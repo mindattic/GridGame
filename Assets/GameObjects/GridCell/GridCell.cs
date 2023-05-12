@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Cell : MonoBehaviour, IDropHandler
+public class GridCell : MonoBehaviour, IDropHandler
 {
-
     public void OnDrop(PointerEventData eventData)
     {
         Debug.Log("OnDrop");
