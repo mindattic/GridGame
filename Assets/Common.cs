@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 
 public class Common
@@ -47,5 +48,14 @@ public class Common
             return height;
         }
     }
+
+
+
+    public static GameObject FindClosestByTag(Vector3 position, string tag)
+    {
+        return GameObject.FindGameObjectsWithTag(tag).OrderBy(x => Vector3.Distance(x.transform.position, position)).FirstOrDefault();
+    }
+
+
 
 }

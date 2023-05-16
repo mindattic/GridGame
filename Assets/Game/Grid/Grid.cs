@@ -1,48 +1,70 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
-    public GameObject gridCell;
+    public GameObject gridCellPrefab;
+    public GameObject playerPrefab;
+
+    float cellSize;
+    Vector2 cellScale;
 
     void Start()
     {
+        var screenSize = new Vector2(Common.GetScreenToWorldWidth, Common.GetScreenToWorldHeight);
+        cellSize = screenSize.x / 6;
+        cellScale = new Vector2(cellSize, cellSize);
+
         GenerateGrid();
+        GeneratePlayer();
     }
-
-
-
 
     void GenerateGrid()
     {
-        var refCell = Instantiate(gridCell, new Vector3(0, 0, 0), Quaternion.identity);
+        var instance = Instantiate(gridCellPrefab, new Vector3(0, 0, 0), Quaternion.identity);
 
         int cols = 5;
         int rows = 8;
 
-        var screenSize = new Vector2(Common.GetScreenToWorldWidth, Common.GetScreenToWorldHeight);
-        float size = screenSize.x / 6;
+        var cellScale = new Vector2(cellSize, cellSize);
 
         var start = new Vector2(transform.position.x, transform.position.y);
-        var offset = new Vector2(size, 0);
+        var offset = new Vector2(cellSize, 0);
 
         for (int row = 1; row <= rows; row++)
         {
             for (int col = 1; col <= cols; col++)
             {
-                var cell = Instantiate(gridCell, transform);
+                var cell = Instantiate(instance, transform);
                 cell.transform.SetParent(transform, true);
-                cell.transform.localScale = Vector3.one * size;
-
-                float x = start.x + offset.x + (col * size);
-                float y = start.y + offset.y + (row * -size);
+                cell.transform.localScale = cellScale;
+                cell.GetComponent<BoxCollider2D>().size = cellScale;
+                float x = start.x + offset.x + (col * cellSize);
+                float y = start.y + offset.y + (row * -cellSize);
                 cell.transform.position = new Vector3(x, y, 0);
-
             }
         }
 
-        Destroy(refCell);
+        Destroy(instance);
+    }
+
+    void GeneratePlayer()
+    {
+
+        var player1 = Instantiate(playerPrefab, transform);
+        player1.transform.SetParent(transform, true);
+        player1.transform.localScale = cellScale;
+        player1.GetComponent<BoxCollider2D>().size = cellScale;
+        player1.transform.position = new Vector3(-1, 4, 0);
+
+        //var player2 = Instantiate(playerPrefab, transform);
+        //player2.transform.SetParent(transform, true);
+        //player2.transform.localScale = cellScale;
+        //player2.GetComponent<BoxCollider2D>().size = cellScale;
+        //player2.transform.position = new Vector3(3, 4, 0);
     }
 
 }

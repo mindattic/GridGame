@@ -38,85 +38,45 @@ public class Player : MonoBehaviour
         {
             selectedObject.transform.position = mousePosition + offset;
         }
-        //if (!Input.GetMouseButtonUp(0) && selectedObject)
-        //{
-        //    selectedObject = null;
-
-        //    RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, 10f);
-
-        //    if (hit.collider != null && hit.collider.gameObject.tag == "GridCell")
-        //    {
-        //        transform.position = hit.collider.gameObject.transform.position;
-        //    }
-
-
-        //    ////if (currentGridCell != null)
-        //    //    transform.position = currentGridCell.transform.position;
-        //}
     }
 
     void OnMouseDown()
     {
-        // If your mouse hovers over the GameObject with the script attached, output this message
         Debug.Log("OnMouseDown");
     }
 
     void OnMouseUp()
     {
-        // If your mouse hovers over the GameObject with the script attached, output this message
         Debug.Log("OnMouseUp");
-
-        if (selectedObject)
-        {
-            RaycastHit2D[] hit = Physics2D.RaycastAll(selectedObject.transform.position, selectedObject.transform.forward);
-
-            GameObject gridCell = hit.Where(x => x.collider.gameObject.CompareTag("GridCell")).FirstOrDefault().collider.gameObject;
-            if (gridCell)
-            {
-                selectedObject.transform.position = gridCell.transform.position;
-            }
-
-            selectedObject = null;
-        }
-
-
-        //if (!Input.GetMouseButtonUp(0) && selectedObject)
-        //{
-        //    selectedObject = null;
-
-        //    RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, 10f);
-
-        //    if (hit.collider != null && hit.collider.gameObject.tag == "GridCell")
-        //    {
-        //        transform.position = hit.collider.gameObject.transform.position;
-        //    }
-
-
-        //    ////if (currentGridCell != null)
-        //    //    transform.position = currentGridCell.transform.position;
-        //}
-
+        DropPlayer();
 
 
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+
+    private void DropPlayer()
     {
-        Debug.Log("OnTriggerEnter2D");
+        if (!selectedObject)
+            return;
 
-        //if (other.gameObject.tag == "GridCell")
+        List<RaycastHit2D> hits = Physics2D.RaycastAll(selectedObject.transform.position, selectedObject.transform.forward).ToList();
+        if (hits == null || hits.Count < 1)
+            return;
+
+
+        //GameObject gridCell = hits.Where(x => x.collider.gameObject.CompareTag("GridCell")).FirstOrDefault().collider?.gameObject;
+        //if (gridCell == null)
         //{
-        //    currentGridCell = other.gameObject;
+        //    gridCell = Common.FindClosestByTag(selectedObject.transform.position, "GridCell");
         //}
+        var gridCell = Common.FindClosestByTag(selectedObject.transform.position, "GridCell");
+
+        selectedObject.transform.position = gridCell.transform.position;
+
+        selectedObject = null;
     }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        Debug.Log("OnTriggerExit2D");
 
-        //if (other.gameObject.tag == "GridCell")
-        //{
-        //    currentGridCell = null;
-        //}
-    }
+
+
 }

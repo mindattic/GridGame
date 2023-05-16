@@ -57,13 +57,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Game\Grid\Grid.cs" />
-    <Compile Include="Assets\GUI\Console.cs" />
-    <Compile Include="Assets\GUI\Pointer.cs" />
-    <Compile Include="Assets\Global.cs" />
-    <Compile Include="Assets\Singleton.cs" />
     <Compile Include="Assets\Game\Player\Player.cs" />
-    <Compile Include="Assets\Common.cs" />
     <Compile Include="Assets\Game\Grid\GridCell.cs" />
+    <Compile Include="Assets\GUI\Console.cs" />
+    <Compile Include="Assets\Singleton.cs" />
+    <Compile Include="Assets\GUI\Pointer.cs" />
+    <Compile Include="Assets\Common.cs" />
+    <Compile Include="Assets\Global.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
