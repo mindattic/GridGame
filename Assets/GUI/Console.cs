@@ -8,11 +8,11 @@ public class Console : MonoBehaviour
 {
     [SerializeField] private Canvas canvas;
 
-    private Text text;
+    private Text console;
   
     private void Awake()
     {
-        text = GetComponent<Text>();
+        console = GetComponent<Text>();
     }
 
     // Start is called before the first frame update
@@ -39,11 +39,11 @@ public class Console : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-     
-    
-        text.text 
-            = $@"Mouse: {Input.mousePosition.x.ToString("N0").Replace(", ", "")} , {Input.mousePosition.y.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}" 
-            + $@"Stat 2";
+
+        console.text
+            = $@"Mouse 2D: {Global.Instance.MousePosition2D.x.ToString("N0").Replace(", ", "")} , {Global.Instance.MousePosition2D.y.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
+            + $@"Mouse 3D: {Global.Instance.MousePosition3D.x.ToString("N0").Replace(", ", "")} , {Global.Instance.MousePosition3D.y.ToString("N0").Replace(",", ""):N0} , {Global.Instance.MousePosition3D.z.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
+            + $@"";
 
 
 
