@@ -62,7 +62,7 @@
     <Compile Include="Assets\Global.cs" />
     <Compile Include="Assets\Singleton.cs" />
     <Compile Include="Assets\Game\Player\Player.cs" />
-    <Compile Include="Assets\Helpers\Collider2DHelper.cs" />
+    <Compile Include="Assets\Common.cs" />
     <Compile Include="Assets\Game\Grid\GridCell.cs" />
   </ItemGroup>
   <ItemGroup>

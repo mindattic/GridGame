@@ -11,6 +11,15 @@ public class Player : MonoBehaviour
 
     private GameObject currentGridCell;
 
+    private void Start()
+    {
+        var screenSize = new Vector2(Common.GetScreenToWorldWidth, Common.GetScreenToWorldHeight);
+        float size = screenSize.x / 6;
+        transform.localScale = Vector3.one * size;
+
+        var collider = GetComponent<BoxCollider2D>();
+        collider.size = new Vector2(size, size);
+    }
 
     void Update()
     {

@@ -17,7 +17,7 @@ public abstract class Singleton<T> : Singleton where T : MonoBehaviour
 
     #region  Properties
     [NotNull]
-    public static T Instance
+    public static T instance
     {
         get
         {

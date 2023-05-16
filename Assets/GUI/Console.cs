@@ -41,8 +41,8 @@ public class Console : MonoBehaviour
     {
 
         console.text
-            = $@"Mouse 2D: {Global.Instance.MousePosition2D.x.ToString("N0").Replace(", ", "")} , {Global.Instance.MousePosition2D.y.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
-            + $@"Mouse 3D: {Global.Instance.MousePosition3D.x.ToString("N0").Replace(", ", "")} , {Global.Instance.MousePosition3D.y.ToString("N0").Replace(",", ""):N0} , {Global.Instance.MousePosition3D.z.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
+            = $@"Mouse 2D: {Global.instance.mousePosition2D.x.ToString("N0").Replace(", ", "")} , {Global.instance.mousePosition2D.y.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
+            + $@"Mouse 3D: {Global.instance.mousePosition3D.x.ToString("N0").Replace(", ", "")} , {Global.instance.mousePosition3D.y.ToString("N0").Replace(",", ""):N0} , {Global.instance.mousePosition3D.z.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
             + $@"";
 
 

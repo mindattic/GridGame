@@ -21,8 +21,8 @@ public class Pointer : MonoBehaviour, IPointerMoveHandler, IPointerDownHandler, 
 
     public void OnPointerMove(PointerEventData eventData)
     {
-        Global.Instance.MousePosition2D = Input.mousePosition;
-        Global.Instance.MousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Global.instance.mousePosition2D = Input.mousePosition;
+        Global.instance.mousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -70,8 +70,8 @@ public class Pointer : MonoBehaviour, IPointerMoveHandler, IPointerDownHandler, 
 
     public void Update()
     {
-        Global.Instance.MousePosition2D = Input.mousePosition;
-        Global.Instance.MousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Global.instance.mousePosition2D = Input.mousePosition;
+        Global.instance.mousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
 }
