@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
-    public GameObject selectedObject;
-    Vector3 offset;
-
+    public Coordinates coodinates = new Coordinates();
+    public GameObject selectedPlayer;
+   
     private GameObject currentGridCell;
+    private Vector3 offset;
+
 
     private void Start()
     {
@@ -30,24 +31,25 @@ public class Player : MonoBehaviour
 
             if (targetObject && targetObject.tag == "Player")
             {
-                selectedObject = targetObject.transform.gameObject;
-                offset = selectedObject.transform.position - mousePosition;
+                selectedPlayer = targetObject.transform.gameObject;
+                offset = selectedPlayer.transform.position - mousePosition;
             }
         }
-        if (selectedObject)
+
+        if (selectedPlayer)
         {
-            selectedObject.transform.position = mousePosition + offset;
+            selectedPlayer.transform.position = mousePosition + offset;
         }
     }
 
     void OnMouseDown()
     {
-        Debug.Log("OnMouseDown");
+        //Debug.Log("OnMouseDown");
     }
 
     void OnMouseUp()
     {
-        Debug.Log("OnMouseUp");
+        //Debug.Log("OnMouseUp");
         DropPlayer();
 
 
@@ -56,27 +58,25 @@ public class Player : MonoBehaviour
 
     private void DropPlayer()
     {
-        if (!selectedObject)
+        if (!selectedPlayer)
             return;
 
-        List<RaycastHit2D> hits = Physics2D.RaycastAll(selectedObject.transform.position, selectedObject.transform.forward).ToList();
-        if (hits == null || hits.Count < 1)
-            return;
-
-
+        //List<RaycastHit2D> hits = Physics2D.RaycastAll(selectedPlayer.transform.position, selectedPlayer.transform.forward).ToList();
+        //if (hits == null || hits.Count < 1)
+        //    return;
         //GameObject gridCell = hits.Where(x => x.collider.gameObject.CompareTag("GridCell")).FirstOrDefault().collider?.gameObject;
         //if (gridCell == null)
         //{
         //    gridCell = Common.FindClosestByTag(selectedObject.transform.position, "GridCell");
         //}
-        var gridCell = Common.FindClosestByTag(selectedObject.transform.position, "GridCell");
 
-        selectedObject.transform.position = gridCell.transform.position;
+        var closestCell = Common.FindClosestByTag(selectedPlayer.transform.position, "GridCell");
 
-        selectedObject = null;
+        selectedPlayer.transform.position = closestCell.transform.position;
+        selectedPlayer.GetComponent<Player>().coodinates = closestCell.GetComponent<GridCell>().coodinates;
+
+        selectedPlayer = null;
     }
-
-
 
 
 }

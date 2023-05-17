@@ -64,6 +64,7 @@
     <Compile Include="Assets\GUI\Pointer.cs" />
     <Compile Include="Assets\Common.cs" />
     <Compile Include="Assets\Global.cs" />
+    <Compile Include="Assets\Models.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

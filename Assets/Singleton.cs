@@ -1,33 +1,25 @@
-using JetBrains.Annotations;
 using UnityEngine;
 
 public abstract class Singleton<T> : Singleton where T : MonoBehaviour
 {
-    #region  Fields
-    [CanBeNull]
     private static T _instance;
-
-    [NotNull]
-    // ReSharper disable once StaticMemberInGenericType
-    private static readonly object Lock = new object();
+    private static readonly object objLock = new object();
 
     [SerializeField]
     private bool _persistent = true;
-    #endregion
-
-    #region  Properties
-    [NotNull]
+  
     public static T instance
     {
         get
         {
-            if (Quitting)
+            if (isQuitting)
             {
                 Debug.LogWarning($"[{nameof(Singleton)}<{typeof(T)}>] Instance will not be returned because the application is quitting.");
                 // ReSharper disable once AssignNullToNotNullAttribute
                 return null;
             }
-            lock (Lock)
+
+            lock (objLock)
             {
                 if (_instance != null)
                     return _instance;
@@ -49,9 +41,7 @@ public abstract class Singleton<T> : Singleton where T : MonoBehaviour
             }
         }
     }
-    #endregion
 
-    #region  Methods
     private void Awake()
     {
         if (_persistent)
@@ -60,20 +50,14 @@ public abstract class Singleton<T> : Singleton where T : MonoBehaviour
     }
 
     protected virtual void OnAwake() { }
-    #endregion
 }
 
 public abstract class Singleton : MonoBehaviour
-{
-    #region  Properties
-    public static bool Quitting { get; private set; }
-    #endregion
-
-    #region  Methods
+{ 
+    public static bool isQuitting { get; private set; }
+    
     private void OnApplicationQuit()
     {
-        Quitting = true;
+        isQuitting = true;
     }
-    #endregion
 }
-//Free candy!

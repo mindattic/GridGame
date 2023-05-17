@@ -5,5 +5,6 @@ using UnityEngine;
 public class GridCell : MonoBehaviour
 {
 
+    public Coordinates coodinates = new Coordinates();
 
 }

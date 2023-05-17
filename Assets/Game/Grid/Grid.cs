@@ -42,6 +42,7 @@ public class Grid : MonoBehaviour
                 cell.transform.SetParent(transform, true);
                 cell.transform.localScale = cellScale;
                 cell.GetComponent<BoxCollider2D>().size = cellScale;
+                cell.GetComponent<GridCell>().coodinates = new Coordinates(col, row);
                 float x = start.x + offset.x + (col * cellSize);
                 float y = start.y + offset.y + (row * -cellSize);
                 cell.transform.position = new Vector3(x, y, 0);
