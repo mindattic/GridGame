@@ -56,15 +56,17 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Game\Grid\Grid.cs" />
-    <Compile Include="Assets\Game\Player\Player.cs" />
-    <Compile Include="Assets\Game\Grid\GridCell.cs" />
-    <Compile Include="Assets\GUI\Console.cs" />
+    <Compile Include="Assets\Game\Grid\GridManager.cs" />
+    <Compile Include="Assets\Game\Player\PlayerManager.cs" />
+    <Compile Include="Assets\Game\Grid\CellManager.cs" />
+    <Compile Include="Assets\GUI\ConsoleManager.cs" />
     <Compile Include="Assets\Singleton.cs" />
-    <Compile Include="Assets\GUI\Pointer.cs" />
+    <Compile Include="Assets\GUI\PointerManager.cs" />
     <Compile Include="Assets\Common.cs" />
     <Compile Include="Assets\Global.cs" />
     <Compile Include="Assets\Models.cs" />
+    <Compile Include="Assets\WallManager.cs" />
+    <Compile Include="Assets\CameraManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

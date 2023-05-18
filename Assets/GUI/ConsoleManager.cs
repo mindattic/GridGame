@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Console : MonoBehaviour
+public class ConsoleManager : MonoBehaviour
 {
     [SerializeField] private Canvas canvas;
 
@@ -41,7 +41,7 @@ public class Console : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var coordinates = player.GetComponent<Player>().coodinates;
+        var coordinates = player.GetComponent<PlayerManager>().coodinates;
         console.text
             = $@"Mouse 2D: {Global.instance.mousePosition2D.x.ToString("N0").Replace(", ", "")} , {Global.instance.mousePosition2D.y.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
             + $@"Mouse 3D: {Global.instance.mousePosition3D.x.ToString("N0").Replace(", ", "")} , {Global.instance.mousePosition3D.y.ToString("N0").Replace(",", ""):N0} , {Global.instance.mousePosition3D.z.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"

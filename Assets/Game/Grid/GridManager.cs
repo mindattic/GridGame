@@ -4,27 +4,23 @@ using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Grid : MonoBehaviour
+public class GridManager : MonoBehaviour
 {
-    public GameObject gridCellPrefab;
+    public GameObject cellPrefab;
     public GameObject playerPrefab;
 
-    float cellSize;
-    Vector2 cellScale;
+    private float cellSize => Global.instance.cellSize;
+    private Vector2 cellScale => Global.instance.cellScale;
 
     void Start()
     {
-        var screenSize = new Vector2(Common.GetScreenToWorldWidth, Common.GetScreenToWorldHeight);
-        cellSize = screenSize.x / 6;
-        cellScale = new Vector2(cellSize, cellSize);
-
         GenerateGrid();
         GeneratePlayer();
     }
 
     void GenerateGrid()
     {
-        var instance = Instantiate(gridCellPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        var instance = Instantiate(cellPrefab, new Vector3(0, 0, 0), Quaternion.identity);
 
         int cols = 5;
         int rows = 8;
@@ -42,7 +38,7 @@ public class Grid : MonoBehaviour
                 cell.transform.SetParent(transform, true);
                 cell.transform.localScale = cellScale;
                 cell.GetComponent<BoxCollider2D>().size = cellScale;
-                cell.GetComponent<GridCell>().coodinates = new Coordinates(col, row);
+                cell.GetComponent<CellManager>().coodinates = new Coordinates(col, row);
                 float x = start.x + offset.x + (col * cellSize);
                 float y = start.y + offset.y + (row * -cellSize);
                 cell.transform.position = new Vector3(x, y, 0);
