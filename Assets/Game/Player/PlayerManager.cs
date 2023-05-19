@@ -19,6 +19,12 @@ public class PlayerManager : MonoBehaviour
     private float cellSize => Global.instance.cellSize;
 
 
+    private bool isWall(Collision2D other)
+    {
+        return other.collider.gameObject.CompareTag(Tag.Wall);
+    }
+
+
     private void Start()
     {
         //var screenSize = new Vector2(Common.GetScreenToWorldWidth, Common.GetScreenToWorldHeight);
@@ -55,13 +61,13 @@ public class PlayerManager : MonoBehaviour
 
     void OnMouseDown()
     {
-        Debug.Log("OnMouseDown");
+        //Debug.Log("OnMouseDown");
         PickupPlayer();
     }
 
     void OnMouseUp()
     {
-        Debug.Log("OnMouseUp");
+        //Debug.Log("OnMouseUp");
         DropPlayer();
     }
 
@@ -93,11 +99,11 @@ public class PlayerManager : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.collider.gameObject.CompareTag(Tag.Wall))
+        if (isWall(other))
         {
             //var x = transform.position.normalized
             //if()
-            Debug.Log("OnCollisionEnter2D");
+            Debug.Log("Enter Wall");
 
 
         }
@@ -106,5 +112,20 @@ public class PlayerManager : MonoBehaviour
 
     }
 
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (isWall(other))
+        {
+            //var x = transform.position.normalized
+            //if()
+            Debug.Log("Exit Wall");
+
+
+        }
+
+
+
+    }
 
 }
