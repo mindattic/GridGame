@@ -22,16 +22,16 @@ public class WallManager : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.collider.gameObject.CompareTag(Tag.Player))
-        {
-            var player = other.collider.gameObject;
+        //if (other.collider.gameObject.CompareTag(Tag.Player))
+        //{
+        //    var player = other.collider.gameObject;
 
-            player.transform.position = new Vector3(transform.position.x - cellSize,
-                                                    player.transform.position.y,
-                                                    player.transform.position.z);
+        //    player.transform.position = new Vector3(transform.position.x - cellSize,
+        //                                            player.transform.position.y,
+        //                                            player.transform.position.z);
 
 
-        }
+        //}
 
 
 

@@ -37,7 +37,6 @@ public class GridManager : MonoBehaviour
                 var cell = Instantiate(instance, transform);
                 cell.transform.SetParent(transform, true);
                 cell.transform.localScale = cellScale;
-                cell.GetComponent<BoxCollider2D>().size = cellScale;
                 cell.GetComponent<CellManager>().coodinates = new Coordinates(col, row);
                 float x = start.x + offset.x + (col * cellSize);
                 float y = start.y + offset.y + (row * -cellSize);
@@ -54,7 +53,6 @@ public class GridManager : MonoBehaviour
         var player1 = Instantiate(playerPrefab, transform);
         player1.transform.SetParent(transform, true);
         player1.transform.localScale = cellScale;
-        player1.GetComponent<BoxCollider2D>().size = cellScale;
         player1.transform.position = new Vector3(-1, 4, 0);
 
         //var player2 = Instantiate(playerPrefab, transform);
