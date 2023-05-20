@@ -59,14 +59,14 @@
     <Compile Include="Assets\Game\Grid\GridManager.cs" />
     <Compile Include="Assets\Game\Player\PlayerManager.cs" />
     <Compile Include="Assets\Game\Grid\CellManager.cs" />
+    <Compile Include="Assets\CameraManager.cs" />
     <Compile Include="Assets\GUI\ConsoleManager.cs" />
     <Compile Include="Assets\Singleton.cs" />
     <Compile Include="Assets\GUI\PointerManager.cs" />
+    <Compile Include="Assets\Models.cs" />
     <Compile Include="Assets\Common.cs" />
     <Compile Include="Assets\Global.cs" />
-    <Compile Include="Assets\Models.cs" />
     <Compile Include="Assets\WallManager.cs" />
-    <Compile Include="Assets\CameraManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
