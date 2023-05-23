@@ -12,6 +12,13 @@ public class GridManager : MonoBehaviour
     private float cellSize => Global.instance.cellSize;
     private Vector2 cellScale => Global.instance.cellScale;
 
+    private Dictionary<Coordinates, Vector2> gridMap
+    {
+        get { return Global.instance.gridMap; }
+        set { Global.instance.gridMap = value; }
+    }  
+  
+
     void Start()
     {
         GenerateGrid();
@@ -41,6 +48,10 @@ public class GridManager : MonoBehaviour
                 float x = start.x + offset.x + (col * cellSize);
                 float y = start.y + offset.y + (row * -cellSize);
                 cell.transform.position = new Vector3(x, y, 0);
+
+
+                //Assign grid map entry
+                gridMap.Add(new Coordinates(col, row), new Vector2(x, y));
             }
         }
 
@@ -53,7 +64,12 @@ public class GridManager : MonoBehaviour
         var player1 = Instantiate(playerPrefab, transform);
         player1.transform.SetParent(transform, true);
         player1.transform.localScale = cellScale;
-        player1.transform.position = new Vector3(-1, 4, 0);
+
+        //Set initial position and coordinates
+        player1.GetComponent<Rigidbody2D>().MovePosition(new Vector2(2, -2));
+        player1.GetComponent<PlayerManager>().DropPlayer();
+
+        //player1.transform.position = new Vector3(-1, 4, 0);
 
         //var player2 = Instantiate(playerPrefab, transform);
         //player2.transform.SetParent(transform, true);
@@ -62,4 +78,11 @@ public class GridManager : MonoBehaviour
         //player2.transform.position = new Vector3(3, 4, 0);
     }
 
+
+
+
+    //public Transform GetTransformByCoordinates(Coordinates coordinates)
+    //{
+
+    //}
 }

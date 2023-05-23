@@ -12,6 +12,9 @@ public class Global : Singleton<Global>
     public float cellSize;
     public Vector2 cellScale;
 
+    public Dictionary<Coordinates, Vector2> gridMap = new Dictionary<Coordinates, Vector2>();
+
+
     public Global()
     {
        //Calculate values of global variables
