@@ -9,6 +9,11 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Common
 {
+    private float cellSize => Global.instance.cellSize;
+    private Vector2 cellScale => Global.instance.cellScale;
+
+
+
 
     public Collider2D GetHighestObject(Collider2D[] results)
     {
@@ -56,6 +61,27 @@ public class Common
         return GameObject.FindGameObjectsWithTag(tag).OrderBy(x => Vector3.Distance(x.transform.position, position)).FirstOrDefault();
     }
 
+
+
+    public static GameObject GetCellByCoordinates(int x, int y)
+    {
+        return GameObject.Find($"Cell_{x}x{y}");
+    }
+
+  
+
+    //public static Vector2 GetPositionByCoordinates(Coordinates coordinates)
+    //{
+    //    float x = coordinates.x * Global.instance.cellSize;
+    //    float y = coordinates.y * Global.instance.cellSize;
+    //    return new Vector2(x, y);
+    //}
+
+    //public static Vector2 GetPositionByCoordinates(int x, int y)
+    //{
+
+    //    return GetPositionByCoordinates(new Coordinates(x, y));
+    //}
 
 
 }

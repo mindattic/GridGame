@@ -10,6 +10,13 @@ public class CameraManager : MonoBehaviour
         Global.instance.screenSize = new Vector2(Common.GetScreenToWorldWidth, Common.GetScreenToWorldHeight);
         Global.instance.cellSize = Global.instance.screenSize.x / 6;
         Global.instance.cellScale = new Vector2(Global.instance.cellSize, Global.instance.cellSize);
+
+
+
+        Global.instance.spriteScale *= 0.75f;
+
+
+
     }
 
 

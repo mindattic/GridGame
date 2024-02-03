@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
         Global.instance.screenSize = new Vector2(Common.GetScreenToWorldWidth, Common.GetScreenToWorldHeight);
         Global.instance.cellSize = Global.instance.screenSize.x / 6.0f;
         Global.instance.cellScale = new Vector2(Global.instance.cellSize, Global.instance.cellSize);
+   
+    
+    
+    
     }
 
 

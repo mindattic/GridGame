@@ -887,11 +887,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 0
-  cloudProjectId: 
+  cloudProjectId: e6cf26d7-21ef-45a9-8d4f-848ebe4c563a
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: GridGame
+  organizationId: mindattic-interactive
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

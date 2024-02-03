@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,15 +10,23 @@ public class GridManager : MonoBehaviour
     public GameObject cellPrefab;
     public GameObject playerPrefab;
 
+    SpriteManager spriteManager;
+
     private float cellSize => Global.instance.cellSize;
     private Vector2 cellScale => Global.instance.cellScale;
+    private Vector2 spriteScale => Global.instance.spriteScale;
 
-    private Dictionary<Coordinates, Vector2> gridMap
+    private Dictionary<string, GameObject> gridMap
     {
         get { return Global.instance.gridMap; }
         set { Global.instance.gridMap = value; }
-    }  
-  
+    }
+
+    void Awake()
+    {
+        spriteManager = GameObject.Find("Sprite").GetComponent<SpriteManager>();
+
+    }
 
     void Start()
     {
@@ -27,62 +36,70 @@ public class GridManager : MonoBehaviour
 
     void GenerateGrid()
     {
-        var instance = Instantiate(cellPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        var cells = GameObject.FindGameObjectsWithTag("Cell");
+        if (cells == null)
+            return;
 
-        int cols = 5;
-        int rows = 8;
+        int columns = 4;
+        int rows = 7;
 
-        var cellScale = new Vector2(cellSize, cellSize);
-
-        var start = new Vector2(transform.position.x, transform.position.y);
-        var offset = new Vector2(cellSize, 0);
-
-        for (int row = 1; row <= rows; row++)
+        for (int c = 0; c <= columns; c++)
         {
-            for (int col = 1; col <= cols; col++)
+            for (int r = 0; r <= rows; r++)
             {
-                var cell = Instantiate(instance, transform);
-                cell.transform.SetParent(transform, true);
-                cell.transform.localScale = cellScale;
-                cell.GetComponent<CellManager>().coodinates = new Coordinates(col, row);
-                float x = start.x + offset.x + (col * cellSize);
-                float y = start.y + offset.y + (row * -cellSize);
-                cell.transform.position = new Vector3(x, y, 0);
+                var name = $"Cell_{c}x{r}";
+                var cell = cells.FirstOrDefault(x => string.Equals(x.name, name));
+                if (cell == null)
+                    return;
 
+                var cellBehavior = cell.GetComponent<CellBehavior>();
+                if (cellBehavior == null)
+                    return;
 
-                //Assign grid map entry
-                gridMap.Add(new Coordinates(col, row), new Vector2(x, y));
+                cellBehavior.X = c;
+                cellBehavior.Y = r;
+                gridMap.Add(name, cell);
             }
         }
-
-        Destroy(instance);
     }
 
     void GeneratePlayer()
     {
+        GameObject gameObject;
 
-        var player1 = Instantiate(playerPrefab, transform);
+        gridMap.TryGetValue("Cell_2x2", out gameObject);
+        if (gameObject == null)
+            return;
+
+        var player1 = Instantiate(playerPrefab, gameObject.transform);
+        player1.name = "Sentinel";
+        player1.GetComponent<SpriteRenderer>().sprite = spriteManager.sentinel;
         player1.transform.SetParent(transform, true);
         player1.transform.localScale = cellScale;
 
-        //Set initial position and coordinates
-        player1.GetComponent<Rigidbody2D>().MovePosition(new Vector2(2, -2));
-        player1.GetComponent<PlayerManager>().DropPlayer();
+        gridMap.TryGetValue("Cell_4x4", out gameObject);
+        if (gameObject == null)
+            return;
 
-        //player1.transform.position = new Vector3(-1, 4, 0);
+        var player2 = Instantiate(playerPrefab, gameObject.transform);
+        player2.name = "Corsair";
+        player2.GetComponent<SpriteRenderer>().sprite = spriteManager.corsair;
+        player2.transform.SetParent(transform, true);
+        player2.transform.localScale = cellScale;
 
-        //var player2 = Instantiate(playerPrefab, transform);
-        //player2.transform.SetParent(transform, true);
-        //player2.transform.localScale = cellScale;
-        //player2.GetComponent<BoxCollider2D>().size = cellScale;
-        //player2.transform.position = new Vector3(3, 4, 0);
+        gridMap.TryGetValue("Cell_1x6", out gameObject);
+        if (gameObject == null)
+            return;
+
+        var player3 = Instantiate(playerPrefab, gameObject.transform);
+        player3.name = "Oracle";
+        player3.GetComponent<SpriteRenderer>().sprite = spriteManager.oracle;
+        player3.transform.SetParent(transform, true);
+        player3.transform.localScale = cellScale;
+
+        //Assign players list
+        Global.instance.players = GameObject.FindGameObjectsWithTag(Tag.Player).ToList();
+
     }
 
-
-
-
-    //public Transform GetTransformByCoordinates(Coordinates coordinates)
-    //{
-
-    //}
 }

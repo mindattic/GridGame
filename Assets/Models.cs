@@ -5,22 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Coordinates
-{
-    public Coordinates() { }
-    public Coordinates(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-    }
+//public class Coordinates
+//{
+//    public Coordinates() { }
+//    public Coordinates(int x, int y)
+//    {
+//        this.x = x;
+//        this.y = y;
+//    }
 
-    public int x { get; set; }
-    public int y { get; set; }
-}
+//    public int x { get; set; }
+//    public int y { get; set; }
+//}
 
 public static class Tag
 {
     public static string Player = "Player";
+    public static string Enemy = "Enemy";
     public static string Grid = "Grid";
     public static string Cell = "Cell";
     public static string Wall = "Wall";
@@ -37,17 +38,17 @@ public enum CollisionDirection
 
 public class GameBehaviour : MonoBehaviour
 {
-    public Coordinates coordinates;
+    //public Coordinates coordinates;
 
 
-    public void SetCoordinates(Coordinates coordinates)
-    {
-        this.coordinates = coordinates;
-    }
-    public void SetCoordinates(int x, int y)
-    {
-        this.coordinates = new Coordinates(x, y);
-    }
+    //public void SetCoordinates(Coordinates coordinates)
+    //{
+    //    this.coordinates = coordinates;
+    //}
+    //public void SetCoordinates(int x, int y)
+    //{
+    //    this.coordinates = new Coordinates(x, y);
+    //}
 
 }
 
