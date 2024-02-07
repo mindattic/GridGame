@@ -43,8 +43,14 @@ public class ActorBehavior : MonoBehaviour
         set { GameManager.instance.activeActor = value; }
     }
     private bool HasActiveActor => activeActor != null;
-    private bool InSameColumn => HasActiveActor && activeActor.location.x == location.x;
-    private bool InSameRow => HasActiveActor && activeActor.location.y == location.y;
+    private bool IsSameColumn => HasActiveActor && activeActor.location.x == location.x;
+    private bool IsSameRow => HasActiveActor && activeActor.location.y == location.y;
+    private bool IsAbove => activeActor.location.y == location.y - 1;
+    private bool IsRight => activeActor.location.x == location.x + 1;
+    private bool IsBelow => activeActor.location.y == location.y + 1;
+    private bool IsLeft => activeActor.location.x == location.x - 1;
+
+
 
     private bool IsOnPlayerTeam => team == Team.Player;
 
@@ -189,28 +195,11 @@ public class ActorBehavior : MonoBehaviour
         if (destination.HasValue)
             return;
 
-        //Determine actor destination based on collision direction
-        if (InSameColumn && activeActor.location.y == location.y - 1)
-        {
-            Debug.Log($"{Time.time} | Triggered(From.Above)");
+        if ((IsSameColumn && IsAbove) 
+            || (IsSameRow && IsRight) 
+            || (IsSameColumn && IsBelow) 
+            || (IsSameRow && IsLeft))
             destination = Geometry.PointFromGrid(activeActor.location);
-        }
-        else if (InSameRow && activeActor.location.x == location.x + 1)
-        {
-            Debug.Log($"{Time.time} | Triggered(From.Right)");
-            destination = Geometry.PointFromGrid(activeActor.location);
-        }
-        else if (InSameColumn && activeActor.location.y == location.y + 1)
-        {
-            Debug.Log($"{Time.time} | Triggered(From.Below)");
-            destination = Geometry.PointFromGrid(activeActor.location);
-        }
-        else if (InSameRow && activeActor.location.x == location.x - 1)
-        {
-            Debug.Log($"{Time.time} | Triggered(From.Left)");
-            destination = Geometry.PointFromGrid(activeActor.location);
-        }
-
     }
 
     private void OnTriggerStay2D(Collider2D collider)
@@ -331,13 +320,13 @@ public class ActorBehavior : MonoBehaviour
     //}
 
 
-    //private bool InSameColumn(Vector3 a)
+    //private bool IsSameColumn(Vector3 a)
     //{
     //    var range = tileSize / 2;
     //    return a.x <= transform.position.x + range && a.x >= transform.position.x - range;
     //}
 
-    //private bool InSameRow(Vector3 a)
+    //private bool IsSameRow(Vector3 a)
     //{
     //    var range = tileSize / 2;
     //    return a.y <= transform.position.y + range && a.y >= transform.position.y - range;
@@ -362,10 +351,10 @@ public class ActorBehavior : MonoBehaviour
 
     //    return from switch
     //    {
-    //        From.Above => a.y < d.y - range && InSameColumn(a),
-    //        From.Right => a.x < d.x - range && InSameRow(a),
-    //        From.Below => a.y > d.y + range && InSameColumn(a),
-    //        From.Left => a.x > d.x + range && InSameRow(a),
+    //        From.Above => a.y < d.y - range && IsSameColumn(a),
+    //        From.Right => a.x < d.x - range && IsSameRow(a),
+    //        From.Below => a.y > d.y + range && IsSameColumn(a),
+    //        From.Left => a.x > d.x + range && IsSameRow(a),
     //        _ => false,
     //    };
     //}
