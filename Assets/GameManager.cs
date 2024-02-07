@@ -26,10 +26,7 @@ public class GameManager : Singleton<GameManager>
 
     public GameObject selectedPlayer;
 
-
-    public Dictionary<string, GameObject> gridMap = new Dictionary<string, GameObject>();
-
-    public List<GameObject> actors;
+    public List<ActorBehavior> actors;
 
     public Vector2 size33 = new Vector2(0.333333f, 0.333333f);
     public Vector2 size50 = new Vector2(0.5f, 0.5f);

@@ -1,28 +1,30 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ActorBehavior : MonoBehaviour
 {
     //Variables
     [field: SerializeField] public Vector2Int location { get; set; }
+    [field: SerializeField] public Team team = Team.Neutral;
 
-
-
-    private Vector3 offset;
-    private BoxCollider2D boxCollider2D;
-    //private Vector3 mousePosition;
+    private Vector3 mouseOffset;
     private GameObject targetPlayer;
     private GameObject targetCell;
     private Vector2? targetPosition;
-    bool inMotion = false;
+    bool inMotion;
+    float cursorSpeed;
 
-    //Global properties
+
+    
+
+
+    //GameManager properties
     private float tileSize => GameManager.instance.tileSize;
-    //private Rigidbody2D selectedRigidBody
-    //{
+    private Vector2 size50 => GameManager.instance.size50;
+    private Vector2 size100 => GameManager.instance.size100;
+    private Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
+    private List<ActorBehavior> actors => GameManager.instance.actors;
 
-    //    get { return GameManager.instance.selectedRigidBody; }
-    //    set { GameManager.instance.selectedRigidBody = value; }
-    //}
 
     private GameObject selectedPlayer
     {
@@ -30,6 +32,10 @@ public class ActorBehavior : MonoBehaviour
         set { GameManager.instance.selectedPlayer = value; }
     }
 
+    public BoxCollider2D boxCollider2D
+    {
+        get => gameObject.GetComponent<BoxCollider2D>();
+    }
 
     public Sprite sprite
     {
@@ -43,23 +49,6 @@ public class ActorBehavior : MonoBehaviour
         set => gameObject.transform.SetParent(value, true);
     }
 
-    //Local properties
-    private Vector2 GetPosition(GameObject go) => go.transform.position;
-    private ActorBehavior GetPlayerBehavior(GameObject player) => player.GetComponent<ActorBehavior>();
-    private TileBehavior GetCellBehavior(GameObject cell) => cell.GetComponent<TileBehavior>();
-
-    private SpriteRenderer GetSpriteRenderer(GameObject go) => go.GetComponent<SpriteRenderer>();
-    private BoxCollider2D GetBoxCollider(GameObject go) => go.GetComponent<BoxCollider2D>();
-    private Rigidbody2D GetRigidBody(GameObject go) => go.GetComponent<Rigidbody2D>();
-
-
-    //private void SetCoordinates(GameObject cell)
-    //{
-    //    var behavior = GetCellBehavior(cell);
-    //    X = behavior.x;
-    //    Y = behavior.y;
-    //}
-
     private void Awake()
     {
 
@@ -67,13 +56,9 @@ public class ActorBehavior : MonoBehaviour
 
     private void Start()
     {
+        cursorSpeed = GameManager.instance.tileSize / 5;
         transform.position = Geometry.PointFromGrid(location);
         transform.localScale = GameManager.instance.tileScale;
-
-
-        //var closestCell = Common.FindClosestByTag(transform.position, Tag.Tile);
-        //transform.position = closestCell.transform.position;
-        //SetCoordinates(closestCell);
     }
 
     void Update()
@@ -90,18 +75,17 @@ public class ActorBehavior : MonoBehaviour
         if (selectedPlayer != null)
             return;
 
-        Collider2D targetCollider2D = Physics2D.OverlapPoint(GameManager.instance.mousePosition3D);
+        Collider2D targetCollider2D = Physics2D.OverlapPoint(mousePosition3D);
         if (targetCollider2D == null || !targetCollider2D.CompareTag(Tag.Actor))
             return;
 
         selectedPlayer = targetCollider2D.transform.gameObject;
         GameManager.instance.selectedPlayerName = selectedPlayer.name;
-        //selectedRigidBody = GetRigidBody(selectedPlayer);
-        offset = selectedPlayer.transform.position - GameManager.instance.mousePosition3D;
+        mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
 
-        //Reduce all collider sizes by 50%
-        GameManager.instance.actors.ForEach(x => GetComponent<BoxCollider2D>().size = GameManager.instance.size50);
+        //Reduce all box collider sizes by 50%
+        GameManager.instance.actors.ForEach(x => x.boxCollider2D.size = size50);
     }
 
     private void DropPlayer()
@@ -114,35 +98,34 @@ public class ActorBehavior : MonoBehaviour
         selectedPlayer = null;
         GameManager.instance.selectedPlayerName = "";
 
-        //Increase all collider sizes by 50%
-        GameManager.instance.actors.ForEach(x => GetComponent<BoxCollider2D>().size = GameManager.instance.size100);
+        //Increase all box collider sizes by 50%
+        GameManager.instance.actors.ForEach(x => x.boxCollider2D.size = size100);
     }
 
     void FixedUpdate()
     {
-        float speed = GameManager.instance.tileSize / 5; //20 * Time.deltaTime;
-
+       
 
         //If selected go...
         if (selectedPlayer != null)
         {
-            //selectedRigidBody.MovePosition(GameManager.instance.mousePosition3D + offset);
+            //selectedRigidBody.MovePosition(GameManager.instance.mousePosition3D + mouseOffset);
             selectedPlayer.transform.position
                 = Vector2.MoveTowards(selectedPlayer.transform.position,
-                                      GameManager.instance.mousePosition3D + offset,
-                                      speed);
+                                      GameManager.instance.mousePosition3D + mouseOffset,
+                                      cursorSpeed);
         }
 
 
         //if (selectedRigidBody)
         //{
-        //    selectedRigidBody.MovePosition(GameManager.instance.mousePosition3D + offset);
+        //    selectedRigidBody.MovePosition(GameManager.instance.mousePosition3D + mouseOffset);
         //}
 
         //Otherwise...
         if (inMotion && targetPosition != null)
         {
-            transform.position = Vector2.MoveTowards(transform.position, targetPosition.Value, speed);
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition.Value, cursorSpeed);
 
             float distance = Vector2.Distance(transform.position, targetPosition.Value);
             if (distance < 0.1f)

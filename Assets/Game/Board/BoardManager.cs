@@ -57,6 +57,7 @@ public class BoardManager : MonoBehaviour
         actor.sprite = spriteManager.sentinel;
         actor.parent = transform;
         actor.location = new Vector2Int(2, 3);
+        actor.team = Team.Player;
 
         prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
         actor = prefab.GetComponent<ActorBehavior>();
@@ -64,6 +65,7 @@ public class BoardManager : MonoBehaviour
         actor.sprite = spriteManager.corsair;
         actor.parent = transform;
         actor.location = new Vector2Int(4, 4);
+        actor.team = Team.Player;
 
         prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
         actor = prefab.GetComponent<ActorBehavior>();
@@ -71,9 +73,23 @@ public class BoardManager : MonoBehaviour
         actor.sprite = spriteManager.oracle;
         actor.parent = transform;
         actor.location = new Vector2Int(5, 6);
+        actor.team = Team.Player;
 
+        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        actor = prefab.GetComponent<ActorBehavior>();
+        actor.name = "Slime A";
+        actor.sprite = spriteManager.slime;
+        actor.parent = transform;
+        actor.location = new Vector2Int(3, 2);
+        actor.team = Team.Enemy;
 
-
+        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        actor = prefab.GetComponent<ActorBehavior>();
+        actor.name = "Slime B";
+        actor.sprite = spriteManager.slime;
+        actor.parent = transform;
+        actor.location = new Vector2Int(3, 3);
+        actor.team = Team.Enemy;
 
         //var prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
         //player2.name = "Corsair";
@@ -88,7 +104,7 @@ public class BoardManager : MonoBehaviour
         //player3.transform.localScale = tileScale;
 
         //Assign actors list
-        GameManager.instance.actors = GameObject.FindGameObjectsWithTag(Tag.Actor).ToList();
+        GameManager.instance.actors = GameObject.Find(Constants.Board).GetComponents<ActorBehavior>().ToList();
 
     }
 
