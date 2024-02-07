@@ -1,18 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-
-public enum CollisionDirection
-{
-    Top,
-    Right,
-    Bottom,
-    Left 
-}
-
+﻿
 public enum Team
 {
     Player,
@@ -20,8 +6,17 @@ public enum Team
     Neutral
 }
 
-public enum State
+public enum ActorState
 {
     Idle,
+    Active,
     Moving
+}
+
+public enum From
+{
+    Above,
+    Below,
+    Right,
+    Left
 }

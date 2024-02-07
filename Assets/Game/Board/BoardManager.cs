@@ -15,11 +15,13 @@ public class BoardManager : MonoBehaviour
     private float tileSize => GameManager.instance.tileSize;
     private Vector2 tileScale => GameManager.instance.tileScale;
     private Vector2 boardOffset => GameManager.instance.boardOffset;
+    private int columns => GameManager.instance.boardColumns;
+    private int rows => GameManager.instance.boardRows;
+
 
     void Awake()
     {
         spriteManager = GameObject.Find(Constants.Sprites).GetComponent<SpriteManager>();
-
     }
 
     void Start()
@@ -31,9 +33,6 @@ public class BoardManager : MonoBehaviour
 
     void GenerateTiles()
     {
-        int columns = 5;
-        int rows = 8;
-
         for (int col = 1; col <= columns; col++)
         {
             for (int row = 1; row <= rows; row++)
@@ -44,6 +43,10 @@ public class BoardManager : MonoBehaviour
                 tile.location = new Vector2Int(col, row);
             }
         }
+
+        //Assign tiles list
+        GameObject.FindGameObjectsWithTag(Tag.Tile).ToList()
+            .ForEach(x => GameManager.instance.tiles.Add(x.GetComponent<TileBehavior>()));
     }
 
     void GenerateActors()
@@ -75,37 +78,25 @@ public class BoardManager : MonoBehaviour
         actor.location = new Vector2Int(5, 6);
         actor.team = Team.Player;
 
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Slime A";
-        actor.sprite = spriteManager.slime;
-        actor.parent = transform;
-        actor.location = new Vector2Int(3, 2);
-        actor.team = Team.Enemy;
+        //prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        //actor = prefab.GetComponent<ActorBehavior>();
+        //actor.name = "Slime A";
+        //actor.sprite = spriteManager.slime;
+        //actor.parent = transform;
+        //actor.location = new Vector2Int(3, 2);
+        //actor.team = Team.Enemy;
 
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Slime B";
-        actor.sprite = spriteManager.slime;
-        actor.parent = transform;
-        actor.location = new Vector2Int(3, 3);
-        actor.team = Team.Enemy;
-
-        //var prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        //player2.name = "Corsair";
-        //player2.GetComponent<SpriteRenderer>().sprite = spriteManager.corsair;
-        //player2.transform.SetParent(transform, true);
-        //player2.transform.localScale = tileScale;
-
-        //var player3 = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        //player3.name = "Oracle";
-        //player3.GetComponent<SpriteRenderer>().sprite = spriteManager.oracle;
-        //player3.transform.SetParent(transform, true);
-        //player3.transform.localScale = tileScale;
+        //prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        //actor = prefab.GetComponent<ActorBehavior>();
+        //actor.name = "Slime B";
+        //actor.sprite = spriteManager.slime;
+        //actor.parent = transform;
+        //actor.location = new Vector2Int(3, 3);
+        //actor.team = Team.Enemy;
 
         //Assign actors list
-        GameManager.instance.actors = GameObject.Find(Constants.Board).GetComponents<ActorBehavior>().ToList();
-
+        GameObject.FindGameObjectsWithTag(Tag.Actor).ToList()
+           .ForEach(x => GameManager.instance.actors.Add(x.GetComponent<ActorBehavior>()));
     }
 
 }

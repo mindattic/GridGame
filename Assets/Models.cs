@@ -1,28 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-
-//public class Coordinates
-//{
-//    public Coordinates() { }
-//    public Coordinates(int x, int y)
-//    {
-//        this.x = x;
-//        this.y = y;
-//    }
-
-//    public int x { get; set; }
-//    public int y { get; set; }
-//}
+﻿using UnityEngine;
 
 public static class Tag
 {
-    public static string Grid = "Grid";
+    public static string Board = "Board";
     public static string Tile = "Tile";
     public static string Actor = "Actor";
     public static string Wall = "Wall";
 }
 
+public static class Direction
+{
+    public static Vector3 Up = new Vector3(0, GameManager.instance.tileSize);
+    public static Vector3 Down = new Vector3(0, -GameManager.instance.tileSize);
+    public static Vector3 Right = new Vector3(GameManager.instance.tileSize, 0);
+    public static Vector3 Left = new Vector3(-GameManager.instance.tileSize, 0);
+}

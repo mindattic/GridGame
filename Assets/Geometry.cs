@@ -1,9 +1,16 @@
-﻿using UnityEngine;
+﻿/*
+Adapted from Geometry.cs 
+www: https://www.kodeco.com/5441-how-to-make-a-chess-game-with-unity
+zip: https://koenig-media.raywenderlich.com/uploads/2018/03/ChessGameInUnity-Project-Materials.zip
+*/
+
+using UnityEngine;
 
 public class Geometry
 {
     static private Vector2 gridOffset => GameManager.instance.boardOffset;
     static private float tileSize => GameManager.instance.tileSize;
+
 
 
     static public Vector3 PointFromGrid(int col, int row)

@@ -48,9 +48,8 @@ public class ConsoleManager : MonoBehaviour
         //    + $@"";
 
         console.text
-            = $@"Selected Actor: {GameManager.instance.selectedPlayerName}{Environment.NewLine}"
-            + $@"  Target Actor: {GameManager.instance.targetPlayerName}{Environment.NewLine}"
-            + $@"       Mouse 2D: {GameManager.instance.mousePosition2D.x.ToString("N0").Replace(", ", "")} , {GameManager.instance.mousePosition2D.y.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
+            = $@"Selected Actor: {GameManager.instance.activeActor?.name ?? ""}{Environment.NewLine}"
+            + $@"       Mouse 2D: {GameManager.instance.mousePosition2D.x.ToString("N0").Replace(", ", "")},{GameManager.instance.mousePosition2D.y.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
             + $@"";
 
 

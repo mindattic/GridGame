@@ -1218,6 +1218,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board
       objectReference: {fileID: 0}
+    - target: {fileID: 7829945854487650484, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}
+      propertyPath: m_TagString
+      value: Board
+      objectReference: {fileID: 0}
     - target: {fileID: 7901408539009926492, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}
       propertyPath: m_Name
       value: Cell_3x5
