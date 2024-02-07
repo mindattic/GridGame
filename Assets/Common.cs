@@ -45,22 +45,10 @@ public class Common
 
 
 
-    //public static Vector2 GetPositionByCoordinates(Coordinates coordinates)
-    //{
-    //    float x = coordinates.x * GameManager.instance.tileSize;
-    //    float y = coordinates.y * GameManager.instance.tileSize;
-    //    return new Vector2(x, y);
-    //}
 
-    //public static Vector2 GetPositionByCoordinates(int x, int y)
+    //public static bool InRange(float a, float b, float range)
     //{
 
-    //    return GetPositionByCoordinates(new Coordinates(x, y));
+    //    return a <= b + range && a >= b - range;
     //}
-
-
-    public static bool InRange(float a, float b, float range)
-    {
-        return a >= b - range || a <= b + range;
-    }
 }
