@@ -20,35 +20,9 @@ using UnityEngine;
 
 public static class Tag
 {
-    public static string Player = "Player";
-    public static string Enemy = "Enemy";
     public static string Grid = "Grid";
-    public static string Cell = "Cell";
+    public static string Tile = "Tile";
+    public static string Actor = "Actor";
     public static string Wall = "Wall";
-}
-
-public enum CollisionDirection
-{
-    None = 0,
-    Top = 1,
-    Right = 2,
-    Bottom = 3,
-    Left = 4
-}
-
-public class GameBehaviour : MonoBehaviour
-{
-    //public Coordinates coordinates;
-
-
-    //public void SetCoordinates(Coordinates coordinates)
-    //{
-    //    this.coordinates = coordinates;
-    //}
-    //public void SetCoordinates(int x, int y)
-    //{
-    //    this.coordinates = new Coordinates(x, y);
-    //}
-
 }
 

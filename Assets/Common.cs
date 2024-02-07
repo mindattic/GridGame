@@ -9,8 +9,8 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Common
 {
-    private float cellSize => Global.instance.cellSize;
-    private Vector2 cellScale => Global.instance.cellScale;
+    private float cellSize => GameManager.instance.tileSize;
+    private Vector2 cellScale => GameManager.instance.tileScale;
 
 
 
@@ -30,7 +30,6 @@ public class Common
         }
         return highestObject;
     }
-
 
     public static float GetScreenToWorldWidth
     {
@@ -72,8 +71,8 @@ public class Common
 
     //public static Vector2 GetPositionByCoordinates(Coordinates coordinates)
     //{
-    //    float x = coordinates.x * Global.instance.cellSize;
-    //    float y = coordinates.y * Global.instance.cellSize;
+    //    float x = coordinates.x * GameManager.instance.tileSize;
+    //    float y = coordinates.y * GameManager.instance.tileSize;
     //    return new Vector2(x, y);
     //}
 
