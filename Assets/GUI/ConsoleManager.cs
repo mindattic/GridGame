@@ -10,7 +10,8 @@ public class ConsoleManager : MonoBehaviour
 
     private Text console;
 
-   
+    private ActorBehavior activeActor => GameManager.instance.activeActor;
+    private Vector3 mousePosition2D => GameManager.instance.mousePosition2D;
 
     private void Awake()
     {
@@ -20,9 +21,9 @@ public class ConsoleManager : MonoBehaviour
 
     void Start()
     {
-      
-        
-      
+
+
+
     }
 
     //Vector2 UnscalePosition(Vector2 vec)
@@ -48,8 +49,9 @@ public class ConsoleManager : MonoBehaviour
         //    + $@"";
 
         console.text
-            = $@"Selected Actor: {GameManager.instance.activeActor?.name ?? ""}{Environment.NewLine}"
-            + $@"       Mouse 2D: {GameManager.instance.mousePosition2D.x.ToString("N0").Replace(", ", "")},{GameManager.instance.mousePosition2D.y.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
+            = $@"Selected Actor: {activeActor?.name ?? ""}{Environment.NewLine}"
+            + $@"      Location: {activeActor?.location.x},{activeActor?.location.y}{Environment.NewLine}"
+            + $@"      Mouse 2D: {mousePosition2D.x.ToString("N0").Replace(", ", "")},{mousePosition2D.y.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
             + $@"";
 
 

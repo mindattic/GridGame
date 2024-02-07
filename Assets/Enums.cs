@@ -16,7 +16,16 @@ public enum ActorState
 public enum From
 {
     Above,
-    Below,
     Right,
+    Below,
+    Left
+}
+
+public enum Direction
+{
+    None,
+    Up,
+    Right,
+    Down,
     Left
 }

@@ -10,19 +10,19 @@ public class ActorBehavior : MonoBehaviour
     [field: SerializeField] public Vector2Int location { get; set; }
     [field: SerializeField] public State state = State.Idle;
     [field: SerializeField] public Team team = Team.Neutral;
-    //private TileBehavior targetTile = null;
+
+
+
+
     private Vector3? destination = null;
 
-
-
-    //GameManager properties
-
+   
     private float tileSize => GameManager.instance.tileSize;
     private Vector2 size50 => GameManager.instance.size50;
     private Vector2 size100 => GameManager.instance.size100;
     private Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
     private List<ActorBehavior> actors => GameManager.instance.actors;
-    private float followSpeed => GameManager.instance.followSpeed;
+    private float moveSpeed => GameManager.instance.followSpeed;
     private float snapDistance => GameManager.instance.snapDistance;
 
     private Vector3 mouseOffset
@@ -30,7 +30,6 @@ public class ActorBehavior : MonoBehaviour
         get { return GameManager.instance.mouseOffset; }
         set { GameManager.instance.mouseOffset = value; }
     }
-
 
     //State Properties
     private bool IsIdle => state == State.Moving;
@@ -44,7 +43,8 @@ public class ActorBehavior : MonoBehaviour
         set { GameManager.instance.activeActor = value; }
     }
     private bool HasActiveActor => activeActor != null;
-    private bool IsActiveActor => HasActiveActor && string.Equals(activeActor.name, name);
+    private bool InSameColumn => HasActiveActor && activeActor.location.x == location.x;
+    private bool InSameRow => HasActiveActor && activeActor.location.y == location.y;
 
     private bool IsOnPlayerTeam => team == Team.Player;
 
@@ -84,6 +84,10 @@ public class ActorBehavior : MonoBehaviour
             PickupPlayer();
         else if (Input.GetMouseButtonUp(0))
             DropPlayer();
+
+
+        if (HasActiveActor)
+            activeActor.location = ClosestTile(activeActor.transform.position).location;
     }
 
 
@@ -110,26 +114,28 @@ public class ActorBehavior : MonoBehaviour
         activeActor.state = State.Active;
         mouseOffset = activeActor.transform.position - mousePosition3D;
 
-        //Reduce active actor box collider size by 50% to help it slip between other actors
-        activeActor.boxCollider2D.size = size50;
+        //Reduce box collider size by 50%
+        //activeActor.boxCollider2D.size = size50;
+        actors.ForEach(x => x.boxCollider2D.size = size50);
     }
 
     private void DropPlayer()
     {
         //Only drop player if actor is active
-        if (!HasActiveActor || !IsActiveActor)
+        if (!HasActiveActor || !IsActive)
             return;
 
-        //Restore active actor box collider size to 100%
-        activeActor.boxCollider2D.size = size100;
+        //Restore box collider size to 100%
+        //activeActor.boxCollider2D.size = size100;
+        actors.ForEach(x => x.boxCollider2D.size = size100);
 
         //Find tile closest to active actor
-        var closestTile = ClosestTile(activeActor.transform.position);
+        var closestTile = ClosestTile(transform.position);
 
         //Assign actor new current location/position and drop
-        activeActor.location = closestTile.location;
-        activeActor.transform.position = Geometry.PointFromGrid(activeActor.location);
-        activeActor.state = State.Idle;
+        location = closestTile.location;
+        transform.position = Geometry.PointFromGrid(location);
+        state = State.Idle;
 
         //Clear active actor
         activeActor = null;
@@ -140,7 +146,7 @@ public class ActorBehavior : MonoBehaviour
         if (IsActive && IsOnPlayerTeam)
         {
             //Move active actor towards mouse cursor
-            FollowMouse();
+            MoveToCursor();
         }
         else if (IsActive && !IsOnPlayerTeam)
         {
@@ -158,63 +164,90 @@ public class ActorBehavior : MonoBehaviour
 
     }
 
-
-
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        //Determine if two actors collided
-        if (!IsActorCollision(collider))
+        var sender = collider.gameObject.GetComponent<ActorBehavior>();
+        //var receiver = gameObject.GetComponent<ActorBehavior>();
+
+        //Determine if actor collision
+        if (!sender.CompareTag(Tag.Actor) || !CompareTag(Tag.Actor))
             return;
 
-        //Verify a destination has *not* been set 
+        //Verify sender is State: "Active"
+        if (sender != activeActor)
+            return;
+
+        //Ignore active actor
+        if (state == State.Active)
+            return;
+
+        //Ignore actors in motion
+        if (state != State.Idle)
+            return;
+
+        //Verify destination has *not* been set 
         if (destination.HasValue)
             return;
 
-        //Determine target tile
-        if (IsCollision(From.Above))
-            destination = transform.position + Direction.Up;
-        else if (IsCollision(From.Right))
-            destination = transform.position + Direction.Right;
-        else if (IsCollision(From.Below))
-            destination = transform.position + Direction.Down;
-        else if (IsCollision(From.Left))
-            destination = transform.position + Direction.Left;
+        //Determine actor destination based on collision direction
+        if (InSameColumn && activeActor.location.y == location.y - 1)
+        {
+            Debug.Log($"{Time.time} | Triggered(From.Above)");
+            destination = Geometry.PointFromGrid(activeActor.location);
+        }
+        else if (InSameRow && activeActor.location.x == location.x + 1)
+        {
+            Debug.Log($"{Time.time} | Triggered(From.Right)");
+            destination = Geometry.PointFromGrid(activeActor.location);
+        }
+        else if (InSameColumn && activeActor.location.y == location.y + 1)
+        {
+            Debug.Log($"{Time.time} | Triggered(From.Below)");
+            destination = Geometry.PointFromGrid(activeActor.location);
+        }
+        else if (InSameRow && activeActor.location.x == location.x - 1)
+        {
+            Debug.Log($"{Time.time} | Triggered(From.Left)");
+            destination = Geometry.PointFromGrid(activeActor.location);
+        }
+
     }
 
     private void OnTriggerStay2D(Collider2D collider)
     {
-        //Determine if two actors collided
-        if (!IsActorCollision(collider))
+        var sender = collider.gameObject.GetComponent<ActorBehavior>();
+        //var receiver = gameObject.GetComponent<ActorBehavior>();
+
+        //Determine if actor collision
+        if (!sender.CompareTag(Tag.Actor) || !CompareTag(Tag.Actor))
             return;
 
-        //Verify a destination *has* been set 
+        //Verify sender is State: "Active"
+        if (sender != activeActor)
+            return;
+
+        //Ignore active actor
+        if (state == State.Active)
+            return;
+
+        //Ignore actors in motion
+        if (state != State.Idle)
+            return;
+
+        //Verify destination *has* been set 
         if (!destination.HasValue)
-            return;
-
-        var a = activeActor.transform.position;
-        var b = destination.Value;
-        var range = tileSize / 2;
-
-        //Determine if active actor has moved amount neccessary
-        bool wasAbove = a.y >= b.y + range && (a.x <= b.x + range && a.x >= b.x - range);
-        bool wasRight = a.x < b.x - range && (a.y <= b.y + range && a.y >= b.y - range);
-        bool wasBelow = a.y < b.y - range && (a.x <= b.x + range && a.x >= b.x - range);
-        bool wasLeft = a.x >= b.x + range && (a.y <= b.y + range && a.y >= b.y - range);
-
-        if (!wasAbove && !wasRight && !wasBelow && !wasLeft)
             return;
 
         state = State.Moving;
     }
 
+
     private void OnTriggerExit2D(Collider2D collider)
     {
-        
+
     }
 
-
-
-    private void FollowMouse()
+    private void MoveToCursor()
     {
         if (!HasActiveActor || !IsActive)
             return;
@@ -222,7 +255,7 @@ public class ActorBehavior : MonoBehaviour
         activeActor.transform.position
                 = Vector2.MoveTowards(activeActor.transform.position,
                                       GameManager.instance.mousePosition3D + mouseOffset,
-                                      followSpeed);
+                                      moveSpeed);
     }
 
     private void MoveToDestination()
@@ -230,8 +263,11 @@ public class ActorBehavior : MonoBehaviour
         if (!destination.HasValue)
             return;
 
+        if (state != State.Moving)
+            return;
+
         //Move actor towards destination
-        transform.position = Vector2.MoveTowards(transform.position, destination.Value, followSpeed);
+        transform.position = Vector2.MoveTowards(transform.position, destination.Value, moveSpeed);
 
         //Determine if actor is close to destination
         bool isCloseToDestination = Vector2.Distance(transform.position, destination.Value) < snapDistance;
@@ -240,7 +276,7 @@ public class ActorBehavior : MonoBehaviour
         if (isCloseToDestination)
         {
             transform.position = destination.Value;
-            location = Geometry.GridFromPoint(transform.position);
+            location = ClosestTile(transform.position).location;
             destination = null;
             state = State.Idle;
         }
@@ -255,50 +291,6 @@ public class ActorBehavior : MonoBehaviour
             .First()
             .GetComponent<TileBehavior>();
     }
-
-    private bool IsActorCollision(Collider2D collider)
-    {
-        var sender = collider.gameObject.GetComponent<ActorBehavior>();
-        var receiver = gameObject.GetComponent<ActorBehavior>();
-
-        //Determine if actor collision
-        if (!sender.CompareTag(Tag.Actor) || !receiver.CompareTag(Tag.Actor))
-            return false;
-
-        if (!HasActiveActor)
-            return false;
-
-        //Verify sender is State: "Active"
-        if (sender != activeActor)
-            return false;
-
-        //Ignore actors in motion
-        if (receiver.state != State.Idle)
-            return false;
-
-        return true;
-    }
-
-    private bool IsCollision(From from)
-    {
-        var a = activeActor.transform.position;
-        var b = transform.position;
-        var range = tileSize / 2;
-
-        return from switch
-        {
-            From.Above => a.y > b.y && (a.x <= b.x + range && a.x >= b.x - range),
-            From.Right => a.x > b.x && (a.y <= b.y + range && a.y >= b.y - range),
-            From.Below => a.y < b.y && (a.x <= b.x + range && a.x >= b.x - range),
-            From.Left => a.x < b.x && (a.y <= b.y + range && a.y >= b.y - range),
-            _ => false,
-        };
-    }
-
-
-
-
-
 
     private void OnCollisionExit2D(Collision2D other)
     {
@@ -315,8 +307,80 @@ public class ActorBehavior : MonoBehaviour
 
 
 
+    //private bool IsActorCollision(Collider2D collider)
+    //{
+    //    var sender = collider.gameObject.GetComponent<ActorBehavior>();
+    //    var receiver = gameObject.GetComponent<ActorBehavior>();
+
+    //    //Determine if actor collision
+    //    if (!sender.CompareTag(Tag.Actor) || !receiver.CompareTag(Tag.Actor))
+    //        return false;
+
+    //    if (!HasActiveActor)
+    //        return false;
+
+    //    //Verify sender is State: "Active"
+    //    if (sender != activeActor)
+    //        return false;
+
+    //    //Ignore actors in motion
+    //    if (receiver.state != State.Idle)
+    //        return false;
+
+    //    return true;
+    //}
 
 
+    //private bool InSameColumn(Vector3 a)
+    //{
+    //    var range = tileSize / 2;
+    //    return a.x <= transform.position.x + range && a.x >= transform.position.x - range;
+    //}
+
+    //private bool InSameRow(Vector3 a)
+    //{
+    //    var range = tileSize / 2;
+    //    return a.y <= transform.position.y + range && a.y >= transform.position.y - range;
+    //}
+
+
+
+
+    //private bool IsOccupiedTile(Vector2Int location)
+    //{
+    //    var 
+    //    return GameManager.instance.tiles.Where(x => x.location == location).Select(x => x.location).Intersect()
+    //}
+
+
+    //private bool WasCollision(From from)
+    //{
+    //    var a = activeActor.transform.position;
+    //    //var b = transform.position;
+    //    var d = destination.Value;
+    //    var range = tileSize / 2;
+
+    //    return from switch
+    //    {
+    //        From.Above => a.y < d.y - range && InSameColumn(a),
+    //        From.Right => a.x < d.x - range && InSameRow(a),
+    //        From.Below => a.y > d.y + range && InSameColumn(a),
+    //        From.Left => a.x > d.x + range && InSameRow(a),
+    //        _ => false,
+    //    };
+    //}
+
+    //private bool WasTriggered(From from)
+    //{
+    //    return from switch
+    //    {
+    //        From.Above => activeActor.location.x == location.x && activeActor.location.y == location.y - 1,
+    //        From.Right => activeActor.location.y == location.y && activeActor.location.x == location.x + 1,
+    //        From.Below => activeActor.location.x == location.x && activeActor.location.y == location.y + 1,
+    //        From.Left => activeActor.location.y == location.y && activeActor.location.x == location.x - 1,
+    //        _ => false,
+    //    };
+    //}
 
     //private TileBehavior GetTile(Vector2Int movement)
     //{
@@ -340,13 +404,13 @@ public class ActorBehavior : MonoBehaviour
     //    switch (from)
     //    {
     //        case From.Above:
-    //            return GameManager.instance.tiles.FirstOrDefault(x => x.location == (location + Direction.Up));
+    //            return GameManager.instance.tiles.FirstOrDefault(x => x.location == (location + Vector3Direction.Up));
     //        case From.Right:
-    //            return GameManager.instance.tiles.FirstOrDefault(x => x.location == (location + Direction.Right));
+    //            return GameManager.instance.tiles.FirstOrDefault(x => x.location == (location + Vector3Direction.Right));
     //        case From.Below:
-    //            return GameManager.instance.tiles.FirstOrDefault(x => x.location == (location + Direction.Down));
+    //            return GameManager.instance.tiles.FirstOrDefault(x => x.location == (location + Vector3Direction.Down));
     //        case From.Left:
-    //            return GameManager.instance.tiles.FirstOrDefault(x => x.location == (location + Direction.Left));
+    //            return GameManager.instance.tiles.FirstOrDefault(x => x.location == (location + Vector3Direction.Left));
     //        default: return null;
     //    }
     //}

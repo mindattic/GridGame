@@ -31,9 +31,6 @@ public class GameManager : Singleton<GameManager>
     //Selection
     public ActorBehavior activeActor;
 
-    public Vector2Int nullLocation = new Vector2Int(-1, -1);
-    public Vector3 nullPosition = Vector3.negativeInfinity;
-
     //Collections
     public List<ActorBehavior> actors;
     public List<TileBehavior> tiles;
