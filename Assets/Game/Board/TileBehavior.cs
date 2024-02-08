@@ -11,7 +11,7 @@ public class TileBehavior : MonoBehaviour
 
     public void Start()
     {
-        transform.position = Geometry.PointFromGrid(location);
+        transform.position = Geometry.PositionFromLocation(location);
         transform.localScale = GameManager.instance.tileScale;
     }
 }

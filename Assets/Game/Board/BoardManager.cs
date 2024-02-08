@@ -33,12 +33,15 @@ public class BoardManager : MonoBehaviour
 
     void GenerateTiles()
     {
+        GameObject prefab;
+        TileBehavior tile;
+
         for (int col = 1; col <= columns; col++)
         {
             for (int row = 1; row <= rows; row++)
             {
-                var prefab = Instantiate(tilePrefab, transform);        
-                var tile = prefab.GetComponent<TileBehavior>();
+                prefab = Instantiate(tilePrefab, transform);        
+                tile = prefab.GetComponent<TileBehavior>();
                 tile.name = $"{col}x{row}";
                 tile.location = new Vector2Int(col, row);
             }

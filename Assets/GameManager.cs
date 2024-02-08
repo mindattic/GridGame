@@ -25,7 +25,7 @@ public class GameManager : Singleton<GameManager>
 
     //Board
     public Vector2 boardOffset;
-    public int boardColumns = 5;
+    public int boardColumns = 6;
     public int boardRows = 8;
 
     //Selection
@@ -37,9 +37,9 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-        instance.screenSize = new Vector2(Common.GetScreenToWorldWidth, Common.GetScreenToWorldHeight);
-        instance.tileSize = instance.screenSize.x / 6.0f;
-        instance.tileScale = new Vector2(instance.tileSize, instance.tileSize);
+        screenSize = new Vector2(Common.GetScreenToWorldWidth, Common.GetScreenToWorldHeight);
+        tileSize = screenSize.x / 6.666666f;
+        tileScale = new Vector2(tileSize, tileSize);
 
         size33 = new Vector2(0.333333f, 0.333333f);
         size50 = new Vector2(0.5f, 0.5f);
@@ -49,7 +49,7 @@ public class GameManager : Singleton<GameManager>
         followSpeed = tileSize / 2.5f; //TODO: Figure out mathematically
         snapDistance = followSpeed / 5f; //TODO: Figure out mathematically
 
-        boardOffset = new Vector2(-2.25f, 4f); //TODO: Figure out mathematically
+        boardOffset = new Vector2(-2.44f, 4f); //TODO: Figure out mathematically
     }
 
     void Start()

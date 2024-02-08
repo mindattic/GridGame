@@ -80,7 +80,7 @@ public class ActorBehavior : MonoBehaviour
 
     private void Start()
     {
-        transform.position = Geometry.PointFromGrid(location);
+        transform.position = Geometry.PositionFromLocation(location);
         transform.localScale = GameManager.instance.tileScale;
     }
 
@@ -135,12 +135,11 @@ public class ActorBehavior : MonoBehaviour
         //activeActor.boxCollider2D.size = size100;
         actors.ForEach(x => x.boxCollider2D.size = size100);
 
-        //Find tile closest to active actor
+        //Assign location and position
         var closestTile = ClosestTile(transform.position);
-
-        //Assign actor new current location/position and drop
         location = closestTile.location;
-        transform.position = Geometry.PointFromGrid(location);
+        transform.position = Geometry.PositionFromLocation(location);
+
         state = State.Idle;
 
         //Clear active actor
@@ -170,25 +169,36 @@ public class ActorBehavior : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter2D(Collider2D collider)
+
+    private bool IsPlayerCollision(Collider2D collider)
     {
         var sender = collider.gameObject.GetComponent<ActorBehavior>();
         //var receiver = gameObject.GetComponent<ActorBehavior>();
 
         //Determine if actor collision
         if (!sender.CompareTag(Tag.Actor) || !CompareTag(Tag.Actor))
-            return;
+            return false;
 
         //Verify sender is State: "Active"
         if (sender != activeActor)
-            return;
+            return false;
 
         //Ignore active actor
         if (state == State.Active)
-            return;
+            return false;
 
         //Ignore actors in motion
         if (state != State.Idle)
+            return false;
+
+        return true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+
+        //Determine if active actor collided with an idle actor
+        if (!IsPlayerCollision(collider))
             return;
 
         //Verify destination has *not* been set 
@@ -199,28 +209,19 @@ public class ActorBehavior : MonoBehaviour
             || (IsSameRow && IsRight) 
             || (IsSameColumn && IsBelow) 
             || (IsSameRow && IsLeft))
-            destination = Geometry.PointFromGrid(activeActor.location);
+        {
+            destination = Geometry.PositionFromLocation(activeActor.location);
+
+            //var closestTile = ClosestTile(activeActor.location);
+            //destination = closestTile.transform.position;
+        }
+          
     }
 
     private void OnTriggerStay2D(Collider2D collider)
     {
-        var sender = collider.gameObject.GetComponent<ActorBehavior>();
-        //var receiver = gameObject.GetComponent<ActorBehavior>();
-
-        //Determine if actor collision
-        if (!sender.CompareTag(Tag.Actor) || !CompareTag(Tag.Actor))
-            return;
-
-        //Verify sender is State: "Active"
-        if (sender != activeActor)
-            return;
-
-        //Ignore active actor
-        if (state == State.Active)
-            return;
-
-        //Ignore actors in motion
-        if (state != State.Idle)
+        //Determine if active actor collided with an idle actor
+        if (!IsPlayerCollision(collider))
             return;
 
         //Verify destination *has* been set 
@@ -277,8 +278,14 @@ public class ActorBehavior : MonoBehaviour
         //TODO: Determine if tile is occupied...
         return GameManager.instance.tiles
             .OrderBy(x => Vector3.Distance(x.transform.position, position))
-            .First()
-            .GetComponent<TileBehavior>();
+            .First();
+    }
+
+    private TileBehavior ClosestTile(Vector2Int location)
+    {
+        //TODO: Determine if tile is occupied...
+        return GameManager.instance.tiles
+            .First(x => x.location == location);
     }
 
     private void OnCollisionExit2D(Collision2D other)
