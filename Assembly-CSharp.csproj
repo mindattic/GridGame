@@ -71,6 +71,7 @@
     <Compile Include="Assets\Models.cs" />
     <Compile Include="Assets\Common.cs" />
     <Compile Include="Assets\WallManager.cs" />
+    <Compile Include="Assets\TimerBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

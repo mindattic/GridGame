@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager>
     public Vector3 mousePosition2D;
     public Vector3 mousePosition3D;
     public Vector3 mouseOffset;
-    public float followSpeed;
+    public float moveSpeed;
     public float snapDistance;
 
     //Board
@@ -31,9 +31,10 @@ public class GameManager : Singleton<GameManager>
     //Selection
     public ActorBehavior activeActor;
 
-    //Collections
+    //Behaviors
     public List<ActorBehavior> actors;
     public List<TileBehavior> tiles;
+    public TimerBehavior timer;
 
     private void Awake()
     {
@@ -46,10 +47,14 @@ public class GameManager : Singleton<GameManager>
         size66 = new Vector2(0.666666f, 0.666666f);
         size100 = new Vector2(1.0f, 1.0f);
 
-        followSpeed = tileSize / 2.5f; //TODO: Figure out mathematically
-        snapDistance = followSpeed / 5f; //TODO: Figure out mathematically
+        moveSpeed = tileSize / 2.5f; //TODO: Figure out mathematically
+        snapDistance = moveSpeed / 5f; //TODO: Figure out mathematically
 
         boardOffset = new Vector2(-2.44f, 4f); //TODO: Figure out mathematically
+
+        timer = GameObject.Find("Timer").GetComponent<TimerBehavior>();
+ 
+
     }
 
     void Start()

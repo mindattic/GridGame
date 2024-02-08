@@ -23,3 +23,17 @@ public static class Vector3Direction
 //    public static Vector2Int Right = new Vector2Int(1, 0);
 //    public static Vector2Int Left = new Vector2Int(-1, 0);
 //}
+
+public class Destination {
+
+    public Vector2Int? location { get; set; }
+    public Vector3? position { get; set; } 
+
+    public bool IsValid => location != null && position != null;
+
+    public void Clear()
+    {
+        location = null;
+        position = null;
+    }
+}

@@ -14,7 +14,7 @@ public class ActorBehavior : MonoBehaviour
 
 
 
-    private Vector3? destination = null;
+    private Destination destination = new Destination();
 
    
     private float tileSize => GameManager.instance.tileSize;
@@ -22,7 +22,7 @@ public class ActorBehavior : MonoBehaviour
     private Vector2 size100 => GameManager.instance.size100;
     private Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
     private List<ActorBehavior> actors => GameManager.instance.actors;
-    private float moveSpeed => GameManager.instance.followSpeed;
+    private float moveSpeed => GameManager.instance.moveSpeed;
     private float snapDistance => GameManager.instance.snapDistance;
 
     private Vector3 mouseOffset
@@ -50,15 +50,17 @@ public class ActorBehavior : MonoBehaviour
     private bool IsBelow => activeActor.location.y == location.y + 1;
     private bool IsLeft => activeActor.location.x == location.x - 1;
 
-
-
     private bool IsOnPlayerTeam => team == Team.Player;
 
     //Component properties
     public BoxCollider2D boxCollider2D
     {
         get => gameObject.GetComponent<BoxCollider2D>();
-        set => gameObject.GetComponent<BoxCollider2D>();
+    }
+
+    public SpriteRenderer spriteRenderer
+    {
+        get => gameObject.GetComponent<SpriteRenderer>();
     }
 
     public Sprite sprite
@@ -72,6 +74,10 @@ public class ActorBehavior : MonoBehaviour
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
+
+
+
+    private TimerBehavior timer => GameManager.instance.timer;
 
     private void Awake()
     {
@@ -91,9 +97,8 @@ public class ActorBehavior : MonoBehaviour
         else if (Input.GetMouseButtonUp(0))
             DropPlayer();
 
-
         if (HasActiveActor)
-            activeActor.location = ClosestTile(activeActor.transform.position).location;
+            activeActor.location = ClosestTileByPosition(activeActor.transform.position).location;
     }
 
 
@@ -116,13 +121,14 @@ public class ActorBehavior : MonoBehaviour
             return;
 
         //Assign idle actor to active
-        activeActor = actor;
+        activeActor = actor;  
+        activeActor.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 2;   
         activeActor.state = State.Active;
+
+        //Assign mouse offset (how off center was selection)
         mouseOffset = activeActor.transform.position - mousePosition3D;
 
-        //Reduce box collider size by 50%
-        //activeActor.boxCollider2D.size = size50;
-        actors.ForEach(x => x.boxCollider2D.size = size50);
+        timer.Set(scale: 1f, start: true);
     }
 
     private void DropPlayer()
@@ -136,14 +142,20 @@ public class ActorBehavior : MonoBehaviour
         actors.ForEach(x => x.boxCollider2D.size = size100);
 
         //Assign location and position
-        var closestTile = ClosestTile(transform.position);
+        var closestTile = ClosestTileByPosition(transform.position);
         location = closestTile.location;
         transform.position = Geometry.PositionFromLocation(location);
-
+        gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
         state = State.Idle;
 
         //Clear active actor
         activeActor = null;
+
+        //Reduce box collider size by 50%
+        //activeActor.boxCollider2D.size = size50;
+        actors.ForEach(x => x.boxCollider2D.size = size50);
+
+        timer.Set(scale: 1f, start: false);
     }
 
     void FixedUpdate()
@@ -151,7 +163,7 @@ public class ActorBehavior : MonoBehaviour
         if (IsActive && IsOnPlayerTeam)
         {
             //Move active actor towards mouse cursor
-            MoveToCursor();
+            MoveTowardCursor();
         }
         else if (IsActive && !IsOnPlayerTeam)
         {
@@ -160,7 +172,7 @@ public class ActorBehavior : MonoBehaviour
         }
         else if (IsMoving)
         {
-            MoveToDestination();
+            MoveTowardDestination();
         }
         else if (IsIdle)
         {
@@ -202,7 +214,7 @@ public class ActorBehavior : MonoBehaviour
             return;
 
         //Verify destination has *not* been set 
-        if (destination.HasValue)
+        if (destination.IsValid)
             return;
 
         if ((IsSameColumn && IsAbove) 
@@ -210,9 +222,11 @@ public class ActorBehavior : MonoBehaviour
             || (IsSameColumn && IsBelow) 
             || (IsSameRow && IsLeft))
         {
-            destination = Geometry.PositionFromLocation(activeActor.location);
+            //Assign destination location and position
+            destination.location = activeActor.location;
+            destination.position = Geometry.PositionFromLocation(destination.location.Value);
 
-            //var closestTile = ClosestTile(activeActor.location);
+            //var closestTile = ClosestTileByPosition(activeActor.location);
             //destination = closestTile.transform.position;
         }
           
@@ -225,55 +239,58 @@ public class ActorBehavior : MonoBehaviour
             return;
 
         //Verify destination *has* been set 
-        if (!destination.HasValue)
+        if (!destination.IsValid)
             return;
 
+        //Assign actor location before movement so occupied tiles can be calculated accurately
+        location = destination.location.Value;
+
+        //Assign State: "Moving"; Actor will move towards it's destination
         state = State.Moving;
     }
-
 
     private void OnTriggerExit2D(Collider2D collider)
     {
 
     }
 
-    private void MoveToCursor()
+    private void MoveTowardCursor()
     {
         if (!HasActiveActor || !IsActive)
             return;
 
-        activeActor.transform.position
+        //Move active actor towards mouse cursor
+        transform.position
                 = Vector2.MoveTowards(activeActor.transform.position,
                                       GameManager.instance.mousePosition3D + mouseOffset,
                                       moveSpeed);
     }
 
-    private void MoveToDestination()
+    private void MoveTowardDestination()
     {
-        if (!destination.HasValue)
+        //Verify destination *has* been set 
+        if (!destination.IsValid)
             return;
 
+        //Verify actor is State: "Moving"
         if (state != State.Moving)
             return;
 
         //Move actor towards destination
-        transform.position = Vector2.MoveTowards(transform.position, destination.Value, moveSpeed);
+        transform.position = Vector2.MoveTowards(transform.position, destination.position.Value, moveSpeed);
 
         //Determine if actor is close to destination
-        bool isCloseToDestination = Vector2.Distance(transform.position, destination.Value) < snapDistance;
-
-        //Snap to destination
+        bool isCloseToDestination = Vector2.Distance(transform.position, destination.position.Value) < snapDistance;
         if (isCloseToDestination)
         {
-            transform.position = destination.Value;
-            location = ClosestTile(transform.position).location;
-            destination = null;
+            //Snap to destination, clear destination, and set actor State: "Idle"
+            transform.position = destination.position.Value;
+            destination.Clear();
             state = State.Idle;
         }
     }
 
-
-    private TileBehavior ClosestTile(Vector2 position)
+    private TileBehavior ClosestTileByPosition(Vector2 position)
     {
         //TODO: Determine if tile is occupied...
         return GameManager.instance.tiles
@@ -281,7 +298,7 @@ public class ActorBehavior : MonoBehaviour
             .First();
     }
 
-    private TileBehavior ClosestTile(Vector2Int location)
+    private TileBehavior ClosestTileByLocation(Vector2Int location)
     {
         //TODO: Determine if tile is occupied...
         return GameManager.instance.tiles

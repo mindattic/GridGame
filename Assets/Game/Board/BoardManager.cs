@@ -81,21 +81,21 @@ public class BoardManager : MonoBehaviour
         actor.location = new Vector2Int(5, 6);
         actor.team = Team.Player;
 
-        //prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        //actor = prefab.GetComponent<ActorBehavior>();
-        //actor.name = "Slime A";
-        //actor.sprite = spriteManager.slime;
-        //actor.parent = transform;
-        //actor.location = new Vector2Int(3, 2);
-        //actor.team = Team.Enemy;
+        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        actor = prefab.GetComponent<ActorBehavior>();
+        actor.name = "Slime A";
+        actor.sprite = spriteManager.slime;
+        actor.parent = transform;
+        actor.location = new Vector2Int(3, 2);
+        actor.team = Team.Enemy;
 
-        //prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        //actor = prefab.GetComponent<ActorBehavior>();
-        //actor.name = "Slime B";
-        //actor.sprite = spriteManager.slime;
-        //actor.parent = transform;
-        //actor.location = new Vector2Int(3, 3);
-        //actor.team = Team.Enemy;
+        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        actor = prefab.GetComponent<ActorBehavior>();
+        actor.name = "Slime B";
+        actor.sprite = spriteManager.slime;
+        actor.parent = transform;
+        actor.location = new Vector2Int(3, 3);
+        actor.team = Team.Enemy;
 
         //Assign actors list
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList()
