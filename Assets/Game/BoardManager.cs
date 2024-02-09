@@ -5,7 +5,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BoardManager : MonoBehaviorBase
+public class BoardManager : ExtendedMonoBehavior
 {
     public GameObject tilePrefab;
     public GameObject actorPrefab;

@@ -1062,6 +1062,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _persistent: 1
+  targetFramerate: 60
+  vSyncCount: 1
   spriteManager: {fileID: 0}
   inputManager: {fileID: 0}
   actorManager: {fileID: 0}
@@ -1069,6 +1071,7 @@ MonoBehaviour:
   tileSize: 0
   tileScale: {x: 0, y: 0}
   spriteScale: {x: 0, y: 0}
+  size25: {x: 0.25, y: 0.25}
   size33: {x: 0.333333, y: 0.333333}
   size50: {x: 0.5, y: 0.5}
   size66: {x: 0.666666, y: 0.666666}
@@ -1124,7 +1127,7 @@ MonoBehaviour:
   sentinel: {fileID: 21300000, guid: 6516101ded5de774ab09dba925fdb3cc, type: 3}
   corsair: {fileID: 21300000, guid: c9470d34c1d097049b851c9801f7bcf1, type: 3}
   oracle: {fileID: 21300000, guid: d237c829d52d73a4081e6bdc2b2a07b6, type: 3}
-  slime: {fileID: 937036382, guid: 1a82b43adeac59a4e80e86c83cb769ed, type: 3}
+  slime: {fileID: 21300000, guid: ff43818280c05f348846d5d79f190d4d, type: 3}
 --- !u!114 &1751276281
 MonoBehaviour:
   m_ObjectHideFlags: 0

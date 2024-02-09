@@ -62,7 +62,7 @@
     <Compile Include="Assets\Constants.cs" />
     <Compile Include="Assets\Game\Actor\ActorBehavior.cs" />
     <Compile Include="Assets\Game\Board\TileBehavior.cs" />
-    <Compile Include="Assets\MonoBehaviorBase.cs" />
+    <Compile Include="Assets\ExtendedMonoBehavior.cs" />
     <Compile Include="Assets\Geometry.cs" />
     <Compile Include="Assets\Game\GameManager.cs" />
     <Compile Include="Assets\GUI\ConsoleManager.cs" />

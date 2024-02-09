@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BoardBehavior : MonoBehaviorBase
+public class BoardBehavior : ExtendedMonoBehavior
 {
     public Vector2 offset = new Vector2(-2.44f, 4f); //TODO: Calculate mathematically...
     public int columns = 6;

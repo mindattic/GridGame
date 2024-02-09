@@ -1,10 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    //Settings
+    public int targetFramerate = 60;
+    public int vSyncCount = 1;
 
     //Managers
     public SpriteManager spriteManager;
@@ -59,13 +60,13 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        Application.targetFrameRate = 60;
-        QualitySettings.vSyncCount = 1;       
+        Application.targetFrameRate = targetFramerate;
+        QualitySettings.vSyncCount = vSyncCount;
     }
 
     void Update()
     {
-      
+
     }
 
 }

@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using State = ActorState;
 
-public class ActorManager : MonoBehaviorBase
+public class ActorManager : ExtendedMonoBehavior
 {
 
     private void Awake()
@@ -22,6 +20,13 @@ public class ActorManager : MonoBehaviorBase
             PickupPlayer();
         else if (Input.GetMouseButtonUp(0))
             DropPlayer();
+
+        if (HasActiveActor)
+        {
+            //Constantly update active actor location
+            var closestTile = Geometry.ClosestTileByPosition(activeActor.transform.position);
+            activeActor.location = closestTile.location;
+        }
     }
 
     private void FixedUpdate()
@@ -83,17 +88,11 @@ public class ActorManager : MonoBehaviorBase
         timer.Set(scale: 1f, start: false);
     }
 
-    /// <summary>
-    /// Method which is used to retrieve all unoccupied locations
-    /// via: https://stackoverflow.com/questions/5620266/the-opposite-of-intersect
-    /// </summary>
-    /// <returns></returns>
-    private List<Vector2Int> GetUnoccupiedLocations()
-    {
-        List<Vector2Int> occupiedLocations = actors.Select(x => x.location).ToList();
-        List<Vector2Int> tileLocations = GameManager.instance.tiles.Select(x => x.location).ToList();
-        List<Vector2Int> unoccupiedLocations = occupiedLocations.Except(tileLocations).Union(tileLocations.Except(occupiedLocations)).ToList();
-        return unoccupiedLocations;
-    }
+    //protected bool IsSameColumn(Vector2Int location) => HasActiveActor && activeActor.location.x == location.x;
+    //protected bool IsSameRow(Vector2Int location) => HasActiveActor && activeActor.location.y == location.y;
+    //protected bool IsAbove(Vector2Int location) => HasActiveActor && activeActor.location.y == location.y - 1;
+    //protected bool IsRight(Vector2Int location) => HasActiveActor && activeActor.location.x == location.x + 1;
+    //protected bool IsBelow(Vector2Int location) => HasActiveActor && activeActor.location.y == location.y + 1;
+    //protected bool IsLeft(Vector2Int location) => HasActiveActor && activeActor.location.x == location.x - 1;
 
 }

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-
 public class Common
 {
     public static Collider2D GetHighestObject(Collider2D[] results)
@@ -40,9 +39,6 @@ public class Common
             return height;
         }
     }
-
-
-
 
 
 
