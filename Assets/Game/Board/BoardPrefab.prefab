@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7829945854487650483}
-  - component: {fileID: 7829945854487650482}
+  - component: {fileID: 4086587420172569240}
   m_Layer: 6
   m_Name: BoardPrefab
   m_TagString: Grid
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7829945854487650482
+--- !u!114 &4086587420172569240
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,8 +41,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7829945854487650484}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22072f7b8fcb00f4599e2d617f278898, type: 3}
+  m_Script: {fileID: 11500000, guid: 1e9515e3cc4649e4ea2d2fc7fec5b6a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilePrefab: {fileID: 7233482234801728947, guid: f420fe272613c294eb4bc531748a437e, type: 3}
-  playerPrefab: {fileID: 3730061202814564284, guid: 4f922b47447b0d245acc44d2545257a3, type: 3}
+  offset: {x: -2.44, y: 4}
+  columns: 6
+  rows: 8
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0

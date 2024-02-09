@@ -1,9 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+
+    //Managers
+    public SpriteManager spriteManager;
+    public InputManager inputManager;
+    public ActorManager actorManager;
+
     //Sizes
     public Vector2 screenSize;
     public float tileSize;
@@ -23,18 +30,15 @@ public class GameManager : Singleton<GameManager>
     public float moveSpeed;
     public float snapDistance;
 
-    //Board
-    public Vector2 boardOffset;
-    public int boardColumns = 6;
-    public int boardRows = 8;
-
     //Selection
     public ActorBehavior activeActor;
 
     //Behaviors
+    public BoardBehavior board;
+    public TimerBehavior timer;
     public List<ActorBehavior> actors;
     public List<TileBehavior> tiles;
-    public TimerBehavior timer;
+
 
     private void Awake()
     {
@@ -50,11 +54,12 @@ public class GameManager : Singleton<GameManager>
         moveSpeed = tileSize / 2.5f; //TODO: Figure out mathematically
         snapDistance = moveSpeed / 5f; //TODO: Figure out mathematically
 
-        boardOffset = new Vector2(-2.44f, 4f); //TODO: Figure out mathematically
+        board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
+        timer = GameObject.Find(Constants.Timer).GetComponent<TimerBehavior>();
 
-        timer = GameObject.Find("Timer").GetComponent<TimerBehavior>();
- 
-
+        spriteManager = GameObject.Find(Constants.Game).GetComponent<SpriteManager>();
+        inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
+        actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
     }
 
     void Start()
@@ -64,6 +69,7 @@ public class GameManager : Singleton<GameManager>
 
     void Update()
     {
-
+      
     }
+
 }

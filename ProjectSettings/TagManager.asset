@@ -9,6 +9,7 @@ TagManager:
   - Tile
   - Actor
   - Board
+  - Grid
   layers:
   - Default
   - TransparentFX
@@ -46,9 +47,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Grid
+  - name: Board
     uniqueID: 2353833759
     locked: 0
-  - name: Player
+  - name: Actor
     uniqueID: 1438895807
     locked: 0

@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{ABC6BD27-6426-9C0A-9167-74920197AA09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -56,9 +57,8 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CameraManager.cs" />
     <Compile Include="Assets\SpriteManager.cs" />
-    <Compile Include="Assets\Game\Board\BoardManager.cs" />
+    <Compile Include="Assets\Game\BoardManager.cs" />
     <Compile Include="Assets\Constants.cs" />
     <Compile Include="Assets\Game\Actor\ActorBehavior.cs" />
     <Compile Include="Assets\Game\Board\TileBehavior.cs" />
@@ -72,6 +72,10 @@
     <Compile Include="Assets\Common.cs" />
     <Compile Include="Assets\WallManager.cs" />
     <Compile Include="Assets\TimerBehavior.cs" />
+    <Compile Include="Assets\Game\Board\BoardBehavior.cs" />
+    <Compile Include="Assets\Game\InputManager.cs" />
+    <Compile Include="Assets\ActorManager.cs" />
+    <Compile Include="Assets\MonoBehaviorBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

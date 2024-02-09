@@ -12,6 +12,7 @@ public class ConsoleManager : MonoBehaviour
 
     private ActorBehavior activeActor => GameManager.instance.activeActor;
     private Vector3 mousePosition2D => GameManager.instance.mousePosition2D;
+    private Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
 
     private void Awake()
     {
@@ -26,35 +27,33 @@ public class ConsoleManager : MonoBehaviour
 
     }
 
-    //Vector2 UnscalePosition(Vector2 vec)
-    //{
-    //    Vector2 referenceResolution = canvas..referenceResolution;
-    //    Vector2 currentResolution = new Vector2(Screen.width, Screen.height);
-
-    //    float widthRatio = currentResolution.x / referenceResolution.x;
-    //    float heightRatio = currentResolution.y / referenceResolution.y;
-
-    //    float ratio = Mathf.Lerp(heightRatio, widthRatio, canvasScaler.matchWidthOrHeight);
-
-    //    return vec / ratio;
-    //}
-
-
-    // Update is called once per frame
     void Update()
     {
-        //console.text
-        //    = $@"Mouse 2D: {GameManager.instance.mousePosition2D.x.ToString("N0").Replace(", ", "")} , {GameManager.instance.mousePosition2D.y.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
-        //    + $@"Mouse 3D: {GameManager.instance.mousePosition3D.x.ToString("N0").Replace(", ", "")} , {GameManager.instance.mousePosition3D.y.ToString("N0").Replace(",", ""):N0} , {GameManager.instance.mousePosition3D.z.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
-        //    + $@"";
 
-        console.text
-            = $@"Selected Actor: {activeActor?.name ?? ""}{Environment.NewLine}"
-            + $@"      Location: {activeActor?.location.x},{activeActor?.location.y}{Environment.NewLine}"
-            + $@"      Mouse 2D: {mousePosition2D.x.ToString("N0").Replace(", ", "")},{mousePosition2D.y.ToString("N0").Replace(",", ""):N0}{Environment.NewLine}"
+    }
+
+    private void FixedUpdate()
+    {
+        var name = activeActor ? activeActor.name : "-";
+        var location = activeActor ? $@"({activeActor?.location.x},{activeActor?.location.y})" : "-";
+        var position = activeActor ? $@"({activeActor?.transform.position.x},{activeActor?.transform.position.y})" : "-";
+        var mouse2D = $@"({mousePosition2D.x.ToString("N0").Replace(", ", "")},{mousePosition2D.y.ToString("N0").Replace(",", ""):N0})";
+        var mouse3D = $@"({mousePosition3D.x},{mousePosition3D.y},{mousePosition3D.z})";
+
+        console.text = ""
+            + $@"Statistics{Environment.NewLine}"
+            + $@"    Runtime: {Time.time}{Environment.NewLine}"
+            + $@"{Environment.NewLine}"
+            + $@"Actor{Environment.NewLine}"
+            + $@"       Name: {name}{Environment.NewLine}"
+            + $@"   Location: {location}{Environment.NewLine}"
+            + $@"   Position: {position}{Environment.NewLine}"
+            + $@"{Environment.NewLine}"
+            + $@"Mouse{Environment.NewLine}"
+            + $@"         2D: {mouse2D}{Environment.NewLine}"
+            + $@"         3D: {mouse3D}{Environment.NewLine}"
+            + $@"{Environment.NewLine}"
+            + $@"{Environment.NewLine}"
             + $@"";
-
-
-
     }
 }

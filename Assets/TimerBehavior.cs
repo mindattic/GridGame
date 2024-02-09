@@ -17,8 +17,8 @@ public class TimerBehavior : MonoBehaviour
         progressBar = GetComponent<Image>();
 
 
-        rect.offsetMin = new Vector2(0, 1550); //Set left, bottom
-        rect.offsetMax = new Vector2(0, -100); //Set right, top
+        rect.offsetMin = new Vector2(25, 1550); //Set left, bottom
+        rect.offsetMax = new Vector2(-25, -100); //Set right, top
 
 
     }
@@ -61,9 +61,4 @@ public class TimerBehavior : MonoBehaviour
         isRunning = false;
     }
 
-    //private void SetRect(RectTransform trs, float left, float top, float right, float bottom)
-    //{
-    //    trs.offsetMin = new Vector2(left, bottom);
-    //    trs.offsetMax = new Vector2(-right, -top);
-    //}
 }

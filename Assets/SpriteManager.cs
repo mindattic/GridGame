@@ -11,12 +11,12 @@ public class SpriteManager : MonoBehaviour
 
     void Awake()
     {
-        var sprites = GameObject.Find(Constants.Sprites);
+        //var sprites = GameObject.Find(Constants.Sprites);
        
-        sentinel = sprites.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite;
-        corsair = sprites.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite;
-        oracle = sprites.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite;
-        slime = sprites.transform.GetChild(3).gameObject.GetComponent<SpriteRenderer>().sprite;
+        //sentinel = sprites.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite;
+        //corsair = sprites.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite;
+        //oracle = sprites.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite;
+        //slime = sprites.transform.GetChild(3).gameObject.GetComponent<SpriteRenderer>().sprite;
     }
 
     // Start is called before the first frame update
