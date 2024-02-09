@@ -22,7 +22,7 @@ public class BoardBehavior : MonoBehaviorBase
     {
         top = offset.y - tileSize / 2;
         right = offset.x + (tileSize * columns) + tileSize / 2;
-        bottom = offset.y - (tileSize * rows) - tileSize / 2; //-1.8f; //offset.y + (tileSize * rows) + tileSize / 2;
+        bottom = offset.y - (tileSize * rows) - tileSize / 2;
         left = offset.x + tileSize / 2;
     }
 

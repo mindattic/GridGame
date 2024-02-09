@@ -3,7 +3,7 @@
 
 public class Common
 {
-    public Collider2D GetHighestObject(Collider2D[] results)
+    public static Collider2D GetHighestObject(Collider2D[] results)
     {
         int highestValue = 0;
         Collider2D highestObject = results[0];

@@ -14,6 +14,8 @@ public class ConsoleManager : MonoBehaviour
     private Vector3 mousePosition2D => GameManager.instance.mousePosition2D;
     private Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
 
+    private FpsMonitor fpsMonitor = new FpsMonitor();
+
     private void Awake()
     {
         console = GetComponent<Text>();
@@ -22,27 +24,29 @@ public class ConsoleManager : MonoBehaviour
 
     void Start()
     {
-
+        fpsMonitor.Start();
 
 
     }
 
     void Update()
     {
-
+        fpsMonitor.Update();
     }
 
     private void FixedUpdate()
     {
-        var name = activeActor ? activeActor.name : "-";
-        var location = activeActor ? $@"({activeActor?.location.x},{activeActor?.location.y})" : "-";
-        var position = activeActor ? $@"({activeActor?.transform.position.x},{activeActor?.transform.position.y})" : "-";
-        var mouse2D = $@"({mousePosition2D.x.ToString("N0").Replace(", ", "")},{mousePosition2D.y.ToString("N0").Replace(",", ""):N0})";
-        var mouse3D = $@"({mousePosition3D.x},{mousePosition3D.y},{mousePosition3D.z})";
+        string fps = $@"{fpsMonitor.current}";
+        string name = activeActor ? activeActor.name : "-";
+        string location = activeActor ? $@"({activeActor?.location.x},{activeActor?.location.y})" : "-";
+        string position = activeActor ? $@"({activeActor?.transform.position.x},{activeActor?.transform.position.y})" : "-";
+        string mouse2D = $@"({mousePosition2D.x.ToString("N0").Replace(", ", "")},{mousePosition2D.y.ToString("N0").Replace(",", ""):N0})";
+        string mouse3D = $@"({mousePosition3D.x},{mousePosition3D.y},{mousePosition3D.z})";
 
         console.text = ""
             + $@"Statistics{Environment.NewLine}"
             + $@"    Runtime: {Time.time}{Environment.NewLine}"
+            + $@"        FPS: {fps}{Environment.NewLine}"
             + $@"{Environment.NewLine}"
             + $@"Actor{Environment.NewLine}"
             + $@"       Name: {name}{Environment.NewLine}"
@@ -52,7 +56,6 @@ public class ConsoleManager : MonoBehaviour
             + $@"Mouse{Environment.NewLine}"
             + $@"         2D: {mouse2D}{Environment.NewLine}"
             + $@"         3D: {mouse3D}{Environment.NewLine}"
-            + $@"{Environment.NewLine}"
             + $@"{Environment.NewLine}"
             + $@"";
     }

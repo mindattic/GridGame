@@ -17,22 +17,13 @@ public class ActorBehavior : MonoBehaviorBase
     private bool IsActive => state == State.Active;
     private bool IsMoving => state == State.Moving;
 
-    //Actor Properties
-    private bool HasActiveActor => activeActor != null;
-    private bool IsSameColumn => HasActiveActor && activeActor.location.x == location.x;
-    private bool IsSameRow => HasActiveActor && activeActor.location.y == location.y;
-    private bool IsAbove => activeActor.location.y == location.y - 1;
-    private bool IsRight => activeActor.location.x == location.x + 1;
-    private bool IsBelow => activeActor.location.y == location.y + 1;
-    private bool IsLeft => activeActor.location.x == location.x - 1;
-
     private bool IsOnPlayerTeam => team == Team.Player;
 
     //Component properties
     public BoxCollider2D boxCollider2D => gameObject.GetComponent<BoxCollider2D>();
-    
+
     public SpriteRenderer spriteRenderer => gameObject.GetComponent<SpriteRenderer>();
-    
+
     public Sprite sprite
     {
         get => gameObject.GetComponent<SpriteRenderer>().sprite;
@@ -67,10 +58,10 @@ public class ActorBehavior : MonoBehaviorBase
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-            PickupPlayer();
-        else if (Input.GetMouseButtonUp(0))
-            DropPlayer();
+        //if (Input.GetMouseButtonDown(0))
+        //    PickupPlayer();
+        //else if (Input.GetMouseButtonUp(0))
+        //    DropPlayer();
 
         if (!HasActiveActor)
             return;
@@ -79,72 +70,66 @@ public class ActorBehavior : MonoBehaviorBase
         //mouseOffset = activeActor.transform.position - mousePosition3D;
 
         //Constantly update active actor location
-        activeActor.location = ClosestTileByPosition(activeActor.transform.position).location;
-
-        //Check bounds
-        //if (activeActor.transform.position.x < board.left)
-        //    activeActor.transform.position = new Vector3(
-        //        board.left,
-        //        activeActor.transform.position.y,
-        //        activeActor.transform.position.z);
+        var closestTile = Geometry.ClosestTileByPosition(activeActor.transform.position);
+        activeActor.location = closestTile.location;
     }
 
 
-    public void PickupPlayer()
-    {
-        //Only pickup player if no actor has State: "Active"
-        if (HasActiveActor)
-            return;
+    //public void PickupPlayer()
+    //{
+    //    //Only pickup player if no actor has State: "Active"
+    //    if (HasActiveActor)
+    //        return;
 
-        //Find actor overlaping mouse position
-        Collider2D mouseCollider = Physics2D.OverlapPoint(mousePosition3D);
-        if (mouseCollider == null || !mouseCollider.CompareTag(Tag.Actor))
-            return;
+    //    //Find actor overlaping mouse position
+    //    Collider2D mouseCollider = Physics2D.OverlapPoint(mousePosition3D);
+    //    if (mouseCollider == null || !mouseCollider.CompareTag(Tag.Actor))
+    //        return;
 
-        //Retrieve actor under mouse cursor
-        var actor = mouseCollider.gameObject.GetComponent<ActorBehavior>();
+    //    //Retrieve actor under mouse cursor
+    //    var actor = mouseCollider.gameObject.GetComponent<ActorBehavior>();
 
-        //Determine if actor Team: "Player" and State: "Idle"
-        if (actor.team != Team.Player || actor.state != State.Idle)
-            return;
+    //    //Determine if actor Team: "Player" and State: "Idle"
+    //    if (actor.team != Team.Player || actor.state != State.Idle)
+    //        return;
 
-        //Assign idle actor to active
-        activeActor = actor;
-        activeActor.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 2;
-        activeActor.state = State.Active;
+    //    //Assign idle actor to active
+    //    activeActor = actor;
+    //    activeActor.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 2;
+    //    activeActor.state = State.Active;
 
-        //Assign mouse offset (how off center was selection)
-        mouseOffset = activeActor.transform.position - mousePosition3D;
+    //    //Assign mouse offset (how off center was selection)
+    //    mouseOffset = activeActor.transform.position - mousePosition3D;
 
-        timer.Set(scale: 1f, start: true);
-    }
+    //    timer.Set(scale: 1f, start: true);
+    //}
 
-    public void DropPlayer()
-    {
-        //Only drop player if actor is active
-        if (!HasActiveActor || !IsActive)
-            return;
+    //public void DropPlayer()
+    //{
+    //    //Only drop player if actor is active
+    //    if (!HasActiveActor || !IsActive)
+    //        return;
 
-        //Restore box collider size to 100%
-        //activeActor.boxCollider2D.size = size100;
-        actors.ForEach(x => x.boxCollider2D.size = size100);
+    //    //Restore box collider size to 100%
+    //    //activeActor.boxCollider2D.size = size100;
+    //    actors.ForEach(x => x.boxCollider2D.size = size100);
 
-        //Assign location and position
-        var closestTile = ClosestTileByPosition(transform.position);
-        location = closestTile.location;
-        transform.position = Geometry.PositionFromLocation(location);
-        gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
-        state = State.Idle;
+    //    //Assign location and position
+    //    var closestTile = ClosestTileByPosition(transform.position);
+    //    location = closestTile.location;
+    //    transform.position = Geometry.PositionFromLocation(location);
+    //    gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
+    //    state = State.Idle;
 
-        //Clear active actor
-        activeActor = null;
+    //    //Clear active actor
+    //    activeActor = null;
 
-        //Reduce box collider size by 50%
-        //activeActor.boxCollider2D.size = size50;
-        actors.ForEach(x => x.boxCollider2D.size = size50);
+    //    //Reduce box collider size by 50%
+    //    //activeActor.boxCollider2D.size = size50;
+    //    actors.ForEach(x => x.boxCollider2D.size = size50);
 
-        timer.Set(scale: 1f, start: false);
-    }
+    //    timer.Set(scale: 1f, start: false);
+    //}
 
     void FixedUpdate()
     {
@@ -205,10 +190,10 @@ public class ActorBehavior : MonoBehaviorBase
         if (destination.IsValid)
             return;
 
-        if ((IsSameColumn && IsAbove)
-            || (IsSameRow && IsRight)
-            || (IsSameColumn && IsBelow)
-            || (IsSameRow && IsLeft))
+        if ((IsSameColumn(location) && IsAbove(location))
+            || (IsSameRow(location) && IsRight(location))
+            || (IsSameColumn(location) && IsBelow(location))
+            || (IsSameRow(location) && IsLeft(location)))
         {
             //Assign destination location and position
             destination.location = activeActor.location;
@@ -290,30 +275,7 @@ public class ActorBehavior : MonoBehaviorBase
         }
     }
 
-    private TileBehavior ClosestTileByPosition(Vector2 position)
-    {
 
-        return GameManager.instance.tiles
-            .OrderBy(x => Vector3.Distance(x.transform.position, position))
-            .First();
-
-        //var unoccupiedLocations = GetUnoccupiedLocations();
-        //return GameManager.instance.tiles
-        //    .Where(x => unoccupiedLocations.Contains(x.location))
-        //    .OrderBy(x => Vector3.Distance(x.transform.position, position))
-        //    .First();
-    }
-
-    private TileBehavior ClosestTileByLocation(Vector2Int location)
-    {
-        return GameManager.instance.tiles
-            .First(x => x.location == location);
-
-        //var unoccupiedLocations = GetUnoccupiedLocations();
-        //return GameManager.instance.tiles
-        //    .Where(x => unoccupiedLocations.Contains(x.location))
-        //    .First(x => x.location == location);
-    }
 
     private void OnCollisionExit2D(Collision2D other)
     {
@@ -321,17 +283,7 @@ public class ActorBehavior : MonoBehaviorBase
     }
 
 
-    /// <summary>
-    /// Method which is used to retrieve all unoccupied locations
-    /// via: https://stackoverflow.com/questions/5620266/the-opposite-of-intersect
-    /// </summary>
-    /// <returns></returns>
-    private List<Vector2Int> GetUnoccupiedLocations() {
-        List<Vector2Int> occupiedLocations = actors.Select(x => x.location).ToList();
-        List<Vector2Int> tileLocations = GameManager.instance.tiles.Select(x => x.location).ToList();
-        List<Vector2Int> unoccupiedLocations = occupiedLocations.Except(tileLocations).Union(tileLocations.Except(occupiedLocations)).ToList();
-        return unoccupiedLocations;
-    }
+
 
     void OnDrawGizmos()
     {
@@ -340,7 +292,18 @@ public class ActorBehavior : MonoBehaviorBase
         //Gizmos.DrawCube(Vector3.zero, Vector3.one);
     }
 
-
+    ///// <summary>
+    ///// Method which is used to retrieve all unoccupied locations
+    ///// via: https://stackoverflow.com/questions/5620266/the-opposite-of-intersect
+    ///// </summary>
+    ///// <returns></returns>
+    //private List<Vector2Int> GetUnoccupiedLocations()
+    //{
+    //    List<Vector2Int> occupiedLocations = actors.Select(x => x.location).ToList();
+    //    List<Vector2Int> tileLocations = GameManager.instance.tiles.Select(x => x.location).ToList();
+    //    List<Vector2Int> unoccupiedLocations = occupiedLocations.Except(tileLocations).Union(tileLocations.Except(occupiedLocations)).ToList();
+    //    return unoccupiedLocations;
+    //}
 
     //private bool IsActorCollision(Collider2D collider)
     //{
