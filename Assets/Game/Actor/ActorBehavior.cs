@@ -249,16 +249,15 @@ public class ActorBehavior : MonoBehaviorBase
 
         var cursorPosition = GameManager.instance.mousePosition3D + mouseOffset;
 
+        //Enforce board bounds
         if (cursorPosition.x < board.left)
             cursorPosition.x = board.left;
         else if (cursorPosition.x > board.right)
             cursorPosition.x = board.right;
-
-
-        //if (cursorPosition.y < board.top)
-        //    cursorPosition.y = board.top;
-        //else if (cursorPosition.y > board.bottom)
-        //    cursorPosition.y = board.bottom;
+        if (cursorPosition.y > board.top)
+            cursorPosition.y = board.top;
+        else if (cursorPosition.y < board.bottom)
+            cursorPosition.y = board.bottom;
 
         //Move active actor towards mouse cursor
         transform.position

@@ -3,26 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BoardBehavior : MonoBehaviour
+public class BoardBehavior : MonoBehaviorBase
 {
-    private BoardBehavior board => GameManager.instance.board;
-    private TimerBehavior timer => GameManager.instance.timer;
-
-    private List<ActorBehavior> actors => GameManager.instance.actors;
-
-
-    public Vector2 offset = new Vector2(-2.44f, 4f);
+    public Vector2 offset = new Vector2(-2.44f, 4f); //TODO: Calculate mathematically...
     public int columns = 6;
     public int rows = 8;
-
     public float top;
     public float right;
     public float bottom;
     public float left;
-
-
-    private float tileSize => GameManager.instance.tileSize;
-
 
     void Awake()
     {
@@ -31,9 +20,9 @@ public class BoardBehavior : MonoBehaviour
 
     void Start()
     {
-        top = 0;
-        right = offset.x + (tileSize * columns) - tileSize / 2;
-        bottom = 0;
+        top = offset.y - tileSize / 2;
+        right = offset.x + (tileSize * columns) + tileSize / 2;
+        bottom = offset.y - (tileSize * rows) - tileSize / 2; //-1.8f; //offset.y + (tileSize * rows) + tileSize / 2;
         left = offset.x + tileSize / 2;
     }
 
