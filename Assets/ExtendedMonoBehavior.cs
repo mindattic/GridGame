@@ -20,7 +20,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected List<ActorBehavior> actors => GameManager.instance.actors;
 
     //Actor
-    protected bool HasActiveActor => activeActor != null;
+    protected bool HasSelectedPlayer => selectedPlayer != null;
 
     //Scale
     protected float tileSize => GameManager.instance.tileSize;
@@ -49,7 +49,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     }
 
 
-    protected ActorBehavior activeActor
+    protected ActorBehavior selectedPlayer
     {
         get { return GameManager.instance.activeActor; }
         set { GameManager.instance.activeActor = value; }

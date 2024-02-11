@@ -133,7 +133,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.666666, y: 0.666666}
   m_EdgeRadius: 0
 --- !u!58 &-5847717001262892073
 CircleCollider2D:
@@ -163,5 +163,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1156cd1b5d0a4f488184b10c40c081c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <location>k__BackingField: {x: 0, y: 0}
+  state: 0
   team: 2

@@ -21,11 +21,11 @@ public class ActorManager : ExtendedMonoBehavior
         else if (Input.GetMouseButtonUp(0))
             DropPlayer();
 
-        if (HasActiveActor)
+        if (HasSelectedPlayer)
         {
             //Constantly update active actor location
-            var closestTile = Geometry.ClosestTileByPosition(activeActor.transform.position);
-            activeActor.location = closestTile.location;
+            var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
+            selectedPlayer.location = closestTile.location;
         }
     }
 
@@ -37,7 +37,7 @@ public class ActorManager : ExtendedMonoBehavior
     public void PickupPlayer()
     {
         //Only pickup player if no actor has State: "Active"
-        if (HasActiveActor)
+        if (HasSelectedPlayer)
             return;
 
         //Find actor overlaping mouse position
@@ -53,15 +53,14 @@ public class ActorManager : ExtendedMonoBehavior
             return;
 
         //Assign idle actor to active
-        activeActor = actor;
-        activeActor.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 2;
-        activeActor.state = State.Active;
-
+        selectedPlayer = actor;
+        selectedPlayer.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 2;
+       
         //Assign mouse offset (how off center was selection)
-        mouseOffset = activeActor.transform.position - mousePosition3D;
+        mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
         //Reduce box collider size (allowing actors some 'wiggle room')
-        actors.ForEach(x => x.boxCollider2D.size = size50);
+        //actors.ForEach(x => x.boxCollider2D.size = size50);
 
         timer.Set(scale: 1f, start: true);
     }
@@ -69,30 +68,22 @@ public class ActorManager : ExtendedMonoBehavior
     public void DropPlayer()
     {
         //Only drop player if actor is active
-        if (!HasActiveActor)
+        if (!HasSelectedPlayer)
             return;
 
         //Assign location and position
-        var closestTile = Geometry.ClosestTileByPosition(activeActor.transform.position);
-        activeActor.location = closestTile.location;
-        activeActor.transform.position = Geometry.PositionFromLocation(activeActor.location);
-        activeActor.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
-        activeActor.state = State.Idle;
+        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
+        selectedPlayer.location = closestTile.location;
+        selectedPlayer.transform.position = Geometry.PositionFromLocation(selectedPlayer.location);
+        selectedPlayer.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        selectedPlayer.state = State.Idle;
 
         //Clear active actor
-        activeActor = null;
+        selectedPlayer = null;
 
         //Restore box collider size to 100%
-        actors.ForEach(x => x.boxCollider2D.size = size100);
+        //actors.ForEach(x => x.boxCollider2D.size = size100);
 
         timer.Set(scale: 1f, start: false);
     }
-
-    //protected bool IsSameColumn(Vector2Int location) => HasActiveActor && activeActor.location.x == location.x;
-    //protected bool IsSameRow(Vector2Int location) => HasActiveActor && activeActor.location.y == location.y;
-    //protected bool IsAbove(Vector2Int location) => HasActiveActor && activeActor.location.y == location.y - 1;
-    //protected bool IsRight(Vector2Int location) => HasActiveActor && activeActor.location.x == location.x + 1;
-    //protected bool IsBelow(Vector2Int location) => HasActiveActor && activeActor.location.y == location.y + 1;
-    //protected bool IsLeft(Vector2Int location) => HasActiveActor && activeActor.location.x == location.x - 1;
-
 }

@@ -11,10 +11,13 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     //State Properties
     private bool IsIdle => state == State.Moving;
-    private bool IsActive => state == State.Active;
+    //private bool IsActive => state == State.Active;
     private bool IsMoving => state == State.Moving;
 
     private bool IsOnPlayerTeam => team == Team.Player;
+
+    private bool IsSelectedPlayer(ActorBehavior actor) => HasSelectedPlayer && actor.Equals(selectedPlayer);
+
 
     //Component properties
     public BoxCollider2D boxCollider2D => gameObject.GetComponent<BoxCollider2D>();
@@ -33,12 +36,12 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.SetParent(value, true);
     }
 
-    protected bool IsSameColumn => HasActiveActor && activeActor.location.x == location.x;
-    protected bool IsSameRow => HasActiveActor && activeActor.location.y == location.y;
-    protected bool IsAbove => HasActiveActor && activeActor.location.y == location.y - 1;
-    protected bool IsRight => HasActiveActor && activeActor.location.x == location.x + 1;
-    protected bool IsBelow => HasActiveActor && activeActor.location.y == location.y + 1;
-    protected bool IsLeft => HasActiveActor && activeActor.location.x == location.x - 1;
+    private bool IsSameColumn(ActorBehavior sender, ActorBehavior receiver) => sender.location.x == receiver.location.x;
+    private bool IsSameRow(ActorBehavior sender, ActorBehavior receiver) => sender.location.y == receiver.location.y;
+    private bool IsAbove(ActorBehavior sender, ActorBehavior receiver) => sender.location.y == receiver.location.y - 1;
+    private bool IsRight(ActorBehavior sender, ActorBehavior receiver) => sender.location.x == receiver.location.x + 1;
+    private bool IsBelow(ActorBehavior sender, ActorBehavior receiver) => sender.location.y == receiver.location.y + 1;
+    private bool IsLeft(ActorBehavior sender, ActorBehavior receiver) => sender.location.x == receiver.location.x - 1;
 
     private void Awake()
     {
@@ -67,15 +70,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void FixedUpdate()
     {
-        if (IsActive && IsOnPlayerTeam)
+        if (IsSelectedPlayer(this))
         {
             //Move active actor towards mouse cursor
             MoveTowardCursor();
-        }
-        else if (IsActive && !IsOnPlayerTeam)
-        {
-            //Enemies and Neutral actors AI here...
-
         }
         else if (IsMoving)
         {
@@ -88,60 +86,74 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-    private bool IsActorCollision(Collider2D collider)
-    {
-        var sender = collider.gameObject.GetComponent<ActorBehavior>();
-        //var receiver = gameObject.GetComponent<ActorBehavior>();
-
-        //Determine if actor collision
-        if (!sender.CompareTag(Tag.Actor) || !CompareTag(Tag.Actor))
-            return false;
-
-        //Ignore actors in motion
-        if (state != State.Idle)
-            return false;
-
-        return true;
-    }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        var sender = collider.gameObject.GetComponent<ActorBehavior>();
+        var receiver = gameObject.GetComponent<ActorBehavior>();
 
-        //Determine if active actor collided with an idle actor
-        if (!IsActorCollision(collider))
+        //Ignore "self collisions"
+        if (sender.Equals(receiver))
+            return;
+
+        //Determine if two actors collided
+        if (!sender.CompareTag(Tag.Actor) || !receiver.CompareTag(Tag.Actor))
+            return;
+
+        //Ignore trigger when against selected player
+        if (IsSelectedPlayer(receiver))
+            return;
+
+        //Ignore actors in motion
+        if (sender.state != State.Idle || receiver.state != State.Idle)
             return;
 
         //Verify destination has *not* been set 
-        if (destination.IsValid)
+        if (receiver.destination.IsValid)
             return;
 
-        if ((IsSameColumn && IsAbove)
-            || (IsSameRow && IsRight)
-            || (IsSameColumn && IsBelow)
-            || (IsSameRow && IsLeft))
+        if ((IsSameColumn(sender, receiver) && IsAbove(sender, receiver))
+            || (IsSameRow(sender, receiver) && IsRight(sender, receiver))
+            || (IsSameColumn(sender, receiver) && IsBelow(sender, receiver))
+            || (IsSameRow(sender, receiver) && IsLeft(sender, receiver)))
         {
             //Assign destination location and position
-            destination.location = activeActor.location;
-            destination.position = Geometry.PositionFromLocation(destination.location.Value);
+            receiver.destination.location = sender.location;
+            receiver.destination.position = Geometry.PositionFromLocation(receiver.destination.location.Value);
         }
 
     }
 
     private void OnTriggerStay2D(Collider2D collider)
     {
-        //Determine if active actor collided with an idle actor
-        if (!IsActorCollision(collider))
+        var sender = collider.gameObject.GetComponent<ActorBehavior>();
+        var receiver = gameObject.GetComponent<ActorBehavior>();
+
+        //Ignore "self collisions"
+        if (sender.Equals(receiver))
+            return;
+
+        //Determine if two actors collided
+        if (!sender.CompareTag(Tag.Actor) || !receiver.CompareTag(Tag.Actor))
+            return;
+
+        //Ignore actors in motion
+        if (sender.state != State.Idle || receiver.state != State.Idle)
+            return;
+
+        //Ignore trigger when against selected player
+        if (IsSelectedPlayer(receiver))
             return;
 
         //Verify destination *has* been set 
-        if (!destination.IsValid)
+        if (!receiver.destination.IsValid)
             return;
 
         //Assign actor location before movement so occupied tiles can be calculated accurately
-        location = destination.location.Value;
+        receiver.location = destination.location.Value;
 
         //Assign State: "Moving"; Actor will move towards it's destination
-        state = State.Moving;
+        receiver.state = State.Moving;
     }
 
     private void OnTriggerExit2D(Collider2D collider)
@@ -151,7 +163,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void MoveTowardCursor()
     {
-        if (!HasActiveActor || !IsActive)
+        if (!HasSelectedPlayer || !IsSelectedPlayer(this))
             return;
 
         var cursorPosition = GameManager.instance.mousePosition3D + mouseOffset;
@@ -168,7 +180,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //Move active actor towards mouse cursor
         transform.position
-                = Vector2.MoveTowards(activeActor.transform.position,
+                = Vector2.MoveTowards(selectedPlayer.transform.position,
                                       cursorPosition,
                                       moveSpeed);
     }
@@ -191,6 +203,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (isCloseToDestination)
         {
             //Snap to destination, clear destination, and set actor State: "Idle"
+            location = destination.location.Value;
             transform.position = destination.position.Value;
             destination.Clear();
             state = State.Idle;
