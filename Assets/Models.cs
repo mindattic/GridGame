@@ -48,6 +48,7 @@ public class Destination {
         position = null;
         direction = Direction.None;
     }
+
 }
 
 

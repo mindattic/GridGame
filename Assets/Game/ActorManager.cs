@@ -47,6 +47,8 @@ public class ActorManager : ExtendedMonoBehavior
 
         //Retrieve actor under mouse cursor
         var actor = mouseCollider.gameObject.GetComponent<ActorBehavior>();
+        if (actor == null)
+            return;
 
         //Determine if actor Team: "Player"
         if (actor.team != Team.Player)
@@ -66,7 +68,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         //Reduce box collider size (allowing actors some 'wiggle room')
         //actors.ForEach(x => x.boxCollider2D.size = size50);
-        //selectedPlayer.boxCollider2D.size = size25;
+        //selectedPlayer.boxCollider2D.size = size33;
 
         timer.Set(scale: 1f, start: true);
     }
@@ -88,7 +90,7 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer = null;
 
         //Restore box collider size to 100%
-        //actors.ForEach(x => x.boxCollider2D.size = size100);
+        //actors.ForEach(x => x.boxCollider2D.size = size50);
 
         timer.Set(scale: 1f, start: false);
     }

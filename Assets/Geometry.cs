@@ -23,6 +23,11 @@ public class Geometry
         return new Vector3(x, y, 0);
     }
 
+    static public Vector3 TilePositionFromLocation(Vector2Int location)
+    {
+        return tiles.FirstOrDefault(x => x.location == location).transform.position;
+    }
+
     ///DEBUG: Does this work?
     static public Vector2Int LocationFromPosition(Vector3 position)
     {

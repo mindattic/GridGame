@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using MoveState = ActorMoveState;
 
@@ -19,7 +20,6 @@ public class ActorBehavior : ExtendedMonoBehavior
     private bool IsSelectedPlayer => HasSelectedPlayer && this.Equals(selectedPlayer);
 
     private bool HasDirection => destination.direction != Direction.None;
-
 
     //Component properties
     public BoxCollider2D boxCollider2D => gameObject.GetComponent<BoxCollider2D>();
@@ -43,9 +43,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
-
-
-
 
     private void Awake()
     {
@@ -74,16 +71,16 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void FixedUpdate()
     {
-        if (IsSelectedPlayer)
+        if (this.IsSelectedPlayer)
         {
-            //Move active actor towards mouse cursor
+            //SetDestination active actor towards mouse cursor
             MoveTowardCursor();
         }
-        else if (IsMoving)
+        else if (this.IsMoving)
         {
-            MoveTowardDestination();
+            this.MoveTowardDestination();
         }
-        else if (IsIdle)
+        else if (this.IsIdle)
         {
             //Do nothing...
         }
@@ -93,81 +90,89 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private bool IsSameColumn(ActorBehavior other) => this.location.x == other.location.x;
     private bool IsSameRow(ActorBehavior other) => this.location.y == other.location.y;
-    private bool IsAbove(ActorBehavior other) => IsSameColumn(other) && this.location.y == other.location.y - 1;
-    private bool IsRightOf(ActorBehavior other) => IsSameRow(other) && this.location.x == other.location.x + 1;
-    private bool IsBelow(ActorBehavior other) => IsSameColumn(other) && this.location.y == other.location.y + 1;
-    private bool IsLeftOf(ActorBehavior other) => IsSameRow(other) && this.location.x == other.location.x - 1;
+    private bool IsAbove(ActorBehavior other) => IsSameColumn(this) && this.location.y == other.location.y + 1;
+    private bool IsRightOf(ActorBehavior other) => IsSameRow(this) && this.location.x == other.location.x + 1;
+    private bool IsBelow(ActorBehavior other) => IsSameColumn(this) && this.location.y == other.location.y - 1;
+    private bool IsLeftOf(ActorBehavior other) => IsSameRow(this) && this.location.x == other.location.x - 1;
+
+
+    private void SetDirection(ActorBehavior other)
+    {
+        if (other == null)
+            return;
+
+        if (this.IsAbove(other))
+            this.destination.direction = Direction.Down;
+        else if (this.IsRightOf(other))
+            this.destination.direction = Direction.Left;
+        else if (this.IsBelow(other))
+            this.destination.direction = Direction.Up;
+        else if (this.IsLeftOf(other))
+            this.destination.direction = Direction.Right;
+        else
+            this.destination.direction = Direction.None;
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        //Verify direction has *NOT* been set 
-        if (HasDirection) return;
-
-        var sender = collider.gameObject.GetComponent<ActorBehavior>();
-
-        //Ignore self-collisions
-        if (sender.Equals(this)) return;
-
-        //Determine if two actors collided
-        if (!sender.CompareTag(Tag.Actor) || !this.CompareTag(Tag.Actor)) return;
+        //Ignore selected actor
+        if (this.IsSelectedPlayer)
+            return;
 
         //Ignore actors in motion
-        if (IsMoving) return;
+        if (this.IsMoving)
+            return;
 
-        if (sender.IsAbove(this))
-        {
-            destination.direction = Direction.Up;
-        }
-        else if (sender.IsRightOf(this))
-        {
-            destination.direction = Direction.Right;
-        }
-        else if (sender.IsBelow(this))
-        {
-            destination.direction = Direction.Down;
-        }
-        else if (sender.IsLeftOf(this))
-        {
-            destination.direction = Direction.Left;
-        }
+        //Ignore actors with set direction
+        if (this.HasDirection)
+            return;
 
+        //Assign intended movement direction
+        var sender = collider.gameObject.GetComponent<ActorBehavior>();
+        this.SetDirection(sender);
     }
 
-    private void OnTriggerStay2D(Collider2D collider)
+    private void SetDestination()
     {
-        //Verify direction *HAS* been set 
-        if (!HasDirection) return;
+        if (this.destination.direction == Direction.None)
+            return;
 
-        var sender = collider.gameObject.GetComponent<ActorBehavior>();
-
-        //Ignore self-collisions
-        if (sender.Equals(this)) return;
-
-        //Determine if two actors collided
-        if (!sender.CompareTag(Tag.Actor) || !this.CompareTag(Tag.Actor)) return;
-
-        //Ignore actors in motion
-        if (IsMoving) return;
-
-        if (destination.direction == Direction.Up)
-        {
-            this.destination.location = this.location + new Vector2Int(0, -1);
-        }
-        else if (destination.direction == Direction.Right)
-        {
-            this.destination.location = this.location + new Vector2Int(1, 0);
-        }
-        else if (destination.direction == Direction.Down)
-        {
+        if (this.destination.direction == Direction.Up)
             this.destination.location = this.location + new Vector2Int(0, 1);
-        }
-        else if (destination.direction == Direction.Left)
-        {
+        else if (this.destination.direction == Direction.Right)
+            this.destination.location = this.location + new Vector2Int(1, 0);
+        else if (this.destination.direction == Direction.Down)
+            this.destination.location = this.location + new Vector2Int(0, -1);
+        else if (this.destination.direction == Direction.Left)
             this.destination.location = this.location + new Vector2Int(-1, 0);
-        }
 
         this.destination.position = Geometry.PositionFromLocation(this.destination.location.Value);
         this.moveState = MoveState.Moving;
+    }
+
+
+    private void OnTriggerStay2D(Collider2D collider)
+    {
+        //Ignore selected actor
+        if (this.IsSelectedPlayer)
+            return;
+
+        //Ignore actors in motion
+        if (this.IsMoving)
+            return;
+
+        //Ignore actos without direction
+        if (!this.HasDirection)
+            return;
+
+        //var sender = collider.gameObject.GetComponent<ActorBehavior>();
+
+        //Determine if two actors collided
+        //if (!sender.CompareTag(Tag.Actor) || !this.CompareTag(Tag.Actor))
+        //    return;
+
+        this.SetDestination();
     }
 
     private void OnTriggerExit2D(Collider2D collider)
@@ -192,7 +197,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         else if (cursorPosition.y < board.bottom)
             cursorPosition.y = board.bottom;
 
-        //Move active actor towards mouse cursor
+        //SetDestination active actor towards mouse cursor
         transform.position
                 = Vector2.MoveTowards(selectedPlayer.transform.position,
                                       cursorPosition,
@@ -202,25 +207,25 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void MoveTowardDestination()
     {
         //Verify destination *has* been set 
-        if (!destination.IsValid)
+        if (!this.destination.IsValid)
             return;
 
         //Verify actor is MoveState: "Moving"
-        if (moveState != MoveState.Moving)
+        if (this.moveState != MoveState.Moving)
             return;
 
-        //Move actor towards destination
-        transform.position = Vector2.MoveTowards(transform.position, destination.position.Value, moveSpeed);
+        //SetDestination actor towards destination
+        this.transform.position = Vector2.MoveTowards(transform.position, destination.position.Value, moveSpeed);
 
         //Determine if actor is close to destination
         bool isCloseToDestination = Vector2.Distance(transform.position, destination.position.Value) < snapDistance;
         if (isCloseToDestination)
         {
             //Snap to destination, clear destination, and set actor MoveState: "Idle"
-            location = destination.location.Value;
-            transform.position = destination.position.Value;
-            destination.Clear();
-            moveState = MoveState.Idle;
+            this.location = destination.location.Value;
+            this.transform.position = destination.position.Value;
+            this.destination.Clear();
+            this.moveState = MoveState.Idle;
         }
     }
 
