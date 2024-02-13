@@ -6,7 +6,7 @@ public enum Team
     Neutral
 }
 
-public enum ActorState
+public enum ActorMoveState
 {
     Idle,
     //Active,

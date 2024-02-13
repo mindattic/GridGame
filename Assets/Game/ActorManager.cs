@@ -1,5 +1,5 @@
 using UnityEngine;
-using State = ActorState;
+using MoveState = ActorMoveState;
 
 public class ActorManager : ExtendedMonoBehavior
 {
@@ -36,7 +36,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     public void PickupPlayer()
     {
-        //Only pickup player if no actor has State: "Active"
+        //Only pickup player if no actor has MoveState: "Active"
         if (HasSelectedPlayer)
             return;
 
@@ -48,19 +48,25 @@ public class ActorManager : ExtendedMonoBehavior
         //Retrieve actor under mouse cursor
         var actor = mouseCollider.gameObject.GetComponent<ActorBehavior>();
 
-        //Determine if actor Team: "Player" and State: "Idle"
-        if (actor.team != Team.Player || actor.state != State.Idle)
+        //Determine if actor Team: "Player"
+        if (actor.team != Team.Player)
+            return;
+
+        //Determine if actor MoveState: "Idle"
+        if (actor.moveState != MoveState.Idle)
             return;
 
         //Assign idle actor to active
         selectedPlayer = actor;
-        selectedPlayer.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        selectedPlayer.moveState = MoveState.Moving;
+        selectedPlayer.sortingOrder = 2;
        
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
         //Reduce box collider size (allowing actors some 'wiggle room')
         //actors.ForEach(x => x.boxCollider2D.size = size50);
+        //selectedPlayer.boxCollider2D.size = size25;
 
         timer.Set(scale: 1f, start: true);
     }
@@ -75,8 +81,8 @@ public class ActorManager : ExtendedMonoBehavior
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
         selectedPlayer.location = closestTile.location;
         selectedPlayer.transform.position = Geometry.PositionFromLocation(selectedPlayer.location);
-        selectedPlayer.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
-        selectedPlayer.state = State.Idle;
+        selectedPlayer.sortingOrder = 1;
+        selectedPlayer.moveState = MoveState.Idle;
 
         //Clear active actor
         selectedPlayer = null;

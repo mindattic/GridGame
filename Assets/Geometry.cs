@@ -78,5 +78,9 @@ public class Geometry
         return unoccupiedLocations;
     }
 
+    static public ActorBehavior GetActorAtLocation(Vector2Int location)
+    {
+        return actors.FirstOrDefault(x => x.location == location);
+    }
 
 }
