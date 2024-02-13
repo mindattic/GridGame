@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using MoveState = ActorMoveState;
 
@@ -10,20 +9,82 @@ public class ActorBehavior : ExtendedMonoBehavior
     public Destination destination = new Destination();
     public Team team = Team.Neutral;
 
-    //MoveState Properties
+    #region Properties
+
     private bool IsIdle => moveState == MoveState.Moving;
-    //private bool IsActive => moveState == MoveState.Active;
     private bool IsMoving => moveState == MoveState.Moving;
-
     private bool IsOnPlayerTeam => team == Team.Player;
-
-    private bool IsSelectedPlayer => HasSelectedPlayer && this.Equals(selectedPlayer);
-
+    private bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
     private bool HasDirection => destination.direction != Direction.None;
+    private bool IsSameColumn(ActorBehavior other) => location.x == other.location.x;
+    private bool IsSameRow(ActorBehavior other) => location.y == other.location.y;
+    private bool IsAbove(ActorBehavior other) => IsSameColumn(other) && location.y == other.location.y + 1;
+    private bool IsRightOf(ActorBehavior other) => IsSameRow(other) && location.x == other.location.x + 1;
+    private bool IsBelow(ActorBehavior other) => IsSameColumn(other) && location.y == other.location.y - 1;
+    private bool IsLeftOf(ActorBehavior other) => IsSameRow(other) && location.x == other.location.x - 1;
 
-    //Component properties
+    #endregion
+
+    #region Methods
+
+    public void Init(Vector2Int? initialLocation = null)
+    {
+        if (initialLocation.HasValue)
+            location = initialLocation.Value;
+
+        transform.position = Geometry.PositionFromLocation(location);
+        transform.localScale = tileScale;
+        moveState = MoveState.Idle;
+    }
+
+    private void SetDirection(ActorBehavior other)
+    {
+        if (other == null)
+            return;
+
+        if (IsAbove(other))
+            destination.direction = Direction.Down;
+        else if (IsRightOf(other))
+            destination.direction = Direction.Left;
+        else if (IsBelow(other))
+            destination.direction = Direction.Up;
+        else if (IsLeftOf(other))
+            destination.direction = Direction.Right;
+        else
+            destination.direction = Direction.None;
+    }
+
+    private void MoveUp() => destination.location = location + new Vector2Int(0, 1);
+
+    private void MoveRight() => destination.location = location + new Vector2Int(1, 0);
+
+    private void MoveDown() => destination.location = location + new Vector2Int(0, -1);
+
+    private void MoveLeft() => destination.location = location + new Vector2Int(-1, 0);
+
+    private void SetDestination()
+    {
+        if (destination.direction == Direction.None)
+            return;
+
+        if (destination.direction == Direction.Up)
+            MoveUp();
+        else if (destination.direction == Direction.Right)
+            MoveRight();
+        else if (destination.direction == Direction.Down)
+            MoveDown();
+        else if (destination.direction == Direction.Left)
+            MoveLeft();
+
+        destination.position = Geometry.PositionFromLocation(destination.location.Value);
+        moveState = MoveState.Moving;
+    }
+
+    #endregion
+
+    #region Components
+
     public BoxCollider2D boxCollider2D => gameObject.GetComponent<BoxCollider2D>();
-
     public SpriteRenderer spriteRenderer => gameObject.GetComponent<SpriteRenderer>();
 
     public Sprite sprite
@@ -44,6 +105,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.SetParent(value, true);
     }
 
+    #endregion
+
     private void Awake()
     {
 
@@ -54,16 +117,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         Init();
     }
 
-    public void Init(Vector2Int? initialLocation = null)
-    {
-        if (initialLocation.HasValue)
-            location = initialLocation.Value;
-
-        transform.position = Geometry.PositionFromLocation(location);
-        transform.localScale = tileScale;
-        moveState = MoveState.Idle;
-    }
-
     void Update()
     {
 
@@ -71,108 +124,65 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void FixedUpdate()
     {
-        if (this.IsSelectedPlayer)
+        if (IsSelectedPlayer)
         {
-            //SetDestination active actor towards mouse cursor
             MoveTowardCursor();
         }
-        else if (this.IsMoving)
+        else if (IsMoving)
         {
-            this.MoveTowardDestination();
+            MoveTowardDestination();
         }
-        else if (this.IsIdle)
+        else if (IsIdle)
         {
             //Do nothing...
         }
-
     }
-
-
-    private bool IsSameColumn(ActorBehavior other) => this.location.x == other.location.x;
-    private bool IsSameRow(ActorBehavior other) => this.location.y == other.location.y;
-    private bool IsAbove(ActorBehavior other) => IsSameColumn(this) && this.location.y == other.location.y + 1;
-    private bool IsRightOf(ActorBehavior other) => IsSameRow(this) && this.location.x == other.location.x + 1;
-    private bool IsBelow(ActorBehavior other) => IsSameColumn(this) && this.location.y == other.location.y - 1;
-    private bool IsLeftOf(ActorBehavior other) => IsSameRow(this) && this.location.x == other.location.x - 1;
-
-
-    private void SetDirection(ActorBehavior other)
-    {
-        if (other == null)
-            return;
-
-        if (this.IsAbove(other))
-            this.destination.direction = Direction.Down;
-        else if (this.IsRightOf(other))
-            this.destination.direction = Direction.Left;
-        else if (this.IsBelow(other))
-            this.destination.direction = Direction.Up;
-        else if (this.IsLeftOf(other))
-            this.destination.direction = Direction.Right;
-        else
-            this.destination.direction = Direction.None;
-    }
-
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
         //Ignore selected actor
-        if (this.IsSelectedPlayer)
+        if (IsSelectedPlayer)
             return;
 
         //Ignore actors in motion
-        if (this.IsMoving)
+        if (IsMoving)
             return;
 
         //Ignore actors with set direction
-        if (this.HasDirection)
+        if (HasDirection)
+            return;
+
+        //Determine if two actors collided
+        var sender = collider.gameObject.GetComponent<ActorBehavior>();
+        if (!sender.CompareTag(Tag.Actor) || !CompareTag(Tag.Actor))
             return;
 
         //Assign intended movement direction
-        var sender = collider.gameObject.GetComponent<ActorBehavior>();
-        this.SetDirection(sender);
+        SetDirection(sender);
     }
 
-    private void SetDestination()
-    {
-        if (this.destination.direction == Direction.None)
-            return;
-
-        if (this.destination.direction == Direction.Up)
-            this.destination.location = this.location + new Vector2Int(0, 1);
-        else if (this.destination.direction == Direction.Right)
-            this.destination.location = this.location + new Vector2Int(1, 0);
-        else if (this.destination.direction == Direction.Down)
-            this.destination.location = this.location + new Vector2Int(0, -1);
-        else if (this.destination.direction == Direction.Left)
-            this.destination.location = this.location + new Vector2Int(-1, 0);
-
-        this.destination.position = Geometry.PositionFromLocation(this.destination.location.Value);
-        this.moveState = MoveState.Moving;
-    }
 
 
     private void OnTriggerStay2D(Collider2D collider)
     {
         //Ignore selected actor
-        if (this.IsSelectedPlayer)
+        if (IsSelectedPlayer)
             return;
 
         //Ignore actors in motion
-        if (this.IsMoving)
+        if (IsMoving)
             return;
 
         //Ignore actos without direction
-        if (!this.HasDirection)
+        if (!HasDirection)
             return;
 
-        //var sender = collider.gameObject.GetComponent<ActorBehavior>();
-
         //Determine if two actors collided
-        //if (!sender.CompareTag(Tag.Actor) || !this.CompareTag(Tag.Actor))
-        //    return;
+        var sender = collider.gameObject.GetComponent<ActorBehavior>();
+        if (!sender.CompareTag(Tag.Actor) || !CompareTag(Tag.Actor))
+            return;
 
-        this.SetDestination();
+        SetDestination();
     }
 
     private void OnTriggerExit2D(Collider2D collider)
@@ -185,7 +195,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsSelectedPlayer)
             return;
 
-        var cursorPosition = GameManager.instance.mousePosition3D + mouseOffset;
+        var cursorPosition = mousePosition3D + mouseOffset;
 
         //Enforce board bounds
         if (cursorPosition.x < board.left)
@@ -207,34 +217,32 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void MoveTowardDestination()
     {
         //Verify destination *has* been set 
-        if (!this.destination.IsValid)
+        if (!destination.IsValid)
             return;
 
         //Verify actor is MoveState: "Moving"
-        if (this.moveState != MoveState.Moving)
+        if (moveState != MoveState.Moving)
             return;
 
         //SetDestination actor towards destination
-        this.transform.position = Vector2.MoveTowards(transform.position, destination.position.Value, moveSpeed);
+        transform.position = Vector2.MoveTowards(transform.position, destination.position.Value, moveSpeed);
 
         //Determine if actor is close to destination
         bool isCloseToDestination = Vector2.Distance(transform.position, destination.position.Value) < snapDistance;
         if (isCloseToDestination)
         {
             //Snap to destination, clear destination, and set actor MoveState: "Idle"
-            this.location = destination.location.Value;
-            this.transform.position = destination.position.Value;
-            this.destination.Clear();
-            this.moveState = MoveState.Idle;
+            location = destination.location.Value;
+            transform.position = destination.position.Value;
+            destination.Clear();
+            moveState = MoveState.Idle;
         }
     }
-
-
 
     void OnDrawGizmos()
     {
         //Gizmos.color = Color.green;
-        //Gizmos.matrix = this.transform.localToWorldMatrix;
+        //Gizmos.matrix = transform.localToWorldMatrix;
         //Gizmos.DrawCube(Vector3.zero, Vector3.one);
     }
 

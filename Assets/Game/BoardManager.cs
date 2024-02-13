@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BoardManager : ExtendedMonoBehavior
@@ -10,7 +6,7 @@ public class BoardManager : ExtendedMonoBehavior
     public GameObject tilePrefab;
     public GameObject actorPrefab;
 
- 
+
 
     void Awake()
     {
@@ -33,7 +29,7 @@ public class BoardManager : ExtendedMonoBehavior
         {
             for (int row = 1; row <= board.rows; row++)
             {
-                prefab = Instantiate(tilePrefab, transform);        
+                prefab = Instantiate(tilePrefab, transform);
                 tile = prefab.GetComponent<TileBehavior>();
                 tile.name = $"{col}x{row}";
                 tile.location = new Vector2Int(col, row);
@@ -103,7 +99,7 @@ public class BoardManager : ExtendedMonoBehavior
     }
 
 
-   
+
 
 
 

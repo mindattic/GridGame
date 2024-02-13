@@ -9,7 +9,6 @@ public enum Team
 public enum ActorMoveState
 {
     Idle,
-    //Active,
     Moving
 }
 

@@ -26,19 +26,17 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected float tileSize => GameManager.instance.tileSize;
     protected Vector2 tileScale => GameManager.instance.tileScale;
 
-    //Size
-    protected Vector2 size25 => GameManager.instance.size25;
-    protected Vector2 size33 => GameManager.instance.size33;
-    protected Vector2 size50 => GameManager.instance.size50;
-    protected Vector2 size66 => GameManager.instance.size66;
-    protected Vector2 size100 => GameManager.instance.size100;
-
     //Mouse
     protected Vector3 mousePosition2D => GameManager.instance.mousePosition2D;
     protected Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
+    protected Vector3 mouseOffset
+    {
+        get { return GameManager.instance.mouseOffset; }
+        set { GameManager.instance.mouseOffset = value; }
+    }
+
     protected float moveSpeed => GameManager.instance.moveSpeed;
     protected float snapDistance => GameManager.instance.snapDistance;
-
 
     protected bool InSameColumn(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x;
     protected bool InSameRow(ActorBehavior a, ActorBehavior b) => a.location.y == b.location.y;
@@ -52,21 +50,11 @@ public class ExtendedMonoBehavior : MonoBehaviour
         return IsAbove(a, b) || IsRight(a, b) || IsBelow(a, b) || IsLeft(a, b);
     }
 
-    protected Vector3 mouseOffset
-    {
-        get { return GameManager.instance.mouseOffset; }
-        set { GameManager.instance.mouseOffset = value; }
-    }
-
-
     protected ActorBehavior selectedPlayer
     {
         get { return GameManager.instance.activeActor; }
         set { GameManager.instance.activeActor = value; }
     }
-
-
-  
 
 }
 

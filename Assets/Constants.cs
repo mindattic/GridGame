@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
-
+﻿using UnityEngine;
 
 public class Constants
 {
     public const string Game = "Game";
     public const string Board = "Board";
-    //public const string Sprites = "Sprites";
     public const string Timer = "Timer";
-    //public const string EventSystem = "EventSystem";
 
+    //Percent
+    public const float percent25 = 0.25f;
+    public const float percent33 = 0.333333f;
+    public const float percent50 = 0.5f;
+    public const float percent66 = 0.666666f;
+    public const float percent100 = 1.0f;
+    public const float percent333 = 3.333333f;
+    public const float percent666 = 6.666666f;
 
+    //Size
+    public readonly Vector2 size25 = new Vector2(percent25, percent25);
+    public readonly Vector2 size33 = new Vector2(percent33, percent33);
+    public readonly Vector2 size50 = new Vector2(percent50, percent50);
+    public readonly Vector2 size66 = new Vector2(percent66, percent66);
+    public readonly Vector2 size100 = new Vector2(percent100, percent100);
 
 
 }

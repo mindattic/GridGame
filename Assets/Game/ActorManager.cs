@@ -62,7 +62,7 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer = actor;
         selectedPlayer.moveState = MoveState.Moving;
         selectedPlayer.sortingOrder = 2;
-       
+
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
