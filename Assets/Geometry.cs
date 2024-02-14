@@ -87,4 +87,10 @@ public class Geometry
         return actors.FirstOrDefault(x => x.location == location);
     }
 
+
+    static public bool IsInRange(float a, float b, float range)
+    {
+        return a <= b + range && a >= b - range;
+    }
+
 }

@@ -24,54 +24,55 @@ public class LineManager : ExtendedMonoBehavior
             return;
 
         //TODO: Trigger "ShowLine" event so that this isn't calculated every frame...
-    
-        var northActor = actors
-            .OrderBy(x => Vector3.Distance(selectedPlayer.position, x.position))
+
+        var sortedActors = actors.OrderBy(x => Vector3.Distance(selectedPlayer.position, x.position));
+
+
+
+        var northActor = sortedActors
             .FirstOrDefault(x =>
             {
                 return !selectedPlayer.Equals(x)
                 && x.team.Equals(Team.Player)
                 && selectedPlayer.IsSameColumn(x)
-                && selectedPlayer.location.y > x.location.y;
+                && selectedPlayer.location.y > x.location.y
+                && Geometry.IsInRange(selectedPlayer.position.x, selectedPlayer.CurrentTile.position.x, tileSize / 4);
             });
         if (northActor != null)
             northLine.Set(selectedPlayer.CurrentTile.position, northActor.CurrentTile.position);
      
-
-        var eastActor = actors
-            .OrderBy(x => Vector3.Distance(selectedPlayer.position, x.position))
+        var eastActor = sortedActors
             .FirstOrDefault(x =>
             {
                 return !selectedPlayer.Equals(x)
                 && x.team.Equals(Team.Player)
                 && selectedPlayer.IsSameRow(x)
-                && selectedPlayer.location.x > x.location.x;
+                && selectedPlayer.location.x > x.location.x
+                && Geometry.IsInRange(selectedPlayer.position.y, selectedPlayer.CurrentTile.position.y, tileSize / 4);
             });
         if (eastActor != null)
             eastLine.Set(selectedPlayer.CurrentTile.position, eastActor.CurrentTile.position);
-       
-            
-
-        var southActor = actors
-            .OrderBy(x => Vector3.Distance(selectedPlayer.position, x.position))
+   
+        var southActor = sortedActors
             .FirstOrDefault(x =>
             {
                 return !selectedPlayer.Equals(x)
                 && x.team.Equals(Team.Player)
                 && selectedPlayer.IsSameColumn(x)
-                && selectedPlayer.location.y < x.location.y;
+                && selectedPlayer.location.y < x.location.y
+                && Geometry.IsInRange(selectedPlayer.position.x, selectedPlayer.CurrentTile.position.x, tileSize / 5);
             });
         if (southActor != null)
             southLine.Set(selectedPlayer.CurrentTile.position, southActor.CurrentTile.position);
 
-        var westActor = actors
-            .OrderBy(x => Vector3.Distance(selectedPlayer.position, x.position))
+        var westActor = sortedActors
             .FirstOrDefault(x =>
             {
                 return !selectedPlayer.Equals(x)
                 && x.team.Equals(Team.Player)
                 && selectedPlayer.IsSameRow(x)
-                && selectedPlayer.location.x < x.location.x;
+                && selectedPlayer.location.x < x.location.x
+                && Geometry.IsInRange(selectedPlayer.position.y, selectedPlayer.CurrentTile.position.y, tileSize / 4);
             });
         if (westActor != null)
             westLine.Set(selectedPlayer.CurrentTile.position, westActor.CurrentTile.position);
