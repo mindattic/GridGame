@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public static class Tag
 {
@@ -49,4 +50,21 @@ public class RectVector3
 public class RectFloat
 {
     public RectFloat() { }
+}
+
+
+public class ActorPair
+{
+    public ActorPair() { }
+    public ActorPair(ActorBehavior actor1, ActorBehavior actor2, Axis axis)
+    {
+        this.actor1 = actor1;
+        this.actor2 = actor2;
+        this.axis = axis;
+    }
+
+    public ActorBehavior actor1 { get; set; }
+    public ActorBehavior actor2 { get; set; }
+    public Axis axis { get; set; }
+    public int gapCount { get; set; }
 }

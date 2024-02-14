@@ -5,7 +5,7 @@ using MoveState = ActorMoveState;
 public class ActorBehavior : ExtendedMonoBehavior
 {
     //Variables
-    public Vector2Int location { get; set; }
+    [SerializeField] public Vector2Int location { get; set; }
     public MoveState moveState = MoveState.Idle;
     public Destination destination = new Destination();
     public Team team = Team.Neutral;
@@ -99,6 +99,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         transform.position = Geometry.PositionFromLocation(location);
         transform.localScale = tileScale;
         moveState = MoveState.Idle;
+        currentTile.isOccupied = true;
     }
 
     private void SetDirection(ActorBehavior other)
@@ -276,7 +277,10 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (isCloseToDestination)
         {
             //Snap to destination, clear destination, and set actor MoveState: "Idle"
+            currentTile.isOccupied = false;
             location = destination.location.Value;
+            currentTile.isOccupied = true;
+            tiles.First(t => t.location.Equals(location)).isOccupied = true;
             transform.position = destination.position.Value;
             destination.Clear();
             moveState = MoveState.Idle;

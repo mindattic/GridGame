@@ -3,6 +3,7 @@ using UnityEngine;
 public class TileBehavior : MonoBehaviour
 {
     [SerializeField] public Vector2Int location { get; set; }
+    [SerializeField] public bool isOccupied { get; set; }
 
     #region Components
 

@@ -12,14 +12,6 @@ public enum ActorMoveState
     Moving
 }
 
-public enum From
-{
-    Above,
-    Right,
-    Below,
-    Left
-}
-
 public enum Direction
 {
     None,
@@ -27,6 +19,13 @@ public enum Direction
     East,
     South,
     West
+}
+
+public enum Axis
+{
+    None,
+    Vertical,
+    Horizontal
 }
 
 public enum TurnPhase
