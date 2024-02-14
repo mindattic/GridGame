@@ -23,11 +23,7 @@ public class LineBehavior : ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
-    public LineRenderer lineRenderer
-    {
-        get => gameObject.GetComponent<LineRenderer>();
-        set => lineRenderer = value;
-    }
+    public LineRenderer lineRenderer;
 
     #endregion
 
@@ -59,7 +55,7 @@ public class LineBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
-
+        lineRenderer = gameObject.GetComponent<LineRenderer>();
     }
 
     void Start()

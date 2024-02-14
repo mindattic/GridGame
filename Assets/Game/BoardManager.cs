@@ -127,9 +127,4 @@ public class BoardManager : ExtendedMonoBehavior
 
     }
 
-
-
-
-
-
 }

@@ -2,22 +2,6 @@
 
 public class Common
 {
-    public static Collider2D GetHighestObject(Collider2D[] results)
-    {
-        int highestValue = 0;
-        Collider2D highestObject = results[0];
-        foreach (Collider2D col in results)
-        {
-            Renderer ren = col.gameObject.GetComponent<Renderer>();
-            if (ren && ren.sortingOrder > highestValue)
-            {
-                highestValue = ren.sortingOrder;
-                highestObject = col;
-            }
-        }
-        return highestObject;
-    }
-
     public static float GetScreenToWorldWidth
     {
         get

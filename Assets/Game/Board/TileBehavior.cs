@@ -19,11 +19,8 @@ public class TileBehavior : MonoBehaviour
         set => gameObject.transform.position = value;
     }
 
-    public SpriteRenderer spriteRenderer
-    {
-        get => spriteRenderer;
-        set => spriteRenderer = value;
-    }
+    public SpriteRenderer spriteRenderer;
+
 
     public Sprite sprite
     {
@@ -37,12 +34,17 @@ public class TileBehavior : MonoBehaviour
 
     public void Awake()
     {
-
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
     public void Start()
     {
         transform.position = Geometry.PositionFromLocation(location);
         transform.localScale = GameManager.instance.tileScale;
+    }
+
+    public void Update()
+    {
+        spriteRenderer.color = isOccupied ? Color.yellow : Color.white;
     }
 }

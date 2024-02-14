@@ -173,7 +173,9 @@ public class ActorManager : ExtendedMonoBehavior
         if (actor.moveState != MoveState.Idle)
             return;
 
-        //Assign idle p to active
+        actor.currentTile.isOccupied = false;
+
+        //Select actor
         selectedPlayer = actor;
         selectedPlayer.moveState = MoveState.Moving;
         selectedPlayer.sortingOrder = 2;
@@ -197,6 +199,7 @@ public class ActorManager : ExtendedMonoBehavior
         //Assign location and position
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
         selectedPlayer.location = closestTile.location;
+        selectedPlayer.currentTile.isOccupied = true;
         selectedPlayer.transform.position = Geometry.PositionFromLocation(selectedPlayer.location);
         selectedPlayer.sortingOrder = 1;
         selectedPlayer.moveState = MoveState.Idle;

@@ -24,17 +24,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
-    public BoxCollider2D boxCollider2D
-    {
-        get => gameObject.GetComponent<BoxCollider2D>();
-        set => boxCollider2D = value;
-    }
-
-    public SpriteRenderer spriteRenderer
-    {
-        get => gameObject.GetComponent<SpriteRenderer>();
-        set => spriteRenderer = value;
-    }
+    public BoxCollider2D boxCollider2D;
+    public SpriteRenderer spriteRenderer;
 
     public Sprite sprite
     {
@@ -47,8 +38,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         get => spriteRenderer.sortingOrder;
         set => spriteRenderer.sortingOrder = value;
     }
-
-   
 
     #endregion
 
@@ -154,7 +143,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     
     private void Awake()
     {
-
+        boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -280,18 +270,10 @@ public class ActorBehavior : ExtendedMonoBehavior
             currentTile.isOccupied = false;
             location = destination.location.Value;
             currentTile.isOccupied = true;
-            tiles.First(t => t.location.Equals(location)).isOccupied = true;
             transform.position = destination.position.Value;
             destination.Clear();
             moveState = MoveState.Idle;
         }
-    }
-
-    void OnDrawGizmos()
-    {
-        //Gizmos.color = Color.green;
-        //Gizmos.matrix = transform.localToWorldMatrix;
-        //Gizmos.DrawCube(Vector3.zero, Vector3.one);
     }
 
 }
