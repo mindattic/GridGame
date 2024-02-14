@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class BoardManager : ExtendedMonoBehavior
 {
-    public GameObject tilePrefab;
-    public GameObject actorPrefab;
-
+    [SerializeField] public GameObject tilePrefab;
+    [SerializeField] public GameObject actorPrefab;
+    [SerializeField] public GameObject linePrefab;
 
 
     void Awake()
@@ -18,6 +18,7 @@ public class BoardManager : ExtendedMonoBehavior
         transform.position = board.offset;
         GenerateTiles();
         GenerateActors();
+        GenerateLines();
     }
 
     void GenerateTiles()
@@ -91,7 +92,35 @@ public class BoardManager : ExtendedMonoBehavior
            .ForEach(x => GameManager.instance.actors.Add(x.GetComponent<ActorBehavior>()));
     }
 
+    void GenerateLines()
+    {
+        GameObject prefab;
+        LineBehavior line;
 
+        prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
+        line = prefab.GetComponent<LineBehavior>();
+        line.name = "NorthLine";
+        line.parent = transform;
+
+        prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
+        line = prefab.GetComponent<LineBehavior>();
+        line.name = "EastLine";
+        line.parent = transform;
+
+        prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
+        line = prefab.GetComponent<LineBehavior>();
+        line.name = "SouthLine";
+        line.parent = transform;
+
+        prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
+        line = prefab.GetComponent<LineBehavior>();
+        line.name = "WestLine";
+        line.parent = transform;
+
+        //Assign line list
+        GameObject.FindGameObjectsWithTag(Tag.Line).ToList()
+           .ForEach(x => GameManager.instance.lines.Add(x.GetComponent<LineBehavior>()));
+    }
 
     void Update()
     {

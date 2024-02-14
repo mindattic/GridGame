@@ -1,7 +1,6 @@
 ﻿/*
 Adapted from Geometry.cs 
-www: https://www.kodeco.com/5441-how-to-make-a-chess-game-with-unity
-zip: https://koenig-media.raywenderlich.com/uploads/2018/03/ChessGameInUnity-Project-Materials.zip
+via: https://www.kodeco.com/5441-how-to-make-sw-chess-game-with-unity
 */
 
 using System.Collections.Generic;

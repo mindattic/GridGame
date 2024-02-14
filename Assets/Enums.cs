@@ -23,8 +23,19 @@ public enum From
 public enum Direction
 {
     None,
-    Up,
-    Right,
-    Down,
-    Left
+    North,
+    East,
+    South,
+    West
+}
+
+public enum TurnPhase
+{
+    None,
+    Start,
+    Move,
+    PreAttack,
+    Attack,
+    PostAttack,
+    End
 }

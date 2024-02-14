@@ -77,6 +77,9 @@
     <Compile Include="Assets\Game\Timer\TimerBehavior.cs" />
     <Compile Include="Assets\Game\InputManager.cs" />
     <Compile Include="Assets\Game\Board\BoardBehavior.cs" />
+    <Compile Include="Assets\TurnManager.cs" />
+    <Compile Include="Assets\LineBehavior.cs" />
+    <Compile Include="Assets\LineManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

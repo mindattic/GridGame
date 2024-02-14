@@ -36,6 +36,7 @@ public class GameManager : Singleton<GameManager>
     public TimerBehavior timer;
     public List<ActorBehavior> actors;
     public List<TileBehavior> tiles;
+    public List<LineBehavior> lines;
 
     private void Awake()
     {

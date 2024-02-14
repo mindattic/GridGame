@@ -18,6 +18,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //Collections
     protected List<TileBehavior> tiles => GameManager.instance.tiles;
     protected List<ActorBehavior> actors => GameManager.instance.actors;
+    protected List<LineBehavior> lines => GameManager.instance.lines;
+
 
     //Actor
     protected bool HasSelectedPlayer => selectedPlayer != null;
@@ -25,6 +27,27 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //Scale
     protected float tileSize => GameManager.instance.tileSize;
     protected Vector2 tileScale => GameManager.instance.tileScale;
+
+
+
+
+    //Percent
+    protected float percent25 => Constants.percent25;
+    protected float percent33 => Constants.percent33;
+    protected float percent50 => Constants.percent50;
+    protected float percent66 => Constants.percent66;
+    protected float percent75 => Constants.percent75;
+    protected float percent100 => Constants.percent100;
+    protected float percent333 => Constants.percent333;
+    protected float percent666 => Constants.percent666;
+
+    //Size
+    protected Vector2 size25 => Constants.size25;
+    protected Vector2 size33 => Constants.size33;
+    protected Vector2 size50 => Constants.size50;
+    protected Vector2 size66 => Constants.size66;
+    protected Vector2 size75 => Constants.size75;
+    protected Vector2 size100 => Constants.size100;
 
     //Mouse
     protected Vector3 mousePosition2D => GameManager.instance.mousePosition2D;

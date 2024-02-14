@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using MoveState = ActorMoveState;
 
@@ -9,6 +10,48 @@ public class ActorBehavior : ExtendedMonoBehavior
     public Destination destination = new Destination();
     public Team team = Team.Neutral;
 
+    #region Components
+
+    public Transform parent
+    {
+        get => gameObject.transform.parent;
+        set => gameObject.transform.SetParent(value, true);
+    }
+
+    public Vector3 position
+    {
+        get => gameObject.transform.position;
+        set => gameObject.transform.position = value;
+    }
+
+    public BoxCollider2D boxCollider2D
+    {
+        get => gameObject.GetComponent<BoxCollider2D>();
+        set => boxCollider2D = value;
+    }
+
+    public SpriteRenderer spriteRenderer
+    {
+        get => gameObject.GetComponent<SpriteRenderer>();
+        set => spriteRenderer = value;
+    }
+
+    public Sprite sprite
+    {
+        get => spriteRenderer.sprite;
+        set => spriteRenderer.sprite = value;
+    }
+
+    public int sortingOrder
+    {
+        get => spriteRenderer.sortingOrder;
+        set => spriteRenderer.sortingOrder = value;
+    }
+
+   
+
+    #endregion
+
     #region Properties
 
     private bool IsIdle => moveState == MoveState.Moving;
@@ -16,12 +59,33 @@ public class ActorBehavior : ExtendedMonoBehavior
     private bool IsOnPlayerTeam => team == Team.Player;
     private bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
     private bool HasDirection => destination.direction != Direction.None;
-    private bool IsSameColumn(ActorBehavior other) => location.x == other.location.x;
-    private bool IsSameRow(ActorBehavior other) => location.y == other.location.y;
-    private bool IsAbove(ActorBehavior other) => IsSameColumn(other) && location.y == other.location.y + 1;
-    private bool IsRightOf(ActorBehavior other) => IsSameRow(other) && location.x == other.location.x + 1;
-    private bool IsBelow(ActorBehavior other) => IsSameColumn(other) && location.y == other.location.y - 1;
-    private bool IsLeftOf(ActorBehavior other) => IsSameRow(other) && location.x == other.location.x - 1;
+    public bool IsSameColumn(ActorBehavior other) => location.x == other.location.x;
+    public bool IsSameRow(ActorBehavior other) => location.y == other.location.y;
+    public bool IsNorthOf(ActorBehavior other) => IsSameColumn(other) && location.y == other.location.y + 1;
+    public bool IsEastOf(ActorBehavior other) => IsSameRow(other) && location.x == other.location.x + 1;
+    public bool IsSouthOf(ActorBehavior other) => IsSameColumn(other) && location.y == other.location.y - 1;
+    public bool IsWestOf(ActorBehavior other) => IsSameRow(other) && location.x == other.location.x - 1;
+
+    public bool IsNorthOf(ActorBehavior other, int tileDistance = 1)
+    {
+        return IsSameColumn(other) && location.y >= other.location.y + tileDistance;
+    }
+
+    public bool IsEastOf(ActorBehavior other, int tileDistance = 1)
+    {
+        return IsSameRow(other) && location.x >= other.location.x + tileDistance;
+    }
+    public bool IsSouthOf(ActorBehavior other, int tileDistance = 1)
+    {
+        return IsSameColumn(other) && location.y <= other.location.y - tileDistance;
+    }
+
+    public bool IsWestOf(ActorBehavior other, int tileDistance = 1)
+    {
+        return IsSameRow(other) && location.x <= other.location.x - tileDistance;
+    }
+
+
 
     #endregion
 
@@ -42,14 +106,14 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (other == null)
             return;
 
-        if (IsAbove(other))
-            destination.direction = Direction.Down;
-        else if (IsRightOf(other))
-            destination.direction = Direction.Left;
-        else if (IsBelow(other))
-            destination.direction = Direction.Up;
-        else if (IsLeftOf(other))
-            destination.direction = Direction.Right;
+        if (IsNorthOf(other))
+            destination.direction = Direction.South;
+        else if (IsEastOf(other))
+            destination.direction = Direction.West;
+        else if (IsSouthOf(other))
+            destination.direction = Direction.North;
+        else if (IsWestOf(other))
+            destination.direction = Direction.East;
         else
             destination.direction = Direction.None;
     }
@@ -67,46 +131,26 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (destination.direction == Direction.None)
             return;
 
-        if (destination.direction == Direction.Up)
+        if (destination.direction == Direction.North)
             MoveUp();
-        else if (destination.direction == Direction.Right)
+        else if (destination.direction == Direction.East)
             MoveRight();
-        else if (destination.direction == Direction.Down)
+        else if (destination.direction == Direction.South)
             MoveDown();
-        else if (destination.direction == Direction.Left)
+        else if (destination.direction == Direction.West)
             MoveLeft();
 
         destination.position = Geometry.PositionFromLocation(destination.location.Value);
         moveState = MoveState.Moving;
     }
 
-    #endregion
 
-    #region Components
-
-    public BoxCollider2D boxCollider2D => gameObject.GetComponent<BoxCollider2D>();
-    public SpriteRenderer spriteRenderer => gameObject.GetComponent<SpriteRenderer>();
-
-    public Sprite sprite
-    {
-        get => spriteRenderer.sprite;
-        set => spriteRenderer.sprite = value;
-    }
-
-    public int sortingOrder
-    {
-        get => spriteRenderer.sortingOrder;
-        set => spriteRenderer.sortingOrder = value;
-    }
-
-    public Transform parent
-    {
-        get => gameObject.transform.parent;
-        set => gameObject.transform.SetParent(value, true);
-    }
+    public TileBehavior CurrentTile => tiles.First(x => x.location.Equals(location));
+  
 
     #endregion
 
+    
     private void Awake()
     {
 

@@ -42,9 +42,9 @@ public class Common
 
 
 
-    //public static bool InRange(float a, float b, float range)
+    //public static bool InRange(float sw, float b, float range)
     //{
 
-    //    return a <= b + range && a >= b - range;
+    //    return sw <= b + range && sw >= b - range;
     //}
 }

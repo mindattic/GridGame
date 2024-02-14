@@ -5,6 +5,7 @@ public static class Tag
     public static string Board = "Board";
     public static string Tile = "Tile";
     public static string Actor = "Actor";
+    public static string Line = "Line";
     public static string Wall = "Wall";
 }
 
@@ -35,4 +36,17 @@ public class Destination
         direction = Direction.None;
     }
 
+}
+
+
+
+public class RectVector3
+{
+    public RectVector3() { }
+}
+
+
+public class RectFloat
+{
+    public RectFloat() { }
 }

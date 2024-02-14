@@ -1026,6 +1026,7 @@ GameObject:
   - component: {fileID: 1751276280}
   - component: {fileID: 1751276279}
   - component: {fileID: 1751276278}
+  - component: {fileID: 1751276282}
   - component: {fileID: 1751276281}
   m_Layer: 0
   m_Name: Game
@@ -1071,21 +1072,17 @@ MonoBehaviour:
   tileSize: 0
   tileScale: {x: 0, y: 0}
   spriteScale: {x: 0, y: 0}
-  size25: {x: 0.25, y: 0.25}
-  size33: {x: 0.333333, y: 0.333333}
-  size50: {x: 0.5, y: 0.5}
-  size66: {x: 0.666666, y: 0.666666}
-  size100: {x: 1, y: 1}
   mousePosition2D: {x: 0, y: 0, z: 0}
   mousePosition3D: {x: 0, y: 0, z: 0}
   mouseOffset: {x: 0, y: 0, z: 0}
   moveSpeed: 0
   snapDistance: 0
   activeActor: {fileID: 0}
-  board: {fileID: 1913779601}
-  timer: {fileID: 1700541647}
+  board: {fileID: 0}
+  timer: {fileID: 0}
   actors: []
   tiles: []
+  lines: []
 --- !u!114 &1751276278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1112,6 +1109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 7233482234801728947, guid: f420fe272613c294eb4bc531748a437e, type: 3}
   actorPrefab: {fileID: 3730061202814564284, guid: 4f922b47447b0d245acc44d2545257a3, type: 3}
+  linePrefab: {fileID: 5922598101913747506, guid: 2e72c33cf0bfdfd4996f76ddc0140c31, type: 3}
 --- !u!114 &1751276280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1140,6 +1138,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d563df7658daf8c43a23c02b375705ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1751276282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751276275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af7068ea874ba7d419eaa5b1615ac382, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentTeam: 0
+  currentPhase: 0
 --- !u!1 &1873523955
 GameObject:
   m_ObjectHideFlags: 0
@@ -1240,14 +1252,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1913779601 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4086587420172569240, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}
-  m_PrefabInstance: {fileID: 1476864828}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e9515e3cc4649e4ea2d2fc7fec5b6a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

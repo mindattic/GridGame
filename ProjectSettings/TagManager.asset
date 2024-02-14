@@ -10,6 +10,7 @@ TagManager:
   - Actor
   - Board
   - Grid
+  - Line
   layers:
   - Default
   - TransparentFX

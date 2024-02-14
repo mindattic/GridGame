@@ -11,16 +11,16 @@ public class Constants
     public const float percent33 = 0.333333f;
     public const float percent50 = 0.5f;
     public const float percent66 = 0.666666f;
+    public const float percent75 = 0.75f;
     public const float percent100 = 1.0f;
     public const float percent333 = 3.333333f;
     public const float percent666 = 6.666666f;
 
     //Size
-    public readonly Vector2 size25 = new Vector2(percent25, percent25);
-    public readonly Vector2 size33 = new Vector2(percent33, percent33);
-    public readonly Vector2 size50 = new Vector2(percent50, percent50);
-    public readonly Vector2 size66 = new Vector2(percent66, percent66);
-    public readonly Vector2 size100 = new Vector2(percent100, percent100);
-
-
+    public static readonly Vector2 size25 = new Vector2(percent25, percent25);
+    public static readonly Vector2 size33 = new Vector2(percent33, percent33);
+    public static readonly Vector2 size50 = new Vector2(percent50, percent50);
+    public static readonly Vector2 size66 = new Vector2(percent66, percent66);
+    public static readonly Vector2 size75 = new Vector2(percent75, percent75);
+    public static readonly Vector2 size100 = new Vector2(percent100, percent100);
 }

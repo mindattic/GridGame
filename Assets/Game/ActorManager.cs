@@ -1,9 +1,11 @@
+using Mono.Cecil;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using MoveState = ActorMoveState;
 
 public class ActorManager : ExtendedMonoBehavior
 {
-
     private void Awake()
     {
 
@@ -27,16 +29,22 @@ public class ActorManager : ExtendedMonoBehavior
             var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
             selectedPlayer.location = closestTile.location;
         }
+
+
     }
 
     private void FixedUpdate()
     {
 
+
+
+
+
     }
 
     public void PickupPlayer()
     {
-        //Only pickup player if no actor has MoveState: "Active"
+        //Only pickup player if no actor is selected
         if (HasSelectedPlayer)
             return;
 
@@ -75,7 +83,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     public void DropPlayer()
     {
-        //Only drop player if actor is active
+        //Only drop player if has selected player
         if (!HasSelectedPlayer)
             return;
 
@@ -94,4 +102,5 @@ public class ActorManager : ExtendedMonoBehavior
 
         timer.Set(scale: 1f, start: false);
     }
+
 }
