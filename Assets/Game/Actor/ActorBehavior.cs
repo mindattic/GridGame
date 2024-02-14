@@ -145,7 +145,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public TileBehavior CurrentTile => tiles.First(x => x.location.Equals(location));
+    public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
   
 
     #endregion

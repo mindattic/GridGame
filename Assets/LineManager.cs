@@ -27,8 +27,6 @@ public class LineManager : ExtendedMonoBehavior
 
         var sortedActors = actors.OrderBy(x => Vector3.Distance(selectedPlayer.position, x.position));
 
-
-
         var northActor = sortedActors
             .FirstOrDefault(x =>
             {
@@ -36,10 +34,10 @@ public class LineManager : ExtendedMonoBehavior
                 && x.team.Equals(Team.Player)
                 && selectedPlayer.IsSameColumn(x)
                 && selectedPlayer.location.y > x.location.y
-                && Geometry.IsInRange(selectedPlayer.position.x, selectedPlayer.CurrentTile.position.x, tileSize / 4);
+                && Geometry.IsInRange(selectedPlayer.position.x, selectedPlayer.currentTile.position.x, tileSize / 4);
             });
         if (northActor != null)
-            northLine.Set(selectedPlayer.CurrentTile.position, northActor.CurrentTile.position);
+            northLine.Set(selectedPlayer.currentTile.position, northActor.currentTile.position);
      
         var eastActor = sortedActors
             .FirstOrDefault(x =>
@@ -48,10 +46,10 @@ public class LineManager : ExtendedMonoBehavior
                 && x.team.Equals(Team.Player)
                 && selectedPlayer.IsSameRow(x)
                 && selectedPlayer.location.x > x.location.x
-                && Geometry.IsInRange(selectedPlayer.position.y, selectedPlayer.CurrentTile.position.y, tileSize / 4);
+                && Geometry.IsInRange(selectedPlayer.position.y, selectedPlayer.currentTile.position.y, tileSize / 4);
             });
         if (eastActor != null)
-            eastLine.Set(selectedPlayer.CurrentTile.position, eastActor.CurrentTile.position);
+            eastLine.Set(selectedPlayer.currentTile.position, eastActor.currentTile.position);
    
         var southActor = sortedActors
             .FirstOrDefault(x =>
@@ -60,10 +58,10 @@ public class LineManager : ExtendedMonoBehavior
                 && x.team.Equals(Team.Player)
                 && selectedPlayer.IsSameColumn(x)
                 && selectedPlayer.location.y < x.location.y
-                && Geometry.IsInRange(selectedPlayer.position.x, selectedPlayer.CurrentTile.position.x, tileSize / 5);
+                && Geometry.IsInRange(selectedPlayer.position.x, selectedPlayer.currentTile.position.x, tileSize / 5);
             });
         if (southActor != null)
-            southLine.Set(selectedPlayer.CurrentTile.position, southActor.CurrentTile.position);
+            southLine.Set(selectedPlayer.currentTile.position, southActor.currentTile.position);
 
         var westActor = sortedActors
             .FirstOrDefault(x =>
@@ -72,10 +70,10 @@ public class LineManager : ExtendedMonoBehavior
                 && x.team.Equals(Team.Player)
                 && selectedPlayer.IsSameRow(x)
                 && selectedPlayer.location.x < x.location.x
-                && Geometry.IsInRange(selectedPlayer.position.y, selectedPlayer.CurrentTile.position.y, tileSize / 4);
+                && Geometry.IsInRange(selectedPlayer.position.y, selectedPlayer.currentTile.position.y, tileSize / 4);
             });
         if (westActor != null)
-            westLine.Set(selectedPlayer.CurrentTile.position, westActor.CurrentTile.position);
+            westLine.Set(selectedPlayer.currentTile.position, westActor.currentTile.position);
        
     }
 }
