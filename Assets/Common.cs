@@ -1,44 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Common
 {
-    public static float GetScreenToWorldWidth
+    public static Vector2 ViewportToWorldSize
     {
         get
         {
             Vector2 topRightCorner = new Vector2(1f, 1f);
             Vector2 edgeVector = Camera.main.ViewportToWorldPoint(topRightCorner);
             var width = edgeVector.x * 2f;
-            return width;
-        }
-    }
-
-    public static float GetScreenToWorldHeight
-    {
-        get
-        {
-            Vector2 topRightCorner = new Vector2(1f, 1f);
-            Vector2 edgeVector = Camera.main.ViewportToWorldPoint(topRightCorner);
             var height = edgeVector.y * 2f;
-            return height;
+            return new Vector2(width, height);
         }
     }
 
-
-
-    public static List<Vector2Int> GenerateUniqueLocations(int amount = 10)
+    public static List<Vector2Int> RandomLocations(int amount = 10)
     {
-        var rnd = GameManager.instance.rnd;
-        var locations = new List<Vector2Int>();
-        do
-        {
-            var l = new Vector2Int(rnd.Next(1, 5), rnd.Next(1, 8));
-            if (!locations.Contains(l))
-                locations.Add(l);
-        } while (locations.Count < amount);
-
-        return locations;
+        return GameManager.instance.allLocations.OrderBy(x => Guid.NewGuid()).Take(amount).ToList();
     }
 
     //public static bool InRange(float sw, float b, float range)

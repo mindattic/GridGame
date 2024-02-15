@@ -40,33 +40,16 @@ public class BoardBehavior : ExtendedMonoBehavior
 
         tiles.ForEach(x => x.isOccupied = false);
 
-        var locations = Common.GenerateUniqueLocations(10);
-        actors.First(x => x.name == "Sentinel").Init(locations[0]);
-        actors.First(x => x.name == "Corsair").Init(locations[1]);
-        actors.First(x => x.name == "Oracle").Init(locations[2]);
-        actors.First(x => x.name == "Mechanic").Init(locations[3]);
-        actors.First(x => x.name == "Slime A").Init(locations[4]);
-        actors.First(x => x.name == "Slime B").Init(locations[5]);
-        actors.First(x => x.name == "Slime C").Init(locations[6]);
-        actors.First(x => x.name == "Slime D").Init(locations[7]);
-        actors.First(x => x.name == "Slime E").Init(locations[8]);
-        actors.First(x => x.name == "Slime F").Init(locations[9]);
+        //Assign each actor a random, non-repeating location
+        var locations = Common.RandomLocations(actors.Count);
+        int i = 0;
+        actors.ForEach(x => x.Init(locations[i++]));
 
         timer.Set(scale: 1f, start: false);
 
     }
 
-    private HashSet<Vector2Int> allLocations = new HashSet<Vector2Int>()
-    {
-        new Vector2Int(1, 0), new Vector2Int(1, 1), new Vector2Int(1, 2), new Vector2Int(1, 3), new Vector2Int(1, 4), new Vector2Int(1, 5), new Vector2Int(1, 6),
-        new Vector2Int(2, 0), new Vector2Int(2, 1), new Vector2Int(2, 2), new Vector2Int(2, 3), new Vector2Int(2, 4), new Vector2Int(2, 5), new Vector2Int(2, 6),
-        new Vector2Int(3, 0), new Vector2Int(3, 1), new Vector2Int(3, 2), new Vector2Int(3, 3), new Vector2Int(3, 4), new Vector2Int(3, 5), new Vector2Int(3, 6),
-        new Vector2Int(4, 0), new Vector2Int(4, 1), new Vector2Int(4, 2), new Vector2Int(4, 3), new Vector2Int(4, 4), new Vector2Int(4, 5), new Vector2Int(4, 6),
-        new Vector2Int(5, 0), new Vector2Int(5, 1), new Vector2Int(5, 2), new Vector2Int(5, 3), new Vector2Int(5, 4), new Vector2Int(5, 5), new Vector2Int(5, 6),
-        new Vector2Int(6, 0), new Vector2Int(6, 1), new Vector2Int(6, 2), new Vector2Int(6, 3), new Vector2Int(6, 4), new Vector2Int(6, 5), new Vector2Int(6, 6),
-        new Vector2Int(7, 0), new Vector2Int(7, 1), new Vector2Int(7, 2), new Vector2Int(7, 3), new Vector2Int(7, 4), new Vector2Int(7, 5), new Vector2Int(7, 6),
-        new Vector2Int(8, 0), new Vector2Int(8, 1), new Vector2Int(8, 2), new Vector2Int(8, 3), new Vector2Int(8, 4), new Vector2Int(8, 5), new Vector2Int(8, 6)
-    };
+
 
 
 }

@@ -7,7 +7,7 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
-        //GameManager.instance.screenSize = new Vector2(Common.GetScreenToWorldWidth, Common.GetScreenToWorldHeight);
+        //GameManager.instance.screenSize = new Vector2(Common.ViewportToWorldWidth, Common.ViewportToWorldHeight);
         //GameManager.instance.tileSize = GameManager.instance.screenSize.x / 6;
         //GameManager.instance.tileScale = new Vector2(GameManager.instance.tileSize, GameManager.instance.tileSize);
 
