@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Common
 {
@@ -25,6 +26,20 @@ public class Common
     }
 
 
+
+    public static List<Vector2Int> GenerateUniqueLocations(int amount = 10)
+    {
+        var rnd = GameManager.instance.rnd;
+        var locations = new List<Vector2Int>();
+        do
+        {
+            var l = new Vector2Int(rnd.Next(1, 5), rnd.Next(1, 8));
+            if (!locations.Contains(l))
+                locations.Add(l);
+        } while (locations.Count < amount);
+
+        return locations;
+    }
 
     //public static bool InRange(float sw, float b, float range)
     //{

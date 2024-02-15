@@ -19,8 +19,7 @@ public class TileBehavior : MonoBehaviour
         set => gameObject.transform.position = value;
     }
 
-    public SpriteRenderer spriteRenderer;
-
+    private SpriteRenderer spriteRenderer;
 
     public Sprite sprite
     {

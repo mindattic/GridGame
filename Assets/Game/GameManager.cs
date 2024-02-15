@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    public System.Random rnd = new System.Random();
+
     //Settings
     public int targetFramerate = 60;
     public int vSyncCount = 1;
@@ -29,7 +31,7 @@ public class GameManager : Singleton<GameManager>
     public float snapDistance;
 
     //Selection
-    public ActorBehavior activeActor;
+    public ActorBehavior selectedPlayer;
 
     //Behaviors
     public BoardBehavior board;
@@ -41,11 +43,11 @@ public class GameManager : Singleton<GameManager>
     private void Awake()
     {
         screenSize = new Vector2(Common.GetScreenToWorldWidth, Common.GetScreenToWorldHeight);
-        tileSize = screenSize.x / 6.666666f;
+        tileSize = screenSize.x / Constants.percent666;
         tileScale = new Vector2(tileSize, tileSize);
 
-        moveSpeed = tileSize / 3.333333f;
-        snapDistance = moveSpeed / 6.666666f;
+        moveSpeed = tileSize / 2;
+        snapDistance = moveSpeed / Constants.percent666;
 
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
         timer = GameObject.Find(Constants.Timer).GetComponent<TimerBehavior>();

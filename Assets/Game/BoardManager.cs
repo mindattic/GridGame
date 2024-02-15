@@ -73,6 +73,14 @@ public class BoardManager : ExtendedMonoBehavior
 
         prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
         actor = prefab.GetComponent<ActorBehavior>();
+        actor.name = "Mechanic";
+        actor.sprite = spriteManager.mechanic;
+        actor.parent = transform;
+        actor.location = new Vector2Int(1, 7);
+        actor.team = Team.Player;
+
+        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        actor = prefab.GetComponent<ActorBehavior>();
         actor.name = "Slime A";
         actor.sprite = spriteManager.slime;
         actor.parent = transform;
@@ -85,6 +93,38 @@ public class BoardManager : ExtendedMonoBehavior
         actor.sprite = spriteManager.slime;
         actor.parent = transform;
         actor.location = new Vector2Int(3, 3);
+        actor.team = Team.Enemy;
+
+        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        actor = prefab.GetComponent<ActorBehavior>();
+        actor.name = "Slime C";
+        actor.sprite = spriteManager.slime;
+        actor.parent = transform;
+        actor.location = new Vector2Int(4, 1);
+        actor.team = Team.Enemy;
+
+        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        actor = prefab.GetComponent<ActorBehavior>();
+        actor.name = "Bat A";
+        actor.sprite = spriteManager.bat;
+        actor.parent = transform;
+        actor.location = new Vector2Int(4, 2);
+        actor.team = Team.Enemy;
+
+        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        actor = prefab.GetComponent<ActorBehavior>();
+        actor.name = "Bat B";
+        actor.sprite = spriteManager.bat;
+        actor.parent = transform;
+        actor.location = new Vector2Int(5, 4);
+        actor.team = Team.Enemy;
+
+        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        actor = prefab.GetComponent<ActorBehavior>();
+        actor.name = "Bat C";
+        actor.sprite = spriteManager.bat;
+        actor.parent = transform;
+        actor.location = new Vector2Int(6, 8);
         actor.team = Team.Enemy;
 
         //Assign actors list

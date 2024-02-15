@@ -4,19 +4,16 @@ using UnityEngine;
 
 public class SpriteManager : MonoBehaviour
 {
-    public Sprite sentinel;
-    public Sprite corsair;
-    public Sprite oracle;
-    public Sprite slime;
+    [SerializeField] public Sprite sentinel;
+    [SerializeField] public Sprite corsair;
+    [SerializeField] public Sprite oracle;
+    [SerializeField] public Sprite slime;
+    [SerializeField] public Sprite mechanic;
+    [SerializeField] public Sprite bat;
 
     void Awake()
     {
-        //var sprites = GameObject.Find(Constants.Sprites);
-       
-        //sentinel = sprites.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite;
-        //corsair = sprites.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite;
-        //oracle = sprites.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite;
-        //slime = sprites.transform.GetChild(3).gameObject.GetComponent<SpriteRenderer>().sprite;
+
     }
 
     // Start is called before the first frame update

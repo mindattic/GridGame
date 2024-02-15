@@ -75,8 +75,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
 
     protected ActorBehavior selectedPlayer
     {
-        get { return GameManager.instance.activeActor; }
-        set { GameManager.instance.activeActor = value; }
+        get { return GameManager.instance.selectedPlayer; }
+        set { GameManager.instance.selectedPlayer = value; }
     }
 
 }

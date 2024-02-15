@@ -61,7 +61,7 @@ public class LineBehavior : ExtendedMonoBehavior
     void Start()
     {
         lineRenderer.positionCount = 2;
-        var width = tileSize * percent50;
+        var width = tileSize / 2;
         lineRenderer.startWidth = width;
         lineRenderer.endWidth = width;
     }

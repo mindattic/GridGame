@@ -8,7 +8,7 @@ public class ConsoleManager : MonoBehaviour
 
     private Text console;
 
-    private ActorBehavior activeActor => GameManager.instance.activeActor;
+    private ActorBehavior activeActor => GameManager.instance.selectedPlayer;
     private Vector3 mousePosition2D => GameManager.instance.mousePosition2D;
     private Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
 
@@ -44,17 +44,17 @@ public class ConsoleManager : MonoBehaviour
         console.text = ""
             + $@"Statistics{Environment.NewLine}"
             + $@"    Runtime: {Time.time}{Environment.NewLine}"
-            + $@"        FPS: {fps}{Environment.NewLine}"
+            //+ $@"        FPS: {fps}{Environment.NewLine}"
             + $@"{Environment.NewLine}"
             + $@"Actor{Environment.NewLine}"
             + $@"       Name: {name}{Environment.NewLine}"
             + $@"   Location: {location}{Environment.NewLine}"
-            + $@"   Position: {position}{Environment.NewLine}"
+            //+ $@"   Position: {position}{Environment.NewLine}"
             + $@"{Environment.NewLine}"
             + $@"Mouse{Environment.NewLine}"
             + $@"         2D: {mouse2D}{Environment.NewLine}"
             + $@"         3D: {mouse3D}{Environment.NewLine}"
-            + $@"{Environment.NewLine}"
+            //+ $@"{Environment.NewLine}"
             + $@"";
     }
 }
