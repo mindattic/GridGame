@@ -81,6 +81,14 @@ public class BoardManager : ExtendedMonoBehavior
 
         prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
         actor = prefab.GetComponent<ActorBehavior>();
+        actor.name = "Mercenary";
+        actor.sprite = spriteManager.mercenary;
+        actor.parent = transform;
+        actor.location = new Vector2Int(2, 7);
+        actor.team = Team.Player;
+
+        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        actor = prefab.GetComponent<ActorBehavior>();
         actor.name = "Slime A";
         actor.sprite = spriteManager.slime;
         actor.parent = transform;

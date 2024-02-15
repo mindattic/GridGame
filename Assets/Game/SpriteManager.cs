@@ -9,6 +9,7 @@ public class SpriteManager : MonoBehaviour
     [SerializeField] public Sprite oracle;
     [SerializeField] public Sprite slime;
     [SerializeField] public Sprite mechanic;
+    [SerializeField] public Sprite mercenary;
     [SerializeField] public Sprite bat;
 
     void Awake()
