@@ -7,6 +7,7 @@ public static class Tag
     public static string Tile = "Tile";
     public static string Actor = "Actor";
     public static string Line = "Line";
+    public static string Trail = "Trail";
     public static string Wall = "Wall";
 }
 

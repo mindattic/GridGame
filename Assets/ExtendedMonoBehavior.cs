@@ -19,6 +19,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected List<TileBehavior> tiles => GameManager.instance.tiles;
     protected List<ActorBehavior> actors => GameManager.instance.actors;
     protected List<LineBehavior> lines => GameManager.instance.lines;
+    protected List<LineBehavior> trails => GameManager.instance.lines;
 
 
     //Actor

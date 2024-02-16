@@ -31,14 +31,14 @@ public class GameManager : Singleton<GameManager>
 
     //Selection
     public ActorBehavior selectedPlayer;
-
+   
     //Behaviors
     public BoardBehavior board;
     public TimerBehavior timer;
     public List<ActorBehavior> actors;
     public List<TileBehavior> tiles;
     public List<LineBehavior> lines;
-
+  
     public HashSet<Vector2Int> allLocations = new HashSet<Vector2Int>()
     {
         new Vector2Int(1, 1), new Vector2Int(1, 2), new Vector2Int(1, 3), new Vector2Int(1, 4), new Vector2Int(1, 5), new Vector2Int(1, 6), new Vector2Int(1, 7), new Vector2Int(1, 8),

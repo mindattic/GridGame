@@ -33,9 +33,11 @@ public class ActorManager : ExtendedMonoBehavior
             selectedPlayer.location = closestTile.location;
         }
 
+        
         CalculateBattleConditions();
     }
 
+  
 
     private void CalculateBattleConditions()
     {
@@ -179,6 +181,7 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer = actor;
         selectedPlayer.moveState = MoveState.Moving;
         selectedPlayer.sortingOrder = 2;
+        selectedPlayer.trailRenderer.enabled = true;
 
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
@@ -203,6 +206,7 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer.transform.position = Geometry.PositionFromLocation(selectedPlayer.location);
         selectedPlayer.sortingOrder = 1;
         selectedPlayer.moveState = MoveState.Idle;
+        selectedPlayer.trailRenderer.enabled = false;
 
         //Clear active p
         selectedPlayer = null;
