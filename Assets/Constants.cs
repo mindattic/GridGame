@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Constants
+public static class Constants
 {
     public const string Game = "Game";
     public const string Board = "Board";
@@ -23,4 +23,14 @@ public class Constants
     public static readonly Vector2 size66 = new Vector2(percent66, percent66);
     public static readonly Vector2 size75 = new Vector2(percent75, percent75);
     public static readonly Vector2 size100 = new Vector2(percent100, percent100);
+}
+
+public static class Tag
+{
+    public static string Board = "Board";
+    public static string Tile = "Tile";
+    public static string Actor = "Actor";
+    public static string Line = "Line";
+    public static string Trail = "Trail";
+    public static string Wall = "Wall";
 }
