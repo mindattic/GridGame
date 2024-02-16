@@ -17,7 +17,11 @@ public class BoardManager : ExtendedMonoBehavior
 
     void Start()
     {
+        board.Set();
+       
         transform.position = board.offset;
+
+
         GenerateTiles();
         GenerateActors();
         GenerateLines();
@@ -55,6 +59,7 @@ public class BoardManager : ExtendedMonoBehavior
             new ActorInit("Oracle", spriteManager.oracle, Team.Player, randomLocation[i++]),
             new ActorInit("Mechanic", spriteManager.mechanic, Team.Player, randomLocation[i++]),
             new ActorInit("Mercenary", spriteManager.mercenary, Team.Player, randomLocation[i++]),
+            new ActorInit("Clearic", spriteManager.cleric, Team.Player, randomLocation[i++]),
             new ActorInit("Slime A", spriteManager.slime, Team.Enemy, randomLocation[i++]),
             new ActorInit("Slime B", spriteManager.slime, Team.Enemy, randomLocation[i++]),
             new ActorInit("Slime C", spriteManager.slime, Team.Enemy, randomLocation[i++]),

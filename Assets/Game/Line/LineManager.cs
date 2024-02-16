@@ -9,7 +9,7 @@ public class LineManager : ExtendedMonoBehavior
     }
 
     private void Update()
-    {;
+    {
        
     }
 
