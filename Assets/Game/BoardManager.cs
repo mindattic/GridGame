@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ public class BoardManager : ExtendedMonoBehavior
         {
             for (int row = 1; row <= board.rows; row++)
             {
-                prefab = Instantiate(tilePrefab, transform);
+                prefab = Instantiate(tilePrefab, board.transform);
                 tile = prefab.GetComponent<TileBehavior>();
                 tile.name = $"{col}x{row}";
                 tile.location = new Vector2Int(col, row);
@@ -45,96 +46,35 @@ public class BoardManager : ExtendedMonoBehavior
 
     void GenerateActors()
     {
+        int i = 0;
+        var randomLocation = Common.RandomLocations();     
+        var actorInit = new List<ActorInit>()
+        {
+            new ActorInit("Sentinel", spriteManager.sentinel, Team.Player, randomLocation[i++]),
+            new ActorInit("Corsair", spriteManager.corsair, Team.Player, randomLocation[i++]),
+            new ActorInit("Oracle", spriteManager.oracle, Team.Player, randomLocation[i++]),
+            new ActorInit("Mechanic", spriteManager.mechanic, Team.Player, randomLocation[i++]),
+            new ActorInit("Mercenary", spriteManager.mercenary, Team.Player, randomLocation[i++]),
+            new ActorInit("Slime A", spriteManager.slime, Team.Enemy, randomLocation[i++]),
+            new ActorInit("Slime B", spriteManager.slime, Team.Enemy, randomLocation[i++]),
+            new ActorInit("Slime C", spriteManager.slime, Team.Enemy, randomLocation[i++]),
+            new ActorInit("Bat A", spriteManager.bat, Team.Enemy, randomLocation[i++]),
+            new ActorInit("Bat B", spriteManager.bat, Team.Enemy, randomLocation[i++]),
+            new ActorInit("Bat C", spriteManager.bat, Team.Enemy, randomLocation[i++]),
+        };
+
         GameObject prefab;
         ActorBehavior actor;
-
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Sentinel";
-        actor.sprite = spriteManager.sentinel;
-        actor.parent = transform;
-        actor.location = new Vector2Int(2, 3);
-        actor.team = Team.Player;
-
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Corsair";
-        actor.sprite = spriteManager.corsair;
-        actor.parent = transform;
-        actor.location = new Vector2Int(4, 4);
-        actor.team = Team.Player;
-
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Oracle";
-        actor.sprite = spriteManager.oracle;
-        actor.parent = transform;
-        actor.location = new Vector2Int(5, 6);
-        actor.team = Team.Player;
-
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Mechanic";
-        actor.sprite = spriteManager.mechanic;
-        actor.parent = transform;
-        actor.location = new Vector2Int(1, 7);
-        actor.team = Team.Player;
-
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Mercenary";
-        actor.sprite = spriteManager.mercenary;
-        actor.parent = transform;
-        actor.location = new Vector2Int(2, 7);
-        actor.team = Team.Player;
-
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Slime A";
-        actor.sprite = spriteManager.slime;
-        actor.parent = transform;
-        actor.location = new Vector2Int(3, 2);
-        actor.team = Team.Enemy;
-
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Slime B";
-        actor.sprite = spriteManager.slime;
-        actor.parent = transform;
-        actor.location = new Vector2Int(3, 3);
-        actor.team = Team.Enemy;
-
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Slime C";
-        actor.sprite = spriteManager.slime;
-        actor.parent = transform;
-        actor.location = new Vector2Int(4, 1);
-        actor.team = Team.Enemy;
-
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Bat A";
-        actor.sprite = spriteManager.bat;
-        actor.parent = transform;
-        actor.location = new Vector2Int(4, 2);
-        actor.team = Team.Enemy;
-
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Bat B";
-        actor.sprite = spriteManager.bat;
-        actor.parent = transform;
-        actor.location = new Vector2Int(5, 4);
-        actor.team = Team.Enemy;
-
-        prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        actor = prefab.GetComponent<ActorBehavior>();
-        actor.name = "Bat C";
-        actor.sprite = spriteManager.bat;
-        actor.parent = transform;
-        actor.location = new Vector2Int(6, 8);
-        actor.team = Team.Enemy;
+        foreach (var init in actorInit)
+        {
+            prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+            actor = prefab.GetComponent<ActorBehavior>();
+            actor.name = init.name;
+            actor.sprite = init.sprite;
+            actor.parent = board.transform;
+            actor.location = init.location;
+            actor.team = init.team;
+        }
 
         //Assign actors list
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList()
@@ -154,12 +94,12 @@ public class BoardManager : ExtendedMonoBehavior
 
         foreach (var player in players)
         {
-            for(int i = 1; i <= 4; i++)
+            for (int i = 1; i <= 4; i++)
             {
                 prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
                 line = prefab.GetComponent<LineBehavior>();
                 line.name = $"Line_{Guid.NewGuid()}";
-                line.parent = transform;
+                line.parent = board.transform;
             }
         }
 

@@ -102,6 +102,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.transform.localScale = tileScale;
         this.moveState = MoveState.Idle;
         this.currentTile.isOccupied = true;
+        this.spriteRenderer.color = Color.white;
     }
 
     private void SetDirection(ActorBehavior other)

@@ -22,9 +22,9 @@ public class Common
         return GameManager.instance.boardLocations.OrderBy(x => Guid.NewGuid()).ToList();
     }
 
-    //public static bool InRange(float sw, float b, float range)
-    //{
+    public static bool IsInRange(float a, float b, float range)
+    {
+        return a <= b + range && a >= b - range;
+    }
 
-    //    return sw <= b + range && sw >= b - range;
-    //}
 }

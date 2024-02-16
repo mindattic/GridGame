@@ -22,10 +22,10 @@ public class Geometry
         return new Vector3(x, y, 0);
     }
 
-    static public Vector3 TilePositionFromLocation(Vector2Int location)
-    {
-        return tiles.FirstOrDefault(x => x.location == location).transform.position;
-    }
+    //static public Vector3 PositionFromLocation(Vector2Int location)
+    //{
+    //    return tiles.FirstOrDefault(x => x.location.Equals(location)).position;
+    //}
 
     ///DEBUG: Does this work?
     static public Vector2Int LocationFromPosition(Vector3 position)
@@ -45,15 +45,15 @@ public class Geometry
     static public TileBehavior ClosestTileByLocation(Vector2Int location)
     {
         return tiles
-            .First(x => x.location == location);
+            .OrderBy(x => Vector2Int.Distance(x.location, location))
+            .First();
     }
 
     //DEBUG: Does this work?...
     static public TileBehavior ClosestUnoccupiedTileByPosition(Vector2 position)
     {
-        var unoccupiedLocations = UnoccupiedLocations();
         return tiles
-            .Where(x => unoccupiedLocations.Contains(x.location))
+            .Where(x => !x.isOccupied)
             .OrderBy(x => Vector3.Distance(x.transform.position, position))
             .First();
     }
@@ -61,25 +61,10 @@ public class Geometry
     //DEBUG: Does this work?...
     static public TileBehavior ClosestUnoccupiedTileByLocation(Vector2Int location)
     {
-        var unoccupiedLocations = UnoccupiedLocations();
         return tiles
-            .Where(x => unoccupiedLocations.Contains(x.location))
-            .OrderBy(x => Vector2.Distance(x.location, location))
+            .Where(x => !x.isOccupied)
+            .OrderBy(x => Vector2Int.Distance(x.location, location))
             .First();
-    }
-
-    /// <summary>
-    /// Method which is used to retrieve all unoccupied locations
-    /// via: https://stackoverflow.com/questions/5620266/the-opposite-of-intersect
-    /// </summary>
-    static public List<Vector2Int> UnoccupiedLocations()
-    {
-        List<Vector2Int> occupiedLocations = actors.Select(x => x.location).ToList();
-        List<Vector2Int> tileLocations = tiles.Select(x => x.location).ToList();
-        List<Vector2Int> unoccupiedLocations 
-            = occupiedLocations.Except(tileLocations).Union(tileLocations.Except(occupiedLocations)).ToList();
-
-        return unoccupiedLocations;
     }
 
     static public ActorBehavior GetActorAtLocation(Vector2Int location)
@@ -88,9 +73,6 @@ public class Geometry
     }
 
 
-    static public bool IsInRange(float a, float b, float range)
-    {
-        return a <= b + range && a >= b - range;
-    }
+   
 
 }

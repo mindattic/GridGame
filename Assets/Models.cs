@@ -54,6 +54,22 @@ public class RectFloat
 }
 
 
+public class ActorInit
+{
+    public string name { get; set; }
+    public Sprite sprite { get; set; }
+    public Team team { get; set; }
+    public Vector2Int location { get; set; }
+    public ActorInit() { }
+    public ActorInit(string name, Sprite sprite, Team team, Vector2Int location)
+    {
+        this.name = name;
+        this.sprite = sprite;
+        this.team = team;
+        this.location = location;
+    }
+}
+
 public class ActorPair
 {
     public ActorPair() { }
