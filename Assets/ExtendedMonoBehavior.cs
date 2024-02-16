@@ -10,6 +10,10 @@ public class ExtendedMonoBehavior : MonoBehaviour
 {
     //Managers
     protected SpriteManager spriteManager => GameManager.instance.spriteManager;
+    protected InputManager inputManager => GameManager.instance.inputManager;
+    protected ActorManager actorManager => GameManager.instance.actorManager;
+    protected LineManager lineManager => GameManager.instance.lineManager;
+
 
     //Behaviors
     protected BoardBehavior board => GameManager.instance.board;
@@ -59,15 +63,10 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected float snapDistance => GameManager.instance.snapDistance;
 
 
-    protected HashSet<string> attackerNames
+    protected BattleParticipants battle
     {
-        get { return GameManager.instance.attackerNames; }
-        set { GameManager.instance.attackerNames = value; }
-    }
-    protected HashSet<string> defenderNames
-    {
-        get { return GameManager.instance.defenderNames; }
-        set { GameManager.instance.defenderNames = value; }
+        get { return GameManager.instance.battle; }
+        set { GameManager.instance.battle = value; }
     }
 
     protected bool InSameColumn(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x;

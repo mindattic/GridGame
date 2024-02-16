@@ -6,8 +6,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 {
     //Variables
 
-
-    public Vector2Int previousLocation { get; set; }
     public Vector2Int location { get; set; }
 
     public MoveState moveState = MoveState.Idle;
@@ -100,7 +98,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (initialLocation.HasValue)
             location = initialLocation.Value;
 
-        this.previousLocation = location;
         this.position = Geometry.PositionFromLocation(location);
         this.transform.localScale = tileScale;
         this.moveState = MoveState.Idle;

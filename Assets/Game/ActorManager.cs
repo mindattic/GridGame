@@ -18,48 +18,32 @@ public class ActorManager : ExtendedMonoBehavior
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-            PickupPlayer();
-        else if (Input.GetMouseButtonUp(0))
-            DropPlayer();
+        if (!HasSelectedPlayer)
+            return;
 
-        if (HasSelectedPlayer)
-        {
-            //Constantly update selected player location
-            selectedPlayer.previousLocation = selectedPlayer.location;
-            var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
-            selectedPlayer.location = closestTile.location;
-        }
-
-
-        CalculateBattleConditions();
+        //Constantly update selected player location
+        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
+        selectedPlayer.location = closestTile.location;
     }
 
-
-
-    private void CalculateBattleConditions()
+    private void ResetBattle()
     {
         //Reset actors
-        enemies.ForEach(x => x.spriteRenderer.color = Color.white);
+        actors.ForEach(x => x.spriteRenderer.color = Color.white);
 
         //Reset lines
-        int i = 0;
-        lines.ForEach(l => l.Hide());
+        lineManager.Hide();
 
-        //Clear names
-        attackerNames = new HashSet<string>();
-        defenderNames = new HashSet<string>();
+        //Reset battle
+        battle.Reset();
+    }
 
-        //Clear pairs
-        List<ActorPair> alignedPairs = new List<ActorPair>();
-        List<ActorPair> attackingPairs = new List<ActorPair>();
+    private void CalculateBattle()
+    {
+        ResetBattle();
 
         if (HasSelectedPlayer)
             return;
-
-        //TODO: Execute this event 1x after dropping selected player...
-
-
 
         //Find actors that share a column or row
 
@@ -69,21 +53,21 @@ public class ActorManager : ExtendedMonoBehavior
             {
                 if (actor1.Equals(actor2)) break;
                 if (actor1.IsSameColumn(actor2))
-                    alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Vertical));
+                    battle.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Vertical));
                 if (actor1.IsSameRow(actor2))
-                    alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Horizontal));
+                    battle.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Horizontal));
             }
         }
-        if (alignedPairs.Count < 1)
+        if (battle.alignedPairs.Count < 1)
             return;
 
-        foreach (var pair in alignedPairs)
+        //Find attacking pairs
+        foreach (var pair in battle.alignedPairs)
         {
             if (pair.axis == Axis.Vertical)
             {
                 var lowest = Math.Min(pair.actor1.location.y, pair.actor2.location.y);
                 var heighest = Math.Max(pair.actor1.location.y, pair.actor2.location.y);
-
                 pair.gaps = tiles.Where(x => x.location.x == pair.actor1.location.x && x.location.y > lowest && x.location.y < heighest && !x.isOccupied).ToList();
                 pair.targets = enemies.Where(x => x.IsSameColumn(pair.actor1) && x.location.y > lowest && x.location.y < heighest).ToList();
             }
@@ -91,46 +75,39 @@ public class ActorManager : ExtendedMonoBehavior
             {
                 var lowest = Math.Min(pair.actor1.location.x, pair.actor2.location.x);
                 var heighest = Math.Max(pair.actor1.location.x, pair.actor2.location.x);
-
                 pair.gaps = tiles.Where(x => x.location.y == pair.actor1.location.y && x.location.x > lowest && x.location.x < heighest && !x.isOccupied).ToList();
                 pair.targets = enemies.Where(x => x.IsSameRow(pair.actor1) && x.location.x > lowest && x.location.x < heighest).ToList();
             }
 
-            bool hasGaps = pair.gaps.Count > 0;
-            bool hasTargets = pair.targets.Count > 0;
-            if (!hasGaps && hasTargets)
+            //Assign attacking pairs
+            if (pair.gaps.Count < 1 && pair.targets.Count > 0)
             {
-                attackingPairs.Add(pair);
-                attackerNames.Add(pair.actor1.name);
-                attackerNames.Add(pair.actor2.name);
+                battle.attackingPairs.Add(pair);
+                battle.attackers.Add(pair.actor1);
+                battle.attackers.Add(pair.actor2);
             }
-
         }
 
-        //find aligned pairs where only 1 actor is a direct attacker (e.g. is actor1 or actor 2 in any attackingPair entry) 
-        foreach (var pair in alignedPairs)
+        //Find support pairs
+        int i = 0;
+        foreach (var pair in battle.alignedPairs)
         {
-            var isAttacker1 = attackerNames.Contains(pair.actor1.name);
-            var isAttacker2 = attackerNames.Contains(pair.actor2.name);
-
-            if (isAttacker1 && !isAttacker2)
+            var isAttacker1 = battle.attackers.Contains(pair.actor1);
+            var isAttacker2 = battle.attackers.Contains(pair.actor2);
+            if ((isAttacker1 && !isAttacker2) || (!isAttacker1 && isAttacker2))
             {
                 lines[i++].Set(pair.actor1.position, pair.actor2.position);
-                attackerNames.Add(pair.actor1.name); //(Indirect Attacker)
-            }
-            else if (!isAttacker1 && isAttacker2)
-            {
-                lines[i++].Set(pair.actor1.position, pair.actor2.position);
-                attackerNames.Add(pair.actor2.name); //(Indirect Attacker)
+                battle.supports.Add(isAttacker1 ? pair.actor2 : pair.actor1);
             }
         }
 
-        foreach (var attackers in attackingPairs)
+        //Finding defenders
+        foreach (var attackers in battle.attackingPairs)
         {
             foreach (var target in attackers.targets)
             {
                 target.spriteRenderer.color = Color.red;
-                defenderNames.Add(target.name);
+                battle.defenders.Add(target);
             }
         }
 
@@ -181,6 +158,7 @@ public class ActorManager : ExtendedMonoBehavior
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
+        ResetBattle();
         //Reduce box collider size (allowing actors some 'wiggle room')
         //actors.ForEach(p => p.boxCollider2D.size = size50);
         //selectedPlayer.boxCollider2D.size = size33;
@@ -205,6 +183,8 @@ public class ActorManager : ExtendedMonoBehavior
 
         //Clear active p
         selectedPlayer = null;
+
+        CalculateBattle();
 
         //Restore box collider size to 100%
         //actors.ForEach(p => p.boxCollider2D.size = size50);

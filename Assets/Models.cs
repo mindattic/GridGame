@@ -70,3 +70,29 @@ public class ActorPair
     public List<TileBehavior> gaps { get; set; } = new List<TileBehavior>();
     public List<ActorBehavior> targets { get; set; } = new List<ActorBehavior>();
 }
+
+
+public class BattleParticipants
+{
+    public HashSet<ActorPair> alignedPairs = new HashSet<ActorPair>();
+    public HashSet<ActorPair> attackingPairs = new HashSet<ActorPair>();
+
+    public HashSet<ActorBehavior> attackers = new HashSet<ActorBehavior>();
+    public HashSet<ActorBehavior> supports = new HashSet<ActorBehavior>();
+    public HashSet<ActorBehavior> defenders = new HashSet<ActorBehavior>();
+
+    public BattleParticipants() { }
+
+
+    public void Reset()
+    {
+        //Clear pairs
+        alignedPairs.Clear();
+        attackingPairs.Clear();
+
+        //Clear participants
+        attackers.Clear();
+        supports.Clear();
+        defenders.Clear();
+    }
+}

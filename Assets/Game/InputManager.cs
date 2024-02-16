@@ -2,15 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+public class InputManager : ExtendedMonoBehavior
 {
-    private BoardBehavior board => GameManager.instance.board;
-    private TimerBehavior timer => GameManager.instance.timer;
-
-    private List<ActorBehavior> actors => GameManager.instance.actors;
-
-
-
+  
     private void Awake()
     {
         
@@ -23,18 +17,16 @@ public class InputManager : MonoBehaviour
    
     void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+            actorManager.PickupPlayer();
+        else if (Input.GetMouseButtonUp(0))
+            actorManager.DropPlayer();
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Pressed R");
             board.ResetBoard();
         }
-
-        //if (Input.GetMouseButtonDown(0))
-        //    PickupPlayer();
-        //else if (Input.GetMouseButtonUp(0))
-        //    DropPlayer();
-
-
-
+     
     }
 }

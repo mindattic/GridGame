@@ -12,6 +12,7 @@ public class GameManager : Singleton<GameManager>
     public SpriteManager spriteManager;
     public InputManager inputManager;
     public ActorManager actorManager;
+    public LineManager lineManager;
 
     //Scale
     public Vector2 screenSize;
@@ -34,16 +35,18 @@ public class GameManager : Singleton<GameManager>
     //Behaviors
     public BoardBehavior board;
     public TimerBehavior timer;
+
+
     public List<ActorBehavior> actors;
     public List<ActorBehavior> players;
     public List<ActorBehavior> enemies;
     public List<TileBehavior> tiles;
     public List<LineBehavior> lines;
 
-    //Hashsets
-    public HashSet<string> attackerNames;
-    public HashSet<string> defenderNames;
+
     public HashSet<Vector2Int> boardLocations;
+
+    public BattleParticipants battle;
 
     private void Awake()
     {
@@ -61,9 +64,10 @@ public class GameManager : Singleton<GameManager>
         spriteManager = GameObject.Find(Constants.Game).GetComponent<SpriteManager>();
         inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
+        lineManager = GameObject.Find(Constants.Game).GetComponent<LineManager>();
 
-        attackerNames = new HashSet<string>();
-        defenderNames = new HashSet<string>();
+        battle = new BattleParticipants();
+
         boardLocations = new HashSet<Vector2Int>()
         {
             new Vector2Int(1, 1), new Vector2Int(1, 2), new Vector2Int(1, 3), new Vector2Int(1, 4), new Vector2Int(1, 5), new Vector2Int(1, 6), new Vector2Int(1, 7), new Vector2Int(1, 8),

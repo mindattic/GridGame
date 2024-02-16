@@ -76,4 +76,12 @@ public class LineManager : ExtendedMonoBehavior
         //    westLine.Set(selectedPlayer.currentTile.position, westActor.currentTile.position);
        
     }
+
+
+    public void Hide()
+    {
+        lines.ForEach(x => x.Hide());
+    }
+
+
 }

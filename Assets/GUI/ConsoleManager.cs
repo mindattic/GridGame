@@ -3,16 +3,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ConsoleManager : MonoBehaviour
+public class ConsoleManager : ExtendedMonoBehavior
 {
     [SerializeField] private Canvas canvas;
 
     private Text console;
-
-    private ActorBehavior activeActor => GameManager.instance.selectedPlayer;
-    private Vector3 mousePosition2D => GameManager.instance.mousePosition2D;
-    private Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
-
     private FpsMonitor fpsMonitor = new FpsMonitor();
 
     private void Awake()
@@ -36,35 +31,31 @@ public class ConsoleManager : MonoBehaviour
     private void FixedUpdate()
     {
         string fps = $@"{fpsMonitor.current}";
-        string name = activeActor ? activeActor.name : "-";
-        string location = activeActor ? $@"({activeActor?.location.x},{activeActor?.location.y})" : "-";
-        string position = activeActor ? $@"({activeActor?.transform.position.x},{activeActor?.transform.position.y})" : "-";
-        string mouse2D = $@"({mousePosition2D.x.ToString("N0").Replace(", ", "")},{mousePosition2D.y.ToString("N0").Replace(",", ""):N0})";
-        string mouse3D = $@"({mousePosition3D.x},{mousePosition3D.y},{mousePosition3D.z})";
-        string attackers = string.Join(Environment.NewLine, GameManager.instance.attackerNames.Select(x => $"   * {x}"));
-        string defenders = string.Join(Environment.NewLine, GameManager.instance.defenderNames.Select(x => $"   * {x}"));
+        string name = selectedPlayer != null ? selectedPlayer.name : "-";
+        string location = selectedPlayer != null ? $@"({selectedPlayer.location.x},{selectedPlayer.location.y})" : "-";
+        string position = selectedPlayer != null ? $@"({selectedPlayer.transform.position.x},{selectedPlayer.transform.position.y})" : "-";
+        string mouse2D = mousePosition2D.x >= 0 ? $@"({mousePosition2D.x.ToString("N0").Replace(",", ""):N0}, {mousePosition2D.y.ToString("N0").Replace(",", ""):N0})" : "-";
+        string mouse3D = mousePosition3D.x >= -4 ? $@"({mousePosition3D.x.ToString("N0").Replace(",", ""):N0}, {mousePosition3D.y.ToString("N0").Replace(",", ""):N0}, {mousePosition3D.z.ToString("N0").Replace(", ", ""):N0})" : "-";
+        string attackers = battle.attackers.Any() ? $"[{string.Join(", ", battle.attackers.Select(x => x.name))}]" : "-";
+        string supports = battle.supports.Any() ? $"[{string.Join(", ", battle.supports.Select(x => x.name))}]" : "-";
+        string defenders = battle.defenders.Any() ? $"[{string.Join(", ", battle.defenders.Select(x => x.name))}]" : "-";
 
         console.text = ""
-            + $@"Runtime: {Time.time} seconds"
-            //+ $@"        FPS: {fps}{Environment.NewLine}"
+            + $@"  Runtime: {Time.time}"
             + $@"{Environment.NewLine}"
-            //+ $@"       Name: {name}{Environment.NewLine}"
-            //+ $@"   Location: {location}{Environment.NewLine}"
-            //+ $@"{Environment.NewLine}"
-            //+ $@"   Mouse 2D: {mouse2D}{Environment.NewLine}"
-            //+ $@"    Mouse3D: {mouse3D}{Environment.NewLine}"
+            + $@"      FPS: {fps}"
             + $@"{Environment.NewLine}"
-            + $@"Attackers:"
+            + $@" Selected: {name}"
             + $@"{Environment.NewLine}"
-            + $@"{attackers}"
+            + $@" Mouse 2D: {mouse2D}"
             + $@"{Environment.NewLine}"
+            + $@" Mouse 3D: {mouse3D}"
             + $@"{Environment.NewLine}"
-            + $@"Defenders:"
+            + $@"Attackers: {attackers}"
             + $@"{Environment.NewLine}"
-            + $@"{defenders}"
-
-
-
+            + $@" Supports: {supports}"
+            + $@"{Environment.NewLine}"
+            + $@"Defenders: {defenders}"
             + $@"";
     }
 }
