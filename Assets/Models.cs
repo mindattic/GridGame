@@ -67,6 +67,6 @@ public class ActorPair
     public ActorBehavior actor1 { get; set; }
     public ActorBehavior actor2 { get; set; }
     public Axis axis { get; set; }
-    public List<TileBehavior> gaps { get; set; }
-    public List<ActorBehavior> targets { get; set; }
+    public List<TileBehavior> gaps { get; set; } = new List<TileBehavior>();
+    public List<ActorBehavior> targets { get; set; } = new List<ActorBehavior>();
 }

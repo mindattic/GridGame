@@ -1,9 +1,7 @@
-using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 using MoveState = ActorMoveState;
 
 public class ActorManager : ExtendedMonoBehavior
@@ -48,17 +46,18 @@ public class ActorManager : ExtendedMonoBehavior
         int i = 0;
         lines.ForEach(l => l.Hide());
 
-        //Clear attacker names
-        GameManager.instance.attackerNames = new HashSet<string>();
-        GameManager.instance.defenderNames = new HashSet<string>();
+        //Clear names
+        attackerNames = new HashSet<string>();
+        defenderNames = new HashSet<string>();
 
+        //Clear pairs
         List<ActorPair> alignedPairs = new List<ActorPair>();
         List<ActorPair> attackingPairs = new List<ActorPair>();
 
         if (HasSelectedPlayer)
             return;
 
-        //TODO: Execute this event 1x after droping selected player...
+        //TODO: Execute this event 1x after dropping selected player...
 
 
 
@@ -97,73 +96,43 @@ public class ActorManager : ExtendedMonoBehavior
                 pair.targets = enemies.Where(x => x.IsSameRow(pair.actor1) && x.location.x > lowest && x.location.x < heighest).ToList();
             }
 
-            bool hasGaps = pair.gaps != null && pair.gaps.Count > 0;
-            bool hasTargets = pair.targets != null && pair.targets.Count > 0;
+            bool hasGaps = pair.gaps.Count > 0;
+            bool hasTargets = pair.targets.Count > 0;
             if (!hasGaps && hasTargets)
             {
                 attackingPairs.Add(pair);
+                attackerNames.Add(pair.actor1.name);
+                attackerNames.Add(pair.actor2.name);
             }
 
         }
 
+        //find aligned pairs where only 1 actor is a direct attacker (e.g. is actor1 or actor 2 in any attackingPair entry) 
         foreach (var pair in alignedPairs)
         {
-            lines[i++].Set(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
+            var isAttacker1 = attackerNames.Contains(pair.actor1.name);
+            var isAttacker2 = attackerNames.Contains(pair.actor2.name);
 
-            //foreach (var attackers in attackingPairs)
-            //{
-            //    bool isActor1Attacker = pair.actor1.Equals(attackers.actor1) && !pair.actor2.Equals(attackers.actor2);
-            //    bool isActor2Attacker = pair.actor2.Equals(attackers.actor1) && !pair.actor1.Equals(attackers.actor2);
-
-            //    if (isActor1Attacker || isActor2Attacker)
-            //    {
-            //        lines[i++].Set(pair.actor1.position, pair.actor2.position);
-            //    }
-            //}
-
-
-            ////    if (!attackingPairs.Contains(pair))
-            ////{
-            ////    lines[i++].Set(pair.actor1.position, pair.actor2.position);
-            ////}
+            if (isAttacker1 && !isAttacker2)
+            {
+                lines[i++].Set(pair.actor1.position, pair.actor2.position);
+                attackerNames.Add(pair.actor1.name); //(Indirect Attacker)
+            }
+            else if (!isAttacker1 && isAttacker2)
+            {
+                lines[i++].Set(pair.actor1.position, pair.actor2.position);
+                attackerNames.Add(pair.actor2.name); //(Indirect Attacker)
+            }
         }
 
         foreach (var attackers in attackingPairs)
         {
-            GameManager.instance.attackerNames.Add(attackers.actor1.name);
-            GameManager.instance.attackerNames.Add(attackers.actor2.name);
             foreach (var target in attackers.targets)
             {
                 target.spriteRenderer.color = Color.red;
-                GameManager.instance.defenderNames.Add(target.name);
+                defenderNames.Add(target.name);
             }
         }
-
-        //foreach (var attackers in attackingPairs)
-        //{
-
-
-
-        //    bool hasGaps = attackers.gaps != null && attackers.gaps.Count > 0;
-        //    bool hasTargets = attackers.targets != null && attackers.targets.Count > 0;
-        //    bool isDirectAttacker = GameManager.instance.attackerNames.Contains(attackers.actor1.name) || GameManager.instance.attackerNames.Contains(attackers.actor2.name);
-
-        //    if (attackers.gaps.Count > 0 && !hasTargets && isDirectAttacker)
-        //    {
-        //        lines[i++].Set(attackers.actor1.position, attackers.actor2.position);
-        //        GameManager.instance.attackerNames.Add(attackers.actor1.name);
-        //        GameManager.instance.attackerNames.Add(attackers.actor2.name);
-        //    }
-        //    else if (!hasGaps && hasTargets)
-        //    {
-        //        attackers.targets.ForEach(x => x.spriteRenderer.color = Color.red);
-        //    }
-
-        //    GameManager.instance.attackerNames.Add(attackers.actor1.name);
-        //    GameManager.instance.attackerNames.Add(attackers.actor2.name);
-        //    attackers.targets.ForEach(x => GameManager.instance.defenderNames.Add(x.name));
-        //}
-
 
 
     }
@@ -179,25 +148,25 @@ public class ActorManager : ExtendedMonoBehavior
 
     public void PickupPlayer()
     {
-        //Only pickup player if no p is selected
+        //Only pickup player if no player is selected
         if (HasSelectedPlayer)
             return;
 
-        //Find p overlaping mouse position
+        //Find player overlaping mouse position
         Collider2D mouseCollider = Physics2D.OverlapPoint(mousePosition3D);
         if (mouseCollider == null || !mouseCollider.CompareTag(Tag.Actor))
             return;
 
-        //Retrieve p under mouse cursor
+        //Retrieve player under mouse cursor
         var actor = mouseCollider.gameObject.GetComponent<ActorBehavior>();
         if (actor == null)
             return;
 
-        //Determine if p Team: "Player"
+        //Determine if player Team: "Player"
         if (actor.team != Team.Player)
             return;
 
-        //Determine if p MoveState: "Idle"
+        //Determine if player MoveState: "Idle"
         if (actor.moveState != MoveState.Idle)
             return;
 

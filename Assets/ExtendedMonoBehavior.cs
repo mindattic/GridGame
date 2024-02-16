@@ -58,6 +58,18 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected float slideSpeed => GameManager.instance.slideSpeed;
     protected float snapDistance => GameManager.instance.snapDistance;
 
+
+    protected HashSet<string> attackerNames
+    {
+        get { return GameManager.instance.attackerNames; }
+        set { GameManager.instance.attackerNames = value; }
+    }
+    protected HashSet<string> defenderNames
+    {
+        get { return GameManager.instance.defenderNames; }
+        set { GameManager.instance.defenderNames = value; }
+    }
+
     protected bool InSameColumn(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x;
     protected bool InSameRow(ActorBehavior a, ActorBehavior b) => a.location.y == b.location.y;
     protected bool IsAbove(ActorBehavior a, ActorBehavior b) => InSameColumn(a, b) && a.location.y == b.location.y - 1;
