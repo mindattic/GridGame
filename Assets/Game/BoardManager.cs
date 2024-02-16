@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -137,7 +138,13 @@ public class BoardManager : ExtendedMonoBehavior
 
         //Assign actors list
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList()
-           .ForEach(x => GameManager.instance.actors.Add(x.GetComponent<ActorBehavior>()));
+           .ForEach(x => actors.Add(x.GetComponent<ActorBehavior>()));
+
+        //Assign players list
+        players.AddRange(actors.Where(p => p.team == Team.Player).ToList());
+
+        //Assign enemies list
+        enemies.AddRange(actors.Where(e => e.team == Team.Enemy).ToList());
     }
 
     void GenerateLines()
@@ -145,25 +152,16 @@ public class BoardManager : ExtendedMonoBehavior
         GameObject prefab;
         LineBehavior line;
 
-        prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
-        line = prefab.GetComponent<LineBehavior>();
-        line.name = "NorthLine";
-        line.parent = transform;
-
-        prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
-        line = prefab.GetComponent<LineBehavior>();
-        line.name = "EastLine";
-        line.parent = transform;
-
-        prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
-        line = prefab.GetComponent<LineBehavior>();
-        line.name = "SouthLine";
-        line.parent = transform;
-
-        prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
-        line = prefab.GetComponent<LineBehavior>();
-        line.name = "WestLine";
-        line.parent = transform;
+        foreach (var player in players)
+        {
+            for(int i = 1; i <= 4; i++)
+            {
+                prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
+                line = prefab.GetComponent<LineBehavior>();
+                line.name = $"Line_{Guid.NewGuid()}";
+                line.parent = transform;
+            }
+        }
 
         //Assign line list
         GameObject.FindGameObjectsWithTag(Tag.Line).ToList()

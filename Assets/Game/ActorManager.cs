@@ -2,9 +2,8 @@ using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
+using static UnityEngine.GraphicsBuffer;
 using MoveState = ActorMoveState;
 
 public class ActorManager : ExtendedMonoBehavior
@@ -32,19 +31,6 @@ public class ActorManager : ExtendedMonoBehavior
             selectedPlayer.previousLocation = selectedPlayer.location;
             var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
             selectedPlayer.location = closestTile.location;
-
-            //Check if selected player moved diagonally...
-            //var movedUL = selectedPlayer.location.x == selectedPlayer.previousLocation.x - 1 && selectedPlayer.location.y == selectedPlayer.previousLocation.y - 1;
-            //if (movedUL)
-            //{
-            //    var actor = actors.FirstOrDefault(x => x.location.Equals(selectedPlayer.location));
-            //    if (actor != null)
-            //    {
-            //        actor.SetDestination(Direction.East);
-            //    }
-            //}
-
-
         }
 
 
@@ -55,106 +41,132 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void CalculateBattleConditions()
     {
+        //Reset actors
+        enemies.ForEach(x => x.spriteRenderer.color = Color.white);
 
-        //Retrieve all players
-        var players = actors.Where(p => p.team == Team.Player).ToList();
-        //players.ForEach(p => p.spriteRenderer.color = Color.white);
+        //Reset lines
+        int i = 0;
+        lines.ForEach(l => l.Hide());
 
-        //Retrieve all enemies
-        var enemies = actors.Where(e => e.team == Team.Enemy).ToList();
-        enemies.ForEach(e => e.spriteRenderer.color = Color.white);
+        //Clear attacker names
+        GameManager.instance.attackerNames = new HashSet<string>();
+        GameManager.instance.defenderNames = new HashSet<string>();
+
+        List<ActorPair> alignedPairs = new List<ActorPair>();
+        List<ActorPair> attackingPairs = new List<ActorPair>();
+
+        if (HasSelectedPlayer)
+            return;
+
+        //TODO: Execute this event 1x after droping selected player...
+
+
 
         //Find actors that share a column or row
-        List<ActorPair> alignedPlayers = new List<ActorPair>();
+
         foreach (var actor1 in players)
         {
             foreach (var actor2 in players)
             {
                 if (actor1.Equals(actor2)) break;
                 if (actor1.IsSameColumn(actor2))
-                    alignedPlayers.Add(new ActorPair(actor1, actor2, Axis.Vertical));
+                    alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Vertical));
                 if (actor1.IsSameRow(actor2))
-                    alignedPlayers.Add(new ActorPair(actor1, actor2, Axis.Horizontal));
+                    alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Horizontal));
             }
         }
-        if (alignedPlayers.Count < 1)
+        if (alignedPairs.Count < 1)
             return;
 
-
-        //Find gaps between each pair of aligned actors
-        foreach (var pair in alignedPlayers)
+        foreach (var pair in alignedPairs)
         {
-
-            List<TileBehavior> gaps = new List<TileBehavior>();
             if (pair.axis == Axis.Vertical)
             {
                 var lowest = Math.Min(pair.actor1.location.y, pair.actor2.location.y);
                 var heighest = Math.Max(pair.actor1.location.y, pair.actor2.location.y);
-                gaps = tiles.Where(g =>
-                {
-                    return g.location.x == pair.actor1.location.x
-                    && g.location.y > lowest
-                    && g.location.y < heighest
-                    && !g.isOccupied;
-                }).ToList();
+
+                pair.gaps = tiles.Where(x => x.location.x == pair.actor1.location.x && x.location.y > lowest && x.location.y < heighest && !x.isOccupied).ToList();
+                pair.targets = enemies.Where(x => x.IsSameColumn(pair.actor1) && x.location.y > lowest && x.location.y < heighest).ToList();
             }
             else if (pair.axis == Axis.Horizontal)
             {
                 var lowest = Math.Min(pair.actor1.location.x, pair.actor2.location.x);
                 var heighest = Math.Max(pair.actor1.location.x, pair.actor2.location.x);
-                gaps = tiles.Where(g =>
-                {
-                    return g.location.y == pair.actor1.location.y
-                    && g.location.x > lowest
-                    && g.location.x < heighest
-                    && !g.isOccupied;
-                }).ToList();
+
+                pair.gaps = tiles.Where(x => x.location.y == pair.actor1.location.y && x.location.x > lowest && x.location.x < heighest && !x.isOccupied).ToList();
+                pair.targets = enemies.Where(x => x.IsSameRow(pair.actor1) && x.location.x > lowest && x.location.x < heighest).ToList();
             }
 
-            pair.gapCount = gaps.Count;
+            bool hasGaps = pair.gaps != null && pair.gaps.Count > 0;
+            bool hasTargets = pair.targets != null && pair.targets.Count > 0;
+            if (!hasGaps && hasTargets)
+            {
+                attackingPairs.Add(pair);
+            }
+
         }
 
-        //Find enemies between each pair of aligned actors
-        foreach (var pair in alignedPlayers)
+        foreach (var pair in alignedPairs)
         {
-            if (pair.gapCount > 0)
-                break;
+            lines[i++].Set(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
 
-            //pair.actor1.spriteRenderer.color = Color.blue;
-            //pair.actor2.spriteRenderer.color = Color.blue;
+            //foreach (var attackers in attackingPairs)
+            //{
+            //    bool isActor1Attacker = pair.actor1.Equals(attackers.actor1) && !pair.actor2.Equals(attackers.actor2);
+            //    bool isActor2Attacker = pair.actor2.Equals(attackers.actor1) && !pair.actor1.Equals(attackers.actor2);
 
-            List<ActorBehavior> pairEnemies = new List<ActorBehavior>();
-            if (pair.axis == Axis.Vertical)
-            {
-                var lowest = Math.Min(pair.actor1.location.y, pair.actor2.location.y);
-                var heighest = Math.Max(pair.actor1.location.y, pair.actor2.location.y);
-                pairEnemies = enemies.Where(e =>
-                {
-                    return e.location.x == pair.actor1.location.x
-                    && e.location.y > lowest
-                    && e.location.y < heighest;
-                }).ToList();
-            }
-            else if (pair.axis == Axis.Horizontal)
-            {
-                var lowest = Math.Min(pair.actor1.location.x, pair.actor2.location.x);
-                var heighest = Math.Max(pair.actor1.location.x, pair.actor2.location.x);
-                pairEnemies = enemies.Where(e =>
-                {
-                    return e.location.y == pair.actor1.location.y
-                    && e.location.x > lowest
-                    && e.location.x < heighest;
-                }).ToList();
-            }
+            //    if (isActor1Attacker || isActor2Attacker)
+            //    {
+            //        lines[i++].Set(pair.actor1.position, pair.actor2.position);
+            //    }
+            //}
 
-            foreach (var enemy in pairEnemies)
+
+            ////    if (!attackingPairs.Contains(pair))
+            ////{
+            ////    lines[i++].Set(pair.actor1.position, pair.actor2.position);
+            ////}
+        }
+
+        foreach (var attackers in attackingPairs)
+        {
+            GameManager.instance.attackerNames.Add(attackers.actor1.name);
+            GameManager.instance.attackerNames.Add(attackers.actor2.name);
+            foreach (var target in attackers.targets)
             {
-                enemy.spriteRenderer.color = Color.red;
+                target.spriteRenderer.color = Color.red;
+                GameManager.instance.defenderNames.Add(target.name);
             }
         }
+
+        //foreach (var attackers in attackingPairs)
+        //{
+
+
+
+        //    bool hasGaps = attackers.gaps != null && attackers.gaps.Count > 0;
+        //    bool hasTargets = attackers.targets != null && attackers.targets.Count > 0;
+        //    bool isDirectAttacker = GameManager.instance.attackerNames.Contains(attackers.actor1.name) || GameManager.instance.attackerNames.Contains(attackers.actor2.name);
+
+        //    if (attackers.gaps.Count > 0 && !hasTargets && isDirectAttacker)
+        //    {
+        //        lines[i++].Set(attackers.actor1.position, attackers.actor2.position);
+        //        GameManager.instance.attackerNames.Add(attackers.actor1.name);
+        //        GameManager.instance.attackerNames.Add(attackers.actor2.name);
+        //    }
+        //    else if (!hasGaps && hasTargets)
+        //    {
+        //        attackers.targets.ForEach(x => x.spriteRenderer.color = Color.red);
+        //    }
+
+        //    GameManager.instance.attackerNames.Add(attackers.actor1.name);
+        //    GameManager.instance.attackerNames.Add(attackers.actor2.name);
+        //    attackers.targets.ForEach(x => GameManager.instance.defenderNames.Add(x.name));
+        //}
+
+
+
     }
-
-
 
     private void FixedUpdate()
     {

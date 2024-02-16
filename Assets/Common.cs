@@ -17,9 +17,9 @@ public class Common
         }
     }
 
-    public static List<Vector2Int> RandomLocations(int amount = 10)
+    public static List<Vector2Int> RandomLocations()
     {
-        return GameManager.instance.allLocations.OrderBy(x => Guid.NewGuid()).Take(amount).ToList();
+        return GameManager.instance.boardLocations.OrderBy(x => Guid.NewGuid()).ToList();
     }
 
     //public static bool InRange(float sw, float b, float range)

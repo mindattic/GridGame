@@ -14,13 +14,11 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //Behaviors
     protected BoardBehavior board => GameManager.instance.board;
     protected TimerBehavior timer => GameManager.instance.timer;
-
-    //Collections
     protected List<TileBehavior> tiles => GameManager.instance.tiles;
     protected List<ActorBehavior> actors => GameManager.instance.actors;
+    protected List<ActorBehavior> players => GameManager.instance.players;
+    protected List<ActorBehavior> enemies => GameManager.instance.enemies;
     protected List<LineBehavior> lines => GameManager.instance.lines;
-    protected List<LineBehavior> trails => GameManager.instance.lines;
-
 
     //Actor
     protected bool HasSelectedPlayer => selectedPlayer != null;
@@ -28,9 +26,6 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //Scale
     protected float tileSize => GameManager.instance.tileSize;
     protected Vector2 tileScale => GameManager.instance.tileScale;
-
-
-
 
     //Percent
     protected float percent25 => Constants.percent25;

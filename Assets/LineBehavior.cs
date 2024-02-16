@@ -49,8 +49,6 @@ public class LineBehavior : ExtendedMonoBehavior
         gameObject.SetActive(false);
     }
 
-
-
     #endregion
 
     private void Awake()

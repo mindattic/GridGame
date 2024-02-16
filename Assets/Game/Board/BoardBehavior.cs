@@ -41,9 +41,9 @@ public class BoardBehavior : ExtendedMonoBehavior
         tiles.ForEach(x => x.isOccupied = false);
 
         //Assign each actor a random, non-repeating location
-        var locations = Common.RandomLocations(actors.Count);
+        var randomLocations = Common.RandomLocations();
         int i = 0;
-        actors.ForEach(x => x.Init(locations[i++]));
+        actors.ForEach(x => x.Init(randomLocations[i++]));
 
         timer.Set(scale: 1f, start: false);
 

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,21 +41,30 @@ public class ConsoleManager : MonoBehaviour
         string position = activeActor ? $@"({activeActor?.transform.position.x},{activeActor?.transform.position.y})" : "-";
         string mouse2D = $@"({mousePosition2D.x.ToString("N0").Replace(", ", "")},{mousePosition2D.y.ToString("N0").Replace(",", ""):N0})";
         string mouse3D = $@"({mousePosition3D.x},{mousePosition3D.y},{mousePosition3D.z})";
+        string attackers = string.Join(Environment.NewLine, GameManager.instance.attackerNames.Select(x => $"   * {x}"));
+        string defenders = string.Join(Environment.NewLine, GameManager.instance.defenderNames.Select(x => $"   * {x}"));
 
         console.text = ""
-            + $@"Statistics{Environment.NewLine}"
-            + $@"    Runtime: {Time.time}{Environment.NewLine}"
+            + $@"Runtime: {Time.time} seconds"
             //+ $@"        FPS: {fps}{Environment.NewLine}"
             + $@"{Environment.NewLine}"
-            + $@"Actor{Environment.NewLine}"
-            + $@"       Name: {name}{Environment.NewLine}"
-            + $@"   Location: {location}{Environment.NewLine}"
-            //+ $@"   Position: {position}{Environment.NewLine}"
-            + $@"{Environment.NewLine}"
-            + $@"Mouse{Environment.NewLine}"
-            + $@"         2D: {mouse2D}{Environment.NewLine}"
-            + $@"         3D: {mouse3D}{Environment.NewLine}"
+            //+ $@"       Name: {name}{Environment.NewLine}"
+            //+ $@"   Location: {location}{Environment.NewLine}"
             //+ $@"{Environment.NewLine}"
+            //+ $@"   Mouse 2D: {mouse2D}{Environment.NewLine}"
+            //+ $@"    Mouse3D: {mouse3D}{Environment.NewLine}"
+            + $@"{Environment.NewLine}"
+            + $@"Attackers:"
+            + $@"{Environment.NewLine}"
+            + $@"{attackers}"
+            + $@"{Environment.NewLine}"
+            + $@"{Environment.NewLine}"
+            + $@"Defenders:"
+            + $@"{Environment.NewLine}"
+            + $@"{defenders}"
+
+
+
             + $@"";
     }
 }
