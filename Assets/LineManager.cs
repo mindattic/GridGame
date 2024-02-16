@@ -15,10 +15,10 @@ public class LineManager : ExtendedMonoBehavior
         //var southLine = lines[2];
         //var westLine = lines[3];
 
-        //northLine.Hide();
-        //eastLine.Hide();
-        //southLine.Hide();
-        //westLine.Hide();
+        //northLine.Reset();
+        //eastLine.Reset();
+        //southLine.Reset();
+        //westLine.Reset();
 
         //if (!HasSelectedPlayer)
         //    return;
@@ -78,7 +78,7 @@ public class LineManager : ExtendedMonoBehavior
     }
 
 
-    public void Hide()
+    public void Reset()
     {
         lines.ForEach(x => x.Hide());
     }

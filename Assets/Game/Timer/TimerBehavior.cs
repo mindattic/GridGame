@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TimerBehavior : MonoBehaviour
+public class TimerBehavior : ExtendedMonoBehavior
 {
     private bool isRunning = false;
     private const float maxTime = 6f;
@@ -16,7 +16,7 @@ public class TimerBehavior : MonoBehaviour
         rect = GetComponent<RectTransform>();
         progressBar = GetComponent<Image>();
 
-
+        //TODO: Calculate programatically
         rect.offsetMin = new Vector2(25, 1550); //Set left, bottom
         rect.offsetMax = new Vector2(-25, -100); //Set right, top
 
@@ -40,6 +40,7 @@ public class TimerBehavior : MonoBehaviour
         else
         {
             isRunning = false;
+            actorManager.DropPlayer();
         }
     }
 

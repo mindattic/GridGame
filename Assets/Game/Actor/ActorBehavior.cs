@@ -113,9 +113,9 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (this.IsNorthWestOf(other))
             this.destination.direction = this.location.x < board.columns ? Direction.East : Direction.West;
         else if (this.IsNorthEastOf(other))
-            this.destination.direction = this.location.x > 0 ? Direction.West : Direction.East;
+            this.destination.direction = this.location.x > 1 ? Direction.West : Direction.East;
         else if (this.IsSouthWestOf(other))
-            this.destination.direction = this.location.x > 0 ? Direction.West : Direction.East;
+            this.destination.direction = this.location.x > 1 ? Direction.West : Direction.East;
         else if (this.IsSouthEastOf(other))
             this.destination.direction = this.location.x < board.columns ? Direction.East : Direction.West;
         else if (this.IsNorthOf(other))
@@ -308,8 +308,13 @@ public class ActorBehavior : ExtendedMonoBehavior
         else if (cursorPosition.y < board.bottom)
             cursorPosition.y = board.bottom;
 
-        //SetDestination active actor towards mouse cursor
-        this.position = Vector2.MoveTowards(selectedPlayer.position, cursorPosition, moveSpeed);
+        //Move selected player towards cursor
+        //this.position = Vector2.MoveTowards(selectedPlayer.position, cursorPosition, moveSpeed);
+
+        //Snap selected player to cursor
+        this.position = cursorPosition;
+
+
     }
 
     private void MoveTowardDestination()

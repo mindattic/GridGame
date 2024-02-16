@@ -32,7 +32,7 @@ public class ActorManager : ExtendedMonoBehavior
         actors.ForEach(x => x.spriteRenderer.color = Color.white);
 
         //Reset lines
-        lineManager.Hide();
+        lineManager.Reset();
 
         //Reset battle
         battle.Reset();

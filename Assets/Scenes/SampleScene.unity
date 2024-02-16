@@ -1134,8 +1134,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -15.94714, y: -604.9982}
-  m_SizeDelta: {x: -111.89428, y: -1210.0034}
+  m_AnchoredPosition: {x: -30.94714, y: -604.9982}
+  m_SizeDelta: {x: -81.89428, y: -1210.0034}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1652735658
 CanvasRenderer:
@@ -1186,9 +1186,9 @@ MonoBehaviour:
     m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 0
-    m_AlignByGeometry: 0
+    m_AlignByGeometry: 1
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Console
@@ -1339,6 +1339,7 @@ MonoBehaviour:
   spriteManager: {fileID: 0}
   inputManager: {fileID: 0}
   actorManager: {fileID: 0}
+  lineManager: {fileID: 0}
   screenSize: {x: 0, y: 0}
   tileSize: 0
   tileScale: {x: 0, y: 0}
@@ -1347,11 +1348,14 @@ MonoBehaviour:
   mousePosition3D: {x: 0, y: 0, z: 0}
   mouseOffset: {x: 0, y: 0, z: 0}
   moveSpeed: 0
+  slideSpeed: 0
   snapDistance: 0
   selectedPlayer: {fileID: 0}
   board: {fileID: 0}
   timer: {fileID: 0}
   actors: []
+  players: []
+  enemies: []
   tiles: []
   lines: []
 --- !u!114 &1751276278
