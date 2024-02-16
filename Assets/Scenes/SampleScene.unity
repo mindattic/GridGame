@@ -1299,7 +1299,6 @@ GameObject:
   - component: {fileID: 1751276282}
   - component: {fileID: 1751276281}
   - component: {fileID: 1751276283}
-  - component: {fileID: 1751276284}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -1350,13 +1349,11 @@ MonoBehaviour:
   moveSpeed: 0
   snapDistance: 0
   selectedPlayer: {fileID: 0}
-  previousLocations: []
   board: {fileID: 0}
   timer: {fileID: 0}
   actors: []
   tiles: []
   lines: []
-  trails: []
 --- !u!114 &1751276278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1439,18 +1436,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 33cac7e58dd618d44803d5c71ff7d1c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1751276284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1751276275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1885709aa077ce247940a9366647ad47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1810209344 stripped

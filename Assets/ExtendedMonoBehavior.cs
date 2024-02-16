@@ -60,6 +60,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     }
 
     protected float moveSpeed => GameManager.instance.moveSpeed;
+    protected float slideSpeed => GameManager.instance.slideSpeed;
     protected float snapDistance => GameManager.instance.snapDistance;
 
     protected bool InSameColumn(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x;

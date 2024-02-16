@@ -28,16 +28,30 @@ public class ActorManager : ExtendedMonoBehavior
 
         if (HasSelectedPlayer)
         {
-            //Constantly update active p location
+            //Constantly update selected player location
+            selectedPlayer.previousLocation = selectedPlayer.location;
             var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
             selectedPlayer.location = closestTile.location;
+
+            //Check if selected player moved diagonally...
+            //var movedUL = selectedPlayer.location.x == selectedPlayer.previousLocation.x - 1 && selectedPlayer.location.y == selectedPlayer.previousLocation.y - 1;
+            //if (movedUL)
+            //{
+            //    var actor = actors.FirstOrDefault(x => x.location.Equals(selectedPlayer.location));
+            //    if (actor != null)
+            //    {
+            //        actor.SetDestination(Direction.East);
+            //    }
+            //}
+
+
         }
 
-        
+
         CalculateBattleConditions();
     }
 
-  
+
 
     private void CalculateBattleConditions()
     {

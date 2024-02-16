@@ -19,14 +19,13 @@ public class GameManager : Singleton<GameManager>
     public Vector2 tileScale;
     public Vector2 spriteScale;
 
-   
-
     //Mouse
     public Vector3 mousePosition2D;
     public Vector3 mousePosition3D;
     public Vector3 mouseOffset;
  
     public float moveSpeed;
+    public float slideSpeed;
     public float snapDistance;
 
     //Selection
@@ -55,8 +54,9 @@ public class GameManager : Singleton<GameManager>
         tileSize = screenSize.x / Constants.percent666;
         tileScale = new Vector2(tileSize, tileSize);
 
-        moveSpeed = tileSize / 2;
-        snapDistance = moveSpeed / Constants.percent666;
+        moveSpeed = tileSize * Constants.percent50;
+        slideSpeed = tileSize * Constants.percent25;
+        snapDistance = tileSize / 8;
 
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
         timer = GameObject.Find(Constants.Timer).GetComponent<TimerBehavior>();

@@ -44,6 +44,6 @@ public class TileBehavior : MonoBehaviour
 
     public void Update()
     {
-        //spriteRenderer.color = isOccupied ? Color.yellow : Color.white;
+        spriteRenderer.color = isOccupied ? Color.yellow : Color.white;
     }
 }

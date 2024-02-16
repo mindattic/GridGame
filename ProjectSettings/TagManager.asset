@@ -11,6 +11,7 @@ TagManager:
   - Board
   - Grid
   - Line
+  - Trail
   layers:
   - Default
   - TransparentFX
