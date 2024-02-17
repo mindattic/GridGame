@@ -24,6 +24,7 @@ public class ActorManager : ExtendedMonoBehavior
         //Constantly update selected player location
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
         selectedPlayer.location = closestTile.location;
+        //selectedPlayer.currentTile.spriteRenderer.color = Color.yellow;
     }
 
     private void ResetBattle()
@@ -149,16 +150,18 @@ public class ActorManager : ExtendedMonoBehavior
 
         actor.currentTile.isOccupied = false;
 
+        ResetBattle();
+
         //Select actor
         selectedPlayer = actor;
         selectedPlayer.moveState = MoveState.Moving;
         selectedPlayer.sortingOrder = 2;
         selectedPlayer.trailRenderer.enabled = true;
+        selectedPlayer.spriteRenderer.color = Color.yellow;
 
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
-        ResetBattle();
         //Reduce box collider size (allowing actors some 'wiggle room')
         //actors.ForEach(p => p.boxCollider2D.size = size50);
         //selectedPlayer.boxCollider2D.size = size33;
@@ -180,8 +183,9 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer.sortingOrder = 1;
         selectedPlayer.moveState = MoveState.Idle;
         selectedPlayer.trailRenderer.enabled = false;
+        selectedPlayer.spriteRenderer.color = Color.white;
 
-        //Clear active p
+        //Clear selected player
         selectedPlayer = null;
 
         CalculateBattle();

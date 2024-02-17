@@ -5,6 +5,10 @@ public class TileBehavior : MonoBehaviour
     [SerializeField] public Vector2Int location { get; set; }
     [SerializeField] public bool isOccupied { get; set; }
 
+
+
+    Color color = new Color(255, 255, 255, 128);
+
     #region Components
 
     public Transform parent
@@ -19,7 +23,7 @@ public class TileBehavior : MonoBehaviour
         set => gameObject.transform.position = value;
     }
 
-    private SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
 
     public Sprite sprite
     {
@@ -44,6 +48,6 @@ public class TileBehavior : MonoBehaviour
 
     public void Update()
     {
-        spriteRenderer.color = isOccupied ? Color.yellow : Color.white;
+        //spriteRenderer.color = isOccupied ? Color.yellow : color;
     }
 }

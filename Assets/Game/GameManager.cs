@@ -82,19 +82,19 @@ public class GameManager : Singleton<GameManager>
 
         //https://docs.unity3d.com/520/Documentation/Manual/PlatformDependentCompilation.html
 #if UNITY_STANDALONE_WIN
-  deviceType = "UNITY_STANDALONE_WIN"
+        deviceType = "UNITY_STANDALONE_WIN";
 #elif UNITY_STANDALONE_LINUX
-  deviceType = "UNITY_STANDALONE_LINUX"
+  deviceType = "UNITY_STANDALONE_LINUX";
 #elif UNITY_IPHONE
         deviceType = "UNITY_IPHONE";
 #elif UNITY_STANDALONE_OSX
     deviceType = "UNITY_STANDALONE_OSX"
 #elif UNITY_WEBPLAYER
-  deviceType = "UNITY_WEBPLAYER"
+  deviceType = "UNITY_WEBPLAYER";
 #elif UNITY_WEBGL
-  deviceType = "UNITY_WEBGL"
+  deviceType = "UNITY_WEBGL";
 #else
-    deviceType = "Unknown";
+    deviceType = "Unknown";;
 #endif
         Debug.Log($"Running on {deviceType}");
 

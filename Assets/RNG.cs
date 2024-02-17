@@ -8,4 +8,9 @@ static class RNG
     {
         return random.Next(min, max + 1);
     }
+
+    public static float RandomPercent()
+    {
+        return (float)random.NextDouble();
+    }
 }

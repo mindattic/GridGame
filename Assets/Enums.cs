@@ -18,7 +18,7 @@ public enum Direction
     North,
     East,
     South,
-    West
+    West,
 }
 
 public enum Axis
