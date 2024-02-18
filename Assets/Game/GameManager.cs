@@ -58,7 +58,7 @@ public class GameManager : Singleton<GameManager>
         tileScale = new Vector2(tileSize, tileSize);
 
         moveSpeed = tileSize / 4;
-        slideSpeed = tileSize * Constants.percent25;
+        slideSpeed = tileSize / 4;
         snapDistance = tileSize / 8;
 
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
