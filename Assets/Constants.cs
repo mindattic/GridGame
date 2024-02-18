@@ -32,5 +32,6 @@ public static class Tag
     public static string Actor = "Actor";
     public static string Line = "Line";
     public static string Trail = "Trail";
+    public static string Select = "Select";
     public static string Wall = "Wall";
 }

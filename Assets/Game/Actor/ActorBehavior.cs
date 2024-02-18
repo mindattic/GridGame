@@ -234,6 +234,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
         //Determine if two actors collided
+        if (!collider.gameObject.CompareTag(Tag.Actor))
+            return;
         var sender = collider.gameObject.GetComponent<ActorBehavior>();
         if (!sender.CompareTag(Tag.Actor) || !CompareTag(Tag.Actor))
             return;
@@ -259,6 +261,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
         //Determine if two actors collided
+        if (!collider.gameObject.CompareTag(Tag.Actor))
+            return;
         var sender = collider.gameObject.GetComponent<ActorBehavior>();
         if (!sender.CompareTag(Tag.Actor) || !CompareTag(Tag.Actor))
             return;
@@ -309,10 +313,10 @@ public class ActorBehavior : ExtendedMonoBehavior
             cursorPosition.y = board.bottom;
 
         //Move selected player towards cursor
-        //this.position = Vector2.MoveTowards(selectedPlayer.position, cursorPosition, moveSpeed);
+        this.position = Vector2.MoveTowards(selectedPlayer.position, cursorPosition, moveSpeed);
 
         //Snap selected player to cursor
-        this.position = cursorPosition;
+        //this.position = cursorPosition;
 
 
     }

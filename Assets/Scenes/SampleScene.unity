@@ -334,8 +334,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 480705957}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
+  m_LocalScale: {x: 20, y: 10, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -537,6 +537,7 @@ RectTransform:
   - {fileID: 810683556}
   - {fileID: 1700541646}
   - {fileID: 275379968}
+  - {fileID: 1647614448}
   m_Father: {fileID: 1873523956}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1197,6 +1198,79 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1568698083}
   m_CullTransparentMesh: 1
+--- !u!1 &1647614447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1647614448}
+  - component: {fileID: 1647614450}
+  - component: {fileID: 1647614449}
+  m_Layer: 5
+  m_Name: PlayerArt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1647614448
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647614447}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 655101921}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 200, y: -800}
+  m_SizeDelta: {x: 1024, y: 1024}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1647614449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647614447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: 866c9dea6fd83754496e4d395b5f313c, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &1647614450
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647614447}
+  m_CullTransparentMesh: 1
 --- !u!1 &1652735655
 GameObject:
   m_ObjectHideFlags: 0
@@ -1501,8 +1575,9 @@ MonoBehaviour:
   corsair: {fileID: 21300000, guid: c9470d34c1d097049b851c9801f7bcf1, type: 3}
   oracle: {fileID: 21300000, guid: d237c829d52d73a4081e6bdc2b2a07b6, type: 3}
   cleric: {fileID: 21300000, guid: a93ef4fcbe56b23499b75c3136436b56, type: 3}
-  mechanic: {fileID: 21300000, guid: 98941ce7f93159d48abbfad319b7f51b, type: 3}
+  mechanic: {fileID: 21300000, guid: 7602ecd382824c14e9829870607846aa, type: 3}
   mercenary: {fileID: 21300000, guid: 2312d81ab8475a4459867592f19d266e, type: 3}
+  paladin: {fileID: 21300000, guid: 7602ecd382824c14e9829870607846aa, type: 3}
   slime: {fileID: 21300000, guid: 1a82b43adeac59a4e80e86c83cb769ed, type: 3}
   bat: {fileID: 21300000, guid: 8612ce53556303d4fa3881bf3b1233b6, type: 3}
 --- !u!114 &1751276281

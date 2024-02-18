@@ -24,6 +24,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected List<ActorBehavior> enemies => GameManager.instance.enemies;
     protected List<LineBehavior> lines => GameManager.instance.lines;
 
+    protected PlayerArtBehavior playerArt => GameManager.instance.playerArt;
+
     //Actor
     protected bool HasSelectedPlayer => selectedPlayer != null;
 

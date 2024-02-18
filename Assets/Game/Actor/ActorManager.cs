@@ -131,12 +131,16 @@ public class ActorManager : ExtendedMonoBehavior
             return;
 
         //Find player overlaping mouse position
-        Collider2D mouseCollider = Physics2D.OverlapPoint(mousePosition3D);
-        if (mouseCollider == null || !mouseCollider.CompareTag(Tag.Actor))
+        var mouseColliders = Physics2D.OverlapPointAll(mousePosition3D);
+        if (mouseColliders == null)
+            return;
+
+        var collider = mouseColliders.FirstOrDefault(x => x.CompareTag(Tag.Select));
+        if (collider == null)
             return;
 
         //Retrieve player under mouse cursor
-        var actor = mouseCollider.gameObject.GetComponent<ActorBehavior>();
+        var actor = collider.gameObject.GetComponentInParent<ActorBehavior>();
         if (actor == null)
             return;
 
@@ -147,6 +151,11 @@ public class ActorManager : ExtendedMonoBehavior
         //Determine if player MoveState: "Idle"
         if (actor.moveState != MoveState.Idle)
             return;
+
+        if (actor.name == "Paladin")
+            playerArt.Show();
+        else 
+            playerArt.Hide();
 
         actor.currentTile.isOccupied = false;
 
@@ -184,6 +193,7 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer.moveState = MoveState.Idle;
         selectedPlayer.trailRenderer.enabled = false;
         selectedPlayer.spriteRenderer.color = Color.white;
+        playerArt.Hide();
 
         //Clear selected player
         selectedPlayer = null;

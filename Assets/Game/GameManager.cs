@@ -43,18 +43,21 @@ public class GameManager : Singleton<GameManager>
     public List<LineBehavior> lines;
 
 
+    public PlayerArtBehavior playerArt;
+
+
     public HashSet<Vector2Int> boardLocations;
 
     public BattleParticipants battle;
 
     private void Awake()
     {
-        
+
         screenSize = Common.ViewportToWorldSize;
         tileSize = screenSize.x / Constants.percent666;
         tileScale = new Vector2(tileSize, tileSize);
 
-        moveSpeed = tileSize * Constants.percent50;
+        moveSpeed = tileSize / 4;
         slideSpeed = tileSize * Constants.percent25;
         snapDistance = tileSize / 8;
 
@@ -65,6 +68,7 @@ public class GameManager : Singleton<GameManager>
         inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
         lineManager = GameObject.Find(Constants.Game).GetComponent<LineManager>();
+        playerArt = GameObject.Find("PlayerArt").GetComponent<PlayerArtBehavior>();
 
         battle = new BattleParticipants();
 

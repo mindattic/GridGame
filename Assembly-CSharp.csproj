@@ -59,6 +59,7 @@
     <Compile Include="Assets\Extensions.cs" />
     <Compile Include="Assets\Game\CameraManager.cs" />
     <Compile Include="Assets\Game\SpriteManager.cs" />
+    <Compile Include="Assets\Game\Line\LineBehavior.cs" />
     <Compile Include="Assets\Game\BoardManager.cs" />
     <Compile Include="Assets\Constants.cs" />
     <Compile Include="Assets\Game\Actor\ActorBehavior.cs" />
@@ -67,10 +68,12 @@
     <Compile Include="Assets\ExtendedMonoBehavior.cs" />
     <Compile Include="Assets\Geometry.cs" />
     <Compile Include="Assets\RNG.cs" />
+    <Compile Include="Assets\CylinderManager.cs" />
     <Compile Include="Assets\Game\GameManager.cs" />
     <Compile Include="Assets\GUI\ConsoleManager.cs" />
     <Compile Include="Assets\GUI\FpsMonitor.cs" />
     <Compile Include="Assets\Singleton.cs" />
+    <Compile Include="Assets\Game\Line\LineManager.cs" />
     <Compile Include="Assets\Enums.cs" />
     <Compile Include="Assets\GUI\PointerManager.cs" />
     <Compile Include="Assets\Models.cs" />
@@ -80,9 +83,7 @@
     <Compile Include="Assets\Game\Timer\TimerBehavior.cs" />
     <Compile Include="Assets\Game\InputManager.cs" />
     <Compile Include="Assets\Game\Board\BoardBehavior.cs" />
-    <Compile Include="Assets\Game\Line\LineBehavior.cs" />
-    <Compile Include="Assets\Game\Line\LineManager.cs" />
-    <Compile Include="Assets\CylinderManager.cs" />
+    <Compile Include="Assets\PlayerArtBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
