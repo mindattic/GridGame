@@ -62,6 +62,7 @@
     <Compile Include="Assets\Game\Line\LineBehavior.cs" />
     <Compile Include="Assets\Game\BoardManager.cs" />
     <Compile Include="Assets\Constants.cs" />
+    <Compile Include="Assets\PlayerArtBehavior.cs" />
     <Compile Include="Assets\Game\Actor\ActorBehavior.cs" />
     <Compile Include="Assets\Game\TurnManager.cs" />
     <Compile Include="Assets\Game\Board\TileBehavior.cs" />
@@ -83,7 +84,6 @@
     <Compile Include="Assets\Game\Timer\TimerBehavior.cs" />
     <Compile Include="Assets\Game\InputManager.cs" />
     <Compile Include="Assets\Game\Board\BoardBehavior.cs" />
-    <Compile Include="Assets\PlayerArtBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
