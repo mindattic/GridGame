@@ -156,11 +156,11 @@ RectTransform:
   m_Children:
   - {fileID: 1568698084}
   m_Father: {fileID: 655101921}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -780}
+  m_AnchoredPosition: {x: -250, y: -780}
   m_SizeDelta: {x: 160, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &275379969
@@ -533,11 +533,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1647614448}
   - {fileID: 1652735656}
   - {fileID: 810683556}
   - {fileID: 1700541646}
   - {fileID: 275379968}
-  - {fileID: 1647614448}
   m_Father: {fileID: 1873523956}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -586,7 +586,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 655101921}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1209,6 +1209,7 @@ GameObject:
   - component: {fileID: 1647614448}
   - component: {fileID: 1647614450}
   - component: {fileID: 1647614449}
+  - component: {fileID: 1647614451}
   m_Layer: 5
   m_Name: PlayerArt
   m_TagString: Untagged
@@ -1229,7 +1230,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 655101921}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1271,6 +1272,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1647614447}
   m_CullTransparentMesh: 1
+--- !u!114 &1647614451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647614447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b2975567c510044c8b42e2b937b3aeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  image: {fileID: 1647614449}
 --- !u!1 &1652735655
 GameObject:
   m_ObjectHideFlags: 0
@@ -1303,7 +1317,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 655101921}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1399,7 +1413,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 655101921}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1532,6 +1546,7 @@ MonoBehaviour:
   enemies: []
   tiles: []
   lines: []
+  playerArt: {fileID: 0}
 --- !u!114 &1751276278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1577,7 +1592,7 @@ MonoBehaviour:
   cleric: {fileID: 21300000, guid: a93ef4fcbe56b23499b75c3136436b56, type: 3}
   mechanic: {fileID: 21300000, guid: 7602ecd382824c14e9829870607846aa, type: 3}
   mercenary: {fileID: 21300000, guid: 2312d81ab8475a4459867592f19d266e, type: 3}
-  paladin: {fileID: 21300000, guid: 7602ecd382824c14e9829870607846aa, type: 3}
+  paladin: {fileID: 21300000, guid: 2f23893ec5ebc5948bc73e87b600a157, type: 3}
   slime: {fileID: 21300000, guid: 1a82b43adeac59a4e80e86c83cb769ed, type: 3}
   bat: {fileID: 21300000, guid: 8612ce53556303d4fa3881bf3b1233b6, type: 3}
 --- !u!114 &1751276281
