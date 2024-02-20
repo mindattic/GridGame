@@ -21,16 +21,27 @@ public class ActorManager : ExtendedMonoBehavior
         if (!HasSelectedPlayer)
             return;
 
-        //Constantly update selected player location
-        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
+        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
+        if (closestTile.location.Equals(selectedPlayer.location))
+            return;
+
+        var actor = actors.FirstOrDefault(x => !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
+        if (actor != null)
+        {
+            actor.SetDirection(selectedPlayer);
+            actor.SetDestination();
+        }
+
         selectedPlayer.location = closestTile.location;
-        //selectedPlayer.currentTile.spriteRenderer.color = Color.yellow;
+        selectedPlayer.currentTile.spriteRenderer.color = Colors.Solid.Gold;
     }
 
     private void ResetBattle()
     {
         //Reset actors
-        actors.ForEach(x => x.spriteRenderer.color = Color.white);
+        actors.ForEach(x => x.spriteRenderer.color = Colors.Solid.White);
+
+        //Reset tiles
 
         //Reset lines
         lineManager.Reset();
@@ -107,7 +118,7 @@ public class ActorManager : ExtendedMonoBehavior
         {
             foreach (var target in attackers.targets)
             {
-                target.spriteRenderer.color = Color.red;
+                target.spriteRenderer.color = Colors.Solid.Red;
                 battle.defenders.Add(target);
             }
         }
@@ -154,7 +165,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         if (actor.name == "Paladin")
             playerArt.Show();
-        else 
+        else
             playerArt.Hide();
 
         actor.currentTile.isOccupied = false;
@@ -163,17 +174,14 @@ public class ActorManager : ExtendedMonoBehavior
 
         //Select actor
         selectedPlayer = actor;
+
         selectedPlayer.moveState = MoveState.Moving;
         selectedPlayer.sortingOrder = 2;
         selectedPlayer.trailRenderer.enabled = true;
-        selectedPlayer.spriteRenderer.color = Color.yellow;
+        selectedPlayer.spriteRenderer.color = Colors.Solid.Gold;
 
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
-
-        //Reduce box collider size (allowing actors some 'wiggle room')
-        //actors.ForEach(p => p.boxCollider2D.size = size50);
-        //selectedPlayer.boxCollider2D.size = size33;
 
         timer.Set(scale: 1f, start: true);
     }
@@ -185,23 +193,29 @@ public class ActorManager : ExtendedMonoBehavior
             return;
 
         //Assign location and position
-        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.transform.position);
+        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
+
+        var actor = actors.FirstOrDefault(x => !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
+        if (actor != null)
+        {
+            actor.SetDirection(selectedPlayer);
+            actor.SetDestination();
+        }
+
         selectedPlayer.location = closestTile.location;
         selectedPlayer.currentTile.isOccupied = true;
+        selectedPlayer.currentTile.spriteRenderer.color = Colors.Transparent.White;
         selectedPlayer.transform.position = Geometry.PositionFromLocation(selectedPlayer.location);
         selectedPlayer.sortingOrder = 1;
         selectedPlayer.moveState = MoveState.Idle;
         selectedPlayer.trailRenderer.enabled = false;
-        selectedPlayer.spriteRenderer.color = Color.white;
+        selectedPlayer.spriteRenderer.color = Colors.Solid.White;
         playerArt.Hide();
 
         //Clear selected player
         selectedPlayer = null;
 
         CalculateBattle();
-
-        //Restore box collider size to 100%
-        //actors.ForEach(p => p.boxCollider2D.size = size50);
 
         timer.Set(scale: 1f, start: false);
     }

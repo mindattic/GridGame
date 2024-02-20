@@ -6,10 +6,12 @@ public class ActorBehavior : ExtendedMonoBehavior
 {
     //Variables
 
+
     public Vector2Int location { get; set; }
 
+    public Vector3 destination { get; set; }
+    public Direction direction { get; set; }
     public MoveState moveState = MoveState.Idle;
-    public Destination destination = new Destination();
     public Team team = Team.Neutral;
 
     #region Components
@@ -51,7 +53,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private bool IsOnPlayerTeam => this.team == Team.Player;
     private bool IsSelectedPlayer => HasSelectedPlayer && this.Equals(selectedPlayer);
-    private bool HasDirection => this.destination.direction != Direction.None;
+    private bool HasDirection => this.direction != Direction.None;
     public bool IsSameColumn(ActorBehavior other) => this.location.x == other.location.x;
     public bool IsSameRow(ActorBehavior other) => this.location.y == other.location.y;
     public bool IsNorthOf(ActorBehavior other) => this.IsSameColumn(other) && this.location.y == other.location.y - 1;
@@ -66,6 +68,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsSouthEastOf(ActorBehavior other) => this.location.x == other.location.x + 1 && this.location.y == other.location.y + 1;
 
 
+    public bool IsNorthEdge => this.location.y == 1;
+    public bool IsEastEdge => this.location.x == board.columns;
+    public bool IsSouthEdge => this.location.y == board.rows;
+    public bool IsWestEdge => this.location.x == 1;
 
 
     public bool IsNorthOf(ActorBehavior other, int tileDistance = 1)
@@ -102,60 +108,116 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.transform.localScale = tileScale;
         this.moveState = MoveState.Idle;
         this.currentTile.isOccupied = true;
-        this.spriteRenderer.color = Color.white;
+        this.spriteRenderer.color = Colors.Solid.White;
     }
 
-    private void SetDirection(ActorBehavior other)
+    public void SetDirection(ActorBehavior other)
     {
         if (other == null)
             return;
 
         if (this.IsNorthWestOf(other))
-            this.destination.direction = this.location.x < board.columns ? Direction.East : Direction.West;
+        {
+            if (other.position.y > other.currentTile.position.y)
+            {
+                this.direction = Direction.South;
+            }
+            else
+            {
+                this.direction = !IsEastEdge ? Direction.East : Direction.West;
+            }
+        }
         else if (this.IsNorthEastOf(other))
-            this.destination.direction = this.location.x > 1 ? Direction.West : Direction.East;
+        {
+            if (other.position.y > other.currentTile.position.y)
+            {
+                this.direction = Direction.South;
+            }
+            else
+            {
+                this.direction = !IsWestEdge ? Direction.West : Direction.East;
+            }
+        }
         else if (this.IsSouthWestOf(other))
-            this.destination.direction = this.location.x > 1 ? Direction.West : Direction.East;
+        {
+            if (other.position.y < other.currentTile.position.y)
+            {
+                this.direction = Direction.North;
+            }
+            else
+            {
+                this.direction = !IsEastEdge ? Direction.East : Direction.West;
+            }
+        }
         else if (this.IsSouthEastOf(other))
-            this.destination.direction = this.location.x < board.columns ? Direction.East : Direction.West;
+        {
+            if (other.position.y < other.currentTile.position.y)
+            {
+                this.direction = Direction.North;
+            }
+            else
+            {
+                this.direction = !IsWestEdge ? Direction.West : Direction.East;
+            }
+        }
         else if (this.IsNorthOf(other))
-            this.destination.direction = Direction.South;
+        {
+            this.direction = Direction.South;
+        }
         else if (this.IsEastOf(other))
-            this.destination.direction = Direction.West;
+        {
+            this.direction = Direction.West;
+        }
         else if (this.IsSouthOf(other))
-            this.destination.direction = Direction.North;
+        {
+            this.direction = Direction.North;
+        }
         else if (this.IsWestOf(other))
-            this.destination.direction = Direction.East;
+        {
+            this.direction = Direction.East;
+        }
         else
-            this.destination.direction = Direction.None;
+        {
+            this.direction = Direction.None;
+        }
 
-        if (this.destination.direction == Direction.None)
-            return;
     }
 
     public void SetDestination(Direction forceDirection = Direction.None)
     {
         if (forceDirection != Direction.None)
-            this.destination.direction = forceDirection;
+            this.direction = forceDirection;
 
-        if (this.destination.direction == Direction.None)
+        if (this.direction == Direction.None)
             return;
 
-        switch (destination.direction)
+        switch (direction)
         {
             case Direction.North:
-                this.destination.location = this.location + new Vector2Int(0, -1);
+                this.location = this.location + new Vector2Int(0, -1);
                 break;
             case Direction.East:
-                this.destination.location = this.location + new Vector2Int(1, 0);
+                this.location = this.location + new Vector2Int(1, 0);
                 break;
             case Direction.South:
-                this.destination.location = this.location + new Vector2Int(0, 1);
+                this.location = this.location + new Vector2Int(0, 1);
                 break;
             case Direction.West:
-                this.destination.location = this.location + new Vector2Int(-1, 0);
+                this.location = this.location + new Vector2Int(-1, 0);
                 break;
             default: return;
+        }
+
+
+
+
+        ActorBehavior conflictActor = actors.FirstOrDefault(x => !x.Equals(this) && !x.Equals(selectedPlayer) && x.location.Equals(this.location));
+        if (conflictActor != null)
+        {
+            Debug.Log($"Conflict: {this.name} / {conflictActor.name}");
+
+            //conflictActor.SetDirection(this);
+            //conflictActor.SetDestination();
         }
 
 
@@ -172,8 +234,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         //}
 
 
-
-        this.destination.position = Geometry.PositionFromLocation(destination.location.Value);
+        var closestTile = Geometry.ClosestTileByLocation(this.location);
+        this.destination = closestTile.position;
         this.moveState = MoveState.Moving;
     }
 
@@ -200,14 +262,29 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void Update()
     {
+        if (this.IsSelectedPlayer)
+        {
+            MoveTowardCursor();
+        }
+        else if (this.IsMoving)
+        {
 
+        }
+        else if (this.IsIdle)
+        {
+            //Do nothing...
+
+
+
+
+        }
     }
 
     void FixedUpdate()
     {
         if (this.IsSelectedPlayer)
         {
-            MoveTowardCursor();
+
         }
         else if (this.IsMoving)
         {
@@ -215,36 +292,38 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
         else if (this.IsIdle)
         {
-            //Do nothing...
+            ////Ignore selected actor
+            //if (this.IsSelectedPlayer)
+            //    return;
+
+            ////Ignore actors in motion
+            //if (this.IsMoving)
+            //    return;
+
+            ////Determine if two actors collided
+            //var other = actors.FirstOrDefault(x => x.location.Equals(this.location));
+            //if (other == null)
+            //    return;
+
+            ////Ignore actos without direction
+            //if (!this.HasDirection)
+            //{
+            //    //Assign intended movement direction
+            //    this.direction = Direction.North;
+           
+            //}
+            //else if (IsTriggerReady(other))
+            //{
+            //    //Assign intended destination
+            //    SetDestination();
+            //}
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        //Ignore selected actor
-        if (this.IsSelectedPlayer)
-            return;
 
-        //Ignore actors in motion
-        if (this.IsMoving)
-            return;
-
-        //Ignore actors with set direction
-        if (this.HasDirection)
-            return;
-
-        //Determine if two actors collided
-        if (!collider.gameObject.CompareTag(Tag.Actor))
-            return;
-        var sender = collider.gameObject.GetComponent<ActorBehavior>();
-        if (!sender.CompareTag(Tag.Actor) || !CompareTag(Tag.Actor))
-            return;
-
-        //Assign intended movement direction
-        SetDirection(sender);
     }
-
-
 
     private void OnTriggerStay2D(Collider2D collider)
     {
@@ -256,19 +335,26 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (this.IsMoving)
             return;
 
-        //Ignore actos without direction
-        if (!this.HasDirection)
-            return;
-
         //Determine if two actors collided
         if (!collider.gameObject.CompareTag(Tag.Actor))
             return;
-        var sender = collider.gameObject.GetComponent<ActorBehavior>();
-        if (!sender.CompareTag(Tag.Actor) || !CompareTag(Tag.Actor))
+
+        var other = collider.gameObject.GetComponent<ActorBehavior>();
+        if (other.IsSelectedPlayer)
             return;
 
-        if (IsTriggerReady(sender))
+        //Ignore actos without direction
+        if (!this.HasDirection)
+        {
+            //Assign intended movement direction
+            SetDirection(other);
+        }
+        else if (IsTriggerReady(other))
+        {
+            //Assign intended destination
             SetDestination();
+        }
+
     }
 
 
@@ -277,7 +363,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!this.HasDirection)
             return false;
 
-        switch (destination.direction)
+        switch (this.direction)
         {
             case Direction.North: return this.IsSameColumn(other) && other.position.y < this.position.y + tileSize / 2;
             case Direction.East: return this.IsSameRow(other) && other.position.x < this.position.x + tileSize / 2;
@@ -288,10 +374,9 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-
     private void OnTriggerExit2D(Collider2D collider)
     {
- 
+
     }
 
     private void MoveTowardCursor()
@@ -302,48 +387,47 @@ public class ActorBehavior : ExtendedMonoBehavior
         var cursorPosition = mousePosition3D + mouseOffset;
 
         //TODO: use nested Math.Min/Max...
+        cursorPosition.x = Mathf.Clamp(cursorPosition.x, board.left, board.right);
+        cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bottom, board.top);
+
+
+
         //Enforce board bounds
-        if (cursorPosition.x < board.left)
-            cursorPosition.x = board.left;
-        else if (cursorPosition.x > board.right)
-            cursorPosition.x = board.right;
-        if (cursorPosition.y > board.top)
-            cursorPosition.y = board.top;
-        else if (cursorPosition.y < board.bottom)
-            cursorPosition.y = board.bottom;
+        //if (cursorPosition.x < board.left)
+        //    cursorPosition.x = board.left;
+        //else if (cursorPosition.x > board.right)
+        //    cursorPosition.x = board.right;
+        //if (cursorPosition.y > board.top)
+        //    cursorPosition.y = board.top;
+        //else if (cursorPosition.y < board.bottom)
+        //    cursorPosition.y = board.bottom;
 
         //Move selected player towards cursor
-        this.position = Vector2.MoveTowards(selectedPlayer.position, cursorPosition, moveSpeed);
+        //this.position = Vector2.MoveTowards(selectedPlayer.position, cursorPosition, moveSpeed);
 
         //Snap selected player to cursor
-        //this.position = cursorPosition;
+        this.position = cursorPosition;
 
 
     }
 
     private void MoveTowardDestination()
     {
-        //Verify destination *has* been set 
-        if (!this.destination.IsValid)
-            return;
-
         //Verify actor is MoveState: "Moving"
         if (!this.IsMoving)
             return;
 
         //SetDestination actor towards destination
-        this.position = Vector2.MoveTowards(this.position, this.destination.position.Value, slideSpeed);
+        this.position = Vector2.MoveTowards(this.position, this.destination, slideSpeed);
 
         //Determine if actor is close to destination
-        bool isCloseToDestination = Vector2.Distance(this.position, this.destination.position.Value) < snapDistance;
+        bool isCloseToDestination = Vector2.Distance(this.position, this.destination) < snapDistance;
         if (isCloseToDestination)
         {
             //Snap to destination, clear destination, and set actor MoveState: "Idle"
-            this.currentTile.isOccupied = false;
-            this.location = destination.location.Value;
             this.currentTile.isOccupied = true;
-            this.transform.position = destination.position.Value;
-            this.destination.Clear();
+            this.transform.position = destination;
+            this.direction = Direction.None;
             this.moveState = MoveState.Idle;
         }
     }

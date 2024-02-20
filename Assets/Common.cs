@@ -27,4 +27,13 @@ public class Common
         return a <= b + range && a >= b - range;
     }
 
+
+    public static Color ColorRGBA(float r, float g, float b, float a = 255)
+    {
+        return new Color(
+            Mathf.Clamp(r, 0, 255) / 255f, 
+            Mathf.Clamp(g, 0, 255) / 255f, 
+            Mathf.Clamp(b, 0, 255) / 255f, 
+            Mathf.Clamp(a, 0, 255) / 255f);
+    }
 }

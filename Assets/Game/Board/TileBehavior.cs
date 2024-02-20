@@ -1,13 +1,14 @@
 using UnityEngine;
 
-public class TileBehavior : MonoBehaviour
+public class TileBehavior : ExtendedMonoBehavior
 {
     [SerializeField] public Vector2Int location { get; set; }
     [SerializeField] public bool isOccupied { get; set; }
 
 
 
-    Color color = new Color(255, 255, 255, 128);
+    public BoxCollider2D boxCollider2D;
+
 
     #region Components
 
@@ -37,6 +38,7 @@ public class TileBehavior : MonoBehaviour
 
     public void Awake()
     {
+        boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
@@ -48,6 +50,17 @@ public class TileBehavior : MonoBehaviour
 
     public void Update()
     {
-        //spriteRenderer.color = isOccupied ? Color.yellow : color;
+        if (!HasSelectedPlayer)
+            return;
+
+        if (selectedPlayer.location.Equals(this.location))
+        {
+            spriteRenderer.color = Colors.Solid.Gold;
+        }
+        else
+        {
+            spriteRenderer.color = Colors.Transparent.White;
+        }
     }
+
 }

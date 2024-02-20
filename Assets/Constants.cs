@@ -35,3 +35,27 @@ public static class Tag
     public static string Select = "Select";
     public static string Wall = "Wall";
 }
+
+
+public static class Colors
+{
+    public static class Solid
+    {
+        public static Color Gold = Common.ColorRGBA(255, 215, 0);
+        public static Color White = Color.white;
+        public static Color LightBlue = Common.ColorRGBA(128, 128, 255);
+        public static Color LightRed = Common.ColorRGBA(255, 128, 128);
+        public static Color Red = Common.ColorRGBA(255, 0, 0);
+
+    }
+
+    public static class Transparent
+    {
+        public static Color Gold = Common.ColorRGBA(255, 215, 0, 100);
+        public static Color White = Common.ColorRGBA(255, 255, 255, 100);
+        public static Color LightBlue = Common.ColorRGBA(128, 128, 255, 100);
+        public static Color LightRed = Common.ColorRGBA(255, 128, 128, 100);
+        public static Color Red = Common.ColorRGBA(255, 0, 0, 100);
+    }
+
+}

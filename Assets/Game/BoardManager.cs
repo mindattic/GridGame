@@ -21,7 +21,6 @@ public class BoardManager : ExtendedMonoBehavior
        
         transform.position = board.offset;
 
-
         GenerateTiles();
         GenerateActors();
         GenerateLines();
@@ -46,6 +45,8 @@ public class BoardManager : ExtendedMonoBehavior
         //Assign tiles list
         GameObject.FindGameObjectsWithTag(Tag.Tile).ToList()
             .ForEach(x => GameManager.instance.tiles.Add(x.GetComponent<TileBehavior>()));
+
+
     }
 
     void GenerateActors()
@@ -90,6 +91,11 @@ public class BoardManager : ExtendedMonoBehavior
 
         //Assign enemies list
         enemies.AddRange(actors.Where(e => e.team == Team.Enemy).ToList());
+
+
+
+
+
     }
 
     void GenerateLines()
