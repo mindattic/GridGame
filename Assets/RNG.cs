@@ -13,4 +13,18 @@ static class RNG
     {
         return (float)random.NextDouble();
     }
+
+
+    public static Direction RandomDirection()
+    {
+        var result = RandomInt(1, 4);
+        return result switch
+        {
+            1 => Direction.North,
+            2 => Direction.East,
+            3 => Direction.South,
+            _ => Direction.West,
+        };
+    }
+
 }

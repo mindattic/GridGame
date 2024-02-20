@@ -26,7 +26,7 @@ public class GameManager : Singleton<GameManager>
     public Vector3 mousePosition3D;
     public Vector3 mouseOffset;
 
-    public float moveSpeed;
+    public float cursorSpeed;
     public float slideSpeed;
     public float snapDistance;
 
@@ -57,7 +57,7 @@ public class GameManager : Singleton<GameManager>
         tileSize = screenSize.x / Constants.percent666;
         tileScale = new Vector2(tileSize, tileSize);
 
-        moveSpeed = tileSize / 4;
+        cursorSpeed = tileSize / 2;
         slideSpeed = tileSize / 4;
         snapDistance = tileSize / 8;
 

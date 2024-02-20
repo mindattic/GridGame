@@ -11,6 +11,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public Vector3 destination { get; set; }
     public Direction direction { get; set; }
+    // public Destination destination { get; set; } = new Destination();
+
+
+
     public MoveState moveState = MoveState.Idle;
     public Team team = Team.Neutral;
 
@@ -107,13 +111,15 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.position = Geometry.PositionFromLocation(location);
         this.transform.localScale = tileScale;
         this.moveState = MoveState.Idle;
-        this.currentTile.isOccupied = true;
         this.spriteRenderer.color = Colors.Solid.White;
     }
 
-    public void SetDirection(ActorBehavior other)
+    public void SetDestination(ActorBehavior other)
     {
         if (other == null)
+            return;
+
+        if (this.HasDirection)
             return;
 
         if (this.IsNorthWestOf(other))
@@ -178,20 +184,21 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
         else
         {
-            this.direction = Direction.None;
+
+            //Actors are on top of eachother
+            if (IsNorthEdge)
+                this.direction = Direction.South;
+            else if (IsEastEdge)
+                this.direction = Direction.West;
+            else if (IsSouthEdge)
+                this.direction = Direction.North;
+            else if (IsWestEdge)
+                this.direction = Direction.East;
+            else
+                this.direction = RNG.RandomDirection();
         }
 
-    }
-
-    public void SetDestination(Direction forceDirection = Direction.None)
-    {
-        if (forceDirection != Direction.None)
-            this.direction = forceDirection;
-
-        if (this.direction == Direction.None)
-            return;
-
-        switch (direction)
+        switch (this.direction)
         {
             case Direction.North:
                 this.location = this.location + new Vector2Int(0, -1);
@@ -205,32 +212,20 @@ public class ActorBehavior : ExtendedMonoBehavior
             case Direction.West:
                 this.location = this.location + new Vector2Int(-1, 0);
                 break;
-            default: return;
         }
 
-
-
-
-        ActorBehavior conflictActor = actors.FirstOrDefault(x => !x.Equals(this) && !x.Equals(selectedPlayer) && x.location.Equals(this.location));
-        if (conflictActor != null)
-        {
-            Debug.Log($"Conflict: {this.name} / {conflictActor.name}");
-
-            //conflictActor.SetDirection(this);
-            //conflictActor.SetDestination();
-        }
-
-
-        //DEBUG: Cheap way to avoid conflicts...
-        //bool hasLocationConflict = actors.FirstOrDefault(x =>
+        //ActorBehavior conflictActor = actors.FirstOrDefault(x =>
         //{
-        //    return x.IsIdle && (x.location.Equals(this.destination.location));
-        //}) != null;
-
-        //if (hasLocationConflict)
+        //    return !x.Equals(this)
+        //    && !x.Equals(selectedPlayer)
+        //    && x.location.Equals(this.destination.location.Value);
+        //});
+        //if (conflictActor != null)
         //{
-        //    this.destination.Clear();
-        //    return;
+        //    Debug.Log($"Conflict: {this.name} / {conflictActor.name}");
+
+        //    //conflictActor.SetDirection(this);
+        //    //conflictActor.SetDestination();
         //}
 
 
@@ -266,18 +261,31 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             MoveTowardCursor();
         }
-        else if (this.IsMoving)
+        else
         {
-
+            this.CheckLocation();
         }
-        else if (this.IsIdle)
-        {
-            //Do nothing...
+        //else if (this.IsMoving)
+        //{
+
+        //}
+        //else if (this.IsIdle)
+        //{
+
+        //}
 
 
+    }
 
 
-        }
+    public void CheckLocation()
+    {
+        var other = actors.FirstOrDefault(x => !this.Equals(x) && this.location.Equals(x.location));
+        if (other == null)
+            return;
+
+        //Assign intended movement
+        this.SetDestination(other);
     }
 
     void FixedUpdate()
@@ -292,31 +300,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
         else if (this.IsIdle)
         {
-            ////Ignore selected actor
-            //if (this.IsSelectedPlayer)
-            //    return;
 
-            ////Ignore actors in motion
-            //if (this.IsMoving)
-            //    return;
 
-            ////Determine if two actors collided
-            //var other = actors.FirstOrDefault(x => x.location.Equals(this.location));
-            //if (other == null)
-            //    return;
-
-            ////Ignore actos without direction
-            //if (!this.HasDirection)
-            //{
-            //    //Assign intended movement direction
-            //    this.direction = Direction.North;
-           
-            //}
-            //else if (IsTriggerReady(other))
-            //{
-            //    //Assign intended destination
-            //    SetDestination();
-            //}
         }
     }
 
@@ -327,51 +312,51 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void OnTriggerStay2D(Collider2D collider)
     {
-        //Ignore selected actor
-        if (this.IsSelectedPlayer)
-            return;
+        ////Ignore selected actor
+        //if (this.IsSelectedPlayer)
+        //    return;
 
-        //Ignore actors in motion
-        if (this.IsMoving)
-            return;
+        ////Ignore actors in motion
+        //if (this.IsMoving)
+        //    return;
 
-        //Determine if two actors collided
-        if (!collider.gameObject.CompareTag(Tag.Actor))
-            return;
+        ////Determine if two actors collided
+        //if (!collider.gameObject.CompareTag(Tag.Actor))
+        //    return;
 
-        var other = collider.gameObject.GetComponent<ActorBehavior>();
-        if (other.IsSelectedPlayer)
-            return;
+        //var other = collider.gameObject.GetComponent<ActorBehavior>();
+        //if (other.IsSelectedPlayer)
+        //    return;
 
-        //Ignore actos without direction
-        if (!this.HasDirection)
-        {
-            //Assign intended movement direction
-            SetDirection(other);
-        }
-        else if (IsTriggerReady(other))
-        {
-            //Assign intended destination
-            SetDestination();
-        }
+        ////Ignore actos without direction
+        //if (!this.HasDirection)
+        //{
+        //    //Assign intended movement direction
+        //    SetDirection(other);
+        //}
+        //else if (IsTriggerReady(other))
+        //{
+        //    //Assign intended destination
+        //    SetDestination();
+        //}
 
     }
 
 
-    private bool IsTriggerReady(ActorBehavior other)
-    {
-        if (!this.HasDirection)
-            return false;
+    //private bool IsTriggerReady(ActorBehavior other)
+    //{
+    //    if (!this.HasDirection)
+    //        return false;
 
-        switch (this.direction)
-        {
-            case Direction.North: return this.IsSameColumn(other) && other.position.y < this.position.y + tileSize / 2;
-            case Direction.East: return this.IsSameRow(other) && other.position.x < this.position.x + tileSize / 2;
-            case Direction.South: return this.IsSameColumn(other) && other.position.y > this.position.y - tileSize / 2;
-            case Direction.West: return this.IsSameRow(other) && other.position.x > this.position.x - tileSize / 2;
-            default: return false;
-        }
-    }
+    //    switch (this.direction)
+    //    {
+    //        case Direction.North: return this.IsSameColumn(other) && other.position.y < this.position.y + tileSize / 2;
+    //        case Direction.East: return this.IsSameRow(other) && other.position.x < this.position.x + tileSize / 2;
+    //        case Direction.South: return this.IsSameColumn(other) && other.position.y > this.position.y - tileSize / 2;
+    //        case Direction.West: return this.IsSameRow(other) && other.position.x > this.position.x - tileSize / 2;
+    //        default: return false;
+    //    }
+    //}
 
 
     private void OnTriggerExit2D(Collider2D collider)
@@ -385,28 +370,14 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
         var cursorPosition = mousePosition3D + mouseOffset;
-
-        //TODO: use nested Math.Min/Max...
         cursorPosition.x = Mathf.Clamp(cursorPosition.x, board.left, board.right);
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bottom, board.top);
 
-
-
-        //Enforce board bounds
-        //if (cursorPosition.x < board.left)
-        //    cursorPosition.x = board.left;
-        //else if (cursorPosition.x > board.right)
-        //    cursorPosition.x = board.right;
-        //if (cursorPosition.y > board.top)
-        //    cursorPosition.y = board.top;
-        //else if (cursorPosition.y < board.bottom)
-        //    cursorPosition.y = board.bottom;
-
         //Move selected player towards cursor
-        //this.position = Vector2.MoveTowards(selectedPlayer.position, cursorPosition, moveSpeed);
+        this.position = Vector2.MoveTowards(selectedPlayer.position, cursorPosition, cursorSpeed);
 
         //Snap selected player to cursor
-        this.position = cursorPosition;
+        //this.position = cursorPosition;
 
 
     }
@@ -417,7 +388,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!this.IsMoving)
             return;
 
-        //SetDestination actor towards destination
+        //Move actor towards destination
         this.position = Vector2.MoveTowards(this.position, this.destination, slideSpeed);
 
         //Determine if actor is close to destination
@@ -425,8 +396,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (isCloseToDestination)
         {
             //Snap to destination, clear destination, and set actor MoveState: "Idle"
-            this.currentTile.isOccupied = true;
-            this.transform.position = destination;
+            this.transform.position = this.destination;
             this.direction = Direction.None;
             this.moveState = MoveState.Idle;
         }

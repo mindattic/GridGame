@@ -1,11 +1,15 @@
+using System.Linq;
 using UnityEngine;
 
 public class TileBehavior : ExtendedMonoBehavior
 {
     [SerializeField] public Vector2Int location { get; set; }
-    [SerializeField] public bool isOccupied { get; set; }
+    //[SerializeField] public bool isOccupied { get; set; }
 
 
+
+
+    public bool isOccupied => actors.Any(x => x.location.Equals(location));
 
     public BoxCollider2D boxCollider2D;
 

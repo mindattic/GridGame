@@ -28,8 +28,8 @@ public class ActorManager : ExtendedMonoBehavior
         var actor = actors.FirstOrDefault(x => !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
         if (actor != null)
         {
-            actor.SetDirection(selectedPlayer);
-            actor.SetDestination();
+            //Assign intended movement
+            actor.SetDestination(selectedPlayer);
         }
 
         selectedPlayer.location = closestTile.location;
@@ -168,8 +168,7 @@ public class ActorManager : ExtendedMonoBehavior
         else
             playerArt.Hide();
 
-        actor.currentTile.isOccupied = false;
-
+     
         ResetBattle();
 
         //Select actor
@@ -194,23 +193,21 @@ public class ActorManager : ExtendedMonoBehavior
 
         //Assign location and position
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
-
-        var actor = actors.FirstOrDefault(x => !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
-        if (actor != null)
-        {
-            actor.SetDirection(selectedPlayer);
-            actor.SetDestination();
-        }
-
         selectedPlayer.location = closestTile.location;
-        selectedPlayer.currentTile.isOccupied = true;
-        selectedPlayer.currentTile.spriteRenderer.color = Colors.Transparent.White;
-        selectedPlayer.transform.position = Geometry.PositionFromLocation(selectedPlayer.location);
+        selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
+        selectedPlayer.spriteRenderer.color = Colors.Solid.White;
         selectedPlayer.sortingOrder = 1;
         selectedPlayer.moveState = MoveState.Idle;
         selectedPlayer.trailRenderer.enabled = false;
-        selectedPlayer.spriteRenderer.color = Colors.Solid.White;
+
+        //Reset tiles
+        tiles.ForEach(x => x.spriteRenderer.color = Colors.Transparent.White);
+
+        
         playerArt.Hide();
+
+        //Determine if two actors collided
+        selectedPlayer.CheckLocation();
 
         //Clear selected player
         selectedPlayer = null;

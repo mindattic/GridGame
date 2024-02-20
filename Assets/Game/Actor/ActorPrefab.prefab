@@ -290,8 +290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveState: 0
   team: 2
-  contact: {fileID: 0}
-  boxCollider2D: {fileID: 0}
+  boxCollider2D: {fileID: 5743272951367702490}
   spriteRenderer: {fileID: 0}
   trailRenderer: {fileID: 0}
 --- !u!61 &5743272951367702490

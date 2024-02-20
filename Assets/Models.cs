@@ -8,7 +8,7 @@ public class Destination
 
     public Destination() { }
 
-    //public Vector2Int? location { get; set; }
+    public Vector2Int? location { get; set; }
     public Vector3? position { get; set; }
     public Direction direction { get; set; } 
 
@@ -17,7 +17,7 @@ public class Destination
 
     public void Clear()
     {
-        //location = null;
+        location = null;
         position = null;
         direction = Direction.None;
     }
