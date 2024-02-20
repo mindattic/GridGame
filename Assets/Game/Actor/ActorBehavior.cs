@@ -10,12 +10,12 @@ public class ActorBehavior : ExtendedMonoBehavior
     public Vector2Int location { get; set; }
 
     public Vector3 destination { get; set; }
-    public Direction direction { get; set; }
+    public Direction direction { get; set; } = Direction.None;
     // public Destination destination { get; set; } = new Destination();
 
 
 
-    public MoveState moveState = MoveState.Idle;
+    //public MoveState moveState = MoveState.Idle;
     public Team team = Team.Neutral;
 
     #region Components
@@ -52,8 +52,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     #region Properties
 
-    private bool IsIdle => this.moveState == MoveState.Idle;
-    private bool IsMoving => this.moveState == MoveState.Moving;
+    //private bool IsIdle => this.moveState == MoveState.Idle;
+    //private bool IsMoving => this.moveState == MoveState.Moving;
 
     private bool IsOnPlayerTeam => this.team == Team.Player;
     private bool IsSelectedPlayer => HasSelectedPlayer && this.Equals(selectedPlayer);
@@ -108,9 +108,10 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (initialLocation.HasValue)
             location = initialLocation.Value;
 
+        this.direction = Direction.None;
         this.position = Geometry.PositionFromLocation(location);
+        this.destination = this.position;
         this.transform.localScale = tileScale;
-        this.moveState = MoveState.Idle;
         this.spriteRenderer.color = Colors.Solid.White;
     }
 
@@ -231,7 +232,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         var closestTile = Geometry.ClosestTileByLocation(this.location);
         this.destination = closestTile.position;
-        this.moveState = MoveState.Moving;
     }
 
 
@@ -265,18 +265,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             this.CheckLocation();
         }
-        //else if (this.IsMoving)
-        //{
-
-        //}
-        //else if (this.IsIdle)
-        //{
-
-        //}
-
-
     }
-
 
     public void CheckLocation()
     {
@@ -291,18 +280,9 @@ public class ActorBehavior : ExtendedMonoBehavior
     void FixedUpdate()
     {
         if (this.IsSelectedPlayer)
-        {
+            return;
 
-        }
-        else if (this.IsMoving)
-        {
-            MoveTowardDestination();
-        }
-        else if (this.IsIdle)
-        {
-
-
-        }
+        CheckMovement();
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
@@ -312,52 +292,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void OnTriggerStay2D(Collider2D collider)
     {
-        ////Ignore selected actor
-        //if (this.IsSelectedPlayer)
-        //    return;
-
-        ////Ignore actors in motion
-        //if (this.IsMoving)
-        //    return;
-
-        ////Determine if two actors collided
-        //if (!collider.gameObject.CompareTag(Tag.Actor))
-        //    return;
-
-        //var other = collider.gameObject.GetComponent<ActorBehavior>();
-        //if (other.IsSelectedPlayer)
-        //    return;
-
-        ////Ignore actos without direction
-        //if (!this.HasDirection)
-        //{
-        //    //Assign intended movement direction
-        //    SetDirection(other);
-        //}
-        //else if (IsTriggerReady(other))
-        //{
-        //    //Assign intended destination
-        //    SetDestination();
-        //}
 
     }
-
-
-    //private bool IsTriggerReady(ActorBehavior other)
-    //{
-    //    if (!this.HasDirection)
-    //        return false;
-
-    //    switch (this.direction)
-    //    {
-    //        case Direction.North: return this.IsSameColumn(other) && other.position.y < this.position.y + tileSize / 2;
-    //        case Direction.East: return this.IsSameRow(other) && other.position.x < this.position.x + tileSize / 2;
-    //        case Direction.South: return this.IsSameColumn(other) && other.position.y > this.position.y - tileSize / 2;
-    //        case Direction.West: return this.IsSameRow(other) && other.position.x > this.position.x - tileSize / 2;
-    //        default: return false;
-    //    }
-    //}
-
 
     private void OnTriggerExit2D(Collider2D collider)
     {
@@ -378,14 +314,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //Snap selected player to cursor
         //this.position = cursorPosition;
-
-
     }
 
-    private void MoveTowardDestination()
+    private void CheckMovement()
     {
-        //Verify actor is MoveState: "Moving"
-        if (!this.IsMoving)
+        if (!HasDirection)
             return;
 
         //Move actor towards destination
@@ -398,7 +331,6 @@ public class ActorBehavior : ExtendedMonoBehavior
             //Snap to destination, clear destination, and set actor MoveState: "Idle"
             this.transform.position = this.destination;
             this.direction = Direction.None;
-            this.moveState = MoveState.Idle;
         }
     }
 

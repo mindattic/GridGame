@@ -159,10 +159,6 @@ public class ActorManager : ExtendedMonoBehavior
         if (actor.team != Team.Player)
             return;
 
-        //Determine if player MoveState: "Idle"
-        if (actor.moveState != MoveState.Idle)
-            return;
-
         if (actor.name == "Paladin")
             playerArt.Show();
         else
@@ -174,7 +170,6 @@ public class ActorManager : ExtendedMonoBehavior
         //Select actor
         selectedPlayer = actor;
 
-        selectedPlayer.moveState = MoveState.Moving;
         selectedPlayer.sortingOrder = 2;
         selectedPlayer.trailRenderer.enabled = true;
         selectedPlayer.spriteRenderer.color = Colors.Solid.Gold;
@@ -197,7 +192,6 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
         selectedPlayer.spriteRenderer.color = Colors.Solid.White;
         selectedPlayer.sortingOrder = 1;
-        selectedPlayer.moveState = MoveState.Idle;
         selectedPlayer.trailRenderer.enabled = false;
 
         //Reset tiles
