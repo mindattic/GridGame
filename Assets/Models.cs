@@ -69,10 +69,21 @@ public class ActorPair
     public Axis axis { get; set; }
     public List<TileBehavior> gaps { get; set; } = new List<TileBehavior>();
     public List<ActorBehavior> enemies { get; set; } = new List<ActorBehavior>();
-    public List<ActorBehavior> allies { get; set; } = new List<ActorBehavior>();
+    public List<ActorBehavior> players { get; set; } = new List<ActorBehavior>();
 
 }
 
+
+
+public class ActorRenderers
+{
+    public ActorRenderers() { }
+
+    public SpriteRenderer portrait { get; set; }
+    public SpriteRenderer healthBarBack { get; set; }
+    public SpriteRenderer healthBar { get; set; }
+
+}
 
 public class BattleParticipants
 {

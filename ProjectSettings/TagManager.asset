@@ -10,10 +10,10 @@ TagManager:
   - Actor
   - Board
   - Grid
-  - Line
   - Trail
   - Select
   - Slide
+  - SupportLine
   layers:
   - Default
   - TransparentFX

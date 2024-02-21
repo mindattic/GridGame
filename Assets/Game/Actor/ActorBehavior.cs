@@ -3,10 +3,20 @@ using UnityEngine;
 
 public class ActorBehavior : ExtendedMonoBehavior
 {
+    //Constants
+    const int Portrait = 0;
+    const int HealthBarBack = 1;
+    const int HealthBar = 2;
+
+
     //Variables
     public Vector2Int location { get; set; }
     public Vector3? destination { get; set; } = null;
     public Team team = Team.Neutral;
+
+    public int MaxHP { get; set; } = 100;
+    public int HP { get; set; }
+
 
     #region Components
 
@@ -22,19 +32,23 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
-    public SpriteRenderer spriteRenderer;
+    public ActorRenderers render = new ActorRenderers();
     public TrailRenderer trailRenderer;
 
     public Sprite sprite
     {
-        get => spriteRenderer.sprite;
-        set => spriteRenderer.sprite = value;
+        get => render.portrait.sprite;
+        set => render.portrait.sprite = value;
     }
 
     public int sortingOrder
     {
-        get => spriteRenderer.sortingOrder;
-        set => spriteRenderer.sortingOrder = value;
+        set
+        {
+            render.portrait.sortingOrder = value;
+            render.healthBarBack.sortingOrder = value + 1;
+            render.healthBar.sortingOrder = value + 2;
+        }
     }
 
     #endregion
@@ -64,17 +78,6 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsNorthEastOf(Vector2Int location) => this.location.x == location.x + 1 && this.location.y == location.y - 1;
     public bool IsSouthWestOf(Vector2Int location) => this.location.x == location.x - 1 && this.location.y == location.y + 1;
     public bool IsSouthEastOf(Vector2Int location) => this.location.x == location.x + 1 && this.location.y == location.y + 1;
-
-    public void Init(Vector2Int? initialLocation = null)
-    {
-        if (initialLocation.HasValue)
-            location = initialLocation.Value;
-
-        this.position = Geometry.PositionFromLocation(location);
-        this.destination = null;
-        this.transform.localScale = tileScale;
-        this.spriteRenderer.color = Colors.Solid.White;
-    }
 
     private Vector2Int GoNorth() => this.location += new Vector2Int(0, -1);
     private Vector2Int GoEast() => this.location += new Vector2Int(1, 0);
@@ -146,14 +149,17 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-   
+
 
 
     #endregion
 
     private void Awake()
     {
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        render.portrait = gameObject.transform.GetChild(Portrait).GetComponent<SpriteRenderer>();
+        render.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
+        render.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
+
         trailRenderer = gameObject.GetComponent<TrailRenderer>();
         trailRenderer.startWidth = tileSize * percent75;
         trailRenderer.time = percent33;
@@ -163,6 +169,20 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         Init();
     }
+
+    public void Init(Vector2Int? initialLocation = null)
+    {
+        if (initialLocation.HasValue)
+            location = initialLocation.Value;
+
+        this.position = Geometry.PositionFromLocation(location);
+        this.destination = null;
+        this.transform.localScale = tileScale;
+        //this.transform.GetChild(Portrait).transform.localScale = tileScale;
+        this.render.portrait.color = Colors.Solid.White;
+        this.HP = MaxHP;
+    }
+
 
     void Update()
     {

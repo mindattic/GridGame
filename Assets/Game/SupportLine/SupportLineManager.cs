@@ -1,0 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+public class SupportLineManager : ExtendedMonoBehavior
+{
+    [SerializeField] public GameObject linePrefab;
+
+    private void Start()
+    {
+
+    }
+
+    private void Update()
+    {
+
+    }
+
+    public void Add(Vector3 a, Vector3 b)
+    {
+        GameObject prefab;
+        SupportLineBehavior line;
+
+        prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
+        line = prefab.GetComponent<SupportLineBehavior>();
+        line.name = $"Line_{Guid.NewGuid()}";
+        line.parent = board.transform;
+        line.Set(a, b);
+    }
+
+    public void Clear()
+    {
+        var supportLines = GameObject.FindGameObjectsWithTag(Tag.SupportLine).ToList();
+        supportLines.ForEach(x => Destroy(x));
+    }
+
+}

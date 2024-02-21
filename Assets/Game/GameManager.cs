@@ -13,7 +13,7 @@ public class GameManager : Singleton<GameManager>
     public SpriteManager spriteManager;
     public InputManager inputManager;
     public ActorManager actorManager;
-    public LineManager lineManager;
+    public SupportLineManager supportLineManager;
 
     //Scale
     public Vector2 screenSize;
@@ -40,7 +40,7 @@ public class GameManager : Singleton<GameManager>
     public List<ActorBehavior> players;
     public List<ActorBehavior> enemies;
     public List<TileBehavior> tiles;
-    public List<LineBehavior> lines;
+    public List<SupportLineBehavior> lines;
 
 
     public PlayerArtBehavior playerArt;
@@ -67,7 +67,7 @@ public class GameManager : Singleton<GameManager>
         spriteManager = GameObject.Find(Constants.Game).GetComponent<SpriteManager>();
         inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
-        lineManager = GameObject.Find(Constants.Game).GetComponent<LineManager>();
+        supportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>();
         playerArt = GameObject.Find("PlayerArt").GetComponent<PlayerArtBehavior>();
 
         battle = new BattleParticipants();

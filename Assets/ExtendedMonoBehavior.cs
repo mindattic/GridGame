@@ -12,7 +12,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected SpriteManager spriteManager => GameManager.instance.spriteManager;
     protected InputManager inputManager => GameManager.instance.inputManager;
     protected ActorManager actorManager => GameManager.instance.actorManager;
-    protected LineManager lineManager => GameManager.instance.lineManager;
+    protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
 
 
     //Behaviors
@@ -22,7 +22,6 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected List<ActorBehavior> actors => GameManager.instance.actors;
     protected List<ActorBehavior> players => GameManager.instance.players;
     protected List<ActorBehavior> enemies => GameManager.instance.enemies;
-    protected List<LineBehavior> lines => GameManager.instance.lines;
 
     protected PlayerArtBehavior playerArt => GameManager.instance.playerArt;
 
@@ -71,17 +70,17 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.battle = value; }
     }
 
-    protected bool InSameColumn(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x;
-    protected bool InSameRow(ActorBehavior a, ActorBehavior b) => a.location.y == b.location.y;
-    protected bool IsAbove(ActorBehavior a, ActorBehavior b) => InSameColumn(a, b) && a.location.y == b.location.y - 1;
-    protected bool IsRight(ActorBehavior a, ActorBehavior b) => InSameRow(a, b) && a.location.x == b.location.x + 1;
-    protected bool IsBelow(ActorBehavior a, ActorBehavior b) => InSameColumn(a, b) && a.location.y == b.location.y + 1;
-    protected bool IsLeft(ActorBehavior a, ActorBehavior b) => InSameRow(a, b) && a.location.x == b.location.x - 1;
+    //protected bool InSameColumn(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x;
+    //protected bool InSameRow(ActorBehavior a, ActorBehavior b) => a.location.y == b.location.y;
+    //protected bool IsAbove(ActorBehavior a, ActorBehavior b) => InSameColumn(a, b) && a.location.y == b.location.y - 1;
+    //protected bool IsRight(ActorBehavior a, ActorBehavior b) => InSameRow(a, b) && a.location.x == b.location.x + 1;
+    //protected bool IsBelow(ActorBehavior a, ActorBehavior b) => InSameColumn(a, b) && a.location.y == b.location.y + 1;
+    //protected bool IsLeft(ActorBehavior a, ActorBehavior b) => InSameRow(a, b) && a.location.x == b.location.x - 1;
 
-    protected bool IsAdjacent(ActorBehavior a, ActorBehavior b)
-    {
-        return IsAbove(a, b) || IsRight(a, b) || IsBelow(a, b) || IsLeft(a, b);
-    }
+    //protected bool IsAdjacent(ActorBehavior a, ActorBehavior b)
+    //{
+    //    return IsAbove(a, b) || IsRight(a, b) || IsBelow(a, b) || IsLeft(a, b);
+    //}
 
     protected ActorBehavior selectedPlayer
     {

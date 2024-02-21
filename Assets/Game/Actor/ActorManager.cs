@@ -39,12 +39,12 @@ public class ActorManager : ExtendedMonoBehavior
     private void ResetBattle()
     {
         //Reset actors
-        actors.ForEach(x => x.spriteRenderer.color = Colors.Solid.White);
+        actors.ForEach(x => x.render.portrait.color = Colors.Solid.White);
 
         //Reset tiles
 
-        //Reset lines
-        lineManager.Reset();
+        //Reset supportLines
+        supportLineManager.Clear();
 
         //Reset battle
         battle.Reset();
@@ -81,7 +81,7 @@ public class ActorManager : ExtendedMonoBehavior
                 var lowest = Math.Min(pair.actor1.location.y, pair.actor2.location.y);
                 var heighest = Math.Max(pair.actor1.location.y, pair.actor2.location.y);
                 pair.enemies = enemies.Where(x => x.IsSameColumn(pair.actor1.location) && x.location.y > lowest && x.location.y < heighest).ToList();
-                pair.allies = enemies.Where(x => x.IsSameColumn(pair.actor1.location) && x.location.y > lowest && x.location.y < heighest).ToList();
+                pair.players = players.Where(x => x.IsSameColumn(pair.actor1.location) && x.location.y > lowest && x.location.y < heighest).ToList();
                 pair.gaps = tiles.Where(x => pair.actor1.IsSameColumn(x.location) && x.location.y > lowest && x.location.y < heighest && !x.IsOccupied).ToList();
             }
             else if (pair.axis == Axis.Horizontal)
@@ -89,13 +89,13 @@ public class ActorManager : ExtendedMonoBehavior
                 var lowest = Math.Min(pair.actor1.location.x, pair.actor2.location.x);
                 var heighest = Math.Max(pair.actor1.location.x, pair.actor2.location.x);
                 pair.enemies = enemies.Where(x => x.IsSameRow(pair.actor1.location) && x.location.x > lowest && x.location.x < heighest).ToList();
-                pair.allies = players.Where(x => x.IsSameRow(pair.actor1.location) && x.location.x > lowest && x.location.x < heighest).ToList();
+                pair.players = players.Where(x => x.IsSameRow(pair.actor1.location) && x.location.x > lowest && x.location.x < heighest).ToList();
                 pair.gaps = tiles.Where(x => pair.actor1.IsSameColumn(x.location) && x.location.x > lowest && x.location.x < heighest && !x.IsOccupied).ToList();
             }
 
             //Assign attacking pairs
             var hasEnemiesBetween = pair.enemies.Count > 0;
-            var hasGapsBetween = pair.gaps.Count > 0;        
+            var hasGapsBetween = pair.gaps.Count > 0;
             if (hasEnemiesBetween && !hasGapsBetween)
             {
                 battle.attackingPairs.Add(pair);
@@ -107,30 +107,27 @@ public class ActorManager : ExtendedMonoBehavior
         //Find defenders
         foreach (var attackers in battle.attackingPairs)
         {
-            foreach (var target in attackers.enemies)
+            foreach (var enemy in attackers.enemies)
             {
-                target.spriteRenderer.color = Colors.Solid.Red;
-                battle.defenders.Add(target);
+                enemy.render.portrait.color = Colors.Solid.Red;
+                battle.defenders.Add(enemy);
             }
         }
 
         //Find support pairs
-        int i = 0;
         foreach (var pair in battle.alignedPairs)
         {
-            var isAttacker1 = battle.attackers.Contains(pair.actor1);
-            var isAttacker2 = battle.attackers.Contains(pair.actor2);
-            var hasDirectAttacker = isAttacker1 || isAttacker2;
+            var isDirectAttacker1 = battle.attackers.Contains(pair.actor1);
+            var isDirectAttacker2 = battle.attackers.Contains(pair.actor2);
+            var hasDirectAttacker = isDirectAttacker1 || isDirectAttacker2;
             var hasEnemiesBetween = pair.enemies.Count > 0;
-            var hasAlliesBetween = pair.allies.Count > 0;
+            var hasPlayersBetween = pair.players.Count > 0;
 
-            if (hasDirectAttacker && !hasEnemiesBetween && !hasAlliesBetween)
+            if (hasDirectAttacker && !hasEnemiesBetween && !hasPlayersBetween)
             {
-                lines[i++].Set(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
-                if (isAttacker1)
-                    battle.supports.Add(pair.actor1);
-                if (isAttacker2)
-                    battle.supports.Add(pair.actor2);
+                supportLineManager.Add(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
+                battle.supports.Add(pair.actor1);
+                battle.supports.Add(pair.actor2);
             }
         }
 
@@ -178,9 +175,10 @@ public class ActorManager : ExtendedMonoBehavior
         //Select actor
         selectedPlayer = actor;
 
-        selectedPlayer.sortingOrder = 2;
+        selectedPlayer.sortingOrder = 10;
+
         selectedPlayer.trailRenderer.enabled = true;
-        selectedPlayer.spriteRenderer.color = Colors.Solid.Gold;
+        selectedPlayer.render.portrait.color = Colors.Solid.Gold;
 
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
@@ -198,7 +196,7 @@ public class ActorManager : ExtendedMonoBehavior
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
-        selectedPlayer.spriteRenderer.color = Colors.Solid.White;
+        selectedPlayer.render.portrait.color = Colors.Solid.White;
         selectedPlayer.sortingOrder = 1;
         selectedPlayer.trailRenderer.enabled = false;
 

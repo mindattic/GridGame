@@ -30,7 +30,7 @@ public static class Tag
     public static string Board = "Board";
     public static string Tile = "Tile";
     public static string Actor = "Actor";
-    public static string Line = "Line";
+    public static string SupportLine = "SupportLine";
     public static string Trail = "Trail";
     public static string Select = "Select";
     public static string Wall = "Wall";

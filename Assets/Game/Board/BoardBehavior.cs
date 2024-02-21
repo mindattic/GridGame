@@ -49,7 +49,7 @@ public class BoardBehavior : ExtendedMonoBehavior
         var randomLocation = Common.RandomLocations();     
         actors.ForEach(x => x.Init(randomLocation[i++]));
 
-        lineManager.Reset();
+        supportLineManager.Clear();
 
         timer.Set(scale: 1f, start: false);
 

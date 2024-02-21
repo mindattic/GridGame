@@ -23,7 +23,6 @@ public class BoardManager : ExtendedMonoBehavior
 
         GenerateTiles();
         GenerateActors();
-        GenerateLines();
     }
 
     void GenerateTiles()
@@ -92,32 +91,8 @@ public class BoardManager : ExtendedMonoBehavior
         //Assign enemies list
         enemies.AddRange(actors.Where(e => e.team == Team.Enemy).ToList());
 
-
-
-
-
     }
 
-    void GenerateLines()
-    {
-        GameObject prefab;
-        LineBehavior line;
-
-        foreach (var player in players)
-        {
-            for (int i = 1; i <= 4; i++)
-            {
-                prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
-                line = prefab.GetComponent<LineBehavior>();
-                line.name = $"Line_{Guid.NewGuid()}";
-                line.parent = board.transform;
-            }
-        }
-
-        //Assign line list
-        GameObject.FindGameObjectsWithTag(Tag.Line).ToList()
-           .ForEach(x => GameManager.instance.lines.Add(x.GetComponent<LineBehavior>()));
-    }
 
     void Update()
     {
