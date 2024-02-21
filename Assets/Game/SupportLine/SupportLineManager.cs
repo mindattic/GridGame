@@ -31,8 +31,8 @@ public class SupportLineManager : ExtendedMonoBehavior
 
     public void Clear()
     {
-        var supportLines = GameObject.FindGameObjectsWithTag(Tag.SupportLine).ToList();
-        supportLines.ForEach(x => Destroy(x));
+        var gameObjects = GameObject.FindGameObjectsWithTag(Tag.SupportLine).ToList();
+        gameObjects.ForEach(x => Destroy(x));
     }
 
 }

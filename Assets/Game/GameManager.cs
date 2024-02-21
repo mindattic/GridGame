@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
@@ -14,12 +15,20 @@ public class GameManager : Singleton<GameManager>
     public InputManager inputManager;
     public ActorManager actorManager;
     public SupportLineManager supportLineManager;
+    public DamageTextManager damageTextManager;
 
     //Scale
     public Vector2 screenSize;
     public float tileSize;
     public Vector2 tileScale;
     public Vector2 spriteScale;
+
+
+    public Canvas canvas2D;
+    public Canvas canvas3D;
+
+
+
 
     //Mouse
     public Vector3 mousePosition2D;
@@ -53,7 +62,7 @@ public class GameManager : Singleton<GameManager>
     private void Awake()
     {
 
-        screenSize = Common.ViewportToWorldSize;
+        screenSize = Common.ScreenToWorldSize;
         tileSize = screenSize.x / Constants.percent666;
         tileScale = new Vector2(tileSize, tileSize);
 
@@ -64,10 +73,14 @@ public class GameManager : Singleton<GameManager>
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
         timer = GameObject.Find(Constants.Timer).GetComponent<TimerBehavior>();
 
+        canvas2D = GameObject.Find("Canvas2D").GetComponent<Canvas>();
+        canvas3D = GameObject.Find("Canvas3D").GetComponent<Canvas>();
+   
         spriteManager = GameObject.Find(Constants.Game).GetComponent<SpriteManager>();
         inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
         supportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>();
+        damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
         playerArt = GameObject.Find("PlayerArt").GetComponent<PlayerArtBehavior>();
 
         battle = new BattleParticipants();

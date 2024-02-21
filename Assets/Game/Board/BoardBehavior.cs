@@ -35,12 +35,6 @@ public class BoardBehavior : ExtendedMonoBehavior
 
     }
 
-
-    public void Set()
-    {
-
-    }
-
     public void ResetBoard()
     {
         selectedPlayer = null;

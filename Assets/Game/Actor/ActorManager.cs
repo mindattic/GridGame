@@ -64,6 +64,10 @@ public class ActorManager : ExtendedMonoBehavior
             foreach (var actor2 in players)
             {
                 if (actor1.Equals(actor2)) break;
+
+                if (!actor1.IsAlive || !actor2.IsAlive)
+                    return;
+
                 if (actor1.IsSameColumn(actor2.location))
                     battle.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Vertical));
                 if (actor1.IsSameRow(actor2.location))
@@ -73,6 +77,13 @@ public class ActorManager : ExtendedMonoBehavior
         if (battle.alignedPairs.Count < 1)
             return;
 
+
+        //bool isBetween(float a, float b, float c)
+        //{
+        //    return a > b && a < c;
+        //}
+
+
         //Find attacking pairs
         foreach (var pair in battle.alignedPairs)
         {
@@ -80,17 +91,17 @@ public class ActorManager : ExtendedMonoBehavior
             {
                 var lowest = Math.Min(pair.actor1.location.y, pair.actor2.location.y);
                 var heighest = Math.Max(pair.actor1.location.y, pair.actor2.location.y);
-                pair.enemies = enemies.Where(x => x.IsSameColumn(pair.actor1.location) && x.location.y > lowest && x.location.y < heighest).ToList();
-                pair.players = players.Where(x => x.IsSameColumn(pair.actor1.location) && x.location.y > lowest && x.location.y < heighest).ToList();
-                pair.gaps = tiles.Where(x => pair.actor1.IsSameColumn(x.location) && x.location.y > lowest && x.location.y < heighest && !x.IsOccupied).ToList();
+                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && x.location.y > lowest && x.location.y < heighest).ToList();
+                pair.players = players.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && x.location.y > lowest && x.location.y < heighest).ToList();
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && x.location.y > lowest && x.location.y < heighest).ToList();
             }
             else if (pair.axis == Axis.Horizontal)
             {
                 var lowest = Math.Min(pair.actor1.location.x, pair.actor2.location.x);
                 var heighest = Math.Max(pair.actor1.location.x, pair.actor2.location.x);
-                pair.enemies = enemies.Where(x => x.IsSameRow(pair.actor1.location) && x.location.x > lowest && x.location.x < heighest).ToList();
-                pair.players = players.Where(x => x.IsSameRow(pair.actor1.location) && x.location.x > lowest && x.location.x < heighest).ToList();
-                pair.gaps = tiles.Where(x => pair.actor1.IsSameColumn(x.location) && x.location.x > lowest && x.location.x < heighest && !x.IsOccupied).ToList();
+                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && x.location.x > lowest && x.location.x < heighest).ToList();
+                pair.players = players.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && x.location.x > lowest && x.location.x < heighest).ToList();
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && x.location.x > lowest && x.location.x < heighest).ToList();
             }
 
             //Assign attacking pairs
@@ -131,6 +142,12 @@ public class ActorManager : ExtendedMonoBehavior
             }
         }
 
+
+        foreach(var enemy in battle.defenders)
+        {
+            enemy.TakeDamage(RNG.RandomInt(16, 33));
+        }
+
     }
 
     private void FixedUpdate()
@@ -157,6 +174,9 @@ public class ActorManager : ExtendedMonoBehavior
         //Retrieve actor from collider
         var actor = collider.gameObject.GetComponent<ActorBehavior>();
         if (actor == null)
+            return;
+
+        if (!actor.IsAlive)
             return;
 
         //Determine if player Team: "Player"

@@ -14,6 +14,7 @@ TagManager:
   - Select
   - Slide
   - SupportLine
+  - DamageText
   layers:
   - Default
   - TransparentFX
@@ -24,8 +25,8 @@ TagManager:
   - Board
   - Tile
   - Actor
-  - Select
-  - Slide
+  - DamageText
+  - 
   - 
   - 
   - 
@@ -56,4 +57,7 @@ TagManager:
     locked: 0
   - name: Actor
     uniqueID: 1438895807
+    locked: 0
+  - name: DamageText
+    uniqueID: 2394124353
     locked: 0

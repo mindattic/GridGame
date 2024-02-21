@@ -88,37 +88,4 @@ public class PlayerArtBehavior : ExtendedMonoBehavior
         }
     }
 
-
-
-    //IEnumerator FadeIn()
-    //{
-    //    yield return new WaitForSeconds(1f);
-
-    //    if (image.color.a < 255)
-    //    {
-    //        alpha++;
-    //        image.color = new Color(255, 255, 255, alpha);
-
-    //    }
-    //    else
-    //    {
-    //        StopCoroutine(FadeIn());
-    //    }
-    //}
-
-    //IEnumerator FadeOut()
-    //{
-    //    yield return new WaitForSeconds(1f);
-
-    //    if (image.color.a > 0)
-    //    {
-    //        alpha--;
-    //        image.color = new Color(255, 255, 255, alpha);
-    //    }
-    //    else
-    //    {
-    //        StopCoroutine(FadeOut());
-    //    }
-    //}
-
 }

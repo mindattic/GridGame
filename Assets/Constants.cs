@@ -33,7 +33,9 @@ public static class Tag
     public static string SupportLine = "SupportLine";
     public static string Trail = "Trail";
     public static string Select = "Select";
+    public static string DamageText = "DamageText";
     public static string Wall = "Wall";
+
 }
 
 

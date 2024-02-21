@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Common
 {
-    public static Vector2 ViewportToWorldSize
+    public static Vector2 ScreenToWorldSize
     {
         get
         {
@@ -16,6 +16,13 @@ public class Common
             return new Vector2(width, height);
         }
     }
+
+    public static Vector3 WorldToScreenPosition(Vector3 position)
+    {
+        return Camera.main.WorldToScreenPoint(position);
+    }
+
+
 
     public static List<Vector2Int> RandomLocations()
     {

@@ -82,7 +82,6 @@ public class ActorRenderers
     public SpriteRenderer portrait { get; set; }
     public SpriteRenderer healthBarBack { get; set; }
     public SpriteRenderer healthBar { get; set; }
-
 }
 
 public class BattleParticipants

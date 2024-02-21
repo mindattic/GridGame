@@ -17,10 +17,6 @@ public class BoardManager : ExtendedMonoBehavior
 
     void Start()
     {
-        board.Set();
-       
-        transform.position = board.offset;
-
         GenerateTiles();
         GenerateActors();
     }

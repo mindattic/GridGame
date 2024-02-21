@@ -8,11 +8,17 @@ using UnityEngine;
 
 public class ExtendedMonoBehavior : MonoBehaviour
 {
+
+
+    protected Canvas canvas2D => GameManager.instance.canvas2D;
+    protected Canvas canvas3D => GameManager.instance.canvas3D;
+
     //Managers
     protected SpriteManager spriteManager => GameManager.instance.spriteManager;
     protected InputManager inputManager => GameManager.instance.inputManager;
     protected ActorManager actorManager => GameManager.instance.actorManager;
     protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
+    protected DamageTextManager damageTextManager => GameManager.instance.damageTextManager;
 
 
     //Behaviors

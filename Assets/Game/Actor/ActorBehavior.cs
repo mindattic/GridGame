@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -8,14 +9,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     const int HealthBarBack = 1;
     const int HealthBar = 2;
 
-
     //Variables
     public Vector2Int location { get; set; }
     public Vector3? destination { get; set; } = null;
     public Team team = Team.Neutral;
 
-    public int MaxHP { get; set; } = 100;
-    public int HP { get; set; }
+    public float MaxHP { get; set; } = 100f;
+    public float HP { get; set; }
 
 
     #region Components
@@ -35,6 +35,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public ActorRenderers render = new ActorRenderers();
     public TrailRenderer trailRenderer;
 
+
     public Sprite sprite
     {
         get => render.portrait.sprite;
@@ -51,6 +52,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
     }
 
+
+
     #endregion
 
     #region Properties
@@ -64,6 +67,9 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsSouthEdge => this.location.y == board.rows;
     public bool IsWestEdge => this.location.x == 1;
 
+
+    public bool IsAlive => this.HP > 0 && this.isActiveAndEnabled;
+ 
     #endregion
 
     #region Methods
@@ -159,7 +165,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.portrait = gameObject.transform.GetChild(Portrait).GetComponent<SpriteRenderer>();
         render.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
         render.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
-
         trailRenderer = gameObject.GetComponent<TrailRenderer>();
         trailRenderer.startWidth = tileSize * percent75;
         trailRenderer.time = percent33;
@@ -175,17 +180,22 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (initialLocation.HasValue)
             location = initialLocation.Value;
 
+        this.gameObject.SetActive(true);
         this.position = Geometry.PositionFromLocation(location);
         this.destination = null;
         this.transform.localScale = tileScale;
         //this.transform.GetChild(Portrait).transform.localScale = tileScale;
         this.render.portrait.color = Colors.Solid.White;
         this.HP = MaxHP;
+
     }
 
 
     void Update()
     {
+        if (!IsAlive)
+            return;
+
         if (this.IsSelectedPlayer)
         {
             MoveTowardCursor();
@@ -199,7 +209,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void CheckLocation()
     {
-        var other = actors.FirstOrDefault(x => !this.Equals(x) && this.location.Equals(x.location));
+        var other = actors.FirstOrDefault(x => !this.Equals(x) && this.location.Equals(x.location) && x.IsAlive);
         if (other == null)
             return;
 
@@ -208,6 +218,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void FixedUpdate()
     {
+        if (!IsAlive)
+            return;
+
         if (this.IsSelectedPlayer)
             return;
 
@@ -246,6 +259,56 @@ public class ActorBehavior : ExtendedMonoBehavior
             this.transform.position = this.destination.Value;
             this.destination = null;
         }
+    }
+
+
+
+    public void TakeDamage(int amount)
+    {
+        damageTaken = amount;
+        StartCoroutine(TakeDamage());
+    }
+
+    private int damageTaken = 0;
+
+    private IEnumerator TakeDamage()
+    {
+        var y = render.healthBarBack.transform.localScale.y;
+        var z = render.healthBarBack.transform.localScale.z;
+        var remainingHP = HP - damageTaken;
+
+        while (HP > remainingHP)
+        {
+            var damage = RNG.RandomInt(1, 3);
+            HP -= damage;
+            HP = Mathf.Clamp(HP, 0, MaxHP);
+            if (HP < 1)
+                break;
+            
+            damageTextManager.Add(damage.ToString(), position);
+            var x = render.healthBarBack.transform.localScale.x * (HP / MaxHP);
+            render.healthBar.transform.localScale = new Vector3(x, y, z);
+            yield return new WaitForSeconds(0.05f); // update interval
+        }
+        damageTaken = 0;
+        if (HP < 1)
+            this.gameObject.SetActive(false);
+    }
+
+
+    private IEnumerator Die()
+    {
+        var alpha = 1f;
+        while (alpha > 0)
+        {
+            alpha -= 0.01f;
+
+            var color = Common.ColorRGBA(255, 255, 255, alpha);
+
+            this.render.portrait.color = color;
+            yield return new WaitForSeconds(0.01f); // update interval
+        }
+        this.gameObject.SetActive(false);
     }
 
 }
