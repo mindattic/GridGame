@@ -1,21 +1,11 @@
 using System.Linq;
 using UnityEngine;
-using MoveState = ActorMoveState;
 
 public class ActorBehavior : ExtendedMonoBehavior
 {
     //Variables
-
-
     public Vector2Int location { get; set; }
-
-    public Vector3 destination { get; set; }
-    public Direction direction { get; set; } = Direction.None;
-    // public Destination destination { get; set; } = new Destination();
-
-
-
-    //public MoveState moveState = MoveState.Idle;
+    public Vector3? destination { get; set; } = null;
     public Team team = Team.Neutral;
 
     #region Components
@@ -52,67 +42,67 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     #region Properties
 
-    //private bool IsIdle => this.moveState == MoveState.Idle;
-    //private bool IsMoving => this.moveState == MoveState.Moving;
-
+    public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
     private bool IsOnPlayerTeam => this.team == Team.Player;
     private bool IsSelectedPlayer => HasSelectedPlayer && this.Equals(selectedPlayer);
-    private bool HasDirection => this.direction != Direction.None;
-    public bool IsSameColumn(ActorBehavior other) => this.location.x == other.location.x;
-    public bool IsSameRow(ActorBehavior other) => this.location.y == other.location.y;
-    public bool IsNorthOf(ActorBehavior other) => this.IsSameColumn(other) && this.location.y == other.location.y - 1;
-    public bool IsEastOf(ActorBehavior other) => this.IsSameRow(other) && this.location.x == other.location.x + 1;
-    public bool IsSouthOf(ActorBehavior other) => this.IsSameColumn(other) && this.location.y == other.location.y + 1;
-    public bool IsWestOf(ActorBehavior other) => this.IsSameRow(other) && this.location.x == other.location.x - 1;
-
-    //TODO: Make diagonal checks too...
-    public bool IsNorthWestOf(ActorBehavior other) => this.location.x == other.location.x - 1 && this.location.y == other.location.y - 1;
-    public bool IsNorthEastOf(ActorBehavior other) => this.location.x == other.location.x + 1 && this.location.y == other.location.y - 1;
-    public bool IsSouthWestOf(ActorBehavior other) => this.location.x == other.location.x - 1 && this.location.y == other.location.y + 1;
-    public bool IsSouthEastOf(ActorBehavior other) => this.location.x == other.location.x + 1 && this.location.y == other.location.y + 1;
-
-
+    private bool HasDestination => this.destination.HasValue;
     public bool IsNorthEdge => this.location.y == 1;
     public bool IsEastEdge => this.location.x == board.columns;
     public bool IsSouthEdge => this.location.y == board.rows;
     public bool IsWestEdge => this.location.x == 1;
 
-
-    public bool IsNorthOf(ActorBehavior other, int tileDistance = 1)
-    {
-        return IsSameColumn(other) && this.location.y >= other.location.y + tileDistance;
-    }
-
-    public bool IsEastOf(ActorBehavior other, int tileDistance = 1)
-    {
-        return IsSameRow(other) && this.location.x >= other.location.x + tileDistance;
-    }
-    public bool IsSouthOf(ActorBehavior other, int tileDistance = 1)
-    {
-        return IsSameColumn(other) && this.location.y <= other.location.y - tileDistance;
-    }
-
-    public bool IsWestOf(ActorBehavior other, int tileDistance = 1)
-    {
-        return IsSameRow(other) && this.location.x <= other.location.x - tileDistance;
-    }
-
-
-
     #endregion
 
     #region Methods
+
+    public bool IsSameColumn(Vector2Int location) => this.location.x == location.x;
+    public bool IsSameRow(Vector2Int location) => this.location.y == location.y;
+    public bool IsNorthOf(Vector2Int location) => this.IsSameColumn(location) && this.location.y == location.y - 1;
+    public bool IsEastOf(Vector2Int location) => this.IsSameRow(location) && this.location.x == location.x + 1;
+    public bool IsSouthOf(Vector2Int location) => this.IsSameColumn(location) && this.location.y == location.y + 1;
+    public bool IsWestOf(Vector2Int location) => this.IsSameRow(location) && this.location.x == location.x - 1;
+    public bool IsNorthWestOf(Vector2Int location) => this.location.x == location.x - 1 && this.location.y == location.y - 1;
+    public bool IsNorthEastOf(Vector2Int location) => this.location.x == location.x + 1 && this.location.y == location.y - 1;
+    public bool IsSouthWestOf(Vector2Int location) => this.location.x == location.x - 1 && this.location.y == location.y + 1;
+    public bool IsSouthEastOf(Vector2Int location) => this.location.x == location.x + 1 && this.location.y == location.y + 1;
 
     public void Init(Vector2Int? initialLocation = null)
     {
         if (initialLocation.HasValue)
             location = initialLocation.Value;
 
-        this.direction = Direction.None;
         this.position = Geometry.PositionFromLocation(location);
-        this.destination = this.position;
+        this.destination = null;
         this.transform.localScale = tileScale;
         this.spriteRenderer.color = Colors.Solid.White;
+    }
+
+    private Vector2Int GoNorth() => this.location += new Vector2Int(0, -1);
+    private Vector2Int GoEast() => this.location += new Vector2Int(1, 0);
+    private Vector2Int GoSouth() => this.location += new Vector2Int(0, 1);
+    private Vector2Int GoWest() => this.location += new Vector2Int(-1, 0);
+
+    private Vector2Int GoRandomDirection()
+    {
+        return RNG.RandomInt(1, 4) switch
+        {
+            1 => GoNorth(),
+            2 => GoEast(),
+            3 => GoSouth(),
+            _ => GoWest(),
+        };
+    }
+
+    private void GoToward(Vector2Int other)
+    {
+        if (this.IsNorthOf(other) || this.IsNorthWestOf(other) || this.IsNorthEastOf(other))
+            GoSouth();
+        else if (this.IsEastOf(other))
+            GoWest();
+        else if (this.IsSouthOf(other) || this.IsSouthWestOf(other) || this.IsSouthEastOf(other))
+            GoNorth();
+        else if (this.IsWestOf(other))
+            GoEast();
     }
 
     public void SetDestination(ActorBehavior other)
@@ -120,126 +110,47 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (other == null)
             return;
 
-        if (this.HasDirection)
+        if (HasDestination)
             return;
 
-        if (this.IsNorthWestOf(other))
-        {
-            if (other.position.y > other.currentTile.position.y)
-            {
-                this.direction = Direction.South;
-            }
-            else
-            {
-                this.direction = !IsEastEdge ? Direction.East : Direction.West;
-            }
-        }
-        else if (this.IsNorthEastOf(other))
-        {
-            if (other.position.y > other.currentTile.position.y)
-            {
-                this.direction = Direction.South;
-            }
-            else
-            {
-                this.direction = !IsWestEdge ? Direction.West : Direction.East;
-            }
-        }
-        else if (this.IsSouthWestOf(other))
-        {
-            if (other.position.y < other.currentTile.position.y)
-            {
-                this.direction = Direction.North;
-            }
-            else
-            {
-                this.direction = !IsEastEdge ? Direction.East : Direction.West;
-            }
-        }
-        else if (this.IsSouthEastOf(other))
-        {
-            if (other.position.y < other.currentTile.position.y)
-            {
-                this.direction = Direction.North;
-            }
-            else
-            {
-                this.direction = !IsWestEdge ? Direction.West : Direction.East;
-            }
-        }
-        else if (this.IsNorthOf(other))
-        {
-            this.direction = Direction.South;
-        }
-        else if (this.IsEastOf(other))
-        {
-            this.direction = Direction.West;
-        }
-        else if (this.IsSouthOf(other))
-        {
-            this.direction = Direction.North;
-        }
-        else if (this.IsWestOf(other))
-        {
-            this.direction = Direction.East;
-        }
+        if (this.IsNorthOf(other.location) || this.IsNorthWestOf(other.location) || this.IsNorthEastOf(other.location))
+            GoSouth();
+        else if (this.IsEastOf(other.location))
+            GoWest();
+        else if (this.IsSouthOf(other.location) || this.IsSouthWestOf(other.location) || this.IsSouthEastOf(other.location))
+            GoNorth();
+        else if (this.IsWestOf(other.location))
+            GoEast();
         else
         {
-
             //Actors are on top of eachother
-            if (IsNorthEdge)
-                this.direction = Direction.South;
+            //TODO: Make sure this never happens in the first place...
+            //Debug.Log($"Conflict: {this.name} / {location.name}");
+
+            var closestUnoccupiedTile = Geometry.ClosestUnoccupiedTileByLocation(this.location);
+            if (closestUnoccupiedTile != null)
+                GoToward(closestUnoccupiedTile.location);
+            else if (IsNorthEdge)
+                GoSouth();
             else if (IsEastEdge)
-                this.direction = Direction.West;
+                GoWest();
             else if (IsSouthEdge)
-                this.direction = Direction.North;
+                GoNorth();
             else if (IsWestEdge)
-                this.direction = Direction.East;
+                GoEast();
             else
-                this.direction = RNG.RandomDirection();
+                GoRandomDirection();
         }
-
-        switch (this.direction)
-        {
-            case Direction.North:
-                this.location = this.location + new Vector2Int(0, -1);
-                break;
-            case Direction.East:
-                this.location = this.location + new Vector2Int(1, 0);
-                break;
-            case Direction.South:
-                this.location = this.location + new Vector2Int(0, 1);
-                break;
-            case Direction.West:
-                this.location = this.location + new Vector2Int(-1, 0);
-                break;
-        }
-
-        //ActorBehavior conflictActor = actors.FirstOrDefault(x =>
-        //{
-        //    return !x.Equals(this)
-        //    && !x.Equals(selectedPlayer)
-        //    && x.location.Equals(this.destination.location.Value);
-        //});
-        //if (conflictActor != null)
-        //{
-        //    Debug.Log($"Conflict: {this.name} / {conflictActor.name}");
-
-        //    //conflictActor.SetDirection(this);
-        //    //conflictActor.SetDestination();
-        //}
-
 
         var closestTile = Geometry.ClosestTileByLocation(this.location);
         this.destination = closestTile.position;
     }
 
 
-    public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
+   
 
 
     #endregion
-
 
     private void Awake()
     {
@@ -263,6 +174,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
         else
         {
+            //Determine if two actors occupy same location
             this.CheckLocation();
         }
     }
@@ -273,7 +185,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (other == null)
             return;
 
-        //Assign intended movement
         this.SetDestination(other);
     }
 
@@ -318,19 +229,19 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void CheckMovement()
     {
-        if (!HasDirection)
+        if (!HasDestination)
             return;
 
         //Move actor towards destination
-        this.position = Vector2.MoveTowards(this.position, this.destination, slideSpeed);
+        this.position = Vector2.MoveTowards(this.position, this.destination.Value, slideSpeed);
 
         //Determine if actor is close to destination
-        bool isCloseToDestination = Vector2.Distance(this.position, this.destination) < snapDistance;
+        bool isCloseToDestination = Vector2.Distance(this.position, this.destination.Value) < snapDistance;
         if (isCloseToDestination)
         {
             //Snap to destination, clear destination, and set actor MoveState: "Idle"
-            this.transform.position = this.destination;
-            this.direction = Direction.None;
+            this.transform.position = this.destination.Value;
+            this.destination = null;
         }
     }
 

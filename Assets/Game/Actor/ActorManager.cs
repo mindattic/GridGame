@@ -64,9 +64,9 @@ public class ActorManager : ExtendedMonoBehavior
             foreach (var actor2 in players)
             {
                 if (actor1.Equals(actor2)) break;
-                if (actor1.IsSameColumn(actor2))
+                if (actor1.IsSameColumn(actor2.location))
                     battle.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Vertical));
-                if (actor1.IsSameRow(actor2))
+                if (actor1.IsSameRow(actor2.location))
                     battle.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Horizontal));
             }
         }
@@ -81,14 +81,14 @@ public class ActorManager : ExtendedMonoBehavior
                 var lowest = Math.Min(pair.actor1.location.y, pair.actor2.location.y);
                 var heighest = Math.Max(pair.actor1.location.y, pair.actor2.location.y);
                 pair.gaps = tiles.Where(x => x.location.x == pair.actor1.location.x && x.location.y > lowest && x.location.y < heighest && !x.isOccupied).ToList();
-                pair.targets = enemies.Where(x => x.IsSameColumn(pair.actor1) && x.location.y > lowest && x.location.y < heighest).ToList();
+                pair.targets = enemies.Where(x => x.IsSameColumn(pair.actor1.location) && x.location.y > lowest && x.location.y < heighest).ToList();
             }
             else if (pair.axis == Axis.Horizontal)
             {
                 var lowest = Math.Min(pair.actor1.location.x, pair.actor2.location.x);
                 var heighest = Math.Max(pair.actor1.location.x, pair.actor2.location.x);
                 pair.gaps = tiles.Where(x => x.location.y == pair.actor1.location.y && x.location.x > lowest && x.location.x < heighest && !x.isOccupied).ToList();
-                pair.targets = enemies.Where(x => x.IsSameRow(pair.actor1) && x.location.x > lowest && x.location.x < heighest).ToList();
+                pair.targets = enemies.Where(x => x.IsSameRow(pair.actor1.location) && x.location.x > lowest && x.location.x < heighest).ToList();
             }
 
             //Assign attacking pairs
@@ -200,7 +200,7 @@ public class ActorManager : ExtendedMonoBehavior
         
         playerArt.Hide();
 
-        //Determine if two actors collided
+        //Determine if two actors occupy same location
         selectedPlayer.CheckLocation();
 
         //Clear selected player
