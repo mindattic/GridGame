@@ -4,15 +4,8 @@ using UnityEngine;
 public class TileBehavior : ExtendedMonoBehavior
 {
     [SerializeField] public Vector2Int location { get; set; }
-    //[SerializeField] public bool isOccupied { get; set; }
-
-
-
-
-    public bool isOccupied => actors.Any(x => x.location.Equals(location));
-
-    public BoxCollider2D boxCollider2D;
-
+  
+    public bool IsOccupied => actors.Any(x => x.location.Equals(location));
 
     #region Components
 
@@ -38,11 +31,8 @@ public class TileBehavior : ExtendedMonoBehavior
 
     #endregion
 
-
-
     public void Awake()
     {
-        boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 

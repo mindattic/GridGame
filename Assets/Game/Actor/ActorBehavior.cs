@@ -22,7 +22,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
-    public BoxCollider2D boxCollider2D;
     public SpriteRenderer spriteRenderer;
     public TrailRenderer trailRenderer;
 
@@ -154,7 +153,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
-        boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         trailRenderer = gameObject.GetComponent<TrailRenderer>();
         trailRenderer.startWidth = tileSize * percent75;
@@ -194,21 +192,6 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
         CheckMovement();
-    }
-
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-
-    }
-
-    private void OnTriggerStay2D(Collider2D collider)
-    {
-
-    }
-
-    private void OnTriggerExit2D(Collider2D collider)
-    {
-
     }
 
     private void MoveTowardCursor()

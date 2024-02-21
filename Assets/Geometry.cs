@@ -46,7 +46,7 @@ public class Geometry
     static public TileBehavior ClosestUnoccupiedTileByLocation(Vector2Int location)
     {
         return tiles
-            .Where(x => !x.isOccupied)
+            .Where(x => !x.IsOccupied)
             .First(x => Vector2Int.Distance(x.location, location) == 1);
     }
 
