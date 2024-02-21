@@ -1527,7 +1527,7 @@ MonoBehaviour:
   spriteManager: {fileID: 0}
   inputManager: {fileID: 0}
   actorManager: {fileID: 0}
-  lineManager: {fileID: 0}
+  supportLineManager: {fileID: 0}
   screenSize: {x: 0, y: 0}
   tileSize: 0
   tileScale: {x: 0, y: 0}
@@ -1535,7 +1535,7 @@ MonoBehaviour:
   mousePosition2D: {x: 0, y: 0, z: 0}
   mousePosition3D: {x: 0, y: 0, z: 0}
   mouseOffset: {x: 0, y: 0, z: 0}
-  moveSpeed: 0
+  cursorSpeed: 0
   slideSpeed: 0
   snapDistance: 0
   selectedPlayer: {fileID: 0}
@@ -1633,6 +1633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4954ab494bbb70b47a9025b6207963e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linePrefab: {fileID: 5922598101913747506, guid: 2e72c33cf0bfdfd4996f76ddc0140c31, type: 3}
 --- !u!114 &1810209344 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4086587420172569240, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}

@@ -194,7 +194,7 @@ Transform:
   m_GameObject: {fileID: 3237102041834732807}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.4, y: -0.4, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.15, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3730061202814564275}
@@ -485,9 +485,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 2
-  portraitRenderer: {fileID: 0}
-  healthBarBackRenderer: {fileID: 0}
-  healthBarRenderer: {fileID: 0}
   trailRenderer: {fileID: 0}
 --- !u!61 &7144084762364041630
 BoxCollider2D:
