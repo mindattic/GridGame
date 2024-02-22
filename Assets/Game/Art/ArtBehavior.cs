@@ -107,6 +107,8 @@ public class ArtBehavior : ExtendedMonoBehavior
         float alpha = spriteRenderer.color.a;
         Color color = spriteRenderer.color;
 
+        var direction = RNG.RandomBoolean() ? new Vector3(0.1f, 0, 0) : new Vector3(-0.1f, 0, 0);
+
         yield return new WaitForSeconds(2f);
 
         while (spriteRenderer.color.a > 0)
@@ -116,6 +118,7 @@ public class ArtBehavior : ExtendedMonoBehavior
             color.a = alpha;
             spriteRenderer.color = color;
 
+            position += direction;
             yield return new WaitForSeconds(0.01f); // update interval
         }
 

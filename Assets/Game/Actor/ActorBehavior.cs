@@ -187,7 +187,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //this.transform.GetChild(Portrait).transform.localScale = tileScale;
         this.render.portrait.color = Colors.Solid.White;
         this.HP = MaxHP;
-
+        this.render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
     }
 
 
