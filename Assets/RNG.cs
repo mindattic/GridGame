@@ -14,6 +14,11 @@ static class RNG
         return (float)random.NextDouble();
     }
 
+    public static bool RandomBoolean()
+    {
+        return RandomInt(1, 2) == 1 ? true : false;
+    }
+
     public static Direction RandomDirection()
     {
         var result = RandomInt(1, 4);

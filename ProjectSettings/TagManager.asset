@@ -15,6 +15,7 @@ TagManager:
   - Slide
   - SupportLine
   - DamageText
+  - Art
   layers:
   - Default
   - TransparentFX

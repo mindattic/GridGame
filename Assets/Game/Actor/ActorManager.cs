@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
 using MoveState = ActorMoveState;
 
 public class ActorManager : ExtendedMonoBehavior
@@ -143,10 +146,7 @@ public class ActorManager : ExtendedMonoBehavior
         }
 
 
-        foreach(var enemy in battle.defenders)
-        {
-            enemy.TakeDamage(RNG.RandomInt(16, 33));
-        }
+        StartCoroutine(SpawnArt());
 
     }
 
@@ -183,25 +183,19 @@ public class ActorManager : ExtendedMonoBehavior
         if (actor.team != Team.Player)
             return;
 
-        //TODO: Show/Hide art for every selected player
-        if (actor.name == "Paladin")
-            playerArt.Show();
-        else
-            playerArt.Hide();
-
-
         ResetBattle();
 
         //Select actor
         selectedPlayer = actor;
-
         selectedPlayer.sortingOrder = 10;
-
         selectedPlayer.trailRenderer.enabled = true;
         selectedPlayer.render.portrait.color = Colors.Solid.Gold;
 
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
+
+        //Add art related to selected player
+        //artManager.Add(selectedPlayer);
 
         timer.Set(scale: 1f, start: true);
     }
@@ -224,7 +218,7 @@ public class ActorManager : ExtendedMonoBehavior
         tiles.ForEach(x => x.spriteRenderer.color = Colors.Transparent.White);
 
 
-        playerArt.Hide();
+        artManager.Hide();
 
         //Determine if two actors occupy same location
         selectedPlayer.CheckLocation();
@@ -236,5 +230,35 @@ public class ActorManager : ExtendedMonoBehavior
 
         timer.Set(scale: 1f, start: false);
     }
+
+
+
+    private IEnumerator SpawnArt()
+    {
+        foreach (var attackers in battle.attackingPairs)
+        {
+            artManager.Add(attackers.actor1);
+            yield return new WaitForSeconds(0.2f); // update interval
+            artManager.Add(attackers.actor2);
+            yield return new WaitForSeconds(0.2f); // update interval
+        }
+        foreach (var supporter in battle.supports)
+        {
+            artManager.Add(supporter);
+            yield return new WaitForSeconds(0.2f); // update interval
+        }
+
+
+        yield return new WaitForSeconds(3f); // update interval
+
+        foreach (var enemy in battle.defenders)
+        {
+            enemy.TakeDamage(RNG.RandomInt(16, 33));
+        }
+
+
+    }
+
+
 
 }

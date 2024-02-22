@@ -9,19 +9,15 @@ public class ActorArt
     public Sprite full;
 }
 
-
-
-
-public class SpriteManager : MonoBehaviour
+public class SpriteManager : ExtendedMonoBehavior
 {
-    [SerializeField] public Sprite sentinel;
-    [SerializeField] public Sprite corsair;
-    [SerializeField] public Sprite oracle;
-    [SerializeField] public Sprite cleric;
-    [SerializeField] public Sprite mechanic;
-    [SerializeField] public Sprite mercenary;
     [SerializeField] public Sprite paladin;
-
+    [SerializeField] public Sprite barbarian;
+    [SerializeField] public Sprite ninja;
+    [SerializeField] public Sprite cleric;
+    [SerializeField] public Sprite sentinel;
+    [SerializeField] public Sprite pandagirl;
+    
     [SerializeField] public Sprite slime;
     [SerializeField] public Sprite bat;
 

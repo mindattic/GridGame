@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager>
     public ActorManager actorManager;
     public SupportLineManager supportLineManager;
     public DamageTextManager damageTextManager;
+    public ArtManager artManager;
 
     //Scale
     public Vector2 screenSize;
@@ -50,9 +51,8 @@ public class GameManager : Singleton<GameManager>
     public List<ActorBehavior> enemies;
     public List<TileBehavior> tiles;
     public List<SupportLineBehavior> lines;
-
-
-    public PlayerArtBehavior playerArt;
+ 
+    public ArtBehavior playerArt;
 
 
     public HashSet<Vector2Int> boardLocations;
@@ -73,15 +73,15 @@ public class GameManager : Singleton<GameManager>
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
         timer = GameObject.Find(Constants.Timer).GetComponent<TimerBehavior>();
 
-        canvas2D = GameObject.Find("Canvas2D").GetComponent<Canvas>();
-        canvas3D = GameObject.Find("Canvas3D").GetComponent<Canvas>();
+        canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>();
+        canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>();
    
         spriteManager = GameObject.Find(Constants.Game).GetComponent<SpriteManager>();
         inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
         supportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>();
         damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
-        playerArt = GameObject.Find("PlayerArt").GetComponent<PlayerArtBehavior>();
+        artManager = GameObject.Find(Constants.Game).GetComponent<ArtManager>();
 
         battle = new BattleParticipants();
 

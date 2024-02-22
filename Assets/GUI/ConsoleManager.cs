@@ -41,22 +41,22 @@ public class ConsoleManager : ExtendedMonoBehavior
         string defenders = battle.defenders.Any() ? $"[{string.Join(",", battle.defenders.Select(x => x.name))}]" : "-";
 
         
-        console.text = ""
-            + $@"  Runtime: {Time.time}"
-            + $@"{Environment.NewLine}"
-            + $@"      FPS: {fps}"
-            + $@"{Environment.NewLine}"
-            + $@" Selected: {name}"
-            + $@"{Environment.NewLine}"
-            + $@" Location: {location}"
-            + $@"{Environment.NewLine}"
-            + $@"    Mouse: {mouse2D}"
-            + $@"{Environment.NewLine}"
-            + $@"Attackers: {attackers}"
-            + $@"{Environment.NewLine}"
-            + $@" Supports: {supports}"
-            + $@"{Environment.NewLine}"
-            + $@"Defenders: {defenders}"
-            + $@"";
+        //console.text = ""
+        //    + $@"  Runtime: {Time.time}"
+        //    + $@"{Environment.NewLine}"
+        //    + $@"      FPS: {fps}"
+        //    + $@"{Environment.NewLine}"
+        //    + $@" Selected: {name}"
+        //    + $@"{Environment.NewLine}"
+        //    + $@" Location: {location}"
+        //    + $@"{Environment.NewLine}"
+        //    + $@"    Mouse: {mouse2D}"
+        //    + $@"{Environment.NewLine}"
+        //    + $@"Attackers: {attackers}"
+        //    + $@"{Environment.NewLine}"
+        //    + $@" Supports: {supports}"
+        //    + $@"{Environment.NewLine}"
+        //    + $@"Defenders: {defenders}"
+        //    + $@"";
     }
 }

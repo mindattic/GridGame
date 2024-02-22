@@ -50,15 +50,17 @@ public class BoardManager : ExtendedMonoBehavior
         var randomLocation = Common.RandomLocations();     
         var actorInit = new List<ActorInit>()
         {
-            new ActorInit("Sentinel", spriteManager.sentinel, Team.Player, randomLocation[i++]),
-            new ActorInit("Corsair", spriteManager.corsair, Team.Player, randomLocation[i++]),
-            new ActorInit("Oracle", spriteManager.oracle, Team.Player, randomLocation[i++]),
             new ActorInit("Paladin", spriteManager.paladin, Team.Player, randomLocation[i++]),
-            new ActorInit("Mercenary", spriteManager.mercenary, Team.Player, randomLocation[i++]),
+            new ActorInit("Barbarian", spriteManager.barbarian, Team.Player, randomLocation[i++]),
+            new ActorInit("Ninja", spriteManager.ninja, Team.Player, randomLocation[i++]),
+            new ActorInit("Sentinel", spriteManager.sentinel, Team.Player, randomLocation[i++]),        
+            new ActorInit("Panda Girl", spriteManager.pandagirl, Team.Player, randomLocation[i++]),
             new ActorInit("Cleric", spriteManager.cleric, Team.Player, randomLocation[i++]),
+
             new ActorInit("Slime A", spriteManager.slime, Team.Enemy, randomLocation[i++]),
             new ActorInit("Slime B", spriteManager.slime, Team.Enemy, randomLocation[i++]),
             new ActorInit("Slime C", spriteManager.slime, Team.Enemy, randomLocation[i++]),
+
             new ActorInit("Bat A", spriteManager.bat, Team.Enemy, randomLocation[i++]),
             new ActorInit("Bat B", spriteManager.bat, Team.Enemy, randomLocation[i++]),
             new ActorInit("Bat C", spriteManager.bat, Team.Enemy, randomLocation[i++]),
