@@ -9,6 +9,9 @@ using MoveState = ActorMoveState;
 
 public class ActorManager : ExtendedMonoBehavior
 {
+
+
+
     private void Awake()
     {
 
@@ -152,6 +155,8 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void FixedUpdate()
     {
+        if (!HasSelectedPlayer)
+            return;
 
     }
 
@@ -188,7 +193,7 @@ public class ActorManager : ExtendedMonoBehavior
         //Select actor
         selectedPlayer = actor;
         selectedPlayer.sortingOrder = 10;
-        selectedPlayer.trailRenderer.enabled = true;
+        //selectedPlayer.trailRenderer.enabled = true;
         selectedPlayer.render.portrait.color = Colors.Solid.Gold;
 
         //Assign mouse offset (how off center was selection)
@@ -196,6 +201,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         //Add art related to selected player
         //artManager.Add(selectedPlayer);
+        StartCoroutine(SpawnGhost());
 
         timer.Set(scale: 1f, start: true);
     }
@@ -212,7 +218,7 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
         selectedPlayer.render.portrait.color = Colors.Solid.White;
         selectedPlayer.sortingOrder = 1;
-        selectedPlayer.trailRenderer.enabled = false;
+        //selectedPlayer.trailRenderer.enabled = false;
 
         //Reset tiles
         tiles.ForEach(x => x.spriteRenderer.color = Colors.Transparent.White);
@@ -235,29 +241,45 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator SpawnArt()
     {
+
+
         foreach (var attackers in battle.attackingPairs)
         {
             artManager.Add(attackers.actor1);
-            yield return new WaitForSeconds(0.2f); // update interval
+            yield return new WaitForSeconds(0.25f); // update interval
             artManager.Add(attackers.actor2);
-            yield return new WaitForSeconds(0.2f); // update interval
+            yield return new WaitForSeconds(0.25f); // update interval
         }
+
         foreach (var supporter in battle.supports)
         {
             artManager.Add(supporter);
-            yield return new WaitForSeconds(0.2f); // update interval
+            yield return new WaitForSeconds(0.25f); // update interval
         }
 
 
-        yield return new WaitForSeconds(3f); // update interval
+        yield return new WaitForSeconds(2f); // update interval
 
         foreach (var enemy in battle.defenders)
         {
             enemy.TakeDamage(RNG.RandomInt(16, 33));
         }
-
-
     }
+
+
+    [SerializeField] public GameObject ghostPrefab;
+
+
+    private IEnumerator SpawnGhost()
+    {
+        while (HasSelectedPlayer)
+        {
+            ghostManager.Add(selectedPlayer);
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
+
+
 
 
 

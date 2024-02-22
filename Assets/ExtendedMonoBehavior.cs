@@ -20,6 +20,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
     protected DamageTextManager damageTextManager => GameManager.instance.damageTextManager;
     protected ArtManager artManager => GameManager.instance.artManager;
+    protected GhostManager ghostManager => GameManager.instance.ghostManager;
 
 
     //Behaviors

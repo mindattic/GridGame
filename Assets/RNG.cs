@@ -14,6 +14,12 @@ static class RNG
         return (float)random.NextDouble();
     }
 
+    public static float RandomRange(float amount)
+    {
+        return -amount + amount * RandomPercent();
+    }
+
+
     public static bool RandomBoolean()
     {
         return RandomInt(1, 2) == 1 ? true : false;

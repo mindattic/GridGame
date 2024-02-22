@@ -87,6 +87,8 @@
     <Compile Include="Assets\Game\Timer\TimerBehavior.cs" />
     <Compile Include="Assets\Game\InputManager.cs" />
     <Compile Include="Assets\Game\Board\BoardBehavior.cs" />
+    <Compile Include="Assets\GhostBehavior.cs" />
+    <Compile Include="Assets\GhostManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -279,18 +279,22 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         while (HP > remainingHP)
         {
+            position = currentTile.position;
+           
             var damage = RNG.RandomInt(1, 3);
             HP -= damage;
             HP = Mathf.Clamp(HP, 0, MaxHP);
             if (HP < 1)
                 break;
-            
+
+            position += new Vector3(RNG.RandomRange(tileSize / 12), RNG.RandomRange(tileSize / 12), 1);
             damageTextManager.Add(damage.ToString(), position);
             var x = render.healthBarBack.transform.localScale.x * (HP / MaxHP);
             render.healthBar.transform.localScale = new Vector3(x, y, z);
             yield return new WaitForSeconds(0.05f); // update interval
         }
         damageTaken = 0;
+        position = currentTile.position;
         if (HP < 1)
             this.gameObject.SetActive(false);
     }

@@ -35,21 +35,19 @@ public class ArtManager : ExtendedMonoBehavior
     public void Add(ActorBehavior actor)
     {
 
-        var y = -5f + 2 * RNG.RandomPercent();
-
-        var scaler = 0.5f + 0.5f * RNG.RandomPercent();
-        var scale = new Vector3(scaler, scaler, 1);
+        var y = -2f;
+        var scale = new Vector3(1, 1, 1);
 
         sortingOrder++;
 
         switch (actor.name)
         {
-            case "Paladin": Add(paladin, new Vector3(actor.position.x, y, 1), scale, sortingOrder); break;
-            case "Barbarian": Add(barbarian, new Vector3(actor.position.x, y, 1), scale, sortingOrder); break;
-            case "Ninja": Add(ninja, new Vector3(actor.position.x, y, 1), scale, sortingOrder); break;
-            case "Cleric": Add(cleric, new Vector3(actor.position.x, y, 1), scale, sortingOrder); break;
-            case "Sentinel": Add(sentinel, new Vector3(actor.position.x, y, 1), scale, sortingOrder); break;
-            case "Panda Girl": Add(pandagirl, new Vector3(actor.position.x, y, 1), scale, sortingOrder); break;
+            case "Paladin": Add(paladin, new Vector3(0, y, 1), scale, sortingOrder); break;
+            case "Barbarian": Add(barbarian, new Vector3(0, y, 1), scale, sortingOrder); break;
+            case "Ninja": Add(ninja, new Vector3(0, y, 1), scale, sortingOrder); break;
+            case "Cleric": Add(cleric, new Vector3(0, y, 1), scale, sortingOrder); break;
+            case "Sentinel": Add(sentinel, new Vector3(0, y, 1), scale, sortingOrder); break;
+            case "Panda Girl": Add(pandagirl, new Vector3(0, y, 1), scale, sortingOrder); break;
         }
     }
 

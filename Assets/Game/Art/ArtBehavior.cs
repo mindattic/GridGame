@@ -3,11 +3,6 @@ using UnityEngine;
 
 public class ArtBehavior : ExtendedMonoBehavior
 {
-
-
-
-
-
     #region Components
 
     public Transform parent
@@ -99,6 +94,7 @@ public class ArtBehavior : ExtendedMonoBehavior
             yield return new WaitForSeconds(0.01f); // update interval
         }
 
+        yield return new WaitForSeconds(1f); // update interval
         StartCoroutine(FadeOut());
     }
 
@@ -108,8 +104,6 @@ public class ArtBehavior : ExtendedMonoBehavior
         Color color = spriteRenderer.color;
 
         var direction = RNG.RandomBoolean() ? new Vector3(0.1f, 0, 0) : new Vector3(-0.1f, 0, 0);
-
-        yield return new WaitForSeconds(2f);
 
         while (spriteRenderer.color.a > 0)
         {

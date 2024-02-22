@@ -17,6 +17,7 @@ public class GameManager : Singleton<GameManager>
     public SupportLineManager supportLineManager;
     public DamageTextManager damageTextManager;
     public ArtManager artManager;
+    public GhostManager ghostManager;
 
     //Scale
     public Vector2 screenSize;
@@ -27,9 +28,6 @@ public class GameManager : Singleton<GameManager>
 
     public Canvas canvas2D;
     public Canvas canvas3D;
-
-
-
 
     //Mouse
     public Vector3 mousePosition2D;
@@ -82,6 +80,7 @@ public class GameManager : Singleton<GameManager>
         supportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>();
         damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
         artManager = GameObject.Find(Constants.Game).GetComponent<ArtManager>();
+        ghostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>();
 
         battle = new BattleParticipants();
 
