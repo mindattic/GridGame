@@ -44,8 +44,11 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void ResetBattle()
     {
+        StopCoroutine(SpawnArt());
+
+
         //Reset actors
-        actors.ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
+        actors.ForEach(x => x.renderers.thumbnail.color = Colors.Solid.White);
 
         //Reset tiles
 
@@ -126,7 +129,7 @@ public class ActorManager : ExtendedMonoBehavior
         {
             foreach (var enemy in attackers.enemies)
             {
-                enemy.render.thumbnail.color = Colors.Solid.Red;
+                enemy.renderers.thumbnail.color = Colors.Solid.Red;
                 battle.defenders.Add(enemy);
             }
         }
@@ -193,7 +196,7 @@ public class ActorManager : ExtendedMonoBehavior
         //Select actor
         selectedPlayer = actor;
         selectedPlayer.sortingOrder = 10;
-        selectedPlayer.render.thumbnail.color = Colors.Solid.Gold;
+        selectedPlayer.renderers.frame.color = Colors.Solid.Gold;
 
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
@@ -215,7 +218,7 @@ public class ActorManager : ExtendedMonoBehavior
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
-        selectedPlayer.render.thumbnail.color = Colors.Solid.White;
+        selectedPlayer.renderers.frame.color = Colors.Solid.White;
         selectedPlayer.sortingOrder = 1;
       
         //Reset tiles
@@ -248,6 +251,8 @@ public class ActorManager : ExtendedMonoBehavior
             portraitManager.Add(attackers.actor2);
             yield return new WaitForSeconds(0.25f); // update interval
         }
+
+
 
         foreach (var supporter in battle.supports)
         {

@@ -13,9 +13,9 @@ public class Destination
 
     public Destination() { }
 
-    public Vector2Int? location { get; set; }
-    public Vector3? position { get; set; }
-    public Direction direction { get; set; } 
+    public Vector2Int? location;
+    public Vector3? position;
+    public Direction direction; 
 
 
     //public bool IsValid => location != null && position != null && direction != Direction.None;
@@ -45,10 +45,10 @@ public class RectFloat
 
 public class ActorInit
 {
-    public string name { get; set; }
-    public Sprite sprite { get; set; }
-    public Team team { get; set; }
-    public Vector2Int location { get; set; }
+    public string name;
+    public Sprite sprite;
+    public Team team;
+    public Vector2Int location;
     public ActorInit() { }
     public ActorInit(string name, Sprite sprite, Team team, Vector2Int location)
     {
@@ -69,12 +69,12 @@ public class ActorPair
         this.axis = axis;
     }
 
-    public ActorBehavior actor1 { get; set; }
-    public ActorBehavior actor2 { get; set; }
-    public Axis axis { get; set; }
-    public List<TileBehavior> gaps { get; set; } = new List<TileBehavior>();
-    public List<ActorBehavior> enemies { get; set; } = new List<ActorBehavior>();
-    public List<ActorBehavior> players { get; set; } = new List<ActorBehavior>();
+    public ActorBehavior actor1;
+    public ActorBehavior actor2;
+    public Axis axis;
+    public List<TileBehavior> gaps = new List<TileBehavior>();
+    public List<ActorBehavior> enemies = new List<ActorBehavior>();
+    public List<ActorBehavior> players = new List<ActorBehavior>();
 
 }
 
@@ -84,9 +84,10 @@ public class ActorRenderers
 {
     public ActorRenderers() { }
 
-    public SpriteRenderer thumbnail { get; set; }
-    public SpriteRenderer healthBarBack { get; set; }
-    public SpriteRenderer healthBar { get; set; }
+    public SpriteRenderer thumbnail;
+    public SpriteRenderer frame;
+    public SpriteRenderer healthBarBack;
+    public SpriteRenderer healthBar;
 }
 
 public class BattleParticipants

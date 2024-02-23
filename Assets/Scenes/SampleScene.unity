@@ -1432,15 +1432,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1751276276}
+  - component: {fileID: 1751276278}
   - component: {fileID: 1751276277}
   - component: {fileID: 1751276287}
   - component: {fileID: 1751276279}
-  - component: {fileID: 1751276278}
   - component: {fileID: 1751276282}
   - component: {fileID: 1751276281}
   - component: {fileID: 1751276283}
   - component: {fileID: 1751276285}
   - component: {fileID: 1751276286}
+  - component: {fileID: 1751276288}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -1479,13 +1480,13 @@ MonoBehaviour:
   deviceType: 
   targetFramerate: 60
   vSyncCount: 1
-  spriteManager: {fileID: 0}
+  resourceManager: {fileID: 0}
   inputManager: {fileID: 0}
   actorManager: {fileID: 0}
   supportLineManager: {fileID: 0}
   damageTextManager: {fileID: 0}
-  resourceManager: {fileID: 0}
   ghostManager: {fileID: 0}
+  portraitManager: {fileID: 0}
   screenSize: {x: 0, y: 0}
   tileSize: 0
   tileScale: {x: 0, y: 0}
@@ -1621,6 +1622,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e8759d61593029541966704a135471fa, type: 2}
   - {fileID: 11400000, guid: e6432c69dfc629f498ad887e2d1f4050, type: 2}
   - {fileID: 11400000, guid: 168f65728fc44ac42862ed21e1763289, type: 2}
+--- !u!114 &1751276288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751276275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecac3ddf0267d184c8f2af968e95b7c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  portraitPrefab: {fileID: 2051276160011534070, guid: 220ff14787355a447a5244ab644fa536, type: 3}
 --- !u!114 &1810209344 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4086587420172569240, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}

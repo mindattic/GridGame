@@ -27,7 +27,7 @@ TagManager:
   - Tile
   - Actor
   - DamageText
-  - 
+  - Portrait
   - 
   - 
   - 
@@ -61,4 +61,7 @@ TagManager:
     locked: 0
   - name: DamageText
     uniqueID: 2394124353
+    locked: 0
+  - name: Portrait
+    uniqueID: 776177277
     locked: 0

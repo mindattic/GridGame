@@ -78,6 +78,7 @@
     <Compile Include="Assets\Game\GameManager.cs" />
     <Compile Include="Assets\GUI\ConsoleManager.cs" />
     <Compile Include="Assets\GUI\FpsMonitor.cs" />
+    <Compile Include="Assets\Game\PortraitManager.cs" />
     <Compile Include="Assets\Singleton.cs" />
     <Compile Include="Assets\Game\SupportLine\SupportLineManager.cs" />
     <Compile Include="Assets\Enums.cs" />
@@ -89,7 +90,6 @@
     <Compile Include="Assets\Game\Timer\TimerBehavior.cs" />
     <Compile Include="Assets\Game\InputManager.cs" />
     <Compile Include="Assets\Game\Board\BoardBehavior.cs" />
-    <Compile Include="Assets\Game\PortraitManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

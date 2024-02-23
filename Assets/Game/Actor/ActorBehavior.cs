@@ -6,8 +6,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 {
     //Constants
     const int Thumbnail = 0;
-    const int HealthBarBack = 1;
-    const int HealthBar = 2;
+    const int Frame = 1;
+    const int HealthBarBack = 2;
+    const int HealthBar = 3;
 
     //Variables
     public Vector2Int location { get; set; }
@@ -32,22 +33,23 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
-    public ActorRenderers render = new ActorRenderers();
+    public ActorRenderers renderers = new ActorRenderers();
 
 
     public Sprite thumbnail
     {
-        get => render.thumbnail.sprite;
-        set => render.thumbnail.sprite = value;
+        get => renderers.thumbnail.sprite;
+        set => renderers.thumbnail.sprite = value;
     }
 
     public int sortingOrder
     {
         set
         {
-            render.thumbnail.sortingOrder = value;
-            render.healthBarBack.sortingOrder = value + 1;
-            render.healthBar.sortingOrder = value + 2;
+            renderers.thumbnail.sortingOrder = value;
+            renderers.frame.sortingOrder = value + 1;
+            renderers.healthBarBack.sortingOrder = value + 2;
+            renderers.healthBar.sortingOrder = value + 3;
         }
     }
 
@@ -161,9 +163,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
-        render.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
-        render.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
-        render.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
+        renderers.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
+        renderers.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
+        renderers.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
+        renderers.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -181,10 +184,10 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.destination = null;
         this.transform.localScale = tileScale;
         //this.transform.GetChild(Thumbnail).transform.localScale = tileScale;
-        this.render.thumbnail.color = Colors.Solid.White;
+        this.renderers.thumbnail.color = Colors.Solid.White;
 
         this.HP = MaxHP;
-        this.render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
+        this.renderers.healthBar.transform.localScale = renderers.healthBarBack.transform.localScale;
     }
 
 
@@ -270,8 +273,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private IEnumerator TakeDamage()
     {
-        var y = render.healthBarBack.transform.localScale.y;
-        var z = render.healthBarBack.transform.localScale.z;
+        var y = renderers.healthBarBack.transform.localScale.y;
+        var z = renderers.healthBarBack.transform.localScale.z;
         var remainingHP = HP - damageTaken;
 
         while (HP > remainingHP)
@@ -286,8 +289,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             position += new Vector3(RNG.RandomRange(tileSize / 12), RNG.RandomRange(tileSize / 12), 1);
             damageTextManager.Add(damage.ToString(), position);
-            var x = render.healthBarBack.transform.localScale.x * (HP / MaxHP);
-            render.healthBar.transform.localScale = new Vector3(x, y, z);
+            var x = renderers.healthBarBack.transform.localScale.x * (HP / MaxHP);
+            renderers.healthBar.transform.localScale = new Vector3(x, y, z);
             yield return new WaitForSeconds(0.05f); // update interval
         }
         damageTaken = 0;
@@ -306,7 +309,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             var color = Common.ColorRGBA(255, 255, 255, alpha);
 
-            this.render.thumbnail.color = color;
+            this.renderers.thumbnail.color = color;
             yield return new WaitForSeconds(0.01f); // update interval
         }
         this.gameObject.SetActive(false);

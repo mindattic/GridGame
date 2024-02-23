@@ -22,6 +22,7 @@ public class InputManager : ExtendedMonoBehavior
         else if (Input.GetMouseButtonUp(0))
             actorManager.DropPlayer();
 
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Pressed R");
