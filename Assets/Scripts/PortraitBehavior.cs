@@ -66,10 +66,10 @@ public class PortraitBehavior : ExtendedMonoBehavior
     {
         this.sprite = sprite;
         this.sortingOrder = sortingOrder;
-        this.transform.position = new Vector3(0, -4.5f, 1);
+        this.transform.position = new Vector3(4, -4.5f, 1);
         this.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+        StartCoroutine(FadeIn());
         StartCoroutine(SlideIn());
-
     }
 
     public void FadeIn(Sprite sprite, int sortingOrder)
@@ -111,6 +111,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
         }
 
         yield return new WaitForSeconds(1f); //Wait 1 second
+    
     }
 
 

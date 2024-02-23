@@ -28,6 +28,9 @@ public class PortraitManager : ExtendedMonoBehavior
 
     public void SlideIn(ActorBehavior actor)
     {
+        if (portraits.Any(x => x.id.Equals(actor.id)))
+            return;
+
         GameObject prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         PortraitBehavior portrait = prefab.GetComponent<PortraitBehavior>();
         portrait.name = $"Portrait_{Guid.NewGuid()}";
