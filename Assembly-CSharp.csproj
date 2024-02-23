@@ -56,16 +56,18 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\GhostBehavior.cs" />
     <Compile Include="Assets\Game\DamageText\DamageTextBehavior.cs" />
     <Compile Include="Assets\Extensions.cs" />
     <Compile Include="Assets\Game\CameraManager.cs" />
     <Compile Include="Assets\Game\SpriteManager.cs" />
     <Compile Include="Assets\Game\SupportLine\SupportLineBehavior.cs" />
-    <Compile Include="Assets\ArtManager.cs" />
+    <Compile Include="Assets\Game\ResourceManager.cs" />
     <Compile Include="Assets\Game\BoardManager.cs" />
     <Compile Include="Assets\Constants.cs" />
-    <Compile Include="Assets\Game\Art\ArtBehavior.cs" />
+    <Compile Include="Assets\Game\Portrait\PortraitBehavior.cs" />
     <Compile Include="Assets\Game\Actor\ActorBehavior.cs" />
+    <Compile Include="Assets\ActorSprite.cs" />
     <Compile Include="Assets\Game\TurnManager.cs" />
     <Compile Include="Assets\Game\Board\TileBehavior.cs" />
     <Compile Include="Assets\Game\DamageText\DamageTextManager.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Assets\Geometry.cs" />
     <Compile Include="Assets\RNG.cs" />
     <Compile Include="Assets\CylinderManager.cs" />
+    <Compile Include="Assets\GhostManager.cs" />
     <Compile Include="Assets\Game\GameManager.cs" />
     <Compile Include="Assets\GUI\ConsoleManager.cs" />
     <Compile Include="Assets\GUI\FpsMonitor.cs" />
@@ -87,8 +90,6 @@
     <Compile Include="Assets\Game\Timer\TimerBehavior.cs" />
     <Compile Include="Assets\Game\InputManager.cs" />
     <Compile Include="Assets\Game\Board\BoardBehavior.cs" />
-    <Compile Include="Assets\GhostBehavior.cs" />
-    <Compile Include="Assets\GhostManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using UnityEngine;
 
 public class BoardManager : ExtendedMonoBehavior
@@ -47,24 +48,22 @@ public class BoardManager : ExtendedMonoBehavior
     void GenerateActors()
     {
         int i = 0;
-        var randomLocation = Common.RandomLocations();     
-        var actorInit = new List<ActorInit>()
-        {
-            new ActorInit("Paladin", spriteManager.paladin, Team.Player, randomLocation[i++]),
-            new ActorInit("Barbarian", spriteManager.barbarian, Team.Player, randomLocation[i++]),
-            new ActorInit("Ninja", spriteManager.ninja, Team.Player, randomLocation[i++]),
-            new ActorInit("Sentinel", spriteManager.sentinel, Team.Player, randomLocation[i++]),        
-            new ActorInit("Panda Girl", spriteManager.pandagirl, Team.Player, randomLocation[i++]),
-            new ActorInit("Cleric", spriteManager.cleric, Team.Player, randomLocation[i++]),
+        var randomLocation = Common.RandomLocations();
+        var actorInit = new List<ActorInit>();
+        actorInit.Add(new ActorInit("Paladin", resourceManager.Thumbnail("Paladin"), Team.Player, randomLocation[i++]));
+        actorInit.Add(new ActorInit("Barbarian", resourceManager.Thumbnail("Barbarian"), Team.Player, randomLocation[i++]));
+        actorInit.Add(new ActorInit("Ninja", resourceManager.Thumbnail("Ninja"), Team.Player, randomLocation[i++]));
+        actorInit.Add(new ActorInit("Sentinel", resourceManager.Thumbnail("Sentinel"), Team.Player, randomLocation[i++]));
+        actorInit.Add(new ActorInit("Panda Girl", resourceManager.Thumbnail("Panda Girl"), Team.Player, randomLocation[i++]));
+        actorInit.Add(new ActorInit("Cleric", resourceManager.Thumbnail("Cleric"), Team.Player, randomLocation[i++]));
 
-            new ActorInit("Slime A", spriteManager.slime, Team.Enemy, randomLocation[i++]),
-            new ActorInit("Slime B", spriteManager.slime, Team.Enemy, randomLocation[i++]),
-            new ActorInit("Slime C", spriteManager.slime, Team.Enemy, randomLocation[i++]),
+        actorInit.Add(new ActorInit("Slime A", resourceManager.Thumbnail("Slime"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorInit("Slime B", resourceManager.Thumbnail("Slime"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorInit("Slime C", resourceManager.Thumbnail("Slime"), Team.Enemy, randomLocation[i++]));
 
-            new ActorInit("Bat A", spriteManager.bat, Team.Enemy, randomLocation[i++]),
-            new ActorInit("Bat B", spriteManager.bat, Team.Enemy, randomLocation[i++]),
-            new ActorInit("Bat C", spriteManager.bat, Team.Enemy, randomLocation[i++]),
-        };
+        actorInit.Add(new ActorInit("Bat A", resourceManager.Thumbnail("Bat"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorInit("Bat B", resourceManager.Thumbnail("Bat"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorInit("Bat C", resourceManager.Thumbnail("Bat"), Team.Enemy, randomLocation[i++]));
 
         GameObject prefab;
         ActorBehavior actor;
@@ -73,7 +72,7 @@ public class BoardManager : ExtendedMonoBehavior
             prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
             actor = prefab.GetComponent<ActorBehavior>();
             actor.name = init.name;
-            actor.sprite = init.sprite;
+            actor.thumbnail = init.sprite;
             actor.parent = board.transform;
             actor.location = init.location;
             actor.team = init.team;

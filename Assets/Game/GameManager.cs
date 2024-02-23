@@ -16,7 +16,7 @@ public class GameManager : Singleton<GameManager>
     public ActorManager actorManager;
     public SupportLineManager supportLineManager;
     public DamageTextManager damageTextManager;
-    public ArtManager artManager;
+    public ResourceManager resourceManager;
     public GhostManager ghostManager;
 
     //Scale
@@ -50,7 +50,7 @@ public class GameManager : Singleton<GameManager>
     public List<TileBehavior> tiles;
     public List<SupportLineBehavior> lines;
  
-    public ArtBehavior playerArt;
+    public PortraitBehavior playerArt;
 
 
     public HashSet<Vector2Int> boardLocations;
@@ -79,7 +79,7 @@ public class GameManager : Singleton<GameManager>
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
         supportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>();
         damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
-        artManager = GameObject.Find(Constants.Game).GetComponent<ArtManager>();
+        resourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>();
         ghostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>();
 
         battle = new BattleParticipants();

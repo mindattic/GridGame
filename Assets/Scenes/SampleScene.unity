@@ -532,8 +532,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -250, y: -780}
-  m_SizeDelta: {x: 160, y: 64}
+  m_AnchoredPosition: {x: -290, y: 820}
+  m_SizeDelta: {x: 100, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &718459624
 MonoBehaviour:
@@ -1331,7 +1331,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Console
+  m_Text: '
 
 '
 --- !u!1 &1700541645
@@ -1433,14 +1433,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1751276276}
   - component: {fileID: 1751276277}
-  - component: {fileID: 1751276280}
+  - component: {fileID: 1751276287}
   - component: {fileID: 1751276279}
   - component: {fileID: 1751276278}
   - component: {fileID: 1751276282}
   - component: {fileID: 1751276281}
   - component: {fileID: 1751276283}
-  - component: {fileID: 1751276284}
   - component: {fileID: 1751276285}
+  - component: {fileID: 1751276286}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -1484,7 +1484,8 @@ MonoBehaviour:
   actorManager: {fileID: 0}
   supportLineManager: {fileID: 0}
   damageTextManager: {fileID: 0}
-  artManager: {fileID: 0}
+  resourceManager: {fileID: 0}
+  ghostManager: {fileID: 0}
   screenSize: {x: 0, y: 0}
   tileSize: 0
   tileScale: {x: 0, y: 0}
@@ -1533,26 +1534,6 @@ MonoBehaviour:
   tilePrefab: {fileID: 7233482234801728947, guid: f420fe272613c294eb4bc531748a437e, type: 3}
   actorPrefab: {fileID: 3730061202814564284, guid: 4f922b47447b0d245acc44d2545257a3, type: 3}
   linePrefab: {fileID: 5922598101913747506, guid: 2e72c33cf0bfdfd4996f76ddc0140c31, type: 3}
---- !u!114 &1751276280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1751276275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74538dc503774194b9a3472cae46c83a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  paladin: {fileID: 21300000, guid: 2f23893ec5ebc5948bc73e87b600a157, type: 3}
-  barbarian: {fileID: 21300000, guid: 8692a499fbc8eca4cafe8d431a7c5ecb, type: 3}
-  ninja: {fileID: 21300000, guid: 872cf2364782cd84cac80f1171343a91, type: 3}
-  cleric: {fileID: 21300000, guid: a93ef4fcbe56b23499b75c3136436b56, type: 3}
-  sentinel: {fileID: 21300000, guid: 6516101ded5de774ab09dba925fdb3cc, type: 3}
-  pandagirl: {fileID: 21300000, guid: 18b578b82eb8b31419f7bf60e4872916, type: 3}
-  slime: {fileID: 21300000, guid: 1a82b43adeac59a4e80e86c83cb769ed, type: 3}
-  bat: {fileID: 21300000, guid: 8612ce53556303d4fa3881bf3b1233b6, type: 3}
 --- !u!114 &1751276281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1565,6 +1546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d563df7658daf8c43a23c02b375705ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ghostPrefab: {fileID: 0}
 --- !u!114 &1751276282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1592,27 +1574,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linePrefab: {fileID: 5922598101913747506, guid: 2e72c33cf0bfdfd4996f76ddc0140c31, type: 3}
---- !u!114 &1751276284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1751276275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1ab69e486f76f346a6a18a43218c8d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  artPrefab: {fileID: 2051276160011534070, guid: 220ff14787355a447a5244ab644fa536, type: 3}
-  paladin: {fileID: 21300000, guid: 6335db3b8ab3c2347ad1791988189843, type: 3}
-  barbarian: {fileID: 21300000, guid: ca333234cf12d5a43a6a57e872b938a1, type: 3}
-  ninja: {fileID: 21300000, guid: 12d3e4328ead3124eadeb095b3ac7dcb, type: 3}
-  cleric: {fileID: 21300000, guid: 7bff9ae47e35d684a9bd1e139e1dcad3, type: 3}
-  sentinel: {fileID: 21300000, guid: aca8087db30a5ae428d0b3eb8e732e4e, type: 3}
-  pandagirl: {fileID: 21300000, guid: c438792bfcda5f0479136129b49d3fdd, type: 3}
-  slime: {fileID: 0}
-  bat: {fileID: 0}
 --- !u!114 &1751276285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1626,6 +1587,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageTextPrefab: {fileID: 650995887706566427, guid: 70ed2dcb9cfeb86489b788049c8eeb4c, type: 3}
+--- !u!114 &1751276286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751276275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26c4fc437d88e1342aa46c9e11bbc5c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostPrefab: {fileID: 713162551248075102, guid: c20c54f089a20c94ea7d832de372f35f, type: 3}
+--- !u!114 &1751276287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751276275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ab69e486f76f346a6a18a43218c8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actorSprites:
+  - {fileID: 11400000, guid: d28a961f7abb9684f8d4b72f61f1cfae, type: 2}
+  - {fileID: 11400000, guid: 1d0dcbbafad66bb43a61bf5f97afb115, type: 2}
+  - {fileID: 11400000, guid: 0168d34f4a24da54db20358053e15234, type: 2}
+  - {fileID: 11400000, guid: 97fb61cfcf8213d4f84848a1436dc15d, type: 2}
+  - {fileID: 11400000, guid: 42bdeacd8aff0644fbad00ca3b826f04, type: 2}
+  - {fileID: 11400000, guid: e8759d61593029541966704a135471fa, type: 2}
+  - {fileID: 11400000, guid: e6432c69dfc629f498ad887e2d1f4050, type: 2}
+  - {fileID: 11400000, guid: 168f65728fc44ac42862ed21e1763289, type: 2}
 --- !u!114 &1810209344 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4086587420172569240, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}
@@ -1790,8 +1785,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

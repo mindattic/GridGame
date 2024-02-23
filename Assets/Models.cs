@@ -3,6 +3,11 @@ using UnityEngine;
 
 
 
+
+
+
+
+
 public class Destination
 {
 
@@ -79,7 +84,7 @@ public class ActorRenderers
 {
     public ActorRenderers() { }
 
-    public SpriteRenderer portrait { get; set; }
+    public SpriteRenderer thumbnail { get; set; }
     public SpriteRenderer healthBarBack { get; set; }
     public SpriteRenderer healthBar { get; set; }
 }

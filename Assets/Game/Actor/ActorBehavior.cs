@@ -5,7 +5,7 @@ using UnityEngine;
 public class ActorBehavior : ExtendedMonoBehavior
 {
     //Constants
-    const int Portrait = 0;
+    const int Thumbnail = 0;
     const int HealthBarBack = 1;
     const int HealthBar = 2;
 
@@ -33,20 +33,19 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
     public ActorRenderers render = new ActorRenderers();
-    public TrailRenderer trailRenderer;
 
 
-    public Sprite sprite
+    public Sprite thumbnail
     {
-        get => render.portrait.sprite;
-        set => render.portrait.sprite = value;
+        get => render.thumbnail.sprite;
+        set => render.thumbnail.sprite = value;
     }
 
     public int sortingOrder
     {
         set
         {
-            render.portrait.sortingOrder = value;
+            render.thumbnail.sortingOrder = value;
             render.healthBarBack.sortingOrder = value + 1;
             render.healthBar.sortingOrder = value + 2;
         }
@@ -162,12 +161,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
-        render.portrait = gameObject.transform.GetChild(Portrait).GetComponent<SpriteRenderer>();
+        render.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
         render.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
         render.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
-        trailRenderer = gameObject.GetComponent<TrailRenderer>();
-        trailRenderer.startWidth = tileSize * percent75;
-        trailRenderer.time = percent33;
     }
 
     private void Start()
@@ -184,8 +180,9 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.position = Geometry.PositionFromLocation(location);
         this.destination = null;
         this.transform.localScale = tileScale;
-        //this.transform.GetChild(Portrait).transform.localScale = tileScale;
-        this.render.portrait.color = Colors.Solid.White;
+        //this.transform.GetChild(Thumbnail).transform.localScale = tileScale;
+        this.render.thumbnail.color = Colors.Solid.White;
+
         this.HP = MaxHP;
         this.render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
     }
@@ -309,7 +306,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             var color = Common.ColorRGBA(255, 255, 255, alpha);
 
-            this.render.portrait.color = color;
+            this.render.thumbnail.color = color;
             yield return new WaitForSeconds(0.01f); // update interval
         }
         this.gameObject.SetActive(false);

@@ -45,7 +45,7 @@ public class ActorManager : ExtendedMonoBehavior
     private void ResetBattle()
     {
         //Reset actors
-        actors.ForEach(x => x.render.portrait.color = Colors.Solid.White);
+        actors.ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
 
         //Reset tiles
 
@@ -126,7 +126,7 @@ public class ActorManager : ExtendedMonoBehavior
         {
             foreach (var enemy in attackers.enemies)
             {
-                enemy.render.portrait.color = Colors.Solid.Red;
+                enemy.render.thumbnail.color = Colors.Solid.Red;
                 battle.defenders.Add(enemy);
             }
         }
@@ -194,13 +194,13 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer = actor;
         selectedPlayer.sortingOrder = 10;
         //selectedPlayer.trailRenderer.enabled = true;
-        selectedPlayer.render.portrait.color = Colors.Solid.Gold;
+        selectedPlayer.render.thumbnail.color = Colors.Solid.Gold;
 
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
         //Add art related to selected player
-        //artManager.Add(selectedPlayer);
+        //resourceManager.Add(selectedPlayer);
         StartCoroutine(SpawnGhost());
 
         timer.Set(scale: 1f, start: true);
@@ -216,7 +216,7 @@ public class ActorManager : ExtendedMonoBehavior
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
-        selectedPlayer.render.portrait.color = Colors.Solid.White;
+        selectedPlayer.render.thumbnail.color = Colors.Solid.White;
         selectedPlayer.sortingOrder = 1;
         //selectedPlayer.trailRenderer.enabled = false;
 
@@ -224,7 +224,7 @@ public class ActorManager : ExtendedMonoBehavior
         tiles.ForEach(x => x.spriteRenderer.color = Colors.Transparent.White);
 
 
-        artManager.Hide();
+        //artManager.Hide();
 
         //Determine if two actors occupy same location
         selectedPlayer.CheckLocation();
@@ -245,15 +245,15 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var attackers in battle.attackingPairs)
         {
-            artManager.Add(attackers.actor1);
+            //artManager.Add(attackers.actor1);
             yield return new WaitForSeconds(0.25f); // update interval
-            artManager.Add(attackers.actor2);
+            //artManager.Add(attackers.actor2);
             yield return new WaitForSeconds(0.25f); // update interval
         }
 
         foreach (var supporter in battle.supports)
         {
-            artManager.Add(supporter);
+            //artManager.Add(supporter);
             yield return new WaitForSeconds(0.25f); // update interval
         }
 

@@ -25,7 +25,7 @@ public class GhostManager : ExtendedMonoBehavior
 
         prefab = Instantiate(ghostPrefab, Vector2.zero, Quaternion.identity);
         ghost = prefab.GetComponent<GhostBehavior>();
-        ghost.sprite = actor.sprite;
+        ghost.sprite = actor.thumbnail;
         ghost.name = $"Ghost_{Guid.NewGuid()}";
         ghost.parent = board.transform;
         ghost.Set(actor);
