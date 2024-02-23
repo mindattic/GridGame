@@ -44,7 +44,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void ResetBattle()
     {
-        StopCoroutine(SpawnArt());
+        StopCoroutine(SpawnPortraits());
 
         //Reset actors
         actors.ForEach(x => x.renderers.thumbnail.color = Colors.Solid.White);
@@ -151,7 +151,7 @@ public class ActorManager : ExtendedMonoBehavior
         }
 
 
-        StartCoroutine(SpawnArt());
+        StartCoroutine(SpawnPortraits());
 
     }
 
@@ -200,8 +200,10 @@ public class ActorManager : ExtendedMonoBehavior
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
-        //Add art related to selected player
-        portraitManager.Add(selectedPlayer);
+       
+        portraitManager.FadeIn(selectedPlayer);
+
+
         StartCoroutine(SpawnGhost());
 
         timer.Set(scale: 1f, start: true);
@@ -224,7 +226,7 @@ public class ActorManager : ExtendedMonoBehavior
         tiles.ForEach(x => x.spriteRenderer.color = Colors.Transparent.White);
         ghostManager.Clear();
 
-        portraitManager.Hide();
+        portraitManager.FadeOut(selectedPlayer);
 
         //Determine if two actors occupy same location
         selectedPlayer.CheckLocation();
@@ -240,23 +242,22 @@ public class ActorManager : ExtendedMonoBehavior
 
 
 
-    private IEnumerator SpawnArt()
+    private IEnumerator SpawnPortraits()
     {
 
 
         foreach (var attackers in battle.attackingPairs)
         {
-            portraitManager.Add(attackers.actor1);
+            portraitManager.SlideIn(attackers.actor1);
             yield return new WaitForSeconds(0.25f); // update interval
-            portraitManager.Add(attackers.actor2);
+            portraitManager.SlideIn(attackers.actor2);
             yield return new WaitForSeconds(0.25f); // update interval
         }
 
 
-
         foreach (var supporter in battle.supports)
         {
-            portraitManager.Add(supporter);
+            portraitManager.SlideIn(supporter);
             yield return new WaitForSeconds(0.25f); // update interval
         }
 

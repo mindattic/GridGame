@@ -25,6 +25,7 @@ public class SupportLineManager : ExtendedMonoBehavior
         prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
         line = prefab.GetComponent<SupportLineBehavior>();
         line.name = $"Line_{Guid.NewGuid()}";
+        line.id = line.name;
         line.parent = board.transform;
         line.Set(a, b);
     }

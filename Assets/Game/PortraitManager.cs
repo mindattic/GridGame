@@ -1,10 +1,18 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class PortraitManager : ExtendedMonoBehavior
 {
+
+    //Variables
+    [SerializeField] public string id;
     [SerializeField] public GameObject portraitPrefab;
+
+
+    public List<PortraitBehavior> portraits = new List<PortraitBehavior>();
+
 
     private int sortingOrder = 1;
 
@@ -18,27 +26,57 @@ public class PortraitManager : ExtendedMonoBehavior
 
     }
 
-    public void Hide()
+    public void SlideIn(ActorBehavior actor)
     {
-
+        GameObject prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
+        PortraitBehavior portrait = prefab.GetComponent<PortraitBehavior>();
+        portrait.name = $"Portrait_{Guid.NewGuid()}";
+        portrait.id = actor.id;
+        portrait.parent = canvas3D.transform;
+        var sprite = resourceManager.actorSprites.First(x => x.id.Equals(actor.id)).portrait;
+        portrait.SlideIn(sprite, sortingOrder++);
+        portraits.Add(portrait);
     }
 
-    public void Add(ActorBehavior actor)
+    public void FadeIn(ActorBehavior actor)
     {
-        GameObject prefab;
-        PortraitBehavior portrait;
-
-        prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
-        portrait = prefab.GetComponent<PortraitBehavior>();
+        GameObject prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
+        PortraitBehavior portrait = prefab.GetComponent<PortraitBehavior>();
         portrait.name = $"Portrait_{Guid.NewGuid()}";
+        portrait.id = actor.id;
         portrait.parent = canvas3D.transform;
-        portrait.Set(resourceManager.actorSprites.First(x => x.id.Equals(actor.name)).portrait, sortingOrder++);
+        var sprite = resourceManager.actorSprites.First(x => x.id.Equals(actor.id)).portrait;
+        portrait.FadeIn(sprite, sortingOrder++);
+        portraits.Add(portrait);
+    }
+
+    public void FadeOut(ActorBehavior actor)
+    {
+        var portrait = portraitManager.portraits.FirstOrDefault(x => x.id.Equals(actor.id));
+        if (portrait == null)
+            return;
+
+        portrait.FadeOut();
+        portraits.Add(portrait);
+    }
+
+
+    public void FadeInOut(ActorBehavior actor)
+    {
+        GameObject prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
+        PortraitBehavior portrait = prefab.GetComponent<PortraitBehavior>();
+        portrait.name = $"Portrait_{Guid.NewGuid()}";
+        portrait.id = actor.id;
+        portrait.parent = canvas3D.transform;
+        var sprite = resourceManager.actorSprites.First(x => x.id.Equals(actor.id)).portrait;
+        portrait.FadeInOut(sprite, sortingOrder++);
+        portraits.Add(portrait);
     }
 
 
     public void Clear()
     {
-        var gameObjects = GameObject.FindGameObjectsWithTag(Tag.DamageText).ToList();
-        gameObjects.ForEach(x => Destroy(x));
+        portraits.ForEach(x => Destroy(x));
+        portraits.Clear();
     }
 }

@@ -10,6 +10,7 @@ public class GhostBehavior : MonoBehaviour
     const int Frame = 1;
 
     //Variables
+    [SerializeField] public string id;
     public float duration = 3f;
 
     #region Components

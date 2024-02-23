@@ -3,7 +3,8 @@ using UnityEngine.U2D;
 
 public class SupportLineBehavior : ExtendedMonoBehavior
 {
-
+    //Variables
+    [SerializeField] public string id;
     [SerializeField] public Vector3 start;
     [SerializeField] public Vector3 end;
     [SerializeField] public float width;

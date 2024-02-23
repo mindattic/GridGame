@@ -34,6 +34,7 @@ public class BoardManager : ExtendedMonoBehavior
                 prefab = Instantiate(tilePrefab, board.transform);
                 tile = prefab.GetComponent<TileBehavior>();
                 tile.name = $"{col}x{row}";
+                tile.id = tile.name;
                 tile.location = new Vector2Int(col, row);
             }
         }
@@ -72,6 +73,7 @@ public class BoardManager : ExtendedMonoBehavior
             prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
             actor = prefab.GetComponent<ActorBehavior>();
             actor.name = init.name;
+            actor.id = init.name;
             actor.thumbnail = init.sprite;
             actor.parent = board.transform;
             actor.location = init.location;

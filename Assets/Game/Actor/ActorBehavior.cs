@@ -11,12 +11,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     const int HealthBar = 3;
 
     //Variables
-    public Vector2Int location { get; set; }
-    public Vector3? destination { get; set; } = null;
+    [SerializeField] public string id;
+    public Vector2Int location;
+    public Vector3? destination = null;
     public Team team = Team.Neutral;
 
-    public float MaxHP { get; set; } = 100f;
-    public float HP { get; set; }
+    public float MaxHP = 100f;
+    public float HP;
 
 
     #region Components
@@ -134,7 +135,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             //Actors are on top of eachother
             //TODO: Make sure this never happens in the first place...
-            //Debug.Log($"Conflict: {this.name} / {location.name}");
+            //Debug.Log($"Conflict: {this.id} / {location.id}");
 
             var closestUnoccupiedTile = Geometry.ClosestUnoccupiedTileByLocation(this.location);
             if (closestUnoccupiedTile != null)
@@ -295,6 +296,11 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
         damageTaken = 0;
         position = currentTile.position;
+
+        yield return new WaitForSeconds(1);
+        renderers.thumbnail.color = Colors.Solid.White;
+
+
         if (HP < 1)
             this.gameObject.SetActive(false);
     }
