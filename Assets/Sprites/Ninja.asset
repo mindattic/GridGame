@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 445e33c595b51d243b26605ee3545525, type: 3}
   m_Name: Ninja
   m_EditorClassIdentifier: 
-  id: 
-  thumbnail: {fileID: 0}
-  portrait: {fileID: 0}
+  id: Ninja
+  thumbnail: {fileID: 21300000, guid: a771670633d645348ada9e936f14c5f4, type: 3}
+  portrait: {fileID: 21300000, guid: 7351940f282b048469f7f2efa932e9b4, type: 3}

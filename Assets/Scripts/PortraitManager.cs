@@ -7,13 +7,8 @@ public class PortraitManager : ExtendedMonoBehavior
 {
 
     //Variables
-    [SerializeField] public string id;
     [SerializeField] public GameObject portraitPrefab;
-
-
     public List<PortraitBehavior> portraits = new List<PortraitBehavior>();
-
-
     private int sortingOrder = 1;
 
     private void Start()

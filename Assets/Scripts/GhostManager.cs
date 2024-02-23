@@ -7,7 +7,6 @@ using UnityEngine;
 public class GhostManager : ExtendedMonoBehavior
 {
     //Variables
-    [SerializeField] public string id;
     [SerializeField] public GameObject ghostPrefab;
 
     void Start()
@@ -23,11 +22,8 @@ public class GhostManager : ExtendedMonoBehavior
 
     public void Add(ActorBehavior actor)
     {
-        GameObject prefab;
-        GhostBehavior ghost;
-
-        prefab = Instantiate(ghostPrefab, Vector2.zero, Quaternion.identity);
-        ghost = prefab.GetComponent<GhostBehavior>();
+        GameObject prefab = Instantiate(ghostPrefab, Vector2.zero, Quaternion.identity);
+        GhostBehavior ghost = prefab.GetComponent<GhostBehavior>();
         ghost.thumbnail = actor.thumbnail;
         ghost.name = $"Ghost_{Guid.NewGuid()}";
         ghost.id = actor.id;

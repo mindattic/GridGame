@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 445e33c595b51d243b26605ee3545525, type: 3}
   m_Name: Barbarian
   m_EditorClassIdentifier: 
-  id: 
-  thumbnail: {fileID: 0}
-  portrait: {fileID: 0}
+  id: Barbarian
+  thumbnail: {fileID: 21300000, guid: c19bc5ef1633fb44d91f89d4b32592db, type: 3}
+  portrait: {fileID: 21300000, guid: 44c9665b4bea7494ebff429c31891ddf, type: 3}
