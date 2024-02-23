@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{ABC6BD27-6426-9C0A-9167-74920197AA09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -57,40 +56,40 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GhostBehavior.cs" />
     <Compile Include="Assets\Scripts\DamageTextBehavior.cs" />
-    <Compile Include="Assets\Scripts\Extensions.cs" />
     <Compile Include="Assets\Scripts\CameraManager.cs" />
     <Compile Include="Assets\Scripts\SupportLineBehavior.cs" />
     <Compile Include="Assets\Scripts\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\BoardManager.cs" />
-    <Compile Include="Assets\Scripts\Constants.cs" />
     <Compile Include="Assets\Scripts\PortraitBehavior.cs" />
     <Compile Include="Assets\Scripts\ActorBehavior.cs" />
-    <Compile Include="Assets\Scripts\ActorSprite.cs" />
     <Compile Include="Assets\Scripts\TurnManager.cs" />
     <Compile Include="Assets\Scripts\TileBehavior.cs" />
     <Compile Include="Assets\Scripts\DamageTextManager.cs" />
-    <Compile Include="Assets\Scripts\ExtendedMonoBehavior.cs" />
-    <Compile Include="Assets\Scripts\Geometry.cs" />
-    <Compile Include="Assets\Scripts\RNG.cs" />
-    <Compile Include="Assets\Scripts\CylinderManager.cs" />
-    <Compile Include="Assets\Scripts\GhostManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\ConsoleManager.cs" />
     <Compile Include="Assets\Scripts\FpsMonitor.cs" />
     <Compile Include="Assets\Scripts\PortraitManager.cs" />
-    <Compile Include="Assets\Scripts\Singleton.cs" />
     <Compile Include="Assets\Scripts\SupportLineManager.cs" />
-    <Compile Include="Assets\Scripts\Enums.cs" />
     <Compile Include="Assets\Scripts\PointerManager.cs" />
-    <Compile Include="Assets\Scripts\Models.cs" />
-    <Compile Include="Assets\Scripts\Common.cs" />
     <Compile Include="Assets\Scripts\WallManager.cs" />
     <Compile Include="Assets\Scripts\ActorManager.cs" />
     <Compile Include="Assets\Scripts\TimerBehavior.cs" />
     <Compile Include="Assets\Scripts\InputManager.cs" />
     <Compile Include="Assets\Scripts\BoardBehavior.cs" />
+    <Compile Include="Assets\Scripts\Singleton.cs" />
+    <Compile Include="Assets\Scripts\Constants.cs" />
+    <Compile Include="Assets\Scripts\Enums.cs" />
+    <Compile Include="Assets\Scripts\Common.cs" />
+    <Compile Include="Assets\Scripts\Extensions.cs" />
+    <Compile Include="Assets\Scripts\Models.cs" />
+    <Compile Include="Assets\Scripts\Geometry.cs" />
+    <Compile Include="Assets\Scripts\GhostManager.cs" />
+    <Compile Include="Assets\Scripts\ActorSprite.cs" />
+    <Compile Include="Assets\Scripts\CylinderManager.cs" />
+    <Compile Include="Assets\Scripts\ExtendedMonoBehavior.cs" />
+    <Compile Include="Assets\Scripts\GhostBehavior.cs" />
+    <Compile Include="Assets\Scripts\RNG.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
