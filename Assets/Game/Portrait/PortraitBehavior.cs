@@ -57,20 +57,20 @@ public class PortraitBehavior : ExtendedMonoBehavior
     {
     }
 
-    public void Set(Sprite sprite)
-    {
-        this.sprite = sprite;
-        this.spriteRenderer.flipX = RNG.RandomBoolean();
-        this.Show();
-    }
+    //public void Set(Sprite sprite)
+    //{
+    //    this.sprite = sprite;
+    //    this.spriteRenderer.flipX = RNG.RandomBoolean();
+    //    this.Show();
+    //}
 
 
     public void Set(Sprite sprite, int sortingOrder)
     {
         this.sprite = sprite;
         this.sortingOrder = sortingOrder;
-        this.transform.position = new Vector3(3, -4, 1);
-        this.transform.localScale = new Vector3(tileSize * 2, tileSize * 2, 1);
+        this.transform.position = new Vector3(0, -4.5f, 1);
+        this.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         this.Show();
     }
 

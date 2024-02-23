@@ -60,7 +60,6 @@
     <Compile Include="Assets\Game\DamageText\DamageTextBehavior.cs" />
     <Compile Include="Assets\Extensions.cs" />
     <Compile Include="Assets\Game\CameraManager.cs" />
-    <Compile Include="Assets\Game\SpriteManager.cs" />
     <Compile Include="Assets\Game\SupportLine\SupportLineBehavior.cs" />
     <Compile Include="Assets\Game\ResourceManager.cs" />
     <Compile Include="Assets\Game\BoardManager.cs" />
@@ -90,6 +89,7 @@
     <Compile Include="Assets\Game\Timer\TimerBehavior.cs" />
     <Compile Include="Assets\Game\InputManager.cs" />
     <Compile Include="Assets\Game\Board\BoardBehavior.cs" />
+    <Compile Include="Assets\Game\PortraitManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

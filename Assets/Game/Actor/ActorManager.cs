@@ -193,14 +193,13 @@ public class ActorManager : ExtendedMonoBehavior
         //Select actor
         selectedPlayer = actor;
         selectedPlayer.sortingOrder = 10;
-        //selectedPlayer.trailRenderer.enabled = true;
         selectedPlayer.render.thumbnail.color = Colors.Solid.Gold;
 
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
         //Add art related to selected player
-        //resourceManager.Add(selectedPlayer);
+        portraitManager.Add(selectedPlayer);
         StartCoroutine(SpawnGhost());
 
         timer.Set(scale: 1f, start: true);
@@ -218,13 +217,12 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
         selectedPlayer.render.thumbnail.color = Colors.Solid.White;
         selectedPlayer.sortingOrder = 1;
-        //selectedPlayer.trailRenderer.enabled = false;
-
+      
         //Reset tiles
         tiles.ForEach(x => x.spriteRenderer.color = Colors.Transparent.White);
 
 
-        //artManager.Hide();
+        portraitManager.Hide();
 
         //Determine if two actors occupy same location
         selectedPlayer.CheckLocation();
@@ -245,15 +243,15 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var attackers in battle.attackingPairs)
         {
-            //artManager.Add(attackers.actor1);
+            portraitManager.Add(attackers.actor1);
             yield return new WaitForSeconds(0.25f); // update interval
-            //artManager.Add(attackers.actor2);
+            portraitManager.Add(attackers.actor2);
             yield return new WaitForSeconds(0.25f); // update interval
         }
 
         foreach (var supporter in battle.supports)
         {
-            //artManager.Add(supporter);
+            portraitManager.Add(supporter);
             yield return new WaitForSeconds(0.25f); // update interval
         }
 

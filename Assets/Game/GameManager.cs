@@ -11,13 +11,13 @@ public class GameManager : Singleton<GameManager>
     public int vSyncCount = 0;
 
     //Managers
-    public SpriteManager spriteManager;
+    public ResourceManager resourceManager;
     public InputManager inputManager;
     public ActorManager actorManager;
     public SupportLineManager supportLineManager;
     public DamageTextManager damageTextManager;
-    public ResourceManager resourceManager;
     public GhostManager ghostManager;
+    public PortraitManager portraitManager;
 
     //Scale
     public Vector2 screenSize;
@@ -73,14 +73,14 @@ public class GameManager : Singleton<GameManager>
 
         canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>();
         canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>();
-   
-        spriteManager = GameObject.Find(Constants.Game).GetComponent<SpriteManager>();
+
+        resourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>();
         inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
         supportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>();
         damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
-        resourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>();
         ghostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>();
+        portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();
 
         battle = new BattleParticipants();
 
