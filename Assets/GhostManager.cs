@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GhostManager : ExtendedMonoBehavior
@@ -25,9 +26,16 @@ public class GhostManager : ExtendedMonoBehavior
 
         prefab = Instantiate(ghostPrefab, Vector2.zero, Quaternion.identity);
         ghost = prefab.GetComponent<GhostBehavior>();
-        ghost.sprite = actor.thumbnail;
+        ghost.thumbnail = actor.thumbnail;
         ghost.name = $"Ghost_{Guid.NewGuid()}";
         ghost.parent = board.transform;
         ghost.Set(actor);
     }
+
+    public void Clear()
+    {
+        var gameObjects = GameObject.FindGameObjectsWithTag(Tag.Ghost).ToList();
+        gameObjects.ForEach(x => Destroy(x));
+    }
+
 }

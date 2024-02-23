@@ -5,7 +5,11 @@ using UnityEngine;
 public class GhostBehavior : MonoBehaviour
 {
 
+    //Constants
+    const int Thumbnail = 0;
+    const int Frame = 1;
 
+    //Variables
     public float duration = 3f;
 
     #region Components
@@ -22,19 +26,23 @@ public class GhostBehavior : MonoBehaviour
         set => gameObject.transform.position = value;
     }
 
-    public SpriteRenderer spriteRenderer;
 
-    public Sprite sprite
+    public GhostRenderers renderers = new GhostRenderers();
+
+
+    public Sprite thumbnail
     {
-        get => spriteRenderer.sprite;
-        set => spriteRenderer.sprite = value;
+        get => renderers.thumbnail.sprite;
+        set => renderers.thumbnail.sprite = value;
     }
 
+ 
     public int sortingOrder
     {
         set
         {
-            spriteRenderer.sortingOrder = value;
+            renderers.thumbnail.sortingOrder = value;
+            renderers.frame.sortingOrder = value + 1;
         }
     }
 
@@ -43,7 +51,8 @@ public class GhostBehavior : MonoBehaviour
 
     public void Set(ActorBehavior actor)
     {
-        this.spriteRenderer.color = Common.ColorRGBA(255, 255, 255, 100);
+        this.renderers.thumbnail.color = Common.ColorRGBA(255, 255, 255, 100);
+        this.renderers.frame.color = Common.ColorRGBA(255, 255, 255, 100);
         this.position = actor.position;
         StartCoroutine(FadeOut());
     }
@@ -52,7 +61,8 @@ public class GhostBehavior : MonoBehaviour
 
     private void Awake()
     {
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        renderers.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
+        renderers.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
     }
 
     // Start is called before the first frame update
@@ -74,15 +84,17 @@ public class GhostBehavior : MonoBehaviour
 
     private IEnumerator FadeOut()
     {
-        float alpha = spriteRenderer.color.a;
-        Color color = spriteRenderer.color;
+        float alpha = renderers.thumbnail.color.a;
+        Color color = renderers.thumbnail.color;
 
-        while (spriteRenderer.color.a > 0)
+        while (alpha > 0)
         {
             alpha -= 0.05f;
             alpha = Mathf.Max(alpha, 0f);
             color.a = alpha;
-            spriteRenderer.color = color;
+            renderers.thumbnail.color = color;
+            renderers.frame.color = color;
+
             yield return new WaitForSeconds(0.05f); // update interval
         }
 

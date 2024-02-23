@@ -46,7 +46,6 @@ public class ActorManager : ExtendedMonoBehavior
     {
         StopCoroutine(SpawnArt());
 
-
         //Reset actors
         actors.ForEach(x => x.renderers.thumbnail.color = Colors.Solid.White);
 
@@ -223,12 +222,13 @@ public class ActorManager : ExtendedMonoBehavior
       
         //Reset tiles
         tiles.ForEach(x => x.spriteRenderer.color = Colors.Transparent.White);
-
+        ghostManager.Clear();
 
         portraitManager.Hide();
 
         //Determine if two actors occupy same location
         selectedPlayer.CheckLocation();
+
 
         //Clear selected player
         selectedPlayer = null;

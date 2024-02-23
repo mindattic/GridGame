@@ -90,6 +90,16 @@ public class ActorRenderers
     public SpriteRenderer healthBar;
 }
 
+
+
+public class GhostRenderers
+{
+    public GhostRenderers() { }
+
+    public SpriteRenderer thumbnail;
+    public SpriteRenderer frame;
+}
+
 public class BattleParticipants
 {
     public HashSet<ActorPair> alignedPairs = new HashSet<ActorPair>();
