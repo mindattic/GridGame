@@ -870,9 +870,6 @@
     <Reference Include="Unity.InternalAPIEditorBridge.001">
       <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Subsystem.Registration">
-      <HintPath>Library\ScriptAssemblies\Unity.Subsystem.Registration.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.AdaptivePerformance.UI.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.AdaptivePerformance.UI.Editor.dll</HintPath>
     </Reference>
@@ -929,6 +926,15 @@
     </Reference>
     <Reference Include="Unity.SysrootPackage.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.SysrootPackage.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.AdaptivePerformance.Samsung.Android.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.AdaptivePerformance.Samsung.Android.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.AdaptivePerformance.Simulator.VRR.Extension">
+      <HintPath>Library\ScriptAssemblies\Unity.AdaptivePerformance.Simulator.VRR.Extension.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.AdaptivePerformance.Samsung.Android">
+      <HintPath>Library\ScriptAssemblies\Unity.AdaptivePerformance.Samsung.Android.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
