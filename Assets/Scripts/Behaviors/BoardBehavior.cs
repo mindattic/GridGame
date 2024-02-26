@@ -39,6 +39,10 @@ public class BoardBehavior : ExtendedMonoBehavior
     {
         selectedPlayer = null;
 
+        turnManager.Reset();
+
+
+
         int i = 0;
         var randomLocation = Common.RandomLocations();     
         actors.ForEach(x => x.Init(randomLocation[i++]));

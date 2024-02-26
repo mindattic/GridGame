@@ -56,47 +56,49 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Utilities\Geometry.cs" />
+    <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\DamageTextBehavior.cs" />
+    <Compile Include="Assets\Scripts\Utilities\Extensions.cs" />
     <Compile Include="Assets\Scripts\Managers\CameraManager.cs" />
+    <Compile Include="Assets\Scripts\Models\ActorSprite.cs" />
+    <Compile Include="Assets\Scripts\Models\Enums.cs" />
+    <Compile Include="Assets\Scripts\Models\PortraitTransitionSettings.cs" />
     <Compile Include="Assets\Scripts\Behaviors\SupportLineBehavior.cs" />
+    <Compile Include="Assets\Scripts\Models\ActorRenderers.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Managers\BoardManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\PortraitBehavior.cs" />
+    <Compile Include="Assets\Scripts\Utilities\Common.cs" />
     <Compile Include="Assets\Scripts\Behaviors\ActorBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\TurnManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\TileBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\DamageTextManager.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\ExtendedMonoBehavior.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\GhostBehavior.cs" />
+    <Compile Include="Assets\Scripts\Models\ActorPair.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Managers\ConsoleManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\FpsMonitor.cs" />
     <Compile Include="Assets\Scripts\Managers\PortraitManager.cs" />
     <Compile Include="Assets\Scripts\Managers\SupportLineManager.cs" />
     <Compile Include="Assets\Scripts\Managers\PointerManager.cs" />
+    <Compile Include="Assets\Scripts\Models\Destination.cs" />
+    <Compile Include="Assets\Scripts\Utilities\Constants.cs" />
+    <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
     <Compile Include="Assets\Scripts\Managers\WallManager.cs" />
+    <Compile Include="Assets\Scripts\Models\BattleParticipants.cs" />
     <Compile Include="Assets\Scripts\Managers\ActorManager.cs" />
+    <Compile Include="Assets\Scripts\Models\GhostRenderers.cs" />
     <Compile Include="Assets\Scripts\Behaviors\TimerBehavior.cs" />
+    <Compile Include="Assets\Scripts\Utilities\RNG.cs" />
     <Compile Include="Assets\Scripts\Managers\InputManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\BoardBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\Singleton.cs" />
-    <Compile Include="Assets\Scripts\Utilities\Constants.cs" />
-    <Compile Include="Assets\Scripts\Models\Enums.cs" />
-    <Compile Include="Assets\Scripts\Utilities\Common.cs" />
-    <Compile Include="Assets\Scripts\Utilities\Geometry.cs" />
-    <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
-    <Compile Include="Assets\Scripts\Models\ActorSprite.cs" />
-    <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
-    <Compile Include="Assets\Scripts\Behaviors\ExtendedMonoBehavior.cs" />
-    <Compile Include="Assets\Scripts\Behaviors\GhostBehavior.cs" />
-    <Compile Include="Assets\Scripts\Utilities\RNG.cs" />
-    <Compile Include="Assets\Scripts\Models\Destination.cs" />
     <Compile Include="Assets\Scripts\Models\ActorOptions.cs" />
-    <Compile Include="Assets\Scripts\Models\ActorPair.cs" />
-    <Compile Include="Assets\Scripts\Models\ActorRenderers.cs" />
-    <Compile Include="Assets\Scripts\Models\GhostRenderers.cs" />
-    <Compile Include="Assets\Scripts\Models\BattleParticipants.cs" />
-    <Compile Include="Assets\Scripts\Models\PortraitTransitionSettings.cs" />
-    <Compile Include="Assets\Scripts\Managers\AnnouncementManager.cs" />
-    <Compile Include="Assets\Scripts\Utilities\Extensions.cs" />
+    <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\OverlayManager.cs" />
+    <Compile Include="Assets\Scripts\Utilities\Wait.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -782,6 +784,9 @@
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.AdaptivePerformance.Samsung.Android.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.AdaptivePerformance.Samsung.Android.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualScripting.State.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
     </Reference>
@@ -920,23 +925,20 @@
     <Reference Include="Unity.AdaptivePerformance.Profiler.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.AdaptivePerformance.Profiler.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.AdaptivePerformance.Simulator.VRR.Extension">
+      <HintPath>Library\ScriptAssemblies\Unity.AdaptivePerformance.Simulator.VRR.Extension.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.SpriteShape.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.SpriteShape.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.SysrootPackage.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.SysrootPackage.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AdaptivePerformance.Samsung.Android.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.AdaptivePerformance.Samsung.Android.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AdaptivePerformance.Simulator.VRR.Extension">
-      <HintPath>Library\ScriptAssemblies\Unity.AdaptivePerformance.Simulator.VRR.Extension.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.AdaptivePerformance.Samsung.Android">
       <HintPath>Library\ScriptAssemblies\Unity.AdaptivePerformance.Samsung.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.SysrootPackage.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.SysrootPackage.Editor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

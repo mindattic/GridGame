@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -119,7 +120,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             GoEast();
     }
 
-    public void SetDestination(ActorBehavior other)
+    public void SwapLocation(ActorBehavior other)
     {
         if (other == null)
             return;
@@ -161,7 +162,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
+    public void SetDestination(List<Vector2Int> locations)
+    {
 
+    }
 
 
     #endregion
@@ -208,17 +212,17 @@ public class ActorBehavior : ExtendedMonoBehavior
         else
         {
             //Determine if two actors occupy same location
-            this.CheckLocation();
+            this.CheckLocationConflict();
         }
     }
 
-    public void CheckLocation()
+    public void CheckLocationConflict()
     {
-        var other = actors.FirstOrDefault(x => !this.Equals(x) && this.location.Equals(x.location) && x.IsAlive);
+        var other = actors.FirstOrDefault(x => x.IsAlive && !this.Equals(x) && this.location.Equals(x.location));
         if (other == null)
             return;
 
-        this.SetDestination(other);
+        this.SwapLocation(other);
     }
 
     void FixedUpdate()

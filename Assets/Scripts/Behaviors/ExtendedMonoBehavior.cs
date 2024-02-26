@@ -22,10 +22,11 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
     protected GhostManager ghostManager => GameManager.instance.ghostManager;
     protected PortraitManager portraitManager => GameManager.instance.portraitManager;
-    protected AnnouncementManager announcementManager => GameManager.instance.announcementManager;
+    protected OverlayManager overlayManager => GameManager.instance.overlayManager;
+    protected TitleManager titleManager => GameManager.instance.titleManager;
 
 
-   
+
 
     //Behaviors
     protected BoardBehavior board => GameManager.instance.board;

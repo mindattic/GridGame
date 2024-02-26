@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using UnityEngine;
 
 public static class Extensions
 {
@@ -15,6 +13,13 @@ public static class Extensions
     }
 
 
+    public static IEnumerator WaitAll(this ExtendedMonoBehavior monoBehaviour, params IEnumerator[] coroutines)
+    {
+        return new WaitAll(monoBehaviour, coroutines);
+    }
 
+    public static IEnumerator WaitAny(this ExtendedMonoBehavior monoBehaviour, params IEnumerator[] coroutines)
+    {
+        return new WaitAny(monoBehaviour, coroutines);
+    }
 }
-

@@ -19,7 +19,8 @@ public class GameManager : Singleton<GameManager>
     public DamageTextManager damageTextManager;
     public GhostManager ghostManager;
     public PortraitManager portraitManager;
-    public AnnouncementManager announcementManager;
+    public OverlayManager overlayManager;
+    public TitleManager titleManager;
 
     //Scale
     public Vector2 screenSize;
@@ -85,8 +86,10 @@ public class GameManager : Singleton<GameManager>
         damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
         ghostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>();
         portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();
-        //announcementManager = GameObject.Find("Announcement").GetComponent<AnnouncementManager>();
 
+
+        overlayManager = GameObject.Find("Overlay").GetComponent<OverlayManager>();
+        titleManager = GameObject.Find("Title").GetComponent<TitleManager>();
 
         battle = new BattleParticipants();
 
@@ -138,5 +141,12 @@ public class GameManager : Singleton<GameManager>
     {
 
     }
+
+    void FixedUpdate()
+    {
+
+    }
+
+
 
 }

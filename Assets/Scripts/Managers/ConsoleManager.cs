@@ -36,31 +36,31 @@ public class ConsoleManager : ExtendedMonoBehavior
         string attackers = battle.attackers.Any() ? $"[{string.Join(",", battle.attackers.Select(x => x.id))}]" : "-";
         string supports = battle.supporters.Any() ? $"[{string.Join(",", battle.supporters.Select(x => x.id))}]" : "-";
         string defenders = battle.defenders.Any() ? $"[{string.Join(",", battle.defenders.Select(x => x.id))}]" : "-";
-        //string currentTeam = turnManager?.currentTeam ? turnManager.currentTeam.ToString();
-        //string currentPhase = turnManager.currentPhase.ToString();
+        string currentTeam = turnManager != null ? turnManager.activeTeam.ToString() : "-";
+        string currentPhase = turnManager != null ? turnManager.phase.ToString() : "-";
 
 
         console.text = ""
-        //    + $@"  Runtime: {Time.time}"
-        //    + $@"{Environment.NewLine}"
-        //    + $@"      FPS: {fps}"
-        //    + $@"{Environment.NewLine}"
-        //    + $@" Selected: {name}"
-        //    + $@"{Environment.NewLine}"
-        //    + $@" Location: {location}"
-        //    + $@"{Environment.NewLine}"
-        //    + $@"    Mouse: {mouse2D}"
-        //    + $@"{Environment.NewLine}"
-        //    + $@"Attackers: {attackers}"
-        //    + $@"{Environment.NewLine}"
-        //    + $@" Supports: {supporters}"
-        //    + $@"{Environment.NewLine}"
-        //    + $@"Defenders: {defenders}"
-            + $@"";
-              //+ $@"      Turn: {currentTeam}"
-              //+ $@"{Environment.NewLine}"
-              //+ $@"      Phase: {currentPhase}"
-              //+ $@"{Environment.NewLine}";
+              //    + $@"  Runtime: {Time.time}"
+              //    + $@"{Environment.NewLine}"
+              //    + $@"      FPS: {fps}"
+              //    + $@"{Environment.NewLine}"
+              //    + $@" Selected: {name}"
+              //    + $@"{Environment.NewLine}"
+              //    + $@" Location: {location}"
+              //    + $@"{Environment.NewLine}"
+              //    + $@"    Mouse: {mouse2D}"
+              //    + $@"{Environment.NewLine}"
+              //    + $@"Attackers: {attackers}"
+              //    + $@"{Environment.NewLine}"
+              //    + $@" Supports: {supporters}"
+              //    + $@"{Environment.NewLine}"
+              //    + $@"Defenders: {defenders}"
+              //+ $@"";
+              + $@"      Turn: {currentTeam}"
+              + $@"{Environment.NewLine}"
+              + $@"      Phase: {currentPhase}"
+              + $@"{Environment.NewLine}";
 
 
     }

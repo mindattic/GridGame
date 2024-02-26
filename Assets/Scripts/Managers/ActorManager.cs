@@ -6,8 +6,6 @@ using UnityEngine;
 public class ActorManager : ExtendedMonoBehavior
 {
 
-
-
     private void Awake()
     {
 
@@ -20,49 +18,59 @@ public class ActorManager : ExtendedMonoBehavior
 
     void Update()
     {
-        //if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase)
-        //    return;
+        CheckPlayerMove();
+        CheckEnemyMove();
+    }
 
-        if (!HasSelectedPlayer)
+    private void CheckPlayerMove()
+    {
+        if (!turnManager.IsPlayerActive || !turnManager.IsMovePhase || !HasSelectedPlayer)
             return;
 
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
         if (closestTile.location.Equals(selectedPlayer.location))
             return;
 
-        var actor = actors.FirstOrDefault(x => !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
+        //Determine if selected player and another actor are occupying the same tile
+        var actor = actors.FirstOrDefault(x => x.IsAlive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
         if (actor != null)
         {
-            //Assign intended movement
-            actor.SetDestination(selectedPlayer);
+            actor.SwapLocation(selectedPlayer);
         }
 
         selectedPlayer.location = closestTile.location;
         selectedPlayer.currentTile.spriteRenderer.color = Colors.Solid.Gold;
     }
 
-    private void ResetBattle()
+    private void CheckEnemyMove()
     {
-        StopCoroutine(StartBattle());
+        if (!turnManager.IsEnemyActive || !turnManager.IsStartPhase)
+            return;
 
-        //Reset actors
-        actors.ForEach(x => x.renderers.thumbnail.color = Colors.Solid.White);
+        StartCoroutine(EnemyMove());
+    }
 
-        //Reset tiles
+    IEnumerator EnemyMove()
+    {
+        turnManager.phase = TurnPhase.Move;
 
-        //Reset supportLines
-        supportLineManager.Clear();
+        overlayManager.color = new Color(1f, 0f, 0f, 0.5f);
+        titleManager.text = "Enemy Turn";
 
-        //Reset battle
-        battle.Reset();
+        yield return new WaitForSeconds(3f);
+
+        overlayManager.color = new Color(0f, 0f, 0f, 0f);
+        titleManager.text = "";
+
+        turnManager.NextTurn();
     }
 
     private void CalculateBattle()
     {
-        ResetBattle();
-
-        if (HasSelectedPlayer)
-            return;
+        //Reset objects
+        actors.ForEach(x => x.renderers.thumbnail.color = Colors.Solid.White);
+        supportLineManager.Clear();
+        battle.Reset();
 
         //Find actors that share a column or row
 
@@ -163,11 +171,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     public void PickupPlayer()
     {
-        //if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase)
-        //    return;
-
-        //Only pickup player if no player is selected
-        if (HasSelectedPlayer)
+        if (!turnManager.IsPlayerActive || !turnManager.IsMovePhase || HasSelectedPlayer)
             return;
 
         //Collect collision data
@@ -192,8 +196,6 @@ public class ActorManager : ExtendedMonoBehavior
         if (actor.team != Team.Player)
             return;
 
-        ResetBattle();
-
         //Select actor
         selectedPlayer = actor;
         selectedPlayer.sortingOrder = 10;
@@ -213,12 +215,10 @@ public class ActorManager : ExtendedMonoBehavior
 
     public void DropPlayer()
     {
-        //if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase)
-        //    return;
-
-        //Only drop player if has selected player
-        if (!HasSelectedPlayer)
+        if (!turnManager.IsPlayerActive || !turnManager.IsMovePhase || !HasSelectedPlayer)
             return;
+
+        turnManager.phase = TurnPhase.Attack;
 
         //Assign location and position
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
@@ -235,22 +235,18 @@ public class ActorManager : ExtendedMonoBehavior
         //portraitManager.Play(selectedPlayer, PortraitTransitionState.FadeOut);
 
         //Determine if two actors occupy same location
-        selectedPlayer.CheckLocation();
+        selectedPlayer.CheckLocationConflict();
 
         //Clear selected player
         selectedPlayer = null;
 
         CalculateBattle();
-
-        timer.Set(scale: 1f, start: false);
     }
 
 
 
     private IEnumerator StartBattle()
     {
-        //turnManager.currentPhase = TurnPhase.Attack;
-
         Vector3 enlarged = new Vector3(tileSize * 1.25f, tileSize * 1.25f, 1);
 
         foreach (var attackers in battle.attackingPairs)
@@ -288,13 +284,24 @@ public class ActorManager : ExtendedMonoBehavior
             x.scale = tileScale;
         });
 
+        timer.Set(scale: 1f, start: false);
+
+        yield return new WaitForSeconds(1f);
+
+
+        //Reset objects
+        actors.ForEach(x => x.renderers.thumbnail.color = Colors.Solid.White);
+        supportLineManager.Clear();
+        battle.Reset();
+
+        turnManager.activeTeam = Team.Enemy;
+        turnManager.phase = TurnPhase.Start;
     }
 
 
-    [SerializeField] public GameObject ghostPrefab;
 
 
-    
+
 
 
 
