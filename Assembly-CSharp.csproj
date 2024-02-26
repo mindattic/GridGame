@@ -95,6 +95,8 @@
     <Compile Include="Assets\Scripts\Models\GhostRenderers.cs" />
     <Compile Include="Assets\Scripts\Models\BattleParticipants.cs" />
     <Compile Include="Assets\Scripts\Models\PortraitTransitionSettings.cs" />
+    <Compile Include="Assets\Scripts\Managers\AnnouncementManager.cs" />
+    <Compile Include="Assets\Scripts\Utilities\Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

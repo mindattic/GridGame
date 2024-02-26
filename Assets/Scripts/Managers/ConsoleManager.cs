@@ -1,12 +1,9 @@
 using System;
 using System.Linq;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class ConsoleManager : ExtendedMonoBehavior
 {
-    [SerializeField] private Canvas canvas;
-
     private Text console;
     private FpsMonitor fpsMonitor = new FpsMonitor();
 
@@ -39,9 +36,11 @@ public class ConsoleManager : ExtendedMonoBehavior
         string attackers = battle.attackers.Any() ? $"[{string.Join(",", battle.attackers.Select(x => x.id))}]" : "-";
         string supports = battle.supporters.Any() ? $"[{string.Join(",", battle.supporters.Select(x => x.id))}]" : "-";
         string defenders = battle.defenders.Any() ? $"[{string.Join(",", battle.defenders.Select(x => x.id))}]" : "-";
+        //string currentTeam = turnManager?.currentTeam ? turnManager.currentTeam.ToString();
+        //string currentPhase = turnManager.currentPhase.ToString();
 
-        
-        //console.text = ""
+
+        console.text = ""
         //    + $@"  Runtime: {Time.time}"
         //    + $@"{Environment.NewLine}"
         //    + $@"      FPS: {fps}"
@@ -57,6 +56,12 @@ public class ConsoleManager : ExtendedMonoBehavior
         //    + $@" Supports: {supporters}"
         //    + $@"{Environment.NewLine}"
         //    + $@"Defenders: {defenders}"
-        //    + $@"";
+            + $@"";
+              //+ $@"      Turn: {currentTeam}"
+              //+ $@"{Environment.NewLine}"
+              //+ $@"      Phase: {currentPhase}"
+              //+ $@"{Environment.NewLine}";
+
+
     }
 }

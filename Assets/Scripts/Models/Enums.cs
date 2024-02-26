@@ -31,10 +31,9 @@ public enum Axis
 
 public enum TurnPhase
 {
-    None,
+    Start,
     Move,
     Attack,
-    Support,
     End
 }
 

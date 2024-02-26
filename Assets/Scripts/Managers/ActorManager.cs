@@ -20,6 +20,9 @@ public class ActorManager : ExtendedMonoBehavior
 
     void Update()
     {
+        //if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase)
+        //    return;
+
         if (!HasSelectedPlayer)
             return;
 
@@ -160,6 +163,9 @@ public class ActorManager : ExtendedMonoBehavior
 
     public void PickupPlayer()
     {
+        //if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase)
+        //    return;
+
         //Only pickup player if no player is selected
         if (HasSelectedPlayer)
             return;
@@ -207,6 +213,9 @@ public class ActorManager : ExtendedMonoBehavior
 
     public void DropPlayer()
     {
+        //if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase)
+        //    return;
+
         //Only drop player if has selected player
         if (!HasSelectedPlayer)
             return;
@@ -240,6 +249,8 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator StartBattle()
     {
+        //turnManager.currentPhase = TurnPhase.Attack;
+
         Vector3 enlarged = new Vector3(tileSize * 1.25f, tileSize * 1.25f, 1);
 
         foreach (var attackers in battle.attackingPairs)
