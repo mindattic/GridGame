@@ -28,13 +28,13 @@ public class GhostBehavior : MonoBehaviour
     }
 
 
-    public GhostRenderers renderers = new GhostRenderers();
+    public GhostRenderers sprite = new GhostRenderers();
 
 
     public Sprite thumbnail
     {
-        get => renderers.thumbnail.sprite;
-        set => renderers.thumbnail.sprite = value;
+        get => sprite.thumbnail.sprite;
+        set => sprite.thumbnail.sprite = value;
     }
 
  
@@ -42,8 +42,8 @@ public class GhostBehavior : MonoBehaviour
     {
         set
         {
-            renderers.thumbnail.sortingOrder = value;
-            renderers.frame.sortingOrder = value + 1;
+            sprite.thumbnail.sortingOrder = value;
+            sprite.frame.sortingOrder = value + 1;
         }
     }
 
@@ -52,8 +52,8 @@ public class GhostBehavior : MonoBehaviour
 
     public void Set(ActorBehavior actor)
     {
-        this.renderers.thumbnail.color = Common.ColorRGBA(255, 255, 255, 100);
-        this.renderers.frame.color = Common.ColorRGBA(255, 255, 255, 100);
+        this.sprite.thumbnail.color = Common.ColorRGBA(255, 255, 255, 100);
+        this.sprite.frame.color = Common.ColorRGBA(255, 255, 255, 100);
         this.position = actor.position;
         StartCoroutine(FadeOut());
     }
@@ -62,8 +62,8 @@ public class GhostBehavior : MonoBehaviour
 
     private void Awake()
     {
-        renderers.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
-        renderers.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
+        sprite.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
+        sprite.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
     }
 
     // Start is called before the first frame update
@@ -85,18 +85,18 @@ public class GhostBehavior : MonoBehaviour
 
     private IEnumerator FadeOut()
     {
-        float alpha = renderers.thumbnail.color.a;
-        Color color = renderers.thumbnail.color;
+        float alpha = sprite.thumbnail.color.a;
+        Color color = sprite.thumbnail.color;
 
         while (alpha > 0)
         {
-            alpha -= 0.05f;
+            alpha -= Increment.Five;
             alpha = Mathf.Max(alpha, 0f);
             color.a = alpha;
-            renderers.thumbnail.color = color;
-            renderers.frame.color = color;
+            sprite.thumbnail.color = color;
+            sprite.frame.color = color;
 
-            yield return new WaitForSeconds(0.05f); // update interval
+            yield return new WaitForSeconds(Interval.Five);
         }
 
         Destroy(this.gameObject);

@@ -62,7 +62,7 @@ public class TileBehavior : ExtendedMonoBehavior
         }
         else
         {
-            spriteRenderer.color = Colors.Transparent.White;
+            spriteRenderer.color = Colors.Translucent.White;
         }
     }
 

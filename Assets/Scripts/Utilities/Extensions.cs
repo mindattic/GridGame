@@ -3,7 +3,7 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
-public static class Extensions
+public static class EnumExtensions
 {
     public static T Next<T>(this T src) where T : struct
     {
@@ -11,7 +11,14 @@ public static class Extensions
         int index = Array.IndexOf<T>(values, src) + 1;
         return (values.Length == index) ? values[0] : values[index];
     }
+}
 
+public static class IEnumeratorExtensions
+{
+    public static IEnumerator WaitUntil(this ExtendedMonoBehavior monoBehaviour, IEnumerator coroutine)
+    {
+        return new WaitAll(monoBehaviour, coroutine);
+    }
 
     public static IEnumerator WaitAll(this ExtendedMonoBehavior monoBehaviour, params IEnumerator[] coroutines)
     {

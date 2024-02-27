@@ -6,8 +6,8 @@ public class OverlayManager : ExtendedMonoBehavior
 {
 
     //Variables
-    private float maxAlpha = 0.5f;
     private Image image;
+    const float MaxAlpha = 0.5f;
 
     #region Components
 
@@ -16,7 +16,6 @@ public class OverlayManager : ExtendedMonoBehavior
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
-
 
     public Color color
     {
@@ -30,49 +29,44 @@ public class OverlayManager : ExtendedMonoBehavior
     {
         image = GameObject.Find("Overlay").GetComponent<Image>();
         image.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+        image.color = new Color(0f, 0f, 0f, 0f);
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        image.color = new Color(0f, 0f, 0f, maxAlpha);
+      
     }
 
-    // Update is called once per frame
     void Update()
     {
 
     }
 
-    public IEnumerator FadeInOut()
+    public IEnumerator FadeIn()
     {
-        var increment = 0.1f;
-        var interval = 0.01f;
-        var cooldown = 3f;
-        var alpha = 0f;
+        float alpha = 0f;
         image.color = new Color(0f, 0f, 0f, alpha);
 
-        while (alpha < maxAlpha)
+        while (alpha < MaxAlpha)
         {
-            alpha += increment;
-            alpha = Mathf.Clamp(alpha, 0f, maxAlpha);
+            alpha += Increment.Five;
+            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
             image.color = new Color(0f, 0f, 0f, alpha);
-            yield return new WaitForSeconds(interval);
-        }
-
-        yield return new WaitForSeconds(cooldown);
-
-        increment = 0.01f;
-        alpha = maxAlpha;
-
-        while (alpha > 0f)
-        {
-            alpha -= increment;
-            alpha = Mathf.Clamp(alpha, 0f, maxAlpha);
-            image.color = new Color(0f, 0f, 0f, alpha);
-
-            yield return new WaitForSeconds(interval);
+            yield return new WaitForSeconds(Interval.One);
         }
     }
 
+    public IEnumerator FadeOut()
+    {
+        float alpha = 1f;
+        image.color = new Color(0f, 0f, 0f, alpha);
+
+        while (alpha > 0f)
+        {
+            alpha -= Increment.One;
+            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
+            image.color = new Color(0f, 0f, 0f, alpha);
+            yield return new WaitForSeconds(Interval.One);
+        }
+    }
 }

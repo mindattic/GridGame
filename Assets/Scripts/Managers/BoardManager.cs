@@ -78,6 +78,7 @@ public class BoardManager : ExtendedMonoBehavior
             actor.parent = board.transform;
             actor.location = init.location;
             actor.team = init.team;
+            _ = actor.team == Team.Enemy ? Colors.Solid.Red : Colors.Solid.White;
         }
 
         //Assign actors list

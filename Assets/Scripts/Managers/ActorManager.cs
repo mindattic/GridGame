@@ -67,10 +67,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void CalculateBattle()
     {
-        //Reset objects
-        actors.ForEach(x => x.renderers.thumbnail.color = Colors.Solid.White);
-        supportLineManager.Clear();
-        battle.Reset();
+        ResetBattle();
 
         //Find actors that share a column or row
 
@@ -135,7 +132,7 @@ public class ActorManager : ExtendedMonoBehavior
         {
             foreach (var enemy in attackers.enemies)
             {
-                enemy.renderers.thumbnail.color = Colors.Solid.Red;
+                enemy.sprite.thumbnail.color = Colors.Solid.Red;
                 battle.defenders.Add(enemy);
             }
         }
@@ -199,7 +196,7 @@ public class ActorManager : ExtendedMonoBehavior
         //Select actor
         selectedPlayer = actor;
         selectedPlayer.sortingOrder = 10;
-        selectedPlayer.renderers.frame.color = Colors.Solid.Gold;
+        selectedPlayer.sprite.frame.color = Colors.Solid.Gold;
 
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
@@ -224,11 +221,11 @@ public class ActorManager : ExtendedMonoBehavior
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
-        selectedPlayer.renderers.frame.color = Colors.Solid.White;
+        selectedPlayer.sprite.frame.color = Colors.Solid.White;
         selectedPlayer.sortingOrder = 1;
 
         //Reset tiles
-        tiles.ForEach(x => x.spriteRenderer.color = Colors.Transparent.White);
+        tiles.ForEach(x => x.spriteRenderer.color = Colors.Translucent.White);
         ghostManager.Clear();
 
         //Hide portrait
@@ -245,18 +242,29 @@ public class ActorManager : ExtendedMonoBehavior
 
 
 
+    private void ResetBattle()
+    {
+        foreach (var actor in actors)
+        {
+            if (actor.IsAlive)
+                actor.sprite.thumbnail.color = Colors.Solid.White;
+        }
+        supportLineManager.Clear();
+        battle.Reset();
+    }
+
     private IEnumerator StartBattle()
     {
         Vector3 enlarged = new Vector3(tileSize * 1.25f, tileSize * 1.25f, 1);
 
         foreach (var attackers in battle.attackingPairs)
         {
-            attackers.actor1.renderers.frame.color = Colors.Solid.Red;
+            attackers.actor1.sprite.frame.color = Colors.Solid.Red;
             attackers.actor1.scale = enlarged;
             attackers.actor1.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
 
-            attackers.actor2.renderers.frame.color = Colors.Solid.Red;
+            attackers.actor2.sprite.frame.color = Colors.Solid.Red;
             attackers.actor2.scale = enlarged;
             attackers.actor2.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
@@ -264,7 +272,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var supporter in battle.supporters)
         {
-            supporter.renderers.frame.color = Colors.Solid.Red;
+            supporter.sprite.frame.color = Colors.Solid.Red;
             supporter.scale = enlarged;
             supporter.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
@@ -280,7 +288,7 @@ public class ActorManager : ExtendedMonoBehavior
         players.ForEach(x =>
         {
             x.sortingOrder = 1;
-            x.renderers.frame.color = Colors.Solid.White;
+            x.sprite.frame.color = Colors.Solid.White;
             x.scale = tileScale;
         });
 
@@ -288,11 +296,9 @@ public class ActorManager : ExtendedMonoBehavior
 
         yield return new WaitForSeconds(1f);
 
+        ResetBattle();
 
-        //Reset objects
-        actors.ForEach(x => x.renderers.thumbnail.color = Colors.Solid.White);
-        supportLineManager.Clear();
-        battle.Reset();
+
 
         turnManager.activeTeam = Team.Enemy;
         turnManager.phase = TurnPhase.Start;

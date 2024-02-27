@@ -40,22 +40,22 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.localScale = value;
     }
 
-    public ActorRenderers renderers = new ActorRenderers();
+    public ActorRenderers sprite = new ActorRenderers();
 
     public Sprite thumbnail
     {
-        get => renderers.thumbnail.sprite;
-        set => renderers.thumbnail.sprite = value;
+        get => sprite.thumbnail.sprite;
+        set => sprite.thumbnail.sprite = value;
     }
 
     public int sortingOrder
     {
         set
         {
-            renderers.thumbnail.sortingOrder = value;
-            renderers.frame.sortingOrder = value + 1;
-            renderers.healthBarBack.sortingOrder = value + 2;
-            renderers.healthBar.sortingOrder = value + 3;
+            sprite.thumbnail.sortingOrder = value;
+            sprite.frame.sortingOrder = value + 1;
+            sprite.healthBarBack.sortingOrder = value + 2;
+            sprite.healthBar.sortingOrder = value + 3;
         }
     }
 
@@ -172,10 +172,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
-        renderers.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
-        renderers.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
-        renderers.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
-        renderers.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
+        sprite.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
+        sprite.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
+        sprite.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
+        sprite.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -193,10 +193,10 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.destination = null;
         this.transform.localScale = tileScale;
         //this.transform.GetChild(Thumbnail).transform.localScale = tileScale;
-        this.renderers.thumbnail.color = Colors.Solid.White;
+        this.sprite.thumbnail.color = Colors.Solid.White;
 
         this.HP = MaxHP;
-        this.renderers.healthBar.transform.localScale = renderers.healthBarBack.transform.localScale;
+        this.sprite.healthBar.transform.localScale = sprite.healthBarBack.transform.localScale;
     }
 
 
@@ -214,6 +214,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             //Determine if two actors occupy same location
             this.CheckLocationConflict();
         }
+
+
     }
 
     public void CheckLocationConflict()
@@ -282,8 +284,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private IEnumerator TakeDamage()
     {
-        var y = renderers.healthBarBack.transform.localScale.y;
-        var z = renderers.healthBarBack.transform.localScale.z;
+        var y = sprite.healthBarBack.transform.localScale.y;
+        var z = sprite.healthBarBack.transform.localScale.z;
         var remainingHP = HP - damageTaken;
 
         while (HP > remainingHP)
@@ -298,15 +300,15 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             position += new Vector3(RNG.RandomRange(tileSize / 12), RNG.RandomRange(tileSize / 12), 1);
             damageTextManager.Add(damage.ToString(), position);
-            var x = renderers.healthBarBack.transform.localScale.x * (HP / MaxHP);
-            renderers.healthBar.transform.localScale = new Vector3(x, y, z);
+            var x = sprite.healthBarBack.transform.localScale.x * (HP / MaxHP);
+            sprite.healthBar.transform.localScale = new Vector3(x, y, z);
             yield return new WaitForSeconds(0.05f);
         }
         damageTaken = 0;
         position = currentTile.position;
 
         yield return new WaitForSeconds(1);
-        renderers.thumbnail.color = Colors.Solid.White;
+        sprite.thumbnail.color = Colors.Solid.White;
 
         //Deactive enemy if killed
         if (HP < 1)
@@ -329,10 +331,10 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha -= 0.05f;
             alpha = Mathf.Clamp(alpha, 0, 1);
             var color = new Color(1, 1, 1, alpha); 
-            this.renderers.thumbnail.color = color;
-            this.renderers.frame.color = color;
-            this.renderers.healthBarBack.color = color;
-            this.renderers.healthBar.color = color;
+            this.sprite.thumbnail.color = color;
+            this.sprite.frame.color = color;
+            this.sprite.healthBarBack.color = color;
+            this.sprite.healthBar.color = color;
             yield return new WaitForSeconds(0.01f);
         }
         this.gameObject.SetActive(false);

@@ -45,8 +45,22 @@ public class TurnManager : ExtendedMonoBehavior
 
     IEnumerator FadeInOut()
     {
+        foreach(var actor in actors)
+        {
+            if (actor.IsAlive)
+                actor.sprite.thumbnail.color = Colors.Solid.Gray;
+        }
 
-        yield return this.WaitAll(overlayManager.FadeInOut(), titleManager.FadeInOut());
+        yield return this.WaitUntil(overlayManager.FadeIn());
+        yield return this.WaitUntil(titleManager.FadeIn());
+        yield return new WaitForSeconds(2f);
+        yield return this.WaitAll(overlayManager.FadeOut(), titleManager.FadeOut());
+
+        foreach (var actor in actors)
+        {
+            if (actor.IsAlive)
+                actor.sprite.thumbnail.color = Colors.Solid.White;
+        }
 
         turnManager.phase = Phase.Move;
     }

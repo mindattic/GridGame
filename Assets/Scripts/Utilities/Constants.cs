@@ -55,9 +55,10 @@ public static class Colors
         public static Color LightRed = Common.ColorRGBA(255, 128, 128);
         public static Color Red = Common.ColorRGBA(255, 0, 0);
         public static Color Green = Common.ColorRGBA(0, 255, 0);
+        public static Color Gray = new Color(0.5f, 0.5f, 0.5f);
     }
 
-    public static class Transparent
+    public static class Translucent
     {
         public static Color Gold = Common.ColorRGBA(255, 215, 0, 100);
         public static Color White = Common.ColorRGBA(255, 255, 255, 100);
@@ -67,4 +68,22 @@ public static class Colors
         public static Color Green = Common.ColorRGBA(0, 255, 0, 100);
     }
 
+
+
+}
+
+public static class Interval
+{
+    public static float One = 0.01f;
+    public static float Two = 0.02f;
+    public static float Five = 0.05f;
+    public static float Ten = 0.1f;
+}
+
+public static class Increment
+{
+    public static float One = 0.01f;
+    public static float Two = 0.02f;
+    public static float Five = 0.05f;
+    public static float Ten = 0.1f;
 }

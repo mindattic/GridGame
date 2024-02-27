@@ -6,6 +6,7 @@ public class TitleManager : ExtendedMonoBehavior
 {
     //Variables
     public Text title;
+    const float MaxAlpha = 1f;
 
     #region Components
 
@@ -28,6 +29,7 @@ public class TitleManager : ExtendedMonoBehavior
     {
         title = GameObject.Find("Title").GetComponent<Text>();
         title.transform.localPosition = new Vector3(0, 0, 0);
+        title.color = new Color(0f, 0f, 0f, 0f);
     }
 
 
@@ -35,7 +37,7 @@ public class TitleManager : ExtendedMonoBehavior
     // Start is called before the first frame update
     void Start()
     {
-
+    
     }
 
     // Update is called once per frame
@@ -43,36 +45,33 @@ public class TitleManager : ExtendedMonoBehavior
     {
 
     }
-  
 
-    public IEnumerator FadeInOut()
-    {
-        var increment = 0.01f;
-        var interval = 0.01f;
-        var cooldown = 1f;
-        var alpha = 0f;
-        title.color = new Color(1f, 1f, 1f, alpha);
+    public IEnumerator FadeIn()
+    {  
+        float alpha = 0f;
+        title.color = new Color(0f, 0f, 0f, alpha);
 
-        while (alpha < 1f)
+        while (alpha < MaxAlpha)
         {
-            alpha += increment;
-            alpha = Mathf.Clamp(alpha, 0f, 1f);
+            alpha += Increment.One;
+            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
             title.color = new Color(1f, 1f, 1f, alpha);
-            yield return new WaitForSeconds(interval);
-        }
-        yield return new WaitForSeconds(cooldown);
-
-        alpha = 1f;
-        title.color = new Color(1f, 1f, 1f, alpha);
-
-        while (alpha > 0f)
-        {
-            alpha -= increment;
-            alpha = Mathf.Clamp(alpha, 0f, 1f);
-            title.color = new Color(1f, 1f, 1f, alpha);
-            yield return new WaitForSeconds(interval);
+            yield return new WaitForSeconds(Interval.One);
         }
     }
 
+    public IEnumerator FadeOut()
+    {
+        float alpha = 1f;
+        title.color = new Color(0f, 0f, 0f, alpha);
+
+        while (alpha > 0f)
+        {
+            alpha -= Increment.One;
+            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
+            title.color = new Color(1f, 1f, 1f, alpha);
+            yield return new WaitForSeconds(Interval.One);
+        }
+    }
 
 }
