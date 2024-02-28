@@ -76,7 +76,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
 
     public bool IsAlive => this.HP > 0 && this.isActiveAndEnabled;
- 
+
     #endregion
 
     #region Methods
@@ -99,7 +99,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private Vector2Int GoRandomDirection()
     {
-        return RNG.RandomInt(1, 4) switch
+        return Random.Int(1, 4) switch
         {
             1 => GoNorth(),
             2 => GoEast(),
@@ -162,9 +162,11 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public void SetDestination(List<Vector2Int> locations)
+    public void SetDestination()
     {
-
+        var location = new Vector2Int(Random.Int(1, board.columns), Random.Int(1, board.rows));
+        var closestTile = Geometry.ClosestTileByLocation(location);
+        this.destination = closestTile.position;
     }
 
 
@@ -205,16 +207,22 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsAlive)
             return;
 
+
         if (this.IsSelectedPlayer)
-        {
             MoveTowardCursor();
-        }
-        else
+
+        var closestTile = Geometry.ClosestTileByPosition(this.position);
+        if (closestTile.location.Equals(this.location))
+            return;
+
+        //Determine if selected player and another actor are occupying the same tile
+        var actor = actors.FirstOrDefault(x => x.IsAlive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
+        if (actor != null)
         {
-            //Determine if two actors occupy same location
-            this.CheckLocationConflict();
+            actor.SwapLocation(this);
         }
 
+        this.location = closestTile.location;
 
     }
 
@@ -259,8 +267,19 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!HasDestination)
             return;
 
+        var delta = this.destination.Value - this.position;
+        if (Mathf.Abs(delta.x) > snapDistance)
+        {
+            this.position = Vector2.MoveTowards(this.position, new Vector3(this.destination.Value.x, this.position.y, this.position.z), slideSpeed);
+        }
+        else if (Mathf.Abs(delta.y) > snapDistance)
+        {
+            this.position = Vector2.MoveTowards(this.position, new Vector3(this.position.x, this.destination.Value.y, this.position.z), slideSpeed);
+        }
+
+
         //Move actor towards destination
-        this.position = Vector2.MoveTowards(this.position, this.destination.Value, slideSpeed);
+        //this.position = Vector2.MoveTowards(this.position, this.destination.Value, slideSpeed);
 
         //Determine if actor is close to destination
         bool isCloseToDestination = Vector2.Distance(this.position, this.destination.Value) < snapDistance;
@@ -291,14 +310,14 @@ public class ActorBehavior : ExtendedMonoBehavior
         while (HP > remainingHP)
         {
             position = currentTile.position;
-           
-            var damage = RNG.RandomInt(1, 3);
+
+            var damage = Random.Int(1, 3);
             HP -= damage;
             HP = Mathf.Clamp(HP, 0, MaxHP);
             if (HP < 1)
                 break;
 
-            position += new Vector3(RNG.RandomRange(tileSize / 12), RNG.RandomRange(tileSize / 12), 1);
+            position += new Vector3(Random.Range(tileSize / 12), Random.Range(tileSize / 12), 1);
             damageTextManager.Add(damage.ToString(), position);
             var x = sprite.healthBarBack.transform.localScale.x * (HP / MaxHP);
             sprite.healthBar.transform.localScale = new Vector3(x, y, z);
@@ -330,7 +349,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             alpha -= 0.05f;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            var color = new Color(1, 1, 1, alpha); 
+            var color = new Color(1, 1, 1, alpha);
             this.sprite.thumbnail.color = color;
             this.sprite.frame.color = color;
             this.sprite.healthBarBack.color = color;

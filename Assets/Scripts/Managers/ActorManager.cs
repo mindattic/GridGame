@@ -18,50 +18,61 @@ public class ActorManager : ExtendedMonoBehavior
 
     void Update()
     {
-        CheckPlayerMove();
-        CheckEnemyMove();
+        CheckSelectedPlayer();
+        CheckEnemy();
+
     }
 
-    private void CheckPlayerMove()
+    //private void CheckPlayerMove()
+    //{
+    //    if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase || !HasSelectedPlayer)
+    //        return;
+
+    //    //var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
+    //    //if (closestTile.location.Equals(selectedPlayer.location))
+    //    //    return;
+
+    //    ////Determine if selected player and another actor are occupying the same tile
+    //    //var actor = actors.FirstOrDefault(x => x.IsAlive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
+    //    //if (actor != null)
+    //    //{
+    //    //    actor.SwapLocation(selectedPlayer);
+    //    //}
+
+    //    //selectedPlayer.location = closestTile.location;
+    //    selectedPlayer.currentTile.spriteRenderer.color = Colors.Solid.Gold;
+    //}
+
+    private void CheckSelectedPlayer()
     {
-        if (!turnManager.IsPlayerActive || !turnManager.IsMovePhase || !HasSelectedPlayer)
+        if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase || !HasSelectedPlayer)
             return;
 
-        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
-        if (closestTile.location.Equals(selectedPlayer.location))
-            return;
-
-        //Determine if selected player and another actor are occupying the same tile
-        var actor = actors.FirstOrDefault(x => x.IsAlive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
-        if (actor != null)
-        {
-            actor.SwapLocation(selectedPlayer);
-        }
-
-        selectedPlayer.location = closestTile.location;
         selectedPlayer.currentTile.spriteRenderer.color = Colors.Solid.Gold;
     }
 
-    private void CheckEnemyMove()
+
+    private void CheckEnemy()
     {
-        if (!turnManager.IsEnemyActive || !turnManager.IsStartPhase)
+        if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
             return;
 
-        StartCoroutine(EnemyMove());
+        enemies.Where(x => x.IsAlive).ToList().ForEach(x => x.SetDestination());
+        StartCoroutine(StartEnemyMove());
     }
 
-    IEnumerator EnemyMove()
+    IEnumerator StartEnemyMove()
     {
-        turnManager.phase = TurnPhase.Move;
-
-        overlayManager.color = new Color(1f, 0f, 0f, 0.5f);
-        titleManager.text = "Enemy Turn";
-
+        turnManager.currentPhase = TurnPhase.Move;
         yield return new WaitForSeconds(3f);
+        turnManager.currentPhase = TurnPhase.Attack;
+        StartCoroutine(StartEnemyAttack());
+    }
 
-        overlayManager.color = new Color(0f, 0f, 0f, 0f);
-        titleManager.text = "";
-
+    IEnumerator StartEnemyAttack()
+    {
+        turnManager.currentPhase = TurnPhase.Attack;
+        yield return new WaitForSeconds(5f);
         turnManager.NextTurn();
     }
 
@@ -168,7 +179,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     public void PickupPlayer()
     {
-        if (!turnManager.IsPlayerActive || !turnManager.IsMovePhase || HasSelectedPlayer)
+        if (!turnManager.IsPlayerTurn || !turnManager.IsStartPhase || HasSelectedPlayer)
             return;
 
         //Collect collision data
@@ -198,6 +209,8 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer.sortingOrder = 10;
         selectedPlayer.sprite.frame.color = Colors.Solid.Gold;
 
+        turnManager.currentPhase = TurnPhase.Move;
+
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
@@ -212,10 +225,10 @@ public class ActorManager : ExtendedMonoBehavior
 
     public void DropPlayer()
     {
-        if (!turnManager.IsPlayerActive || !turnManager.IsMovePhase || !HasSelectedPlayer)
+        if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase || !HasSelectedPlayer)
             return;
 
-        turnManager.phase = TurnPhase.Attack;
+        turnManager.currentPhase = TurnPhase.Attack;
 
         //Assign location and position
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
@@ -232,7 +245,7 @@ public class ActorManager : ExtendedMonoBehavior
         //portraitManager.Play(selectedPlayer, PortraitTransitionState.FadeOut);
 
         //Determine if two actors occupy same location
-        selectedPlayer.CheckLocationConflict();
+        //selectedPlayer.CheckLocationConflict();
 
         //Clear selected player
         selectedPlayer = null;
@@ -280,7 +293,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var enemy in battle.defenders)
         {
-            enemy.TakeDamage(RNG.RandomInt(16, 33));
+            enemy.TakeDamage(Random.Int(16, 33));
         }
 
         yield return new WaitForSeconds(0.25f);
@@ -299,9 +312,7 @@ public class ActorManager : ExtendedMonoBehavior
         ResetBattle();
 
 
-
-        turnManager.activeTeam = Team.Enemy;
-        turnManager.phase = TurnPhase.Start;
+        turnManager.NextTurn();
     }
 
 

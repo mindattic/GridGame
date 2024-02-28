@@ -34,7 +34,7 @@ public enum TurnPhase
     Start,
     Move,
     Attack,
-    End
+    //End
 }
 
 public enum PortraitTransitionState

@@ -24,6 +24,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected PortraitManager portraitManager => GameManager.instance.portraitManager;
     protected OverlayManager overlayManager => GameManager.instance.overlayManager;
     protected TitleManager titleManager => GameManager.instance.titleManager;
+    protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
 
 
 

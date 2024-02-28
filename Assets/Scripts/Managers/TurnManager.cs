@@ -8,16 +8,16 @@ public class TurnManager : ExtendedMonoBehavior
 {
     //Variables
     [SerializeField] public int turnNumber = 1;
-    [SerializeField] public Team activeTeam = Team.Player;
-    [SerializeField] public Phase phase = Phase.Start;
-    
+    [SerializeField] public Team currentTurn = Team.Player;
+    [SerializeField] public Phase currentPhase = Phase.Start;
+
     //Properties
-    public bool IsPlayerActive => activeTeam.Equals(Team.Player);
-    public bool IsEnemyActive => activeTeam.Equals(Team.Enemy);
-    public bool IsStartPhase => phase.Equals(Phase.Start);
-    public bool IsMovePhase => phase.Equals(Phase.Move);
-    public bool IsAttackPhase => phase.Equals(Phase.Attack);
-    public bool IsEndPhase => phase.Equals(Phase.End);
+    public bool IsPlayerTurn => currentTurn.Equals(Team.Player);
+    public bool IsEnemyTurn => currentTurn.Equals(Team.Enemy);
+    public bool IsStartPhase => currentPhase.Equals(Phase.Start);
+    public bool IsMovePhase => currentPhase.Equals(Phase.Move);
+    public bool IsAttackPhase => currentPhase.Equals(Phase.Attack);
+    //public bool IsEndPhase => currentPhase.Equals(Phase.End);
 
     void Awake()
     {
@@ -25,63 +25,25 @@ public class TurnManager : ExtendedMonoBehavior
 
     void Start()
     {
-        Play();  
+        Reset();
     }
 
     public void Reset()
     {
         turnNumber = 1;
-        activeTeam = Team.Player;
-        phase = Phase.Start;
-        Play();
-    }
-
-    public void Play()
-    {
-        titleManager.text = turnNumber == 1 ? "Battle Start" : $"Turn {turnNumber}";
-        StartCoroutine(FadeInOut());
-    }
-
-
-    IEnumerator FadeInOut()
-    {
-        foreach(var actor in actors)
-        {
-            if (actor.IsAlive)
-                actor.sprite.thumbnail.color = Colors.Solid.Gray;
-        }
-
-        yield return this.WaitUntil(overlayManager.FadeIn());
-        yield return this.WaitUntil(titleManager.FadeIn());
-        yield return new WaitForSeconds(2f);
-        yield return this.WaitAll(overlayManager.FadeOut(), titleManager.FadeOut());
-
-        foreach (var actor in actors)
-        {
-            if (actor.IsAlive)
-                actor.sprite.thumbnail.color = Colors.Solid.White;
-        }
-
-        turnManager.phase = Phase.Move;
+        currentTurn = Team.Player;
+        currentPhase = Phase.Start;
     }
 
     public void NextTurn()
     {
         turnNumber++;
-        turnManager.activeTeam = IsPlayerActive ? Team.Enemy : Team.Player;
-        turnManager.phase = TurnPhase.Start;
-
-        Play();
+        turnManager.currentTurn = IsPlayerTurn ? Team.Enemy : Team.Player;
+        turnManager.currentPhase = Phase.Start;
     }
-
-
-
 
     void Update()
     {
-        
-
-
 
     }
 

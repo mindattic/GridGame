@@ -47,7 +47,7 @@ public class Geometry
     {
         return tiles
             .Where(x => !x.IsOccupied)
-            .First(x => Vector2Int.Distance(x.location, location) == 1);
+            .FirstOrDefault(x => Vector2Int.Distance(x.location, location) == 1);
     }
 
     static public ActorBehavior GetActorAtLocation(Vector2Int location)

@@ -28,8 +28,8 @@ public class CylinderManager : MonoBehaviour
         }
         else
         {
-            speed = RNG.RandomInt(2, 5) * 0.01f;
-            floor = -1f + (-1f * RNG.RandomPercent());
+            speed = Random.Int(2, 5) * 0.01f;
+            floor = -1f + (-1f * Random.Percent());
             isRising = false;
         }
 
@@ -39,8 +39,8 @@ public class CylinderManager : MonoBehaviour
         }
         else
         {
-            speed = RNG.RandomInt(2, 5) * 0.01f;
-            ceiling = 1f + (1f * RNG.RandomPercent());
+            speed = Random.Int(2, 5) * 0.01f;
+            ceiling = 1f + (1f * Random.Percent());
             isRising = true;
         }
 

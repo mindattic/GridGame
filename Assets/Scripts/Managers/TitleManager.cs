@@ -5,31 +5,31 @@ using UnityEngine.UI;
 public class TitleManager : ExtendedMonoBehavior
 {
     //Variables
-    public Text title;
+    public Text label;
     const float MaxAlpha = 1f;
 
     #region Components
 
     public string text
     {
-        get => title.text;
-        set => title.text = value;
+        get => label.text;
+        set => label.text = value;
     }
 
 
     public Color color
     {
-        get => title.color;
-        set => title.color = value;
+        get => label.color;
+        set => label.color = value;
     }
 
     #endregion
 
     void Awake()
     {
-        title = GameObject.Find("Title").GetComponent<Text>();
-        title.transform.localPosition = new Vector3(0, 0, 0);
-        title.color = new Color(0f, 0f, 0f, 0f);
+        label = GameObject.Find("Title").GetComponent<Text>();
+        label.transform.localPosition = new Vector3(0, 0, 0);
+        label.color = new Color(0f, 0f, 0f, 0f);
     }
 
 
@@ -49,13 +49,13 @@ public class TitleManager : ExtendedMonoBehavior
     public IEnumerator FadeIn()
     {  
         float alpha = 0f;
-        title.color = new Color(0f, 0f, 0f, alpha);
+        label.color = new Color(1f, 1f, 1f, alpha);
 
         while (alpha < MaxAlpha)
         {
             alpha += Increment.One;
             alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
-            title.color = new Color(1f, 1f, 1f, alpha);
+            label.color = new Color(1f, 1f, 1f, alpha);
             yield return new WaitForSeconds(Interval.One);
         }
     }
@@ -63,13 +63,13 @@ public class TitleManager : ExtendedMonoBehavior
     public IEnumerator FadeOut()
     {
         float alpha = 1f;
-        title.color = new Color(0f, 0f, 0f, alpha);
+        label.color = new Color(1f, 1f, 1f, alpha);
 
         while (alpha > 0f)
         {
             alpha -= Increment.One;
             alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
-            title.color = new Color(1f, 1f, 1f, alpha);
+            label.color = new Color(1f, 1f, 1f, alpha);
             yield return new WaitForSeconds(Interval.One);
         }
     }

@@ -21,6 +21,7 @@ public class GameManager : Singleton<GameManager>
     public PortraitManager portraitManager;
     public OverlayManager overlayManager;
     public TitleManager titleManager;
+    public ConsoleManager consoleManager;
 
     //Scale
     public Vector2 screenSize;
@@ -86,6 +87,7 @@ public class GameManager : Singleton<GameManager>
         damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
         ghostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>();
         portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();
+        consoleManager = GameObject.Find("Console").GetComponent<ConsoleManager>();
 
 
         overlayManager = GameObject.Find("Overlay").GetComponent<OverlayManager>();
