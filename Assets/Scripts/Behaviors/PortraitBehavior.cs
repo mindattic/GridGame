@@ -100,11 +100,12 @@ public class PortraitBehavior : ExtendedMonoBehavior
 
     IEnumerator FadeIn()
     {
-        var position = settings?.position ?? new Vector3(actor.position.x, -4, 1);
+        StopCoroutine(FadeOut());
+        var position = settings?.position ?? new Vector3(0, -4, 1);
         var scale = settings?.scale ?? new Vector3(0.5f, 0.5f, 1);
         var warmup = settings?.warmup ?? 0f;
         var increment = settings?.warmup ?? 0.01f;
-        var interval = settings?.interval ?? 0.01f;
+        var interval = settings?.interval ?? 0.05f;
         var cooldown = settings?.cooldown ?? 0f;
 
         this.transform.position = position;
@@ -128,7 +129,8 @@ public class PortraitBehavior : ExtendedMonoBehavior
 
     IEnumerator FadeOut()
     {
-        var position = settings?.position ?? new Vector3(actor.position.x, -4, 1);
+        StopCoroutine(FadeIn());
+        var position = settings?.position ?? new Vector3(0, -4, 1);
         var scale = settings?.scale ?? new Vector3(0.5f, 0.5f, 1);
         var warmup = settings?.warmup ?? 0f;
         var increment = settings?.warmup ?? 0.01f;
@@ -166,8 +168,8 @@ public class PortraitBehavior : ExtendedMonoBehavior
 
     IEnumerator SlideIn()
     {
-        var position = settings?.position ?? new Vector3(actor.position.x, -4, 1);
-        var destination = settings?.destination ?? new Vector3(-2, -4, 1);
+        var position = settings?.position ?? new Vector3(5, -4, 1);
+        var destination = settings?.destination ?? new Vector3(0, -4, 1);
         var scale = settings?.scale ?? new Vector3(0.5f, 0.5f, 1);
         var warmup = settings?.warmup ?? 0f;
         var increment = settings?.warmup ?? 0.01f;
@@ -181,14 +183,14 @@ public class PortraitBehavior : ExtendedMonoBehavior
 
         while (!position.Equals(destination))
         {
-            position = Vector3.MoveTowards(position, destination, increment);
+            position = Vector3.MoveTowards(position, destination, Increment.One);
             bool isCloseToDestination = Vector3.Distance(position, destination) < increment * 2;
             if (isCloseToDestination)
             {
                 position = destination;
             }
 
-            yield return new WaitForSeconds(interval); //0.01f
+            yield return new WaitForSeconds(Interval.One); //0.01f
         }
 
         yield return new WaitForSeconds(cooldown);

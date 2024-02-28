@@ -1432,7 +1432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d2b70fd9eb4a6044be42a3fcc50c426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: {fileID: 0}
+  label: {fileID: 0}
 --- !u!1 &1652735655
 GameObject:
   m_ObjectHideFlags: 0
@@ -1684,6 +1684,7 @@ MonoBehaviour:
   portraitManager: {fileID: 0}
   overlayManager: {fileID: 0}
   titleManager: {fileID: 0}
+  consoleManager: {fileID: 0}
   screenSize: {x: 0, y: 0}
   tileSize: 0
   tileScale: {x: 0, y: 0}
@@ -1757,8 +1758,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnNumber: 1
-  activeTeam: 0
-  phase: 0
+  currentTurn: 0
+  currentPhase: 0
 --- !u!114 &1751276283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1806,6 +1807,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e8759d61593029541966704a135471fa, type: 2}
   - {fileID: 11400000, guid: e6432c69dfc629f498ad887e2d1f4050, type: 2}
   - {fileID: 11400000, guid: 168f65728fc44ac42862ed21e1763289, type: 2}
+  statusSprites:
+  - {fileID: 11400000, guid: 6cc028cdbb5c5bb4bbb59fa96cbba237, type: 2}
+  - {fileID: 11400000, guid: eb61db422a2858f44a1f219dd70d392e, type: 2}
+  - {fileID: 11400000, guid: 71fa838fbfdb10c4ab6ff3d3dc23aef9, type: 2}
 --- !u!114 &1751276288
 MonoBehaviour:
   m_ObjectHideFlags: 0

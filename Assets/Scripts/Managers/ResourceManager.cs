@@ -6,28 +6,12 @@ using UnityEngine.UIElements;
 
 
 
-
 public class ResourceManager : ExtendedMonoBehavior
 {
-    //[SerializeField] public GameObject spritePrefab;
-    //[SerializeField] public GameObject artPrefab;
 
     [SerializeField] public List<ActorSprite> actorSprites = new List<ActorSprite>();
-    //ArtCollection portraits = new ArtCollection();
- 
-    //[SerializeField] public Sprite paladin;
-    //[SerializeField] public Sprite barbarian;
-    //[SerializeField] public Sprite ninja;
-    //[SerializeField] public Sprite cleric;
-    //[SerializeField] public Sprite sentinel;
-    //[SerializeField] public Sprite pandagirl;
 
-    //[SerializeField] public Sprite slime;
-    //[SerializeField] public Sprite bat;
-
-
-
-    int sortingOrder = 0;
+    [SerializeField] public List<StatusSprite> statusSprites = new List<StatusSprite>();
 
     private void Awake()
     {
@@ -41,15 +25,20 @@ public class ResourceManager : ExtendedMonoBehavior
         //sprites.Create(new ArtPiece("Slime", Load("Thumbnails\\Slime"), Load("Portraits\\Slime")));    
     }
 
-    public Sprite Thumbnail(string id)
+    public Sprite ActorThumbnail(string id)
     {
         return actorSprites.First(x => x.id.Equals(id)).thumbnail;
     }
 
-    public Sprite Portrait(string id)
+    public Sprite ActorPortrait(string id)
     {
         return actorSprites.First(x => x.id.Equals(id)).portrait;
     }
 
+
+    public Sprite StatusThumbnail(string id)
+    {
+        return statusSprites.First(x => x.id.Equals(id)).thumbnail;
+    }
 
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using static Colors;
 
 public class ActorBehavior : ExtendedMonoBehavior
 {
@@ -13,7 +14,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     const int Frame = 1;
     const int HealthBarBack = 2;
     const int HealthBar = 3;
-    const int TurnDelay = 4;
+    const int StatusIcon = 4;
+    const int TurnDelay = 5;
 
     //Variables
     [SerializeField] public string id;
@@ -60,6 +62,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             render.frame.sortingOrder = value + 1;
             render.healthBarBack.sortingOrder = value + 2;
             render.healthBar.sortingOrder = value + 3;
+            render.statusIcon.sortingOrder = value + 4;
         }
     }
 
@@ -72,6 +75,9 @@ public class ActorBehavior : ExtendedMonoBehavior
             render.turnDelay.text = $"{enemyTurnDelay}";
         }
     }
+
+
+
 
 
     #endregion
@@ -92,6 +98,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     #endregion
 
     #region Methods
+
+    public void GenerateTurnDelay()
+    {
+        //TODO: Use enemy statistics to determine turn delay...
+        enemyTurnDelay = Random.Int(2, 4);
+        render.turnDelay.text = $"{enemyTurnDelay}";
+    }
 
     public bool IsSameColumn(Vector2Int location) => this.location.x == location.x;
     public bool IsSameRow(Vector2Int location) => this.location.y == location.y;
@@ -190,6 +203,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
         render.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
         render.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
+        render.statusIcon = gameObject.transform.GetChild(StatusIcon).GetComponent<SpriteRenderer>();
         render.turnDelay = gameObject.transform.GetChild(TurnDelay).GetComponent<TextMeshPro>();
     }
 
@@ -207,14 +221,22 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.position = Geometry.PositionFromLocation(location);
         this.destination = null;
         this.transform.localScale = tileScale;
-        //this.transform.GetChild(Thumbnail).transform.localScale = tileScale;
+        //this.transform.GetChild(ActorThumbnail).transform.localScale = tileScale;
         this.render.thumbnail.color = Colors.Solid.White;
 
         this.HP = MaxHP;
         this.render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
         render.turnDelay.text = $"{enemyTurnDelay}";
         if (this.IsPlayer)
+        {
+            render.frame.color = Colors.Solid.Green;
             render.turnDelay.color = new Color(1, 1, 1, 0f);
+        }
+        else
+        {
+            render.frame.color = Colors.Solid.Red;
+        }
+
     }
 
 
@@ -312,8 +334,6 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void TakeDamage(int amount)
     {
         damageTaken = amount;
-        turnDelay++;
-
         StartCoroutine(TakeDamage());
     }
 
@@ -371,7 +391,6 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha = Mathf.Clamp(alpha, 0, 1);
             var color = new Color(1, 1, 1, alpha);
             this.render.thumbnail.color = color;
-            this.render.frame.color = color;
             this.render.healthBarBack.color = color;
             this.render.healthBar.color = color;
             yield return new WaitForSeconds(0.01f);

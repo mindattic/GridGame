@@ -9,7 +9,7 @@ public class ActorRenderers
     public SpriteRenderer frame;
     public SpriteRenderer healthBarBack;
     public SpriteRenderer healthBar;
+    public SpriteRenderer statusIcon;
     public TextMeshPro turnDelay;
-
 }
 

@@ -8,9 +8,6 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class ActorManager : ExtendedMonoBehavior
 {
-
-    Vector3 enlarged;
-
     private void Awake()
     {
 
@@ -18,7 +15,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     void Start()
     {
-        enlarged = new Vector3(tileSize * 1.25f, tileSize * 1.25f, 1);
+
     }
 
     void Update()
@@ -176,38 +173,34 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var attackers in attackParticipants.attackingPairs)
         {
-            attackers.actor1.render.frame.color = Colors.Solid.Red;
-            attackers.actor1.scale = enlarged;
+            attackers.actor1.render.thumbnail.color = Colors.Solid.Green;
             attackers.actor1.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
 
-            attackers.actor2.render.frame.color = Colors.Solid.Red;
-            attackers.actor2.scale = enlarged;
+            attackers.actor1.render.thumbnail.color = Colors.Solid.Green;
             attackers.actor2.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
         }
 
         foreach (var supporter in attackParticipants.supporters)
         {
-            supporter.render.frame.color = Colors.Solid.Red;
-            supporter.scale = enlarged;
+            supporter.render.thumbnail.color = Colors.Solid.Green;
             supporter.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
         }
+
+        yield return new WaitForSeconds(2f);
 
         foreach (var enemy in attackParticipants.defenders)
         {
             enemy.TakeDamage(Random.Int(16, 33));
         }
 
-        yield return new WaitForSeconds(0.25f);
-
-
         foreach (var player in players)
         {
             if (!player.IsAlive) continue;
             player.sortingOrder = 1;
-            player.render.frame.color = Colors.Solid.White;
+            player.render.thumbnail.color = Colors.Solid.White;
             player.scale = tileScale;
         }
 
@@ -258,8 +251,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var attacker in attackParticipants.attackers)
         {
-            attacker.render.frame.color = Colors.Solid.Red;
-            attacker.scale = enlarged;
+            attacker.render.thumbnail.color = Colors.Solid.Green;
             attacker.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
         }
@@ -276,30 +268,17 @@ public class ActorManager : ExtendedMonoBehavior
         {
             if (!enemy.IsAlive) continue;
             enemy.sortingOrder = 1;
-            enemy.render.frame.color = Colors.Solid.White;
+            enemy.render.thumbnail.color = Colors.Solid.White;
             enemy.scale = tileScale;
             if (enemy.turnDelay < 1)
             {
-                enemy.turnDelay = Common.CalculateTurnDelay();
+                enemy.GenerateTurnDelay();
             }
         }
 
         attackParticipants.Reset();
         turnManager.NextTurn();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private void FixedUpdate()
@@ -364,7 +343,7 @@ public class ActorManager : ExtendedMonoBehavior
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
-        selectedPlayer.render.frame.color = Colors.Solid.White;
+        selectedPlayer.render.frame.color = Colors.Solid.Green;
         selectedPlayer.sortingOrder = 1;
 
         //Reset tiles

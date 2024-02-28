@@ -51,20 +51,24 @@ public class BoardManager : ExtendedMonoBehavior
         int i = 0;
         var randomLocation = Common.RandomLocations();
         var actorInit = new List<ActorOptions>();
-        actorInit.Add(new ActorOptions("Paladin", resourceManager.Thumbnail("Paladin"), Team.Player, randomLocation[i++]));
-        actorInit.Add(new ActorOptions("Barbarian", resourceManager.Thumbnail("Barbarian"), Team.Player, randomLocation[i++]));
-        actorInit.Add(new ActorOptions("Ninja", resourceManager.Thumbnail("Ninja"), Team.Player, randomLocation[i++]));
-        actorInit.Add(new ActorOptions("Sentinel", resourceManager.Thumbnail("Sentinel"), Team.Player, randomLocation[i++]));
-        actorInit.Add(new ActorOptions("Panda Girl", resourceManager.Thumbnail("Panda Girl"), Team.Player, randomLocation[i++]));
-        actorInit.Add(new ActorOptions("Cleric", resourceManager.Thumbnail("Cleric"), Team.Player, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Paladin", resourceManager.ActorThumbnail("Paladin"), Team.Player, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Barbarian", resourceManager.ActorThumbnail("Barbarian"), Team.Player, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Ninja", resourceManager.ActorThumbnail("Ninja"), Team.Player, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Sentinel", resourceManager.ActorThumbnail("Sentinel"), Team.Player, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Panda Girl", resourceManager.ActorThumbnail("Panda Girl"), Team.Player, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Cleric", resourceManager.ActorThumbnail("Cleric"), Team.Player, randomLocation[i++]));
 
-        actorInit.Add(new ActorOptions("Slime A", resourceManager.Thumbnail("Slime"), Team.Enemy, randomLocation[i++]));
-        actorInit.Add(new ActorOptions("Slime B", resourceManager.Thumbnail("Slime"), Team.Enemy, randomLocation[i++]));
-        actorInit.Add(new ActorOptions("Slime C", resourceManager.Thumbnail("Slime"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Slime A", resourceManager.ActorThumbnail("Slime"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Slime B", resourceManager.ActorThumbnail("Slime"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Slime C", resourceManager.ActorThumbnail("Slime"), Team.Enemy, randomLocation[i++]));
 
-        actorInit.Add(new ActorOptions("Bat A", resourceManager.Thumbnail("Bat"), Team.Enemy, randomLocation[i++]));
-        actorInit.Add(new ActorOptions("Bat B", resourceManager.Thumbnail("Bat"), Team.Enemy, randomLocation[i++]));
-        actorInit.Add(new ActorOptions("Bat C", resourceManager.Thumbnail("Bat"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Bat A", resourceManager.ActorThumbnail("Bat"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Bat B", resourceManager.ActorThumbnail("Bat"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Bat C", resourceManager.ActorThumbnail("Bat"), Team.Enemy, randomLocation[i++]));
+
+        actorInit.Add(new ActorOptions("Scorpion A", resourceManager.ActorThumbnail("Scorpion"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Scorpion B", resourceManager.ActorThumbnail("Scorpion"), Team.Enemy, randomLocation[i++]));
+        actorInit.Add(new ActorOptions("Scorpion C", resourceManager.ActorThumbnail("Scorpion"), Team.Enemy, randomLocation[i++]));
 
         GameObject prefab;
         ActorBehavior actor;
@@ -93,7 +97,7 @@ public class BoardManager : ExtendedMonoBehavior
 
         foreach(var enemy in enemies)
         {
-            enemy.turnDelay = Common.CalculateTurnDelay();
+            enemy.GenerateTurnDelay();
         }
 
     }

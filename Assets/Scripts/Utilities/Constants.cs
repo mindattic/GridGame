@@ -39,7 +39,7 @@ public static class Tag
     public static string Select = "Select";
     public static string DamageText = "DamageText";
     public static string AnnouncementText = "AnnouncementText";
-    public static string Portrait = "Portrait";
+    public static string Portrait = "ActorPortrait";
     public static string Ghost = "Ghost";
     public static string Wall = "Wall";
 }

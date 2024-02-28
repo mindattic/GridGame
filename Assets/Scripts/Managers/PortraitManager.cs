@@ -43,7 +43,7 @@ public class PortraitManager : ExtendedMonoBehavior
         portrait.id = id;
         portrait.parent = canvas3D.transform;
         portrait.sortingOrder = sortingOrder++;
-        portrait.sprite = resourceManager.Portrait(id);
+        portrait.sprite = resourceManager.ActorPortrait(id);
         portraits.Add(portrait);
 
         return portrait;

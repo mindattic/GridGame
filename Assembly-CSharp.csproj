@@ -99,6 +99,7 @@
     <Compile Include="Assets\Scripts\Behaviors\BoardBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\Singleton.cs" />
     <Compile Include="Assets\Scripts\Models\ActorOptions.cs" />
+    <Compile Include="Assets\Scripts\Models\StatusSprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
