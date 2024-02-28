@@ -99,7 +99,6 @@ public class ActorManager : ExtendedMonoBehavior
             return;
         }
 
-
         //Find attacking pairs
         foreach (var pair in attackParticipants.alignedPairs)
         {
@@ -174,18 +173,15 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var attackers in attackParticipants.attackingPairs)
         {
             attackers.actor1.render.thumbnail.color = Colors.Solid.Green;
-            attackers.actor1.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
 
-            attackers.actor1.render.thumbnail.color = Colors.Solid.Green;
-            attackers.actor2.sortingOrder = 10;
+            attackers.actor2.render.thumbnail.color = Colors.Solid.Green;
             yield return new WaitForSeconds(0.25f);
         }
 
         foreach (var supporter in attackParticipants.supporters)
         {
             supporter.render.thumbnail.color = Colors.Solid.Green;
-            supporter.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
         }
 
@@ -193,8 +189,10 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var enemy in attackParticipants.defenders)
         {
-            enemy.TakeDamage(Random.Int(16, 33));
+            enemy.TakeDamage(Random.Int(15, 100));
         }
+
+        yield return new WaitForSeconds(2f);
 
         foreach (var player in players)
         {
@@ -206,7 +204,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         timer.Set(scale: 1f, start: false);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         //Reset values
         actors.Where(x => x.IsAlive).ToList().ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
@@ -252,7 +250,6 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var attacker in attackParticipants.attackers)
         {
             attacker.render.thumbnail.color = Colors.Solid.Green;
-            attacker.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
         }
 
@@ -267,7 +264,6 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var enemy in enemies)
         {
             if (!enemy.IsAlive) continue;
-            enemy.sortingOrder = 1;
             enemy.render.thumbnail.color = Colors.Solid.White;
             enemy.scale = tileScale;
             if (enemy.turnDelay < 1)
@@ -344,7 +340,6 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
         selectedPlayer.render.frame.color = Colors.Solid.Green;
-        selectedPlayer.sortingOrder = 1;
 
         //Reset tiles
         tiles.ForEach(x => x.spriteRenderer.color = Colors.Translucent.White);
@@ -358,6 +353,8 @@ public class ActorManager : ExtendedMonoBehavior
 
         //Clear selected player
         selectedPlayer = null;
+
+        timer.Set(scale: 0f, start: false);
 
         turnManager.currentPhase = TurnPhase.Attack;
         PlayerAttack();

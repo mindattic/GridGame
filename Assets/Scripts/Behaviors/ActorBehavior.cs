@@ -229,7 +229,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.turnDelay.text = $"{enemyTurnDelay}";
         if (this.IsPlayer)
         {
-            render.frame.color = Colors.Solid.Green;
+            render.frame.color = Colors.Solid.White;
             render.turnDelay.color = new Color(1, 1, 1, 0f);
         }
         else
