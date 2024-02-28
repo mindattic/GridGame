@@ -76,10 +76,10 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected float snapDistance => GameManager.instance.snapDistance;
 
 
-    protected BattleParticipants battle
+    protected AttackParticipants attackParticipants
     {
-        get { return GameManager.instance.battle; }
-        set { GameManager.instance.battle = value; }
+        get { return GameManager.instance.attackParticipants; }
+        set { GameManager.instance.attackParticipants = value; }
     }
 
     //protected bool InSameColumn(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x;

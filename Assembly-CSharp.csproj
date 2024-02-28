@@ -90,7 +90,7 @@
     <Compile Include="Assets\Scripts\Utilities\Constants.cs" />
     <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
     <Compile Include="Assets\Scripts\Managers\WallManager.cs" />
-    <Compile Include="Assets\Scripts\Models\BattleParticipants.cs" />
+    <Compile Include="Assets\Scripts\Models\AttackParticipants.cs" />
     <Compile Include="Assets\Scripts\Managers\ActorManager.cs" />
     <Compile Include="Assets\Scripts\Models\GhostRenderers.cs" />
     <Compile Include="Assets\Scripts\Behaviors\TimerBehavior.cs" />

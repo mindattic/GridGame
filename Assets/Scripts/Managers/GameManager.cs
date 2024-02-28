@@ -60,7 +60,7 @@ public class GameManager : Singleton<GameManager>
 
     public HashSet<Vector2Int> boardLocations;
 
-    public BattleParticipants battle;
+    public AttackParticipants attackParticipants;
 
     private void Awake()
     {
@@ -93,7 +93,7 @@ public class GameManager : Singleton<GameManager>
         overlayManager = GameObject.Find("Overlay").GetComponent<OverlayManager>();
         titleManager = GameObject.Find("Title").GetComponent<TitleManager>();
 
-        battle = new BattleParticipants();
+        attackParticipants = new AttackParticipants();
 
         boardLocations = new HashSet<Vector2Int>()
         {

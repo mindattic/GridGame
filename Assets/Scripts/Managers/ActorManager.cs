@@ -6,6 +6,8 @@ using UnityEngine;
 public class ActorManager : ExtendedMonoBehavior
 {
 
+    Vector3 enlarged;
+
     private void Awake()
     {
 
@@ -13,7 +15,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     void Start()
     {
-
+        enlarged = new Vector3(tileSize * 1.25f, tileSize * 1.25f, 1);
     }
 
     void Update()
@@ -21,26 +23,6 @@ public class ActorManager : ExtendedMonoBehavior
         CheckSelectedPlayer();
         CheckEnemy();
     }
-
-    //private void CheckPlayerMove()
-    //{
-    //    if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase || !HasSelectedPlayer)
-    //        return;
-
-    //    //var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
-    //    //if (closestTile.location.Equals(selectedPlayer.location))
-    //    //    return;
-
-    //    ////Determine if selected player and another actor are occupying the same tile
-    //    //var actor = actors.FirstOrDefault(x => x.IsAlive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
-    //    //if (actor != null)
-    //    //{
-    //    //    actor.SwapLocation(selectedPlayer);
-    //    //}
-
-    //    //selectedPlayer.location = closestTile.location;
-    //    selectedPlayer.currentTile.spriteRenderer.color = Colors.Solid.Gold;
-    //}
 
     private void CheckSelectedPlayer()
     {
@@ -70,22 +52,16 @@ public class ActorManager : ExtendedMonoBehavior
         }
 
         turnManager.currentPhase = TurnPhase.Attack;
-        StartCoroutine(StartEnemyAttack());
+        EnemyAttack();
     }
 
-    private IEnumerator StartEnemyAttack()
-    {
-        turnManager.currentPhase = TurnPhase.Attack;
-        yield return new WaitForSeconds(1f);
-        turnManager.NextTurn();
-    }
 
     private void PlayerAttack()
     {
         //Reset values
         actors.Where(x => x.IsAlive).ToList().ForEach(x => x.sprite.thumbnail.color = Colors.Solid.White);
         supportLineManager.Clear();
-        battle.Reset();
+        attackParticipants.Reset();
 
         //Find actors that share a column or row
         foreach (var actor1 in players)
@@ -98,23 +74,21 @@ public class ActorManager : ExtendedMonoBehavior
                     return;
 
                 if (actor1.IsSameColumn(actor2.location))
-                    battle.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Vertical));
+                    attackParticipants.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Vertical));
                 if (actor1.IsSameRow(actor2.location))
-                    battle.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Horizontal));
+                    attackParticipants.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Horizontal));
             }
         }
-        if (battle.alignedPairs.Count < 1)
+
+        if (attackParticipants.alignedPairs.Count < 1)
+        {
+            turnManager.NextTurn();
             return;
-
-
-        //bool isBetween(float a, float b, float c)
-        //{
-        //    return a > b && a < c;
-        //}
+        }
 
 
         //Find attacking pairs
-        foreach (var pair in battle.alignedPairs)
+        foreach (var pair in attackParticipants.alignedPairs)
         {
             if (pair.axis == Axis.Vertical)
             {
@@ -138,27 +112,33 @@ public class ActorManager : ExtendedMonoBehavior
             var hasGapsBetween = pair.gaps.Count > 0;
             if (hasEnemiesBetween && !hasGapsBetween)
             {
-                battle.attackingPairs.Add(pair);
-                battle.attackers.Add(pair.actor1);
-                battle.attackers.Add(pair.actor2);
+                attackParticipants.attackingPairs.Add(pair);
+                attackParticipants.attackers.Add(pair.actor1);
+                attackParticipants.attackers.Add(pair.actor2);
             }
         }
 
+        if (attackParticipants.attackers.Count < 1)
+        {
+            turnManager.NextTurn();
+            return;
+        }
+
         //Find defenders
-        foreach (var attackers in battle.attackingPairs)
+        foreach (var attackers in attackParticipants.attackingPairs)
         {
             foreach (var enemy in attackers.enemies)
             {
                 enemy.sprite.thumbnail.color = Colors.Solid.Red;
-                battle.defenders.Add(enemy);
+                attackParticipants.defenders.Add(enemy);
             }
         }
 
         //Find support pairs
-        foreach (var pair in battle.alignedPairs)
+        foreach (var pair in attackParticipants.alignedPairs)
         {
-            var isDirectAttacker1 = battle.attackers.Contains(pair.actor1);
-            var isDirectAttacker2 = battle.attackers.Contains(pair.actor2);
+            var isDirectAttacker1 = attackParticipants.attackers.Contains(pair.actor1);
+            var isDirectAttacker2 = attackParticipants.attackers.Contains(pair.actor2);
             var hasDirectAttacker = isDirectAttacker1 || isDirectAttacker2;
             var hasEnemiesBetween = pair.enemies.Count > 0;
             var hasPlayersBetween = pair.players.Count > 0;
@@ -166,14 +146,140 @@ public class ActorManager : ExtendedMonoBehavior
             if (hasDirectAttacker && !hasEnemiesBetween && !hasPlayersBetween)
             {
                 supportLineManager.Add(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
-                battle.supporters.Add(pair.actor1);
-                battle.supporters.Add(pair.actor2);
+                attackParticipants.supporters.Add(pair.actor1);
+                attackParticipants.supporters.Add(pair.actor2);
             }
         }
 
 
         StartCoroutine(StartPlayerAttack());
     }
+
+    private IEnumerator StartPlayerAttack()
+    {
+ 
+        foreach (var attackers in attackParticipants.attackingPairs)
+        {
+            attackers.actor1.sprite.frame.color = Colors.Solid.Red;
+            attackers.actor1.scale = enlarged;
+            attackers.actor1.sortingOrder = 10;
+            yield return new WaitForSeconds(0.25f);
+
+            attackers.actor2.sprite.frame.color = Colors.Solid.Red;
+            attackers.actor2.scale = enlarged;
+            attackers.actor2.sortingOrder = 10;
+            yield return new WaitForSeconds(0.25f);
+        }
+
+        foreach (var supporter in attackParticipants.supporters)
+        {
+            supporter.sprite.frame.color = Colors.Solid.Red;
+            supporter.scale = enlarged;
+            supporter.sortingOrder = 10;
+            yield return new WaitForSeconds(0.25f);
+        }
+
+        foreach (var enemy in attackParticipants.defenders)
+        {
+            enemy.TakeDamage(Random.Int(16, 33));
+        }
+
+        yield return new WaitForSeconds(0.25f);
+
+        players.ForEach(x =>
+        {
+            x.sortingOrder = 1;
+            x.sprite.frame.color = Colors.Solid.White;
+            x.scale = tileScale;
+        });
+
+        timer.Set(scale: 1f, start: false);
+
+        yield return new WaitForSeconds(1f);
+
+        //Reset values
+        actors.Where(x => x.IsAlive).ToList().ForEach(x => x.sprite.thumbnail.color = Colors.Solid.White);
+        supportLineManager.Clear();
+        attackParticipants.Reset();
+
+        turnManager.NextTurn();
+    }
+
+
+    private void EnemyAttack()
+    {
+
+        attackParticipants.Reset();
+
+        foreach (var enemy in enemies)
+        {
+            if (!enemy.IsAlive) continue;
+
+            foreach (var player in players)
+            {
+                if (!player.IsAlive || (!player.IsSameColumn(enemy.location) && !player.IsSameRow(enemy.location))) continue;
+
+                var delta = enemy.location - player.location;
+                if (Math.Abs(delta.x).Equals(1) || Math.Abs(delta.y).Equals(1))
+                {
+                    attackParticipants.attackers.Add(enemy);
+                    attackParticipants.defenders.Add(player);
+                }
+
+            }
+        }
+
+        StartCoroutine(StartEnemyAttack());
+    }
+
+
+    private IEnumerator StartEnemyAttack()
+    {
+        turnManager.currentPhase = TurnPhase.Attack;
+
+
+        foreach (var attacker in attackParticipants.attackers)
+        {
+            attacker.sprite.frame.color = Colors.Solid.Red;
+            attacker.scale = enlarged;
+            attacker.sortingOrder = 10;
+            yield return new WaitForSeconds(0.25f);
+        }
+
+  
+        foreach (var player in attackParticipants.defenders)
+        {
+            player.TakeDamage(Random.Int(16, 33));
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        enemies.Where(x => x.IsAlive).ToList().ForEach(x =>
+        {
+            x.sortingOrder = 1;
+            x.sprite.frame.color = Colors.Solid.White;
+            x.scale = tileScale;
+        });
+
+        attackParticipants.Reset();
+
+
+        turnManager.NextTurn();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private void FixedUpdate()
     {
@@ -257,58 +363,6 @@ public class ActorManager : ExtendedMonoBehavior
         PlayerAttack();
     }
 
-
-    private IEnumerator StartPlayerAttack()
-    {
-        Vector3 enlarged = new Vector3(tileSize * 1.25f, tileSize * 1.25f, 1);
-
-        foreach (var attackers in battle.attackingPairs)
-        {
-            attackers.actor1.sprite.frame.color = Colors.Solid.Red;
-            attackers.actor1.scale = enlarged;
-            attackers.actor1.sortingOrder = 10;
-            yield return new WaitForSeconds(0.25f);
-
-            attackers.actor2.sprite.frame.color = Colors.Solid.Red;
-            attackers.actor2.scale = enlarged;
-            attackers.actor2.sortingOrder = 10;
-            yield return new WaitForSeconds(0.25f);
-        }
-
-        foreach (var supporter in battle.supporters)
-        {
-            supporter.sprite.frame.color = Colors.Solid.Red;
-            supporter.scale = enlarged;
-            supporter.sortingOrder = 10;
-            yield return new WaitForSeconds(0.25f);
-        }
-
-        foreach (var enemy in battle.defenders)
-        {
-            enemy.TakeDamage(Random.Int(16, 33));
-        }
-
-        yield return new WaitForSeconds(0.25f);
-
-        players.ForEach(x =>
-        {
-            x.sortingOrder = 1;
-            x.sprite.frame.color = Colors.Solid.White;
-            x.scale = tileScale;
-        });
-
-        timer.Set(scale: 1f, start: false);
-
-        yield return new WaitForSeconds(1f);
-
-        //Reset values
-        actors.Where(x => x.IsAlive).ToList().ForEach(x => x.sprite.thumbnail.color = Colors.Solid.White);
-        supportLineManager.Clear();
-        battle.Reset();
-
-
-        turnManager.NextTurn();
-    }
 
 
 
