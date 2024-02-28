@@ -20,7 +20,6 @@ public class ActorManager : ExtendedMonoBehavior
     {
         CheckSelectedPlayer();
         CheckEnemy();
-
     }
 
     //private void CheckPlayerMove()
@@ -61,27 +60,34 @@ public class ActorManager : ExtendedMonoBehavior
         StartCoroutine(StartEnemyMove());
     }
 
-    IEnumerator StartEnemyMove()
+    private IEnumerator StartEnemyMove()
     {
         turnManager.currentPhase = TurnPhase.Move;
-        yield return new WaitForSeconds(3f);
+
+        while (enemies.Any(x => x.HasDestination))
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
+
         turnManager.currentPhase = TurnPhase.Attack;
         StartCoroutine(StartEnemyAttack());
     }
 
-    IEnumerator StartEnemyAttack()
+    private IEnumerator StartEnemyAttack()
     {
         turnManager.currentPhase = TurnPhase.Attack;
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(1f);
         turnManager.NextTurn();
     }
 
-    private void CalculateBattle()
+    private void PlayerAttack()
     {
-        ResetBattle();
+        //Reset values
+        actors.Where(x => x.IsAlive).ToList().ForEach(x => x.sprite.thumbnail.color = Colors.Solid.White);
+        supportLineManager.Clear();
+        battle.Reset();
 
         //Find actors that share a column or row
-
         foreach (var actor1 in players)
         {
             foreach (var actor2 in players)
@@ -166,8 +172,7 @@ public class ActorManager : ExtendedMonoBehavior
         }
 
 
-        StartCoroutine(StartBattle());
-
+        StartCoroutine(StartPlayerAttack());
     }
 
     private void FixedUpdate()
@@ -228,8 +233,6 @@ public class ActorManager : ExtendedMonoBehavior
         if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase || !HasSelectedPlayer)
             return;
 
-        turnManager.currentPhase = TurnPhase.Attack;
-
         //Assign location and position
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
         selectedPlayer.location = closestTile.location;
@@ -250,23 +253,12 @@ public class ActorManager : ExtendedMonoBehavior
         //Clear selected player
         selectedPlayer = null;
 
-        CalculateBattle();
+        turnManager.currentPhase = TurnPhase.Attack;
+        PlayerAttack();
     }
 
 
-
-    private void ResetBattle()
-    {
-        foreach (var actor in actors)
-        {
-            if (actor.IsAlive)
-                actor.sprite.thumbnail.color = Colors.Solid.White;
-        }
-        supportLineManager.Clear();
-        battle.Reset();
-    }
-
-    private IEnumerator StartBattle()
+    private IEnumerator StartPlayerAttack()
     {
         Vector3 enlarged = new Vector3(tileSize * 1.25f, tileSize * 1.25f, 1);
 
@@ -309,7 +301,10 @@ public class ActorManager : ExtendedMonoBehavior
 
         yield return new WaitForSeconds(1f);
 
-        ResetBattle();
+        //Reset values
+        actors.Where(x => x.IsAlive).ToList().ForEach(x => x.sprite.thumbnail.color = Colors.Solid.White);
+        supportLineManager.Clear();
+        battle.Reset();
 
 
         turnManager.NextTurn();

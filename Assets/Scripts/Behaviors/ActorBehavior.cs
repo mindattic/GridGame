@@ -66,9 +66,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     #region Properties
 
     public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
-    private bool IsOnPlayerTeam => this.team == Team.Player;
-    private bool IsSelectedPlayer => HasSelectedPlayer && this.Equals(selectedPlayer);
-    private bool HasDestination => this.destination.HasValue;
+    public bool IsPlayer => this.team.Equals(Team.Player);
+    public bool IsEnemy => this.team.Equals(Team.Enemy);
+    public bool IsSelectedPlayer => HasSelectedPlayer && this.Equals(selectedPlayer);
+    public bool HasDestination => this.destination.HasValue;
     public bool IsNorthEdge => this.location.y == 1;
     public bool IsEastEdge => this.location.x == board.columns;
     public bool IsSouthEdge => this.location.y == board.rows;
