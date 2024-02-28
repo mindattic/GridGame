@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class ActorManager : ExtendedMonoBehavior
 {
@@ -38,7 +41,20 @@ public class ActorManager : ExtendedMonoBehavior
         if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
             return;
 
-        enemies.Where(x => x.IsAlive).ToList().ForEach(x => x.SetDestination());
+        foreach (var enemy in enemies)
+        {
+            if (!enemy.IsAlive) continue;
+
+            if (enemy.turnDelay > 0)
+            {
+                enemy.turnDelay--;
+                if (enemy.turnDelay == 0)
+                {
+                    enemy.SetDestination();
+                }
+            }
+        }
+
         StartCoroutine(StartEnemyMove());
     }
 
@@ -59,7 +75,7 @@ public class ActorManager : ExtendedMonoBehavior
     private void PlayerAttack()
     {
         //Reset values
-        actors.Where(x => x.IsAlive).ToList().ForEach(x => x.sprite.thumbnail.color = Colors.Solid.White);
+        actors.Where(x => x.IsAlive).ToList().ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
         supportLineManager.Clear();
         attackParticipants.Reset();
 
@@ -129,7 +145,7 @@ public class ActorManager : ExtendedMonoBehavior
         {
             foreach (var enemy in attackers.enemies)
             {
-                enemy.sprite.thumbnail.color = Colors.Solid.Red;
+                enemy.render.thumbnail.color = Colors.Solid.Red;
                 attackParticipants.defenders.Add(enemy);
             }
         }
@@ -157,15 +173,15 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator StartPlayerAttack()
     {
- 
+
         foreach (var attackers in attackParticipants.attackingPairs)
         {
-            attackers.actor1.sprite.frame.color = Colors.Solid.Red;
+            attackers.actor1.render.frame.color = Colors.Solid.Red;
             attackers.actor1.scale = enlarged;
             attackers.actor1.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
 
-            attackers.actor2.sprite.frame.color = Colors.Solid.Red;
+            attackers.actor2.render.frame.color = Colors.Solid.Red;
             attackers.actor2.scale = enlarged;
             attackers.actor2.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
@@ -173,7 +189,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var supporter in attackParticipants.supporters)
         {
-            supporter.sprite.frame.color = Colors.Solid.Red;
+            supporter.render.frame.color = Colors.Solid.Red;
             supporter.scale = enlarged;
             supporter.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
@@ -186,19 +202,21 @@ public class ActorManager : ExtendedMonoBehavior
 
         yield return new WaitForSeconds(0.25f);
 
-        players.ForEach(x =>
+
+        foreach (var player in players)
         {
-            x.sortingOrder = 1;
-            x.sprite.frame.color = Colors.Solid.White;
-            x.scale = tileScale;
-        });
+            if (!player.IsAlive) continue;
+            player.sortingOrder = 1;
+            player.render.frame.color = Colors.Solid.White;
+            player.scale = tileScale;
+        }
 
         timer.Set(scale: 1f, start: false);
 
         yield return new WaitForSeconds(1f);
 
         //Reset values
-        actors.Where(x => x.IsAlive).ToList().ForEach(x => x.sprite.thumbnail.color = Colors.Solid.White);
+        actors.Where(x => x.IsAlive).ToList().ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
         supportLineManager.Clear();
         attackParticipants.Reset();
 
@@ -214,6 +232,7 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var enemy in enemies)
         {
             if (!enemy.IsAlive) continue;
+            if (enemy.turnDelay > 0) continue;
 
             foreach (var player in players)
             {
@@ -237,16 +256,15 @@ public class ActorManager : ExtendedMonoBehavior
     {
         turnManager.currentPhase = TurnPhase.Attack;
 
-
         foreach (var attacker in attackParticipants.attackers)
         {
-            attacker.sprite.frame.color = Colors.Solid.Red;
+            attacker.render.frame.color = Colors.Solid.Red;
             attacker.scale = enlarged;
             attacker.sortingOrder = 10;
             yield return new WaitForSeconds(0.25f);
         }
 
-  
+
         foreach (var player in attackParticipants.defenders)
         {
             player.TakeDamage(Random.Int(16, 33));
@@ -254,16 +272,19 @@ public class ActorManager : ExtendedMonoBehavior
 
         yield return new WaitForSeconds(1f);
 
-        enemies.Where(x => x.IsAlive).ToList().ForEach(x =>
+        foreach (var enemy in enemies)
         {
-            x.sortingOrder = 1;
-            x.sprite.frame.color = Colors.Solid.White;
-            x.scale = tileScale;
-        });
+            if (!enemy.IsAlive) continue;
+            enemy.sortingOrder = 1;
+            enemy.render.frame.color = Colors.Solid.White;
+            enemy.scale = tileScale;
+            if (enemy.turnDelay < 1)
+            {
+                enemy.turnDelay = Common.CalculateTurnDelay();
+            }
+        }
 
         attackParticipants.Reset();
-
-
         turnManager.NextTurn();
     }
 
@@ -318,7 +339,7 @@ public class ActorManager : ExtendedMonoBehavior
         //Select actor
         selectedPlayer = actor;
         selectedPlayer.sortingOrder = 10;
-        selectedPlayer.sprite.frame.color = Colors.Solid.Gold;
+        selectedPlayer.render.frame.color = Colors.Solid.Gold;
 
         turnManager.currentPhase = TurnPhase.Move;
 
@@ -343,7 +364,7 @@ public class ActorManager : ExtendedMonoBehavior
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
-        selectedPlayer.sprite.frame.color = Colors.Solid.White;
+        selectedPlayer.render.frame.color = Colors.Solid.White;
         selectedPlayer.sortingOrder = 1;
 
         //Reset tiles

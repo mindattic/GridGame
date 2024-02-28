@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
 public class ActorRenderers
 {
@@ -8,5 +9,7 @@ public class ActorRenderers
     public SpriteRenderer frame;
     public SpriteRenderer healthBarBack;
     public SpriteRenderer healthBar;
+    public TextMeshPro turnDelay;
+
 }
 

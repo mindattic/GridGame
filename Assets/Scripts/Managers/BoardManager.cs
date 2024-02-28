@@ -78,7 +78,6 @@ public class BoardManager : ExtendedMonoBehavior
             actor.parent = board.transform;
             actor.location = init.location;
             actor.team = init.team;
-            _ = actor.team == Team.Enemy ? Colors.Solid.Red : Colors.Solid.White;
         }
 
         //Assign actors list
@@ -90,6 +89,12 @@ public class BoardManager : ExtendedMonoBehavior
 
         //Assign enemies list
         enemies.AddRange(actors.Where(e => e.team == Team.Enemy).ToList());
+
+
+        foreach(var enemy in enemies)
+        {
+            enemy.turnDelay = Common.CalculateTurnDelay();
+        }
 
     }
 

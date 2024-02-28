@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ActorBehavior : ExtendedMonoBehavior
@@ -10,6 +13,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     const int Frame = 1;
     const int HealthBarBack = 2;
     const int HealthBar = 3;
+    const int TurnDelay = 4;
 
     //Variables
     [SerializeField] public string id;
@@ -18,7 +22,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public Team team = Team.Independant;
     public float MaxHP = 100f;
     public float HP;
-
+    private int enemyTurnDelay = 0;
 
     #region Components
 
@@ -40,25 +44,34 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.localScale = value;
     }
 
-    public ActorRenderers sprite = new ActorRenderers();
+    public ActorRenderers render = new ActorRenderers();
 
     public Sprite thumbnail
     {
-        get => sprite.thumbnail.sprite;
-        set => sprite.thumbnail.sprite = value;
+        get => render.thumbnail.sprite;
+        set => render.thumbnail.sprite = value;
     }
 
     public int sortingOrder
     {
         set
         {
-            sprite.thumbnail.sortingOrder = value;
-            sprite.frame.sortingOrder = value + 1;
-            sprite.healthBarBack.sortingOrder = value + 2;
-            sprite.healthBar.sortingOrder = value + 3;
+            render.thumbnail.sortingOrder = value;
+            render.frame.sortingOrder = value + 1;
+            render.healthBarBack.sortingOrder = value + 2;
+            render.healthBar.sortingOrder = value + 3;
         }
     }
 
+    public int turnDelay
+    {
+        get => enemyTurnDelay;
+        set
+        {
+            enemyTurnDelay = value;
+            render.turnDelay.text = $"{enemyTurnDelay}";
+        }
+    }
 
 
     #endregion
@@ -74,8 +87,6 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsEastEdge => this.location.x == board.columns;
     public bool IsSouthEdge => this.location.y == board.rows;
     public bool IsWestEdge => this.location.x == 1;
-
-
     public bool IsAlive => this.HP > 0 && this.isActiveAndEnabled;
 
     #endregion
@@ -175,10 +186,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
-        sprite.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
-        sprite.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
-        sprite.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
-        sprite.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
+        render.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
+        render.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
+        render.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
+        render.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
+        render.turnDelay = gameObject.transform.GetChild(TurnDelay).GetComponent<TextMeshPro>();
     }
 
     private void Start()
@@ -196,10 +208,13 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.destination = null;
         this.transform.localScale = tileScale;
         //this.transform.GetChild(Thumbnail).transform.localScale = tileScale;
-        this.sprite.thumbnail.color = Colors.Solid.White;
+        this.render.thumbnail.color = Colors.Solid.White;
 
         this.HP = MaxHP;
-        this.sprite.healthBar.transform.localScale = sprite.healthBarBack.transform.localScale;
+        this.render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
+        render.turnDelay.text = $"{enemyTurnDelay}";
+        if (this.IsPlayer)
+            render.turnDelay.color = new Color(1, 1, 1, 0f);
     }
 
 
@@ -297,6 +312,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void TakeDamage(int amount)
     {
         damageTaken = amount;
+        turnDelay++;
+
         StartCoroutine(TakeDamage());
     }
 
@@ -304,8 +321,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private IEnumerator TakeDamage()
     {
-        var y = sprite.healthBarBack.transform.localScale.y;
-        var z = sprite.healthBarBack.transform.localScale.z;
+        var y = render.healthBarBack.transform.localScale.y;
+        var z = render.healthBarBack.transform.localScale.z;
         var remainingHP = HP - damageTaken;
 
         while (HP > remainingHP)
@@ -320,21 +337,23 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             position += new Vector3(Random.Range(tileSize / 12), Random.Range(tileSize / 12), 1);
             damageTextManager.Add(damage.ToString(), position);
-            var x = sprite.healthBarBack.transform.localScale.x * (HP / MaxHP);
-            sprite.healthBar.transform.localScale = new Vector3(x, y, z);
+            var x = render.healthBarBack.transform.localScale.x * (HP / MaxHP);
+            render.healthBar.transform.localScale = new Vector3(x, y, z);
             yield return new WaitForSeconds(0.05f);
         }
         damageTaken = 0;
         position = currentTile.position;
 
         yield return new WaitForSeconds(1);
-        sprite.thumbnail.color = Colors.Solid.White;
+        render.thumbnail.color = Colors.Solid.White;
 
         //Deactive enemy if killed
         if (HP < 1)
             StartCoroutine(Die());
 
+
         yield return new WaitForSeconds(1);
+
 
         //Reset board if all enemies are dead
         if (enemies.All(x => !x.IsAlive))
@@ -351,10 +370,10 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha -= 0.05f;
             alpha = Mathf.Clamp(alpha, 0, 1);
             var color = new Color(1, 1, 1, alpha);
-            this.sprite.thumbnail.color = color;
-            this.sprite.frame.color = color;
-            this.sprite.healthBarBack.color = color;
-            this.sprite.healthBar.color = color;
+            this.render.thumbnail.color = color;
+            this.render.frame.color = color;
+            this.render.healthBarBack.color = color;
+            this.render.healthBar.color = color;
             yield return new WaitForSeconds(0.01f);
         }
         this.gameObject.SetActive(false);

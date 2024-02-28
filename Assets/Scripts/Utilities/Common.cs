@@ -43,4 +43,14 @@ public class Common
             Mathf.Clamp(b, 0, 255) / 255f, 
             Mathf.Clamp(a, 0, 255) / 255f);
     }
+
+
+
+
+    public static int CalculateTurnDelay()
+    {
+        //TODO: Use enemy statistics to determine turn delay...
+        return Random.Int(2, 4);
+    }
+
 }
