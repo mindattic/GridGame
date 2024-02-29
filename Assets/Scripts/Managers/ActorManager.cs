@@ -173,27 +173,15 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var attackers in attackParticipants.attackingPairs)
         {
             attackers.actor1.render.thumbnail.color = Colors.Solid.Green;
-<<<<<<< HEAD
             attackers.actor1.SetStatusAttack();
             yield return new WaitForSeconds(0.25f);
-
-            attackers.actor1.render.thumbnail.color = Colors.Solid.Green;
             attackers.actor2.SetStatusAttack();
-=======
-            yield return new WaitForSeconds(0.25f);
-
-            attackers.actor2.render.thumbnail.color = Colors.Solid.Green;
->>>>>>> 9ed93de3d8b4b5c200f65ffebea7502954325966
             yield return new WaitForSeconds(0.25f);
         }
 
         foreach (var supporter in attackParticipants.supporters)
         {
-            supporter.render.thumbnail.color = Colors.Solid.Green;
-<<<<<<< HEAD
             supporter.SetStatusSupport();
-=======
->>>>>>> 9ed93de3d8b4b5c200f65ffebea7502954325966
             yield return new WaitForSeconds(0.25f);
         }
 
@@ -261,11 +249,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var attacker in attackParticipants.attackers)
         {
-<<<<<<< HEAD
             attacker.SetStatusAttack();
-=======
-            attacker.render.thumbnail.color = Colors.Solid.Green;
->>>>>>> 9ed93de3d8b4b5c200f65ffebea7502954325966
             yield return new WaitForSeconds(0.25f);
         }
 
