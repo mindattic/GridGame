@@ -104,6 +104,9 @@ public class ActorBehavior : ExtendedMonoBehavior
         //TODO: Use enemy statistics to determine turn delay...
         enemyTurnDelay = Random.Int(2, 4);
         render.turnDelay.text = $"{enemyTurnDelay}";
+        this.SetStatusSleep();
+
+
     }
 
     public bool IsSameColumn(Vector2Int location) => this.location.x == location.x;
@@ -238,6 +241,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
 
     }
+
+
 
 
     void Update()
@@ -387,15 +392,39 @@ public class ActorBehavior : ExtendedMonoBehavior
         var alpha = 1f;
         while (alpha > 0)
         {
-            alpha -= 0.05f;
+            alpha -= Increment.Five;
             alpha = Mathf.Clamp(alpha, 0, 1);
             var color = new Color(1, 1, 1, alpha);
             this.render.thumbnail.color = color;
             this.render.healthBarBack.color = color;
             this.render.healthBar.color = color;
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(Interval.One);
         }
         this.gameObject.SetActive(false);
+    }
+
+
+
+
+
+    public void SetStatusAttack()
+    {
+        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals("Attack")).thumbnail;
+    }
+
+    public void SetStatusSleep()
+    {
+        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals("Sleep")).thumbnail;
+    }
+
+    public void SetStatusSupport()
+    {
+        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals("Support")).thumbnail;
+    }
+
+    public void SetStatusNone()
+    {
+        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals("None")).thumbnail;
     }
 
 }

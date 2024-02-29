@@ -29,7 +29,7 @@ public class TitleManager : ExtendedMonoBehavior
     {
         label = GameObject.Find("Title").GetComponent<Text>();
         label.transform.localPosition = new Vector3(0, 0, 0);
-        label.color = new Color(0f, 0f, 0f, 0f);
+        label.color = new Color(1f, 1f, 1f, 0f);
     }
 
 
@@ -45,6 +45,13 @@ public class TitleManager : ExtendedMonoBehavior
     {
 
     }
+
+    public void Play(string text)
+    {
+        label.text = text;
+        StartCoroutine(FadeInOut());
+    }
+
 
     public IEnumerator FadeIn()
     {  
@@ -73,5 +80,35 @@ public class TitleManager : ExtendedMonoBehavior
             yield return new WaitForSeconds(Interval.One);
         }
     }
+
+
+
+    public IEnumerator FadeInOut()
+    {
+        float alpha = 0f;
+        label.color = new Color(1f, 1f, 1f, alpha);
+
+        while (alpha < MaxAlpha)
+        {
+            alpha += Increment.One;
+            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
+            label.color = new Color(1f, 1f, 1f, alpha);
+            yield return new WaitForSeconds(Interval.One);
+        }
+
+        alpha = 1f;
+        label.color = new Color(1f, 1f, 1f, alpha);
+
+        while (alpha > 0f)
+        {
+            alpha -= Increment.One;
+            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
+            label.color = new Color(1f, 1f, 1f, alpha);
+            yield return new WaitForSeconds(Interval.One);
+        }
+    }
+
+
+
 
 }

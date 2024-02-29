@@ -1807,6 +1807,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e8759d61593029541966704a135471fa, type: 2}
   - {fileID: 11400000, guid: e6432c69dfc629f498ad887e2d1f4050, type: 2}
   - {fileID: 11400000, guid: 168f65728fc44ac42862ed21e1763289, type: 2}
+  - {fileID: 11400000, guid: bcd672913a41bb04099c880d857477db, type: 2}
   statusSprites:
   - {fileID: 11400000, guid: 6cc028cdbb5c5bb4bbb59fa96cbba237, type: 2}
   - {fileID: 11400000, guid: eb61db422a2858f44a1f219dd70d392e, type: 2}

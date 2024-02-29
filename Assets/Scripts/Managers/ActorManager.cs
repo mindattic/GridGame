@@ -174,18 +174,18 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var attackers in attackParticipants.attackingPairs)
         {
             attackers.actor1.render.thumbnail.color = Colors.Solid.Green;
-            attackers.actor1.sortingOrder = 10;
+            attackers.actor1.SetStatusAttack();
             yield return new WaitForSeconds(0.25f);
 
             attackers.actor1.render.thumbnail.color = Colors.Solid.Green;
-            attackers.actor2.sortingOrder = 10;
+            attackers.actor2.SetStatusAttack();
             yield return new WaitForSeconds(0.25f);
         }
 
         foreach (var supporter in attackParticipants.supporters)
         {
             supporter.render.thumbnail.color = Colors.Solid.Green;
-            supporter.sortingOrder = 10;
+            supporter.SetStatusSupport();
             yield return new WaitForSeconds(0.25f);
         }
 
@@ -199,7 +199,7 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var player in players)
         {
             if (!player.IsAlive) continue;
-            player.sortingOrder = 1;
+            player.SetStatusNone();
             player.render.thumbnail.color = Colors.Solid.White;
             player.scale = tileScale;
         }
@@ -251,8 +251,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var attacker in attackParticipants.attackers)
         {
-            attacker.render.thumbnail.color = Colors.Solid.Green;
-            attacker.sortingOrder = 10;
+            attacker.SetStatusAttack();
             yield return new WaitForSeconds(0.25f);
         }
 
@@ -267,7 +266,6 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var enemy in enemies)
         {
             if (!enemy.IsAlive) continue;
-            enemy.sortingOrder = 1;
             enemy.render.thumbnail.color = Colors.Solid.White;
             enemy.scale = tileScale;
             if (enemy.turnDelay < 1)
