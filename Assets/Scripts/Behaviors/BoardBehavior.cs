@@ -17,7 +17,7 @@ public class BoardBehavior : ExtendedMonoBehavior
     {
 
 
-        offset = new Vector2(-2.44f, 4f); //TODO: Calculate mathematically...
+        offset = new Vector2(-(tileSize * 3) - tileSize / 2, (tileSize * 6)); //TODO: Calculate mathematically...
         top = offset.y - tileSize / 2;
         right = offset.x + (tileSize * columns) + tileSize / 2;
         bottom = offset.y - (tileSize * rows) - tileSize / 2;
@@ -50,6 +50,18 @@ public class BoardBehavior : ExtendedMonoBehavior
         supportLineManager.Clear();
 
         timer.Set(scale: 1f, start: false);
+
+    }
+
+
+    public void PreviousLevel()
+    {
+
+    }
+
+
+    public void NextLevel()
+    {
 
     }
 

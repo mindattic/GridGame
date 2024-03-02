@@ -1,11 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using static Colors;
 
 public class ActorBehavior : ExtendedMonoBehavior
 {
@@ -104,7 +100,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //TODO: Use enemy statistics to determine turn delay...
         enemyTurnDelay = Random.Int(2, 4);
         render.turnDelay.text = $"{enemyTurnDelay}";
-        this.SetStatusSleep();
+        this.SetStatusNone();
 
 
     }

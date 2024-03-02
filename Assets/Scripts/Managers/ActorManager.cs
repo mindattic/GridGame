@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class ActorManager : ExtendedMonoBehavior
 {
@@ -172,7 +169,6 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var attackers in attackParticipants.attackingPairs)
         {
-            attackers.actor1.render.thumbnail.color = Colors.Solid.Green;
             attackers.actor1.SetStatusAttack();
             yield return new WaitForSeconds(0.25f);
             attackers.actor2.SetStatusAttack();

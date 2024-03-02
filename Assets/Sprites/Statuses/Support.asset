@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Support
   m_EditorClassIdentifier: 
   id: Support
-  thumbnail: {fileID: 0}
+  thumbnail: {fileID: 21300000, guid: 682cb5977a3e1c04dbc9e55570cdc01b, type: 3}

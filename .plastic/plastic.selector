@@ -1,4 +1,3 @@
-repository "GridGame@MindAttic@cloud"
+rep "GridGame@MindAttic@cloud"
   path "/"
-    smartbranch "/main" changeset "73" 
-     
+    smartbranch "/main"
