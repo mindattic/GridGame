@@ -98,6 +98,17 @@ public class ActorManager : ExtendedMonoBehavior
             return;
         }
 
+
+        //bool isBetween(float p, float floor, float ceiling)
+        //{
+        //    return p > floor && p < ceiling;
+        //}
+
+        bool isBetween(float p, ActorPair pair)
+        {
+            return p > pair.floor && p < pair.ceiling;
+        }
+
         //Find attacking pairs
         foreach (var pair in attackParticipants.alignedPairs)
         {
@@ -105,7 +116,7 @@ public class ActorManager : ExtendedMonoBehavior
             {
                 pair.highest = pair.actor1.location.y > pair.actor2.location.y ? pair.actor1 : pair.actor2;
                 pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
-                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && x.location.y > pair.floor && x.location.y < pair.ceiling).ToList();
+                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && isBetween( x.location.y, pair)).ToList();
                 pair.players = players.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && x.location.y > pair.floor && x.location.y < pair.ceiling).ToList();
                 pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && x.location.y > pair.floor && x.location.y < pair.ceiling).ToList();
             }
@@ -181,7 +192,7 @@ public class ActorManager : ExtendedMonoBehavior
             portraitManager.Play(attackers.actor1, direction1);
             portraitManager.Play(attackers.actor2, direction2);
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
         }
 
         foreach (var supporter in attackParticipants.supporters)

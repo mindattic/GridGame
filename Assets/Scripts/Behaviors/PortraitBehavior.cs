@@ -123,8 +123,12 @@ public class PortraitBehavior : ExtendedMonoBehavior
         {
             var distance = Vector3.Distance(position, destination[index]);
             var velocity = speed * distance * Time.deltaTime;
+            if (index == 1)
+                velocity = Increment.One;
+
+
             this.position = Vector3.MoveTowards(position, destination[index], velocity);
-            bool isSnapDistance = distance < 0.1f;
+            bool isSnapDistance = distance < Increment.One;
             if (isSnapDistance)
             {
                 index++;
