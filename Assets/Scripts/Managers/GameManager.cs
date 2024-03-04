@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager>
     public TurnManager turnManager;
     public ActorManager actorManager;
     public SupportLineManager supportLineManager;
+    public AttackLineManager attackLineManager;
     public DamageTextManager damageTextManager;
     public GhostManager ghostManager;
     public PortraitManager portraitManager;
@@ -84,12 +85,11 @@ public class GameManager : Singleton<GameManager>
         inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
         supportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>();
+        attackLineManager = GameObject.Find(Constants.Game).GetComponent<AttackLineManager>();
         damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
         ghostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>();
         portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();
         consoleManager = GameObject.Find("Console").GetComponent<ConsoleManager>();
-
-
         overlayManager = GameObject.Find("Overlay").GetComponent<OverlayManager>();
         titleManager = GameObject.Find("Title").GetComponent<TitleManager>();
 

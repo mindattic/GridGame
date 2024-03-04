@@ -37,13 +37,3 @@ public enum TurnPhase
     //End
 }
 
-public enum PortraitTransitionState
-{
-    None,
-    FadeIn,
-    FadeOut,
-    FadeInOut,
-    SlideIn,
-    SlideOut,
-    SlideInOut
-}

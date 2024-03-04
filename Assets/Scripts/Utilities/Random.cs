@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor;
 
 static class Random
 {
@@ -25,16 +26,22 @@ static class Random
         return Int(1, 2) == 1 ? true : false;
     }
 
-    //public static Direction Direction()
-    //{
-    //    var result = Int(1, 4);
-    //    return result switch
-    //    {
-    //        1 => global::Direction.North,
-    //        2 => global::Direction.East,
-    //        3 => global::Direction.South,
-    //        _ => global::Direction.West,
-    //    };
-    //}
+    public static Direction Direction()
+    {
+        var result = Int(1, 4);
+        return result switch
+        {
+            1 => global::Direction.North,
+            2 => global::Direction.East,
+            3 => global::Direction.South,
+            _ => global::Direction.West,
+        };
+    }
+
+    public static ActorBehavior Player()
+    {
+        var index = Int(0, GameManager.instance.players.Count - 1);
+        return GameManager.instance.players[index];
+    }
 
 }

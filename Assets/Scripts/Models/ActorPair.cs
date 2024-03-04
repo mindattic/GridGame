@@ -12,6 +12,13 @@ public class ActorPair
 
     public ActorBehavior actor1;
     public ActorBehavior actor2;
+
+    public ActorBehavior highest;
+    public ActorBehavior lowest;
+
+    public float ceiling => axis == Axis.Vertical ? highest.location.y : highest.location.x;
+    public float floor => axis == Axis.Vertical ? lowest.location.y : lowest.location.x;
+
     public Axis axis;
     public List<TileBehavior> gaps = new List<TileBehavior>();
     public List<ActorBehavior> enemies = new List<ActorBehavior>();

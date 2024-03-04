@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using State = PortraitTransitionState;
-using Settings = PortraitTransitionSettings;
 
 public class PortraitManager : ExtendedMonoBehavior
 {
@@ -23,30 +21,26 @@ public class PortraitManager : ExtendedMonoBehavior
 
     }
 
-    public void Play(ActorBehavior actor, State state, Settings settings = null)
-    {
-        //Retrieve existing or create a new portrait
-        var portrait = portraits.FirstOrDefault(x => x.id.Equals(actor.id));
-        if (portrait == null)
-            portrait = Add(actor.id);
-
-        //Play transition
-        portrait.Play(actor, state, settings);
-    }
-
-
-    public PortraitBehavior Add(string id)
+    public void Play(ActorBehavior actor, Direction direction)
     {
         GameObject prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var portrait = prefab.GetComponent<PortraitBehavior>();
         portrait.name = $"Portrait_{Guid.NewGuid()}";
-        portrait.id = id;
+        portrait.id = portrait.name;
         portrait.parent = canvas3D.transform;
         portrait.sortingOrder = sortingOrder++;
-        portrait.sprite = resourceManager.ActorPortrait(id);
+        portrait.sprite = resourceManager.ActorPortrait(actor.id);
+        portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         portraits.Add(portrait);
 
-        return portrait;
+        portrait.Play(actor, direction);
+    }
+
+
+
+    public void Spawn()
+    {
+        Play(Random.Player(), Random.Direction());
     }
 
 
@@ -55,5 +49,10 @@ public class PortraitManager : ExtendedMonoBehavior
         portraits.ForEach(x => Destroy(x.gameObject));
         portraits.Clear();
         sortingOrder = 1;
+    }
+
+    public void Remove(PortraitBehavior portrait)
+    {
+       portraits.Remove(portrait);
     }
 }

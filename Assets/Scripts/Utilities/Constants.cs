@@ -35,6 +35,7 @@ public static class Tag
     public static string Tile = "Tile";
     public static string Actor = "Actor";
     public static string SupportLine = "SupportLine";
+    public static string AttackLine = "AttackLine";
     public static string Trail = "Trail";
     public static string Select = "Select";
     public static string DamageText = "DamageText";
@@ -42,6 +43,7 @@ public static class Tag
     public static string Portrait = "ActorPortrait";
     public static string Ghost = "Ghost";
     public static string Wall = "Wall";
+
 }
 
 

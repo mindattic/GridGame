@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class SupportLineManager : ExtendedMonoBehavior
 {
-    [SerializeField] public GameObject linePrefab;
+    [SerializeField] public GameObject supportLinePrefab;
 
     private void Start()
     {
@@ -22,9 +21,9 @@ public class SupportLineManager : ExtendedMonoBehavior
         GameObject prefab;
         SupportLineBehavior line;
 
-        prefab = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
+        prefab = Instantiate(supportLinePrefab, Vector2.zero, Quaternion.identity);
         line = prefab.GetComponent<SupportLineBehavior>();
-        line.name = $"Line_{Guid.NewGuid()}";
+        line.name = $"SupportLine_{Guid.NewGuid()}";
         line.id = line.name;
         line.parent = board.transform;
         line.Set(a, b);

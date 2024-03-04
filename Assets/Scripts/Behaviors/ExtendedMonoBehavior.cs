@@ -18,6 +18,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected TurnManager turnManager => GameManager.instance.turnManager;
     protected ActorManager actorManager => GameManager.instance.actorManager;
     protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
+    protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
     protected DamageTextManager damageTextManager => GameManager.instance.damageTextManager;
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
     protected GhostManager ghostManager => GameManager.instance.ghostManager;

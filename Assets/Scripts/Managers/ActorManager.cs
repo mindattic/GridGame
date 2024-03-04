@@ -71,6 +71,7 @@ public class ActorManager : ExtendedMonoBehavior
         //Reset values
         actors.Where(x => x.IsAlive).ToList().ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
         supportLineManager.Clear();
+        attackLineManager.Clear();
         attackParticipants.Reset();
 
         //Find actors that share a column or row
@@ -78,14 +79,15 @@ public class ActorManager : ExtendedMonoBehavior
         {
             foreach (var actor2 in players)
             {
-                if (actor1.Equals(actor2)) break;
+                if (actor1.Equals(actor2)) 
+                    break;
 
                 if (!actor1.IsAlive || !actor2.IsAlive)
-                    return;
-
+                    break;
+           
                 if (actor1.IsSameColumn(actor2.location))
                     attackParticipants.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Vertical));
-                if (actor1.IsSameRow(actor2.location))
+                else if (actor1.IsSameRow(actor2.location))
                     attackParticipants.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Horizontal));
             }
         }
@@ -101,29 +103,31 @@ public class ActorManager : ExtendedMonoBehavior
         {
             if (pair.axis == Axis.Vertical)
             {
-                var lowest = Math.Min(pair.actor1.location.y, pair.actor2.location.y);
-                var heighest = Math.Max(pair.actor1.location.y, pair.actor2.location.y);
-                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && x.location.y > lowest && x.location.y < heighest).ToList();
-                pair.players = players.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && x.location.y > lowest && x.location.y < heighest).ToList();
-                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && x.location.y > lowest && x.location.y < heighest).ToList();
+                pair.highest = pair.actor1.location.y > pair.actor2.location.y ? pair.actor1 : pair.actor2;
+                pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
+                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && x.location.y > pair.floor && x.location.y < pair.ceiling).ToList();
+                pair.players = players.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && x.location.y > pair.floor && x.location.y < pair.ceiling).ToList();
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && x.location.y > pair.floor && x.location.y < pair.ceiling).ToList();
             }
             else if (pair.axis == Axis.Horizontal)
             {
-                var lowest = Math.Min(pair.actor1.location.x, pair.actor2.location.x);
-                var heighest = Math.Max(pair.actor1.location.x, pair.actor2.location.x);
-                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && x.location.x > lowest && x.location.x < heighest).ToList();
-                pair.players = players.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && x.location.x > lowest && x.location.x < heighest).ToList();
-                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && x.location.x > lowest && x.location.x < heighest).ToList();
+                pair.highest = pair.actor1.location.x > pair.actor2.location.x ? pair.actor1 : pair.actor2;
+                pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
+                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && x.location.x > pair.floor && x.location.x < pair.ceiling).ToList();
+                pair.players = players.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && x.location.x > pair.floor && x.location.x < pair.ceiling).ToList();
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && x.location.x > pair.floor && x.location.x < pair.ceiling).ToList();
             }
 
             //Assign attacking pairs
             var hasEnemiesBetween = pair.enemies.Count > 0;
+            var hasPlayersBetween = pair.players.Count > 0;
             var hasGapsBetween = pair.gaps.Count > 0;
-            if (hasEnemiesBetween && !hasGapsBetween)
+            if (hasEnemiesBetween && !hasPlayersBetween && !hasGapsBetween)
             {
                 attackParticipants.attackingPairs.Add(pair);
                 attackParticipants.attackers.Add(pair.actor1);
-                attackParticipants.attackers.Add(pair.actor2);
+                attackParticipants.attackers.Add(pair.actor2);   
+                attackLineManager.Add(pair);
             }
         }
 
@@ -148,11 +152,11 @@ public class ActorManager : ExtendedMonoBehavior
         {
             var isDirectAttacker1 = attackParticipants.attackers.Contains(pair.actor1);
             var isDirectAttacker2 = attackParticipants.attackers.Contains(pair.actor2);
-            var hasDirectAttacker = isDirectAttacker1 || isDirectAttacker2;
+            var hasSingleDirectAttacker = (isDirectAttacker1 && !isDirectAttacker2) || (!isDirectAttacker1 && isDirectAttacker2);
             var hasEnemiesBetween = pair.enemies.Count > 0;
             var hasPlayersBetween = pair.players.Count > 0;
 
-            if (hasDirectAttacker && !hasEnemiesBetween && !hasPlayersBetween)
+            if (hasSingleDirectAttacker && !hasEnemiesBetween && !hasPlayersBetween)
             {
                 supportLineManager.Add(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
                 attackParticipants.supporters.Add(pair.actor1);
@@ -170,8 +174,10 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var attackers in attackParticipants.attackingPairs)
         {
             attackers.actor1.SetStatusAttack();
+            portraitManager.Play(attackers.actor1, Random.Direction());
             yield return new WaitForSeconds(0.25f);
             attackers.actor2.SetStatusAttack();
+            portraitManager.Play(attackers.actor2, Random.Direction());
             yield return new WaitForSeconds(0.25f);
         }
 
@@ -205,6 +211,7 @@ public class ActorManager : ExtendedMonoBehavior
         //Reset values
         actors.Where(x => x.IsAlive).ToList().ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
         supportLineManager.Clear();
+        attackLineManager.Clear();
         attackParticipants.Reset();
 
         turnManager.NextTurn();

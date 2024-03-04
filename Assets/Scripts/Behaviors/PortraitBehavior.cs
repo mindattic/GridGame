@@ -1,7 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using State = PortraitTransitionState;
-using Settings = PortraitTransitionSettings;
 
 public class PortraitBehavior : ExtendedMonoBehavior
 {
@@ -9,9 +8,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
     [SerializeField] public string id;
 
     public ActorBehavior actor;
-    public State state;
-    public Settings settings;
-
+    public Direction direction;
 
     #region Components
 
@@ -55,7 +52,6 @@ public class PortraitBehavior : ExtendedMonoBehavior
         }
     }
 
-
     #endregion
 
     private void Awake()
@@ -72,128 +68,68 @@ public class PortraitBehavior : ExtendedMonoBehavior
     // Update is called once per frame
     void Update()
     {
-        //var x = actor.position.x;
-        //position = new Vector3(x, position.y, position.z);
     }
 
     void FixedUpdate()
     {
     }
 
-
-
-    public void Play(ActorBehavior actor, State state, Settings settings = null)
+    public void Play(ActorBehavior actor, Direction direction)
     {
         this.actor = actor;
-        this.state = state;
-        this.settings = settings;
+        this.direction = direction;
 
-        switch (state)
-        {
-            case State.FadeIn: StartCoroutine(FadeIn()); break;
-            case State.FadeOut: StartCoroutine(FadeOut()); break;
-            case State.FadeInOut: StartCoroutine(FadeInOut()); break;
-            case State.SlideIn: StartCoroutine(SlideIn()); break;
-            case State.None: default: break;
-        }
+        StartCoroutine(Slide());
     }
 
-    IEnumerator FadeIn()
+    IEnumerator Slide()
     {
-        StopCoroutine(FadeOut());
-        var position = settings?.position ?? new Vector3(0, -4, 1);
-        var scale = settings?.scale ?? new Vector3(0.5f, 0.5f, 1);
-        var warmup = settings?.warmup ?? 0f;
-        var increment = settings?.warmup ?? 0.01f;
-        var interval = settings?.interval ?? 0.05f;
-        var cooldown = settings?.cooldown ?? 0f;
+        List<Vector3> destination = new List<Vector3>();
 
-        this.transform.position = position;
-        this.transform.localScale = scale;
-        this.color = new Color(1f, 1f, 1f, 0f);
-
-        yield return new WaitForSeconds(warmup);
-
-        float alpha = this.color.a;
-        while (alpha < 1f)
+        switch (direction)
         {
-            alpha += increment; //0.1f
-            alpha = Mathf.Min(alpha, 1f);
-            this.color = new Color(1f, 1f, 1f, alpha);
+            case Direction.North:
+                this.position = new Vector3(0, -10, 1);
+                destination.Add(new Vector3(0, 0, 1));
+                destination.Add(new Vector3(0, 10, 1));
+                break;
 
-            yield return new WaitForSeconds(interval); //0.01f
+            case Direction.East:
+                this.position = new Vector3(-10, 0, 1);
+                destination.Add(new Vector3(0, 0, 1));
+                destination.Add(new Vector3(10, 0, 1));
+                break;
+
+            case Direction.South:
+                this.position = new Vector3(0, 10, 1);
+                destination.Add(new Vector3(0, 0, 1));
+                destination.Add(new Vector3(0, -10, 1));
+                break;
+
+            case Direction.West:
+                this.position = new Vector3(10, 0, 1);
+                destination.Add(new Vector3(0, 0, 1));
+                destination.Add(new Vector3(-10, 0, 1));
+                break;
         }
 
-        yield return new WaitForSeconds(cooldown);
-    }
-
-    IEnumerator FadeOut()
-    {
-        StopCoroutine(FadeIn());
-        var position = settings?.position ?? new Vector3(0, -4, 1);
-        var scale = settings?.scale ?? new Vector3(0.5f, 0.5f, 1);
-        var warmup = settings?.warmup ?? 0f;
-        var increment = settings?.warmup ?? 0.01f;
-        var interval = settings?.interval ?? 0.01f;
-        var cooldown = settings?.cooldown ?? 0f;
-
-        this.transform.position = position;
-        this.transform.localScale = scale;
-        this.color = new Color(1f, 1f, 1f, 1f);
-
-        yield return new WaitForSeconds(warmup);
-
-        float alpha = this.color.a;
-        while (alpha > 0f)
+        int index = 0;
+        while (index < destination.Count)
         {
-            alpha -= increment; //0.1f
-            alpha = Mathf.Max(alpha, 0f);
-            this.color = new Color(1f, 1f, 1f, alpha);
-
-            yield return new WaitForSeconds(interval); //0.01f
-        }
-
-        yield return new WaitForSeconds(cooldown);
-
-        portraitManager.portraits.Remove(this);
-        Destroy(this.gameObject);
-    }
-
-    IEnumerator FadeInOut()
-    {
-        yield return StartCoroutine(FadeIn());
-        yield return StartCoroutine(FadeOut());
-    }
-
-
-    IEnumerator SlideIn()
-    {
-        var position = settings?.position ?? new Vector3(5, -4, 1);
-        var destination = settings?.destination ?? new Vector3(0, -4, 1);
-        var scale = settings?.scale ?? new Vector3(0.5f, 0.5f, 1);
-        var warmup = settings?.warmup ?? 0f;
-        var increment = settings?.warmup ?? 0.01f;
-        var interval = settings?.interval ?? 0.01f;
-        var cooldown = settings?.cooldown ?? 0f;
-
-        this.transform.position = position;
-        this.transform.localScale = scale;
-
-        yield return new WaitForSeconds(warmup);
-
-        while (!position.Equals(destination))
-        {
-            position = Vector3.MoveTowards(position, destination, Increment.One);
-            bool isCloseToDestination = Vector3.Distance(position, destination) < increment * 2;
+            var distance = Vector3.Distance(position, destination[index]);
+            this.position = Vector3.MoveTowards(position, destination[index], 5 * distance * Time.deltaTime);
+            bool isCloseToDestination = distance < 0.05f;
             if (isCloseToDestination)
             {
-                position = destination;
+                this.position = destination[index];
+                index++;
             }
 
-            yield return new WaitForSeconds(Interval.One); //0.01f
+            yield return new WaitForSeconds(Interval.One);
         }
 
-        yield return new WaitForSeconds(cooldown);
+        portraitManager.Remove(this);
+        Destroy(this.gameObject);
     }
 
 }

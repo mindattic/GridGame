@@ -17,6 +17,7 @@ TagManager:
   - DamageText
   - Portrait
   - Ghost
+  - AttackLine
   layers:
   - Default
   - TransparentFX

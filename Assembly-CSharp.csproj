@@ -65,7 +65,6 @@
     <Compile Include="Assets\Scripts\Utilities\Wait.cs" />
     <Compile Include="Assets\Scripts\Models\ActorSprite.cs" />
     <Compile Include="Assets\Scripts\Models\Enums.cs" />
-    <Compile Include="Assets\Scripts\Models\PortraitTransitionSettings.cs" />
     <Compile Include="Assets\Scripts\Behaviors\SupportLineBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\ActorRenderers.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
@@ -100,6 +99,8 @@
     <Compile Include="Assets\Scripts\Models\Singleton.cs" />
     <Compile Include="Assets\Scripts\Models\StatusSprite.cs" />
     <Compile Include="Assets\Scripts\Models\ActorOptions.cs" />
+    <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\AttackLineBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
