@@ -174,17 +174,20 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var attackers in attackParticipants.attackingPairs)
         {
             attackers.actor1.SetStatusAttack();
-            portraitManager.Play(attackers.actor1, Random.Direction());
-            yield return new WaitForSeconds(0.25f);
             attackers.actor2.SetStatusAttack();
-            portraitManager.Play(attackers.actor2, Random.Direction());
-            yield return new WaitForSeconds(0.25f);
+
+            var direction1 = attackers.axis == Axis.Vertical ? Direction.South : Direction.East;
+            var direction2 = attackers.axis == Axis.Vertical ? Direction.North : Direction.West;
+            portraitManager.Play(attackers.actor1, direction1);
+            portraitManager.Play(attackers.actor2, direction2);
+
+            yield return new WaitForSeconds(0.5f);
         }
 
         foreach (var supporter in attackParticipants.supporters)
         {
             supporter.SetStatusSupport();
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.5f);
         }
 
         yield return new WaitForSeconds(2f);
@@ -206,13 +209,15 @@ public class ActorManager : ExtendedMonoBehavior
 
         timer.Set(scale: 1f, start: false);
 
-        yield return new WaitForSeconds(2f);
-
+      
         //Reset values
         actors.Where(x => x.IsAlive).ToList().ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
         supportLineManager.Clear();
         attackLineManager.Clear();
         attackParticipants.Reset();
+
+        yield return new WaitForSeconds(2f);
+
 
         turnManager.NextTurn();
     }

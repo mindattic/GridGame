@@ -68,7 +68,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         set
         {
             enemyTurnDelay = value;
-            render.turnDelay.text = $"{enemyTurnDelay}";
+            render.turnDelay.text = enemyTurnDelay != 0 ? $"{enemyTurnDelay}" : "";
         }
     }
 

@@ -1,12 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackLineBehavior : ExtendedMonoBehavior
 {
     //Variables
     [SerializeField] public string id;
-    [SerializeField] public Vector3 start;
-    [SerializeField] public Vector3 end;
-    [SerializeField] public float width;
+
+    Color color;
+    float width = 1.2f;
+    float maxAlpha = 0.25f;
 
 
     #region Components
@@ -31,9 +34,7 @@ public class AttackLineBehavior : ExtendedMonoBehavior
 
     public void Set(Vector3 start, Vector3 end)
     {
-        this.start = start;
-        this.end = end;
-
+        color = lineRenderer.startColor;
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
         Show();
@@ -42,6 +43,7 @@ public class AttackLineBehavior : ExtendedMonoBehavior
     public void Show()
     {
         gameObject.SetActive(true);
+        StartCoroutine(FadeIn());
     }
 
     public void Hide()
@@ -59,12 +61,33 @@ public class AttackLineBehavior : ExtendedMonoBehavior
     void Start()
     {
         lineRenderer.positionCount = 2;
-        lineRenderer.startWidth = tileSize * 1.2f;
-        lineRenderer.endWidth = tileSize * 1.2f;
+
+        lineRenderer.startWidth = tileSize * width;
+        lineRenderer.endWidth = tileSize * width;     
     }
 
     void Update()
     {
 
+    }
+
+
+    IEnumerator FadeIn()
+    {
+        float alpha = 0f;
+        color = new Color(color.r, color.g, color.b, alpha);
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
+
+        while (!alpha.Equals(maxAlpha))
+        {
+            alpha += Increment.One;
+            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+            color = new Color(color.r, color.g, color.b, alpha);
+            lineRenderer.startColor = color;
+            lineRenderer.endColor = color;
+
+            yield return new WaitForSeconds(Interval.One);
+        }
     }
 }

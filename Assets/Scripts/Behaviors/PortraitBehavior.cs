@@ -6,10 +6,11 @@ public class PortraitBehavior : ExtendedMonoBehavior
 {
     //Variables
     [SerializeField] public string id;
+    [SerializeField] public float speed = 5f;
 
-    public ActorBehavior actor;
-    public Direction direction;
-
+    private ActorBehavior actor;
+    private Direction direction;
+   
     #region Components
 
     public Transform parent
@@ -89,27 +90,31 @@ public class PortraitBehavior : ExtendedMonoBehavior
         switch (direction)
         {
             case Direction.North:
-                this.position = new Vector3(0, -10, 1);
-                destination.Add(new Vector3(0, 0, 1));
-                destination.Add(new Vector3(0, 10, 1));
+                this.position = new Vector3(1, -10, 1);
+                destination.Add(new Vector3(1, 0, 1));
+                destination.Add(new Vector3(1, -0.5f, 1));
+                destination.Add(new Vector3(1, 10, 1));
                 break;
 
             case Direction.East:
-                this.position = new Vector3(-10, 0, 1);
-                destination.Add(new Vector3(0, 0, 1));
-                destination.Add(new Vector3(10, 0, 1));
+                this.position = new Vector3(-10, 1, 1);
+                destination.Add(new Vector3(0, 1, 1));
+                destination.Add(new Vector3(-0.5f, 1, 1));
+                destination.Add(new Vector3(10, 1, 1));
                 break;
 
             case Direction.South:
-                this.position = new Vector3(0, 10, 1);
-                destination.Add(new Vector3(0, 0, 1));
-                destination.Add(new Vector3(0, -10, 1));
+                this.position = new Vector3(-1, 10, 1);
+                destination.Add(new Vector3(-1, 0, 1));
+                destination.Add(new Vector3(-1, 0.5f, 1));
+                destination.Add(new Vector3(-1, -10, 1));
                 break;
 
             case Direction.West:
-                this.position = new Vector3(10, 0, 1);
-                destination.Add(new Vector3(0, 0, 1));
-                destination.Add(new Vector3(-10, 0, 1));
+                this.position = new Vector3(10, -1, 1);
+                destination.Add(new Vector3(0, -1, 1));
+                destination.Add(new Vector3(0.5f, -1, 1));
+                destination.Add(new Vector3(-10, -1, 1));
                 break;
         }
 
@@ -117,11 +122,11 @@ public class PortraitBehavior : ExtendedMonoBehavior
         while (index < destination.Count)
         {
             var distance = Vector3.Distance(position, destination[index]);
-            this.position = Vector3.MoveTowards(position, destination[index], 5 * distance * Time.deltaTime);
-            bool isCloseToDestination = distance < 0.05f;
-            if (isCloseToDestination)
+            var velocity = speed * distance * Time.deltaTime;
+            this.position = Vector3.MoveTowards(position, destination[index], velocity);
+            bool isSnapDistance = distance < 0.1f;
+            if (isSnapDistance)
             {
-                this.position = destination[index];
                 index++;
             }
 

@@ -31,6 +31,7 @@ public class PortraitManager : ExtendedMonoBehavior
         portrait.sortingOrder = sortingOrder++;
         portrait.sprite = resourceManager.ActorPortrait(actor.id);
         portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+        portrait.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
         portraits.Add(portrait);
 
         portrait.Play(actor, direction);
