@@ -41,7 +41,20 @@ public class PortraitManager : ExtendedMonoBehavior
 
     public void Spawn()
     {
-        Play(Random.Player(), Random.Direction());
+
+        Direction direction1 = Random.Direction();
+        Direction direction2 = Direction.None;
+        switch (direction1)
+        {
+            case Direction.North: direction2 = Direction.South; break;
+            case Direction.East: direction2 = Direction.West; break;
+            case Direction.South: direction2 = Direction.North; break;
+            case Direction.West: direction2 = Direction.East; break;
+        }
+
+        Play(Random.Player(), direction1);
+        Play(Random.Player(), direction2);
+
     }
 
 
