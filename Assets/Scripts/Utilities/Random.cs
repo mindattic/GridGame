@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEditor;
 
 static class Random
@@ -40,8 +41,9 @@ static class Random
 
     public static ActorBehavior Player()
     {
-        var index = Int(0, GameManager.instance.players.Count - 1);
-        return GameManager.instance.players[index];
+        var players = GameManager.instance.actors.Where(x => x.team.Equals(Team.Player)).ToList();
+        var index = Int(0, players.Count - 1);
+        return players[index];
     }
 
 }

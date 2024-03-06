@@ -9,7 +9,6 @@ public static class Constants
     public const string Canvas3D = "Canvas3D";
     public const string Art = "Art";
 
-
     //Percent
     public const float percent25 = 0.25f;
     public const float percent33 = 0.333333f;
@@ -88,4 +87,20 @@ public static class Increment
     public static float Two = 0.02f;
     public static float Five = 0.05f;
     public static float Ten = 0.1f;
+}
+
+
+
+
+public static class Archetype
+{
+    public static string Paladin = "Paladin";
+    public static string Barbarian = "Barbarian";
+    public static string Ninja = "Ninja";
+    public static string Sentinel = "Sentinel";
+    public static string PandaGirl = "PandaGirl";
+    public static string Cleric = "Cleric";
+    public static string Slime = "Slime";
+    public static string Bat = "Bat";
+    public static string Scorpion = "Scorpion";
 }

@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Utilities\Geometry.cs" />
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\StageManager.cs" />
+    <Compile Include="Assets\Scripts\Models\ActorAttributes.cs" />
     <Compile Include="Assets\Scripts\Behaviors\DamageTextBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\OverlayManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Extensions.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Assets\Scripts\Managers\TurnManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\TileBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\DamageTextManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\ExtendedMonoBehavior.cs" />
     <Compile Include="Assets\Scripts\Behaviors\GhostBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\ActorPair.cs" />
@@ -87,6 +90,7 @@
     <Compile Include="Assets\Scripts\Managers\PointerManager.cs" />
     <Compile Include="Assets\Scripts\Models\Destination.cs" />
     <Compile Include="Assets\Scripts\Utilities\Constants.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\AttackLineBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
     <Compile Include="Assets\Scripts\Managers\WallManager.cs" />
     <Compile Include="Assets\Scripts\Models\AttackParticipants.cs" />
@@ -98,9 +102,8 @@
     <Compile Include="Assets\Scripts\Behaviors\BoardBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\Singleton.cs" />
     <Compile Include="Assets\Scripts\Models\StatusSprite.cs" />
-    <Compile Include="Assets\Scripts\Models\ActorOptions.cs" />
-    <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
-    <Compile Include="Assets\Scripts\Behaviors\AttackLineBehavior.cs" />
+    <Compile Include="Assets\Scripts\Models\StageActor.cs" />
+    <Compile Include="Assets\Scripts\Models\Stage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

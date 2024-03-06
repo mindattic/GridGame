@@ -18,9 +18,11 @@ public class ActorBehavior : ExtendedMonoBehavior
     public Vector2Int location;
     public Vector3? destination = null;
     public Team team = Team.Independant;
-    public float MaxHP = 100f;
-    public float HP;
+    public ActorAttributes attributes;
+
+
     private int enemyTurnDelay = 0;
+
 
     #region Components
 
@@ -90,6 +92,16 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsSouthEdge => this.location.y == board.rows;
     public bool IsWestEdge => this.location.x == 1;
     public bool IsAlive => this.HP > 0 && this.isActiveAndEnabled;
+    public int HP
+    {
+        get { return this.attributes.HP; }
+        set { attributes.HP = value; }
+    }
+    public int MaxHP
+    {
+        get { return this.attributes.MaxHP; }
+        set { attributes.MaxHP = value; }
+    }
 
     #endregion
 
@@ -220,7 +232,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.position = Geometry.PositionFromLocation(location);
         this.destination = null;
         this.transform.localScale = tileScale;
-        //this.transform.GetChild(ActorThumbnail).transform.localScale = tileScale;
         this.render.thumbnail.color = Colors.Solid.White;
 
         this.HP = MaxHP;
@@ -229,13 +240,13 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (this.IsPlayer)
         {
             render.frame.color = Colors.Solid.White;
-            render.turnDelay.color = new Color(1, 1, 1, 0f);
+            render.turnDelay.gameObject.SetActive(false);
         }
         else
         {
             render.frame.color = Colors.Solid.Red;
+            GenerateTurnDelay();
         }
-
     }
 
 
