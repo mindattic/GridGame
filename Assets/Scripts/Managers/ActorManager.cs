@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ActorManager : ExtendedMonoBehavior
@@ -68,6 +69,18 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void PlayerAttack()
     {
+
+
+        StartCoroutine(StartPlayerAttack());
+    }
+
+    private bool isBetween(float p, ActorPair pair)
+    {
+        return p > pair.floor && p < pair.ceiling;
+    }
+
+    private IEnumerator StartPlayerAttack()
+    {
         //Clear values
         actors.Where(x => x.IsAlive).ToList().ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
         supportLineManager.Clear();
@@ -95,18 +108,7 @@ public class ActorManager : ExtendedMonoBehavior
         if (attackParticipants.alignedPairs.Count < 1)
         {
             turnManager.NextTurn();
-            return;
-        }
-
-
-        //bool isBetween(float p, float floor, float ceiling)
-        //{
-        //    return p > floor && p < ceiling;
-        //}
-
-        bool isBetween(float p, ActorPair pair)
-        {
-            return p > pair.floor && p < pair.ceiling;
+            yield return null;
         }
 
         //Find attacking pairs
@@ -135,78 +137,63 @@ public class ActorManager : ExtendedMonoBehavior
             var hasGapsBetween = pair.gaps.Count > 0;
             if (hasEnemiesBetween && !hasPlayersBetween && !hasGapsBetween)
             {
-                attackParticipants.attackingPairs.Add(pair);
-                attackParticipants.attackers.Add(pair.actor1);
-                attackParticipants.attackers.Add(pair.actor2);
                 attackLineManager.Add(pair);
+
+                pair.actor1.SetStatusAttack();
+                pair.actor2.SetStatusAttack();
+                pair.enemies.ForEach(x => x.render.thumbnail.color = Colors.Solid.Red);
+
+                var direction1 = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
+                var direction2 = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
+                portraitManager.Play(pair.actor1, direction1);
+                portraitManager.Play(pair.actor2, direction2);
+
+                yield return new WaitForSeconds(1f);
+
+                pair.enemies.ForEach(x => x.TakeDamage(Random.Int(15, 100)));
+
             }
         }
 
-        if (attackParticipants.attackers.Count < 1)
-        {
-            turnManager.NextTurn();
-            return;
-        }
+ 
+        //foreach (var pair in attackParticipants.alignedPairs)
+        //{
+        //    var isDirectAttacker1 = attackParticipants.attackers.Contains(pair.actor1);
+        //    var isDirectAttacker2 = attackParticipants.attackers.Contains(pair.actor2);
+        //    var hasSingleDirectAttacker = (isDirectAttacker1 && !isDirectAttacker2) || (!isDirectAttacker1 && isDirectAttacker2);
+        //    var hasEnemiesBetween = pair.enemies.Count > 0;
+        //    var hasPlayersBetween = pair.players.Count > 0;
 
-        //Find defenders
-        foreach (var attackers in attackParticipants.attackingPairs)
-        {
-            foreach (var enemy in attackers.enemies)
-            {
-                enemy.render.thumbnail.color = Colors.Solid.Red;
-                attackParticipants.defenders.Add(enemy);
-            }
-        }
+        //    if (hasSingleDirectAttacker && !hasEnemiesBetween && !hasPlayersBetween)
+        //    {
+        //        supportLineManager.Add(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
+        //        attackParticipants.supporters.Add(pair.actor1);
+        //        attackParticipants.supporters.Add(pair.actor2);
+        //    }
+        //}
 
-        //Find support pairs
-        foreach (var pair in attackParticipants.alignedPairs)
-        {
-            var isDirectAttacker1 = attackParticipants.attackers.Contains(pair.actor1);
-            var isDirectAttacker2 = attackParticipants.attackers.Contains(pair.actor2);
-            var hasSingleDirectAttacker = (isDirectAttacker1 && !isDirectAttacker2) || (!isDirectAttacker1 && isDirectAttacker2);
-            var hasEnemiesBetween = pair.enemies.Count > 0;
-            var hasPlayersBetween = pair.players.Count > 0;
+        //foreach (var attackers in attackParticipants.attackingPairs)
+        //{
+        //    attackers.actor1.SetStatusAttack();
+        //    attackers.actor2.SetStatusAttack();
 
-            if (hasSingleDirectAttacker && !hasEnemiesBetween && !hasPlayersBetween)
-            {
-                supportLineManager.Add(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
-                attackParticipants.supporters.Add(pair.actor1);
-                attackParticipants.supporters.Add(pair.actor2);
-            }
-        }
+            
 
+        //    yield return new WaitForSeconds(1f);
+        //}
 
-        StartCoroutine(StartPlayerAttack());
-    }
+        //foreach (var supporter in attackParticipants.supporters)
+        //{
+        //    supporter.SetStatusSupport();
+        //    yield return new WaitForSeconds(0.5f);
+        //}
 
-    private IEnumerator StartPlayerAttack()
-    {
+        //yield return new WaitForSeconds(2f);
 
-        foreach (var attackers in attackParticipants.attackingPairs)
-        {
-            attackers.actor1.SetStatusAttack();
-            attackers.actor2.SetStatusAttack();
-
-            var direction1 = attackers.axis == Axis.Vertical ? Direction.South : Direction.East;
-            var direction2 = attackers.axis == Axis.Vertical ? Direction.North : Direction.West;
-            portraitManager.Play(attackers.actor1, direction1);
-            portraitManager.Play(attackers.actor2, direction2);
-
-            yield return new WaitForSeconds(1f);
-        }
-
-        foreach (var supporter in attackParticipants.supporters)
-        {
-            supporter.SetStatusSupport();
-            yield return new WaitForSeconds(0.5f);
-        }
-
-        yield return new WaitForSeconds(2f);
-
-        foreach (var enemy in attackParticipants.defenders)
-        {
-            enemy.TakeDamage(Random.Int(15, 100));
-        }
+        //foreach (var enemy in attackParticipants.defenders)
+        //{
+        //    enemy.TakeDamage(Random.Int(15, 100));
+        //}
 
         yield return new WaitForSeconds(2f);
 

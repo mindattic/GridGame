@@ -10,7 +10,10 @@ public class PortraitBehavior : ExtendedMonoBehavior
 
     private ActorBehavior actor;
     private Direction direction;
-   
+    private float startTime;
+
+    [SerializeField] public AnimationCurve slide;
+
     #region Components
 
     public Transform parent
@@ -79,59 +82,57 @@ public class PortraitBehavior : ExtendedMonoBehavior
     {
         this.actor = actor;
         this.direction = direction;
-
+        this.startTime = Time.time;
         StartCoroutine(Slide());
     }
 
     IEnumerator Slide()
     {
-        List<Vector3> destination = new List<Vector3>();
+        Vector3 destination = new Vector3();
 
         switch (direction)
         {
             case Direction.North:
                 this.position = new Vector3(1, -10, 1);
-                destination.Add(new Vector3(1, 0, 1));
-                destination.Add(new Vector3(1, -0.5f, 1));
-                destination.Add(new Vector3(1, 10, 1));
+                destination = new Vector3(1, 10, 1);
                 break;
 
             case Direction.East:
                 this.position = new Vector3(-10, 1, 1);
-                destination.Add(new Vector3(0, 1, 1));
-                destination.Add(new Vector3(-0.5f, 1, 1));
-                destination.Add(new Vector3(10, 1, 1));
+                destination = new Vector3(10, 1, 1);
                 break;
 
             case Direction.South:
                 this.position = new Vector3(-1, 10, 1);
-                destination.Add(new Vector3(-1, 0, 1));
-                destination.Add(new Vector3(-1, 0.5f, 1));
-                destination.Add(new Vector3(-1, -10, 1));
+                destination = new Vector3(-1, -10, 1);
                 break;
 
             case Direction.West:
                 this.position = new Vector3(10, -1, 1);
-                destination.Add(new Vector3(0, -1, 1));
-                destination.Add(new Vector3(0.5f, -1, 1));
-                destination.Add(new Vector3(-10, -1, 1));
+                destination = new Vector3(-10, -1, 1);
                 break;
         }
 
-        int index = 0;
-        while (index < destination.Count)
+
+        while (!position.Equals(destination))
         {
-            var distance = Vector3.Distance(position, destination[index]);
-            var velocity = speed * distance * Time.deltaTime;
-            if (index == 1)
-                velocity = Increment.One;
-
-
-            this.position = Vector3.MoveTowards(position, destination[index], velocity);
-            bool isSnapDistance = distance < Increment.Two;
-            if (isSnapDistance)
+            switch (direction)
             {
-                index++;
+                case Direction.North:
+                case Direction.South:
+                    this.position = new Vector3(
+                        destination.x,
+                        destination.y * slide.Evaluate((Time.time - startTime) % slide.length),
+                        destination.z);
+                    break;
+
+                case Direction.East:
+                case Direction.West:
+                    this.position = new Vector3(
+                          destination.x * slide.Evaluate((Time.time - startTime) % slide.length),
+                          destination.y,
+                          destination.z);
+                    break;
             }
 
             yield return new WaitForSeconds(Interval.One);
