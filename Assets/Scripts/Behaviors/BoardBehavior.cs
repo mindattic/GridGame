@@ -13,20 +13,27 @@ public class BoardBehavior : ExtendedMonoBehavior
     public float bottom;
     public float left;
 
+    public Vector3 position
+    {
+        get => gameObject.transform.position;
+        set => gameObject.transform.position = value;
+    }
+
+
     void Awake()
     {
 
-
-        offset = new Vector2(-(tileSize * 3) - tileSize / 2, (tileSize * 6)); //TODO: Calculate mathematically...
-        top = offset.y - tileSize / 2;
-        right = offset.x + (tileSize * columns) + tileSize / 2;
-        bottom = offset.y - (tileSize * rows) - tileSize / 2;
-        left = offset.x + tileSize / 2;
     }
 
     void Start()
     {
-      
+        offset = new Vector2(-(tileSize * 3) - tileSize / 2, (tileSize * 6));
+        top = offset.y - tileSize / 2;
+        right = offset.x + (tileSize * columns) + tileSize / 2;
+        bottom = offset.y - (tileSize * rows) - tileSize / 2;
+        left = offset.x + tileSize / 2;
+
+        position = offset;
     }
 
     // Update is called once per frame

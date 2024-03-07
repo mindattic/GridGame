@@ -29,13 +29,13 @@ public class StageManager : ExtendedMonoBehavior
 
     public void NextStage()
     {
-
         currentStage++;
         Load();
     }
 
     public void Load()
     {
+
         //Clear and clear variables
         selectedPlayer = null;
         supportLineManager.Clear();
@@ -155,6 +155,10 @@ public class StageManager : ExtendedMonoBehavior
 
                 break;
         }
+
+        //Clear existing actors
+        GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
+        actors.Clear();
 
         //Iterate and populate gameobjects
         foreach (var x in stageActors)

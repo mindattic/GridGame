@@ -263,9 +263,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void Update()
     {
-        if (!IsAlive)
-            return;
-
+        if (!IsAlive) return;
 
         if (this.IsSelectedPlayer)
             MoveTowardCursor();
@@ -326,8 +324,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void CheckMovement()
     {
-        if (!HasDestination)
-            return;
+        if (!HasDestination) return;
 
         var delta = this.destination.Value - this.position;
         if (Mathf.Abs(delta.x) > snapDistance)
@@ -356,23 +353,18 @@ public class ActorBehavior : ExtendedMonoBehavior
     
     private void CheckBobbing()
     {
-
         if (!this.IsAlive) return;
         if (!this.IsPlayer) return;
         if (!turnManager.IsStartPhase) return;
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
-        render.thumbnail.transform.position = new Vector3(
+        var pos = new Vector3(
             transform.position.x,
             transform.position.y + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
             transform.position.z);
 
-        //float speed = 5f;
-        //float height = 1f;
-        //calculate what the new Y position will be
-        //float newY = Mathf.Sin(Time.time * speed) * height;
-        ////set the object's Y to the new calculated Y
-        //render.thumbnail.transform.rotation = Quaternion.Euler(0, 0, newY);
+        render.thumbnail.transform.position = pos;
+        render.frame.transform.position = pos;
     }
 
     public void TakeDamage(int amount)
