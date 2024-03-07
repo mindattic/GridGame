@@ -68,23 +68,23 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void PlayerAttack()
     {
-        //Reset values
+        //Clear values
         actors.Where(x => x.IsAlive).ToList().ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
         supportLineManager.Clear();
         attackLineManager.Clear();
-        attackParticipants.Reset();
+        attackParticipants.Clear();
 
         //Find actors that share a column or row
         foreach (var actor1 in players)
         {
             foreach (var actor2 in players)
             {
-                if (actor1.Equals(actor2)) 
+                if (actor1.Equals(actor2))
                     break;
 
                 if (!actor1.IsAlive || !actor2.IsAlive)
                     break;
-           
+
                 if (actor1.IsSameColumn(actor2.location))
                     attackParticipants.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Vertical));
                 else if (actor1.IsSameRow(actor2.location))
@@ -116,17 +116,17 @@ public class ActorManager : ExtendedMonoBehavior
             {
                 pair.highest = pair.actor1.location.y > pair.actor2.location.y ? pair.actor1 : pair.actor2;
                 pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
-                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && isBetween( x.location.y, pair)).ToList();
-                pair.players = players.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && x.location.y > pair.floor && x.location.y < pair.ceiling).ToList();
-                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && x.location.y > pair.floor && x.location.y < pair.ceiling).ToList();
+                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && isBetween(x.location.y, pair)).ToList();
+                pair.players = players.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && isBetween(x.location.y, pair)).ToList();
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && isBetween(x.location.y, pair)).ToList();
             }
             else if (pair.axis == Axis.Horizontal)
             {
                 pair.highest = pair.actor1.location.x > pair.actor2.location.x ? pair.actor1 : pair.actor2;
                 pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
-                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && x.location.x > pair.floor && x.location.x < pair.ceiling).ToList();
-                pair.players = players.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && x.location.x > pair.floor && x.location.x < pair.ceiling).ToList();
-                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && x.location.x > pair.floor && x.location.x < pair.ceiling).ToList();
+                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && isBetween(x.location.x, pair)).ToList();
+                pair.players = players.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && isBetween(x.location.x, pair)).ToList();
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && isBetween(x.location.x, pair)).ToList();
             }
 
             //Assign attacking pairs
@@ -137,7 +137,7 @@ public class ActorManager : ExtendedMonoBehavior
             {
                 attackParticipants.attackingPairs.Add(pair);
                 attackParticipants.attackers.Add(pair.actor1);
-                attackParticipants.attackers.Add(pair.actor2);   
+                attackParticipants.attackers.Add(pair.actor2);
                 attackLineManager.Add(pair);
             }
         }
@@ -220,12 +220,12 @@ public class ActorManager : ExtendedMonoBehavior
 
         timer.Set(scale: 1f, start: false);
 
-      
-        //Reset values
+
+        //Clear values
         actors.Where(x => x.IsAlive).ToList().ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
         supportLineManager.Clear();
         attackLineManager.Clear();
-        attackParticipants.Reset();
+        attackParticipants.Clear();
 
         yield return new WaitForSeconds(2f);
 
@@ -237,7 +237,7 @@ public class ActorManager : ExtendedMonoBehavior
     private void EnemyAttack()
     {
 
-        attackParticipants.Reset();
+        attackParticipants.Clear();
 
         foreach (var enemy in enemies)
         {
@@ -291,7 +291,7 @@ public class ActorManager : ExtendedMonoBehavior
             }
         }
 
-        attackParticipants.Reset();
+        attackParticipants.Clear();
         turnManager.NextTurn();
     }
 
@@ -335,6 +335,9 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer.sortingOrder = 10;
         selectedPlayer.render.frame.color = Colors.Solid.Gold;
 
+        //Clear bobbing position
+        ResetBobbing();
+
         turnManager.currentPhase = TurnPhase.Move;
 
         //Assign mouse offset (how off center was selection)
@@ -360,7 +363,7 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
         selectedPlayer.render.frame.color = Colors.Solid.Green;
 
-        //Reset tiles
+        //Clear tiles
         tiles.ForEach(x => x.spriteRenderer.color = Colors.Translucent.White);
         ghostManager.Clear();
 
@@ -381,11 +384,22 @@ public class ActorManager : ExtendedMonoBehavior
 
 
 
+    public void Clear()
+    {
+        GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
+        actors.Clear();
+    }
 
 
 
-
-
+    private void ResetBobbing()
+    {
+        actors.ForEach(x =>
+        {
+            x.render.thumbnail.transform.position = x.position;
+            x.render.frame.transform.position = x.position;
+        });
+    }
 
 
 }

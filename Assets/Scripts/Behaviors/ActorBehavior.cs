@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Xml;
 using TMPro;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class ActorBehavior : ExtendedMonoBehavior
 {
@@ -18,9 +21,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     public Vector2Int location;
     public Vector3? destination = null;
     public Team team = Team.Independant;
-    public float MaxHP = 100f;
-    public float HP;
+    public ActorAttributes attributes;
+
+    //Vector3 original;
+
     private int enemyTurnDelay = 0;
+
+    [SerializeField] public AnimationCurve bobbing;
 
     #region Components
 
@@ -89,7 +96,17 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsEastEdge => this.location.x == board.columns;
     public bool IsSouthEdge => this.location.y == board.rows;
     public bool IsWestEdge => this.location.x == 1;
-    public bool IsAlive => this.HP > 0 && this.isActiveAndEnabled;
+    public bool IsAlive => this != null && this.isActiveAndEnabled && this.HP > 0;
+    public int HP
+    {
+        get { return this.attributes.HP; }
+        set { attributes.HP = value; }
+    }
+    public int MaxHP
+    {
+        get { return this.attributes.MaxHP; }
+        set { attributes.MaxHP = value; }
+    }
 
     #endregion
 
@@ -220,7 +237,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.position = Geometry.PositionFromLocation(location);
         this.destination = null;
         this.transform.localScale = tileScale;
-        //this.transform.GetChild(ActorThumbnail).transform.localScale = tileScale;
         this.render.thumbnail.color = Colors.Solid.White;
 
         this.HP = MaxHP;
@@ -229,13 +245,17 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (this.IsPlayer)
         {
             render.frame.color = Colors.Solid.White;
-            render.turnDelay.color = new Color(1, 1, 1, 0f);
+            render.turnDelay.gameObject.SetActive(false);
         }
         else
         {
             render.frame.color = Colors.Solid.Red;
+            GenerateTurnDelay();
         }
 
+
+
+        //original = render.thumbnail.transform.position;
     }
 
 
@@ -283,6 +303,9 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
         CheckMovement();
+        CheckBobbing();
+
+
     }
 
     private void MoveTowardCursor()
@@ -330,17 +353,37 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
     }
 
+    
+    private void CheckBobbing()
+    {
 
+        if (!this.IsAlive) return;
+        if (!this.IsPlayer) return;
+        if (!turnManager.IsStartPhase) return;
+
+        //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
+        render.thumbnail.transform.position = new Vector3(
+            transform.position.x,
+            transform.position.y + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
+            transform.position.z);
+
+        //float speed = 5f;
+        //float height = 1f;
+        //calculate what the new Y position will be
+        //float newY = Mathf.Sin(Time.time * speed) * height;
+        ////set the object's Y to the new calculated Y
+        //render.thumbnail.transform.rotation = Quaternion.Euler(0, 0, newY);
+    }
 
     public void TakeDamage(int amount)
     {
         damageTaken = amount;
-        StartCoroutine(TakeDamage());
+        StartCoroutine(StartTakingDamage());
     }
 
     private int damageTaken = 0;
 
-    private IEnumerator TakeDamage()
+    private IEnumerator StartTakingDamage()
     {
         var y = render.healthBarBack.transform.localScale.y;
         var z = render.healthBarBack.transform.localScale.z;
@@ -370,32 +413,37 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //Deactive enemy if killed
         if (HP < 1)
-            StartCoroutine(Die());
+            StartCoroutine(StartDying());
 
 
         yield return new WaitForSeconds(1);
 
 
-        //Reset board if all enemies are dead
+        //Clear board if all enemies are dead
         if (enemies.All(x => !x.IsAlive))
-            board.ResetBoard();
+            stageManager.NextStage();
 
     }
 
 
-    private IEnumerator Die()
+    private IEnumerator StartDying()
     {
         var alpha = 1f;
+        var color = new Color(1, 1, 1, alpha);
+        this.render.thumbnail.color = color;
+        this.render.healthBarBack.color = color;
+        this.render.healthBar.color = color;
+
         while (alpha > 0)
         {
             alpha -= Increment.Five;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            var color = new Color(1, 1, 1, alpha);
             this.render.thumbnail.color = color;
             this.render.healthBarBack.color = color;
             this.render.healthBar.color = color;
             yield return new WaitForSeconds(Interval.One);
         }
+
         this.gameObject.SetActive(false);
     }
 

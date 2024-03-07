@@ -128,7 +128,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
 
 
             this.position = Vector3.MoveTowards(position, destination[index], velocity);
-            bool isSnapDistance = distance < Increment.One;
+            bool isSnapDistance = distance < Increment.Two;
             if (isSnapDistance)
             {
                 index++;

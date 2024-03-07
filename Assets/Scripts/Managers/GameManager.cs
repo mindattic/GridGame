@@ -13,6 +13,7 @@ public class GameManager : Singleton<GameManager>
     //Managers
     public ResourceManager resourceManager;
     public InputManager inputManager;
+    public StageManager stageManager;
     public TurnManager turnManager;
     public ActorManager actorManager;
     public SupportLineManager supportLineManager;
@@ -51,8 +52,8 @@ public class GameManager : Singleton<GameManager>
     public BoardBehavior board;
     public TimerBehavior timer;
     public List<ActorBehavior> actors;
-    public List<ActorBehavior> players;
-    public List<ActorBehavior> enemies;
+    //public List<ActorBehavior> players;
+    //public List<ActorBehavior> enemies;
     public List<TileBehavior> tiles;
     public List<SupportLineBehavior> lines;
  
@@ -81,6 +82,7 @@ public class GameManager : Singleton<GameManager>
         canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>();
 
         resourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>();
+        stageManager = GameObject.Find(Constants.Game).GetComponent<StageManager>();
         turnManager = GameObject.Find(Constants.Game).GetComponent<TurnManager>();
         inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();

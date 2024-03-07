@@ -33,7 +33,6 @@ public class TurnManager : ExtendedMonoBehavior
         turnNumber = 1;
         currentTurn = Team.Player;
         currentPhase = Phase.Start;
-        titleManager.Play(IsPlayerTurn ? "Player Turn" : "Enemy Turn");
     }
 
     public void NextTurn()
@@ -41,8 +40,6 @@ public class TurnManager : ExtendedMonoBehavior
         turnNumber++;
         turnManager.currentTurn = IsPlayerTurn ? Team.Enemy : Team.Player;
         turnManager.currentPhase = Phase.Start;
-
-        titleManager.Play(IsPlayerTurn ? "Player Turn" : "Enemy Turn");
 
     }
 

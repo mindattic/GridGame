@@ -711,7 +711,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 528747521}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1751276291}
+        m_TargetAssemblyTypeName: StageManager, Assembly-CSharp
+        m_MethodName: NextStage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &528747521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1161,9 +1173,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1810209344}
-        m_TargetAssemblyTypeName: BoardBehavior, Assembly-CSharp
-        m_MethodName: ResetBoard
+      - m_Target: {fileID: 1751276291}
+        m_TargetAssemblyTypeName: StageManager, Assembly-CSharp
+        m_MethodName: Load
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1366,7 +1378,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 872640210}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1751276291}
+        m_TargetAssemblyTypeName: StageManager, Assembly-CSharp
+        m_MethodName: PreviousStage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &872640210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1970,11 +1994,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7829945854487650483, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7829945854487650483, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7829945854487650483, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2457,6 +2481,7 @@ GameObject:
   - component: {fileID: 1751276277}
   - component: {fileID: 1751276287}
   - component: {fileID: 1751276278}
+  - component: {fileID: 1751276291}
   - component: {fileID: 1751276279}
   - component: {fileID: 1751276281}
   - component: {fileID: 1751276283}
@@ -2504,6 +2529,7 @@ MonoBehaviour:
   vSyncCount: 1
   resourceManager: {fileID: 0}
   inputManager: {fileID: 0}
+  stageManager: {fileID: 0}
   turnManager: {fileID: 0}
   actorManager: {fileID: 0}
   supportLineManager: {fileID: 0}
@@ -2530,8 +2556,6 @@ MonoBehaviour:
   board: {fileID: 0}
   timer: {fileID: 0}
   actors: []
-  players: []
-  enemies: []
   tiles: []
   lines: []
   playerArt: {fileID: 0}
@@ -2560,8 +2584,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 7233482234801728947, guid: f420fe272613c294eb4bc531748a437e, type: 3}
-  actorPrefab: {fileID: 3730061202814564284, guid: 4f922b47447b0d245acc44d2545257a3, type: 3}
-  linePrefab: {fileID: 5922598101913747506, guid: 2e72c33cf0bfdfd4996f76ddc0140c31, type: 3}
 --- !u!114 &1751276281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2683,17 +2705,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackLinePrefab: {fileID: 1217694120567122752, guid: fd3cd14ef4856444c8996d9ec5183d59, type: 3}
---- !u!114 &1810209344 stripped
+--- !u!114 &1751276291
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4086587420172569240, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}
-  m_PrefabInstance: {fileID: 1476864828}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1751276275}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e9515e3cc4649e4ea2d2fc7fec5b6a2, type: 3}
+  m_Script: {fileID: 11500000, guid: 3033aa7c0c25f4141be2ebb68f5c2b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentStage: 5
+  actorPrefab: {fileID: 3730061202814564284, guid: 4f922b47447b0d245acc44d2545257a3, type: 3}
 --- !u!1 &1907110553
 GameObject:
   m_ObjectHideFlags: 0

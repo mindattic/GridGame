@@ -35,37 +35,4 @@ public class BoardBehavior : ExtendedMonoBehavior
 
     }
 
-    public void ResetBoard()
-    {
-        selectedPlayer = null;
-
-        turnManager.Reset();
-
-
-
-        int i = 0;
-        var randomLocation = Common.RandomLocations();     
-        actors.ForEach(x => x.Init(randomLocation[i++]));
-
-        supportLineManager.Clear();
-
-        timer.Set(scale: 1f, start: false);
-
-    }
-
-
-    public void PreviousLevel()
-    {
-
-    }
-
-
-    public void NextLevel()
-    {
-
-    }
-
-
-
-
 }

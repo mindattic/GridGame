@@ -12,7 +12,7 @@ public class AttackParticipants
     public AttackParticipants() { }
 
 
-    public void Reset()
+    public void Clear()
     {
         //Clear pairs
         alignedPairs.Clear();

@@ -15,6 +15,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
 
     //Managers
     protected InputManager inputManager => GameManager.instance.inputManager;
+    protected StageManager stageManager => GameManager.instance.stageManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
     protected ActorManager actorManager => GameManager.instance.actorManager;
     protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
@@ -27,16 +28,18 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected TitleManager titleManager => GameManager.instance.titleManager;
     protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
 
-
-
-
     //Behaviors
     protected BoardBehavior board => GameManager.instance.board;
     protected TimerBehavior timer => GameManager.instance.timer;
     protected List<TileBehavior> tiles => GameManager.instance.tiles;
-    protected List<ActorBehavior> actors => GameManager.instance.actors;
-    protected List<ActorBehavior> players => GameManager.instance.players;
-    protected List<ActorBehavior> enemies => GameManager.instance.enemies;
+    protected List<ActorBehavior> actors
+    {
+        get => GameManager.instance.actors;
+        set => GameManager.instance.actors = value;
+    }
+
+    protected List<ActorBehavior> players => GameManager.instance.actors.Where(x => x.team.Equals(Team.Player)).ToList();
+    protected List<ActorBehavior> enemies => GameManager.instance.actors.Where(x => x.team.Equals(Team.Enemy)).ToList();
 
     //Actor
     protected bool HasSelectedPlayer => selectedPlayer != null;

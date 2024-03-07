@@ -46,12 +46,15 @@ public class TitleManager : ExtendedMonoBehavior
 
     }
 
-    public void Play(string text)
+    public void Show(string text)
     {
         label.text = text;
-        StartCoroutine(FadeInOut());
-    }
+        label.color = new Color(1f, 1f, 1f, 1f);
 
+        //StopCoroutine(FadeIn());
+        //StopCoroutine(FadeOut());
+        StartCoroutine(FadeOut());
+    }
 
     public IEnumerator FadeIn()
     {  
@@ -72,6 +75,8 @@ public class TitleManager : ExtendedMonoBehavior
         float alpha = 1f;
         label.color = new Color(1f, 1f, 1f, alpha);
 
+        yield return new WaitForSeconds(2f);
+
         while (alpha > 0f)
         {
             alpha -= Increment.One;
@@ -85,27 +90,30 @@ public class TitleManager : ExtendedMonoBehavior
 
     public IEnumerator FadeInOut()
     {
-        float alpha = 0f;
-        label.color = new Color(1f, 1f, 1f, alpha);
+        yield return StartCoroutine(FadeIn());
+        yield return StartCoroutine(FadeOut());
 
-        while (alpha < MaxAlpha)
-        {
-            alpha += Increment.One;
-            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
-            label.color = new Color(1f, 1f, 1f, alpha);
-            yield return new WaitForSeconds(Interval.One);
-        }
+        //float alpha = 0f;
+        //label.color = new Color(1f, 1f, 1f, alpha);
 
-        alpha = 1f;
-        label.color = new Color(1f, 1f, 1f, alpha);
+        //while (alpha < MaxAlpha)
+        //{
+        //    alpha += Increment.One;
+        //    alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
+        //    label.color = new Color(1f, 1f, 1f, alpha);
+        //    yield return new WaitForSeconds(Interval.One);
+        //}
 
-        while (alpha > 0f)
-        {
-            alpha -= Increment.One;
-            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
-            label.color = new Color(1f, 1f, 1f, alpha);
-            yield return new WaitForSeconds(Interval.One);
-        }
+        //alpha = 1f;
+        //label.color = new Color(1f, 1f, 1f, alpha);
+
+        //while (alpha > 0f)
+        //{
+        //    alpha -= Increment.One;
+        //    alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
+        //    label.color = new Color(1f, 1f, 1f, alpha);
+        //    yield return new WaitForSeconds(Interval.One);
+        //}
     }
 
 

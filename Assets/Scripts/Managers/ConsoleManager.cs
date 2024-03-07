@@ -46,7 +46,7 @@ public class ConsoleManager : ExtendedMonoBehavior
     private void FixedUpdate()
     {
         //string fps = $@"{fpsMonitor.current}";
-        //string name = HasSelectedPlayer ? selectedPlayer.id : "-";
+        //string id = HasSelectedPlayer ? selectedPlayer.id : "-";
         //string location = HasSelectedPlayer ? $@"({selectedPlayer.location.x},{selectedPlayer.location.y})" : "-";
         //string position = HasSelectedPlayer ? $@"({selectedPlayer.transform.position.x},{selectedPlayer.transform.position.y})" : "-";
         //string mouse2D = mousePosition2D.x >= 0 ? $@"({mousePosition2D.x.ToString("N0").Replace(",", ""):N0},{mousePosition2D.y.ToString("N0").Replace(",", ""):N0})" : "-";
@@ -63,7 +63,7 @@ public class ConsoleManager : ExtendedMonoBehavior
               //    + $@"{Environment.NewLine}"
               //    + $@"      FPS: {fps}"
               //    + $@"{Environment.NewLine}"
-              //    + $@" Selected: {name}"
+              //    + $@" Selected: {id}"
               //    + $@"{Environment.NewLine}"
               //    + $@" Location: {location}"
               //    + $@"{Environment.NewLine}"

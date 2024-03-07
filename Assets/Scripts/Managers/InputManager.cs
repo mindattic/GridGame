@@ -26,7 +26,7 @@ public class InputManager : ExtendedMonoBehavior
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Pressed R");
-            board.ResetBoard();
+            stageManager.Load();
         }
      
     }

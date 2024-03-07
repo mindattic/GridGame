@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,6 +43,12 @@ public class OverlayManager : ExtendedMonoBehavior
 
     }
 
+    public void Show()
+    {
+        image.color = new Color(0f, 0f, 0f, 1);
+        StartCoroutine(FadeOut());
+    }
+
     public IEnumerator FadeIn()
     {
         float alpha = 0f;
@@ -60,6 +67,8 @@ public class OverlayManager : ExtendedMonoBehavior
     {
         float alpha = 1f;
         image.color = new Color(0f, 0f, 0f, alpha);
+
+        yield return new WaitForSeconds(2f);
 
         while (alpha > 0f)
         {
