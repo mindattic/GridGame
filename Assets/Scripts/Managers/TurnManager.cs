@@ -17,7 +17,6 @@ public class TurnManager : ExtendedMonoBehavior
     public bool IsStartPhase => currentPhase.Equals(Phase.Start);
     public bool IsMovePhase => currentPhase.Equals(Phase.Move);
     public bool IsAttackPhase => currentPhase.Equals(Phase.Attack);
-    //public bool IsEndPhase => currentPhase.Equals(Phase.End);
 
     void Awake()
     {
@@ -34,7 +33,6 @@ public class TurnManager : ExtendedMonoBehavior
         currentTurn = Team.Player;
         currentPhase = Phase.Start;
 
-
         musicSource.PlayOneShot(resourceManager.MusicTrack($"MelancholyLull"));
     }
 
@@ -45,7 +43,6 @@ public class TurnManager : ExtendedMonoBehavior
         turnManager.currentPhase = Phase.Start;
 
         soundSource.PlayOneShot(resourceManager.SoundEffect($"NextTurn"));
-
     }
 
     void Update()

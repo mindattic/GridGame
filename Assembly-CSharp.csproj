@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\Utilities\Geometry.cs" />
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
     <Compile Include="Assets\Scripts\Managers\StageManager.cs" />
+    <Compile Include="Assets\Scripts\Models\SoundEffect.cs" />
     <Compile Include="Assets\Scripts\Models\ActorAttributes.cs" />
     <Compile Include="Assets\Scripts\Behaviors\DamageTextBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\OverlayManager.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Assets\Scripts\Behaviors\TileBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\DamageTextManager.cs" />
     <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
+    <Compile Include="Assets\Scripts\Models\MusicTrack.cs" />
     <Compile Include="Assets\Scripts\Behaviors\ExtendedMonoBehavior.cs" />
     <Compile Include="Assets\Scripts\Behaviors\GhostBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\ActorPair.cs" />
@@ -104,8 +106,6 @@
     <Compile Include="Assets\Scripts\Models\StatusSprite.cs" />
     <Compile Include="Assets\Scripts\Models\StageActor.cs" />
     <Compile Include="Assets\Scripts\Models\Stage.cs" />
-    <Compile Include="Assets\Scripts\Models\SoundEffect.cs" />
-    <Compile Include="Assets\Scripts\Models\MusicTrack.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

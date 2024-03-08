@@ -18,12 +18,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     //Variables
     [SerializeField] public string id;
-    public Vector2Int location;
-    public Vector3? destination = null;
-    public Team team = Team.Independant;
-    public ActorAttributes attributes;
-
-    //Vector3 original;
+    [SerializeField] public Vector2Int location;
+    [SerializeField] public Vector3? destination = null;
+    [SerializeField] public Team team = Team.Independant;
+    [SerializeField] public int HP;
+    [SerializeField] public int MaxHP;
 
     private int enemyTurnDelay = 0;
 
@@ -97,16 +96,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsSouthEdge => this.location.y == board.rows;
     public bool IsWestEdge => this.location.x == 1;
     public bool IsAlive => this != null && this.isActiveAndEnabled && this.HP > 0;
-    public int HP
-    {
-        get { return this.attributes.HP; }
-        set { attributes.HP = value; }
-    }
-    public int MaxHP
-    {
-        get { return this.attributes.MaxHP; }
-        set { attributes.MaxHP = value; }
-    }
+    
 
     #endregion
 
@@ -274,7 +264,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (closestTile.location.Equals(this.location))
             return;
 
-        soundSource.PlayOneShot(resourceManager.SoundEffect($"Move"));
+        soundSource.PlayOneShot(resourceManager.SoundEffect($"Move{Random.Int(1, 6)}"));
+        //soundSource.PlayOneShot(resourceManager.SoundEffect($"Move1"));
 
         //Determine if selected player and another actor are occupying the same tile
         var actor = actors.FirstOrDefault(x => x.IsAlive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
@@ -354,7 +345,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
     }
 
-    
+
     private void CheckBobbing()
     {
         if (!this.IsAlive) return;
@@ -381,41 +372,47 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private IEnumerator StartTakingDamage()
     {
-        var y = render.healthBarBack.transform.localScale.y;
-        var z = render.healthBarBack.transform.localScale.z;
-        var remainingHP = HP - damageTaken;
+        var remainingHP = Mathf.Clamp(HP - damageTaken, 0, MaxHP);
 
         while (HP > remainingHP)
         {
-            position = currentTile.position;
 
+            //Decrease HP
             var damage = Random.Int(1, 3);
             HP -= damage;
             HP = Mathf.Clamp(HP, remainingHP, MaxHP);
 
-            position += new Vector3(Random.Range(tileSize / 12), Random.Range(tileSize / 12), 1);
-            damageTextManager.Add(damage.ToString(), position);
-            var x = render.healthBarBack.transform.localScale.x * ((float)HP / (float)MaxHP);
-            render.healthBar.transform.localScale = new Vector3(x, y, z);
+            //Spawn damage text
+            damageTextManager.Spawn(damage.ToString(), position);
 
-            soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 6)}"));
+            //Shake actor
+            this.position = currentTile.position;
+            this.position += new Vector3(Random.Range(tileSize / 12), Random.Range(tileSize / 12), 1);
+ 
+            //Resize health bar
+            var scale = new Vector3(
+                render.healthBarBack.transform.localScale.x * (HP.ToFloat() / MaxHP.ToFloat()),
+                render.healthBarBack.transform.localScale.y,
+                render.healthBarBack.transform.localScale.z);
+            this.render.healthBar.transform.localScale = scale;
+
+            //Play sfx
+            soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
 
             yield return new WaitForSeconds(Interval.Five);
         }
 
+        this.HP = remainingHP;
         damageTaken = 0;
-        position = currentTile.position;
+        this.position = currentTile.position;
 
         //Deactive enemy if killed
-        if (HP < 1)
+        if (this.HP < 1)
         {
-            yield return StartCoroutine(StartDying());
+            StartCoroutine(StartDying());
 
-            //Clear board if all enemies are dead
-            if (enemies.All(x => !x.IsAlive))
-                stageManager.NextStage();
         }
-           
+
     }
 
 
@@ -433,15 +430,22 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         while (alpha > 0)
         {
+
             alpha -= Increment.Five;
             alpha = Mathf.Clamp(alpha, 0, 1);
             this.render.thumbnail.color = color;
             this.render.healthBarBack.color = color;
             this.render.healthBar.color = color;
+
+            position = currentTile.position;
+            position += new Vector3(Random.Range(tileSize / 12), Random.Range(tileSize / 12), 1);
+
             yield return new WaitForSeconds(Interval.One);
         }
 
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
+        actors.Remove(this);
+        Destroy(this.gameObject);
     }
 
 

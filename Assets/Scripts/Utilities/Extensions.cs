@@ -30,3 +30,48 @@ public static class IEnumeratorExtensions
         return new WaitAny(monoBehaviour, coroutines);
     }
 }
+
+
+public static class Vector3Extensions
+{
+    public static void SetX(this Vector3 v3, float value)
+    {
+        v3 = new Vector3(value, v3.y, v3.z);
+    }
+
+    public static void AddX(this Vector3 v3, float value)
+    {
+        v3 = new Vector3(v3.x + value, v3.y, v3.z);
+    }
+
+    public static void SetY(this Vector3 v3, float value)
+    {
+        v3 = new Vector3(v3.x, value, v3.z);
+    }
+
+    public static void AddY(this Vector3 v3, float value)
+    {
+        v3 = new Vector3(v3.x , v3.y + value, v3.z);
+    }
+
+    public static void SetZ(this Vector3 v3, float value)
+    {
+        v3 = new Vector3(v3.x, v3.y, value);
+    }
+
+    public static void AddZ(this Vector3 v3, float value)
+    {
+        v3 = new Vector3(v3.x, v3.y , v3.z + value);
+    }
+
+
+}
+
+
+public static class IntExtensions
+{
+    public static float ToFloat(this int i)
+    {
+        return (float)i;
+    }
+}

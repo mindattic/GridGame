@@ -18,7 +18,7 @@ public class DamageTextManager : ExtendedMonoBehavior
 
     }
 
-    public void Add(string text, Vector3 position)
+    public void Spawn(string text, Vector3 position)
     {
         GameObject prefab;
         DamageTextBehavior damageText;

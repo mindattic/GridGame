@@ -167,7 +167,8 @@ public class StageManager : ExtendedMonoBehavior
             var actor = prefab.GetComponent<ActorBehavior>();
             actor.id = x.id;
             actor.name = x.name;
-            actor.attributes = x.attributes;
+            actor.MaxHP = x.attributes.MaxHP;
+            actor.HP = x.attributes.HP;
             actor.thumbnail = x.thumbnail;
             actor.parent = board.transform;
             actor.location = x.location;

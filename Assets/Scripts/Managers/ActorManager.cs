@@ -178,9 +178,9 @@ public class ActorManager : ExtendedMonoBehavior
 
         //    if (hasSingleDirectAttacker && !hasEnemiesBetween && !hasPlayersBetween)
         //    {
-        //        supportLineManager.Add(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
-        //        attackParticipants.supporters.Add(pair.actor1);
-        //        attackParticipants.supporters.Add(pair.actor2);
+        //        supportLineManager.Spawn(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
+        //        attackParticipants.supporters.Spawn(pair.actor1);
+        //        attackParticipants.supporters.Spawn(pair.actor2);
         //    }
         //}
 
