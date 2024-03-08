@@ -410,7 +410,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (this.HP < 1)
         {
             StartCoroutine(StartDying());
-
         }
 
     }
