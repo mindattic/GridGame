@@ -17,6 +17,7 @@ public class ResourceManager : ExtendedMonoBehavior
 
     [SerializeField] public List<SoundEffect> soundEffects = new List<SoundEffect>();
 
+    [SerializeField] public List<MusicTrack> musicTracks = new List<MusicTrack>();
 
 
     private void Awake()
@@ -52,5 +53,12 @@ public class ResourceManager : ExtendedMonoBehavior
     {
         return soundEffects.First(x => x.id.Equals(id)).audio;
     }
+
+
+    public AudioClip MusicTrack(string id)
+    {
+        return musicTracks.First(x => x.id.Equals(id)).audio;
+    }
+
 
 }

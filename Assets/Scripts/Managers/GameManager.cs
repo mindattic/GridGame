@@ -26,8 +26,9 @@ public class GameManager : Singleton<GameManager>
     public ConsoleManager consoleManager;
 
 
-    public AudioSource audioSource;
-
+    //Audio
+    public AudioSource soundSource;
+    public AudioSource musicSource;
 
     //Scale
     public Vector2 screenSize;
@@ -99,7 +100,8 @@ public class GameManager : Singleton<GameManager>
         overlayManager = GameObject.Find("Overlay").GetComponent<OverlayManager>();
         titleManager = GameObject.Find("Title").GetComponent<TitleManager>();
 
-        audioSource = GameObject.Find(Constants.Game).GetComponent<AudioSource>();
+        soundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[0];
+        musicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[1];
 
         attackParticipants = new AttackParticipants();
 

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeb7b50cc639bac47a42e1cb580f7074, type: 3}
   m_Name: Slash5
   m_EditorClassIdentifier: 
-  id: 
-  audio: {fileID: 0}
+  id: Slash5
+  audio: {fileID: 8300000, guid: 758339350a68d5a4fbfbd7206376f55d, type: 3}

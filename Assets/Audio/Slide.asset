@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeb7b50cc639bac47a42e1cb580f7074, type: 3}
   m_Name: Slide
   m_EditorClassIdentifier: 
-  id: 
-  audio: {fileID: 0}
+  id: Slide
+  audio: {fileID: 8300000, guid: cd1aa738dcc809748ba263497b163462, type: 3}

@@ -148,7 +148,7 @@ public class ActorManager : ExtendedMonoBehavior
                 portraitManager.Play(pair.actor1, direction1);
                 portraitManager.Play(pair.actor2, direction2);
 
-                audioSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
+                soundSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
 
                 yield return new WaitForSeconds(3f);
 
@@ -314,7 +314,7 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer.sortingOrder = 10;
         selectedPlayer.render.frame.color = Colors.Solid.Gold;
 
-        audioSource.PlayOneShot(resourceManager.SoundEffect($"Select"));
+        soundSource.PlayOneShot(resourceManager.SoundEffect($"Select"));
 
         //Clear bobbing position
         ResetBobbing();

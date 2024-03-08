@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeb7b50cc639bac47a42e1cb580f7074, type: 3}
   m_Name: Death
   m_EditorClassIdentifier: 
-  id: 
-  audio: {fileID: 0}
+  id: Death
+  audio: {fileID: 8300000, guid: e730c3c03091a2e49a3cce227adb89dc, type: 3}

@@ -33,6 +33,9 @@ public class TurnManager : ExtendedMonoBehavior
         turnNumber = 1;
         currentTurn = Team.Player;
         currentPhase = Phase.Start;
+
+
+        musicSource.PlayOneShot(resourceManager.MusicTrack($"MelancholyLull"));
     }
 
     public void NextTurn()
@@ -41,7 +44,7 @@ public class TurnManager : ExtendedMonoBehavior
         turnManager.currentTurn = IsPlayerTurn ? Team.Enemy : Team.Player;
         turnManager.currentPhase = Phase.Start;
 
-        audioSource.PlayOneShot(resourceManager.SoundEffect($"NextTurn"));
+        soundSource.PlayOneShot(resourceManager.SoundEffect($"NextTurn"));
 
     }
 

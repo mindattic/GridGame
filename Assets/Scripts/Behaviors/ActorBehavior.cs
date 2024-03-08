@@ -201,7 +201,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         var closestTile = Geometry.ClosestTileByLocation(this.location);
         this.destination = closestTile.position;
 
-        audioSource.PlayOneShot(resourceManager.SoundEffect("Slide"));
+        soundSource.PlayOneShot(resourceManager.SoundEffect("Slide"));
     }
 
 
@@ -274,7 +274,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (closestTile.location.Equals(this.location))
             return;
 
-        audioSource.PlayOneShot(resourceManager.SoundEffect($"Move"));
+        soundSource.PlayOneShot(resourceManager.SoundEffect($"Move"));
 
         //Determine if selected player and another actor are occupying the same tile
         var actor = actors.FirstOrDefault(x => x.IsAlive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
@@ -398,7 +398,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             var x = render.healthBarBack.transform.localScale.x * ((float)HP / (float)MaxHP);
             render.healthBar.transform.localScale = new Vector3(x, y, z);
 
-            audioSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 6)}"));
+            soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 6)}"));
 
             yield return new WaitForSeconds(Interval.Five);
         }
@@ -429,7 +429,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.render.healthBarBack.color = color;
         this.render.healthBar.color = color;
 
-        audioSource.PlayOneShot(resourceManager.SoundEffect("Death"));
+        soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
 
         while (alpha > 0)
         {

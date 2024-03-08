@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeb7b50cc639bac47a42e1cb580f7074, type: 3}
   m_Name: Move
   m_EditorClassIdentifier: 
-  id: 
-  audio: {fileID: 0}
+  id: Move
+  audio: {fileID: 8300000, guid: 1497a99c010235246a4772e7fe909b58, type: 3}

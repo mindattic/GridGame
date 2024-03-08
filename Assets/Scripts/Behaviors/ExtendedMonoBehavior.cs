@@ -29,8 +29,9 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
 
 
-    protected AudioSource audioSource=> GameManager.instance.audioSource;
-
+    //Audio
+    protected AudioSource soundSource => GameManager.instance.soundSource;
+    protected AudioSource musicSource => GameManager.instance.musicSource;
 
     //Behaviors
     protected BoardBehavior board => GameManager.instance.board;
