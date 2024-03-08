@@ -277,12 +277,12 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void FixedUpdate()
     {
-        if (!HasSelectedPlayer)
-            return;
-
+     
     }
 
-    public void PickupPlayer()
+
+
+    public void TargetPlayer()
     {
         if (!turnManager.IsPlayerTurn || !turnManager.IsStartPhase || HasSelectedPlayer)
             return;
@@ -309,8 +309,20 @@ public class ActorManager : ExtendedMonoBehavior
         if (actor.team != Team.Player)
             return;
 
+        //TODO: Update Card display...
+        targettedPlayer = actor;
+        cardManager.Set(targettedPlayer);
+    }
+
+   
+
+    public void SelectPlayer()
+    {
+        if (!turnManager.IsPlayerTurn || !turnManager.IsStartPhase || HasSelectedPlayer || !HasTargettedPlayer)
+            return;
+
         //Select actor
-        selectedPlayer = actor;
+        selectedPlayer = targettedPlayer;
         selectedPlayer.sortingOrder = 10;
         selectedPlayer.render.frame.color = Colors.Solid.Gold;
 
@@ -324,16 +336,13 @@ public class ActorManager : ExtendedMonoBehavior
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
-        //Show portrait
-        //portraitManager.Play(selectedPlayer, PortraitTransitionState.FadeIn);
-
         //Spawn ghost images of selected player
         ghostManager.Spawn();
 
         timer.Set(scale: 1f, start: true);
     }
 
-    public void DropPlayer()
+    public void DeselectPlayer()
     {
         if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase || !HasSelectedPlayer)
             return;
@@ -348,14 +357,12 @@ public class ActorManager : ExtendedMonoBehavior
         tiles.ForEach(x => x.spriteRenderer.color = Colors.Translucent.White);
         ghostManager.Clear();
 
-        //Hide portrait
-        //portraitManager.Play(selectedPlayer, PortraitTransitionState.FadeOut);
-
-        //Determine if two actors occupy same location
-        //selectedPlayer.CheckLocationConflict();
-
         //Clear selected player
+        selectedPlayer.sortingOrder = 0;
+        selectedPlayer.render.frame.color = Colors.Solid.White;
         selectedPlayer = null;
+        targettedPlayer = null;
+        cardManager.Clear();
 
         timer.Set(scale: 0f, start: false);
 

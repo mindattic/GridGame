@@ -11,6 +11,10 @@ public class ResourceManager : ExtendedMonoBehavior
 
     [SerializeField] public List<ActorSprite> actorSprites = new List<ActorSprite>();
 
+    [SerializeField] public List<ActorDetails> actorDetails = new List<ActorDetails>();
+
+
+
     [SerializeField] public List<StatusSprite> statusSprites = new List<StatusSprite>();
 
 
@@ -33,6 +37,13 @@ public class ResourceManager : ExtendedMonoBehavior
     {
         return actorSprites.First(x => x.id.Equals(id)).portrait;
     }
+
+
+    public string ActorDetails(string id)
+    {
+        return actorDetails.First(x => x.id.Equals(id)).details;
+    }
+
 
 
     public Sprite StatusThumbnail(string id)

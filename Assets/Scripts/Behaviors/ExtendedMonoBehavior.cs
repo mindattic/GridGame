@@ -27,6 +27,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected OverlayManager overlayManager => GameManager.instance.overlayManager;
     protected TitleManager titleManager => GameManager.instance.titleManager;
     protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
+    protected CardManager cardManager => GameManager.instance.cardManager;
 
 
     //Audio
@@ -47,6 +48,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected List<ActorBehavior> enemies => GameManager.instance.actors.Where(x => x.team.Equals(Team.Enemy)).ToList();
 
     //Actor
+    protected bool HasTargettedPlayer => targettedPlayer != null;
     protected bool HasSelectedPlayer => selectedPlayer != null;
 
     //Scale
@@ -102,6 +104,13 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //{
     //    return IsAbove(a, b) || IsRight(a, b) || IsBelow(a, b) || IsLeft(a, b);
     //}
+
+
+    protected ActorBehavior targettedPlayer
+    {
+        get { return GameManager.instance.targettedPlayer; }
+        set { GameManager.instance.targettedPlayer = value; }
+    }
 
     protected ActorBehavior selectedPlayer
     {

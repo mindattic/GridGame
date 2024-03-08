@@ -89,6 +89,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
     public bool IsPlayer => this.team.Equals(Team.Player);
     public bool IsEnemy => this.team.Equals(Team.Enemy);
+    public bool IsTargettedPlayer => HasTargettedPlayer && this.Equals(targettedPlayer);
     public bool IsSelectedPlayer => HasSelectedPlayer && this.Equals(selectedPlayer);
     public bool HasDestination => this.destination.HasValue;
     public bool IsNorthEdge => this.location.y == 1;
@@ -311,7 +312,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bottom, board.top);
 
         //Move selected player towards cursor
-        this.position = Vector2.MoveTowards(selectedPlayer.position, cursorPosition, cursorSpeed);
+        this.position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
 
         //Snap selected player to cursor
         //this.position = cursorPosition;
@@ -348,9 +349,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void CheckBobbing()
     {
-        if (!this.IsAlive) return;
-        if (!this.IsPlayer) return;
-        if (!turnManager.IsStartPhase) return;
+        if (!this.IsAlive || !this.IsPlayer || !turnManager.IsStartPhase) return;
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         var pos = new Vector3(

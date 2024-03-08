@@ -24,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     public OverlayManager overlayManager;
     public TitleManager titleManager;
     public ConsoleManager consoleManager;
+    public CardManager cardManager;
 
 
     //Audio
@@ -49,8 +50,9 @@ public class GameManager : Singleton<GameManager>
     public float slideSpeed;
     public float snapDistance;
 
-   
+
     //Selection
+    public ActorBehavior targettedPlayer;
     public ActorBehavior selectedPlayer;
 
     //Behaviors
@@ -99,6 +101,7 @@ public class GameManager : Singleton<GameManager>
         consoleManager = GameObject.Find("Console").GetComponent<ConsoleManager>();
         overlayManager = GameObject.Find("Overlay").GetComponent<OverlayManager>();
         titleManager = GameObject.Find("Title").GetComponent<TitleManager>();
+        cardManager = GameObject.Find("Card").GetComponent<CardManager>();
 
         soundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[0];
         musicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[1];

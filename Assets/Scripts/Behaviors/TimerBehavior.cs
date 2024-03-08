@@ -40,7 +40,7 @@ public class TimerBehavior : ExtendedMonoBehavior
         else
         {
             isRunning = false;
-            actorManager.DropPlayer();
+            actorManager.DeselectPlayer();
         }
     }
 
