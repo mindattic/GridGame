@@ -28,6 +28,10 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected TitleManager titleManager => GameManager.instance.titleManager;
     protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
 
+
+    protected AudioSource audioSource=> GameManager.instance.audioSource;
+
+
     //Behaviors
     protected BoardBehavior board => GameManager.instance.board;
     protected TimerBehavior timer => GameManager.instance.timer;

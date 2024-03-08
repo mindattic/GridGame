@@ -41,6 +41,8 @@ public class TurnManager : ExtendedMonoBehavior
         turnManager.currentTurn = IsPlayerTurn ? Team.Enemy : Team.Player;
         turnManager.currentPhase = Phase.Start;
 
+        audioSource.PlayOneShot(resourceManager.SoundEffect($"NextTurn"));
+
     }
 
     void Update()

@@ -141,16 +141,28 @@ public class ActorManager : ExtendedMonoBehavior
 
                 pair.actor1.SetStatusAttack();
                 pair.actor2.SetStatusAttack();
-                pair.enemies.ForEach(x => x.render.thumbnail.color = Colors.Solid.Red);
+                //pair.enemies.ForEach(x => x.render.thumbnail.color = Colors.Solid.Red);
 
                 var direction1 = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
                 var direction2 = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
                 portraitManager.Play(pair.actor1, direction1);
                 portraitManager.Play(pair.actor2, direction2);
 
-                yield return new WaitForSeconds(1f);
+                audioSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
 
-                pair.enemies.ForEach(x => x.TakeDamage(Random.Int(15, 100)));
+                yield return new WaitForSeconds(3f);
+
+                foreach(var enemy in pair.enemies)
+                {
+                    var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
+                    enemy.TakeDamage(damage);
+                }
+
+
+                //TODO: Find "supporters" ...
+
+
+
 
             }
         }
@@ -214,14 +226,20 @@ public class ActorManager : ExtendedMonoBehavior
         attackLineManager.Clear();
         attackParticipants.Clear();
 
-        yield return new WaitForSeconds(2f);
-
-
         turnManager.NextTurn();
     }
 
 
     private void EnemyAttack()
+    {
+
+        
+
+        StartCoroutine(StartEnemyAttack());
+    }
+
+
+    private IEnumerator StartEnemyAttack()
     {
 
         attackParticipants.Clear();
@@ -238,43 +256,17 @@ public class ActorManager : ExtendedMonoBehavior
                 var delta = enemy.location - player.location;
                 if (Math.Abs(delta.x).Equals(1) || Math.Abs(delta.y).Equals(1))
                 {
-                    attackParticipants.attackers.Add(enemy);
-                    attackParticipants.defenders.Add(player);
+
+                    enemy.SetStatusAttack();
+                    var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
+                    player.TakeDamage(damage);
+
+
+                    yield return new WaitForSeconds(1f);
+
+                    enemy.GenerateTurnDelay();
                 }
 
-            }
-        }
-
-        StartCoroutine(StartEnemyAttack());
-    }
-
-
-    private IEnumerator StartEnemyAttack()
-    {
-        turnManager.currentPhase = TurnPhase.Attack;
-
-        foreach (var attacker in attackParticipants.attackers)
-        {
-            attacker.SetStatusAttack();
-            yield return new WaitForSeconds(0.25f);
-        }
-
-
-        foreach (var player in attackParticipants.defenders)
-        {
-            player.TakeDamage(Random.Int(16, 33));
-        }
-
-        yield return new WaitForSeconds(1f);
-
-        foreach (var enemy in enemies)
-        {
-            if (!enemy.IsAlive) continue;
-            enemy.render.thumbnail.color = Colors.Solid.White;
-            enemy.scale = tileScale;
-            if (enemy.turnDelay < 1)
-            {
-                enemy.GenerateTurnDelay();
             }
         }
 
@@ -321,6 +313,8 @@ public class ActorManager : ExtendedMonoBehavior
         selectedPlayer = actor;
         selectedPlayer.sortingOrder = 10;
         selectedPlayer.render.frame.color = Colors.Solid.Gold;
+
+        audioSource.PlayOneShot(resourceManager.SoundEffect($"Select"));
 
         //Clear bobbing position
         ResetBobbing();
@@ -381,7 +375,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void ResetBobbing()
     {
-        actors.ForEach(x =>
+        actors.Where(x => x != null && x.IsAlive).ToList().ForEach(x =>
         {
             x.render.thumbnail.transform.position = x.position;
             x.render.frame.transform.position = x.position;

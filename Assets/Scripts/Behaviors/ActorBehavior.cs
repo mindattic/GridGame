@@ -200,6 +200,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         var closestTile = Geometry.ClosestTileByLocation(this.location);
         this.destination = closestTile.position;
+
+        audioSource.PlayOneShot(resourceManager.SoundEffect("Slide"));
     }
 
 
@@ -271,6 +273,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         var closestTile = Geometry.ClosestTileByPosition(this.position);
         if (closestTile.location.Equals(this.location))
             return;
+
+        audioSource.PlayOneShot(resourceManager.SoundEffect($"Move"));
 
         //Determine if selected player and another actor are occupying the same tile
         var actor = actors.FirstOrDefault(x => x.IsAlive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
@@ -387,35 +391,34 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             var damage = Random.Int(1, 3);
             HP -= damage;
-            HP = Mathf.Clamp(HP, 0, MaxHP);
-            if (HP < 1)
-                break;
+            HP = Mathf.Clamp(HP, remainingHP, MaxHP);
 
             position += new Vector3(Random.Range(tileSize / 12), Random.Range(tileSize / 12), 1);
             damageTextManager.Add(damage.ToString(), position);
-            var x = render.healthBarBack.transform.localScale.x * (HP / MaxHP);
+            var x = render.healthBarBack.transform.localScale.x * ((float)HP / (float)MaxHP);
             render.healthBar.transform.localScale = new Vector3(x, y, z);
-            yield return new WaitForSeconds(0.05f);
+
+            audioSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 6)}"));
+
+            yield return new WaitForSeconds(Interval.Five);
         }
+
         damageTaken = 0;
         position = currentTile.position;
 
-        yield return new WaitForSeconds(1);
-        render.thumbnail.color = Colors.Solid.White;
-
         //Deactive enemy if killed
         if (HP < 1)
-            StartCoroutine(StartDying());
+        {
+            yield return StartCoroutine(StartDying());
 
-
-        yield return new WaitForSeconds(1);
-
-
-        //Clear board if all enemies are dead
-        if (enemies.All(x => !x.IsAlive))
-            stageManager.NextStage();
-
+            //Clear board if all enemies are dead
+            if (enemies.All(x => !x.IsAlive))
+                stageManager.NextStage();
+        }
+           
     }
+
+
 
 
     private IEnumerator StartDying()
@@ -425,6 +428,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.render.thumbnail.color = color;
         this.render.healthBarBack.color = color;
         this.render.healthBar.color = color;
+
+        audioSource.PlayOneShot(resourceManager.SoundEffect("Death"));
 
         while (alpha > 0)
         {

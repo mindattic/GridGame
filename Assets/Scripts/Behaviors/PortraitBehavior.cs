@@ -6,7 +6,6 @@ public class PortraitBehavior : ExtendedMonoBehavior
 {
     //Variables
     [SerializeField] public string id;
-    [SerializeField] public float speed = 5f;
 
     private ActorBehavior actor;
     private Direction direction;
