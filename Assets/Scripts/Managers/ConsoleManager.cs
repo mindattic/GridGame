@@ -1,11 +1,12 @@
 using System;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ConsoleManager : ExtendedMonoBehavior
 {
-    private Text label;
+    private TextMeshProUGUI label;
     private FpsMonitor fpsMonitor = new FpsMonitor();
 
     #region Components
@@ -27,7 +28,7 @@ public class ConsoleManager : ExtendedMonoBehavior
 
     private void Awake()
     {
-        label = GetComponent<Text>();
+        label = GetComponent<TextMeshProUGUI>();
         //label.font = new Font("Consolas");
     }
 

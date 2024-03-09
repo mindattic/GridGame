@@ -11,5 +11,6 @@ public class ActorRenderers
     public SpriteRenderer healthBar;
     public SpriteRenderer statusIcon;
     public TextMeshPro turnDelay;
+    public TextMeshPro healthText;
 }
 

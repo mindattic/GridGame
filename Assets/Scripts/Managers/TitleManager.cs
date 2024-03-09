@@ -1,11 +1,12 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TitleManager : ExtendedMonoBehavior
 {
     //Variables
-    public Text label;
+    public TextMeshProUGUI label;
     const float MaxAlpha = 1f;
 
     #region Components
@@ -27,7 +28,7 @@ public class TitleManager : ExtendedMonoBehavior
 
     void Awake()
     {
-        label = GameObject.Find("Title").GetComponent<Text>();
+        label = GameObject.Find("Title").GetComponent<TextMeshProUGUI>();
         label.transform.localPosition = new Vector3(0, 0, 0);
         label.color = new Color(1f, 1f, 1f, 0f);
     }

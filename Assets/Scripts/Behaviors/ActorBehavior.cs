@@ -15,6 +15,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     const int HealthBar = 3;
     const int StatusIcon = 4;
     const int TurnDelay = 5;
+    const int HealthText = 6;
 
     //Variables
     [SerializeField] public string id;
@@ -65,6 +66,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             render.healthBarBack.sortingOrder = value + 2;
             render.healthBar.sortingOrder = value + 3;
             render.statusIcon.sortingOrder = value + 4;
+            render.turnDelay.sortingOrder = value + 5;
+            render.healthText.sortingOrder = value + 6;
         }
     }
 
@@ -214,6 +217,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
         render.statusIcon = gameObject.transform.GetChild(StatusIcon).GetComponent<SpriteRenderer>();
         render.turnDelay = gameObject.transform.GetChild(TurnDelay).GetComponent<TextMeshPro>();
+        render.healthText = gameObject.transform.GetChild(HealthText).GetComponent<TextMeshPro>();
+
     }
 
     private void Start()
@@ -234,6 +239,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         this.HP = MaxHP;
         this.render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
+        this.render.healthText.text = $"{HP}/{MaxHP}";
+
         render.turnDelay.text = $"{enemyTurnDelay}";
         if (this.IsPlayer)
         {
@@ -394,6 +401,9 @@ public class ActorBehavior : ExtendedMonoBehavior
                 render.healthBarBack.transform.localScale.y,
                 render.healthBarBack.transform.localScale.z);
             this.render.healthBar.transform.localScale = scale;
+
+            //Print health
+            this.render.healthText.text = $"{HP}/{MaxHP}";
 
             //Play sfx
             soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));

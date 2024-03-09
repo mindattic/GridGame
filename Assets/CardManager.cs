@@ -1,18 +1,24 @@
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class CardManager : ExtendedMonoBehavior
 {
-
+    RectTransform rectTransform;
+    Image back;
     Image profile;
     TextMeshProUGUI title;
     TextMeshProUGUI details;
 
     private void Awake()
     {
-        profile = GetComponentInChildren<Image>();
-        title = GetComponentsInChildren<TextMeshProUGUI>()[0];
-        details = GetComponentsInChildren<TextMeshProUGUI>()[1];
+        rectTransform = GetComponent<RectTransform>();
+        back = GameObject.Find("Card/Back").GetComponent<Image>();
+        profile = GameObject.Find("Card/Profile").GetComponent<Image>();
+        title = GameObject.Find("Card/Title").GetComponent<TextMeshProUGUI>();
+        details = GameObject.Find("Card/Details").GetComponent<TextMeshProUGUI>();
+
+        Clear();
     }
 
     void Start()
@@ -29,6 +35,7 @@ public class CardManager : ExtendedMonoBehavior
 
     public void Set(ActorBehavior actor)
     {
+        back.enabled = true;
         profile.sprite = resourceManager.ActorPortrait(actor.id);
         profile.enabled = true;
         title.text = actor.name;
@@ -37,6 +44,7 @@ public class CardManager : ExtendedMonoBehavior
 
     public void Clear()
     {
+        back.enabled = false;
         profile.enabled = false;
         title.text = "";
         details.text = "";
