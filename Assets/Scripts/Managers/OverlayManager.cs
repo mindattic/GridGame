@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,9 +6,11 @@ public class OverlayManager : ExtendedMonoBehavior
 {
 
     //Variables
+    private RectTransform rectTransform;
     private Image image;
     const float MaxAlpha = 0.5f;
 
+    
     #region Components
 
     public Transform parent
@@ -28,14 +29,21 @@ public class OverlayManager : ExtendedMonoBehavior
 
     void Awake()
     {
+        rectTransform = GetComponent<RectTransform>();
+        var canvas = this.GetComponentInParent<Canvas>();
+        var sizeDeltaY = Screen.height / canvas.scaleFactor;
+        rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sizeDeltaY);
+
+
         image = GameObject.Find("Overlay").GetComponent<Image>();
-        image.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
         image.color = new Color(0f, 0f, 0f, 0f);
+
+        
     }
 
     void Start()
     {
-      
+
     }
 
     void Update()

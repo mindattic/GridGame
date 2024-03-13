@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Barbarian
   m_EditorClassIdentifier: 
   id: Barbarian
-  details: Gains [Rage] when attacked. Use [Unleash Rage] skill to decrease incoming
-    damage and increase outgoing damage.
+  details: Gains <color=#FF0000>[Rage]</color> when attacked. Will eventually go
+    <color=#FF0000>[Berserk]</color> and attack multiple nearby enemies.

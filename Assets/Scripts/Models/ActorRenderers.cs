@@ -12,5 +12,7 @@ public class ActorRenderers
     public SpriteRenderer statusIcon;
     public TextMeshPro turnDelay;
     public TextMeshPro healthText;
+
+
 }
 

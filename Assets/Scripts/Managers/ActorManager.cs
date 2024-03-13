@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ActorManager : ExtendedMonoBehavior
@@ -355,7 +354,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         //Clear tiles
         tiles.ForEach(x => x.spriteRenderer.color = Colors.Translucent.White);
-        ghostManager.Clear();
+        //ghostManager.Clear();
 
         //Clear selected player
         selectedPlayer.sortingOrder = 0;

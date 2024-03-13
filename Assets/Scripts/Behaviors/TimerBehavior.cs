@@ -11,14 +11,18 @@ public class TimerBehavior : ExtendedMonoBehavior
     private RectTransform rect;
     private Image progressBar;
 
-    void Start()
+    private void Awake()
     {
         rect = GetComponent<RectTransform>();
         progressBar = GetComponent<Image>();
 
-        //TODO: Calculate programatically
-        rect.offsetMin = new Vector2(40, 1550); //Play left, bottom
-        rect.offsetMax = new Vector2(-40, -100); //Play right, top
+      
+    }
+
+
+    void Start()
+    {
+
 
 
     }
@@ -26,7 +30,7 @@ public class TimerBehavior : ExtendedMonoBehavior
 
     void Update()
     {
-        
+
 
     }
 

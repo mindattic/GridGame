@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class TitleManager : ExtendedMonoBehavior
 {
     //Variables
+    private RectTransform rectTransform;
     public TextMeshProUGUI label;
     const float MaxAlpha = 1f;
 
@@ -28,6 +29,11 @@ public class TitleManager : ExtendedMonoBehavior
 
     void Awake()
     {
+        //rectTransform = GetComponent<RectTransform>();
+        //var canvas = this.GetComponentInParent<Canvas>();
+        //var sizeDeltaY = Screen.height / canvas.scaleFactor;
+        //rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sizeDeltaY);
+
         label = GameObject.Find("Title").GetComponent<TextMeshProUGUI>();
         label.transform.localPosition = new Vector3(0, 0, 0);
         label.color = new Color(1f, 1f, 1f, 0f);

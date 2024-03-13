@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GhostBehavior : MonoBehaviour
+public class GhostBehavior : ExtendedMonoBehavior
 {
 
     //Constants
@@ -11,7 +11,6 @@ public class GhostBehavior : MonoBehaviour
 
     //Variables
     [SerializeField] public string id;
-    public float duration = 3f;
 
     #region Components
 
@@ -28,32 +27,43 @@ public class GhostBehavior : MonoBehaviour
     }
 
 
-    public GhostRenderers sprite = new GhostRenderers();
+    public GhostRenderers render = new GhostRenderers();
 
 
     public Sprite thumbnail
     {
-        get => sprite.thumbnail.sprite;
-        set => sprite.thumbnail.sprite = value;
+        get => render.thumbnail.sprite;
+        set => render.thumbnail.sprite = value;
     }
 
- 
+    public Sprite frame
+    {
+        get => render.frame.sprite;
+        set => render.frame.sprite = value;
+    }
+
+
     public int sortingOrder
     {
         set
         {
-            sprite.thumbnail.sortingOrder = value;
-            sprite.frame.sortingOrder = value + 1;
+            render.thumbnail.sortingOrder = value;
+            render.frame.sortingOrder = value + 1;
         }
     }
 
 
     #endregion
 
-    public void Set(ActorBehavior actor)
+    public void Spawn(ActorBehavior actor)
     {
-        this.sprite.thumbnail.color = Common.ColorRGBA(255, 255, 255, 100);
-        this.sprite.frame.color = Common.ColorRGBA(255, 255, 255, 100);
+        //TODO: Fix later...
+        this.render.frame.enabled = false;
+
+        this.render.thumbnail.size = new Vector2(tileSize, tileSize);
+        //this.render.frame.size = new Vector2(tileSize, tileSize);
+        this.render.thumbnail.color = Common.ColorRGBA(255, 255, 255, 100);
+        //this.render.frame.color = Common.ColorRGBA(255, 255, 255, 100);
         this.position = actor.position;
         StartCoroutine(FadeOut());
     }
@@ -62,8 +72,8 @@ public class GhostBehavior : MonoBehaviour
 
     private void Awake()
     {
-        sprite.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
-        sprite.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
+        render.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
+        render.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
     }
 
     // Start is called before the first frame update
@@ -85,16 +95,16 @@ public class GhostBehavior : MonoBehaviour
 
     private IEnumerator FadeOut()
     {
-        float alpha = sprite.thumbnail.color.a;
-        Color color = sprite.thumbnail.color;
+        float alpha = render.thumbnail.color.a;
+        Color color = render.thumbnail.color;
 
         while (alpha > 0)
         {
             alpha -= Increment.Five;
             alpha = Mathf.Max(alpha, 0f);
             color.a = alpha;
-            sprite.thumbnail.color = color;
-            sprite.frame.color = color;
+            render.thumbnail.color = color;
+            render.frame.color = color;
 
             yield return new WaitForSeconds(Interval.Five);
         }

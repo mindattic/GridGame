@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Xml;
 using TMPro;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class ActorBehavior : ExtendedMonoBehavior
 {
@@ -77,7 +74,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         set
         {
             enemyTurnDelay = value;
-            render.turnDelay.text = enemyTurnDelay != 0 ? $"{enemyTurnDelay}" : "";
+            render.turnDelay.text = enemyTurnDelay != 0 ? $"x{enemyTurnDelay}" : "";
         }
     }
 
@@ -100,7 +97,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsSouthEdge => this.location.y == board.rows;
     public bool IsWestEdge => this.location.x == 1;
     public bool IsAlive => this != null && this.isActiveAndEnabled && this.HP > 0;
-    
+
 
     #endregion
 
@@ -110,8 +107,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         //TODO: Use enemy statistics to determine turn delay...
         enemyTurnDelay = Random.Int(2, 4);
-        render.turnDelay.text = $"{enemyTurnDelay}";
-        this.SetStatusNone();
+        render.turnDelay.text = $"x{enemyTurnDelay}";
+        this.SetStatusSleep();
 
 
     }
@@ -241,11 +238,11 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
         this.render.healthText.text = $"{HP}/{MaxHP}";
 
-        render.turnDelay.text = $"{enemyTurnDelay}";
         if (this.IsPlayer)
         {
             render.frame.color = Colors.Solid.White;
             render.turnDelay.gameObject.SetActive(false);
+            SetStatusNone();
         }
         else
         {
@@ -366,6 +363,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         render.thumbnail.transform.position = pos;
         render.frame.transform.position = pos;
+
+
     }
 
     public void TakeDamage(int amount)
@@ -394,7 +393,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             //Shake actor
             this.position = currentTile.position;
             this.position += new Vector3(Random.Range(tileSize / 12), Random.Range(tileSize / 12), 1);
- 
+
             //Resize health bar
             var scale = new Vector3(
                 render.healthBarBack.transform.localScale.x * (HP.ToFloat() / MaxHP.ToFloat()),
