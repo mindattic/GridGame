@@ -109,8 +109,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         enemyTurnDelay = Random.Int(2, 4);
         render.turnDelay.text = $"x{enemyTurnDelay}";
         this.SetStatusSleep();
-
-
     }
 
     public bool IsSameColumn(Vector2Int location) => this.location.x == location.x;

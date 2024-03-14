@@ -62,15 +62,14 @@ public class ActorManager : ExtendedMonoBehavior
         }
 
         turnManager.currentPhase = TurnPhase.Attack;
-        EnemyAttack();
+        CheckEnemyAttack();
     }
 
 
     private void CheckPlayerAttack()
     {
-        ClearAttack();
-        if (!FindAlignedPairs()) return;
-        if (!FindAttackingPairs()) return;
+        if (!HasAlignedPlayers()) return;
+        if (!HasAttackingPlayers()) return;
         StartCoroutine(PlayerAttack());
     }
 
@@ -84,8 +83,10 @@ public class ActorManager : ExtendedMonoBehavior
     /// <summary>
     /// Method which is used to find actors that share a column or row
     /// </summary>
-    private bool FindAlignedPairs()
+    private bool HasAlignedPlayers()
     {
+        ClearAttack();
+
         foreach (var actor1 in players)
         {
             foreach (var actor2 in players)
@@ -100,7 +101,6 @@ public class ActorManager : ExtendedMonoBehavior
             }
         }
 
-
         if (attackParticipants.alignedPairs.Count < 1)
         {
             turnManager.NextTurn();
@@ -114,7 +114,7 @@ public class ActorManager : ExtendedMonoBehavior
     /// <summary>
     /// Method which is used to find actors surrounding enemies without gaps between
     /// </summary>
-    private bool FindAttackingPairs()
+    private bool HasAttackingPlayers()
     {
         foreach (var pair in attackParticipants.alignedPairs)
         {
@@ -122,24 +122,23 @@ public class ActorManager : ExtendedMonoBehavior
             {
                 pair.highest = pair.actor1.location.y > pair.actor2.location.y ? pair.actor1 : pair.actor2;
                 pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
-                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling));
-                pair.players = players.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling));
-                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling));
+                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y);
+                pair.players = players.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y);
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y);
             }
             else if (pair.axis == Axis.Horizontal)
             {
                 pair.highest = pair.actor1.location.x > pair.actor2.location.x ? pair.actor1 : pair.actor2;
                 pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
-                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling));
-                pair.players = players.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling));
-                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling));
+                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x);
+                pair.players = players.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x);
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x);
             }
 
             //Assign attacking pairs
             var hasEnemiesBetween = pair.enemies.Any();
             var hasPlayersBetween = pair.players.Any();
             var hasGapsBetween = pair.gaps.Any();
-
             if (!hasEnemiesBetween || hasPlayersBetween || hasGapsBetween)
                 continue;
 
@@ -158,7 +157,6 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator PlayerAttack()
     {
-
         foreach(var pair in attackParticipants.attackingPairs)
         {
             attackLineManager.Add(pair);
@@ -180,6 +178,9 @@ public class ActorManager : ExtendedMonoBehavior
                 var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
                 yield return enemy.TakeDamage(damage);
             }
+
+            pair.actor1.SetStatusNone();
+            pair.actor2.SetStatusNone();
         }
 
         yield return new WaitForSeconds(2f);
@@ -188,41 +189,31 @@ public class ActorManager : ExtendedMonoBehavior
         turnManager.NextTurn();
     }
 
-
-
-    private void EnemyAttack()
+    private void CheckEnemyAttack()
     {
-
-
-
-        StartCoroutine(StartEnemyAttack());
+        StartCoroutine(EnemyAttack());
     }
 
-
-    private IEnumerator StartEnemyAttack()
+    private IEnumerator EnemyAttack()
     {
-
-        attackParticipants.Clear();
+        ClearAttack();
 
         foreach (var enemy in enemies)
         {
-            if (!enemy.IsAlive) continue;
-            if (enemy.turnDelay > 0) continue;
+            if (!enemy.IsAlive || enemy.turnDelay > 0) continue;
 
             foreach (var player in players)
             {
                 if (!player.IsAlive || (!player.IsSameColumn(enemy.location) && !player.IsSameRow(enemy.location))) continue;
 
                 var delta = enemy.location - player.location;
-                if (Math.Abs(delta.x).Equals(1) || Math.Abs(delta.y).Equals(1))
+                if (Math.Abs(delta.x) == 1 || Math.Abs(delta.y) == 1)
                 {
-
                     enemy.SetStatusAttack();
                     var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
                     player.TakeDamage(damage);
 
-
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSeconds(2f);
 
                     enemy.GenerateTurnDelay();
                 }
@@ -230,7 +221,7 @@ public class ActorManager : ExtendedMonoBehavior
             }
         }
 
-        attackParticipants.Clear();
+        ClearAttack();
         turnManager.NextTurn();
     }
 
