@@ -66,36 +66,32 @@ public class ActorManager : ExtendedMonoBehavior
     }
 
 
-    private void PlayerAttack()
+    private void CheckPlayerAttack()
     {
-
-
-        StartCoroutine(StartPlayerAttack());
+        ClearAttack();
+        if (!FindAlignedPairs()) return;
+        if (!FindAttackingPairs()) return;
+        StartCoroutine(PlayerAttack());
     }
 
-    private bool isBetween(float p, ActorPair pair)
+    private void ClearAttack()
     {
-        return p > pair.floor && p < pair.ceiling;
-    }
-
-    private IEnumerator StartPlayerAttack()
-    {
-        //Clear values
-        actors.Where(x => x.IsAlive).ToList().ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
         supportLineManager.Clear();
         attackLineManager.Clear();
         attackParticipants.Clear();
+    }
 
-        //Find actors that share a column or row
+    /// <summary>
+    /// Method which is used to find actors that share a column or row
+    /// </summary>
+    private bool FindAlignedPairs()
+    {
         foreach (var actor1 in players)
         {
             foreach (var actor2 in players)
             {
-                if (actor1.Equals(actor2))
-                    break;
-
-                if (!actor1.IsAlive || !actor2.IsAlive)
-                    break;
+                if (actor1.Equals(actor2) || !actor1.IsAlive || !actor2.IsAlive || attackParticipants.HasAlignedPair(actor1, actor2))
+                    continue;
 
                 if (actor1.IsSameColumn(actor2.location))
                     attackParticipants.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Vertical));
@@ -104,135 +100,100 @@ public class ActorManager : ExtendedMonoBehavior
             }
         }
 
+
         if (attackParticipants.alignedPairs.Count < 1)
         {
             turnManager.NextTurn();
-            yield return null;
+            return false;
         }
 
-        //Find attacking pairs
+        return true;
+    }
+
+
+    /// <summary>
+    /// Method which is used to find actors surrounding enemies without gaps between
+    /// </summary>
+    private bool FindAttackingPairs()
+    {
         foreach (var pair in attackParticipants.alignedPairs)
         {
             if (pair.axis == Axis.Vertical)
             {
                 pair.highest = pair.actor1.location.y > pair.actor2.location.y ? pair.actor1 : pair.actor2;
                 pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
-                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && isBetween(x.location.y, pair)).ToList();
-                pair.players = players.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && isBetween(x.location.y, pair)).ToList();
-                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && isBetween(x.location.y, pair)).ToList();
+                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling));
+                pair.players = players.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling));
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling));
             }
             else if (pair.axis == Axis.Horizontal)
             {
                 pair.highest = pair.actor1.location.x > pair.actor2.location.x ? pair.actor1 : pair.actor2;
                 pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
-                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && isBetween(x.location.x, pair)).ToList();
-                pair.players = players.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && isBetween(x.location.x, pair)).ToList();
-                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && isBetween(x.location.x, pair)).ToList();
+                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling));
+                pair.players = players.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling));
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling));
             }
 
             //Assign attacking pairs
-            var hasEnemiesBetween = pair.enemies.Count > 0;
-            var hasPlayersBetween = pair.players.Count > 0;
-            var hasGapsBetween = pair.gaps.Count > 0;
-            if (hasEnemiesBetween && !hasPlayersBetween && !hasGapsBetween)
+            var hasEnemiesBetween = pair.enemies.Any();
+            var hasPlayersBetween = pair.players.Any();
+            var hasGapsBetween = pair.gaps.Any();
+
+            if (!hasEnemiesBetween || hasPlayersBetween || hasGapsBetween)
+                continue;
+
+            attackParticipants.attackingPairs.Add(pair);
+        }
+
+        if (attackParticipants.attackingPairs.Count < 1)
+        {
+            turnManager.NextTurn();
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private IEnumerator PlayerAttack()
+    {
+
+        foreach(var pair in attackParticipants.attackingPairs)
+        {
+            attackLineManager.Add(pair);
+
+            pair.actor1.SetStatusAttack();
+            pair.actor2.SetStatusAttack();
+           
+            var direction1 = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
+            var direction2 = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
+            portraitManager.Play(pair.actor1, direction1);
+            portraitManager.Play(pair.actor2, direction2);
+
+            soundSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
+
+            yield return new WaitForSeconds(3f);
+
+            foreach (var enemy in pair.enemies)
             {
-                attackLineManager.Add(pair);
-
-                pair.actor1.SetStatusAttack();
-                pair.actor2.SetStatusAttack();
-                //pair.enemies.ForEach(x => x.render.thumbnail.color = Colors.Solid.Red);
-
-                var direction1 = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
-                var direction2 = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
-                portraitManager.Play(pair.actor1, direction1);
-                portraitManager.Play(pair.actor2, direction2);
-
-                soundSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
-
-                yield return new WaitForSeconds(3f);
-
-                foreach(var enemy in pair.enemies)
-                {
-                    var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
-                    enemy.TakeDamage(damage);
-                }
-
-
-                //TODO: Find "supporters" ...
-
-
-
-
+                var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
+                yield return enemy.TakeDamage(damage);
             }
         }
 
- 
-        //foreach (var pair in attackParticipants.alignedPairs)
-        //{
-        //    var isDirectAttacker1 = attackParticipants.attackers.Contains(pair.actor1);
-        //    var isDirectAttacker2 = attackParticipants.attackers.Contains(pair.actor2);
-        //    var hasSingleDirectAttacker = (isDirectAttacker1 && !isDirectAttacker2) || (!isDirectAttacker1 && isDirectAttacker2);
-        //    var hasEnemiesBetween = pair.enemies.Count > 0;
-        //    var hasPlayersBetween = pair.players.Count > 0;
-
-        //    if (hasSingleDirectAttacker && !hasEnemiesBetween && !hasPlayersBetween)
-        //    {
-        //        supportLineManager.Spawn(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
-        //        attackParticipants.supporters.Spawn(pair.actor1);
-        //        attackParticipants.supporters.Spawn(pair.actor2);
-        //    }
-        //}
-
-        //foreach (var attackers in attackParticipants.attackingPairs)
-        //{
-        //    attackers.actor1.SetStatusAttack();
-        //    attackers.actor2.SetStatusAttack();
-
-            
-
-        //    yield return new WaitForSeconds(1f);
-        //}
-
-        //foreach (var supporter in attackParticipants.supporters)
-        //{
-        //    supporter.SetStatusSupport();
-        //    yield return new WaitForSeconds(0.5f);
-        //}
-
-        //yield return new WaitForSeconds(2f);
-
-        //foreach (var enemy in attackParticipants.defenders)
-        //{
-        //    enemy.TakeDamage(Random.Int(15, 100));
-        //}
-
         yield return new WaitForSeconds(2f);
 
-        foreach (var player in players)
-        {
-            if (!player.IsAlive) continue;
-            player.SetStatusNone();
-            player.render.thumbnail.color = Colors.Solid.White;
-            player.scale = tileScale;
-        }
-
-        timer.Set(scale: 1f, start: false);
-
-
-        //Clear values
-        actors.Where(x => x.IsAlive).ToList().ForEach(x => x.render.thumbnail.color = Colors.Solid.White);
-        supportLineManager.Clear();
-        attackLineManager.Clear();
-        attackParticipants.Clear();
-
+        ClearAttack();
         turnManager.NextTurn();
     }
+
 
 
     private void EnemyAttack()
     {
 
-        
+
 
         StartCoroutine(StartEnemyAttack());
     }
@@ -276,7 +237,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void FixedUpdate()
     {
-     
+
     }
 
 
@@ -313,7 +274,7 @@ public class ActorManager : ExtendedMonoBehavior
         cardManager.Set(targettedPlayer);
     }
 
-   
+
 
     public void SelectPlayer()
     {
@@ -366,7 +327,8 @@ public class ActorManager : ExtendedMonoBehavior
         timer.Set(scale: 0f, start: false);
 
         turnManager.currentPhase = TurnPhase.Attack;
-        PlayerAttack();
+
+        CheckPlayerAttack();
     }
 
 

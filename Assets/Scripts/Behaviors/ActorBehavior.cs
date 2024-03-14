@@ -367,15 +367,15 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-    public void TakeDamage(int amount)
-    {
-        damageTaken = amount;
-        StartCoroutine(StartTakingDamage());
-    }
+    //public void TakeDamage(int amount)
+    //{
+    //    damageTaken = amount;
+    //    StartCoroutine(StartTakingDamage());
+    //}
 
-    private int damageTaken = 0;
+    //private int damageTaken = 0;
 
-    private IEnumerator StartTakingDamage()
+    public IEnumerator TakeDamage(int damageTaken)
     {
         var remainingHP = Mathf.Clamp(HP - damageTaken, 0, MaxHP);
 

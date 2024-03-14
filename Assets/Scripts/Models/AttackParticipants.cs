@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 public class AttackParticipants
 {
@@ -22,5 +23,12 @@ public class AttackParticipants
         attackers.Clear();
         supporters.Clear();
         defenders.Clear();
+    }
+
+
+
+    public bool HasAlignedPair(ActorBehavior actor1, ActorBehavior actor2)
+    {
+        return alignedPairs.Any(x => x.Matches(actor1, actor2));
     }
 }

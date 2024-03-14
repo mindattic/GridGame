@@ -34,6 +34,10 @@ public class Common
         return a <= b + range && a >= b - range;
     }
 
+    public static bool IsBetween(float a, float b, float c)
+    {
+        return a > b && a < c;
+    }
 
     public static Color ColorRGBA(float r, float g, float b, float a = 255)
     {
