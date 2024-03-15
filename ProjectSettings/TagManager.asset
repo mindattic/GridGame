@@ -30,7 +30,7 @@ TagManager:
   - Actor
   - DamageText
   - Portrait
-  - Bloom
+  - PostProcessing
   - 
   - 
   - 

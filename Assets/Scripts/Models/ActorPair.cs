@@ -20,11 +20,11 @@ public class ActorPair
     public float floor => axis == Axis.Vertical ? lowest.location.y : lowest.location.x;
 
     public Axis axis;
-    public IEnumerable<TileBehavior> gaps;
-    public IEnumerable<ActorBehavior> enemies;
-    public IEnumerable<ActorBehavior> players;
+    public List<TileBehavior> gaps;
+    public List<ActorBehavior> enemies;
+    public List<ActorBehavior> players;
 
-    public bool Matches(ActorBehavior actor1, ActorBehavior actor2)
+    public bool HasMatch(ActorBehavior actor1, ActorBehavior actor2)
     {
         return (this.actor1 == actor1 && this.actor2 == actor2) || (this.actor1 == actor2 && this.actor2 == actor1);
     }

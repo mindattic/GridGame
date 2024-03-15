@@ -105,7 +105,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public bool HasSpawned => !spawnTurn.HasValue || (spawnTurn.HasValue && spawnTurn.Value >= turnManager.turnNumber);
 
-    public bool IsActive => this.isActiveAndEnabled;
+    public bool IsActive => this != null && this.isActiveAndEnabled;
 
     #endregion
 
@@ -385,10 +385,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-    private void Shake(int factor = 12)
+    private void Shake(int intensity = 12)
     {
         this.position = currentTile.position;
-        this.position += new Vector3(Random.Range(tileSize / factor), Random.Range(tileSize / factor), 1);
+        this.position += new Vector3(Random.Range(tileSize / intensity), Random.Range(tileSize / intensity), 1);
     }
 
 
@@ -427,7 +427,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             PrintHealth();
 
-            //Play sfx
+            //SlideIn sfx
             soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
 
             yield return new WaitForSeconds(Interval.Five);
@@ -453,11 +453,13 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.render.healthBar.color = color;
 
         soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
+        portraitManager.Disintegrate(this);
+        yield return new WaitForSeconds(3f);
 
         while (alpha > 0)
         {
 
-            alpha -= Increment.One;
+            alpha -= Increment.Ten;
             alpha = Mathf.Clamp(alpha, 0, 1);
             this.render.thumbnail.color = color;
             this.render.frame.color = color;

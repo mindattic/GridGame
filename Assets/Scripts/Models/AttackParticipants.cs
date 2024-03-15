@@ -29,6 +29,6 @@ public class AttackParticipants
 
     public bool HasAlignedPair(ActorBehavior actor1, ActorBehavior actor2)
     {
-        return alignedPairs.Any(x => x.Matches(actor1, actor2));
+        return alignedPairs.Any(x => x.HasMatch(actor1, actor2));
     }
 }

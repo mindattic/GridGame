@@ -81,6 +81,7 @@ public class ActorManager : ExtendedMonoBehavior
         attackParticipants.Clear();
     }
 
+
     /// <summary>
     /// Method which is used to find actors that share a column or row
     /// </summary>
@@ -98,9 +99,18 @@ public class ActorManager : ExtendedMonoBehavior
                     continue;
 
                 if (actor1.IsSameColumn(actor2.location))
-                    attackParticipants.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Vertical));
+                {
+                    var highest = actor1.location.y > actor2.location.y ? actor1 : actor2;
+                    var lowest = highest == actor1 ? actor2 : actor1;
+                    attackParticipants.alignedPairs.Add(new ActorPair(highest, lowest, Axis.Vertical));
+                }
                 else if (actor1.IsSameRow(actor2.location))
-                    attackParticipants.alignedPairs.Add(new ActorPair(actor1, actor2, Axis.Horizontal));
+                {
+                    var highest = actor1.location.x > actor2.location.x ? actor1 : actor2;
+                    var lowest = highest == actor1 ? actor2 : actor1;
+                    attackParticipants.alignedPairs.Add(new ActorPair(highest, lowest, Axis.Horizontal));
+                }
+
             }
         }
 
@@ -125,17 +135,17 @@ public class ActorManager : ExtendedMonoBehavior
             {
                 pair.highest = pair.actor1.location.y > pair.actor2.location.y ? pair.actor1 : pair.actor2;
                 pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
-                pair.enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y);
-                pair.players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y);
-                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y);
+                pair.enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y).ToList();
+                pair.players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y).ToList();
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y).ToList();
             }
             else if (pair.axis == Axis.Horizontal)
             {
                 pair.highest = pair.actor1.location.x > pair.actor2.location.x ? pair.actor1 : pair.actor2;
                 pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
-                pair.enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x);
-                pair.players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x);
-                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x);
+                pair.enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x).ToList();
+                pair.players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x).ToList();
+                pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x).ToList();
             }
 
             //Assign attacking pairs
@@ -169,20 +179,20 @@ public class ActorManager : ExtendedMonoBehavior
 
             var direction1 = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
             var direction2 = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
-            portraitManager.Play(pair.actor1, direction1);
-            portraitManager.Play(pair.actor2, direction2);
+            portraitManager.SlideIn(pair.actor1, direction1);
+            portraitManager.SlideIn(pair.actor2, direction2);
 
             soundSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
-
             yield return new WaitForSeconds(3f);
 
             foreach (var enemy in pair.enemies)
             {
-                var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
+                //var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
+                var damage = 100;
                 yield return enemy.TakeDamage(damage);
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
 
             foreach (var enemy in pair.enemies)
             {

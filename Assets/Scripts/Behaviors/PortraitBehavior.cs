@@ -6,11 +6,10 @@ public class PortraitBehavior : ExtendedMonoBehavior
 {
     //Variables
     [SerializeField] public string id;
-
-    private ActorBehavior actor;
-    private Direction direction;
-    private float startTime;
-
+    [SerializeField] public ActorBehavior actor;
+    [SerializeField] public Direction direction;
+    [SerializeField] public float startTime;
+    [SerializeField] public Vector2 startPosition;
     [SerializeField] public AnimationCurve slide;
 
     #region Components
@@ -77,15 +76,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
     {
     }
 
-    public void Play(ActorBehavior actor, Direction direction)
-    {
-        this.actor = actor;
-        this.direction = direction;
-        this.startTime = Time.time;
-        StartCoroutine(Slide());
-    }
-
-    IEnumerator Slide()
+    public IEnumerator SlideIn()
     {
         Vector3 destination = new Vector3();
 
@@ -137,8 +128,37 @@ public class PortraitBehavior : ExtendedMonoBehavior
             yield return new WaitForSeconds(Interval.One);
         }
 
-        portraitManager.Remove(this);
         Destroy(this.gameObject);
+        portraitManager.Remove(this);     
     }
+
+
+    public IEnumerator Disintegrate()
+    {
+        var alpha = 1.0f;
+        spriteRenderer.color = new Color(1, 1, 1, alpha);
+
+        while (alpha > 0)
+        {
+          
+            this.position = startPosition;
+            this.position += new Vector3(Random.Range(tileSize / 12), Random.Range(tileSize / 12), 1);
+            this.transform.localScale *= 0.99f;
+            alpha -= Increment.One;
+            spriteRenderer.color = new Color(1, 1, 1, alpha);
+            yield return new WaitForSeconds(Interval.One);
+        }
+
+        Destroy(this.gameObject);
+        portraitManager.Remove(this);
+    }
+
+
+
+    //private void Shake(int factor = 12)
+    //{
+    //    this.position = currentTile.position;
+    //    this.position += new Vector3(Random.Range(tileSize / factor), Random.Range(tileSize / factor), 1);
+    //}
 
 }

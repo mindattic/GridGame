@@ -21,7 +21,15 @@ public class PortraitManager : ExtendedMonoBehavior
 
     }
 
-    public void Play(ActorBehavior actor, Direction direction)
+
+    public void SlideIn()
+    {
+        var actor = players[Random.Int(0, players.Count - 1)];
+        var direction = Random.Direction();
+        SlideIn(actor, direction);
+    }
+
+    public void SlideIn(ActorBehavior actor, Direction direction)
     {
         GameObject prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var portrait = prefab.GetComponent<PortraitBehavior>();
@@ -32,29 +40,39 @@ public class PortraitManager : ExtendedMonoBehavior
         portrait.sprite = resourceManager.ActorPortrait(actor.id);
         portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         portrait.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
+        portrait.actor = actor;
+        portrait.direction = direction;
+        portrait.startTime = Time.time;
         portraits.Add(portrait);
 
-        portrait.Play(actor, direction);
+        StartCoroutine(portrait.SlideIn());
     }
 
 
-
-    public void Spawn()
+    public void Disintegrate()
     {
+        var actor = players[Random.Int(0, players.Count - 1)];
+        Disintegrate(actor);
+    }
 
-        Direction direction1 = Random.Direction();
-        Direction direction2 = Direction.None;
-        switch (direction1)
-        {
-            case Direction.North: direction2 = Direction.South; break;
-            case Direction.East: direction2 = Direction.West; break;
-            case Direction.South: direction2 = Direction.North; break;
-            case Direction.West: direction2 = Direction.East; break;
-        }
+    public void Disintegrate(ActorBehavior actor)
+    {
+        GameObject prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
+        var portrait = prefab.GetComponent<PortraitBehavior>();
+        portrait.name = $"Portrait_{Guid.NewGuid()}";
+        portrait.id = portrait.name;
+        portrait.parent = board.transform;
+        portrait.sortingOrder = 100;
+        portrait.sprite = resourceManager.ActorPortrait(actor.id);
+        portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+        portrait.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
+        portrait.actor = actor;
+        portrait.position = actor.position;
+        portrait.startPosition = actor.position;
+        portrait.transform.localScale = new Vector3(0.25f, 0.25f, 1);
+        portraits.Add(portrait);
 
-        Play(Random.Player(), direction1);
-        Play(Random.Player(), direction2);
-
+        StartCoroutine(portrait.Disintegrate());
     }
 
 
@@ -67,6 +85,6 @@ public class PortraitManager : ExtendedMonoBehavior
 
     public void Remove(PortraitBehavior portrait)
     {
-       portraits.Remove(portrait);
+        portraits.Remove(portrait);
     }
 }
