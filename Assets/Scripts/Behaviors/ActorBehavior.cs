@@ -16,7 +16,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     const int HealthText = 6;
 
     //Variables
-    [SerializeField] public string id;
+    [SerializeField] public Archetype archetype;
     [SerializeField] public Vector2Int location = Vector2Int.zero;
     [SerializeField] public Vector3? destination = null;
     [SerializeField] public Team team = Team.Independant;
@@ -175,7 +175,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             //Actors are on top of eachother
             //TODO: Make sure this never happens in the first place...
-            //Debug.Log($"Conflict: {this.id} / {location.id}");
+            //Debug.Log($"Conflict: {this.archetype} / {location.archetype}");
 
             var closestUnoccupiedTile = Geometry.ClosestUnoccupiedTileByLocation(location);
             if (closestUnoccupiedTile != null)
@@ -257,10 +257,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             else
             {
                 var color = new Color(1, 1, 1, 0);
-                render.thumbnail.color = color;
-                render.frame.color = color;
-                render.healthBarBack.color = color;
-                render.healthBar.color = color;
+                render.SetColor(color);
                 gameObject.SetActive(false);
             }
 
@@ -433,26 +430,16 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator Die()
     {
         var alpha = 1f;
-        var color = new Color(1, 1, 1, alpha);
-        render.thumbnail.color = color;
-        render.frame.color = color;
-        render.healthBarBack.color = color;
-        render.healthBar.color = color;
+        render.SetColor(new Color(1, 1, 1, alpha));
 
         portraitManager.Dissolve(this);
         soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
 
-        yield return new WaitForSeconds(1);
-
         while (alpha > 0)
         {
-            alpha -= Increment.Two;
+            alpha -= Increment.One;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            color = new Color(1, 1, 1, alpha);
-            render.thumbnail.color = color;
-            render.frame.color = color;
-            render.healthBarBack.color = color;
-            render.healthBar.color = color;
+            render.SetColor(new Color(1, 1, 1, alpha));
             yield return Wait.Tick();
         }
 
@@ -469,21 +456,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator FadeIn(float increment = 0.01f)
     {
         float alpha = 0;
-        var color = new Color(1, 1, 1, alpha);
-        render.thumbnail.color = color;
-        render.frame.color = color;
-        render.healthBarBack.color = color;
-        render.healthBar.color = color;
+        render.SetColor(new Color(1, 1, 1, alpha));
 
         while (alpha < 1)
         {
             alpha += increment;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            color = new Color(1, 1, 1, alpha);
-            render.thumbnail.color = color;
-            render.frame.color = color;
-            render.healthBarBack.color = color;
-            render.healthBar.color = color;
+            render.SetColor(new Color(1, 1, 1, alpha));
 
             //Shake actor
             Shake(shakeIntensity.Low);
@@ -497,21 +476,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator FadeOut(float increment = 0.01f)
     {
         float alpha = 1f;
-        var color = new Color(1, 1, 1, alpha);
-        render.thumbnail.color = color;
-        render.frame.color = color;
-        render.healthBarBack.color = color;
-        render.healthBar.color = color;
+        render.SetColor(new Color(1, 1, 1, alpha));
 
         while (alpha > 0f)
         {
             alpha -= increment;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            color = new Color(1, 1, 1, alpha);
-            render.thumbnail.color = color;
-            render.frame.color = color;
-            render.healthBarBack.color = color;
-            render.healthBar.color = color;
+            render.SetColor(new Color(1, 1, 1, alpha));
 
             //Shake actor
             Shake(shakeIntensity.Low);

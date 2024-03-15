@@ -2,7 +2,7 @@
 
 public class StageActor
 {
-    public string id;
+    public Archetype archetype;
     public string name;
     public ActorAttributes attributes;
     public Sprite thumbnail;
@@ -12,24 +12,24 @@ public class StageActor
 
 
     public StageActor() { }
-    public StageActor(string id, string name, ActorAttributes attributes, Team team, Vector2Int location)
+    public StageActor(Archetype archetype, string name, ActorAttributes attributes, Team team, Vector2Int location)
     {
-        this.id = id;
+        this.archetype = archetype;
         this.name = name;
         this.attributes = attributes;
-        this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(id);
+        this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
         this.team = team;
         this.location = location;
         this.spawnTurn = null;
     }
 
 
-    public StageActor(string id, string name, ActorAttributes attributes, Team team, int spawnTurn)
+    public StageActor(Archetype archetype, string name, ActorAttributes attributes, Team team, int spawnTurn)
     {
-        this.id = id;
+        this.archetype = archetype;
         this.name = name;
         this.attributes = attributes;
-        this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(id);
+        this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
         this.team = team;
         this.location = Vector2Int.zero;
         this.spawnTurn = spawnTurn;

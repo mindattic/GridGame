@@ -5,8 +5,6 @@ using UnityEngine;
 public class AttackLineBehavior : ExtendedMonoBehavior
 {
     //Variables
-    [SerializeField] public string id;
-
     Color color;
     float width = 1.2f;
     float maxAlpha = 0.25f;

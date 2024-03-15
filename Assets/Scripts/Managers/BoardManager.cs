@@ -29,7 +29,6 @@ public class BoardManager : ExtendedMonoBehavior
                 prefab = Instantiate(tilePrefab, board.transform);
                 tile = prefab.GetComponent<TileBehavior>();
                 tile.name = $"{col}x{row}";
-                tile.id = tile.name;
                 tile.location = new Vector2Int(col, row);
             }
         }

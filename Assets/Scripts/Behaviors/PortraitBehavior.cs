@@ -5,7 +5,7 @@ using UnityEngine;
 public class PortraitBehavior : ExtendedMonoBehavior
 {
     //Variables
-    [SerializeField] public string id;
+
     [SerializeField] public ActorBehavior actor;
     [SerializeField] public Direction direction;
     [SerializeField] public float startTime;
@@ -128,8 +128,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
             yield return Wait.Tick();
         }
 
-        Destroy(this.gameObject);
-        portraitManager.Remove(this);     
+        Destroy(this.gameObject);   
     }
 
 
@@ -155,7 +154,6 @@ public class PortraitBehavior : ExtendedMonoBehavior
         }
 
         Destroy(this.gameObject);
-        portraitManager.Remove(this);
     }
 
 

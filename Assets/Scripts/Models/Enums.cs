@@ -46,3 +46,16 @@ public enum ActionIcon
     Support
 }
 
+
+public enum Archetype
+{
+    Paladin,
+    Barbarian,
+    Ninja,
+    Sentinel,
+    PandaGirl,
+    Cleric,
+    Slime,
+    Bat,
+    Scorpion
+}

@@ -9,9 +9,6 @@ public class GhostBehavior : ExtendedMonoBehavior
     const int Thumbnail = 0;
     const int Frame = 1;
 
-    //Variables
-    [SerializeField] public string id;
-
     #region Components
 
     public Transform parent

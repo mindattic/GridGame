@@ -19,9 +19,6 @@ public class AttackLineManager : ExtendedMonoBehavior
 
     public void Add(ActorPair pair)
     {
-        GameObject prefab;
-        AttackLineBehavior line;
-
         Vector3 a = pair.highest.position;
         Vector3 b = pair.lowest.position;
 
@@ -49,12 +46,11 @@ public class AttackLineManager : ExtendedMonoBehavior
         //    b += new Vector3(-tileSize / 2, 0, 0);
         //}
 
-        prefab = Instantiate(attackLinePrefab, Vector2.zero, Quaternion.identity);
-        line = prefab.GetComponent<AttackLineBehavior>();
-        line.name = $"AttackLine_{Guid.NewGuid()}";
-        line.id = line.name;
-        line.parent = board.transform;
-        line.Set(a, b);
+        var prefab = Instantiate(attackLinePrefab, Vector2.zero, Quaternion.identity);
+        var attackLine = prefab.GetComponent<AttackLineBehavior>();
+        attackLine.name = $"AttackLine_{Guid.NewGuid()}";
+        attackLine.parent = board.transform;
+        attackLine.Set(a, b);
     }
 
     public void Clear()

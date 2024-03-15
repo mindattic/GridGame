@@ -36,10 +36,10 @@ public class CardManager : ExtendedMonoBehavior
     public void Set(ActorBehavior actor)
     {
         back.enabled = true;
-        profile.sprite = resourceManager.ActorPortrait(actor.id);
+        profile.sprite = resourceManager.ActorPortrait(actor.archetype.ToString());
         profile.enabled = true;
         title.text = actor.name;
-        details.text = resourceManager.ActorDetails(actor.id);
+        details.text = resourceManager.ActorDetails(actor.archetype.ToString());
     }
 
     public void Clear()

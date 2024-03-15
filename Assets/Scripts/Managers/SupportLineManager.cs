@@ -18,15 +18,11 @@ public class SupportLineManager : ExtendedMonoBehavior
 
     public void Add(Vector3 a, Vector3 b)
     {
-        GameObject prefab;
-        SupportLineBehavior line;
-
-        prefab = Instantiate(supportLinePrefab, Vector2.zero, Quaternion.identity);
-        line = prefab.GetComponent<SupportLineBehavior>();
-        line.name = $"SupportLine_{Guid.NewGuid()}";
-        line.id = line.name;
-        line.parent = board.transform;
-        line.Set(a, b);
+        var prefab = Instantiate(supportLinePrefab, Vector2.zero, Quaternion.identity);
+        var supportLine = prefab.GetComponent<SupportLineBehavior>();
+        supportLine.name = $"SupportLine_{Guid.NewGuid()}";
+        supportLine.parent = board.transform;
+        supportLine.Set(a, b);
     }
 
     public void Clear()

@@ -164,7 +164,7 @@ public class StageManager : ExtendedMonoBehavior
         {
             var prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
             var actor = prefab.GetComponent<ActorBehavior>();
-            actor.id = x.id;
+            actor.archetype = x.archetype;
             actor.name = x.name;
             actor.MaxHP = x.attributes.MaxHP;
             actor.HP = x.attributes.HP;

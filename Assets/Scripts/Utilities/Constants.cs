@@ -93,18 +93,5 @@ public static class Increment
 public static class Wait
 {
     public static WaitForSeconds Tick() => new WaitForSeconds(Interval.One);
-
 }
 
-public static class Archetype
-{
-    public static string Paladin = "Paladin";
-    public static string Barbarian = "Barbarian";
-    public static string Ninja = "Ninja";
-    public static string Sentinel = "Sentinel";
-    public static string PandaGirl = "PandaGirl";
-    public static string Cleric = "Cleric";
-    public static string Slime = "Slime";
-    public static string Bat = "Bat";
-    public static string Scorpion = "Scorpion";
-}
