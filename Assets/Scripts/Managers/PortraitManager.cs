@@ -49,13 +49,13 @@ public class PortraitManager : ExtendedMonoBehavior
     }
 
 
-    public void Disintegrate()
+    public void Dissolve()
     {
         var actor = players[Random.Int(0, players.Count - 1)];
-        Disintegrate(actor);
+        Dissolve(actor);
     }
 
-    public void Disintegrate(ActorBehavior actor)
+    public void Dissolve(ActorBehavior actor)
     {
         GameObject prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var portrait = prefab.GetComponent<PortraitBehavior>();
@@ -72,7 +72,7 @@ public class PortraitManager : ExtendedMonoBehavior
         portrait.transform.localScale = new Vector3(0.25f, 0.25f, 1);
         portraits.Add(portrait);
 
-        StartCoroutine(portrait.Disintegrate());
+        StartCoroutine(portrait.Dissolve());
     }
 
 

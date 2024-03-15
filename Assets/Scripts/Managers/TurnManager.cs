@@ -35,6 +35,7 @@ public class TurnManager : ExtendedMonoBehavior
         overlayManager.FadeIn();
         titleManager.Print("Battle Start");
 
+        musicSource.Stop();
         musicSource.PlayOneShot(resourceManager.MusicTrack($"MelancholyLull"));
     }
 

@@ -67,7 +67,7 @@ public class OverlayManager : ExtendedMonoBehavior
             alpha += Increment.Five;
             alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
             image.color = new Color(0f, 0f, 0f, alpha);
-            yield return new WaitForSeconds(Interval.One);
+            yield return Wait.Tick();
         }
     }
 
@@ -83,7 +83,7 @@ public class OverlayManager : ExtendedMonoBehavior
             alpha -= Increment.One;
             alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
             image.color = new Color(0f, 0f, 0f, alpha);
-            yield return new WaitForSeconds(Interval.One);
+            yield return Wait.Tick();
         }
     }
 }

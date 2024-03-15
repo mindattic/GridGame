@@ -87,7 +87,7 @@ public class AttackLineBehavior : ExtendedMonoBehavior
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
 
-            yield return new WaitForSeconds(Interval.One);
+            yield return Wait.Tick();
         }
     }
 }

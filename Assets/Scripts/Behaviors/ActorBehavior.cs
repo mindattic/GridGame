@@ -90,22 +90,18 @@ public class ActorBehavior : ExtendedMonoBehavior
     #region Properties
 
     public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
-    public bool IsPlayer => this.team.Equals(Team.Player);
-    public bool IsEnemy => this.team.Equals(Team.Enemy);
-    public bool IsTargettedPlayer => HasTargettedPlayer && this.Equals(targettedPlayer);
-    public bool IsSelectedPlayer => HasSelectedPlayer && this.Equals(selectedPlayer);
-    public bool HasDestination => this.destination.HasValue;
-    public bool IsNorthEdge => this.location.y == 1;
-    public bool IsEastEdge => this.location.x == board.columns;
-    public bool IsSouthEdge => this.location.y == board.rows;
-    public bool IsWestEdge => this.location.x == 1;
-    public bool IsAlive => this.HP > 0;
-
-
-
-    public bool HasSpawned => !spawnTurn.HasValue || (spawnTurn.HasValue && spawnTurn.Value >= turnManager.turnNumber);
-
+    public bool IsPlayer => team.Equals(Team.Player);
+    public bool IsEnemy => team.Equals(Team.Enemy);
+    public bool IsTargettedPlayer => HasTargettedPlayer && Equals(targettedPlayer);
+    public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
+    public bool HasDestination => destination.HasValue;
+    public bool IsNorthEdge => location.y == 1;
+    public bool IsEastEdge => location.x == board.columns;
+    public bool IsSouthEdge => location.y == board.rows;
+    public bool IsWestEdge => location.x == 1;
+    public bool IsAlive => HP > 0;
     public bool IsActive => this != null && this.isActiveAndEnabled;
+    public bool HasSpawned => !spawnTurn.HasValue || (spawnTurn.HasValue && spawnTurn.Value >= turnManager.turnNumber);
 
     #endregion
 
@@ -117,24 +113,24 @@ public class ActorBehavior : ExtendedMonoBehavior
         enemyTurnDelay = Random.Int(2, 4);
         render.turnDelay.text = $"x{enemyTurnDelay}";
         render.turnDelay.gameObject.SetActive(true);
-        this.SetStatusSleep();
+        Set(ActionIcon.Sleep);
     }
 
     public bool IsSameColumn(Vector2Int location) => this.location.x == location.x;
     public bool IsSameRow(Vector2Int location) => this.location.y == location.y;
-    public bool IsNorthOf(Vector2Int location) => this.IsSameColumn(location) && this.location.y == location.y - 1;
-    public bool IsEastOf(Vector2Int location) => this.IsSameRow(location) && this.location.x == location.x + 1;
-    public bool IsSouthOf(Vector2Int location) => this.IsSameColumn(location) && this.location.y == location.y + 1;
-    public bool IsWestOf(Vector2Int location) => this.IsSameRow(location) && this.location.x == location.x - 1;
+    public bool IsNorthOf(Vector2Int location) => IsSameColumn(location) && this.location.y == location.y - 1;
+    public bool IsEastOf(Vector2Int location) => IsSameRow(location) && this.location.x == location.x + 1;
+    public bool IsSouthOf(Vector2Int location) => IsSameColumn(location) && this.location.y == location.y + 1;
+    public bool IsWestOf(Vector2Int location) => IsSameRow(location) && this.location.x == location.x - 1;
     public bool IsNorthWestOf(Vector2Int location) => this.location.x == location.x - 1 && this.location.y == location.y - 1;
     public bool IsNorthEastOf(Vector2Int location) => this.location.x == location.x + 1 && this.location.y == location.y - 1;
     public bool IsSouthWestOf(Vector2Int location) => this.location.x == location.x - 1 && this.location.y == location.y + 1;
     public bool IsSouthEastOf(Vector2Int location) => this.location.x == location.x + 1 && this.location.y == location.y + 1;
 
-    private Vector2Int GoNorth() => this.location += new Vector2Int(0, -1);
-    private Vector2Int GoEast() => this.location += new Vector2Int(1, 0);
-    private Vector2Int GoSouth() => this.location += new Vector2Int(0, 1);
-    private Vector2Int GoWest() => this.location += new Vector2Int(-1, 0);
+    private Vector2Int GoNorth() => location += new Vector2Int(0, -1);
+    private Vector2Int GoEast() => location += new Vector2Int(1, 0);
+    private Vector2Int GoSouth() => location += new Vector2Int(0, 1);
+    private Vector2Int GoWest() => location += new Vector2Int(-1, 0);
 
     private Vector2Int GoRandomDirection()
     {
@@ -149,13 +145,13 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void GoToward(Vector2Int other)
     {
-        if (this.IsNorthOf(other) || this.IsNorthWestOf(other) || this.IsNorthEastOf(other))
+        if (IsNorthOf(other) || IsNorthWestOf(other) || IsNorthEastOf(other))
             GoSouth();
-        else if (this.IsEastOf(other))
+        else if (IsEastOf(other))
             GoWest();
-        else if (this.IsSouthOf(other) || this.IsSouthWestOf(other) || this.IsSouthEastOf(other))
+        else if (IsSouthOf(other) || IsSouthWestOf(other) || IsSouthEastOf(other))
             GoNorth();
-        else if (this.IsWestOf(other))
+        else if (IsWestOf(other))
             GoEast();
     }
 
@@ -167,13 +163,13 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (HasDestination)
             return;
 
-        if (this.IsNorthOf(other.location) || this.IsNorthWestOf(other.location) || this.IsNorthEastOf(other.location))
+        if (IsNorthOf(other.location) || IsNorthWestOf(other.location) || IsNorthEastOf(other.location))
             GoSouth();
-        else if (this.IsEastOf(other.location))
+        else if (IsEastOf(other.location))
             GoWest();
-        else if (this.IsSouthOf(other.location) || this.IsSouthWestOf(other.location) || this.IsSouthEastOf(other.location))
+        else if (IsSouthOf(other.location) || IsSouthWestOf(other.location) || IsSouthEastOf(other.location))
             GoNorth();
-        else if (this.IsWestOf(other.location))
+        else if (IsWestOf(other.location))
             GoEast();
         else
         {
@@ -181,7 +177,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             //TODO: Make sure this never happens in the first place...
             //Debug.Log($"Conflict: {this.id} / {location.id}");
 
-            var closestUnoccupiedTile = Geometry.ClosestUnoccupiedTileByLocation(this.location);
+            var closestUnoccupiedTile = Geometry.ClosestUnoccupiedTileByLocation(location);
             if (closestUnoccupiedTile != null)
                 GoToward(closestUnoccupiedTile.location);
             else if (IsNorthEdge)
@@ -196,7 +192,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                 GoRandomDirection();
         }
 
-        var closestTile = Geometry.ClosestTileByLocation(this.location);
+        var closestTile = Geometry.ClosestTileByLocation(location);
         this.destination = closestTile.position;
 
         soundSource.PlayOneShot(resourceManager.SoundEffect("Slide"));
@@ -207,7 +203,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         var location = new Vector2Int(Random.Int(1, board.columns), Random.Int(1, board.rows));
         var closestTile = Geometry.ClosestTileByLocation(location);
-        this.destination = closestTile.position;
+        destination = closestTile.position;
     }
 
 
@@ -235,20 +231,20 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (initialLocation.HasValue)
             location = initialLocation.Value;
 
-        this.gameObject.SetActive(true);
-        this.position = Geometry.PositionFromLocation(location);
-        this.destination = null;
-        this.transform.localScale = tileScale;
-        this.render.thumbnail.color = Colors.Solid.White;
+        gameObject.SetActive(true);
+        position = Geometry.PositionFromLocation(location);
+        destination = null;
+        transform.localScale = tileScale;
+        render.thumbnail.color = Colors.Solid.White;
 
-        this.HP = MaxHP;
-        this.render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
+        HP = MaxHP;
+        render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
         PrintHealth();
 
         if (this.IsPlayer)
         {
             render.turnDelay.gameObject.SetActive(false);
-            SetStatusNone();
+            Set(ActionIcon.None);
         }
         else
         {
@@ -256,16 +252,16 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             if (!spawnTurn.HasValue)
             {
-                this.gameObject.SetActive(true);
+                gameObject.SetActive(true);
             }
             else
             {
                 var color = new Color(1, 1, 1, 0);
-                this.render.thumbnail.color = color;
-                this.render.frame.color = color;
-                this.render.healthBarBack.color = color;
-                this.render.healthBar.color = color;
-                this.gameObject.SetActive(false);
+                render.thumbnail.color = color;
+                render.frame.color = color;
+                render.healthBarBack.color = color;
+                render.healthBar.color = color;
+                gameObject.SetActive(false);
             }
 
         }
@@ -280,7 +276,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         if (!IsAlive) return;
 
-        if (this.IsSelectedPlayer)
+        if (IsSelectedPlayer)
             MoveTowardCursor();
 
         var closestTile = Geometry.ClosestTileByPosition(this.position);
@@ -297,26 +293,22 @@ public class ActorBehavior : ExtendedMonoBehavior
             actor.SwapLocation(this);
         }
 
-        this.location = closestTile.location;
+        location = closestTile.location;
 
     }
 
     public void CheckLocationConflict()
     {
-        var other = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !this.Equals(x) && this.location.Equals(x.location));
+        var other = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !Equals(x) && location.Equals(x.location));
         if (other == null)
             return;
 
-        this.SwapLocation(other);
+        SwapLocation(other);
     }
 
     void FixedUpdate()
     {
-        if (!IsAlive || !IsActive)
-            return;
-
-        if (this.IsSelectedPlayer)
-            return;
+        if (!IsAlive || !IsActive || IsSelectedPlayer) return;
 
         CheckMovement();
         CheckBobbing();
@@ -326,7 +318,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void MoveTowardCursor()
     {
-        if (!this.IsSelectedPlayer)
+        if (!IsSelectedPlayer)
             return;
 
         var cursorPosition = mousePosition3D + mouseOffset;
@@ -334,7 +326,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bottom, board.top);
 
         //Move selected player towards cursor
-        this.position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
+        position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
 
         //Snap selected player to cursor
         //this.position = cursorPosition;
@@ -344,27 +336,23 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         if (!HasDestination) return;
 
-        var delta = this.destination.Value - this.position;
+        var delta = this.destination.Value - position;
         if (Mathf.Abs(delta.x) > snapDistance)
         {
-            this.position = Vector2.MoveTowards(this.position, new Vector3(this.destination.Value.x, this.position.y, this.position.z), slideSpeed);
+            position = Vector2.MoveTowards(position, new Vector3(destination.Value.x, position.y, position.z), slideSpeed);
         }
         else if (Mathf.Abs(delta.y) > snapDistance)
         {
-            this.position = Vector2.MoveTowards(this.position, new Vector3(this.position.x, this.destination.Value.y, this.position.z), slideSpeed);
+            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), slideSpeed);
         }
 
-
-        //Move actor towards destination
-        //this.position = Vector2.MoveTowards(this.position, this.destination.Value, slideSpeed);
-
         //Determine if actor is close to destination
-        bool isCloseToDestination = Vector2.Distance(this.position, this.destination.Value) < snapDistance;
-        if (isCloseToDestination)
+        bool isSnapDistance = Vector2.Distance(position, destination.Value) < snapDistance;
+        if (isSnapDistance)
         {
             //Snap to destination, clear destination, and set actor MoveState: "Idle"
-            this.transform.position = this.destination.Value;
-            this.destination = null;
+            transform.position = destination.Value;
+            destination = null;
         }
     }
 
@@ -385,10 +373,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-    private void Shake(int intensity = 12)
+    private void Shake(float intensity)
     {
-        this.position = currentTile.position;
-        this.position += new Vector3(Random.Range(tileSize / intensity), Random.Range(tileSize / intensity), 1);
+        position = currentTile.position;
+        position += new Vector3(Random.Range(intensity), Random.Range(intensity), 1);
     }
 
 
@@ -408,7 +396,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             damageTextManager.Spawn(damage.ToString(), position);
 
             //Shake actor
-            Shake();
+            Shake(shakeIntensity.Medium);
 
             //Resize health bar
             if (HP > 0)
@@ -433,121 +421,102 @@ public class ActorBehavior : ExtendedMonoBehavior
             yield return new WaitForSeconds(Interval.Five);
         }
 
-        this.HP = remainingHP;
-        this.position = currentTile.position;
+        HP = remainingHP;
+        position = currentTile.position;
     }
 
     private void PrintHealth()
     {
-        this.render.healthText.text = $@"{Math.Round(HP.ToFloat() / MaxHP.ToFloat() * 100)}%";
+        render.healthText.text = $@"{Math.Round(HP.ToFloat() / MaxHP.ToFloat() * 100)}%";
     }
-
 
     public IEnumerator Die()
     {
         var alpha = 1f;
         var color = new Color(1, 1, 1, alpha);
-        this.render.thumbnail.color = color;
-        this.render.frame.color = color;
-        this.render.healthBarBack.color = color;
-        this.render.healthBar.color = color;
+        render.thumbnail.color = color;
+        render.frame.color = color;
+        render.healthBarBack.color = color;
+        render.healthBar.color = color;
 
+        portraitManager.Dissolve(this);
         soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
-        portraitManager.Disintegrate(this);
-        yield return new WaitForSeconds(3f);
+
+        yield return new WaitForSeconds(1);
 
         while (alpha > 0)
         {
-
-            alpha -= Increment.Ten;
+            alpha -= Increment.Two;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            this.render.thumbnail.color = color;
-            this.render.frame.color = color;
-            this.render.healthBarBack.color = color;
-            this.render.healthBar.color = color;
-
-            //Shake actor
-            Shake();
-
-            yield return new WaitForSeconds(Interval.One);
+            color = new Color(1, 1, 1, alpha);
+            render.thumbnail.color = color;
+            render.frame.color = color;
+            render.healthBarBack.color = color;
+            render.healthBar.color = color;
+            yield return Wait.Tick();
         }
 
-        this.position = currentTile.position;
         Destroy(this.gameObject);
         actors.Remove(this);
     }
 
-    public void SetStatusAttack()
+    public void Set(ActionIcon icon)
     {
-        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals("Attack")).thumbnail;
+        var id = icon.ToString();
+        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(id)).thumbnail;
     }
-
-    public void SetStatusSleep()
-    {
-        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals("Sleep")).thumbnail;
-    }
-
-    public void SetStatusSupport()
-    {
-        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals("Support")).thumbnail;
-    }
-
-    public void SetStatusNone()
-    {
-        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals("None")).thumbnail;
-    }
-
 
     public IEnumerator FadeIn(float increment = 0.01f)
     {
         float alpha = 0;
         var color = new Color(1, 1, 1, alpha);
-        this.render.thumbnail.color = color;
-        this.render.frame.color = color;
-        this.render.healthBarBack.color = color;
-        this.render.healthBar.color = color;
+        render.thumbnail.color = color;
+        render.frame.color = color;
+        render.healthBarBack.color = color;
+        render.healthBar.color = color;
 
         while (alpha < 1)
         {
             alpha += increment;
             alpha = Mathf.Clamp(alpha, 0, 1);
             color = new Color(1, 1, 1, alpha);
-            this.render.thumbnail.color = color;
-            this.render.frame.color = color;
-            this.render.healthBarBack.color = color;
-            this.render.healthBar.color = color;
+            render.thumbnail.color = color;
+            render.frame.color = color;
+            render.healthBarBack.color = color;
+            render.healthBar.color = color;
 
+            //Shake actor
+            Shake(shakeIntensity.Low);
 
-            Shake(24);
-
-            yield return new WaitForSeconds(Interval.One);
+            yield return Wait.Tick();
         }
 
-        this.position = currentTile.position;
+        position = currentTile.position;
     }
 
     public IEnumerator FadeOut(float increment = 0.01f)
     {
         float alpha = 1f;
         var color = new Color(1, 1, 1, alpha);
-        this.render.thumbnail.color = color;
-        this.render.frame.color = color;
-        this.render.healthBarBack.color = color;
-        this.render.healthBar.color = color;
+        render.thumbnail.color = color;
+        render.frame.color = color;
+        render.healthBarBack.color = color;
+        render.healthBar.color = color;
 
         while (alpha > 0f)
         {
             alpha -= increment;
             alpha = Mathf.Clamp(alpha, 0, 1);
             color = new Color(1, 1, 1, alpha);
-            this.render.thumbnail.color = color;
-            this.render.frame.color = color;
-            this.render.healthBarBack.color = color;
-            this.render.healthBar.color = color;
+            render.thumbnail.color = color;
+            render.frame.color = color;
+            render.healthBarBack.color = color;
+            render.healthBar.color = color;
 
-            Shake();
+            //Shake actor
+            Shake(shakeIntensity.Low);
 
-            yield return new WaitForSeconds(Interval.One);
+            yield return Wait.Tick();
         }
 
         this.position = currentTile.position;
@@ -559,14 +528,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         yield return new WaitForSeconds(intermission);
         yield return FadeOut(fadeOuIncrement);
     }
-
-
-
-
-
-
-
-
 
 
 

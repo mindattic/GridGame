@@ -38,7 +38,7 @@ public class GhostManager : ExtendedMonoBehavior
         while (HasSelectedPlayer)
         {
             this.Spawn(selectedPlayer);
-            yield return new WaitForSeconds(Interval.One);
+            yield return Wait.Tick();
         }
     }
 

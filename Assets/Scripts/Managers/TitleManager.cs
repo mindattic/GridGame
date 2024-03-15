@@ -66,7 +66,7 @@ public class TitleManager : ExtendedMonoBehavior
             alpha += Increment.Ten;
             alpha = Mathf.Clamp(alpha, 0, 1);
             label.color = new Color(1, 1, 1f, alpha);
-            yield return new WaitForSeconds(Interval.One);
+            yield return Wait.Tick();
         }
     }
 
@@ -82,7 +82,7 @@ public class TitleManager : ExtendedMonoBehavior
             alpha -= Increment.Ten;
             alpha = Mathf.Clamp(alpha, 0f, 1);
             label.color = new Color(1, 1, 1, alpha);
-            yield return new WaitForSeconds(Interval.One);
+            yield return Wait.Tick();
         }
     }
 

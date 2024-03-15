@@ -108,6 +108,7 @@
     <Compile Include="Assets\Scripts\Models\StatusSprite.cs" />
     <Compile Include="Assets\Scripts\Models\StageActor.cs" />
     <Compile Include="Assets\Scripts\Models\Stage.cs" />
+    <Compile Include="Assets\Scripts\Models\ShakeIntensity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -174,8 +174,8 @@ public class ActorManager : ExtendedMonoBehavior
         {
             attackLineManager.Add(pair);
 
-            pair.actor1.SetStatusAttack();
-            pair.actor2.SetStatusAttack();
+            pair.actor1.Set(ActionIcon.Attack);
+            pair.actor2.Set(ActionIcon.Attack);
 
             var direction1 = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
             var direction2 = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
@@ -200,8 +200,8 @@ public class ActorManager : ExtendedMonoBehavior
                     yield return enemy.Die();
             }
 
-            pair.actor1.SetStatusNone();
-            pair.actor2.SetStatusNone();
+            pair.actor1.Set(ActionIcon.None);
+            pair.actor2.Set(ActionIcon.None);
         }
 
         yield return new WaitForSeconds(2f);
@@ -232,7 +232,7 @@ public class ActorManager : ExtendedMonoBehavior
                 var delta = enemy.location - player.location;
                 if (Math.Abs(delta.x) == 1 || Math.Abs(delta.y) == 1)
                 {
-                    enemy.SetStatusAttack();
+                    enemy.Set(ActionIcon.Attack);
                     var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
                     player.TakeDamage(damage);
 

@@ -90,7 +90,11 @@ public static class Increment
 }
 
 
+public static class Wait
+{
+    public static WaitForSeconds Tick() => new WaitForSeconds(Interval.One);
 
+}
 
 public static class Archetype
 {

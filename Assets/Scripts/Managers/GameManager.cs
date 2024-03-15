@@ -71,6 +71,9 @@ public class GameManager : Singleton<GameManager>
 
     public AttackParticipants attackParticipants;
 
+    public ShakeIntensity shakeIntensity;
+
+
     private void Awake()
     {
 
@@ -81,6 +84,7 @@ public class GameManager : Singleton<GameManager>
         cursorSpeed = tileSize / 2;
         slideSpeed = tileSize / 4;
         snapDistance = tileSize / 8;
+        shakeIntensity = new ShakeIntensity(tileSize);
 
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
         timer = GameObject.Find(Constants.Timer).GetComponent<TimerBehavior>();

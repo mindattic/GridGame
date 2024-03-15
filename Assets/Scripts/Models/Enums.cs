@@ -37,3 +37,12 @@ public enum TurnPhase
     //End
 }
 
+
+public enum ActionIcon
+{
+    None,
+    Attack,
+    Sleep,
+    Support
+}
+

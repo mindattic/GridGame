@@ -125,7 +125,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
                     break;
             }
 
-            yield return new WaitForSeconds(Interval.One);
+            yield return Wait.Tick();
         }
 
         Destroy(this.gameObject);
@@ -133,7 +133,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
     }
 
 
-    public IEnumerator Disintegrate()
+    public IEnumerator Dissolve()
     {
         var alpha = 1.0f;
         spriteRenderer.color = new Color(1, 1, 1, alpha);
@@ -141,12 +141,17 @@ public class PortraitBehavior : ExtendedMonoBehavior
         while (alpha > 0)
         {
           
-            this.position = startPosition;
-            this.position += new Vector3(Random.Range(tileSize / 12), Random.Range(tileSize / 12), 1);
-            this.transform.localScale *= 0.99f;
+            //Shake
+            position = startPosition;
+            position += new Vector3(Random.Range(shakeIntensity.Medium), Random.Range(shakeIntensity.Medium), 1);
+
+            //Shrink
+            transform.localScale *= 0.99f;
+
+            //Fade
             alpha -= Increment.One;
             spriteRenderer.color = new Color(1, 1, 1, alpha);
-            yield return new WaitForSeconds(Interval.One);
+            yield return Wait.Tick();
         }
 
         Destroy(this.gameObject);
