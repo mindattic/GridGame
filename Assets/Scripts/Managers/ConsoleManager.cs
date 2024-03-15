@@ -55,7 +55,7 @@ public class ConsoleManager : ExtendedMonoBehavior
         //string attackers = battle.attackers.Any() ? $"[{string.Join(",", battle.attackers.Select(x => x.id))}]" : "-";
         //string supports = battle.supporters.Any() ? $"[{string.Join(",", battle.supporters.Select(x => x.id))}]" : "-";
         //string defenders = battle.defenders.Any() ? $"[{string.Join(",", battle.defenders.Select(x => x.id))}]" : "-";
-        //string currentTeam = turnManager != null ? turnManager.currentTurn.ToString() : "-";
+        //string currentTeam = turnManager != null ? turnManager.currentTeam.ToString() : "-";
         //string currentPhase = turnManager != null ? turnManager.currentPhase.ToString() : "-";
 
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using TMPro;
@@ -16,12 +17,14 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     //Variables
     [SerializeField] public string id;
-    [SerializeField] public Vector2Int location;
+    [SerializeField] public Vector2Int location = Vector2Int.zero;
     [SerializeField] public Vector3? destination = null;
     [SerializeField] public Team team = Team.Independant;
     [SerializeField] public int HP;
     [SerializeField] public int MaxHP;
 
+
+    public int? spawnTurn = null;
     private int enemyTurnDelay = 0;
 
     [SerializeField] public AnimationCurve bobbing;
@@ -96,8 +99,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsEastEdge => this.location.x == board.columns;
     public bool IsSouthEdge => this.location.y == board.rows;
     public bool IsWestEdge => this.location.x == 1;
-    public bool IsAlive => this != null && this.isActiveAndEnabled && this.HP > 0;
+    public bool IsAlive => this.HP > 0;
 
+
+
+    public bool HasSpawned => !spawnTurn.HasValue || (spawnTurn.HasValue && spawnTurn.Value >= turnManager.turnNumber);
+
+    public bool IsActive => this.isActiveAndEnabled;
 
     #endregion
 
@@ -108,6 +116,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //TODO: Use enemy statistics to determine turn delay...
         enemyTurnDelay = Random.Int(2, 4);
         render.turnDelay.text = $"x{enemyTurnDelay}";
+        render.turnDelay.gameObject.SetActive(true);
         this.SetStatusSleep();
     }
 
@@ -234,23 +243,34 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         this.HP = MaxHP;
         this.render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
-        this.render.healthText.text = $"{HP}/{MaxHP}";
+        PrintHealth();
 
         if (this.IsPlayer)
         {
-            render.frame.color = Colors.Solid.White;
             render.turnDelay.gameObject.SetActive(false);
             SetStatusNone();
         }
         else
         {
-            render.frame.color = Colors.Solid.Red;
             GenerateTurnDelay();
+
+            if (!spawnTurn.HasValue)
+            {
+                this.gameObject.SetActive(true);
+            }
+            else
+            {
+                var color = new Color(1, 1, 1, 0);
+                this.render.thumbnail.color = color;
+                this.render.frame.color = color;
+                this.render.healthBarBack.color = color;
+                this.render.healthBar.color = color;
+                this.gameObject.SetActive(false);
+            }
+
         }
 
 
-
-        //original = render.thumbnail.transform.position;
     }
 
 
@@ -271,7 +291,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //soundSource.PlayOneShot(resourceManager.SoundEffect($"Move1"));
 
         //Determine if selected player and another actor are occupying the same tile
-        var actor = actors.FirstOrDefault(x => x.IsAlive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
+        var actor = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
         if (actor != null)
         {
             actor.SwapLocation(this);
@@ -283,7 +303,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void CheckLocationConflict()
     {
-        var other = actors.FirstOrDefault(x => x.IsAlive && !this.Equals(x) && this.location.Equals(x.location));
+        var other = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !this.Equals(x) && this.location.Equals(x.location));
         if (other == null)
             return;
 
@@ -292,7 +312,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void FixedUpdate()
     {
-        if (!IsAlive)
+        if (!IsAlive || !IsActive)
             return;
 
         if (this.IsSelectedPlayer)
@@ -351,7 +371,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void CheckBobbing()
     {
-        if (!this.IsAlive || !this.IsPlayer || !turnManager.IsStartPhase) return;
+        if (!IsAlive || !IsActive || !IsPlayer || !turnManager.IsStartPhase) return;
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         var pos = new Vector3(
@@ -365,13 +385,12 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-    //public void TakeDamage(int amount)
-    //{
-    //    damageTaken = amount;
-    //    StartCoroutine(StartTakingDamage());
-    //}
+    private void Shake(int factor = 12)
+    {
+        this.position = currentTile.position;
+        this.position += new Vector3(Random.Range(tileSize / factor), Random.Range(tileSize / factor), 1);
+    }
 
-    //private int damageTaken = 0;
 
     public IEnumerator TakeDamage(int damageTaken)
     {
@@ -389,18 +408,24 @@ public class ActorBehavior : ExtendedMonoBehavior
             damageTextManager.Spawn(damage.ToString(), position);
 
             //Shake actor
-            this.position = currentTile.position;
-            this.position += new Vector3(Random.Range(tileSize / 12), Random.Range(tileSize / 12), 1);
+            Shake();
 
             //Resize health bar
-            var scale = new Vector3(
-                render.healthBarBack.transform.localScale.x * (HP.ToFloat() / MaxHP.ToFloat()),
-                render.healthBarBack.transform.localScale.y,
-                render.healthBarBack.transform.localScale.z);
-            this.render.healthBar.transform.localScale = scale;
+            if (HP > 0)
+            {
+                var x = render.healthBarBack.transform.localScale.x;
+                var y = render.healthBarBack.transform.localScale.y;
+                var z = render.healthBarBack.transform.localScale.z;
+                var scale = new Vector3(x * (HP.ToFloat() / MaxHP.ToFloat()), y, z);
+                render.healthBar.transform.localScale = scale;
 
-            //Print health
-            this.render.healthText.text = $"{HP}/{MaxHP}";
+            }
+            else
+            {
+                render.healthBar.enabled = false;
+            }
+
+            PrintHealth();
 
             //Play sfx
             soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
@@ -409,25 +434,21 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
 
         this.HP = remainingHP;
-        damageTaken = 0;
         this.position = currentTile.position;
+    }
 
-        //Deactive enemy if killed
-        if (this.HP < 1)
-        {
-            StartCoroutine(StartDying());
-        }
-
+    private void PrintHealth()
+    {
+        this.render.healthText.text = $@"{Math.Round(HP.ToFloat() / MaxHP.ToFloat() * 100)}%";
     }
 
 
-
-
-    private IEnumerator StartDying()
+    public IEnumerator Die()
     {
         var alpha = 1f;
         var color = new Color(1, 1, 1, alpha);
         this.render.thumbnail.color = color;
+        this.render.frame.color = color;
         this.render.healthBarBack.color = color;
         this.render.healthBar.color = color;
 
@@ -436,26 +457,23 @@ public class ActorBehavior : ExtendedMonoBehavior
         while (alpha > 0)
         {
 
-            alpha -= Increment.Five;
+            alpha -= Increment.One;
             alpha = Mathf.Clamp(alpha, 0, 1);
             this.render.thumbnail.color = color;
+            this.render.frame.color = color;
             this.render.healthBarBack.color = color;
             this.render.healthBar.color = color;
 
-            position = currentTile.position;
-            position += new Vector3(Random.Range(tileSize / 12), Random.Range(tileSize / 12), 1);
+            //Shake actor
+            Shake();
 
             yield return new WaitForSeconds(Interval.One);
         }
 
-        //this.gameObject.SetActive(false);
-        actors.Remove(this);
+        this.position = currentTile.position;
         Destroy(this.gameObject);
+        actors.Remove(this);
     }
-
-
-
-
 
     public void SetStatusAttack()
     {
@@ -476,5 +494,78 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals("None")).thumbnail;
     }
+
+
+    public IEnumerator FadeIn(float increment = 0.01f)
+    {
+        float alpha = 0;
+        var color = new Color(1, 1, 1, alpha);
+        this.render.thumbnail.color = color;
+        this.render.frame.color = color;
+        this.render.healthBarBack.color = color;
+        this.render.healthBar.color = color;
+
+        while (alpha < 1)
+        {
+            alpha += increment;
+            alpha = Mathf.Clamp(alpha, 0, 1);
+            color = new Color(1, 1, 1, alpha);
+            this.render.thumbnail.color = color;
+            this.render.frame.color = color;
+            this.render.healthBarBack.color = color;
+            this.render.healthBar.color = color;
+
+
+            Shake(24);
+
+            yield return new WaitForSeconds(Interval.One);
+        }
+
+        this.position = currentTile.position;
+    }
+
+    public IEnumerator FadeOut(float increment = 0.01f)
+    {
+        float alpha = 1f;
+        var color = new Color(1, 1, 1, alpha);
+        this.render.thumbnail.color = color;
+        this.render.frame.color = color;
+        this.render.healthBarBack.color = color;
+        this.render.healthBar.color = color;
+
+        while (alpha > 0f)
+        {
+            alpha -= increment;
+            alpha = Mathf.Clamp(alpha, 0, 1);
+            color = new Color(1, 1, 1, alpha);
+            this.render.thumbnail.color = color;
+            this.render.frame.color = color;
+            this.render.healthBarBack.color = color;
+            this.render.healthBar.color = color;
+
+            Shake();
+
+            yield return new WaitForSeconds(Interval.One);
+        }
+
+        this.position = currentTile.position;
+    }
+
+    public IEnumerator FadeInOut(float fadeInIncrement = 0.01f, float intermission = 2f, float fadeOuIncrement = 0.01f)
+    {
+        yield return FadeIn(fadeInIncrement);
+        yield return new WaitForSeconds(intermission);
+        yield return FadeOut(fadeOuIncrement);
+    }
+
+
+
+
+
+
+
+
+
+
 
 }

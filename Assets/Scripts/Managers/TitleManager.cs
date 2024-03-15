@@ -8,8 +8,7 @@ public class TitleManager : ExtendedMonoBehavior
     //Variables
     private RectTransform rectTransform;
     public TextMeshProUGUI label;
-    const float MaxAlpha = 1f;
-
+ 
     #region Components
 
     public string text
@@ -29,14 +28,9 @@ public class TitleManager : ExtendedMonoBehavior
 
     void Awake()
     {
-        //rectTransform = GetComponent<RectTransform>();
-        //var canvas = this.GetComponentInParent<Canvas>();
-        //var sizeDeltaY = Screen.height / canvas.scaleFactor;
-        //rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sizeDeltaY);
-
         label = GameObject.Find("Title").GetComponent<TextMeshProUGUI>();
         label.transform.localPosition = new Vector3(0, 0, 0);
-        label.color = new Color(1f, 1f, 1f, 0f);
+        label.color = new Color(1, 1, 1, 0);
     }
 
 
@@ -53,31 +47,30 @@ public class TitleManager : ExtendedMonoBehavior
 
     }
 
-    public void Show(string text)
+    public void Print(string text)
     {
         label.text = text;
-        label.color = new Color(1f, 1f, 1f, 1f);
+        label.color = new Color(1, 1, 1, 0);
 
-        //StopCoroutine(FadeIn());
-        //StopCoroutine(FadeOut());
-        StartCoroutine(FadeOut());
+        StopCoroutine(FadeInOut());
+        StartCoroutine(FadeInOut());
     }
 
-    public IEnumerator FadeIn()
+    private IEnumerator FadeIn()
     {  
         float alpha = 0f;
         label.color = new Color(1f, 1f, 1f, alpha);
 
-        while (alpha < MaxAlpha)
+        while (alpha < 1)
         {
-            alpha += Increment.One;
-            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
-            label.color = new Color(1f, 1f, 1f, alpha);
+            alpha += Increment.Ten;
+            alpha = Mathf.Clamp(alpha, 0, 1);
+            label.color = new Color(1, 1, 1f, alpha);
             yield return new WaitForSeconds(Interval.One);
         }
     }
 
-    public IEnumerator FadeOut()
+    private IEnumerator FadeOut()
     {
         float alpha = 1f;
         label.color = new Color(1f, 1f, 1f, alpha);
@@ -86,41 +79,18 @@ public class TitleManager : ExtendedMonoBehavior
 
         while (alpha > 0f)
         {
-            alpha -= Increment.One;
-            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
-            label.color = new Color(1f, 1f, 1f, alpha);
+            alpha -= Increment.Ten;
+            alpha = Mathf.Clamp(alpha, 0f, 1);
+            label.color = new Color(1, 1, 1, alpha);
             yield return new WaitForSeconds(Interval.One);
         }
     }
 
-
-
-    public IEnumerator FadeInOut()
+    private IEnumerator FadeInOut()
     {
-        yield return StartCoroutine(FadeIn());
-        yield return StartCoroutine(FadeOut());
-
-        //float alpha = 0f;
-        //label.color = new Color(1f, 1f, 1f, alpha);
-
-        //while (alpha < MaxAlpha)
-        //{
-        //    alpha += Increment.One;
-        //    alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
-        //    label.color = new Color(1f, 1f, 1f, alpha);
-        //    yield return new WaitForSeconds(Interval.One);
-        //}
-
-        //alpha = 1f;
-        //label.color = new Color(1f, 1f, 1f, alpha);
-
-        //while (alpha > 0f)
-        //{
-        //    alpha -= Increment.One;
-        //    alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
-        //    label.color = new Color(1f, 1f, 1f, alpha);
-        //    yield return new WaitForSeconds(Interval.One);
-        //}
+        yield return FadeIn();
+        yield return new WaitForSeconds(2f);
+        yield return FadeOut();
     }
 
 

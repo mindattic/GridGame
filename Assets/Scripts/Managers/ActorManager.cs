@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using System.Numerics;
 using UnityEngine;
 
 public class ActorManager : ExtendedMonoBehavior
@@ -37,7 +38,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var enemy in enemies)
         {
-            if (!enemy.IsAlive) continue;
+            if (enemy != null && !enemy.IsAlive || !enemy.IsActive) continue;
 
             if (enemy.turnDelay > 0)
             {
@@ -91,7 +92,9 @@ public class ActorManager : ExtendedMonoBehavior
         {
             foreach (var actor2 in players)
             {
-                if (actor1.Equals(actor2) || !actor1.IsAlive || !actor2.IsAlive || attackParticipants.HasAlignedPair(actor1, actor2))
+                if (actor1.Equals(actor2) || actor1 == null || actor2 == null 
+                    || !actor1.IsAlive || !actor1.IsActive || !actor2.IsAlive || !actor2.IsActive 
+                    || attackParticipants.HasAlignedPair(actor1, actor2))
                     continue;
 
                 if (actor1.IsSameColumn(actor2.location))
@@ -122,16 +125,16 @@ public class ActorManager : ExtendedMonoBehavior
             {
                 pair.highest = pair.actor1.location.y > pair.actor2.location.y ? pair.actor1 : pair.actor2;
                 pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
-                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y);
-                pair.players = players.Where(x => x.IsAlive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y);
+                pair.enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y);
+                pair.players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y);
                 pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && Common.IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y);
             }
             else if (pair.axis == Axis.Horizontal)
             {
                 pair.highest = pair.actor1.location.x > pair.actor2.location.x ? pair.actor1 : pair.actor2;
                 pair.lowest = pair.highest == pair.actor1 ? pair.actor2 : pair.actor1;
-                pair.enemies = enemies.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x);
-                pair.players = players.Where(x => x.IsAlive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x);
+                pair.enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x);
+                pair.players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x);
                 pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x);
             }
 
@@ -157,13 +160,13 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator PlayerAttack()
     {
-        foreach(var pair in attackParticipants.attackingPairs)
+        foreach (var pair in attackParticipants.attackingPairs)
         {
             attackLineManager.Add(pair);
 
             pair.actor1.SetStatusAttack();
             pair.actor2.SetStatusAttack();
-           
+
             var direction1 = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
             var direction2 = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
             portraitManager.Play(pair.actor1, direction1);
@@ -177,6 +180,14 @@ public class ActorManager : ExtendedMonoBehavior
             {
                 var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
                 yield return enemy.TakeDamage(damage);
+            }
+
+            yield return new WaitForSeconds(1f);
+
+            foreach (var enemy in pair.enemies)
+            {
+                if (enemy.HP < 1)
+                    yield return enemy.Die();
             }
 
             pair.actor1.SetStatusNone();
@@ -200,11 +211,13 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var enemy in enemies)
         {
-            if (!enemy.IsAlive || enemy.turnDelay > 0) continue;
+            if (enemy == null || !enemy.IsAlive || enemy.turnDelay > 0) continue;
 
             foreach (var player in players)
             {
-                if (!player.IsAlive || (!player.IsSameColumn(enemy.location) && !player.IsSameRow(enemy.location))) continue;
+                if (player == null 
+                    || !player.IsAlive || !player.IsActive
+                    || (!player.IsSameColumn(enemy.location) && !player.IsSameRow(enemy.location))) continue;
 
                 var delta = enemy.location - player.location;
                 if (Math.Abs(delta.x) == 1 || Math.Abs(delta.y) == 1)
@@ -250,11 +263,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         //Retrieve actor from collider
         var actor = collider.gameObject.GetComponent<ActorBehavior>();
-        if (actor == null)
-            return;
-
-        if (!actor.IsAlive)
-            return;
+        if (actor == null || !actor.IsAlive || !actor.IsActive) return;
 
         //Determine if player Team: "Player"
         if (actor.team != Team.Player)
@@ -275,7 +284,6 @@ public class ActorManager : ExtendedMonoBehavior
         //Select actor
         selectedPlayer = targettedPlayer;
         selectedPlayer.sortingOrder = 10;
-        selectedPlayer.render.frame.color = Colors.Solid.Gold;
 
         soundSource.PlayOneShot(resourceManager.SoundEffect($"Select"));
 
@@ -302,7 +310,6 @@ public class ActorManager : ExtendedMonoBehavior
         var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
-        selectedPlayer.render.frame.color = Colors.Solid.Green;
 
         //Clear tiles
         tiles.ForEach(x => x.spriteRenderer.color = Colors.Translucent.White);
@@ -310,7 +317,6 @@ public class ActorManager : ExtendedMonoBehavior
 
         //Clear selected player
         selectedPlayer.sortingOrder = 0;
-        selectedPlayer.render.frame.color = Colors.Solid.White;
         selectedPlayer = null;
         targettedPlayer = null;
         cardManager.Clear();
@@ -322,23 +328,20 @@ public class ActorManager : ExtendedMonoBehavior
         CheckPlayerAttack();
     }
 
-
-
     public void Clear()
     {
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
         actors.Clear();
     }
 
-
-
     private void ResetBobbing()
     {
-        actors.Where(x => x != null && x.IsAlive).ToList().ForEach(x =>
+        foreach(var actor in actors)
         {
-            x.render.thumbnail.transform.position = x.position;
-            x.render.frame.transform.position = x.position;
-        });
+            if (actor == null || !actor.IsAlive || !actor.IsActive) continue;
+            actor.render.thumbnail.transform.position = actor.position;
+            actor.render.frame.transform.position = actor.position;
+        }
     }
 
 

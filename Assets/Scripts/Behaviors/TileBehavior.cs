@@ -8,7 +8,7 @@ public class TileBehavior : ExtendedMonoBehavior
     [SerializeField] public string id;
     [SerializeField] public Vector2Int location { get; set; }
   
-    public bool IsOccupied => actors.Any(x => x.IsAlive && x.location.Equals(location));
+    public bool IsOccupied => actors.Any(x => x != null && x.IsAlive && x.IsActive && x.location.Equals(location));
 
     #region Components
 

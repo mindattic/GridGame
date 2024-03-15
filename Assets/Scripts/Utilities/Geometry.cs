@@ -44,6 +44,15 @@ public class Geometry
             .First();
     }
 
+
+    public static TileBehavior RandomUnoccupiedTile()
+    {
+        var unoccupitedTiles = tiles.Where(x => !x.IsOccupied).ToList();
+        var index = Random.Int(0, unoccupitedTiles.Count - 1);
+        return unoccupitedTiles[index];
+    }
+
+
     public static TileBehavior ClosestUnoccupiedTileByLocation(Vector2Int location)
     {
         return tiles
