@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 962330659352311960}
   - component: {fileID: 8302434056980343318}
   - component: {fileID: -8534692437993122614}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: PortraitPrefab
   m_TagString: Portrait
   m_Icon: {fileID: 0}
@@ -97,8 +97,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b2975567c510044c8b42e2b937b3aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  speed: 3
+  actor: {fileID: 0}
+  direction: 0
+  startTime: 0
+  startPosition: {x: 0, y: 0}
   slide:
     serializedVersion: 2
     m_Curve:

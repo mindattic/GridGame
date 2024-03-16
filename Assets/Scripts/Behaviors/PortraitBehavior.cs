@@ -154,6 +154,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
         }
 
         Destroy(this.gameObject);
+
     }
 
 

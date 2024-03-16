@@ -18,16 +18,21 @@ public class DamageTextManager : ExtendedMonoBehavior
 
     }
 
+    public void Spawn()
+    {
+        var text = $"{Random.Int(1, 3)}";
+        var position = players[0].position;
+        Spawn(text, position);
+    }
+
+
     public void Spawn(string text, Vector3 position)
     {
-        GameObject prefab;
-        DamageTextBehavior damageText;
-
-        prefab = Instantiate(damageTextPrefab, Vector2.zero, Quaternion.identity);
-        damageText = prefab.GetComponent<DamageTextBehavior>();
-        damageText.name = $"TextMesh_{Guid.NewGuid()}";
+        var prefab = Instantiate(damageTextPrefab, Vector2.zero, Quaternion.identity);
+        var damageText = prefab.GetComponent<DamageTextBehavior>();
+        damageText.name = $"DamageText_{Guid.NewGuid()}";
         damageText.parent = canvas3D.transform;
-        damageText.Set(text, position);
+        damageText.Spawn(text, position);
     }
 
     public void Clear()

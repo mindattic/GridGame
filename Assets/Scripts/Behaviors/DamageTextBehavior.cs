@@ -8,7 +8,7 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 {
 
 
-    public TextMeshPro mesh;
+    public TextMeshPro textMesh;
 
     #region Components
 
@@ -29,7 +29,7 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 
     void Awake()
     {
-        mesh = GetComponent<TextMeshPro>();
+        textMesh = GetComponent<TextMeshPro>();
     }
 
     // Start is called before the first frame update
@@ -44,9 +44,9 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 
     }
 
-    public void Set(string text, Vector3 position)
+    public void Spawn(string text, Vector3 position)
     {
-        mesh.text = text;
+        textMesh.text = text;
         var x = position.x + -(tileSize / 4) + (tileSize / 4 * Random.Percent());
         var y = position.y + (tileSize / 2 * Random.Percent());
         transform.position = new Vector3(x, y, 1);
@@ -55,15 +55,15 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 
     private IEnumerator FadeOut()
     {
-        float alpha = mesh.color.a;
-        Color color = mesh.color;
+        float alpha = textMesh.color.a;
+        Color color = textMesh.color;
 
-        while (mesh.color.a > 0)
+        while (textMesh.color.a > 0)
         {
             alpha -= 0.1f;
             alpha = Mathf.Max(alpha, 0);
             color.a = alpha;
-            mesh.color = color;
+            textMesh.color = color;
 
 
             transform.position += new Vector3(0, tileSize / 16, 0);

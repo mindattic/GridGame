@@ -33,7 +33,7 @@ public class PortraitManager : ExtendedMonoBehavior
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var portrait = prefab.GetComponent<PortraitBehavior>();
         portrait.name = $"Portrait_{Guid.NewGuid()}";
-        portrait.parent = canvas3D.transform;
+        portrait.parent = board.transform;
         portrait.sortingOrder = sortingOrder++;
         portrait.sprite = resourceManager.ActorPortrait(actor.archetype.ToString());
         portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
