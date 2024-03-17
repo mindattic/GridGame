@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
-        m_Texture: {fileID: 2800000, guid: 7351940f282b048469f7f2efa932e9b4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 14467faecb3267b45a85e6d1d62ee7dd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2DAsset_8f2807802b874b2981cd9e0028907bee_Out_0:
@@ -67,9 +67,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _Thickness: 0.12
+    - _Thickness: 1
     m_Colors:
-    - _Color: {r: 2.159126, g: 2.433572, b: 0, a: 1}
+    - _Color: {r: 47.937256, g: 47.937256, b: 47.937256, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

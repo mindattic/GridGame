@@ -93,8 +93,8 @@ public class ActorManager : ExtendedMonoBehavior
         {
             foreach (var actor2 in players)
             {
-                if (actor1.Equals(actor2) || actor1 == null || actor2 == null 
-                    || !actor1.IsAlive || !actor1.IsActive || !actor2.IsAlive || !actor2.IsActive 
+                if (actor1.Equals(actor2) || actor1 == null || actor2 == null
+                    || !actor1.IsAlive || !actor1.IsActive || !actor2.IsAlive || !actor2.IsActive
                     || attackParticipants.HasAlignedPair(actor1, actor2))
                     continue;
 
@@ -175,7 +175,9 @@ public class ActorManager : ExtendedMonoBehavior
             attackLineManager.Add(pair);
 
             pair.actor1.Set(ActionIcon.Attack);
+            pair.actor1.Set(GlowState.On);
             pair.actor2.Set(ActionIcon.Attack);
+            pair.actor2.Set(GlowState.On);
 
             var direction1 = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
             var direction2 = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
@@ -184,6 +186,12 @@ public class ActorManager : ExtendedMonoBehavior
 
             soundSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
             yield return new WaitForSeconds(3f);
+
+
+            foreach (var enemy in pair.enemies)
+            {
+                enemy.Set(GlowState.On);
+            }
 
             foreach (var enemy in pair.enemies)
             {
@@ -200,11 +208,18 @@ public class ActorManager : ExtendedMonoBehavior
                     yield return enemy.Die();
             }
 
-            pair.actor1.Set(ActionIcon.None);
-            pair.actor2.Set(ActionIcon.None);
-        }
+            yield return new WaitForSeconds(2f);
 
-        yield return new WaitForSeconds(2f);
+            foreach (var enemy in pair.enemies)
+            {
+                enemy.Set(GlowState.Off);
+            }
+
+            pair.actor1.Set(ActionIcon.None);
+            pair.actor1.Set(GlowState.Off);
+            pair.actor2.Set(ActionIcon.None);
+            pair.actor2.Set(GlowState.Off);
+        }
 
         ClearAttack();
         turnManager.NextTurn();
@@ -225,7 +240,7 @@ public class ActorManager : ExtendedMonoBehavior
 
             foreach (var player in players)
             {
-                if (player == null 
+                if (player == null
                     || !player.IsAlive || !player.IsActive
                     || (!player.IsSameColumn(enemy.location) && !player.IsSameRow(enemy.location))) continue;
 
@@ -346,7 +361,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void ResetBobbing()
     {
-        foreach(var actor in actors)
+        foreach (var actor in actors)
         {
             if (actor == null || !actor.IsAlive || !actor.IsActive) continue;
             actor.render.thumbnail.transform.position = actor.position;

@@ -7,13 +7,14 @@ using UnityEngine;
 public class ActorBehavior : ExtendedMonoBehavior
 {
     //Constants
-    const int Thumbnail = 0;
-    const int Frame = 1;
-    const int HealthBarBack = 2;
-    const int HealthBar = 3;
-    const int StatusIcon = 4;
-    const int TurnDelay = 5;
-    const int HealthText = 6;
+    const int Glow = 0;
+    const int Thumbnail = 1;
+    const int Frame = 2;
+    const int HealthBarBack = 3;
+    const int HealthBar = 4;
+    const int StatusIcon = 5;
+    const int TurnDelay = 6;
+    const int HealthText = 7;
 
     //Variables
     [SerializeField] public Archetype archetype;
@@ -61,13 +62,14 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         set
         {
-            render.thumbnail.sortingOrder = value;
-            render.frame.sortingOrder = value + 1;
-            render.healthBarBack.sortingOrder = value + 2;
-            render.healthBar.sortingOrder = value + 3;
-            render.statusIcon.sortingOrder = value + 4;
-            render.turnDelay.sortingOrder = value + 5;
-            render.healthText.sortingOrder = value + 6;
+            render.glow.sortingOrder = value;
+            render.thumbnail.sortingOrder = value + 1;
+            render.frame.sortingOrder = value + 2;
+            render.healthBarBack.sortingOrder = value + 3;
+            render.healthBar.sortingOrder = value + 4;
+            render.statusIcon.sortingOrder = value + 5;
+            render.turnDelay.sortingOrder = value + 6;
+            render.healthText.sortingOrder = value + 7;
         }
     }
 
@@ -211,6 +213,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
+        render.glow = gameObject.transform.GetChild(Glow).GetComponent<SpriteRenderer>();
         render.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
         render.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
         render.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
@@ -218,7 +221,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.statusIcon = gameObject.transform.GetChild(StatusIcon).GetComponent<SpriteRenderer>();
         render.turnDelay = gameObject.transform.GetChild(TurnDelay).GetComponent<TextMeshPro>();
         render.healthText = gameObject.transform.GetChild(HealthText).GetComponent<TextMeshPro>();
-
     }
 
     private void Start()
@@ -313,6 +315,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
+
+
+
+
     private void MoveTowardCursor()
     {
         if (!IsSelectedPlayer)
@@ -364,10 +370,9 @@ public class ActorBehavior : ExtendedMonoBehavior
             transform.position.y + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
             transform.position.z);
 
+        render.glow.transform.position = pos;
         render.thumbnail.transform.position = pos;
         render.frame.transform.position = pos;
-
-
     }
 
     private void Shake(float intensity)
@@ -449,8 +454,14 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void Set(ActionIcon icon)
     {
-        var id = icon.ToString();
-        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(id)).thumbnail;
+        if (!IsActive) return;
+        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(icon.ToString())).thumbnail;
+    }
+
+    public void Set(GlowState state)
+    {
+        if (!IsActive) return;
+        gameObject.transform.GetChild(Glow).gameObject.SetActive(state == GlowState.On ? true : false);
     }
 
     public IEnumerator FadeIn(float increment = 0.01f)

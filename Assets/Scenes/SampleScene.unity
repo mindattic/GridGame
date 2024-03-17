@@ -534,7 +534,7 @@ MonoBehaviour:
   m_CameraType: 0
   m_Cameras:
   - {fileID: 608292894}
-  m_RendererIndex: -1
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -3696,7 +3696,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1903731455}
   - component: {fileID: 1903731454}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}

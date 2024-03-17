@@ -46,6 +46,12 @@ public enum ActionIcon
     Support
 }
 
+public enum GlowState
+{
+    Off,
+    On
+}
+
 
 public enum Archetype
 {
