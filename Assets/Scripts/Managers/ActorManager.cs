@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class ActorManager : ExtendedMonoBehavior
 {
@@ -69,6 +71,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private void CheckPlayerAttack()
     {
+        ClearAttack();
         if (!HasAlignedPlayers()) return;
         if (!HasAttackingPlayers()) return;
         StartCoroutine(PlayerAttack());
@@ -83,11 +86,11 @@ public class ActorManager : ExtendedMonoBehavior
 
 
     /// <summary>
-    /// Method which is used to find actors that share a column or row
+    /// Method which is used to find actors that share first column or row
     /// </summary>
     private bool HasAlignedPlayers()
     {
-        ClearAttack();
+    
 
         foreach (var actor1 in players)
         {
@@ -168,57 +171,74 @@ public class ActorManager : ExtendedMonoBehavior
     }
 
 
-    private IEnumerator PlayerAttack()
+
+
+    private IEnumerator PlayerStartGlow()
     {
         foreach (var pair in attackParticipants.attackingPairs)
         {
-            attackLineManager.Add(pair);
-
+            yield return new WaitForSeconds(0.25f);
             pair.actor1.Set(ActionIcon.Attack);
             pair.actor1.Set(GlowState.On);
+            yield return new WaitForSeconds(0.25f);
             pair.actor2.Set(ActionIcon.Attack);
             pair.actor2.Set(GlowState.On);
+        }
+    }
 
-            var direction1 = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
-            var direction2 = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
-            portraitManager.SlideIn(pair.actor1, direction1);
-            portraitManager.SlideIn(pair.actor2, direction2);
+    private IEnumerator PlayerPortraitSlideIn(ActorPair pair)
+    {
+        soundSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
+        var first = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
+        var second = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
+        var direction1 = pair.actor1 == pair.highest ? first : second;
+        var direction2 = pair.actor2 == pair.highest ? first : second;
+        portraitManager.SlideIn(pair.actor1, direction1);
+        portraitManager.SlideIn(pair.actor2, direction2);
+        yield return new WaitForSeconds(3f);
+    }
 
-            soundSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
-            yield return new WaitForSeconds(3f);
+    private IEnumerator PlayerAttackEnemy(ActorPair pair)
+    {
+        foreach (var enemy in pair.enemies)
+        {
+            attackLineManager.Spawn(pair);
+            //var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
+            var damage = 100;
+            yield return enemy.TakeDamage(damage);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+    }
+
+    private IEnumerator CheckEnemyDie(ActorPair pair)
+    {
+        foreach (var enemy in pair.enemies)
+        {
+            if (enemy.HP < 1)
+                yield return enemy.Die();
+        }
+    }
 
 
-            foreach (var enemy in pair.enemies)
-            {
-                enemy.Set(GlowState.On);
-            }
+    private void PlayerStopGlow(ActorPair pair)
+    {
+        pair.actor1.Set(ActionIcon.None);
+        pair.actor1.Set(GlowState.Off);
+        pair.actor2.Set(ActionIcon.None);
+        pair.actor2.Set(GlowState.Off);
+    }
 
-            foreach (var enemy in pair.enemies)
-            {
-                //var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
-                var damage = 100;
-                yield return enemy.TakeDamage(damage);
-            }
+    private IEnumerator PlayerAttack()
+    {
+        yield return PlayerStartGlow();
 
-            yield return new WaitForSeconds(0.5f);
-
-            foreach (var enemy in pair.enemies)
-            {
-                if (enemy.HP < 1)
-                    yield return enemy.Die();
-            }
-
-            yield return new WaitForSeconds(2f);
-
-            foreach (var enemy in pair.enemies)
-            {
-                enemy.Set(GlowState.Off);
-            }
-
-            pair.actor1.Set(ActionIcon.None);
-            pair.actor1.Set(GlowState.Off);
-            pair.actor2.Set(ActionIcon.None);
-            pair.actor2.Set(GlowState.Off);
+        foreach (var pair in attackParticipants.attackingPairs)
+        {
+            yield return PlayerPortraitSlideIn(pair);
+            yield return PlayerAttackEnemy(pair);
+            yield return CheckEnemyDie(pair);
+            PlayerStopGlow(pair);
         }
 
         ClearAttack();

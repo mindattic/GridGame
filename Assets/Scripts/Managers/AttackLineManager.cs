@@ -17,7 +17,7 @@ public class AttackLineManager : ExtendedMonoBehavior
 
     }
 
-    public void Add(ActorPair pair)
+    public void Spawn(ActorPair pair)
     {
         Vector3 a = pair.highest.position;
         Vector3 b = pair.lowest.position;
@@ -50,7 +50,7 @@ public class AttackLineManager : ExtendedMonoBehavior
         var attackLine = prefab.GetComponent<AttackLineBehavior>();
         attackLine.name = $"AttackLine_{Guid.NewGuid()}";
         attackLine.parent = board.transform;
-        attackLine.Set(a, b);
+        attackLine.Spawn(a, b);
     }
 
     public void Clear()

@@ -6,7 +6,7 @@ public class AttackLineBehavior : ExtendedMonoBehavior
 {
     //Variables
     Color color;
-    float width = 1.2f;
+    float width = 0.7f;
     float maxAlpha = 0.25f;
 
 
@@ -30,11 +30,14 @@ public class AttackLineBehavior : ExtendedMonoBehavior
 
     #region Methods
 
-    public void Set(Vector3 start, Vector3 end)
+    public void Spawn(Vector3 start, Vector3 end)
     {
         color = lineRenderer.startColor;
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
+
+
+
         Show();
     }
 
@@ -60,8 +63,9 @@ public class AttackLineBehavior : ExtendedMonoBehavior
     {
         lineRenderer.positionCount = 2;
 
-        lineRenderer.startWidth = tileSize * width;
-        lineRenderer.endWidth = tileSize * width;     
+        var thickness = tileSize * width;
+        lineRenderer.startWidth = thickness;
+        lineRenderer.endWidth = thickness;     
     }
 
     void Update()
@@ -70,7 +74,7 @@ public class AttackLineBehavior : ExtendedMonoBehavior
     }
 
 
-    IEnumerator FadeIn()
+    private IEnumerator FadeIn()
     {
         float alpha = 0f;
         color = new Color(color.r, color.g, color.b, alpha);
@@ -88,4 +92,9 @@ public class AttackLineBehavior : ExtendedMonoBehavior
             yield return Wait.Tick();
         }
     }
+
+
+
+
+
 }
