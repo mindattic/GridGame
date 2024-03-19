@@ -89,7 +89,7 @@ public class TitleManager : ExtendedMonoBehavior
     private IEnumerator FadeInOut()
     {
         yield return FadeIn();
-        yield return Wait.For(Interval.TwoSecond);
+        yield return Wait.For(Interval.OneSecond);
         yield return FadeOut();
     }
 

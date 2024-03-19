@@ -283,7 +283,6 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
         soundSource.PlayOneShot(resourceManager.SoundEffect($"Move{Random.Int(1, 6)}"));
-        //soundSource.PlayOneShot(resourceManager.SoundEffect($"Move1"));
 
         //Determine if selected player and another actor are occupying the same tile
         var actor = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));

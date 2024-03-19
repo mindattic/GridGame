@@ -823,7 +823,7 @@ GameObject:
   - component: {fileID: 6095386227113081049}
   - component: {fileID: 5098790026659470380}
   m_Layer: 8
-  m_Name: Status
+  m_Name: ActionIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
