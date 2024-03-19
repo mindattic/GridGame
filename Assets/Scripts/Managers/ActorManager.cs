@@ -175,16 +175,20 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator PlayerStartGlow()
     {
+        yield return Wait.For(Interval.QuarterSecond);
+
         foreach (var pair in attackParticipants.attackingPairs)
         {
-            yield return Wait.For(Interval.QuarterSecond);
             pair.actor1.Set(ActionIcon.Attack);
             pair.actor1.Set(GlowState.On);
             pair.actor1.sortingOrder = ZAxis.Max;
+            soundSource.PlayOneShot(resourceManager.SoundEffect("PlayerGlow"));
             yield return Wait.For(Interval.QuarterSecond);
             pair.actor2.Set(ActionIcon.Attack);
             pair.actor2.Set(GlowState.On);
             pair.actor2.sortingOrder = ZAxis.Max;
+            soundSource.PlayOneShot(resourceManager.SoundEffect("PlayerGlow"));
+            yield return Wait.For(Interval.QuarterSecond);
         }
     }
 
@@ -407,6 +411,7 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var actor in actors)
         {
             if (actor == null || !actor.IsAlive || !actor.IsActive) continue;
+            actor.render.glow.transform.position = actor.position;
             actor.render.thumbnail.transform.position = actor.position;
             actor.render.frame.transform.position = actor.position;
         }

@@ -461,8 +461,46 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void Set(GlowState state)
     {
         if (!IsActive) return;
-        gameObject.transform.GetChild(Glow).gameObject.SetActive(state == GlowState.On ? true : false);
+        StartCoroutine(state == GlowState.On ? Illuminate() : Deilluminate());
     }
+
+    public IEnumerator Illuminate()
+    {
+        float alpha = 0;
+        render.glow.color = new Color(1, 1, 1, alpha);
+        gameObject.transform.GetChild(Glow).gameObject.SetActive(true);
+
+        while (alpha < 1)
+        {
+            alpha += Increment.OnePercent;
+            alpha = Mathf.Clamp(alpha, 0, 1);
+            render.glow.color = new Color(1, 1, 1, alpha);
+
+            yield return Wait.Tick();
+        }
+    }
+
+
+    public IEnumerator Deilluminate()
+    {
+        float alpha = 1;
+        render.glow.color = new Color(1, 1, 1, alpha);
+        gameObject.transform.GetChild(Glow).gameObject.SetActive(true);
+
+        while (alpha > 0)
+        {
+            alpha -= Increment.OnePercent;
+            alpha = Mathf.Clamp(alpha, 0, 1);
+            render.glow.color = new Color(1, 1, 1, alpha);
+
+            yield return Wait.Tick();
+        }
+
+        gameObject.transform.GetChild(Glow).gameObject.SetActive(false);
+    }
+
+
+
 
     public IEnumerator FadeIn(float increment = 0.01f)
     {

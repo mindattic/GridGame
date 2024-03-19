@@ -93,9 +93,9 @@ public class AttackLineBehavior : ExtendedMonoBehavior
         lineRenderer.startColor = color;
         lineRenderer.endColor = color;
 
-        while (!alpha.Equals(maxAlpha))
+        while (alpha < maxAlpha)
         {
-            alpha += Increment.TenPercent;
+            alpha += Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, maxAlpha);
             color = new Color(color.r, color.g, color.b, alpha);
             lineRenderer.startColor = color;
@@ -117,9 +117,9 @@ public class AttackLineBehavior : ExtendedMonoBehavior
         lineRenderer.startColor = color;
         lineRenderer.endColor = color;
 
-        while (!alpha.Equals(maxAlpha))
+        while (alpha > 0)
         {
-            alpha -= Increment.TenPercent;
+            alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, maxAlpha);
             color = new Color(color.r, color.g, color.b, alpha);
             lineRenderer.startColor = color;
