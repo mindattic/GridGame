@@ -61,7 +61,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         while (enemies.Any(x => x.HasDestination))
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return Wait.For(Interval.HalfSecond);
         }
 
         turnManager.currentPhase = TurnPhase.Attack;
@@ -171,18 +171,20 @@ public class ActorManager : ExtendedMonoBehavior
     }
 
 
-
+    #region Player Attack Methods
 
     private IEnumerator PlayerStartGlow()
     {
         foreach (var pair in attackParticipants.attackingPairs)
         {
-            yield return new WaitForSeconds(0.25f);
+            yield return Wait.For(Interval.QuarterSecond);
             pair.actor1.Set(ActionIcon.Attack);
             pair.actor1.Set(GlowState.On);
-            yield return new WaitForSeconds(0.25f);
+            pair.actor1.sortingOrder = ZAxis.Max;
+            yield return Wait.For(Interval.QuarterSecond);
             pair.actor2.Set(ActionIcon.Attack);
             pair.actor2.Set(GlowState.On);
+            pair.actor2.sortingOrder = ZAxis.Max;
         }
     }
 
@@ -195,7 +197,7 @@ public class ActorManager : ExtendedMonoBehavior
         var direction2 = pair.actor2 == pair.highest ? first : second;
         portraitManager.SlideIn(pair.actor1, direction1);
         portraitManager.SlideIn(pair.actor2, direction2);
-        yield return new WaitForSeconds(3f);
+        yield return Wait.For(Interval.ThreeSecond);
     }
 
     private IEnumerator PlayerAttackEnemy(ActorPair pair)
@@ -208,7 +210,8 @@ public class ActorManager : ExtendedMonoBehavior
             yield return enemy.TakeDamage(damage);
         }
 
-        yield return new WaitForSeconds(0.5f);
+        yield return Wait.For(Interval.HalfSecond);
+        attackLineManager.Destroy(pair);
     }
 
     private IEnumerator CheckEnemyDie(ActorPair pair)
@@ -216,17 +219,21 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var enemy in pair.enemies)
         {
             if (enemy.HP < 1)
+            {
                 yield return enemy.Die();
+            }
+               
         }
     }
-
 
     private void PlayerStopGlow(ActorPair pair)
     {
         pair.actor1.Set(ActionIcon.None);
         pair.actor1.Set(GlowState.Off);
+        pair.actor1.sortingOrder = ZAxis.Min;
         pair.actor2.Set(ActionIcon.None);
         pair.actor2.Set(GlowState.Off);
+        pair.actor2.sortingOrder = ZAxis.Min;
     }
 
     private IEnumerator PlayerAttack()
@@ -244,6 +251,10 @@ public class ActorManager : ExtendedMonoBehavior
         ClearAttack();
         turnManager.NextTurn();
     }
+
+    #endregion
+
+    #region Enemy Attack Methods
 
     private void CheckEnemyAttack()
     {
@@ -271,7 +282,7 @@ public class ActorManager : ExtendedMonoBehavior
                     var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
                     player.TakeDamage(damage);
 
-                    yield return new WaitForSeconds(2f);
+                    yield return Wait.For(Interval.TwoSecond);
 
                     enemy.GenerateTurnDelay();
                 }
@@ -282,6 +293,9 @@ public class ActorManager : ExtendedMonoBehavior
         ClearAttack();
         turnManager.NextTurn();
     }
+
+    #endregion
+
 
 
     private void FixedUpdate()
@@ -372,6 +386,15 @@ public class ActorManager : ExtendedMonoBehavior
 
         CheckPlayerAttack();
     }
+
+    public void Destroy(ActorBehavior actor)
+    {
+        if (actor == null) return;
+
+
+    }
+
+
 
     public void Clear()
     {

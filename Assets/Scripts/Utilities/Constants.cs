@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using JetBrains.Annotations;
+using UnityEngine;
 
 public static class Constants
 {
@@ -77,21 +78,40 @@ public static class Interval
 {
     public static float One = 0.01f;
     public static float Two = 0.02f;
+    public static float Three = 0.03f;
+    public static float Four = 0.04f;
     public static float Five = 0.05f;
     public static float Ten = 0.1f;
+    public static float QuarterSecond = 0.25f;
+    public static float HalfSecond = 0.5f;
+    public static float OneSecond = 1.0f;
+    public static float TwoSecond = 2.0f;
+    public static float ThreeSecond = 3.0f;
+    public static float FourSecond = 4.0f;
+    public static float FiveSecond = 5.0f;
 }
 
 public static class Increment
 {
-    public static float One = 0.01f;
-    public static float Two = 0.02f;
-    public static float Five = 0.05f;
-    public static float Ten = 0.1f;
+    public static float OnePercent = 0.01f;
+    public static float TwoPercent = 0.02f;
+    public static float FivePercent = 0.05f;
+    public static float TenPercent = 0.1f;
+    public static float FiftyPercent = 0.5f;
+    public static float HundredPercent = 1.0f;
 }
 
 
 public static class Wait
 {
     public static WaitForSeconds Tick() => new WaitForSeconds(Interval.One);
+    public static WaitForSeconds For(float seconds) => new WaitForSeconds(seconds);
 }
 
+
+public static class ZAxis
+{
+    public static int Min = 0;
+    public static int Half = 50;
+    public static int Max = 100;
+}

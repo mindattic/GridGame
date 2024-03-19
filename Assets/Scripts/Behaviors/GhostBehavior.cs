@@ -97,13 +97,13 @@ public class GhostBehavior : ExtendedMonoBehavior
 
         while (alpha > 0)
         {
-            alpha -= Increment.Five;
+            alpha -= Increment.FivePercent;
             alpha = Mathf.Max(alpha, 0f);
             color.a = alpha;
             render.thumbnail.color = color;
             render.frame.color = color;
 
-            yield return new WaitForSeconds(Interval.Five);
+            yield return Wait.For(Interval.Five);
         }
 
         Destroy(this.gameObject);

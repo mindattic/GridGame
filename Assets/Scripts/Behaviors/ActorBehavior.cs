@@ -398,7 +398,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             damageTextManager.Spawn(damage.ToString(), position);
 
             //Shake actor
-            Shake(shakeIntensity.Medium);
+            Shake(ShakeIntensity.Medium);
 
             //Resize health bar
             if (HP > 0)
@@ -420,7 +420,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             //SlideIn sfx
             soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
 
-            yield return new WaitForSeconds(Interval.Five);
+            yield return Wait.For(Interval.Five);
         }
 
         HP = remainingHP;
@@ -439,10 +439,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         portraitManager.Dissolve(this);
         soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
+        sortingOrder = ZAxis.Max;
 
         while (alpha > 0)
         {
-            alpha -= Increment.One;
+            alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
             render.SetColor(new Color(1, 1, 1, alpha));
             yield return Wait.Tick();
@@ -476,7 +477,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             render.SetColor(new Color(1, 1, 1, alpha));
 
             //Shake actor
-            Shake(shakeIntensity.Low);
+            Shake(ShakeIntensity.Low);
 
             yield return Wait.Tick();
         }
@@ -496,7 +497,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             render.SetColor(new Color(1, 1, 1, alpha));
 
             //Shake actor
-            Shake(shakeIntensity.Low);
+            Shake(ShakeIntensity.Low);
 
             yield return Wait.Tick();
         }
@@ -507,7 +508,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator FadeInOut(float fadeInIncrement = 0.01f, float intermission = 2f, float fadeOuIncrement = 0.01f)
     {
         yield return FadeIn(fadeInIncrement);
-        yield return new WaitForSeconds(intermission);
+        yield return Wait.For(intermission);
         yield return FadeOut(fadeOuIncrement);
     }
 

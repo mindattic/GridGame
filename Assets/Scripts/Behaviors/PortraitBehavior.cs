@@ -142,13 +142,13 @@ public class PortraitBehavior : ExtendedMonoBehavior
           
             //Shake
             position = startPosition;
-            position += new Vector3(Random.Range(shakeIntensity.Medium), Random.Range(shakeIntensity.Medium), 1);
+            position += new Vector3(Random.Range(ShakeIntensity.Medium), Random.Range(ShakeIntensity.Medium), 1);
 
             //Shrink
             transform.localScale *= 0.99f;
 
             //Fade
-            alpha -= Increment.One;
+            alpha -= Increment.OnePercent;
             spriteRenderer.color = new Color(1, 1, 1, alpha);
             yield return Wait.Tick();
         }

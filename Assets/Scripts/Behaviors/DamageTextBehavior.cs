@@ -67,7 +67,7 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 
 
             transform.position += new Vector3(0, tileSize / 16, 0);
-            yield return new WaitForSeconds(0.05f); // update interval
+            yield return Wait.For(Interval.Five); // update interval
         }
         StopCoroutine(FadeOut());
         Destroy(gameObject);

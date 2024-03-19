@@ -63,7 +63,7 @@ public class TitleManager : ExtendedMonoBehavior
 
         while (alpha < 1)
         {
-            alpha += Increment.Ten;
+            alpha += Increment.TenPercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
             label.color = new Color(1, 1, 1f, alpha);
             yield return Wait.Tick();
@@ -75,11 +75,11 @@ public class TitleManager : ExtendedMonoBehavior
         float alpha = 1f;
         label.color = new Color(1f, 1f, 1f, alpha);
 
-        yield return new WaitForSeconds(2f);
+        yield return Wait.For(Interval.TwoSecond);
 
         while (alpha > 0f)
         {
-            alpha -= Increment.Ten;
+            alpha -= Increment.TenPercent;
             alpha = Mathf.Clamp(alpha, 0f, 1);
             label.color = new Color(1, 1, 1, alpha);
             yield return Wait.Tick();
@@ -89,7 +89,7 @@ public class TitleManager : ExtendedMonoBehavior
     private IEnumerator FadeInOut()
     {
         yield return FadeIn();
-        yield return new WaitForSeconds(2f);
+        yield return Wait.For(Interval.TwoSecond);
         yield return FadeOut();
     }
 

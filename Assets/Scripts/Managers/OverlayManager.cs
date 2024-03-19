@@ -64,7 +64,7 @@ public class OverlayManager : ExtendedMonoBehavior
 
         while (alpha < MaxAlpha)
         {
-            alpha += Increment.Five;
+            alpha += Increment.FivePercent;
             alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
             image.color = new Color(0f, 0f, 0f, alpha);
             yield return Wait.Tick();
@@ -76,11 +76,11 @@ public class OverlayManager : ExtendedMonoBehavior
         float alpha = 1f;
         image.color = new Color(0f, 0f, 0f, alpha);
 
-        yield return new WaitForSeconds(2f);
+        yield return Wait.For(Interval.TwoSecond);
 
         while (alpha > 0f)
         {
-            alpha -= Increment.One;
+            alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
             image.color = new Color(0f, 0f, 0f, alpha);
             yield return Wait.Tick();

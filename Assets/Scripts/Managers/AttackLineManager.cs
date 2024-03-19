@@ -6,6 +6,11 @@ using UnityEngine;
 public class AttackLineManager : ExtendedMonoBehavior
 {
     [SerializeField] public GameObject attackLinePrefab;
+    private List<AttackLineBehavior> attackLines = new List<AttackLineBehavior>();
+
+
+    private const string NameFormat = "AttackLine_{0)+{1}";
+
 
     private void Start()
     {
@@ -19,44 +24,30 @@ public class AttackLineManager : ExtendedMonoBehavior
 
     public void Spawn(ActorPair pair)
     {
-        Vector3 a = pair.highest.position;
-        Vector3 b = pair.lowest.position;
-
-        if (pair.axis == Axis.Vertical)
-        {
-            a += new Vector3(0, -tileSize / 2 + -tileSize * 0.1f, 0);
-            b += new Vector3(0, tileSize / 2 + tileSize * 0.1f, 0);
-
-        }
-        else if (pair.axis == Axis.Horizontal)
-        {
-            a += new Vector3(tileSize / 2 + tileSize * 0.1f, 0, 0);
-            b += new Vector3(-tileSize / 2 + -tileSize * 0.1f, 0, 0);
-        }
-
-        //if (pair.axis == Axis.Vertical)
-        //{
-        //    a += new Vector3(0, -tileSize / 2, 0);
-        //    b += new Vector3(0, tileSize / 2, 0);
-
-        //}
-        //else if (pair.axis == Axis.Horizontal)
-        //{
-        //    a += new Vector3(tileSize / 2, 0, 0);
-        //    b += new Vector3(-tileSize / 2, 0, 0);
-        //}
-
         var prefab = Instantiate(attackLinePrefab, Vector2.zero, Quaternion.identity);
         var attackLine = prefab.GetComponent<AttackLineBehavior>();
-        attackLine.name = $"AttackLine_{Guid.NewGuid()}";
+        var name = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
+        attackLine.name = name;
         attackLine.parent = board.transform;
-        attackLine.Spawn(a, b);
+        attackLine.Spawn(pair);
+
+        attackLines.Add(attackLine);
+    }
+
+
+    public void Destroy(ActorPair pair)
+    {
+        var name = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
+        var attackLine = attackLines.FirstOrDefault(x => x.name == name);
+        if (attackLine == null) return;
+        attackLines.Remove(attackLine);
+        attackLine.FadeOut();
     }
 
     public void Clear()
     {
-        var gameObjects = GameObject.FindGameObjectsWithTag(Tag.AttackLine).ToList();
-        gameObjects.ForEach(x => Destroy(x));
+        attackLines.ForEach(x => Destroy(x.gameObject));
+        attackLines.Clear();
     }
 
 }

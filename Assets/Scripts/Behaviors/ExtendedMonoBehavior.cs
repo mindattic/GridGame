@@ -55,7 +55,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected float tileSize => GameManager.instance.tileSize;
     protected Vector2 tileScale => GameManager.instance.tileScale;
 
-    protected ShakeIntensity shakeIntensity => GameManager.instance.shakeIntensity;
+    protected ShakeIntensity ShakeIntensity => GameManager.instance.shakeIntensity;
 
     //Percent
     protected float percent25 => Constants.percent25;

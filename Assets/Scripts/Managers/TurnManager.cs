@@ -72,7 +72,7 @@ public class TurnManager : ExtendedMonoBehavior
             enemy.gameObject.SetActive(true);
 
             yield return enemy.FadeIn();
-            yield return new WaitForSeconds(0.5f);
+            yield return Wait.For(Interval.HalfSecond);
         }
     }
 
