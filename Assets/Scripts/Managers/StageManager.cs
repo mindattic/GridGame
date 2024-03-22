@@ -94,16 +94,33 @@ public class StageManager : ExtendedMonoBehavior
                 stageActors.Add(new StageActor(Archetype.Sentinel, "Sentinel", attributes, Team.Player, onoccupiedLocation[i++]));
                 stageActors.Add(new StageActor(Archetype.PandaGirl, "Panda Girl", attributes, Team.Player, onoccupiedLocation[i++]));
                 stageActors.Add(new StageActor(Archetype.Cleric, "Cleric", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime B", attributes, Team.Enemy, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime C", attributes, Team.Enemy, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Scorpion, "Scorpion A", attributes, Team.Enemy, spawnTurn: 3));
-                stageActors.Add(new StageActor(Archetype.Scorpion, "Scorpion B", attributes, Team.Enemy, spawnTurn: 3));
-                stageActors.Add(new StageActor(Archetype.Scorpion, "Scorpion C", attributes, Team.Enemy, spawnTurn: 4));
-                stageActors.Add(new StageActor(Archetype.Scorpion, "Scorpion D", attributes, Team.Enemy, spawnTurn: 5));
-                stageActors.Add(new StageActor(Archetype.Scorpion, "Scorpion E", attributes, Team.Enemy, spawnTurn: 6));
-                stageActors.Add(new StageActor(Archetype.Scorpion, "Scorpion F", attributes, Team.Enemy, spawnTurn: 7));
+                stageActors.Add(new StageActor(Archetype.Slime, "Slime", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                stageActors.Add(new StageActor(Archetype.Scorpion, "Scorpion", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                stageActors.Add(new StageActor(Archetype.Bat, "Bat", attributes, Team.Enemy, onoccupiedLocation[i++]));
+
+                //Add enemies randomly to stage
+                var enemies = new List<StageActor>
+                {
+                    new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, spawnTurn: 1),
+                    new StageActor(Archetype.Slime, "Slime B", attributes, Team.Enemy, spawnTurn: 2),
+                    new StageActor(Archetype.Slime, "Slime C", attributes, Team.Enemy, spawnTurn: 3),
+                    new StageActor(Archetype.Slime, "Slime D", attributes, Team.Enemy, spawnTurn: 4),
+                    new StageActor(Archetype.Slime, "Slime E", attributes, Team.Enemy, spawnTurn: 5),
+                    new StageActor(Archetype.Scorpion, "Scorpion A", attributes, Team.Enemy, spawnTurn: 1),
+                    new StageActor(Archetype.Scorpion, "Scorpion B", attributes, Team.Enemy, spawnTurn: 2),
+                    new StageActor(Archetype.Scorpion, "Scorpion C", attributes, Team.Enemy, spawnTurn: 3),
+                    new StageActor(Archetype.Scorpion, "Scorpion D", attributes, Team.Enemy, spawnTurn: 4),
+                    new StageActor(Archetype.Scorpion, "Scorpion E", attributes, Team.Enemy, spawnTurn: 5),
+                    new StageActor(Archetype.Bat, "Bat A", attributes, Team.Enemy, spawnTurn: 1),
+                    new StageActor(Archetype.Bat, "Bat B", attributes, Team.Enemy, spawnTurn: 2),
+                    new StageActor(Archetype.Bat, "Bat C", attributes, Team.Enemy, spawnTurn: 3),
+                    new StageActor(Archetype.Bat, "Bat D", attributes, Team.Enemy, spawnTurn: 4),
+                    new StageActor(Archetype.Bat, "Bat E", attributes, Team.Enemy, spawnTurn: 5)
+                };
+                stageActors.AddRange(enemies.OrderBy(x => Guid.NewGuid()));
+
                 break;
+
 
             case 6:
 
@@ -171,7 +188,7 @@ public class StageManager : ExtendedMonoBehavior
             actor.thumbnail = x.thumbnail;
             actor.parent = board.transform;
             actor.team = x.team;
-            actor.location = x.location;         
+            actor.location = x.location;
             actor.spawnTurn = x.spawnTurn;
         }
 
