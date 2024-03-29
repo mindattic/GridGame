@@ -29,6 +29,8 @@ public class Common
         return GameManager.instance.boardLocations.OrderBy(x => Guid.NewGuid()).ToList();
     }
 
+
+
     public static bool IsInRange(float a, float b, float range)
     {
         return a <= b + range && a >= b - range;

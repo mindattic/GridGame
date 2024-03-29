@@ -4,17 +4,56 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
+
+//public class ActorSubobject
+//{
+//    public GameObject root;
+//    public int index;
+
+//    public ActorSubobject(GameObject root, int index)
+//    {
+//        this.root = root;
+//        this.index = index;
+//    }
+
+//    public GameObject gameObject
+//    {
+//        get => root.transform.GetChild(index).gameObject;
+//    }
+
+//    public Vector3 position
+//    {
+//        get => root.transform.GetChild(index).transform.position;
+//        set => root.transform.GetChild(index).transform.position = value;
+//    }
+
+//    public SpriteRenderer spriteRenderer
+//    {
+//        get => root.transform.GetChild(index).GetComponent<SpriteRenderer>();
+//    }
+
+
+//    public Sprite sprite
+//    {
+//        get => spriteRenderer.sprite;
+//        set => spriteRenderer.sprite = value;
+//    }
+//}
+
+
+
 public class ActorBehavior : ExtendedMonoBehavior
 {
     //Constants
     const int Glow = 0;
-    const int Thumbnail = 1;
-    const int Frame = 2;
-    const int HealthBarBack = 3;
-    const int HealthBar = 4;
-    const int StatusIcon = 5;
-    const int TurnDelay = 6;
-    const int HealthText = 7;
+    const int Shadow = 1;
+    const int Thumbnail = 2;
+    const int Frame = 3;
+    const int HealthBarBack = 4;
+    const int HealthBar = 5;
+    const int StatusIcon = 6;
+    const int TurnDelay = 7;
+    const int HealthText = 8;
 
     //Variables
     [SerializeField] public Archetype archetype;
@@ -25,10 +64,60 @@ public class ActorBehavior : ExtendedMonoBehavior
     [SerializeField] public int MaxHP;
 
 
-    public int? spawnTurn = null;
+    public int spawnTurn = -1;
     private int enemyTurnDelay = 0;
 
     [SerializeField] public AnimationCurve bobbing;
+
+
+
+    private void Awake()
+    {
+        render.glow = gameObject.transform.GetChild(Glow).GetComponent<SpriteRenderer>();
+        render.shadow = gameObject.transform.GetChild(Shadow).GetComponent<SpriteRenderer>();
+        render.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
+        render.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
+        render.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
+        render.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
+        render.statusIcon = gameObject.transform.GetChild(StatusIcon).GetComponent<SpriteRenderer>();
+        render.turnDelay = gameObject.transform.GetChild(TurnDelay).GetComponent<TextMeshPro>();
+        render.healthText = gameObject.transform.GetChild(HealthText).GetComponent<TextMeshPro>();
+    }
+
+    private void Start()
+    {
+        Init();
+    }
+
+    public void Init(Vector2Int? initialLocation = null)
+    {
+        if (initialLocation.HasValue)
+            location = initialLocation.Value;
+
+        gameObject.SetActive(true);
+        position = Geometry.PositionFromLocation(location);
+        destination = null;
+        transform.localScale = tileScale;
+        render.thumbnail.color = Colors.Solid.White;
+
+        HP = MaxHP;
+        render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
+        PrintHealth();
+
+        if (this.IsPlayer)
+        {
+            render.turnDelay.gameObject.SetActive(false);
+            Set(ActionIcon.None);
+        }
+        else
+        {
+            Set(EnemyTurnDelay.Random);
+        }
+
+    }
+
+
+
 
     #region Components
 
@@ -43,6 +132,14 @@ public class ActorBehavior : ExtendedMonoBehavior
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
     }
+
+
+    public Vector3 thumbnailPosition
+    {
+        get => gameObject.transform.GetChild(Thumbnail).position;
+        set => gameObject.transform.GetChild(Thumbnail).position = value;
+    }
+
 
     public Vector3 scale
     {
@@ -83,10 +180,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
     }
 
-
-
-
-
     #endregion
 
     #region Properties
@@ -103,20 +196,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsWestEdge => location.x == 1;
     public bool IsAlive => HP > 0;
     public bool IsActive => this != null && this.isActiveAndEnabled;
-    public bool HasSpawned => !spawnTurn.HasValue || (spawnTurn.HasValue && spawnTurn.Value >= turnManager.turnNumber);
+    public bool HasSpawned => (spawnTurn >= turnManager.turnNumber);
 
     #endregion
 
     #region Methods
 
-    public void GenerateTurnDelay()
-    {
-        //TODO: Use enemy statistics to determine turn delay...
-        enemyTurnDelay = Random.Int(2, 4);
-        render.turnDelay.text = $"x{enemyTurnDelay}";
-        render.turnDelay.gameObject.SetActive(true);
-        Set(ActionIcon.Sleep);
-    }
+
 
     public bool IsSameColumn(Vector2Int location) => this.location.x == location.x;
     public bool IsSameRow(Vector2Int location) => this.location.y == location.y;
@@ -211,63 +297,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     #endregion
 
-    private void Awake()
-    {
-        render.glow = gameObject.transform.GetChild(Glow).GetComponent<SpriteRenderer>();
-        render.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
-        render.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
-        render.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
-        render.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
-        render.statusIcon = gameObject.transform.GetChild(StatusIcon).GetComponent<SpriteRenderer>();
-        render.turnDelay = gameObject.transform.GetChild(TurnDelay).GetComponent<TextMeshPro>();
-        render.healthText = gameObject.transform.GetChild(HealthText).GetComponent<TextMeshPro>();
-    }
-
-    private void Start()
-    {
-        Init();
-    }
-
-    public void Init(Vector2Int? initialLocation = null)
-    {
-        if (initialLocation.HasValue)
-            location = initialLocation.Value;
-
-        gameObject.SetActive(true);
-        position = Geometry.PositionFromLocation(location);
-        destination = null;
-        transform.localScale = tileScale;
-        render.thumbnail.color = Colors.Solid.White;
-
-        HP = MaxHP;
-        render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
-        PrintHealth();
-
-        if (this.IsPlayer)
-        {
-            render.turnDelay.gameObject.SetActive(false);
-            Set(ActionIcon.None);
-        }
-        else
-        {
-            GenerateTurnDelay();
-
-            if (!spawnTurn.HasValue)
-            {
-                gameObject.SetActive(true);
-            }
-            else
-            {
-                var color = new Color(1, 1, 1, 0);
-                render.SetColor(color);
-                gameObject.SetActive(false);
-            }
-
-        }
-
-
-    }
-
+  
 
 
 
@@ -309,8 +339,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsAlive || !IsActive || IsSelectedPlayer) return;
 
         CheckMovement();
-        CheckBobbing();
-
+        //CheckBobbing();
+        CheckThrobbing();
 
     }
 
@@ -369,17 +399,45 @@ public class ActorBehavior : ExtendedMonoBehavior
             transform.position.y + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
             transform.position.z);
 
-        render.glow.transform.position = pos;
-        render.thumbnail.transform.position = pos;
-        render.frame.transform.position = pos;
+        //render.glow.transform.position = pos;
+        //render.thumbnail.transform.position = pos;
+        //render.frame.transform.position = pos;
+        render.shadow.transform.position = pos;
+    }
+
+
+    private void CheckThrobbing()
+    {
+        if (!IsAlive || !IsActive || !IsPlayer || !turnManager.IsStartPhase) return;
+
+        //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
+        var scale = new Vector3(
+            1.5f + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
+            1.5f + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
+            1);
+        render.shadow.transform.localScale = scale;
+
+        var color = new Color(0, 1, 0, 1);
+        render.shadow.color = color;
+
+        //render.glow.transform.position = pos;
+        //render.thumbnail.transform.position = pos;
+        //render.frame.transform.position = pos;
+
+
     }
 
     private void Shake(float intensity)
     {
-        position = currentTile.position;
-        position += new Vector3(Random.Range(intensity), Random.Range(intensity), 1);
+        gameObject.transform.GetChild(Thumbnail).gameObject.transform.position = currentTile.position;
+        gameObject.transform.GetChild(Thumbnail).gameObject.transform.position += new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
     }
 
+    private void ResetShake()
+    {
+        var pos = gameObject.transform.GetChild(Thumbnail).gameObject.transform.position;
+        pos = currentTile.position;
+    }
 
     public IEnumerator TakeDamage(int damageTaken)
     {
@@ -422,6 +480,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             yield return Wait.For(Interval.Five);
         }
 
+        ResetShake();
         HP = remainingHP;
         position = currentTile.position;
     }
@@ -434,7 +493,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator Die()
     {
         var alpha = 1f;
-        render.SetColor(new Color(1, 1, 1, alpha));
+        render.Set(new Color(1, 1, 1, alpha));
 
         portraitManager.Dissolve(this);
         soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
@@ -444,7 +503,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            render.SetColor(new Color(1, 1, 1, alpha));
+            render.Set(new Color(1, 1, 1, alpha));
             yield return Wait.Tick();
         }
 
@@ -461,57 +520,85 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void Set(GlowState state)
     {
         if (!IsActive) return;
-        StartCoroutine(state == GlowState.On ? Illuminate() : Deilluminate());
+        StartCoroutine(state == GlowState.On ? GlowFadeIn(new Color(1, 1, 1, 0)) : GlowFadeOut(new Color(1, 1, 1, 1)));
     }
 
-    public IEnumerator Illuminate()
+    public void Set(GlowState state, Color color)
     {
-        float alpha = 0;
-        render.glow.color = new Color(1, 1, 1, alpha);
-        gameObject.transform.GetChild(Glow).gameObject.SetActive(true);
+        if (!IsActive) return;
+        StartCoroutine(state == GlowState.On ? GlowFadeIn(color) : GlowFadeOut(color));
+    }
 
-        while (alpha < 1)
+    public IEnumerator GlowFadeIn(Color color)
+    {
+        float maxAlpha = 1;
+        float alpha = 0;
+        color.a = alpha;
+        render.glow.color = color;
+
+        while (alpha < maxAlpha)
         {
             alpha += Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            render.glow.color = new Color(1, 1, 1, alpha);
+            color.a = alpha;
+            render.glow.color = color;
 
             yield return Wait.Tick();
         }
+
+        color.a = maxAlpha;
+        render.glow.color = color;
     }
 
-
-    public IEnumerator Deilluminate()
+    public IEnumerator GlowFadeOut(Color color)
     {
+        float minAlpha = 0;
         float alpha = 1;
-        render.glow.color = new Color(1, 1, 1, alpha);
-        gameObject.transform.GetChild(Glow).gameObject.SetActive(true);
+        color.a = alpha;
+        render.glow.color = color;
 
-        while (alpha > 0)
+        while (alpha > minAlpha)
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            render.glow.color = new Color(1, 1, 1, alpha);
+            color.a = alpha;
+            render.glow.color = color;
 
             yield return Wait.Tick();
         }
 
-        gameObject.transform.GetChild(Glow).gameObject.SetActive(false);
+        color.a = minAlpha;
+        render.glow.color = color;
+    }
+
+
+    public void Set(EnemyTurnDelay turnDelay, int min = 2, int max = 4)
+    {
+        if (!IsActive || turnDelay.Equals(EnemyTurnDelay.None)) return;
+
+        enemyTurnDelay = Random.Int(min, max);
+        render.turnDelay.text = $"x{enemyTurnDelay}";
+        render.turnDelay.gameObject.SetActive(true);
+        Set(ActionIcon.Sleep);
     }
 
 
 
 
-    public IEnumerator FadeIn(float increment = 0.01f)
-    {
-        float alpha = 0;
-        render.SetColor(new Color(1, 1, 1, alpha));
 
-        while (alpha < 1)
+    public IEnumerator FadeIn(float delay = 0)
+    {
+        float maxAlpha = 1;
+        float alpha = 0;
+        render.Set(new Color(1, 1, 1, alpha));
+
+        yield return Wait.For(delay);
+
+        while (alpha < maxAlpha)
         {
-            alpha += increment;
+            alpha += Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            render.SetColor(new Color(1, 1, 1, alpha));
+            render.Set(new Color(1, 1, 1, alpha));
 
             //Shake actor
             Shake(ShakeIntensity.Low);
@@ -522,16 +609,19 @@ public class ActorBehavior : ExtendedMonoBehavior
         position = currentTile.position;
     }
 
-    public IEnumerator FadeOut(float increment = 0.01f)
+    public IEnumerator FadeOut(float delay = 0)
     {
-        float alpha = 1f;
-        render.SetColor(new Color(1, 1, 1, alpha));
+        float minAlpha = 0;
+        float alpha = 1;
+        render.Set(new Color(1, 1, 1, alpha));
 
-        while (alpha > 0f)
+        yield return Wait.For(delay);
+
+        while (alpha > minAlpha)
         {
-            alpha -= increment;
+            alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            render.SetColor(new Color(1, 1, 1, alpha));
+            render.Set(new Color(1, 1, 1, alpha));
 
             //Shake actor
             Shake(ShakeIntensity.Low);
@@ -542,11 +632,11 @@ public class ActorBehavior : ExtendedMonoBehavior
         this.position = currentTile.position;
     }
 
-    public IEnumerator FadeInOut(float fadeInIncrement = 0.01f, float intermission = 2f, float fadeOuIncrement = 0.01f)
+    public IEnumerator FadeInOut(float fadeInDelay = 0, float intermissionDelay = 2f, float fadeOutDelay = 0)
     {
-        yield return FadeIn(fadeInIncrement);
-        yield return Wait.For(intermission);
-        yield return FadeOut(fadeOuIncrement);
+        yield return FadeIn(fadeInDelay);
+        yield return Wait.For(intermissionDelay);
+        yield return FadeOut(fadeOutDelay);
     }
 
 

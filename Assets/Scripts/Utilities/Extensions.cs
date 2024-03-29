@@ -32,6 +32,15 @@ public static class IEnumeratorExtensions
     }
 }
 
+
+public static class ListExtensions
+{
+    public static List<T> Shuffle<T>(this List<T> list)
+    {
+        return list.OrderBy(x => Guid.NewGuid()).ToList();
+    }
+}
+
 public static class Vector3Extensions
 {
     public static void SetX(this Vector3 v3, float value)
@@ -51,7 +60,7 @@ public static class Vector3Extensions
 
     public static void AddY(this Vector3 v3, float value)
     {
-        v3 = new Vector3(v3.x , v3.y + value, v3.z);
+        v3 = new Vector3(v3.x, v3.y + value, v3.z);
     }
 
     public static void SetZ(this Vector3 v3, float value)
@@ -61,7 +70,7 @@ public static class Vector3Extensions
 
     public static void AddZ(this Vector3 v3, float value)
     {
-        v3 = new Vector3(v3.x, v3.y , v3.z + value);
+        v3 = new Vector3(v3.x, v3.y, v3.z + value);
     }
 
 

@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -22,8 +20,7 @@ public class StageManager : ExtendedMonoBehavior
 
     public void PreviousStage()
     {
-        if (currentStage > 1)
-            currentStage--;
+        if (currentStage > 1) currentStage--;
         Load();
     }
 
@@ -46,9 +43,11 @@ public class StageManager : ExtendedMonoBehavior
         overlayManager.Show();
         titleManager.Print($"Stage {currentStage}");
 
+        //Clear existing actors
+        GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
+        actors.Clear();
+
         var attributes = new ActorAttributes() { HP = 100, MaxHP = 100 };
-        int i = 0;
-        var onoccupiedLocation = Common.RandomLocations();
 
         List<StageActor> stageActors = new List<StageActor>();
 
@@ -56,146 +55,156 @@ public class StageManager : ExtendedMonoBehavior
         {
             case 1:
 
-                stageActors.Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
 
                 break;
 
             case 2:
 
-                stageActors.Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
 
                 break;
 
             case 3:
 
-                stageActors.Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
 
                 break;
 
             case 4:
 
-                stageActors.Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
 
                 break;
 
             case 5:
 
-                stageActors.Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Ninja, "Ninja", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Sentinel, "Sentinel", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.PandaGirl, "Panda Girl", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Cleric, "Cleric", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime", attributes, Team.Enemy, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Scorpion, "Scorpion", attributes, Team.Enemy, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Bat, "Bat", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                //Players
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Ninja, "Ninja", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Sentinel, "Sentinel", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.PandaGirl, "Panda Girl", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Cleric, "Cleric", attributes, Team.Player, unoccupiedTile.location));
 
-                //Add enemies randomly to stage
-                var enemies = new List<StageActor>
-                {
-                    new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, spawnTurn: 1),
-                    new StageActor(Archetype.Slime, "Slime B", attributes, Team.Enemy, spawnTurn: 2),
-                    new StageActor(Archetype.Slime, "Slime C", attributes, Team.Enemy, spawnTurn: 3),
-                    new StageActor(Archetype.Slime, "Slime D", attributes, Team.Enemy, spawnTurn: 4),
-                    new StageActor(Archetype.Slime, "Slime E", attributes, Team.Enemy, spawnTurn: 5),
-                    new StageActor(Archetype.Scorpion, "Scorpion A", attributes, Team.Enemy, spawnTurn: 1),
-                    new StageActor(Archetype.Scorpion, "Scorpion B", attributes, Team.Enemy, spawnTurn: 2),
-                    new StageActor(Archetype.Scorpion, "Scorpion C", attributes, Team.Enemy, spawnTurn: 3),
-                    new StageActor(Archetype.Scorpion, "Scorpion D", attributes, Team.Enemy, spawnTurn: 4),
-                    new StageActor(Archetype.Scorpion, "Scorpion E", attributes, Team.Enemy, spawnTurn: 5),
-                    new StageActor(Archetype.Bat, "Bat A", attributes, Team.Enemy, spawnTurn: 1),
-                    new StageActor(Archetype.Bat, "Bat B", attributes, Team.Enemy, spawnTurn: 2),
-                    new StageActor(Archetype.Bat, "Bat C", attributes, Team.Enemy, spawnTurn: 3),
-                    new StageActor(Archetype.Bat, "Bat D", attributes, Team.Enemy, spawnTurn: 4),
-                    new StageActor(Archetype.Bat, "Bat E", attributes, Team.Enemy, spawnTurn: 5)
-                };
-                stageActors.AddRange(enemies.OrderBy(x => Guid.NewGuid()));
+                //Enemies
+                Add(new StageActor(Archetype.Slime, "Slime", attributes, Team.Enemy, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion", attributes, Team.Enemy, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Bat, "Bat", attributes, Team.Enemy, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Yeti, "Yeti", attributes, Team.Enemy, unoccupiedTile.location));
+
+                //Dynamic Enemies
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, spawnTurn: 1));
+                Add(new StageActor(Archetype.Slime, "Slime B", attributes, Team.Enemy, spawnTurn: 2));
+                Add(new StageActor(Archetype.Slime, "Slime C", attributes, Team.Enemy, spawnTurn: 3));
+                Add(new StageActor(Archetype.Slime, "Slime D", attributes, Team.Enemy, spawnTurn: 4));
+                Add(new StageActor(Archetype.Slime, "Slime E", attributes, Team.Enemy, spawnTurn: 5));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion A", attributes, Team.Enemy, spawnTurn: 1));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion B", attributes, Team.Enemy, spawnTurn: 2));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion C", attributes, Team.Enemy, spawnTurn: 3));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion D", attributes, Team.Enemy, spawnTurn: 4));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion E", attributes, Team.Enemy, spawnTurn: 5));
+                Add(new StageActor(Archetype.Bat, "Bat A", attributes, Team.Enemy, spawnTurn: 1));
+                Add(new StageActor(Archetype.Bat, "Bat B", attributes, Team.Enemy, spawnTurn: 2));
+                Add(new StageActor(Archetype.Bat, "Bat C", attributes, Team.Enemy, spawnTurn: 3));
+                Add(new StageActor(Archetype.Bat, "Bat D", attributes, Team.Enemy, spawnTurn: 4));
+                Add(new StageActor(Archetype.Bat, "Bat E", attributes, Team.Enemy, spawnTurn: 5));
+                Add(new StageActor(Archetype.Yeti, "Yeti A", attributes, Team.Enemy, spawnTurn: 1));
+                Add(new StageActor(Archetype.Yeti, "Yeti B", attributes, Team.Enemy, spawnTurn: 2));
+                Add(new StageActor(Archetype.Yeti, "Yeti C", attributes, Team.Enemy, spawnTurn: 3));
+                Add(new StageActor(Archetype.Yeti, "Yeti D", attributes, Team.Enemy, spawnTurn: 4));
+                Add(new StageActor(Archetype.Yeti, "Yeti E", attributes, Team.Enemy, spawnTurn: 5));
 
                 break;
 
-
             case 6:
 
-                stageActors.Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
 
                 break;
 
             case 7:
 
-                stageActors.Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
 
                 break;
 
 
             case 8:
 
-                stageActors.Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
 
                 break;
 
             case 9:
 
-                stageActors.Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
 
                 break;
 
             case 10:
 
-                stageActors.Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
 
                 break;
 
             default:
 
-                stageActors.Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, onoccupiedLocation[i++]));
-                stageActors.Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, onoccupiedLocation[i++]));
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
 
                 break;
         }
 
-        //Clear existing actors
-        GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
-        actors.Clear();
+    }
 
-        //Iterate and populate gameobjects
-        foreach (var x in stageActors)
+    public void Add(StageActor stageActor)
+    {
+        var prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
+        var actor = prefab.GetComponent<ActorBehavior>();
+        actor.parent = board.transform;
+        actor.archetype = stageActor.archetype;
+        actor.name = stageActor.name;
+        actor.MaxHP = stageActor.attributes.MaxHP;
+        actor.HP = stageActor.attributes.HP;
+        actor.thumbnail = stageActor.thumbnail;
+        actor.team = stageActor.team;
+
+        if (stageActor.spawnTurn < 0)
         {
-            var prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-            var actor = prefab.GetComponent<ActorBehavior>();
-            actor.archetype = x.archetype;
-            actor.name = x.name;
-            actor.MaxHP = x.attributes.MaxHP;
-            actor.HP = x.attributes.HP;
-            actor.thumbnail = x.thumbnail;
-            actor.parent = board.transform;
-            actor.team = x.team;
-            actor.location = x.location;
-            actor.spawnTurn = x.spawnTurn;
+            actor.gameObject.SetActive(true);
+            actor.location = stageActor.location;
+        }
+        else
+        {
+            actor.render.Set(new Color(1, 1, 1, 0));
+            actor.gameObject.SetActive(false);
+            actor.spawnTurn = stageActor.spawnTurn;
         }
 
-        //Assign actors list
-        GameObject.FindGameObjectsWithTag(Tag.Actor).Where(x => x != null).ToList()
-           .ForEach(x => actors.Add(x.GetComponent<ActorBehavior>()));
 
+        actors.Add(actor);
     }
+
+
 
 }

@@ -1,7 +1,5 @@
-using System.Collections;
 using UnityEngine;
 using Phase = TurnPhase;
-
 
 public class TurnManager : ExtendedMonoBehavior
 {
@@ -50,31 +48,30 @@ public class TurnManager : ExtendedMonoBehavior
         titleManager.Print($"Turn {turnNumber}");
 
         CheckEnemySpawn();
-
+       
         timer.Set(scale: 1f, start: false);
         soundSource.PlayOneShot(resourceManager.SoundEffect($"NextTurn"));
     }
 
     private void CheckEnemySpawn()
     {
-        StartCoroutine(EnemySpawn());
-    }
-
-    private IEnumerator EnemySpawn()
-    {
         foreach (var enemy in enemies)
         {
             if (enemy == null || !enemy.IsAlive || enemy.IsActive || enemy.HasSpawned) continue;
 
-            var unoccupitedTile = Geometry.RandomUnoccupiedTile();
-            enemy.location = unoccupitedTile.location;
-            enemy.position = unoccupitedTile.position;
+            var tile = unoccupiedTile;
+            enemy.location = tile.location;
+            enemy.position = tile.position;
+            enemy.render.Set(new Color(1, 1, 1, 0));
             enemy.gameObject.SetActive(true);
 
-            yield return enemy.FadeIn();
-            yield return Wait.For(Interval.HalfSecond);
+            float delay = Random.Float(0f, 1f);
+            StartCoroutine(enemy.FadeIn(delay));
         }
     }
+
+
+
 
 
 

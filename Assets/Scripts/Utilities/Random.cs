@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 
 static class Random
@@ -9,6 +10,11 @@ static class Random
     public static int Int(int min, int max)
     {
         return random.Next(min, max + 1);
+    }
+
+    public static float Float(float min, float max)
+    {
+        return (float)random.NextDouble() * (max - min) + min;
     }
 
     public static float Percent()

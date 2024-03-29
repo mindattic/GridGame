@@ -27,6 +27,10 @@ public static class Constants
     public static readonly Vector2 size66 = new Vector2(percent66, percent66);
     public static readonly Vector2 size75 = new Vector2(percent75, percent75);
     public static readonly Vector2 size100 = new Vector2(percent100, percent100);
+
+
+    public static readonly Vector2Int nowhere = new Vector2Int(-1, -1);
+
 }
 
 public static class Tag

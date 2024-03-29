@@ -8,10 +8,11 @@ public class StageActor
     public Sprite thumbnail;
     public Team team;
     public Vector2Int location;
-    public int? spawnTurn = null;
+    public int spawnTurn = -1;
 
 
     public StageActor() { }
+
     public StageActor(Archetype archetype, string name, ActorAttributes attributes, Team team, Vector2Int location)
     {
         this.archetype = archetype;
@@ -20,7 +21,7 @@ public class StageActor
         this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
         this.team = team;
         this.location = location;
-        this.spawnTurn = null;
+        this.spawnTurn = -1;
     }
 
 
@@ -31,7 +32,7 @@ public class StageActor
         this.attributes = attributes;
         this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
         this.team = team;
-        this.location = Vector2Int.zero;
+        this.location = Constants.nowhere;
         this.spawnTurn = spawnTurn;
     }
 }

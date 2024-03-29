@@ -52,6 +52,11 @@ public enum GlowState
     On
 }
 
+public enum EnemyTurnDelay
+{
+    None,
+    Random
+}
 
 public enum Archetype
 {
@@ -63,5 +68,6 @@ public enum Archetype
     Cleric,
     Slime,
     Bat,
-    Scorpion
+    Scorpion,
+    Yeti
 }

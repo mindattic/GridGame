@@ -120,5 +120,10 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.selectedPlayer = value; }
     }
 
+
+
+    public TileBehavior unoccupiedTile => tiles.Where(x => !x.IsOccupied).OrderBy(x => Guid.NewGuid()).First();
+
+
 }
 

@@ -180,12 +180,12 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var pair in attackParticipants.attackingPairs)
         {
             pair.actor1.Set(ActionIcon.Attack);
-            pair.actor1.Set(GlowState.On);
+            pair.actor1.Set(GlowState.On, Color.white);
             pair.actor1.sortingOrder = ZAxis.Max;
             soundSource.PlayOneShot(resourceManager.SoundEffect("PlayerGlow"));
             yield return Wait.For(Interval.QuarterSecond);
             pair.actor2.Set(ActionIcon.Attack);
-            pair.actor2.Set(GlowState.On);
+            pair.actor2.Set(GlowState.On, Color.white);
             pair.actor2.sortingOrder = ZAxis.Max;
             soundSource.PlayOneShot(resourceManager.SoundEffect("PlayerGlow"));
             yield return Wait.For(Interval.QuarterSecond);
@@ -209,6 +209,7 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var enemy in pair.enemies)
         {
             attackLineManager.Spawn(pair);
+            enemy.Set(GlowState.On, new Color(1, 0, 0, 1));
             //var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
             var damage = 100;
             yield return enemy.TakeDamage(damage);
@@ -288,7 +289,7 @@ public class ActorManager : ExtendedMonoBehavior
 
                     yield return Wait.For(Interval.TwoSecond);
 
-                    enemy.GenerateTurnDelay();
+                    enemy.Set(EnemyTurnDelay.Random);
                 }
 
             }
