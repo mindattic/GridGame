@@ -45,15 +45,19 @@ using UnityEngine;
 public class ActorBehavior : ExtendedMonoBehavior
 {
     //Constants
-    const int Glow = 0;
-    const int Shadow = 1;
-    const int Thumbnail = 2;
-    const int Frame = 3;
-    const int HealthBarBack = 4;
-    const int HealthBar = 5;
-    const int StatusIcon = 6;
-    const int TurnDelay = 7;
-    const int HealthText = 8;
+    static class Layer
+    {
+        public const int Glow = 0;
+        public const int Shadow = 1;
+        public const int Thumbnail = 2;
+        public const int Frame = 3;
+        public const int HealthBarBack = 4;
+        public const int HealthBar = 5;
+        public const int StatusIcon = 6;
+        public const int TurnDelay = 7;
+        public const int HealthText = 8;
+    }
+
 
     //Variables
     [SerializeField] public Archetype archetype;
@@ -62,6 +66,11 @@ public class ActorBehavior : ExtendedMonoBehavior
     [SerializeField] public Team team = Team.Independant;
     [SerializeField] public int HP;
     [SerializeField] public int MaxHP;
+
+
+
+    public Color glow;
+    public Color shadow = new Color(1, 1, 1, 0.5f);
 
 
     public int spawnTurn = -1;
@@ -73,15 +82,15 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
-        render.glow = gameObject.transform.GetChild(Glow).GetComponent<SpriteRenderer>();
-        render.shadow = gameObject.transform.GetChild(Shadow).GetComponent<SpriteRenderer>();
-        render.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
-        render.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
-        render.healthBarBack = gameObject.transform.GetChild(HealthBarBack).GetComponent<SpriteRenderer>();
-        render.healthBar = gameObject.transform.GetChild(HealthBar).GetComponent<SpriteRenderer>();
-        render.statusIcon = gameObject.transform.GetChild(StatusIcon).GetComponent<SpriteRenderer>();
-        render.turnDelay = gameObject.transform.GetChild(TurnDelay).GetComponent<TextMeshPro>();
-        render.healthText = gameObject.transform.GetChild(HealthText).GetComponent<TextMeshPro>();
+        render.glow = gameObject.transform.GetChild(Layer.Glow).GetComponent<SpriteRenderer>();
+        render.shadow = gameObject.transform.GetChild(Layer.Shadow).GetComponent<SpriteRenderer>();
+        render.thumbnail = gameObject.transform.GetChild(Layer.Thumbnail).GetComponent<SpriteRenderer>();
+        render.frame = gameObject.transform.GetChild(Layer.Frame).GetComponent<SpriteRenderer>();
+        render.healthBarBack = gameObject.transform.GetChild(Layer.HealthBarBack).GetComponent<SpriteRenderer>();
+        render.healthBar = gameObject.transform.GetChild(Layer.HealthBar).GetComponent<SpriteRenderer>();
+        render.statusIcon = gameObject.transform.GetChild(Layer.StatusIcon).GetComponent<SpriteRenderer>();
+        render.turnDelay = gameObject.transform.GetChild(Layer.TurnDelay).GetComponent<TextMeshPro>();
+        render.healthText = gameObject.transform.GetChild(Layer.HealthText).GetComponent<TextMeshPro>();
     }
 
     private void Start()
@@ -89,29 +98,32 @@ public class ActorBehavior : ExtendedMonoBehavior
         Init();
     }
 
-    public void Init(Vector2Int? initialLocation = null)
+    public void Init()
     {
-        if (initialLocation.HasValue)
-            location = initialLocation.Value;
-
         gameObject.SetActive(true);
         position = Geometry.PositionFromLocation(location);
         destination = null;
         transform.localScale = tileScale;
-        render.thumbnail.color = Colors.Solid.White;
-
-        HP = MaxHP;
         render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
+        HP = MaxHP;
         PrintHealth();
 
-        if (this.IsPlayer)
+        if (turnManager.IsFirstTurn)
         {
-            render.turnDelay.gameObject.SetActive(false);
-            Set(ActionIcon.None);
-        }
-        else
-        {
-            Set(EnemyTurnDelay.Random);
+            //render.SetColor(Color.white);
+
+            if (this.IsPlayer)
+            {
+                //render.SetShadow(new Color(1, 1, 1, 0.5f));
+                render.turnDelay.gameObject.SetActive(false);
+                Set(ActionIcon.None);
+            }
+            else
+            {
+                //render.SetShadow(new Color(1, 0, 0, 0.5f));
+                Set(EnemyTurnDelay.Random);
+            }
+
         }
 
     }
@@ -136,8 +148,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public Vector3 thumbnailPosition
     {
-        get => gameObject.transform.GetChild(Thumbnail).position;
-        set => gameObject.transform.GetChild(Thumbnail).position = value;
+        get => gameObject.transform.GetChild(Layer.Thumbnail).position;
+        set => gameObject.transform.GetChild(Layer.Thumbnail).position = value;
     }
 
 
@@ -160,13 +172,14 @@ public class ActorBehavior : ExtendedMonoBehavior
         set
         {
             render.glow.sortingOrder = value;
-            render.thumbnail.sortingOrder = value + 1;
-            render.frame.sortingOrder = value + 2;
-            render.healthBarBack.sortingOrder = value + 3;
-            render.healthBar.sortingOrder = value + 4;
-            render.statusIcon.sortingOrder = value + 5;
-            render.turnDelay.sortingOrder = value + 6;
-            render.healthText.sortingOrder = value + 7;
+            render.shadow.sortingOrder = value + 1;
+            render.thumbnail.sortingOrder = value + 2;
+            render.frame.sortingOrder = value + 3;
+            render.healthBarBack.sortingOrder = value + 4;
+            render.healthBar.sortingOrder = value + 5;
+            render.statusIcon.sortingOrder = value + 6;
+            render.turnDelay.sortingOrder = value + 7;
+            render.healthText.sortingOrder = value + 8;
         }
     }
 
@@ -196,7 +209,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsWestEdge => location.x == 1;
     public bool IsAlive => HP > 0;
     public bool IsActive => this != null && this.isActiveAndEnabled;
-    public bool HasSpawned => (spawnTurn >= turnManager.turnNumber);
+    public bool HasSpawned => spawnTurn > turnManager.turnNumber;
 
     #endregion
 
@@ -297,7 +310,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     #endregion
 
-  
+
 
 
 
@@ -417,27 +430,19 @@ public class ActorBehavior : ExtendedMonoBehavior
             1);
         render.shadow.transform.localScale = scale;
 
-        var color = new Color(0, 1, 0, 1);
+        //var color = new Color(0, 1, 0, 1);
+        var color = new Color(1, 1, 1, 1);
         render.shadow.color = color;
-
-        //render.glow.transform.position = pos;
-        //render.thumbnail.transform.position = pos;
-        //render.frame.transform.position = pos;
-
-
     }
 
     private void Shake(float intensity)
     {
-        gameObject.transform.GetChild(Thumbnail).gameObject.transform.position = currentTile.position;
-        gameObject.transform.GetChild(Thumbnail).gameObject.transform.position += new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
+        gameObject.transform.GetChild(Layer.Thumbnail).gameObject.transform.position = currentTile.position;
+        if (intensity > 0)
+            gameObject.transform.GetChild(Layer.Thumbnail).gameObject.transform.position += new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
     }
 
-    private void ResetShake()
-    {
-        var pos = gameObject.transform.GetChild(Thumbnail).gameObject.transform.position;
-        pos = currentTile.position;
-    }
+
 
     public IEnumerator TakeDamage(int damageTaken)
     {
@@ -480,7 +485,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             yield return Wait.For(Interval.Five);
         }
 
-        ResetShake();
+        Shake(ShakeIntensity.Stop);
         HP = remainingHP;
         position = currentTile.position;
     }
@@ -493,7 +498,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator Die()
     {
         var alpha = 1f;
-        render.Set(new Color(1, 1, 1, alpha));
+        render.SetColor(new Color(1, 1, 1, alpha));
 
         portraitManager.Dissolve(this);
         soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
@@ -503,7 +508,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            render.Set(new Color(1, 1, 1, alpha));
+            render.SetColor(new Color(1, 1, 1, alpha));
             yield return Wait.Tick();
         }
 
@@ -582,15 +587,11 @@ public class ActorBehavior : ExtendedMonoBehavior
         Set(ActionIcon.Sleep);
     }
 
-
-
-
-
     public IEnumerator FadeIn(float delay = 0)
     {
         float maxAlpha = 1;
         float alpha = 0;
-        render.Set(new Color(1, 1, 1, alpha));
+        render.SetColor(new Color(1, 1, 1, alpha));
 
         yield return Wait.For(delay);
 
@@ -598,14 +599,16 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             alpha += Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            render.Set(new Color(1, 1, 1, alpha));
+            render.SetColor(new Color(1, 1, 1, alpha));
+            render.SetShadow(new Color(shadow.r, shadow.g, shadow.b, Mathf.Min(alpha, 0.5f)));
 
-            //Shake actor
             Shake(ShakeIntensity.Low);
 
             yield return Wait.Tick();
         }
 
+        Shake(ShakeIntensity.Stop);
+        render.SetColor(new Color(1, 1, 1, maxAlpha));
         position = currentTile.position;
     }
 
@@ -613,7 +616,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         float minAlpha = 0;
         float alpha = 1;
-        render.Set(new Color(1, 1, 1, alpha));
+        render.SetColor(new Color(1, 1, 1, alpha));
+        render.SetShadow(new Color(shadow.r, shadow.g, shadow.b, Mathf.Max(alpha, 0)));
 
         yield return Wait.For(delay);
 
@@ -621,14 +625,16 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            render.Set(new Color(1, 1, 1, alpha));
+            render.SetColor(new Color(1, 1, 1, alpha));
 
-            //Shake actor
+
             Shake(ShakeIntensity.Low);
 
             yield return Wait.Tick();
         }
 
+        Shake(ShakeIntensity.Stop);
+        render.SetColor(new Color(1, 1, 1, minAlpha));
         this.position = currentTile.position;
     }
 

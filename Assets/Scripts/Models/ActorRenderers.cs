@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿
+using TMPro;
 using UnityEngine;
 
 public class ActorRenderers
@@ -15,9 +16,8 @@ public class ActorRenderers
     public TextMeshPro turnDelay;
     public TextMeshPro healthText;
 
-    public void Set(Color color)
+    public void SetColor(Color color)
     {
-        shadow.color = new Color(1, 1, 1, Mathf.Min(color.a, 0.25f));
         thumbnail.color = color;
         frame.color = color;
         statusIcon.color = new Color(1, 1, 1, color.a);
@@ -27,11 +27,17 @@ public class ActorRenderers
         healthText.color = new Color(1, 1, 1, color.a);
     }
 
-
-    public void SetGlow(Glow glow)
+    public void SetGlow(Color color)
     {
-        this.glow.color = glow.Color;
+
+        this.glow.color = color;
     }
+
+    public void SetShadow(Color color)
+    {
+        this.shadow.color = color;
+    }
+
 
 }
 

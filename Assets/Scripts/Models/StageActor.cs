@@ -10,6 +10,8 @@ public class StageActor
     public Vector2Int location;
     public int spawnTurn = -1;
 
+    public bool IsSpawning => spawnTurn <= 0;
+
 
     public StageActor() { }
 

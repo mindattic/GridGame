@@ -71,3 +71,22 @@ public enum Archetype
     Scorpion,
     Yeti
 }
+
+public enum Glow
+{
+    None,
+    White,
+    Red,
+    Green,
+    Blue
+}
+
+public enum Shadow
+{
+    None,
+    White,
+    Red,
+    Green,
+    Blue
+}
+

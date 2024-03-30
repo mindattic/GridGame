@@ -208,7 +208,7 @@ public class ActorManager : ExtendedMonoBehavior
     {
         foreach (var enemy in pair.enemies)
         {
-            attackLineManager.Spawn(pair);
+            //attackLineManager.Spawn(pair);
             enemy.Set(GlowState.On, new Color(1, 0, 0, 1));
             //var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
             var damage = 100;
@@ -216,7 +216,7 @@ public class ActorManager : ExtendedMonoBehavior
         }
 
         yield return Wait.For(Interval.HalfSecond);
-        attackLineManager.Destroy(pair);
+        //attackLineManager.Destroy(pair);
     }
 
     private IEnumerator CheckEnemyDie(ActorPair pair)

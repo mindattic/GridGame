@@ -40,8 +40,8 @@ public class StageManager : ExtendedMonoBehavior
         turnManager.Reset();
         timer.Set(scale: 1f, start: false);
         actorManager.Clear();
-        overlayManager.Show();
-        titleManager.Print($"Stage {currentStage}");
+        //overlayManager.Show();
+        //titleManager.Print($"Stage {currentStage}");
 
         //Clear existing actors
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
@@ -82,6 +82,9 @@ public class StageManager : ExtendedMonoBehavior
                 Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
                 Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
                 Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
+
+                //Dynamic Enemies
+                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, spawnTurn: 1));
 
                 break;
 
@@ -188,17 +191,22 @@ public class StageManager : ExtendedMonoBehavior
         actor.HP = stageActor.attributes.HP;
         actor.thumbnail = stageActor.thumbnail;
         actor.team = stageActor.team;
+        actor.shadow = actor.IsPlayer ? new Color(1, 1, 1, 0.5f) : new Color(1, 0, 0, 0.5f);
 
-        if (stageActor.spawnTurn < 0)
+
+        if (stageActor.IsSpawning)
         {
-            actor.gameObject.SetActive(true);
+            actor.render.SetShadow(new Color(actor.shadow.r, actor.shadow.g, actor.shadow.b, 0.5f));
+            actor.render.SetColor(new Color(1, 1, 1, 1));
             actor.location = stageActor.location;
+            actor.gameObject.SetActive(true);
         }
         else
         {
-            actor.render.Set(new Color(1, 1, 1, 0));
-            actor.gameObject.SetActive(false);
+            actor.render.SetShadow(new Color(actor.shadow.r, actor.shadow.g, actor.shadow.b, 0f));
+            actor.render.SetColor(new Color(1, 1, 1, 0));
             actor.spawnTurn = stageActor.spawnTurn;
+            actor.gameObject.SetActive(false);
         }
 
 

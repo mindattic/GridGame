@@ -15,6 +15,9 @@ public class TurnManager : ExtendedMonoBehavior
     public bool IsMovePhase => currentPhase.Equals(Phase.Move);
     public bool IsAttackPhase => currentPhase.Equals(Phase.Attack);
 
+    public bool IsFirstTurn => turnNumber == 1;
+
+
     void Awake()
     {
     }
@@ -62,7 +65,7 @@ public class TurnManager : ExtendedMonoBehavior
             var tile = unoccupiedTile;
             enemy.location = tile.location;
             enemy.position = tile.position;
-            enemy.render.Set(new Color(1, 1, 1, 0));
+            enemy.render.SetColor(new Color(1, 1, 1, 0));
             enemy.gameObject.SetActive(true);
 
             float delay = Random.Float(0f, 1f);
