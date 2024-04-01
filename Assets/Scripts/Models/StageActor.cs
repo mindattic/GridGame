@@ -10,7 +10,7 @@ public class StageActor
     public Vector2Int location;
     public int spawnTurn = -1;
 
-    public bool IsSpawning => spawnTurn <= 0;
+    public bool IsSpawning => spawnTurn < 1;
 
 
     public StageActor() { }
@@ -34,7 +34,7 @@ public class StageActor
         this.attributes = attributes;
         this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
         this.team = team;
-        this.location = Constants.nowhere;
+        this.location = Locations.nowhere;
         this.spawnTurn = spawnTurn;
     }
 }

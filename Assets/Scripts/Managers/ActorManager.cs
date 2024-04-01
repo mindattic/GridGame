@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class ActorManager : ExtendedMonoBehavior
 {
@@ -90,8 +91,6 @@ public class ActorManager : ExtendedMonoBehavior
     /// </summary>
     private bool HasAlignedPlayers()
     {
-    
-
         foreach (var actor1 in players)
         {
             foreach (var actor2 in players)
@@ -173,27 +172,39 @@ public class ActorManager : ExtendedMonoBehavior
 
     #region Player Attack Methods
 
-    private IEnumerator PlayerStartGlow()
+    private IEnumerator PlayerAttack()
+    {
+        foreach (var pair in attackParticipants.attackingPairs)
+        {
+            yield return PlayerStartAttack(pair);
+            yield return EnemyStartDefend(pair);
+            yield return PlayerAttack(pair);
+            yield return EnemyDefend(pair);
+            yield return PlayerStopAttack(pair);
+            yield return EnemyStopDefend(pair);
+        }
+
+        ClearAttack();
+        turnManager.NextTurn();
+    }
+
+    private IEnumerator PlayerStartAttack(ActorPair pair)
     {
         yield return Wait.For(Interval.QuarterSecond);
 
-        foreach (var pair in attackParticipants.attackingPairs)
-        {
-            pair.actor1.Set(ActionIcon.Attack);
-            pair.actor1.Set(GlowState.On, Color.white);
-            pair.actor1.sortingOrder = ZAxis.Max;
-            soundSource.PlayOneShot(resourceManager.SoundEffect("PlayerGlow"));
-            yield return Wait.For(Interval.QuarterSecond);
-            pair.actor2.Set(ActionIcon.Attack);
-            pair.actor2.Set(GlowState.On, Color.white);
-            pair.actor2.sortingOrder = ZAxis.Max;
-            soundSource.PlayOneShot(resourceManager.SoundEffect("PlayerGlow"));
-            yield return Wait.For(Interval.QuarterSecond);
-        }
-    }
+        pair.actor1.SetActionIcon(ActionIcon.Attack);
+        pair.actor1.StartGlow(Color.white);
+        pair.actor1.sortingOrder = ZAxis.Max;
+        soundSource.PlayOneShot(resourceManager.SoundEffect("PlayerGlow"));
 
-    private IEnumerator PlayerPortraitSlideIn(ActorPair pair)
-    {
+        yield return Wait.For(Interval.QuarterSecond);
+        pair.actor2.SetActionIcon(ActionIcon.Attack);
+        pair.actor2.StartGlow(Color.white);
+        pair.actor2.sortingOrder = ZAxis.Max;
+        soundSource.PlayOneShot(resourceManager.SoundEffect("PlayerGlow"));
+
+        yield return Wait.For(Interval.QuarterSecond);
+
         soundSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
         var first = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
         var second = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
@@ -201,61 +212,78 @@ public class ActorManager : ExtendedMonoBehavior
         var direction2 = pair.actor2 == pair.highest ? first : second;
         portraitManager.SlideIn(pair.actor1, direction1);
         portraitManager.SlideIn(pair.actor2, direction2);
+
         yield return Wait.For(Interval.ThreeSecond);
     }
 
-    private IEnumerator PlayerAttackEnemy(ActorPair pair)
+    private IEnumerator EnemyStartDefend(ActorPair pair)
     {
         foreach (var enemy in pair.enemies)
         {
-            //attackLineManager.Spawn(pair);
-            enemy.Set(GlowState.On, new Color(1, 0, 0, 1));
-            //var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
+            enemy.StartGlow(Colors.Solid.Red);
+        }
+
+        yield return Wait.Continue();
+    }
+
+
+    private IEnumerator PlayerAttack(ActorPair pair)
+    {
+        yield return Wait.For(Interval.HalfSecond);
+
+        foreach (var enemy in pair.enemies)
+        {
+            //TODO: Calculate based on attacker stats
+            //var damage = Random.Int(15, 33);
             var damage = 100;
+
+            //Attack enemy (one at a time)
             yield return enemy.TakeDamage(damage);
         }
 
         yield return Wait.For(Interval.HalfSecond);
-        //attackLineManager.Destroy(pair);
     }
 
-    private IEnumerator CheckEnemyDie(ActorPair pair)
+    private IEnumerator EnemyDefend(ActorPair pair)
     {
-        foreach (var enemy in pair.enemies)
+        //Dissolve dead enemies (one at a time)
+        foreach (var enemy in pair.enemies.Where(x => x.IsDead))
         {
-            if (enemy.HP < 1)
-            {
-                yield return enemy.Die();
-            }
-               
+            yield return enemy.Dissolve();
         }
+
+        //Fade out (all at once)
+        foreach (var enemy in pair.enemies.Where(x => x.IsDead))
+        {
+            enemy.Die();
+        }
+        yield return Wait.Ticks(100);
     }
 
-    private void PlayerStopGlow(ActorPair pair)
+    private IEnumerator PlayerStopAttack(ActorPair pair)
     {
-        pair.actor1.Set(ActionIcon.None);
-        pair.actor1.Set(GlowState.Off);
+        pair.actor1.SetActionIcon(ActionIcon.None);
+        pair.actor1.StopGlow();
         pair.actor1.sortingOrder = ZAxis.Min;
-        pair.actor2.Set(ActionIcon.None);
-        pair.actor2.Set(GlowState.Off);
+
+        pair.actor2.SetActionIcon(ActionIcon.None);
+        pair.actor2.StopGlow();
         pair.actor2.sortingOrder = ZAxis.Min;
+
+        yield return Wait.Continue();
     }
 
-    private IEnumerator PlayerAttack()
+    private IEnumerator EnemyStopDefend(ActorPair pair)
     {
-        yield return PlayerStartGlow();
-
-        foreach (var pair in attackParticipants.attackingPairs)
+        //Fade out glow (all at once)
+        foreach (var enemy in pair.enemies.Where(x => x.IsAlive))
         {
-            yield return PlayerPortraitSlideIn(pair);
-            yield return PlayerAttackEnemy(pair);
-            yield return CheckEnemyDie(pair);
-            PlayerStopGlow(pair);
+            enemy.StopGlow();
         }
-
-        ClearAttack();
-        turnManager.NextTurn();
+        yield return Wait.Ticks(100);
     }
+
+
 
     #endregion
 
@@ -283,13 +311,13 @@ public class ActorManager : ExtendedMonoBehavior
                 var delta = enemy.location - player.location;
                 if (Math.Abs(delta.x) == 1 || Math.Abs(delta.y) == 1)
                 {
-                    enemy.Set(ActionIcon.Attack);
+                    enemy.SetActionIcon(ActionIcon.Attack);
                     var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
                     player.TakeDamage(damage);
 
                     yield return Wait.For(Interval.TwoSecond);
 
-                    enemy.Set(EnemyTurnDelay.Random);
+                    enemy.SetEnemyTurnDelay(EnemyTurnDelay.Random);
                 }
 
             }
@@ -359,7 +387,7 @@ public class ActorManager : ExtendedMonoBehavior
         //Assign mouse offset (how off center was selection)
         mouseOffset = selectedPlayer.transform.position - mousePosition3D;
 
-        //Spawn ghost images of selected player
+        //SpawnIn ghost images of selected player
         ghostManager.Spawn();
 
         timer.Set(scale: 1f, start: true);

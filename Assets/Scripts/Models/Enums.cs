@@ -46,11 +46,11 @@ public enum ActionIcon
     Support
 }
 
-public enum GlowState
-{
-    Off,
-    On
-}
+//public enum GlowState
+//{
+//    Off,
+//    On
+//}
 
 public enum EnemyTurnDelay
 {

@@ -8,7 +8,7 @@ public class TitleManager : ExtendedMonoBehavior
     //Variables
     private RectTransform rectTransform;
     public TextMeshProUGUI label;
- 
+
     #region Components
 
     public string text
@@ -38,7 +38,7 @@ public class TitleManager : ExtendedMonoBehavior
     // Start is called before the first frame update
     void Start()
     {
-    
+
     }
 
     // Update is called once per frame
@@ -47,17 +47,18 @@ public class TitleManager : ExtendedMonoBehavior
 
     }
 
-    public void Print(string text)
+    public void Print(string text, bool showOverlay = false)
     {
         label.text = text;
         label.color = new Color(1, 1, 1, 0);
 
-        StopCoroutine(FadeInOut());
+        if (showOverlay)
+            StartCoroutine(overlayManager.FadeInOut());
         StartCoroutine(FadeInOut());
     }
 
-    private IEnumerator FadeIn()
-    {  
+    public IEnumerator FadeIn()
+    {
         float alpha = 0f;
         label.color = new Color(1f, 1f, 1f, alpha);
 
@@ -70,7 +71,7 @@ public class TitleManager : ExtendedMonoBehavior
         }
     }
 
-    private IEnumerator FadeOut()
+    public IEnumerator FadeOut()
     {
         float alpha = 1f;
         label.color = new Color(1f, 1f, 1f, alpha);
@@ -86,8 +87,9 @@ public class TitleManager : ExtendedMonoBehavior
         }
     }
 
-    private IEnumerator FadeInOut()
+    public IEnumerator FadeInOut()
     {
+        StopCoroutine(FadeInOut());
         yield return FadeIn();
         yield return Wait.For(Interval.OneSecond);
         yield return FadeOut();

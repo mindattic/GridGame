@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 
 //public class ActorSubobject
@@ -44,11 +45,10 @@ using UnityEngine;
 
 public class ActorBehavior : ExtendedMonoBehavior
 {
-    //Constants
-    static class Layer
+    public static class Layer
     {
         public const int Glow = 0;
-        public const int Shadow = 1;
+        public const int Back = 1;
         public const int Thumbnail = 2;
         public const int Frame = 3;
         public const int HealthBarBack = 4;
@@ -61,17 +61,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     //Variables
     [SerializeField] public Archetype archetype;
-    [SerializeField] public Vector2Int location = Vector2Int.zero;
+    [SerializeField] public Vector2Int location = Locations.nowhere;
     [SerializeField] public Vector3? destination = null;
     [SerializeField] public Team team = Team.Independant;
     [SerializeField] public int HP;
     [SerializeField] public int MaxHP;
-
-
-
-    public Color glow;
-    public Color shadow = new Color(1, 1, 1, 0.5f);
-
 
     public int spawnTurn = -1;
     private int enemyTurnDelay = 0;
@@ -83,7 +77,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void Awake()
     {
         render.glow = gameObject.transform.GetChild(Layer.Glow).GetComponent<SpriteRenderer>();
-        render.shadow = gameObject.transform.GetChild(Layer.Shadow).GetComponent<SpriteRenderer>();
+        render.back = gameObject.transform.GetChild(Layer.Back).GetComponent<SpriteRenderer>();
         render.thumbnail = gameObject.transform.GetChild(Layer.Thumbnail).GetComponent<SpriteRenderer>();
         render.frame = gameObject.transform.GetChild(Layer.Frame).GetComponent<SpriteRenderer>();
         render.healthBarBack = gameObject.transform.GetChild(Layer.HealthBarBack).GetComponent<SpriteRenderer>();
@@ -95,40 +89,49 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Start()
     {
-        Init();
+
     }
 
-    public void Init()
+    public void Init(bool spawn)
     {
-        gameObject.SetActive(true);
-        position = Geometry.PositionFromLocation(location);
-        destination = null;
         transform.localScale = tileScale;
         render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
         HP = MaxHP;
         PrintHealth();
+        gameObject.SetActive(false);
 
-        if (turnManager.IsFirstTurn)
-        {
-            //render.SetColor(Color.white);
-
-            if (this.IsPlayer)
-            {
-                //render.SetShadow(new Color(1, 1, 1, 0.5f));
-                render.turnDelay.gameObject.SetActive(false);
-                Set(ActionIcon.None);
-            }
-            else
-            {
-                //render.SetShadow(new Color(1, 0, 0, 0.5f));
-                Set(EnemyTurnDelay.Random);
-            }
-
-        }
-
+        if (spawn && HasLocation)
+            Spawn();
     }
 
 
+    public void Spawn(Vector2Int? startLocation = null)
+    {
+        gameObject.SetActive(true);
+
+        if (startLocation.HasValue)
+            location = startLocation.Value;
+
+        position = Geometry.PositionFromLocation(location);
+
+        if (this.IsPlayer)
+        {
+            render.SetColor(Colors.Transparent.White);
+            render.SetBackColor(Colors.Transparent.White);
+            render.turnDelay.gameObject.SetActive(false);
+            SetActionIcon(ActionIcon.None);
+        }
+        else if (this.IsEnemy)
+        {
+            render.SetColor(Colors.Transparent.White);
+            render.SetBackColor(Colors.Transparent.Red);
+            SetEnemyTurnDelay(EnemyTurnDelay.Random);
+        }
+
+       
+        float delay = turnManager.currentTurn == 1 ? 0 : Random.Float(0f, 2f);
+        StartCoroutine(SpawnIn(delay));
+    }
 
 
     #region Components
@@ -172,7 +175,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         set
         {
             render.glow.sortingOrder = value;
-            render.shadow.sortingOrder = value + 1;
+            render.back.sortingOrder = value + 1;
             render.thumbnail.sortingOrder = value + 2;
             render.frame.sortingOrder = value + 3;
             render.healthBarBack.sortingOrder = value + 4;
@@ -202,14 +205,18 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsEnemy => team.Equals(Team.Enemy);
     public bool IsTargettedPlayer => HasTargettedPlayer && Equals(targettedPlayer);
     public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
+    public bool HasLocation => location != Locations.nowhere;
     public bool HasDestination => destination.HasValue;
+
     public bool IsNorthEdge => location.y == 1;
     public bool IsEastEdge => location.x == board.columns;
     public bool IsSouthEdge => location.y == board.rows;
     public bool IsWestEdge => location.x == 1;
     public bool IsAlive => HP > 0;
+    public bool IsDead => HP < 1;
+
     public bool IsActive => this != null && this.isActiveAndEnabled;
-    public bool HasSpawned => spawnTurn > turnManager.turnNumber;
+    public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
 
     #endregion
 
@@ -276,7 +283,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             //Actors are on top of eachother
             //TODO: Make sure this never happens in the first place...
-            //Debug.Log($"Conflict: {this.archetype} / {location.archetype}");
+            //Debug.Log($"Conflict: {this.archetype} / {startLocation.archetype}");
 
             var closestUnoccupiedTile = Geometry.ClosestUnoccupiedTileByLocation(location);
             if (closestUnoccupiedTile != null)
@@ -415,7 +422,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //render.glow.transform.position = pos;
         //render.thumbnail.transform.position = pos;
         //render.frame.transform.position = pos;
-        render.shadow.transform.position = pos;
+        render.back.transform.position = pos;
     }
 
 
@@ -428,11 +435,11 @@ public class ActorBehavior : ExtendedMonoBehavior
             1.5f + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
             1.5f + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
             1);
-        render.shadow.transform.localScale = scale;
+        render.back.transform.localScale = scale;
 
         //var color = new Color(0, 1, 0, 1);
         var color = new Color(1, 1, 1, 1);
-        render.shadow.color = color;
+        render.back.color = color;
     }
 
     private void Shake(float intensity)
@@ -441,7 +448,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (intensity > 0)
             gameObject.transform.GetChild(Layer.Thumbnail).gameObject.transform.position += new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
     }
-
 
 
     public IEnumerator TakeDamage(int damageTaken)
@@ -456,7 +462,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             HP -= damage;
             HP = Mathf.Clamp(HP, remainingHP, MaxHP);
 
-            //Spawn damage text
+            //SpawnIn damage text
             damageTextManager.Spawn(damage.ToString(), position);
 
             //Shake actor
@@ -495,7 +501,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.healthText.text = $@"{Math.Round(HP.ToFloat() / MaxHP.ToFloat() * 100)}%";
     }
 
-    public IEnumerator Die()
+    public IEnumerator Dissolve()
     {
         var alpha = 1f;
         render.SetColor(new Color(1, 1, 1, alpha));
@@ -511,140 +517,113 @@ public class ActorBehavior : ExtendedMonoBehavior
             render.SetColor(new Color(1, 1, 1, alpha));
             yield return Wait.Tick();
         }
-
-        Destroy(this.gameObject);
-        actors.Remove(this);
     }
 
-    public void Set(ActionIcon icon)
+    public void SetActionIcon(ActionIcon icon)
     {
         if (!IsActive) return;
         render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(icon.ToString())).thumbnail;
     }
 
-    public void Set(GlowState state)
+
+    public void StartGlow(Color color)
     {
         if (!IsActive) return;
-        StartCoroutine(state == GlowState.On ? GlowFadeIn(new Color(1, 1, 1, 0)) : GlowFadeOut(new Color(1, 1, 1, 1)));
+        render.SetGlowColor(color);
+        StartCoroutine(GlowIn());
     }
 
-    public void Set(GlowState state, Color color)
+    public void StopGlow()
     {
         if (!IsActive) return;
-        StartCoroutine(state == GlowState.On ? GlowFadeIn(color) : GlowFadeOut(color));
+        StartCoroutine(GlowOut());
     }
 
-    public IEnumerator GlowFadeIn(Color color)
+
+    public void Die()
     {
-        float maxAlpha = 1;
+        if (!IsActive) return;
+        StartCoroutine(Death());
+    }
+
+    public IEnumerator GlowIn()
+    {
         float alpha = 0;
-        color.a = alpha;
-        render.glow.color = color;
+        render.SetGlowAlpha(alpha);
 
-        while (alpha < maxAlpha)
+        while (alpha < 1)
         {
             alpha += Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            color.a = alpha;
-            render.glow.color = color;
-
+            render.SetGlowAlpha(alpha);
             yield return Wait.Tick();
         }
 
-        color.a = maxAlpha;
-        render.glow.color = color;
+        render.SetGlowAlpha(1);
     }
 
-    public IEnumerator GlowFadeOut(Color color)
+    public IEnumerator GlowOut()
     {
-        float minAlpha = 0;
-        float alpha = 1;
-        color.a = alpha;
-        render.glow.color = color;
-
-        while (alpha > minAlpha)
+        float alpha = render.glowColor.a;
+        while (alpha > 0)
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            color.a = alpha;
-            render.glow.color = color;
-
+            render.SetGlowAlpha(alpha);
             yield return Wait.Tick();
         }
 
-        color.a = minAlpha;
-        render.glow.color = color;
+        render.SetGlowAlpha(0);
     }
 
-
-    public void Set(EnemyTurnDelay turnDelay, int min = 2, int max = 4)
+    public void SetEnemyTurnDelay(EnemyTurnDelay turnDelay, int min = 2, int max = 4)
     {
         if (!IsActive || turnDelay.Equals(EnemyTurnDelay.None)) return;
 
         enemyTurnDelay = Random.Int(min, max);
         render.turnDelay.text = $"x{enemyTurnDelay}";
         render.turnDelay.gameObject.SetActive(true);
-        Set(ActionIcon.Sleep);
+        SetActionIcon(ActionIcon.Sleep);
     }
 
-    public IEnumerator FadeIn(float delay = 0)
+    public IEnumerator SpawnIn(float delay = 0)
     {
-        float maxAlpha = 1;
         float alpha = 0;
         render.SetColor(new Color(1, 1, 1, alpha));
+        render.SetBackAlpha(alpha);
+        render.SetGlowAlpha(0);
 
         yield return Wait.For(delay);
 
-        while (alpha < maxAlpha)
+        while (alpha < 1)
         {
             alpha += Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
             render.SetColor(new Color(1, 1, 1, alpha));
-            render.SetShadow(new Color(shadow.r, shadow.g, shadow.b, Mathf.Min(alpha, 0.5f)));
-
-            Shake(ShakeIntensity.Low);
-
+            render.SetBackAlpha(alpha);
             yield return Wait.Tick();
         }
 
-        Shake(ShakeIntensity.Stop);
-        render.SetColor(new Color(1, 1, 1, maxAlpha));
-        position = currentTile.position;
+        render.SetColor(Colors.Solid.White);
+        render.SetBackAlpha(0.5f);
     }
 
-    public IEnumerator FadeOut(float delay = 0)
+    public IEnumerator Death()
     {
-        float minAlpha = 0;
         float alpha = 1;
-        render.SetColor(new Color(1, 1, 1, alpha));
-        render.SetShadow(new Color(shadow.r, shadow.g, shadow.b, Mathf.Max(alpha, 0)));
-
-        yield return Wait.For(delay);
-
-        while (alpha > minAlpha)
+        while (alpha > 0)
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            render.SetColor(new Color(1, 1, 1, alpha));
-
-
-            Shake(ShakeIntensity.Low);
-
+            render.SetGlowAlpha(alpha);
+            render.SetBackAlpha(alpha);
             yield return Wait.Tick();
         }
 
-        Shake(ShakeIntensity.Stop);
-        render.SetColor(new Color(1, 1, 1, minAlpha));
-        this.position = currentTile.position;
+        render.SetGlowAlpha(0);
+        render.SetBackAlpha(0);
+        Destroy(this.gameObject);
+        actors.Remove(this);
     }
-
-    public IEnumerator FadeInOut(float fadeInDelay = 0, float intermissionDelay = 2f, float fadeOutDelay = 0)
-    {
-        yield return FadeIn(fadeInDelay);
-        yield return Wait.For(intermissionDelay);
-        yield return FadeOut(fadeOutDelay);
-    }
-
-
 
 }

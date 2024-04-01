@@ -1,5 +1,4 @@
-﻿
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class ActorRenderers
@@ -7,7 +6,7 @@ public class ActorRenderers
     public ActorRenderers() { }
 
     public SpriteRenderer glow;
-    public SpriteRenderer shadow;
+    public SpriteRenderer back;
     public SpriteRenderer thumbnail;
     public SpriteRenderer frame;
     public SpriteRenderer healthBarBack;
@@ -15,6 +14,9 @@ public class ActorRenderers
     public SpriteRenderer statusIcon;
     public TextMeshPro turnDelay;
     public TextMeshPro healthText;
+
+    public Color glowColor;
+    public Color backColor;
 
     public void SetColor(Color color)
     {
@@ -27,17 +29,28 @@ public class ActorRenderers
         healthText.color = new Color(1, 1, 1, color.a);
     }
 
-    public void SetGlow(Color color)
+    public void SetGlowColor(Color color)
     {
-
+        glowColor = color;
         this.glow.color = color;
     }
 
-    public void SetShadow(Color color)
+    public void SetGlowAlpha(float alpha = 1f)
     {
-        this.shadow.color = color;
+        glowColor = new Color(glowColor.r, glowColor.g, glowColor.b, alpha);
+        this.glow.color = glowColor;
     }
 
+    public void SetBackColor(Color color, float alpha = 0.5f)
+    {
+        backColor = new Color(color.r, color.g, color.b, Mathf.Min(color.a, alpha));
+        this.back.color = color;
+    }
 
+    public void SetBackAlpha(float alpha = 0.5f)
+    {
+        backColor = new Color(backColor.r, backColor.g, backColor.b, Mathf.Min(alpha, 0.5f));
+        this.back.color = backColor;
+    }
 }
 

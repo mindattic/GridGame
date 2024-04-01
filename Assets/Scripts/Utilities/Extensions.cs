@@ -43,39 +43,50 @@ public static class ListExtensions
 
 public static class Vector3Extensions
 {
-    public static void SetX(this Vector3 v3, float value)
+    public static Vector3 SetX(this Vector3 v3, float x)
     {
-        v3 = new Vector3(value, v3.y, v3.z);
+        return new Vector3(x, v3.y, v3.z);
     }
 
-    public static void AddX(this Vector3 v3, float value)
+    public static Vector3 AddX(this Vector3 v3, float x)
     {
-        v3 = new Vector3(v3.x + value, v3.y, v3.z);
+        return new Vector3(v3.x + x, v3.y, v3.z);
     }
 
-    public static void SetY(this Vector3 v3, float value)
+    public static Vector3 SetY(this Vector3 v3, float y)
     {
-        v3 = new Vector3(v3.x, value, v3.z);
+        return new Vector3(v3.x, y, v3.z);
     }
 
-    public static void AddY(this Vector3 v3, float value)
+    public static Vector3 AddY(this Vector3 v3, float y)
     {
-        v3 = new Vector3(v3.x, v3.y + value, v3.z);
+        return new Vector3(v3.x, v3.y +y, v3.z);
     }
 
-    public static void SetZ(this Vector3 v3, float value)
+    public static Vector3 SetZ(this Vector3 v3, float z)
     {
-        v3 = new Vector3(v3.x, v3.y, value);
+        return new Vector3(v3.x, v3.y, z);
     }
 
-    public static void AddZ(this Vector3 v3, float value)
+    public static Vector3 AddZ(this Vector3 v3, float z)
     {
-        v3 = new Vector3(v3.x, v3.y, v3.z + value);
+        return new Vector3(v3.x, v3.y, v3.z + z);
     }
-
-
 }
 
+public static class ColorExtensions
+{
+
+    public static Color SetA(this Color c, float a)
+    {
+        return new Color(c.r, c.g, c.b, c.a);
+    }
+
+    public static Color AddA(this Color c, float a)
+    {
+        return new Color(c.r, c.g, c.b, c.a + a);
+    }
+}
 
 public static class IntExtensions
 {
@@ -84,3 +95,4 @@ public static class IntExtensions
         return (float)i;
     }
 }
+

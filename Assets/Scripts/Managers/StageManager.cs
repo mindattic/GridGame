@@ -41,7 +41,7 @@ public class StageManager : ExtendedMonoBehavior
         timer.Set(scale: 1f, start: false);
         actorManager.Clear();
         //overlayManager.Show();
-        //titleManager.Print($"Stage {currentStage}");
+        titleManager.Print($"Stage {currentStage}", showOverlay: true);
 
         //Clear existing actors
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
@@ -191,22 +191,17 @@ public class StageManager : ExtendedMonoBehavior
         actor.HP = stageActor.attributes.HP;
         actor.thumbnail = stageActor.thumbnail;
         actor.team = stageActor.team;
-        actor.shadow = actor.IsPlayer ? new Color(1, 1, 1, 0.5f) : new Color(1, 0, 0, 0.5f);
-
+        actor.render.SetBackColor(actor.IsPlayer ? Color.white : Color.red);
 
         if (stageActor.IsSpawning)
         {
-            actor.render.SetShadow(new Color(actor.shadow.r, actor.shadow.g, actor.shadow.b, 0.5f));
-            actor.render.SetColor(new Color(1, 1, 1, 1));
             actor.location = stageActor.location;
-            actor.gameObject.SetActive(true);
+            actor.Init(spawn: true);
         }
         else
         {
-            actor.render.SetShadow(new Color(actor.shadow.r, actor.shadow.g, actor.shadow.b, 0f));
-            actor.render.SetColor(new Color(1, 1, 1, 0));
             actor.spawnTurn = stageActor.spawnTurn;
-            actor.gameObject.SetActive(false);
+            actor.Init(spawn: false);
         }
 
 

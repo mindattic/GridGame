@@ -1,10 +1,11 @@
+using System.Linq;
 using UnityEngine;
 using Phase = TurnPhase;
 
 public class TurnManager : ExtendedMonoBehavior
 {
     //Variables
-    [SerializeField] public int turnNumber = 1;
+    [SerializeField] public int currentTurn = 1;
     [SerializeField] public Team currentTeam = Team.Player;
     [SerializeField] public Phase currentPhase = Phase.Start;
 
@@ -15,7 +16,7 @@ public class TurnManager : ExtendedMonoBehavior
     public bool IsMovePhase => currentPhase.Equals(Phase.Move);
     public bool IsAttackPhase => currentPhase.Equals(Phase.Attack);
 
-    public bool IsFirstTurn => turnNumber == 1;
+    public bool IsFirstTurn => currentTurn == 1;
 
 
     void Awake()
@@ -29,12 +30,11 @@ public class TurnManager : ExtendedMonoBehavior
 
     public void Reset()
     {
-        turnNumber = 1;
+        currentTurn = 1;
         currentTeam = Team.Player;
         currentPhase = Phase.Start;
 
-        overlayManager.FadeIn();
-        titleManager.Print("Battle Start");
+        //titleManager.Print("Battle Start", showOverlay: true);
 
         musicSource.Stop();
         musicSource.PlayOneShot(resourceManager.MusicTrack($"MelancholyLull"));
@@ -46,9 +46,9 @@ public class TurnManager : ExtendedMonoBehavior
         currentPhase = Phase.Start;
 
         if (IsPlayerTurn)
-            turnNumber++;
+            currentTurn++;
 
-        titleManager.Print($"Turn {turnNumber}");
+        titleManager.Print($"Turn {currentTurn}");
 
         CheckEnemySpawn();
        
@@ -58,24 +58,11 @@ public class TurnManager : ExtendedMonoBehavior
 
     private void CheckEnemySpawn()
     {
-        foreach (var enemy in enemies)
+        foreach (var enemy in enemies.Where(x => x.IsSpawnable))
         {
-            if (enemy == null || !enemy.IsAlive || enemy.IsActive || enemy.HasSpawned) continue;
-
-            var tile = unoccupiedTile;
-            enemy.location = tile.location;
-            enemy.position = tile.position;
-            enemy.render.SetColor(new Color(1, 1, 1, 0));
-            enemy.gameObject.SetActive(true);
-
-            float delay = Random.Float(0f, 1f);
-            StartCoroutine(enemy.FadeIn(delay));
+            enemy.Spawn(unoccupiedTile.location);
         }
     }
-
-
-
-
 
 
     void Update()

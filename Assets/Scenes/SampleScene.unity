@@ -13076,6 +13076,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e6432c69dfc629f498ad887e2d1f4050, type: 2}
   - {fileID: 11400000, guid: 168f65728fc44ac42862ed21e1763289, type: 2}
   - {fileID: 11400000, guid: bcd672913a41bb04099c880d857477db, type: 2}
+  - {fileID: 11400000, guid: d797516de2996b449af62ceb5b8e8303, type: 2}
   actorDetails:
   - {fileID: 11400000, guid: c1997edaa59603c4c968c2a0dc1ec1f3, type: 2}
   - {fileID: 11400000, guid: 641c664aae2139c499b44c88e24c90fd, type: 2}

@@ -8,8 +8,6 @@ public class OverlayManager : ExtendedMonoBehavior
     //Variables
     private RectTransform rectTransform;
     private Image image;
-    const float MaxAlpha = 0.5f;
-
     
     #region Components
 
@@ -36,7 +34,7 @@ public class OverlayManager : ExtendedMonoBehavior
 
 
         image = GameObject.Find("Overlay").GetComponent<Image>();
-        image.color = new Color(0f, 0f, 0f, 0f);
+        image.color = new Color(0f, 0f, 0f, 1f);
 
         
     }
@@ -53,37 +51,56 @@ public class OverlayManager : ExtendedMonoBehavior
 
     public void Show()
     {
-        image.color = new Color(0f, 0f, 0f, 1);
+        StartCoroutine(FadeIn());
+    }
+
+    public void Hide()
+    {
         StartCoroutine(FadeOut());
     }
 
     public IEnumerator FadeIn()
     {
-        float alpha = 0f;
-        image.color = new Color(0f, 0f, 0f, alpha);
+        //float alpha = image.color.a;
+        //image.color = new Color(0f, 0f, 0f, alpha);
 
-        while (alpha < MaxAlpha)
-        {
-            alpha += Increment.FivePercent;
-            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
-            image.color = new Color(0f, 0f, 0f, alpha);
-            yield return Wait.Tick();
-        }
+        //while (alpha < 1)
+        //{
+        //    alpha += Increment.FivePercent;
+        //    alpha = Mathf.Clamp(alpha, 0, 1);
+        //    image.color = new Color(0, 0, 0, alpha);
+        //    yield return Wait.Tick();
+        //}
+
+
+        image.color = new Color(0, 0, 0, 1);
+        yield return Wait.Ticks(20);
     }
 
     public IEnumerator FadeOut()
     {
         float alpha = 1f;
-        image.color = new Color(0f, 0f, 0f, alpha);
+        image.color = new Color(0, 0, 0, alpha);
 
         yield return Wait.For(Interval.TwoSecond);
 
         while (alpha > 0f)
         {
             alpha -= Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0f, MaxAlpha);
-            image.color = new Color(0f, 0f, 0f, alpha);
+            alpha = Mathf.Clamp(alpha, 0, 1);
+            image.color = new Color(0, 0, 0, alpha);
             yield return Wait.Tick();
         }
+
+        image.color = new Color(0, 0, 0, 0);
+    }
+
+
+    public IEnumerator FadeInOut()
+    {
+        StopCoroutine(FadeInOut());
+        yield return FadeIn();
+        yield return Wait.For(Interval.OneSecond);
+        yield return FadeOut();
     }
 }

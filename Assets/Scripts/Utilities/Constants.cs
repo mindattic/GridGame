@@ -28,9 +28,11 @@ public static class Constants
     public static readonly Vector2 size75 = new Vector2(percent75, percent75);
     public static readonly Vector2 size100 = new Vector2(percent100, percent100);
 
+}
 
+public static class Locations
+{
     public static readonly Vector2Int nowhere = new Vector2Int(-1, -1);
-
 }
 
 public static class Tag
@@ -53,28 +55,51 @@ public static class Tag
 
 public static class Colors
 {
+
+    public static Color RGB(float r, float g, float b)
+    {
+        return new Color(
+            Mathf.Clamp(r, 0, 255) / 255,
+            Mathf.Clamp(g, 0, 255) / 255,
+            Mathf.Clamp(b, 0, 255) / 255,
+            255 / 255);
+    }
+
+    public static Color RGBA(float r, float g, float b, float a = 255)
+    {
+        return new Color(
+            Mathf.Clamp(r, 0, 255) / 255,
+            Mathf.Clamp(g, 0, 255) / 255,
+            Mathf.Clamp(b, 0, 255) / 255,
+            Mathf.Clamp(a, 0, 255) / 255);
+    }
+
     public static class Solid
     {
-        public static Color Gold = Common.ColorRGBA(255, 215, 0);
-        public static Color White = Color.white;
-        public static Color LightBlue = Common.ColorRGBA(128, 128, 255);
-        public static Color LightRed = Common.ColorRGBA(255, 128, 128);
-        public static Color Red = Common.ColorRGBA(255, 0, 0);
-        public static Color Green = Common.ColorRGBA(0, 255, 0);
-        public static Color Gray = new Color(0.5f, 0.5f, 0.5f);
+        public static Color Gold = RGB(255, 215, 0);
+        public static Color White = RGB(255, 255, 255);
+        public static Color LightBlue = RGB(128, 128, 255);
+        public static Color LightRed = RGB(255, 128, 128);
+        public static Color Red = RGB(255, 0, 0);
+        public static Color Green = RGB(0, 255, 0);
+        public static Color Gray = RGB(128, 128, 128);
     }
 
     public static class Translucent
     {
-        public static Color Gold = Common.ColorRGBA(255, 215, 0, 100);
-        public static Color White = Common.ColorRGBA(255, 255, 255, 100);
-        public static Color LightBlue = Common.ColorRGBA(128, 128, 255, 100);
-        public static Color LightRed = Common.ColorRGBA(255, 128, 128, 100);
-        public static Color Red = Common.ColorRGBA(255, 0, 0, 100);
-        public static Color Green = Common.ColorRGBA(0, 255, 0, 100);
+        public static Color Gold = RGBA(255, 215, 0, 128);
+        public static Color White = RGBA(255, 255, 255, 128);
+        public static Color LightBlue = RGBA(128, 128, 255, 128);
+        public static Color LightRed =RGBA(255, 128, 128, 128);
+        public static Color Red = RGBA(255, 0, 0, 128);
+        public static Color Green = RGBA(0, 255, 0, 128);
     }
 
-
+    public static class Transparent
+    {
+        public static Color White = RGBA(255, 255, 255, 0);
+        public static Color Red = RGBA(255, 0, 0, 0);
+    }
 
 }
 
@@ -109,7 +134,11 @@ public static class Increment
 public static class Wait
 {
     public static WaitForSeconds Tick() => new WaitForSeconds(Interval.One);
+    public static WaitForSeconds Ticks(int amount) => new WaitForSeconds(Interval.One * amount);
+
     public static WaitForSeconds For(float seconds) => new WaitForSeconds(seconds);
+    public static WaitForSeconds Continue() => new WaitForSeconds(0);
+
 }
 
 
