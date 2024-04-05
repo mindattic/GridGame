@@ -35,26 +35,10 @@ public class InputManager : ExtendedMonoBehavior
         {
             selectedPlayerManager.Untarget();
             selectedPlayerManager.Deselect();
+            isDragging = false;
         }
 
-
-        if (isDragging)
-        {
-            //Determine if targetted player has left current tile
-            //var closestTile = Geometry.ClosestTileByPosition(targettedPlayer.position);
-            //if (closestTile.location != targettedPlayer.location)
-            //{
-            //    selectedPlayerManager.Select();
-            //}
-
-            //var dragDistance = Vector3.Distance(Input.mousePosition, dragStart.Value);
-            var dragDistance = Vector3.Distance(targettedPlayer.position, targettedPlayer.currentTile.position);
-            if (dragDistance > tileSize / 2)
-            {
-                selectedPlayerManager.Select();
-                isDragging = !HasSelectedPlayer;
-            }
-        }
+        CheckDragging();
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -63,6 +47,32 @@ public class InputManager : ExtendedMonoBehavior
         }
 
     }
+
+    private void CheckDragging()
+    {
+        if (!isDragging)
+            return;
+
+        if (!HasTargettedPlayer)
+            return;
+
+        //Determine if targetted player has left current tile
+        //var closestTile = Geometry.ClosestTileByPosition(targettedPlayer.position);
+        //if (closestTile.location != targettedPlayer.location)
+        //{
+        //    selectedPlayerManager.Select();
+        //}
+
+        //var dragDistance = Vector3.Distance(Input.mousePosition, dragStart.Value);
+        var dragDistance = Vector3.Distance(targettedPlayer.position, targettedPlayer.currentTile.position);
+        if (dragDistance > tileSize / 2)
+        {
+            selectedPlayerManager.Select();
+        }
+
+    }
+
+
 }
 
 

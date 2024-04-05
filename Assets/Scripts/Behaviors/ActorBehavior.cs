@@ -64,8 +64,21 @@ public class ActorBehavior : ExtendedMonoBehavior
     [SerializeField] public Vector2Int location = Locations.nowhere;
     [SerializeField] public Vector3? destination = null;
     [SerializeField] public Team team = Team.Independant;
-    [SerializeField] public int HP;
-    [SerializeField] public int MaxHP;
+
+    [SerializeField] public float HP;
+    [SerializeField] public float MaxHP;
+    [SerializeField] public float Attack;
+    [SerializeField] public float Defense;
+    [SerializeField] public float Accuracy;
+    [SerializeField] public float Evasion;
+    [SerializeField] public float Luck;
+
+    public float AttackModifier => Random.Float(0, Attack * 0.01f);
+    public float DefenseModifier => Random.Float(0, Defense * 0.01f);
+    public float AccuracyModifier => Random.Float(0, Accuracy * 0.01f);
+    public float EvasionModifier => Random.Float(0, Evasion * 0.01f);
+    public float LuckModifier => Random.Float(0, Luck * 0.01f);
+
 
     public int spawnTurn = -1;
     private int enemyTurnDelay = 0;
@@ -89,14 +102,13 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Start()
     {
-     
+
     }
 
     public void Init(bool spawn)
     {
         transform.localScale = tileScale;
         render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
-        HP = MaxHP;
         PrintHealth();
         gameObject.SetActive(false);
 
@@ -128,7 +140,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             SetEnemyTurnDelay(EnemyTurnDelay.Random);
         }
 
-       
+
         float delay = turnManager.currentTurn == 1 ? 0 : Random.Float(0f, 2f);
         StartCoroutine(SpawnIn(delay));
     }
@@ -275,6 +287,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (other == null)
             return;
 
+        //if (HasDestination || other.HasDestination)
         if (HasDestination)
             return;
 
@@ -363,7 +376,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void FixedUpdate()
     {
-        if (!IsAlive || !IsActive || IsSelectedPlayer) return;
+        if (!IsAlive || !IsActive || IsTargettedPlayer || IsSelectedPlayer) return;
 
         CheckMovement();
         //CheckBobbing();
@@ -457,22 +470,22 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public IEnumerator TakeDamage(int damageTaken)
+    public IEnumerator TakeDamage(float damage)
     {
-        var remainingHP = Mathf.Clamp(HP - damageTaken, 0, MaxHP);
+        var remainingHP = Mathf.Clamp(HP - damage, 0, MaxHP);
 
         while (HP > remainingHP)
         {
 
             //Decrease HP
-            var min = (damageTaken.ToFloat() * 0.1f).ToInt();
-            var max = (damageTaken.ToFloat() * 0.3f).ToInt();
-            var damage = Random.Int(min, max);
-            HP -= damage;
+            var min = (int)Math.Max(1, damage * 0.1f);
+            var max = (int)Math.Max(1, damage * 0.3f);
+            var hit = Random.Int(min, max);
+            HP -= hit;
             HP = Mathf.Clamp(HP, remainingHP, MaxHP);
 
-            //SpawnIn damage text
-            damageTextManager.Spawn(damage.ToString(), position);
+            //SpawnIn hit text
+            damageTextManager.Spawn(hit.ToString(), position);
 
             //Shake actor
             Shake(ShakeIntensity.Medium);
@@ -481,8 +494,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             if (HP > 0)
             {
                 render.healthBar.transform.localScale = new Vector3(
-                    HealthBarBackScale.x * (HP.ToFloat() / MaxHP.ToFloat()), 
-                    HealthBarBackScale.y, 
+                    HealthBarBackScale.x * (HP / MaxHP),
+                    HealthBarBackScale.y,
                     HealthBarBackScale.z);
             }
             else
@@ -505,7 +518,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void PrintHealth()
     {
-        render.healthText.text = $@"{Math.Round(HP.ToFloat() / MaxHP.ToFloat() * 100)}%";
+        render.healthText.text = $@"{Math.Round(HP / MaxHP * 100)}%";
     }
 
     public IEnumerator Dissolve()
@@ -634,11 +647,5 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-
-    public void SetLocation(Vector2Int location)
-    {
-        this.location = location;
-        this.position = Geometry.PositionFromLocation(this.location);
-    }
 
 }

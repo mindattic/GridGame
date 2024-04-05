@@ -53,7 +53,10 @@ public class TitleManager : ExtendedMonoBehavior
         label.color = new Color(1, 1, 1, 0);
 
         if (showOverlay)
+        {
             StartCoroutine(overlayManager.FadeInOut());
+        }
+           
         StartCoroutine(FadeInOut());
     }
 
@@ -90,6 +93,9 @@ public class TitleManager : ExtendedMonoBehavior
     public IEnumerator FadeInOut()
     {
         StopCoroutine(FadeInOut());
+        StopCoroutine(FadeIn());
+        StopCoroutine(FadeOut());
+
         yield return FadeIn();
         yield return Wait.For(Interval.OneSecond);
         yield return FadeOut();

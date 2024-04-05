@@ -99,6 +99,9 @@ public class OverlayManager : ExtendedMonoBehavior
     public IEnumerator FadeInOut()
     {
         StopCoroutine(FadeInOut());
+        StopCoroutine(FadeIn());
+        StopCoroutine(FadeOut());
+
         yield return FadeIn();
         yield return Wait.For(Interval.OneSecond);
         yield return FadeOut();

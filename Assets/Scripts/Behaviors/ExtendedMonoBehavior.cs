@@ -34,7 +34,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
 
     protected EnemyManager enemyManager => GameManager.instance.enemyManager;
 
-
+    protected TileManager tileManager => GameManager.instance.tileManager;
 
     //Audio
     protected AudioSource soundSource => GameManager.instance.soundSource;
@@ -125,8 +125,6 @@ public class ExtendedMonoBehavior : MonoBehaviour
         get { return GameManager.instance.selectedPlayer; }
         set { GameManager.instance.selectedPlayer = value; }
     }
-
-
 
     public TileBehavior unoccupiedTile => tiles.Where(x => !x.IsOccupied).OrderBy(x => Guid.NewGuid()).First();
 

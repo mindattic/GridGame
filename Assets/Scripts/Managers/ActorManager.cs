@@ -224,8 +224,22 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var enemy in pair.enemies)
         {
             //TODO: Calculate based on attacker stats
-            //var damage = Random.Int(15, 33);
-            var damage = 100;
+            //var damage = Random.Int(33, 66);
+            //var damage = 100;
+
+
+       
+            var attack1 = pair.actor1.Attack * Math.Pow(pair.actor1.Attack, 1.0 + pair.actor1.LuckModifier);
+            var attack2 = pair.actor2.Attack * Math.Pow(pair.actor2.Attack, 1.0 + pair.actor2.LuckModifier);
+
+            var groupPenalty = 0.1 * pair.enemies.Count;
+            var defense = (1.0 - groupPenalty) * Math.Pow(enemy.Defense, 1.0 + enemy.LuckModifier);
+
+            var damage = (float)((attack1 + attack2) / defense);
+
+            Debug.Log($"Attack1: ({attack1}) + Attack2: ({attack2}) / Enemy Defense: ({defense}) = Damage: ({damage})");
+
+
 
             //Attack enemy (one at a time)
             yield return enemy.TakeDamage(damage);
@@ -270,7 +284,8 @@ public class ActorManager : ExtendedMonoBehavior
         {
             enemy.StopGlow();
         }
-        yield return Wait.Ticks(100);
+
+       yield return Wait.Continue();
     }
 
 

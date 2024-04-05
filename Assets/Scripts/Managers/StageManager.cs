@@ -48,7 +48,17 @@ public class StageManager : ExtendedMonoBehavior
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
         actors.Clear();
 
-        var attributes = new ActorAttributes() { HP = 100, MaxHP = 100 };
+        var attributes = new ActorAttributes()
+        {
+            Level = 1,
+            MaxHP = 100,
+            HP = 100,
+            Attack = 10,
+            Defense = 10,
+            Luck = 10,
+            Accuracy = 5,
+            Evasion = 5,
+        };
 
         List<StageActor> stageActors = new List<StageActor>();
 
@@ -105,6 +115,24 @@ public class StageManager : ExtendedMonoBehavior
                 Add(new StageActor(Archetype.Bat, "Bat", attributes, Team.Enemy, unoccupiedTile.location));
                 Add(new StageActor(Archetype.Yeti, "Yeti", attributes, Team.Enemy, unoccupiedTile.location));
 
+                break;
+
+            case 6:
+
+                //Players
+                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Ninja, "Ninja", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Sentinel, "Sentinel", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.PandaGirl, "Panda Girl", attributes, Team.Player, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Cleric, "Cleric", attributes, Team.Player, unoccupiedTile.location));
+
+                //Enemies
+                Add(new StageActor(Archetype.Slime, "Slime", attributes, Team.Enemy, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion", attributes, Team.Enemy, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Bat, "Bat", attributes, Team.Enemy, unoccupiedTile.location));
+                Add(new StageActor(Archetype.Yeti, "Yeti", attributes, Team.Enemy, unoccupiedTile.location));
+
                 //Dynamic Enemies
                 Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, spawnTurn: 1));
                 Add(new StageActor(Archetype.Slime, "Slime B", attributes, Team.Enemy, spawnTurn: 2));
@@ -126,14 +154,6 @@ public class StageManager : ExtendedMonoBehavior
                 Add(new StageActor(Archetype.Yeti, "Yeti C", attributes, Team.Enemy, spawnTurn: 3));
                 Add(new StageActor(Archetype.Yeti, "Yeti D", attributes, Team.Enemy, spawnTurn: 4));
                 Add(new StageActor(Archetype.Yeti, "Yeti E", attributes, Team.Enemy, spawnTurn: 5));
-
-                break;
-
-            case 6:
-
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, unoccupiedTile.location));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, unoccupiedTile.location));
-                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, unoccupiedTile.location));
 
                 break;
 
@@ -189,11 +209,17 @@ public class StageManager : ExtendedMonoBehavior
         actor.archetype = stageActor.archetype;
         actor.name = stageActor.name;
         actor.guid = Guid.NewGuid();
-        actor.MaxHP = stageActor.attributes.MaxHP;
-        actor.HP = stageActor.attributes.HP;
         actor.thumbnail = stageActor.thumbnail;
         actor.team = stageActor.team;
         actor.render.SetBackColor(actor.IsPlayer ? Color.white : Color.red);
+
+        actor.MaxHP = stageActor.attributes.MaxHP;
+        actor.HP = stageActor.attributes.HP;
+        actor.Attack = stageActor.attributes.Attack;
+        actor.Defense = stageActor.attributes.Defense;
+        actor.Accuracy = stageActor.attributes.Accuracy;
+        actor.Evasion = stageActor.attributes.Evasion;
+        actor.Luck = stageActor.attributes.Luck;
 
         if (stageActor.IsSpawning)
         {
