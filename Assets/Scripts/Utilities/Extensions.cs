@@ -60,7 +60,7 @@ public static class Vector3Extensions
 
     public static Vector3 AddY(this Vector3 v3, float y)
     {
-        return new Vector3(v3.x, v3.y +y, v3.z);
+        return new Vector3(v3.x, v3.y + y, v3.z);
     }
 
     public static Vector3 SetZ(this Vector3 v3, float z)
@@ -95,4 +95,15 @@ public static class IntExtensions
         return (float)i;
     }
 }
+
+public static class FloatExtensions
+{
+    public static int ToInt(this float f)
+    {
+        return (int)f;
+    }
+}
+
+
+
 

@@ -24,7 +24,7 @@ static class Random
 
     public static float Range(float amount)
     {
-        return -amount + amount * Percent();
+        return (-amount * Percent()) + (amount * Percent());
     }
 
 

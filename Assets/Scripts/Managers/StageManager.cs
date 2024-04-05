@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -187,6 +188,7 @@ public class StageManager : ExtendedMonoBehavior
         actor.parent = board.transform;
         actor.archetype = stageActor.archetype;
         actor.name = stageActor.name;
+        actor.guid = Guid.NewGuid();
         actor.MaxHP = stageActor.attributes.MaxHP;
         actor.HP = stageActor.attributes.HP;
         actor.thumbnail = stageActor.thumbnail;

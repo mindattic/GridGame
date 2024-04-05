@@ -47,7 +47,7 @@ public class DamageTextBehavior : ExtendedMonoBehavior
     public void Spawn(string text, Vector3 position)
     {
         textMesh.text = text;
-        var x = position.x + -(tileSize / 4) + (tileSize / 4 * Random.Percent());
+        var x = position.x + Random.Range(tileSize / 4);
         var y = position.y + (tileSize / 2 * Random.Percent());
         transform.position = new Vector3(x, y, 1);
         StartCoroutine(FadeOut());

@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+﻿
 using UnityEngine;
 
 public static class Constants
@@ -9,6 +9,10 @@ public static class Constants
     public const string Canvas2D = "Canvas2D";
     public const string Canvas3D = "Canvas3D";
     public const string Art = "Art";
+    public const string Console = "Console";
+    public const string Overlay = "Overlay";
+    public const string Title = "Title";
+    public const string Card = "Card";
 
     //Percent
     public const float percent25 = 0.25f;
@@ -90,7 +94,7 @@ public static class Colors
         public static Color Gold = RGBA(255, 215, 0, 128);
         public static Color White = RGBA(255, 255, 255, 128);
         public static Color LightBlue = RGBA(128, 128, 255, 128);
-        public static Color LightRed =RGBA(255, 128, 128, 128);
+        public static Color LightRed = RGBA(255, 128, 128, 128);
         public static Color Red = RGBA(255, 0, 0, 128);
         public static Color Green = RGBA(0, 255, 0, 128);
     }

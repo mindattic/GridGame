@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 using TMPro;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
+using static Unity.VisualScripting.Member;
 
 
 //public class ActorSubobject
@@ -41,8 +44,6 @@ using static UnityEngine.EventSystems.EventTrigger;
 //    }
 //}
 
-
-
 public class ActorBehavior : ExtendedMonoBehavior
 {
     public static class Layer
@@ -58,7 +59,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         public const int HealthText = 8;
     }
 
-
     //Variables
     [SerializeField] public Archetype archetype;
     [SerializeField] public Vector2Int location = Locations.nowhere;
@@ -72,7 +72,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     [SerializeField] public AnimationCurve bobbing;
 
-
+    public Guid guid;
 
     private void Awake()
     {
@@ -89,7 +89,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Start()
     {
-
+     
     }
 
     public void Init(bool spawn)
@@ -215,8 +215,15 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsAlive => HP > 0;
     public bool IsDead => HP < 1;
 
-    public bool IsActive => this != null && this.isActiveAndEnabled;
+
+    public bool IsActive => this != null && isActiveAndEnabled;
+    public bool IsInactive => this == null || !isActiveAndEnabled;
+
     public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
+
+
+    public Vector3 HealthBarBackScale => render.healthBarBack.transform.localScale;
+
 
     #endregion
 
@@ -325,7 +332,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         if (!IsAlive) return;
 
-        if (IsSelectedPlayer)
+        if (IsTargettedPlayer || IsSelectedPlayer)
             MoveTowardCursor();
 
         var closestTile = Geometry.ClosestTileByPosition(this.position);
@@ -370,7 +377,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void MoveTowardCursor()
     {
-        if (!IsSelectedPlayer)
+        if (!IsTargettedPlayer && !IsSelectedPlayer)
             return;
 
         var cursorPosition = mousePosition3D + mouseOffset;
@@ -458,7 +465,9 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
 
             //Decrease HP
-            var damage = Random.Int(1, 3);
+            var min = (damageTaken.ToFloat() * 0.1f).ToInt();
+            var max = (damageTaken.ToFloat() * 0.3f).ToInt();
+            var damage = Random.Int(min, max);
             HP -= damage;
             HP = Mathf.Clamp(HP, remainingHP, MaxHP);
 
@@ -471,12 +480,10 @@ public class ActorBehavior : ExtendedMonoBehavior
             //Resize health bar
             if (HP > 0)
             {
-                var x = render.healthBarBack.transform.localScale.x;
-                var y = render.healthBarBack.transform.localScale.y;
-                var z = render.healthBarBack.transform.localScale.z;
-                var scale = new Vector3(x * (HP.ToFloat() / MaxHP.ToFloat()), y, z);
-                render.healthBar.transform.localScale = scale;
-
+                render.healthBar.transform.localScale = new Vector3(
+                    HealthBarBackScale.x * (HP.ToFloat() / MaxHP.ToFloat()), 
+                    HealthBarBackScale.y, 
+                    HealthBarBackScale.z);
             }
             else
             {
@@ -624,6 +631,14 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.SetBackAlpha(0);
         Destroy(this.gameObject);
         actors.Remove(this);
+    }
+
+
+
+    public void SetLocation(Vector2Int location)
+    {
+        this.location = location;
+        this.position = Geometry.PositionFromLocation(this.location);
     }
 
 }

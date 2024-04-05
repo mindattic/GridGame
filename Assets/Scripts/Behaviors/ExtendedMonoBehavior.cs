@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-
 public class ExtendedMonoBehavior : MonoBehaviour
 {
 
@@ -28,6 +27,13 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected TitleManager titleManager => GameManager.instance.titleManager;
     protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
     protected CardManager cardManager => GameManager.instance.cardManager;
+
+
+    protected SelectedPlayerManager selectedPlayerManager => GameManager.instance.selectedPlayerManager;
+    protected PlayerManager playerManager => GameManager.instance.playerManager;
+
+    protected EnemyManager enemyManager => GameManager.instance.enemyManager;
+
 
 
     //Audio

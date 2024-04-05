@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class ActorManager : ExtendedMonoBehavior
 {
@@ -21,19 +19,11 @@ public class ActorManager : ExtendedMonoBehavior
 
     void Update()
     {
-        CheckSelectedPlayer();
+
         CheckEnemy();
     }
 
-    private void CheckSelectedPlayer()
-    {
-        if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase || !HasSelectedPlayer)
-            return;
-
-        selectedPlayer.currentTile.spriteRenderer.color = Colors.Solid.Gold;
-    }
-
-
+ 
     private void CheckEnemy()
     {
         if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
@@ -70,7 +60,7 @@ public class ActorManager : ExtendedMonoBehavior
     }
 
 
-    private void CheckPlayerAttack()
+    public void CheckPlayerAttack()
     {
         ClearAttack();
         if (!HasAlignedPlayers()) return;
@@ -338,95 +328,7 @@ public class ActorManager : ExtendedMonoBehavior
 
 
 
-    public void TargetPlayer()
-    {
-        if (!turnManager.IsPlayerTurn || !turnManager.IsStartPhase || HasSelectedPlayer)
-            return;
-
-        //Collect collision data
-        var collisions = Physics2D.OverlapPointAll(mousePosition3D);
-        if (collisions == null)
-            return;
-
-        //Find collider attached to actor
-        var collider = collisions.FirstOrDefault(x => x.CompareTag(Tag.Actor));
-        if (collider == null)
-            return;
-
-        //Retrieve actor from collider
-        var actor = collider.gameObject.GetComponent<ActorBehavior>();
-        if (actor == null || !actor.IsAlive || !actor.IsActive) return;
-
-        //Determine if player Team: "Player"
-        if (actor.team != Team.Player)
-            return;
-
-        //TODO: Update Card display...
-        targettedPlayer = actor;
-        cardManager.Set(targettedPlayer);
-    }
-
-
-
-    public void SelectPlayer()
-    {
-        if (!turnManager.IsPlayerTurn || !turnManager.IsStartPhase || HasSelectedPlayer || !HasTargettedPlayer)
-            return;
-
-        //Select actor
-        selectedPlayer = targettedPlayer;
-        selectedPlayer.sortingOrder = 10;
-
-        soundSource.PlayOneShot(resourceManager.SoundEffect($"Select"));
-
-        //Clear bobbing position
-        ResetBobbing();
-
-        turnManager.currentPhase = TurnPhase.Move;
-
-        //Assign mouse offset (how off center was selection)
-        mouseOffset = selectedPlayer.transform.position - mousePosition3D;
-
-        //SpawnIn ghost images of selected player
-        ghostManager.Spawn();
-
-        timer.Set(scale: 1f, start: true);
-    }
-
-    public void DeselectPlayer()
-    {
-        if (!turnManager.IsPlayerTurn || !turnManager.IsMovePhase || !HasSelectedPlayer)
-            return;
-
-        //Assign location and position
-        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
-        selectedPlayer.location = closestTile.location;
-        selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
-
-        //Clear tiles
-        tiles.ForEach(x => x.spriteRenderer.color = Colors.Translucent.White);
-        //ghostManager.Clear();
-
-        //Clear selected player
-        selectedPlayer.sortingOrder = 0;
-        selectedPlayer = null;
-        targettedPlayer = null;
-        cardManager.Clear();
-
-        timer.Set(scale: 0f, start: false);
-
-        turnManager.currentPhase = TurnPhase.Attack;
-
-        CheckPlayerAttack();
-    }
-
-    public void Destroy(ActorBehavior actor)
-    {
-        if (actor == null) return;
-
-
-    }
-
+ 
 
 
     public void Clear()
@@ -435,16 +337,7 @@ public class ActorManager : ExtendedMonoBehavior
         actors.Clear();
     }
 
-    private void ResetBobbing()
-    {
-        foreach (var actor in actors)
-        {
-            if (actor == null || !actor.IsAlive || !actor.IsActive) continue;
-            actor.render.glow.transform.position = actor.position;
-            actor.render.thumbnail.transform.position = actor.position;
-            actor.render.frame.transform.position = actor.position;
-        }
-    }
+ 
 
 
 }

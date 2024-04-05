@@ -14,8 +14,7 @@ public class GameManager : Singleton<GameManager>
     public ResourceManager resourceManager;
     public InputManager inputManager;
     public StageManager stageManager;
-    public TurnManager turnManager;
-    public ActorManager actorManager;
+    public TurnManager turnManager; 
     public SupportLineManager supportLineManager;
     public AttackLineManager attackLineManager;
     public DamageTextManager damageTextManager;
@@ -25,7 +24,10 @@ public class GameManager : Singleton<GameManager>
     public TitleManager titleManager;
     public ConsoleManager consoleManager;
     public CardManager cardManager;
-
+    public ActorManager actorManager;
+    public SelectedPlayerManager selectedPlayerManager;
+    public PlayerManager playerManager;
+    public EnemyManager enemyManager;
 
     //Audio
     public AudioSource soundSource;
@@ -102,13 +104,19 @@ public class GameManager : Singleton<GameManager>
         damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
         ghostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>();
         portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();
-        consoleManager = GameObject.Find("Console").GetComponent<ConsoleManager>();
-        overlayManager = GameObject.Find("Overlay").GetComponent<OverlayManager>();
-        titleManager = GameObject.Find("Title").GetComponent<TitleManager>();
-        cardManager = GameObject.Find("Card").GetComponent<CardManager>();
+        consoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>();
+        overlayManager = GameObject.Find(Constants.Overlay).GetComponent<OverlayManager>();
+        titleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>();
+        cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>();
+        actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
+        selectedPlayerManager = GameObject.Find(Constants.Game).GetComponent<SelectedPlayerManager>();
+        playerManager = GameObject.Find(Constants.Game).GetComponent<PlayerManager>();
+        enemyManager = GameObject.Find(Constants.Game).GetComponent<EnemyManager>();
 
-        soundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[0];
-        musicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[1];
+        const int SoundSourceIndex = 0;
+        const int MusicSourceIndex = 1;
+        soundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[SoundSourceIndex];
+        musicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[MusicSourceIndex];
 
         attackParticipants = new AttackParticipants();
 
