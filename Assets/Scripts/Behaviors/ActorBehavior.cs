@@ -7,6 +7,8 @@ using System.Runtime.Serialization;
 using TMPro;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
+using static UnityEngine.EventSystems.EventTrigger;
+using static UnityEngine.Rendering.DebugUI;
 
 
 //public class ActorSubobject
@@ -65,6 +67,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     [SerializeField] public Vector3? destination = null;
     [SerializeField] public Team team = Team.Independant;
 
+    [SerializeField] public float Level;
     [SerializeField] public float HP;
     [SerializeField] public float MaxHP;
     [SerializeField] public float Attack;
@@ -72,20 +75,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     [SerializeField] public float Accuracy;
     [SerializeField] public float Evasion;
     [SerializeField] public float Luck;
-
-    public float AttackModifier => Random.Float(0, Attack * 0.01f);
-    public float DefenseModifier => Random.Float(0, Defense * 0.01f);
-    public float AccuracyModifier => Random.Float(0, Accuracy * 0.01f);
-    public float EvasionModifier => Random.Float(0, Evasion * 0.01f);
-    public float LuckModifier => Random.Float(0, Luck * 0.01f);
-
-
-    public int spawnTurn = -1;
-    private int enemyTurnDelay = 0;
-
+    [SerializeField] public int spawnTurn = -1;
+    [SerializeField] public int turnDelay = 0;
     [SerializeField] public AnimationCurve bobbing;
-
-    public Guid guid;
+    [SerializeField] public Guid guid;
 
     private void Awake()
     {
@@ -105,45 +98,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-    public void Init(bool spawn)
-    {
-        transform.localScale = tileScale;
-        render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
-        PrintHealth();
-        gameObject.SetActive(false);
-
-        if (spawn && HasLocation)
-            Spawn();
-    }
-
-
-    public void Spawn(Vector2Int? startLocation = null)
-    {
-        gameObject.SetActive(true);
-
-        if (startLocation.HasValue)
-            location = startLocation.Value;
-
-        position = Geometry.PositionFromLocation(location);
-
-        if (this.IsPlayer)
-        {
-            render.SetColor(Colors.Transparent.White);
-            render.SetBackColor(Colors.Transparent.White);
-            render.turnDelay.gameObject.SetActive(false);
-            SetActionIcon(ActionIcon.None);
-        }
-        else if (this.IsEnemy)
-        {
-            render.SetColor(Colors.Transparent.White);
-            render.SetBackColor(Colors.Transparent.Red);
-            SetEnemyTurnDelay(EnemyTurnDelay.Random);
-        }
-
-
-        float delay = turnManager.currentTurn == 1 ? 0 : Random.Float(0f, 2f);
-        StartCoroutine(SpawnIn(delay));
-    }
 
 
     #region Components
@@ -198,16 +152,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
     }
 
-    public int turnDelay
-    {
-        get => enemyTurnDelay;
-        set
-        {
-            enemyTurnDelay = value;
-            render.turnDelay.text = enemyTurnDelay != 0 ? $"x{enemyTurnDelay}" : "";
-        }
-    }
-
     #endregion
 
     #region Properties
@@ -215,49 +159,93 @@ public class ActorBehavior : ExtendedMonoBehavior
     public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
     public bool IsPlayer => team.Equals(Team.Player);
     public bool IsEnemy => team.Equals(Team.Enemy);
-    public bool IsTargettedPlayer => HasTargettedPlayer && Equals(targettedPlayer);
     public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
+    public bool IsCurrentPlayer => HasCurrentPlayer && Equals(currentPlayer);
     public bool HasLocation => location != Locations.nowhere;
     public bool HasDestination => destination.HasValue;
-
     public bool IsNorthEdge => location.y == 1;
     public bool IsEastEdge => location.x == board.columns;
     public bool IsSouthEdge => location.y == board.rows;
     public bool IsWestEdge => location.x == 1;
     public bool IsAlive => HP > 0;
     public bool IsDead => HP < 1;
-
-
     public bool IsActive => this != null && isActiveAndEnabled;
     public bool IsInactive => this == null || !isActiveAndEnabled;
-
     public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
+    public bool IsPlaying => IsAlive && IsActive;
+    public bool IsReady => turnDelay < 1;
+
+    public float LevelModifier => 1.0f + Random.Float(0, Level * 0.01f);
+    public float AttackModifier => 1.0f + Random.Float(0, Attack * 0.01f);
+    public float DefenseModifier => 1.0f + Random.Float(0, Defense * 0.01f);
+    public float AccuracyModifier => 1.0f + Random.Float(0, Accuracy * 0.01f);
+    public float EvasionModifier => 1.0f + Random.Float(0, Evasion * 0.01f);
+    public float LuckModifier => 1.0f + Random.Float(0, Luck * 0.01f);
 
 
-    public Vector3 HealthBarBackScale => render.healthBarBack.transform.localScale;
+    public bool IsSameColumn(Vector2Int other) => this.location.x == other.x;
+    public bool IsSameRow(Vector2Int other) => this.location.y == other.y;
+    public bool IsNorthOf(Vector2Int other) => IsSameColumn(other) && this.location.y == other.y - 1;
+    public bool IsEastOf(Vector2Int other) => IsSameRow(other) && this.location.x == other.x + 1;
+    public bool IsSouthOf(Vector2Int other) => IsSameColumn(other) && this.location.y == other.y + 1;
+    public bool IsWestOf(Vector2Int other) => IsSameRow(other) && this.location.x == other.x - 1;
+    public bool IsNorthWestOf(Vector2Int other) => this.location.x == other.x - 1 && this.location.y == other.y - 1;
+    public bool IsNorthEastOf(Vector2Int other) => this.location.x == other.x + 1 && this.location.y == other.y - 1;
+    public bool IsSouthWestOf(Vector2Int other) => this.location.x == other.x - 1 && this.location.y == other.y + 1;
+    public bool IsSouthEastOf(Vector2Int other) => this.location.x == other.x + 1 && this.location.y == other.y + 1;
+    public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(this.location, other).Equals(1);
 
+
+
+    private Vector2Int GoNorth() => location += new Vector2Int(0, -1);
+    private Vector2Int GoEast() => location += new Vector2Int(1, 0);
+    private Vector2Int GoSouth() => location += new Vector2Int(0, 1);
+    private Vector2Int GoWest() => location += new Vector2Int(-1, 0);
 
     #endregion
 
     #region Methods
 
 
+    public void Init(bool spawn)
+    {
+        transform.localScale = tileScale;
+        render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
+        PrintHealth();
+        gameObject.SetActive(false);
 
-    public bool IsSameColumn(Vector2Int location) => this.location.x == location.x;
-    public bool IsSameRow(Vector2Int location) => this.location.y == location.y;
-    public bool IsNorthOf(Vector2Int location) => IsSameColumn(location) && this.location.y == location.y - 1;
-    public bool IsEastOf(Vector2Int location) => IsSameRow(location) && this.location.x == location.x + 1;
-    public bool IsSouthOf(Vector2Int location) => IsSameColumn(location) && this.location.y == location.y + 1;
-    public bool IsWestOf(Vector2Int location) => IsSameRow(location) && this.location.x == location.x - 1;
-    public bool IsNorthWestOf(Vector2Int location) => this.location.x == location.x - 1 && this.location.y == location.y - 1;
-    public bool IsNorthEastOf(Vector2Int location) => this.location.x == location.x + 1 && this.location.y == location.y - 1;
-    public bool IsSouthWestOf(Vector2Int location) => this.location.x == location.x - 1 && this.location.y == location.y + 1;
-    public bool IsSouthEastOf(Vector2Int location) => this.location.x == location.x + 1 && this.location.y == location.y + 1;
+        if (spawn && HasLocation)
+            Spawn();
+    }
 
-    private Vector2Int GoNorth() => location += new Vector2Int(0, -1);
-    private Vector2Int GoEast() => location += new Vector2Int(1, 0);
-    private Vector2Int GoSouth() => location += new Vector2Int(0, 1);
-    private Vector2Int GoWest() => location += new Vector2Int(-1, 0);
+
+    public void Spawn(Vector2Int? startLocation = null)
+    {
+        gameObject.SetActive(true);
+
+        if (startLocation.HasValue)
+            location = startLocation.Value;
+
+        position = Geometry.PositionFromLocation(location);
+
+        if (this.IsPlayer)
+        {
+            render.SetColor(Colors.Transparent.White);
+            render.SetBackColor(Colors.Transparent.White);
+            render.turnDelay.gameObject.SetActive(false);
+            SetActionIcon(ActionIcon.None);
+        }
+        else if (this.IsEnemy)
+        {
+            render.SetColor(Colors.Transparent.White);
+            render.SetBackColor(Colors.Transparent.Red);
+            SetTurnDelay();
+        }
+
+
+        float delay = turnManager.currentTurn == 1 ? 0 : Random.Float(0f, 2f);
+        StartCoroutine(SpawnIn(delay));
+    }
 
     private Vector2Int GoRandomDirection()
     {
@@ -329,68 +317,19 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void SetDestination()
     {
+
+        //TODO: Move based on enum (MoveAnywhere, MoveNearest, MoveStrongest, MoveWeakest, etc)...
+
+
+
         var location = new Vector2Int(Random.Int(1, board.columns), Random.Int(1, board.rows));
         var closestTile = Geometry.ClosestTileByLocation(location);
         destination = closestTile.position;
     }
 
-
-    #endregion
-
-
-
-
-
-    void Update()
-    {
-        if (!IsAlive) return;
-
-        if (IsTargettedPlayer || IsSelectedPlayer)
-            MoveTowardCursor();
-
-        var closestTile = Geometry.ClosestTileByPosition(this.position);
-        if (closestTile.location.Equals(this.location))
-            return;
-
-        soundSource.PlayOneShot(resourceManager.SoundEffect($"Move{Random.Int(1, 6)}"));
-
-        //Determine if selected player and another actor are occupying the same tile
-        var actor = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
-        if (actor != null)
-        {
-            actor.SwapLocation(this);
-        }
-
-        location = closestTile.location;
-
-    }
-
-    public void CheckLocationConflict()
-    {
-        var other = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !Equals(x) && location.Equals(x.location));
-        if (other == null)
-            return;
-
-        SwapLocation(other);
-    }
-
-    void FixedUpdate()
-    {
-        if (!IsAlive || !IsActive || IsTargettedPlayer || IsSelectedPlayer) return;
-
-        CheckMovement();
-        //CheckBobbing();
-        CheckThrobbing();
-
-    }
-
-
-
-
-
     private void MoveTowardCursor()
     {
-        if (!IsTargettedPlayer && !IsSelectedPlayer)
+        if (!IsSelectedPlayer && !IsCurrentPlayer)
             return;
 
         var cursorPosition = mousePosition3D + mouseOffset;
@@ -470,6 +409,51 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
+
+    #endregion
+
+
+    void Update()
+    {
+        if (!IsAlive || !IsActive) return;
+
+        if (IsSelectedPlayer || IsCurrentPlayer)
+            MoveTowardCursor();
+
+        var closestTile = Geometry.ClosestTileByPosition(this.position);
+        if (closestTile.location.Equals(this.location))
+            return;
+
+        soundSource.PlayOneShot(resourceManager.SoundEffect($"Move{Random.Int(1, 6)}"));
+
+        //Determine if selected player and another actor are occupying the same tile
+        var actor = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !x.Equals(currentPlayer) && x.location.Equals(closestTile.location));
+        if (actor != null)
+        {
+            actor.SwapLocation(this);
+        }
+
+        location = closestTile.location;
+
+    }
+
+  
+
+    void FixedUpdate()
+    {
+        if (!IsAlive || !IsActive || IsSelectedPlayer || IsCurrentPlayer) return;
+
+        CheckMovement();
+        //CheckBobbing();
+        CheckThrobbing();
+
+    }
+
+
+
+
+
+
     public IEnumerator TakeDamage(float damage)
     {
         var remainingHP = Mathf.Clamp(HP - damage, 0, MaxHP);
@@ -493,10 +477,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             //Resize health bar
             if (HP > 0)
             {
-                render.healthBar.transform.localScale = new Vector3(
-                    HealthBarBackScale.x * (HP / MaxHP),
-                    HealthBarBackScale.y,
-                    HealthBarBackScale.z);
+                var scale = render.healthBarBack.transform.localScale;
+                render.healthBar.transform.localScale = new Vector3(scale.x * (HP / MaxHP), scale.y, scale.z);
             }
             else
             {
@@ -521,6 +503,12 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.healthText.text = $@"{Math.Round(HP / MaxHP * 100)}%";
     }
 
+    private void PrintTurnDelay()
+    {
+        render.turnDelay.text = turnDelay > 0 ? $"x{turnDelay}" : "";
+        render.turnDelay.gameObject.SetActive(true);
+    }
+
     public IEnumerator Dissolve()
     {
         var alpha = 1f;
@@ -541,7 +529,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void SetActionIcon(ActionIcon icon)
     {
-        if (!IsActive) return;
+        if (!IsActive ) return;
         render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(icon.ToString())).thumbnail;
     }
 
@@ -573,7 +561,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         while (alpha < 1)
         {
-            alpha += Increment.OnePercent;
+            alpha += Increment.TwoPercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
             render.SetGlowAlpha(alpha);
             yield return Wait.Tick();
@@ -587,7 +575,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         float alpha = render.glowColor.a;
         while (alpha > 0)
         {
-            alpha -= Increment.OnePercent;
+            alpha -= Increment.TwoPercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
             render.SetGlowAlpha(alpha);
             yield return Wait.Tick();
@@ -596,14 +584,24 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.SetGlowAlpha(0);
     }
 
-    public void SetEnemyTurnDelay(EnemyTurnDelay turnDelay, int min = 2, int max = 4)
+    public void SetTurnDelay()
     {
-        if (!IsActive || turnDelay.Equals(EnemyTurnDelay.None)) return;
+        if (!IsAlive && !IsActive) return;
 
-        enemyTurnDelay = Random.Int(min, max);
-        render.turnDelay.text = $"x{enemyTurnDelay}";
-        render.turnDelay.gameObject.SetActive(true);
+        //TODO: Base off of stats....
+        int min = 2;
+        int max = 4;
+        turnDelay = Random.Int(min, max);
+
         SetActionIcon(ActionIcon.Sleep);
+        PrintTurnDelay();
+    }
+
+    public void DecreaseTurnDelay()
+    {
+        if (!IsAlive && !IsActive) return;
+        turnDelay--;
+        PrintTurnDelay();
     }
 
     public IEnumerator SpawnIn(float delay = 0)
@@ -646,6 +644,16 @@ public class ActorBehavior : ExtendedMonoBehavior
         actors.Remove(this);
     }
 
+
+
+    //public void CheckLocationConflict()
+    //{
+    //    var other = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !Equals(x) && location.Equals(x.location));
+    //    if (other == null)
+    //        return;
+
+    //    SwapLocation(other);
+    //}
 
 
 }

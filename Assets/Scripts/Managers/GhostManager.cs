@@ -28,9 +28,9 @@ public class GhostManager : ExtendedMonoBehavior
 
     private IEnumerator SpawnGhost()
     {
-        while (HasSelectedPlayer)
+        while (HasCurrentPlayer)
         {
-            this.Spawn(selectedPlayer);
+            this.Spawn(currentPlayer);
             yield return Wait.Tick();
         }
     }

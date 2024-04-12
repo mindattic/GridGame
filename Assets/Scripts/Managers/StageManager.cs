@@ -35,7 +35,7 @@ public class StageManager : ExtendedMonoBehavior
     {
 
         //Clear and clear variables
-        selectedPlayer = null;
+        currentPlayer = null;
         supportLineManager.Clear();
         attackLineManager.Clear();
         turnManager.Reset();
@@ -213,6 +213,8 @@ public class StageManager : ExtendedMonoBehavior
         actor.team = stageActor.team;
         actor.render.SetBackColor(actor.IsPlayer ? Color.white : Color.red);
 
+        //Assign attributes
+        actor.Level = stageActor.attributes.Level;
         actor.MaxHP = stageActor.attributes.MaxHP;
         actor.HP = stageActor.attributes.HP;
         actor.Attack = stageActor.attributes.Attack;

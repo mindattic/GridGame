@@ -27,14 +27,11 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected TitleManager titleManager => GameManager.instance.titleManager;
     protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
     protected CardManager cardManager => GameManager.instance.cardManager;
-
-
     protected SelectedPlayerManager selectedPlayerManager => GameManager.instance.selectedPlayerManager;
     protected PlayerManager playerManager => GameManager.instance.playerManager;
-
     protected EnemyManager enemyManager => GameManager.instance.enemyManager;
-
     protected TileManager tileManager => GameManager.instance.tileManager;
+
 
     //Audio
     protected AudioSource soundSource => GameManager.instance.soundSource;
@@ -54,8 +51,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected List<ActorBehavior> enemies => GameManager.instance.actors.Where(x => x.team.Equals(Team.Enemy)).ToList();
 
     //Actor
-    protected bool HasTargettedPlayer => targettedPlayer != null;
     protected bool HasSelectedPlayer => selectedPlayer != null;
+    protected bool HasCurrentPlayer => currentPlayer != null;
 
     //Scale
     protected float tileSize => GameManager.instance.tileSize;
@@ -114,16 +111,16 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //}
 
 
-    protected ActorBehavior targettedPlayer
-    {
-        get { return GameManager.instance.targettedPlayer; }
-        set { GameManager.instance.targettedPlayer = value; }
-    }
-
     protected ActorBehavior selectedPlayer
     {
         get { return GameManager.instance.selectedPlayer; }
         set { GameManager.instance.selectedPlayer = value; }
+    }
+
+    protected ActorBehavior currentPlayer
+    {
+        get { return GameManager.instance.currentPlayer; }
+        set { GameManager.instance.currentPlayer = value; }
     }
 
     public TileBehavior unoccupiedTile => tiles.Where(x => !x.IsOccupied).OrderBy(x => Guid.NewGuid()).First();

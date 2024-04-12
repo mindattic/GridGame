@@ -15,32 +15,11 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
     // Update is called once per frame
     void Update()
     {
-        ////Verify currently players turn...
-        //if (!turnManager.IsPlayerTurn)
-        //    return;
-
-        ////Verify turn phase is either "start" or "move"...
-        //if (!turnManager.IsStartPhase && !turnManager.IsMovePhase)
-        //    return;
-
-        ////Verify either selected player or targetted player exists...
-        //if (!HasSelectedPlayer && !HasTargettedPlayer)
-        //    return;
-
-        ////Assign tile color based on current player selection state
-        //if (HasSelectedPlayer)
-        //{
-        //    //selectedPlayer.currentTile.spriteRenderer.color = Colors.Solid.Gold;
-        //}
-        //else if (HasTargettedPlayer)
-        //{
-        //    //targettedPlayer.currentTile.spriteRenderer.color = Colors.Solid.Gold;
-        //}
 
     }
 
 
-    public void Target()
+    public void Select()
     {
         //Verify is player turn...
         if (!turnManager.IsPlayerTurn)
@@ -64,38 +43,34 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //TODO: Update Card display...
-        targettedPlayer = actor;
-        targettedPlayer.sortingOrder = ZAxis.Max;
+        selectedPlayer = actor;
+        selectedPlayer.sortingOrder = ZAxis.Max;
 
         //Assign mouse offset (how off center was selection)
-        mouseOffset = targettedPlayer.position - mousePosition3D;
+        mouseOffset = selectedPlayer.position - mousePosition3D;
 
-        cardManager.Set(targettedPlayer);
+        cardManager.Set(selectedPlayer);
     }
 
-    public void Untarget()
+    public void Unselect()
     {
         //Verify *HAS* targetted player...
-        if (!HasTargettedPlayer)
+        if (!HasSelectedPlayer)
             return;
 
-        //Assign location and position
-        //var closestTile = Geometry.ClosestTileByPosition(targettedPlayer.position);
-        //closestTile.spriteRenderer.color = Colors.Translucent.White;
-        //argettedPlayer.location = closestTile.location;
-        targettedPlayer.position = targettedPlayer.currentTile.position;
-        targettedPlayer.sortingOrder = ZAxis.Min;
-        targettedPlayer = null;
+        if (!HasCurrentPlayer)
+        {
+            selectedPlayer.position = selectedPlayer.currentTile.position;
+            selectedPlayer.sortingOrder = ZAxis.Min;
+            //cardManager.Clear();
+        }
 
-        cardManager.Clear();
+        selectedPlayer = null;
+     
     }
 
-    public void Select()
+    public void Pickup()
     {
-        //Verify *HAS* targetted player...
-        if (!HasTargettedPlayer)
-            return;
-
         //Verify is player turn...
         if (!turnManager.IsPlayerTurn)
             return;
@@ -104,30 +79,24 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!turnManager.IsStartPhase)
             return;
 
-        //Select actor
-        //selectedPlayer = players.FirstOrDefault(x => x.guid.Equals(targettedPlayer.guid));
-        //if (!HasSelectedPlayer)
-        //    return;
-
-        selectedPlayer = targettedPlayer;
-        if (!HasSelectedPlayer)
+        //Pickup actor
+        currentPlayer = selectedPlayer;
+        if (!HasCurrentPlayer)
             return;
 
-        targettedPlayer = null;
+        Unselect();
         turnManager.currentPhase = TurnPhase.Move;
+        currentPlayer.sortingOrder = ZAxis.Max;
 
-        selectedPlayer.sortingOrder = ZAxis.Max;
-
-      
         soundSource.PlayOneShot(resourceManager.SoundEffect($"Select"));
 
         //Clear bobbing position
         //ResetBobbing();
 
-      
+
 
         //Assign mouse offset (how off center was selection)
-        mouseOffset = selectedPlayer.position - mousePosition3D;
+        mouseOffset = currentPlayer.position - mousePosition3D;
 
         //SpawnIn ghost images of selected player
         ghostManager.Spawn();
@@ -135,7 +104,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         timer.Set(scale: 1f, start: true);
     }
 
-    public void Deselect()
+    public void Drop()
     {
         //Verify is player turn...
         if (!turnManager.IsPlayerTurn)
@@ -146,17 +115,16 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //Verify *HAS* selected player...
-        if (!HasSelectedPlayer)
+        if (!HasCurrentPlayer)
             return;
 
         //Assign location and position
-        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
+        var closestTile = Geometry.ClosestTileByPosition(currentPlayer.position);
         closestTile.spriteRenderer.color = Colors.Translucent.White;
-        selectedPlayer.location = closestTile.location;
-        selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
-        selectedPlayer.sortingOrder = ZAxis.Min;
-        selectedPlayer = null;
-
+        currentPlayer.location = closestTile.location;
+        currentPlayer.position = Geometry.PositionFromLocation(currentPlayer.location);
+        currentPlayer.sortingOrder = ZAxis.Min;
+        currentPlayer = null;
 
         tileManager.Reset();
         cardManager.Clear();

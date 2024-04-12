@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : ExtendedMonoBehavior
@@ -27,14 +25,14 @@ public class InputManager : ExtendedMonoBehavior
 
         if (Input.GetMouseButtonDown(0))
         {
-            selectedPlayerManager.Target();
-            isDragging = HasTargettedPlayer;
+            selectedPlayerManager.Select();
+            isDragging = HasSelectedPlayer;
 
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            selectedPlayerManager.Untarget();
-            selectedPlayerManager.Deselect();
+            selectedPlayerManager.Unselect();
+            selectedPlayerManager.Drop();
             isDragging = false;
         }
 
@@ -53,21 +51,13 @@ public class InputManager : ExtendedMonoBehavior
         if (!isDragging)
             return;
 
-        if (!HasTargettedPlayer)
+        if (!HasSelectedPlayer)
             return;
 
-        //Determine if targetted player has left current tile
-        //var closestTile = Geometry.ClosestTileByPosition(targettedPlayer.position);
-        //if (closestTile.location != targettedPlayer.location)
-        //{
-        //    selectedPlayerManager.Select();
-        //}
-
-        //var dragDistance = Vector3.Distance(Input.mousePosition, dragStart.Value);
-        var dragDistance = Vector3.Distance(targettedPlayer.position, targettedPlayer.currentTile.position);
-        if (dragDistance > tileSize / 2)
+        var dragDistance = Vector3.Distance(selectedPlayer.position, selectedPlayer.currentTile.position);
+        if (dragDistance > tileSize / percent333)
         {
-            selectedPlayerManager.Select();
+            selectedPlayerManager.Pickup();
         }
 
     }
@@ -103,13 +93,13 @@ public class InputManager : ExtendedMonoBehavior
         {
             selectedPlayerManager.TargetPlayer();
 
-            if (HasTargettedPlayer)
+            if (HasSelectedPlayer)
                 dragStart = Input.mousePosition;
         }
         else if (Input.GetMouseButtonUp(0))
         {
             dragStart = null;
-            selectedPlayerManager.Deselect();
+            selectedPlayerManager.Drop();
         }
 
         if (IsDragging)
@@ -118,7 +108,7 @@ public class InputManager : ExtendedMonoBehavior
             var dragDistance = Vector3.Distance(Input.mousePosition, dragStart.Value);
             if (dragDistance > dragThreshold)
             {
-                selectedPlayerManager.Select();
+                selectedPlayerManager.Pickup();
             }
         }
 

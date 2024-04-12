@@ -52,12 +52,6 @@ public enum ActionIcon
 //    On
 //}
 
-public enum EnemyTurnDelay
-{
-    None,
-    Random
-}
-
 public enum Archetype
 {
     Paladin,

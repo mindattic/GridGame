@@ -46,24 +46,19 @@ public class TurnManager : ExtendedMonoBehavior
         currentPhase = Phase.Start;
 
         if (IsPlayerTurn)
+        {
             currentTurn++;
-
-        titleManager.Print($"Turn {currentTurn}");
-
-        CheckEnemySpawn();
+            titleManager.Print($"Turn {currentTurn}");
+            timer.Set(scale: 1f, start: false);
+        }
+        else if (IsEnemyTurn)
+        {
+            actorManager.CheckEnemySpawn();
+            actorManager.CheckEnemyMove();
+        }
        
-        timer.Set(scale: 1f, start: false);
         soundSource.PlayOneShot(resourceManager.SoundEffect($"NextTurn"));
     }
-
-    private void CheckEnemySpawn()
-    {
-        foreach (var enemy in enemies.Where(x => x.IsSpawnable))
-        {
-            enemy.Spawn(unoccupiedTile.location);
-        }
-    }
-
 
     void Update()
     {

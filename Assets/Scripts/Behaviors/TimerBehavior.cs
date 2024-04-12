@@ -44,7 +44,7 @@ public class TimerBehavior : ExtendedMonoBehavior
         else
         {
             isRunning = false;
-            selectedPlayerManager.Deselect();
+            selectedPlayerManager.Drop();
         }
     }
 

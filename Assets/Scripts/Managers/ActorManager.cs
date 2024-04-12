@@ -20,34 +20,38 @@ public class ActorManager : ExtendedMonoBehavior
     void Update()
     {
 
-        CheckEnemy();
+
     }
 
- 
-    private void CheckEnemy()
+
+
+    public void CheckEnemySpawn()
     {
         if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
             return;
 
-        foreach (var enemy in enemies)
-        {
-            if (enemy != null && !enemy.IsAlive || !enemy.IsActive) continue;
+        var spawnableEnemies = enemies.Where(x => x.IsSpawnable).ToList();
+        spawnableEnemies.ForEach(x => x.Spawn(unoccupiedTile.location));
+    }
 
-            if (enemy.turnDelay > 0)
-            {
-                enemy.turnDelay--;
-                if (enemy.turnDelay == 0)
-                {
-                    enemy.SetDestination();
-                }
-            }
-        }
+    public void CheckEnemyMove()
+    {
+        if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
+            return;
+
+        var queuedEnemies = enemies.Where(x => x != null && x.IsAlive && x.IsAlive && !x.IsReady).ToList();
+        queuedEnemies.ForEach(x => x.DecreaseTurnDelay());
+
+        var movingEnemies = queuedEnemies.Where(x => x.IsReady).ToList();
+        movingEnemies.ForEach(x => x.SetDestination());
 
         StartCoroutine(StartEnemyMove());
     }
 
     private IEnumerator StartEnemyMove()
     {
+        yield return Wait.For(Interval.OneSecond);
+
         turnManager.currentPhase = TurnPhase.Move;
 
         while (enemies.Any(x => x.HasDestination))
@@ -166,12 +170,16 @@ public class ActorManager : ExtendedMonoBehavior
     {
         foreach (var pair in attackParticipants.attackingPairs)
         {
-            yield return PlayerStartAttack(pair);
             yield return EnemyStartDefend(pair);
+        }
+
+        foreach (var pair in attackParticipants.attackingPairs)
+        {
+            yield return PlayerStartAttack(pair);
             yield return PlayerAttack(pair);
             yield return EnemyDefend(pair);
-            yield return PlayerStopAttack(pair);
             yield return EnemyStopDefend(pair);
+            yield return PlayerStopAttack(pair);
         }
 
         ClearAttack();
@@ -224,28 +232,32 @@ public class ActorManager : ExtendedMonoBehavior
         foreach (var enemy in pair.enemies)
         {
             //TODO: Calculate based on attacker stats
-            //var damage = Random.Int(33, 66);
+            var damage = Random.Int(33, 100);
             //var damage = 100;
 
 
-       
-            var attack1 = pair.actor1.Attack * Math.Pow(pair.actor1.Attack, 1.0 + pair.actor1.LuckModifier);
-            var attack2 = pair.actor2.Attack * Math.Pow(pair.actor2.Attack, 1.0 + pair.actor2.LuckModifier);
+            //var actor1 = pair.actor1;
+            //var actor2 = pair.actor2;
+            //var totalEnemies = pair.enemies.Count - 1;
+            //var groupedEnemyModifier = Mathf.Max(1.0f - (0.1f * totalEnemies), 0.1f);
 
-            var groupPenalty = 0.1 * pair.enemies.Count;
-            var defense = (1.0 - groupPenalty) * Math.Pow(enemy.Defense, 1.0 + enemy.LuckModifier);
 
-            var damage = (float)((attack1 + attack2) / defense);
 
-            Debug.Log($"Attack1: ({attack1}) + Attack2: ({attack2}) / Enemy Defense: ({defense}) = Damage: ({damage})");
+            //var attack1 = (actor1.Attack + (actor1.Attack * actor1.LevelModifier)) * Math.Pow(actor1.Attack, actor1.LuckModifier);
+            //var attack2 = (actor2.Attack + (actor2.Attack * actor2.LevelModifier)) * Math.Pow(actor2.Attack, actor2.LuckModifier);
+
+            //var defense = enemy.Defense * groupedEnemyModifier * Math.Pow(enemy.Defense, enemy.LuckModifier);
+
+            //var damage = (float)((attack1 + attack2) / defense);
+
+            //Debug.Log($"Attack1: ({attack1}) + Attack2: ({attack2}) / Enemy Defense: ({defense}) = Damage: ({damage})");
+
 
 
 
             //Attack enemy (one at a time)
             yield return enemy.TakeDamage(damage);
         }
-
-        yield return Wait.For(Interval.HalfSecond);
     }
 
     private IEnumerator EnemyDefend(ActorPair pair)
@@ -285,7 +297,7 @@ public class ActorManager : ExtendedMonoBehavior
             enemy.StopGlow();
         }
 
-       yield return Wait.Continue();
+        yield return Wait.Continue();
     }
 
 
@@ -301,34 +313,34 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator EnemyAttack()
     {
-        ClearAttack();
+        yield return Wait.For(Interval.OneSecond);
 
-        foreach (var enemy in enemies)
+        var readyEnemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsReady).ToList();
+        if (readyEnemies.Count > 0)
         {
-            if (enemy == null || !enemy.IsAlive || enemy.turnDelay > 0) continue;
-
-            foreach (var player in players)
+            foreach (var enemy in readyEnemies)
             {
-                if (player == null
-                    || !player.IsAlive || !player.IsActive
-                    || (!player.IsSameColumn(enemy.location) && !player.IsSameRow(enemy.location))) continue;
-
-                var delta = enemy.location - player.location;
-                if (Math.Abs(delta.x) == 1 || Math.Abs(delta.y) == 1)
+                var defendingPlayers = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsAdjacentTo(enemy.location)).ToList();
+                if (defendingPlayers.Count > 0)
                 {
-                    enemy.SetActionIcon(ActionIcon.Attack);
-                    var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
-                    player.TakeDamage(damage);
+                    foreach (var player in defendingPlayers)
+                    {
+                        enemy.SetActionIcon(ActionIcon.Attack);
+                        var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
 
-                    yield return Wait.For(Interval.TwoSecond);
-
-                    enemy.SetEnemyTurnDelay(EnemyTurnDelay.Random);
+                        //Attack enemy (one at a time)
+                        yield return player.TakeDamage(damage);
+                        enemy.SetTurnDelay();
+                    }
                 }
-
+                else
+                {
+                    enemy.SetTurnDelay();
+                }
             }
         }
 
-        ClearAttack();
+        yield return Wait.For(Interval.OneSecond);
         turnManager.NextTurn();
     }
 
@@ -343,7 +355,7 @@ public class ActorManager : ExtendedMonoBehavior
 
 
 
- 
+
 
 
     public void Clear()
@@ -352,7 +364,7 @@ public class ActorManager : ExtendedMonoBehavior
         actors.Clear();
     }
 
- 
+
 
 
 }

@@ -55,8 +55,8 @@ public class GameManager : Singleton<GameManager>
 
 
     //Selection
-    public ActorBehavior targettedPlayer;
     public ActorBehavior selectedPlayer;
+    public ActorBehavior currentPlayer;
 
     //Behaviors
     public BoardBehavior board;
@@ -94,6 +94,7 @@ public class GameManager : Singleton<GameManager>
 
         canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>();
         canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>();
+        cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>();
 
         resourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>();
         stageManager = GameObject.Find(Constants.Game).GetComponent<StageManager>();
@@ -107,8 +108,7 @@ public class GameManager : Singleton<GameManager>
         portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();
         consoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>();
         overlayManager = GameObject.Find(Constants.Overlay).GetComponent<OverlayManager>();
-        titleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>();
-        cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>();
+        titleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>();     
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
         selectedPlayerManager = GameObject.Find(Constants.Game).GetComponent<SelectedPlayerManager>();
         playerManager = GameObject.Find(Constants.Game).GetComponent<PlayerManager>();

@@ -77,7 +77,6 @@
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\FpsMonitor.cs" />
     <Compile Include="Assets\Scripts\Models\ShakeIntensity.cs" />
-    <Compile Include="Assets\CardManager.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
     <Compile Include="Assets\Scripts\Managers\SupportLineManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Constants.cs" />
@@ -93,7 +92,6 @@
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
     <Compile Include="Assets\Scripts\Models\ActorAttributes.cs" />
     <Compile Include="Assets\Scripts\Behaviors\DamageTextBehavior.cs" />
-    <Compile Include="Assets\SelectedPlayerManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Wait.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Managers\TurnManager.cs" />
@@ -102,7 +100,6 @@
     <Compile Include="Assets\Scripts\Models\MusicTrack.cs" />
     <Compile Include="Assets\Scripts\Behaviors\ExtendedMonoBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\ConsoleManager.cs" />
-    <Compile Include="Assets\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Managers\PortraitManager.cs" />
     <Compile Include="Assets\Scripts\Managers\PointerManager.cs" />
     <Compile Include="Assets\Scripts\Models\Destination.cs" />
@@ -110,9 +107,12 @@
     <Compile Include="Assets\Scripts\Managers\WallManager.cs" />
     <Compile Include="Assets\Scripts\Models\AttackParticipants.cs" />
     <Compile Include="Assets\Scripts\Models\GhostRenderers.cs" />
-    <Compile Include="Assets\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
-    <Compile Include="Assets\TileManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\CardManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\EnemyManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\TileManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\SelectedPlayerManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
