@@ -9,24 +9,18 @@ using UnityEngine.UIElements;
 public class ResourceManager : ExtendedMonoBehavior
 {
 
+    //Variables
     [SerializeField] public List<ActorSprite> actorSprites = new List<ActorSprite>();
-
     [SerializeField] public List<ActorDetails> actorDetails = new List<ActorDetails>();
-
-
-
     [SerializeField] public List<StatusSprite> statusSprites = new List<StatusSprite>();
-
-
-
+    [SerializeField] public List<PropSprite> propSprites = new List<PropSprite>();
     [SerializeField] public List<SoundEffect> soundEffects = new List<SoundEffect>();
-
     [SerializeField] public List<MusicTrack> musicTracks = new List<MusicTrack>();
 
-
-    private void Awake()
-    {
-    }
+    void Awake() { }
+    void Start() { }
+    void Update() { }
+    void FixedUpdate() { }
 
     public Sprite ActorThumbnail(string id)
     {
@@ -44,7 +38,10 @@ public class ResourceManager : ExtendedMonoBehavior
         return actorDetails.First(x => x.id.Equals(id)).details;
     }
 
-
+    public Sprite Prop(string id)
+    {
+        return propSprites.First(x => x.id.Equals(id)).sprite;
+    }
 
     public Sprite StatusThumbnail(string id)
     {

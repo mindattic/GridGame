@@ -113,6 +113,9 @@
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Managers\TileManager.cs" />
     <Compile Include="Assets\Scripts\Managers\SelectedPlayerManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\FootstepManager.cs" />
+    <Compile Include="Assets\Scripts\Models\PropSprite.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\FootstepBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

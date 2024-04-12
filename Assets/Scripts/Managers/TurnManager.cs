@@ -27,14 +27,14 @@ public class TurnManager : ExtendedMonoBehavior
     {
         Reset();
     }
+    void Update() { }
+    void FixedUpdate() { }
 
     public void Reset()
     {
         currentTurn = 1;
         currentTeam = Team.Player;
         currentPhase = Phase.Start;
-
-        //titleManager.Print("Battle Start", showOverlay: true);
 
         musicSource.Stop();
         musicSource.PlayOneShot(resourceManager.MusicTrack($"MelancholyLull"));
@@ -59,12 +59,6 @@ public class TurnManager : ExtendedMonoBehavior
        
         soundSource.PlayOneShot(resourceManager.SoundEffect($"NextTurn"));
     }
-
-    void Update()
-    {
-
-    }
-
 
 
 }

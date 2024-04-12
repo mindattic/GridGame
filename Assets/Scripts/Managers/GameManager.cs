@@ -29,6 +29,7 @@ public class GameManager : Singleton<GameManager>
     public PlayerManager playerManager;
     public EnemyManager enemyManager;
     public TileManager tileManager;
+    public FootstepManager footstepManager;
 
     //Audio
     public AudioSource soundSource;
@@ -114,6 +115,7 @@ public class GameManager : Singleton<GameManager>
         playerManager = GameObject.Find(Constants.Game).GetComponent<PlayerManager>();
         enemyManager = GameObject.Find(Constants.Game).GetComponent<EnemyManager>();
         tileManager = GameObject.Find(Constants.Game).GetComponent<TileManager>();
+        footstepManager = GameObject.Find(Constants.Game).GetComponent<FootstepManager>();
 
         const int SoundSourceIndex = 0;
         const int MusicSourceIndex = 1;

@@ -7,23 +7,10 @@ using UnityEngine;
 
 public class ActorManager : ExtendedMonoBehavior
 {
-    private void Awake()
-    {
-
-    }
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-
-    }
-
-
+    void Awake() { }
+    void Start() { }
+    void Update() { }
+    void FixedUpdate() { }
 
     public void CheckEnemySpawn()
     {
@@ -58,6 +45,8 @@ public class ActorManager : ExtendedMonoBehavior
         {
             yield return Wait.For(Interval.HalfSecond);
         }
+
+        yield return Wait.For(Interval.OneSecond);
 
         turnManager.currentPhase = TurnPhase.Attack;
         CheckEnemyAttack();
@@ -329,7 +318,11 @@ public class ActorManager : ExtendedMonoBehavior
                     foreach (var player in defendingPlayers)
                     {
                         enemy.SetActionIcon(ActionIcon.Attack);
-                        var damage = Random.Int(15, 33); //TODO: Calculate based on attacker stats
+                        yield return Wait.For(Interval.OneSecond);
+
+
+                        //TODO: Calculate based on attacker stats
+                        var damage = Random.Int(15, 33); 
 
                         //Attack enemy (one at a time)
                         yield return player.TakeDamage(damage);
@@ -349,25 +342,11 @@ public class ActorManager : ExtendedMonoBehavior
 
     #endregion
 
-
-
-    private void FixedUpdate()
-    {
-
-    }
-
-
-
-
-
-
     public void Clear()
     {
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
         actors.Clear();
     }
-
-
 
 
 }

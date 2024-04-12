@@ -98,8 +98,9 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         //Assign mouse offset (how off center was selection)
         mouseOffset = currentPlayer.position - mousePosition3D;
 
-        //SpawnIn ghost images of selected player
-        ghostManager.Spawn();
+        
+        ghostManager.Start(currentPlayer);
+        footstepManager.Start(currentPlayer);
 
         timer.Set(scale: 1f, start: true);
     }
@@ -125,6 +126,9 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         currentPlayer.position = Geometry.PositionFromLocation(currentPlayer.location);
         currentPlayer.sortingOrder = ZAxis.Min;
         currentPlayer = null;
+
+        ghostManager.Stop();
+        footstepManager.Stop();
 
         tileManager.Reset();
         cardManager.Clear();

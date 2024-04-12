@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,34 +6,53 @@ public class GhostManager : ExtendedMonoBehavior
 {
     //Variables
     [SerializeField] public GameObject ghostPrefab;
+    ActorBehavior actor;
+    float threshold;
+    Vector3 previousPosition;
 
-    void Start()
+    void Awake()
     {
+       
 
     }
 
-    // Update is called once per frame
+    void Start() {
+        threshold = tileSize / 12;
+    }
+
+    void FixedUpdate() { }
+
+
+    public void Start(ActorBehavior actor)
+    {
+        if (actor == null || actor.IsDead || actor.IsInactive)
+            return;
+
+        this.actor = actor;
+        previousPosition = this.actor.position;
+    }
+
+    public void Stop()
+    {
+        actor = null;
+    }
+
+
     void Update()
     {
+        if (actor == null || actor.IsDead || actor.IsInactive)
+            return;
 
+        var distance = Vector3.Distance(actor.position, previousPosition);
+        if (distance < threshold)
+            return;
+
+        previousPosition = actor.position;
+
+        Spawn();
     }
 
-
-    public void Spawn()
-    {
-        StartCoroutine(SpawnGhost());
-    }
-
-    private IEnumerator SpawnGhost()
-    {
-        while (HasCurrentPlayer)
-        {
-            this.Spawn(currentPlayer);
-            yield return Wait.Tick();
-        }
-    }
-
-    public void Spawn(ActorBehavior actor)
+    private void Spawn()
     {
         GameObject prefab = Instantiate(ghostPrefab, Vector2.zero, Quaternion.identity);
         GhostBehavior ghost = prefab.GetComponent<GhostBehavior>();

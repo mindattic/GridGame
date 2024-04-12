@@ -52,6 +52,7 @@ public static class Tag
     public static string AnnouncementText = "AnnouncementText";
     public static string Portrait = "ActorPortrait";
     public static string Ghost = "Ghost";
+    public static string Footstep = "Footstep";
     public static string Wall = "Wall";
 
 }

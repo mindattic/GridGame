@@ -20,17 +20,9 @@ public class CardManager : ExtendedMonoBehavior
 
         Clear();
     }
-
-    void Start()
-    {
-
-    }
-
-
-    void Update()
-    {
-
-    }
+    void Start() { }
+    void Update() { }
+    void FixedUpdate() { }
 
 
     public void Set(ActorBehavior actor)

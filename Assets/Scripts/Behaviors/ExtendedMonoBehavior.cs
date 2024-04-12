@@ -31,6 +31,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected PlayerManager playerManager => GameManager.instance.playerManager;
     protected EnemyManager enemyManager => GameManager.instance.enemyManager;
     protected TileManager tileManager => GameManager.instance.tileManager;
+    protected FootstepManager footstepManager => GameManager.instance.footstepManager;
 
 
     //Audio
