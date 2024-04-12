@@ -5640,7 +5640,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 570420153}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38ca24a5923a9f047abbdfb877e8df0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 05858ca814fb23e4e8d6feeed263d55d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &608292893
@@ -12975,8 +12975,8 @@ MonoBehaviour:
   cursorSpeed: 0
   slideSpeed: 0
   snapDistance: 0
-  targettedPlayer: {fileID: 0}
   selectedPlayer: {fileID: 0}
+  currentPlayer: {fileID: 0}
   board: {fileID: 0}
   timer: {fileID: 0}
   actors: []
