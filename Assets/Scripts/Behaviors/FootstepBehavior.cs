@@ -55,7 +55,7 @@ public class FootstepBehavior : ExtendedMonoBehavior
         this.position = position;
         this.rotation = rotation;
         spriteRenderer.sprite = resourceManager.Prop($"Footstep{(isRightFoot ? "Right" : "Left")}");
-        //StartCoroutine(FadeOut());
+        StartCoroutine(FadeOut());
     }
 
     private IEnumerator FadeOut()
