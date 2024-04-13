@@ -5,28 +5,49 @@ public class ActorRenderers
 {
     public ActorRenderers() { }
 
+    public Color glowColor;
+    public Color backColor;
     public SpriteRenderer glow;
     public SpriteRenderer back;
     public SpriteRenderer thumbnail;
     public SpriteRenderer frame;
+    public SpriteRenderer statusIcon;
     public SpriteRenderer healthBarBack;
     public SpriteRenderer healthBar;
-    public SpriteRenderer statusIcon;
-    public TextMeshPro turnDelay;
     public TextMeshPro healthText;
+    public SpriteRenderer actionBarBack;
+    public SpriteRenderer actionBar;
+    public TextMeshPro actionText;
 
-    public Color glowColor;
-    public Color backColor;
-
+ 
     public void SetColor(Color color)
     {
-        thumbnail.color = color;
-        frame.color = color;
-        statusIcon.color = new Color(1, 1, 1, color.a);
-        turnDelay.color = new Color(1, 1, 1, color.a);
-        healthBarBack.color = new Color(1, 1, 1, color.a);
-        healthBar.color = new Color(1, 1, 1, color.a);
-        healthText.color = new Color(1, 1, 1, color.a);
+        if (thumbnail.enabled)
+            thumbnail.color = color;
+
+        if (frame.enabled)
+            frame.color = color;
+
+        if (statusIcon.enabled)
+            statusIcon.color = new Color(1, 1, 1, color.a);
+
+        if (healthBarBack.enabled)
+            healthBarBack.color = new Color(1, 1, 1, color.a);
+
+        if (healthBar.enabled)
+            healthBar.color = new Color(1, 1, 1, color.a);
+
+        if (healthText.enabled)
+            healthText.color = new Color(1, 1, 1, color.a);
+
+        if (actionBarBack.enabled)
+            actionBarBack.color = new Color(1, 1, 1, color.a);
+
+        if (actionBar.enabled)
+            actionBar.color = new Color(1, 1, 1, color.a);
+
+        if (actionText.enabled)
+            actionText.color = new Color(1, 1, 1, color.a);
     }
 
     public void SetGlowColor(Color color)

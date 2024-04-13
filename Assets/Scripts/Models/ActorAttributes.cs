@@ -15,4 +15,5 @@ public class ActorAttributes
     public float Accuracy;
     public float Evasion;
     public float Luck;
+    public float Speed;
 }

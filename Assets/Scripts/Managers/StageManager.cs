@@ -55,9 +55,10 @@ public class StageManager : ExtendedMonoBehavior
             HP = 100,
             Attack = 10,
             Defense = 10,
-            Luck = 10,
             Accuracy = 5,
             Evasion = 5,
+            Speed = 10,
+            Luck = 10
         };
 
         List<StageActor> stageActors = new List<StageActor>();
@@ -221,6 +222,7 @@ public class StageManager : ExtendedMonoBehavior
         actor.Defense = stageActor.attributes.Defense;
         actor.Accuracy = stageActor.attributes.Accuracy;
         actor.Evasion = stageActor.attributes.Evasion;
+        actor.Speed = stageActor.attributes.Speed;
         actor.Luck = stageActor.attributes.Luck;
 
         if (stageActor.IsSpawning)

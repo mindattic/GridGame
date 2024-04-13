@@ -46,7 +46,10 @@ public class ConsoleManager : ExtendedMonoBehavior
 
     private void FixedUpdate()
     {
-        //string fps = $@"{fpsMonitor.current}";
+        string fps = $@"{fpsMonitor.current}";
+        label.text = $"{fps} FPS" + Environment.NewLine + $"Runtime: {Time.time}";
+
+
         //string archetype = HasCurrentPlayer ? currentPlayer.archetype : "-";
         //string location = HasCurrentPlayer ? $@"({currentPlayer.location.x},{currentPlayer.location.y})" : "-";
         //string position = HasCurrentPlayer ? $@"({currentPlayer.transform.position.x},{currentPlayer.transform.position.y})" : "-";

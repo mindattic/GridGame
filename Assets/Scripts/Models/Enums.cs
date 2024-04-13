@@ -43,7 +43,8 @@ public enum ActionIcon
     None,
     Attack,
     Sleep,
-    Support
+    Support,
+    Move
 }
 
 //public enum GlowState

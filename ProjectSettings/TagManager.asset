@@ -18,6 +18,7 @@ TagManager:
   - Portrait
   - Ghost
   - AttackLine
+  - Footstep
   layers:
   - Default
   - TransparentFX

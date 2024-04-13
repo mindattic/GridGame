@@ -62,16 +62,16 @@ public class FootstepBehavior : ExtendedMonoBehavior
     {
         yield return Wait.For(duration);
 
-        float alpha = 1;
+        float alpha = spriteRenderer.color.a;
         spriteRenderer.color = new Color(1, 1, 1, alpha);
 
         while (alpha > 0)
         {
-            alpha -= Increment.FivePercent;
+            alpha -= Increment.OnePercent;
             alpha = Mathf.Max(alpha, 0f);
             spriteRenderer.color = new Color(1, 1, 1, alpha);
 
-            yield return Wait.For(Interval.One);
+            yield return Wait.For(Interval.Ten);
         }
 
         Destroy(this.gameObject);

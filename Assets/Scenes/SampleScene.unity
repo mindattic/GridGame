@@ -12677,8 +12677,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -30.94714, y: -604.9982}
-  m_SizeDelta: {x: -81.89428, y: -1210.0034}
+  m_AnchoredPosition: {x: -15.94714, y: -599.9982}
+  m_SizeDelta: {x: -111.89428, y: -1200.0034}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1652735658
 CanvasRenderer:
@@ -13098,8 +13098,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eb61db422a2858f44a1f219dd70d392e, type: 2}
   - {fileID: 11400000, guid: 71fa838fbfdb10c4ab6ff3d3dc23aef9, type: 2}
   - {fileID: 11400000, guid: 19553e1841a8b66409b9689e07f8617c, type: 2}
+  - {fileID: 11400000, guid: a4cb35da490acdc469f4ab36210da287, type: 2}
   propSprites:
   - {fileID: 11400000, guid: cd51026f4e87dee4aab54acdec4e0f8d, type: 2}
+  - {fileID: 11400000, guid: 8949318a856a2bf458ffc92f0ac77c5a, type: 2}
+  - {fileID: 11400000, guid: 61d3740c71aa4e84b8d70bbafb15f226, type: 2}
   soundEffects:
   - {fileID: 11400000, guid: 4114cdd851f647842bf7211b176cb70f, type: 2}
   - {fileID: 11400000, guid: 12fe8d6cc678c944090b1db3caa67371, type: 2}

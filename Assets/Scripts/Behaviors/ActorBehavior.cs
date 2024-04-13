@@ -1,14 +1,8 @@
 using System;
 using System.Collections;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
 using TMPro;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
-using static UnityEngine.EventSystems.EventTrigger;
-using static UnityEngine.Rendering.DebugUI;
 
 
 //public class ActorSubobject
@@ -54,11 +48,13 @@ public class ActorBehavior : ExtendedMonoBehavior
         public const int Back = 1;
         public const int Thumbnail = 2;
         public const int Frame = 3;
-        public const int HealthBarBack = 4;
-        public const int HealthBar = 5;
-        public const int StatusIcon = 6;
-        public const int TurnDelay = 7;
-        public const int HealthText = 8;
+        public const int StatusIcon = 4;
+        public const int HealthBarBack = 5;
+        public const int HealthBar = 6;
+        public const int HealthText = 7;
+        public const int ActionBarBack = 8;
+        public const int ActionBar = 9;
+        public const int ActionText = 10;
     }
 
     //Variables
@@ -74,9 +70,17 @@ public class ActorBehavior : ExtendedMonoBehavior
     [SerializeField] public float Defense;
     [SerializeField] public float Accuracy;
     [SerializeField] public float Evasion;
+    [SerializeField] public float Speed;
     [SerializeField] public float Luck;
+
+
+
+    [SerializeField] public float wait = 0;
+    [SerializeField] public float waitDuration = -1;
+
+
     [SerializeField] public int spawnTurn = -1;
-    [SerializeField] public int turnDelay = 0;
+
     [SerializeField] public AnimationCurve bobbing;
     [SerializeField] public Guid guid;
 
@@ -86,19 +90,19 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.back = gameObject.transform.GetChild(Layer.Back).GetComponent<SpriteRenderer>();
         render.thumbnail = gameObject.transform.GetChild(Layer.Thumbnail).GetComponent<SpriteRenderer>();
         render.frame = gameObject.transform.GetChild(Layer.Frame).GetComponent<SpriteRenderer>();
+        render.statusIcon = gameObject.transform.GetChild(Layer.StatusIcon).GetComponent<SpriteRenderer>();
         render.healthBarBack = gameObject.transform.GetChild(Layer.HealthBarBack).GetComponent<SpriteRenderer>();
         render.healthBar = gameObject.transform.GetChild(Layer.HealthBar).GetComponent<SpriteRenderer>();
-        render.statusIcon = gameObject.transform.GetChild(Layer.StatusIcon).GetComponent<SpriteRenderer>();
-        render.turnDelay = gameObject.transform.GetChild(Layer.TurnDelay).GetComponent<TextMeshPro>();
         render.healthText = gameObject.transform.GetChild(Layer.HealthText).GetComponent<TextMeshPro>();
+        render.actionBarBack = gameObject.transform.GetChild(Layer.ActionBarBack).GetComponent<SpriteRenderer>();
+        render.actionBar = gameObject.transform.GetChild(Layer.ActionBar).GetComponent<SpriteRenderer>();
+        render.actionText = gameObject.transform.GetChild(Layer.ActionText).GetComponent<TextMeshPro>();
     }
 
     private void Start()
     {
 
     }
-
-
 
     #region Components
 
@@ -141,14 +145,16 @@ public class ActorBehavior : ExtendedMonoBehavior
         set
         {
             render.glow.sortingOrder = value;
-            render.back.sortingOrder = value + 1;
-            render.thumbnail.sortingOrder = value + 2;
-            render.frame.sortingOrder = value + 3;
-            render.healthBarBack.sortingOrder = value + 4;
-            render.healthBar.sortingOrder = value + 5;
-            render.statusIcon.sortingOrder = value + 6;
-            render.turnDelay.sortingOrder = value + 7;
-            render.healthText.sortingOrder = value + 8;
+            render.back.sortingOrder = value + Layer.Back;
+            render.thumbnail.sortingOrder = value + Layer.Thumbnail;
+            render.frame.sortingOrder = value + Layer.Frame;
+            render.statusIcon.sortingOrder = value + Layer.StatusIcon;
+            render.healthBarBack.sortingOrder = value + Layer.HealthBarBack;
+            render.healthBar.sortingOrder = value + Layer.HealthBar;
+            render.healthText.sortingOrder = value + Layer.HealthText;
+            render.actionBarBack.sortingOrder = value + Layer.ActionBarBack;
+            render.actionBar.sortingOrder = value + Layer.ActionBar;
+            render.actionText.sortingOrder = value + Layer.ActionText;
         }
     }
 
@@ -173,7 +179,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsInactive => this == null || !isActiveAndEnabled;
     public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
     public bool IsPlaying => IsAlive && IsActive;
-    public bool IsReady => turnDelay < 1;
+    public bool IsReady => wait == waitDuration;
 
     public float LevelModifier => 1.0f + Random.Float(0, Level * 0.01f);
     public float AttackModifier => 1.0f + Random.Float(0, Attack * 0.01f);
@@ -206,12 +212,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     #region Methods
 
-
     public void Init(bool spawn)
     {
         transform.localScale = tileScale;
-        render.healthBar.transform.localScale = render.healthBarBack.transform.localScale;
-        PrintHealth();
         gameObject.SetActive(false);
 
         if (spawn && HasLocation)
@@ -232,16 +235,21 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             render.SetColor(Colors.Transparent.White);
             render.SetBackColor(Colors.Transparent.White);
-            render.turnDelay.gameObject.SetActive(false);
+            render.actionBarBack.enabled = false;
+            render.actionBar.enabled = false;
+            render.actionText.enabled = false;
             SetActionIcon(ActionIcon.None);
         }
         else if (this.IsEnemy)
         {
             render.SetColor(Colors.Transparent.White);
             render.SetBackColor(Colors.Transparent.Red);
-            SetTurnDelay();
+            CalculateWait();
+            wait = turnManager.currentTurn == 1 ? Random.Float(0, waitDuration) : 0;
         }
 
+        UpdateHealthBar();
+        //UpdateActionBar();
 
         float delay = turnManager.currentTurn == 1 ? 0 : Random.Float(0f, 2f);
         StartCoroutine(SpawnIn(delay));
@@ -272,11 +280,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void SwapLocation(ActorBehavior other)
     {
-        if (other == null)
-            return;
-
-        //if (HasDestination || other.HasDestination)
-        if (HasDestination)
+        //Check abort state
+        if (other == null || HasDestination)
             return;
 
         if (IsNorthOf(other.location) || IsNorthWestOf(other.location) || IsNorthEastOf(other.location))
@@ -320,7 +325,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //TODO: Move based on enum (MoveAnywhere, MoveNearest, MoveStrongest, MoveWeakest, etc)...
 
-
+        SetActionIcon(ActionIcon.Move);
 
         var location = new Vector2Int(Random.Int(1, board.columns), Random.Int(1, board.rows));
         var closestTile = Geometry.ClosestTileByLocation(location);
@@ -329,6 +334,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void MoveTowardCursor()
     {
+        //Check abort state
         if (!IsSelectedPlayer && !IsCurrentPlayer)
             return;
 
@@ -345,7 +351,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void CheckMovement()
     {
-        if (!HasDestination) return;
+        //Check abort state
+        if (!HasDestination) 
+            return;
 
         var delta = this.destination.Value - position;
         if (Mathf.Abs(delta.x) > snapDistance)
@@ -370,7 +378,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void CheckBobbing()
     {
-        if (!IsAlive || !IsActive || !IsPlayer || !turnManager.IsStartPhase) return;
+        //Check abort state
+        if (!IsAlive || !IsActive || !IsPlayer || !turnManager.IsStartPhase) 
+            return;
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         var pos = new Vector3(
@@ -387,7 +397,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void CheckThrobbing()
     {
-        if (!IsAlive || !IsActive || !IsPlayer || !turnManager.IsStartPhase) return;
+        //Check abort state
+        if (!IsAlive || !IsActive || !IsPlayer || !turnManager.IsStartPhase) 
+            return;
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         var scale = new Vector3(
@@ -401,11 +413,18 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.back.color = color;
     }
 
-    private void Shake(float intensity)
+    public void Shake(float intensity)
     {
         gameObject.transform.GetChild(Layer.Thumbnail).gameObject.transform.position = currentTile.position;
+        gameObject.transform.GetChild(Layer.Frame).gameObject.transform.position = currentTile.position;
+
         if (intensity > 0)
-            gameObject.transform.GetChild(Layer.Thumbnail).gameObject.transform.position += new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
+        {
+            var amount = new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
+            gameObject.transform.GetChild(Layer.Thumbnail).gameObject.transform.position += amount;
+            gameObject.transform.GetChild(Layer.Frame).gameObject.transform.position += amount;
+        }
+
     }
 
 
@@ -415,7 +434,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void Update()
     {
-        if (!IsAlive || !IsActive) return;
+        //Check abort state
+        if (!IsAlive || !IsActive) 
+            return;
 
         if (IsSelectedPlayer || IsCurrentPlayer)
             MoveTowardCursor();
@@ -437,22 +458,22 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-  
+
 
     void FixedUpdate()
     {
-        if (!IsAlive || !IsActive || IsSelectedPlayer || IsCurrentPlayer) return;
+        //Check abort state
+        if (!IsAlive || !IsActive || IsSelectedPlayer || IsCurrentPlayer) 
+            return;
 
         CheckMovement();
         //CheckBobbing();
         CheckThrobbing();
 
+
+        FillActionBar();
+
     }
-
-
-
-
-
 
     public IEnumerator TakeDamage(float damage)
     {
@@ -474,18 +495,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             //Shake actor
             Shake(ShakeIntensity.Medium);
 
-            //Resize health bar
-            if (HP > 0)
-            {
-                var scale = render.healthBarBack.transform.localScale;
-                render.healthBar.transform.localScale = new Vector3(scale.x * (HP / MaxHP), scale.y, scale.z);
-            }
-            else
-            {
-                render.healthBar.enabled = false;
-            }
-
-            PrintHealth();
+            UpdateHealthBar();
 
             //SlideIn sfx
             soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
@@ -498,16 +508,53 @@ public class ActorBehavior : ExtendedMonoBehavior
         position = currentTile.position;
     }
 
-    private void PrintHealth()
+
+    public IEnumerator MissAttack()
     {
-        render.healthText.text = $@"{Math.Round(HP / MaxHP * 100)}%";
+
+        float ticks = 0;
+        float duration = Interval.QuarterSecond;
+
+        while (ticks < duration)
+        {
+            ticks += Interval.One;
+            Shake(ShakeIntensity.Low);
+            yield return Wait.Tick();
+        }
+
+        Shake(ShakeIntensity.Stop);
     }
 
-    private void PrintTurnDelay()
+    public void FillActionBar()
     {
-        render.turnDelay.text = turnDelay > 0 ? $"x{turnDelay}" : "";
-        render.turnDelay.gameObject.SetActive(true);
+        //Check abort state
+        if (turnManager.IsEnemyTurn || !turnManager.IsStartPhase || titleManager.color.a > 0.5f || !IsAlive || !IsActive) 
+            return;
+  
+        if (wait < waitDuration)
+            wait += Time.deltaTime;
+        else
+            wait = waitDuration;
+
+        UpdateActionBar();
     }
+
+    private void UpdateActionBar()
+    {
+        var scale = render.actionBarBack.transform.localScale;
+        var x = Mathf.Clamp(scale.x * (wait / waitDuration), 0, scale.x);
+        render.actionBar.transform.localScale = new Vector3(x, scale.y, scale.z);
+        render.actionText.text = wait < waitDuration ? $@"{Math.Round(wait / waitDuration * 100)}%" : "Ready!";
+    }
+
+    private void UpdateHealthBar()
+    {
+        var scale = render.healthBarBack.transform.localScale;
+        var x = Mathf.Clamp(scale.x * (HP / MaxHP), 0, scale.x);
+        render.healthBar.transform.localScale = new Vector3(x, scale.y, scale.z);
+        render.healthText.text = $@"{HP}/{MaxHP}";
+    }
+
 
     public IEnumerator Dissolve()
     {
@@ -529,28 +576,40 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void SetActionIcon(ActionIcon icon)
     {
-        if (!IsActive ) return;
+        //Check abort state
+        if (!IsActive) 
+            return;
+
         render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(icon.ToString())).thumbnail;
     }
 
 
     public void StartGlow(Color color)
     {
-        if (!IsActive) return;
+        //Check abort state
+        if (!IsActive)
+            return;
+
         render.SetGlowColor(color);
         StartCoroutine(GlowIn());
     }
 
     public void StopGlow()
     {
-        if (!IsActive) return;
+        //Check abort state
+        if (!IsActive) 
+            return;
+
         StartCoroutine(GlowOut());
     }
 
 
     public void Die()
     {
-        if (!IsActive) return;
+        //Check abort state
+        if (!IsActive) 
+            return;
+
         StartCoroutine(Death());
     }
 
@@ -584,25 +643,25 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.SetGlowAlpha(0);
     }
 
-    public void SetTurnDelay()
+    public void CalculateWait()
     {
-        if (!IsAlive && !IsActive) return;
+        //Check abort state
+        if (!IsAlive && !IsActive) 
+            return;
 
-        //TODO: Base off of stats....
-        int min = 2;
-        int max = 4;
-        turnDelay = Random.Int(min, max);
+        //TODO: Calculate based on stats....
+        float min = Interval.OneSecond * 20;
+        float max = Interval.OneSecond * 40;
 
-        SetActionIcon(ActionIcon.Sleep);
-        PrintTurnDelay();
+        wait = 0;
+        waitDuration = Random.Float(min, max);
+
+        UpdateActionBar();
+
+        SetActionIcon(ActionIcon.None);
     }
 
-    public void DecreaseTurnDelay()
-    {
-        if (!IsAlive && !IsActive) return;
-        turnDelay--;
-        PrintTurnDelay();
-    }
+
 
     public IEnumerator SpawnIn(float delay = 0)
     {

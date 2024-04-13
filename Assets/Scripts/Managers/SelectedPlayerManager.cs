@@ -84,6 +84,9 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!HasCurrentPlayer)
             return;
 
+
+        currentPlayer.SetActionIcon(ActionIcon.Move);
+
         Unselect();
         turnManager.currentPhase = TurnPhase.Move;
         currentPlayer.sortingOrder = ZAxis.Max;
@@ -125,6 +128,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         currentPlayer.location = closestTile.location;
         currentPlayer.position = Geometry.PositionFromLocation(currentPlayer.location);
         currentPlayer.sortingOrder = ZAxis.Min;
+        currentPlayer.SetActionIcon(ActionIcon.None);
         currentPlayer = null;
 
         ghostManager.Stop();

@@ -14,6 +14,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     public void CheckEnemySpawn()
     {
+        //Check abort state
         if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
             return;
 
@@ -23,13 +24,14 @@ public class ActorManager : ExtendedMonoBehavior
 
     public void CheckEnemyMove()
     {
+        //Check abort state
         if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
             return;
 
-        var queuedEnemies = enemies.Where(x => x != null && x.IsAlive && x.IsAlive && !x.IsReady).ToList();
-        queuedEnemies.ForEach(x => x.DecreaseTurnDelay());
+        //var waitingEnemies = enemies.Where(x => x != null && x.IsAlive && x.IsAlive && !x.IsReady).ToList();
+        //waitingEnemies.ForEach(x => x.FillActionBar());
 
-        var movingEnemies = queuedEnemies.Where(x => x.IsReady).ToList();
+        var movingEnemies = enemies.Where(x => x.IsReady).ToList();
         movingEnemies.ForEach(x => x.SetDestination());
 
         StartCoroutine(StartEnemyMove());
@@ -46,6 +48,8 @@ public class ActorManager : ExtendedMonoBehavior
             yield return Wait.For(Interval.HalfSecond);
         }
 
+        //enemies.ForEach(x => x.SetActionIcon(ActionIcon.None));
+ 
         yield return Wait.For(Interval.OneSecond);
 
         turnManager.currentPhase = TurnPhase.Attack;
@@ -305,7 +309,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator EnemyAttack()
     {
-        yield return Wait.For(Interval.OneSecond);
+        yield return Wait.For(Interval.HalfSecond);
 
         var readyEnemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsReady).ToList();
         if (readyEnemies.Count > 0)
@@ -318,7 +322,7 @@ public class ActorManager : ExtendedMonoBehavior
                     foreach (var player in defendingPlayers)
                     {
                         enemy.SetActionIcon(ActionIcon.Attack);
-                        yield return Wait.For(Interval.OneSecond);
+                        yield return Wait.For(Interval.HalfSecond);
 
 
                         //TODO: Calculate based on attacker stats
@@ -326,17 +330,20 @@ public class ActorManager : ExtendedMonoBehavior
 
                         //Attack enemy (one at a time)
                         yield return player.TakeDamage(damage);
-                        enemy.SetTurnDelay();
+                        enemy.CalculateWait();
                     }
                 }
                 else
                 {
-                    enemy.SetTurnDelay();
+                    enemy.SetActionIcon(ActionIcon.Attack);
+                    yield return Wait.For(Interval.HalfSecond);
+                    yield return enemy.MissAttack();
+                    enemy.CalculateWait();
                 }
             }
         }
 
-        yield return Wait.For(Interval.OneSecond);
+        yield return Wait.For(Interval.HalfSecond);
         turnManager.NextTurn();
     }
 
