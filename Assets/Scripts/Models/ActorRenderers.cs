@@ -29,7 +29,7 @@ public class ActorRenderers
         thumbnail.color = new Color(1, 1, 1, alpha);
         frame.color = new Color(1, 1, 1, alpha);
         statusIcon.color = new Color(1, 1, 1, alpha);
-        healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.5f));
+        healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
         healthBar.color = new Color(1, 1, 1, alpha);
         healthBarFront.color = new Color(1, 1, 1, alpha);
         healthText.color = new Color(1, 1, 1, alpha);
