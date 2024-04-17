@@ -4,6 +4,9 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Unity.VisualScripting.Member;
+using static UnityEngine.GraphicsBuffer;
+using static UnityEngine.GridBrushBase;
 
 public class FootstepManager : ExtendedMonoBehavior
 {
@@ -67,8 +70,7 @@ public class FootstepManager : ExtendedMonoBehavior
         footstep.sprite = resourceManager.Prop("Footstep");
         footstep.name = $"Footstep_{Guid.NewGuid()}";
         footstep.parent = board.transform;
-        var rotation = Common.CalculateRotation(actor.position, previousPosition);
-        footstep.Spawn(actor.position, rotation, isRightFoot);
+        footstep.Spawn(actor.position, Common.RotationByDirection(actor.position, previousPosition), isRightFoot);
         previousPosition = actor.position;
         isRightFoot = !isRightFoot;
     }

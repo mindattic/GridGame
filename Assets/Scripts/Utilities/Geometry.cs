@@ -17,30 +17,30 @@ public class Geometry
         return new Vector3(x, y, 0);
     }
 
-    //public static Vector3 PositionFromLocation(Vector2Int location)
+    //public static Vector3 PositionFromLocation(Vector2Int other)
     //{
-    //    return tiles.FirstOrDefault(x => x.location.Equals(location)).position;
+    //    return tiles.FirstOrDefault(x => x.other.Equals(other)).other;
     //}
 
 
-    //public static Vector2Int LocationFromPosition(Vector3 position)
+    //public static Vector2Int LocationFromPosition(Vector3 other)
     //{
-    //    int x = Mathf.FloorToInt(position.x / tileSize - board.offset.x);
-    //    int y = Mathf.FloorToInt(position.y / tileSize - board.offset.y);
+    //    int x = Mathf.FloorToInt(other.x / tileSize - board.offset.x);
+    //    int y = Mathf.FloorToInt(other.y / tileSize - board.offset.y);
     //    return new Vector2Int(x, y);
     //}
 
-    public static TileBehavior ClosestTileByPosition(Vector2 position)
+    public static TileBehavior ClosestTileByPosition(Vector2 other)
     {
         return tiles
-            .OrderBy(x => Vector3.Distance(x.transform.position, position))
+            .OrderBy(x => Vector3.Distance(x.transform.position, other))
             .First();
     }
 
-    public static TileBehavior ClosestTileByLocation(Vector2Int location)
+    public static TileBehavior ClosestTileByLocation(Vector2Int other)
     {
         return tiles
-            .OrderBy(x => Vector2Int.Distance(x.location, location))
+            .OrderBy(x => Vector2Int.Distance(x.location, other))
             .First();
     }
 
@@ -53,16 +53,24 @@ public class Geometry
     }
 
 
-    public static TileBehavior ClosestUnoccupiedTileByLocation(Vector2Int location)
+    public static TileBehavior ClosestUnoccupiedTileByLocation(Vector2Int other)
     {
         return tiles
-            .Where(x => !x.IsOccupied)
-            .FirstOrDefault(x => Vector2Int.Distance(x.location, location) == 1);
+            .FirstOrDefault(x => !x.IsOccupied && Vector2Int.Distance(x.location, other) == 1);
     }
 
-    public static ActorBehavior GetActorAtLocation(Vector2Int location)
+
+    public static TileBehavior ClosestUnoccupiedAdjacentTileByLocation(Vector2Int other)
     {
-        return actors.FirstOrDefault(x => x.location.Equals(location));
+        return tiles
+            .FirstOrDefault(x => !x.IsOccupied && Vector2Int.Distance(x.location, other).Equals(1)
+            && (x.location.x == other.x - 1 || x.location.x == other.x + 1 || x.location.y == other.y - 1 || x.location.y == other.y + 1));
+
+    }
+
+    public static ActorBehavior GetActorAtLocation(Vector2Int other)
+    {
+        return actors.FirstOrDefault(x => x.location.Equals(other));
     }
 
 

@@ -1,4 +1,5 @@
 ﻿
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public static class Constants
@@ -60,7 +61,6 @@ public static class Tag
 
 public static class Colors
 {
-
     public static Color RGB(float r, float g, float b)
     {
         return new Color(
@@ -82,12 +82,13 @@ public static class Colors
     public static class Solid
     {
         public static Color Gold = RGB(255, 215, 0);
+        public static Color Black = RGB(0, 0, 0);
+        public static Color Gray = RGB(128, 128, 128);
         public static Color White = RGB(255, 255, 255);
         public static Color LightBlue = RGB(128, 128, 255);
         public static Color LightRed = RGB(255, 128, 128);
         public static Color Red = RGB(255, 0, 0);
         public static Color Green = RGB(0, 255, 0);
-        public static Color Gray = RGB(128, 128, 128);
     }
 
     public static class Translucent
@@ -106,7 +107,16 @@ public static class Colors
         public static Color Red = RGBA(255, 0, 0, 0);
     }
 
+    public static Quality Junk = new Quality("Junk", RGB(128, 128, 128));
+    public static Quality Common = new Quality("Common", RGB(255, 255, 255));
+    public static Quality Uncommon = new Quality("Uncommon", RGB(30, 255, 0));
+    public static Quality Rare = new Quality("Rare", RGB(0, 112, 221));
+    public static Quality Epic = new Quality("Epic", RGB(163, 53, 238));
+    public static Quality Legendary = new Quality("Legendary", RGB(255, 128, 0));
+
 }
+
+
 
 public static class Interval
 {

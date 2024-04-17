@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
+﻿using UnityEngine;
 
 public class Common
 {
@@ -40,7 +36,7 @@ public class Common
     /// <param name="target"></param>
     /// <param name="source"></param>
     /// <returns></returns>
-    public static Quaternion CalculateRotation(Vector3 target, Vector3 source)
+    public static Quaternion RotationByDirection(Vector3 target, Vector3 source)
     {
         var direction = target - source;
         var angle = Vector2.SignedAngle(Vector2.right, direction);

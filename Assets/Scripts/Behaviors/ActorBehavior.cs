@@ -51,10 +51,16 @@ public class ActorBehavior : ExtendedMonoBehavior
         public const int StatusIcon = 4;
         public const int HealthBarBack = 5;
         public const int HealthBar = 6;
-        public const int HealthText = 7;
-        public const int ActionBarBack = 8;
-        public const int ActionBar = 9;
-        public const int ActionText = 10;
+        public const int HealthBarFront = 7;
+        public const int HealthText = 8;
+        public const int ActionBarBack = 9;
+        public const int ActionBar = 10;
+        public const int ActionText = 11;
+        public const int RadialBack = 12;
+        public const int RadialFill = 13;
+
+
+
     }
 
     //Variables
@@ -62,7 +68,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     [SerializeField] public Vector2Int location = Locations.nowhere;
     [SerializeField] public Vector3? destination = null;
     [SerializeField] public Team team = Team.Independant;
-
+    [SerializeField] public Quality quality = Colors.Common;
     [SerializeField] public float Level;
     [SerializeField] public float HP;
     [SerializeField] public float MaxHP;
@@ -84,6 +90,9 @@ public class ActorBehavior : ExtendedMonoBehavior
     [SerializeField] public AnimationCurve bobbing;
     [SerializeField] public Guid guid;
 
+
+    [SerializeField] public float backScale = 1.4f;
+
     private void Awake()
     {
         render.glow = gameObject.transform.GetChild(Layer.Glow).GetComponent<SpriteRenderer>();
@@ -93,10 +102,14 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.statusIcon = gameObject.transform.GetChild(Layer.StatusIcon).GetComponent<SpriteRenderer>();
         render.healthBarBack = gameObject.transform.GetChild(Layer.HealthBarBack).GetComponent<SpriteRenderer>();
         render.healthBar = gameObject.transform.GetChild(Layer.HealthBar).GetComponent<SpriteRenderer>();
+        render.healthBarFront = gameObject.transform.GetChild(Layer.HealthBarFront).GetComponent<SpriteRenderer>();
         render.healthText = gameObject.transform.GetChild(Layer.HealthText).GetComponent<TextMeshPro>();
         render.actionBarBack = gameObject.transform.GetChild(Layer.ActionBarBack).GetComponent<SpriteRenderer>();
         render.actionBar = gameObject.transform.GetChild(Layer.ActionBar).GetComponent<SpriteRenderer>();
         render.actionText = gameObject.transform.GetChild(Layer.ActionText).GetComponent<TextMeshPro>();
+        render.radialBack = gameObject.transform.GetChild(Layer.RadialBack).GetComponent<SpriteRenderer>();
+        render.radialFill = gameObject.transform.GetChild(Layer.RadialFill).GetComponent<SpriteRenderer>();
+
     }
 
     private void Start()
@@ -151,10 +164,14 @@ public class ActorBehavior : ExtendedMonoBehavior
             render.statusIcon.sortingOrder = value + Layer.StatusIcon;
             render.healthBarBack.sortingOrder = value + Layer.HealthBarBack;
             render.healthBar.sortingOrder = value + Layer.HealthBar;
+            render.healthBarFront.sortingOrder = value + Layer.HealthBarFront;
             render.healthText.sortingOrder = value + Layer.HealthText;
             render.actionBarBack.sortingOrder = value + Layer.ActionBarBack;
             render.actionBar.sortingOrder = value + Layer.ActionBar;
             render.actionText.sortingOrder = value + Layer.ActionText;
+            render.radialBack.sortingOrder = value + Layer.RadialBack;
+            render.radialFill.sortingOrder = value + Layer.RadialFill;
+
         }
     }
 
@@ -233,20 +250,23 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         if (this.IsPlayer)
         {
-            render.SetColor(Colors.Transparent.White);
-            render.SetBackColor(Colors.Transparent.White);
+            render.SetAlpha(0);
+            render.SetBackColor(Colors.Solid.White);
             render.actionBarBack.enabled = false;
             render.actionBar.enabled = false;
             render.actionText.enabled = false;
-            SetActionIcon(ActionIcon.None);
+            SetStatus(Status.None);
         }
         else if (this.IsEnemy)
         {
-            render.SetColor(Colors.Transparent.White);
-            render.SetBackColor(Colors.Transparent.Red);
+            render.SetAlpha(0);
+            render.SetBackColor(Colors.Translucent.Red);
             CalculateWait();
-            wait = turnManager.currentTurn == 1 ? Random.Float(0, waitDuration) : 0;
+            wait = turnManager.currentTurn == 1 ? Random.Float(0, waitDuration / 4) : 0;
         }
+
+
+        render.back.transform.localScale = new Vector3(backScale, backScale, 1);
 
         UpdateHealthBar();
         //UpdateActionBar();
@@ -323,13 +343,57 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void SetDestination()
     {
 
-        //TODO: Move based on enum (MoveAnywhere, MoveNearest, MoveStrongest, MoveWeakest, etc)...
+        //Randomy select an attack strategy
+        //var strategy = Random.Strategy();
+        var strategy = AttackStrategy.AttackClosest;
+        switch (strategy)
+        {
+            //case AttackStrategy.MoveAnywhere:
+            //    var location = new Vector2Int(Random.Int(1, board.columns), Random.Int(1, board.rows));
+            //    destination = Geometry.ClosestTileByLocation(location).position;
+            //    break;
+            case AttackStrategy.AttackClosest:
 
-        SetActionIcon(ActionIcon.Move);
 
-        var location = new Vector2Int(Random.Int(1, board.columns), Random.Int(1, board.rows));
-        var closestTile = Geometry.ClosestTileByLocation(location);
-        destination = closestTile.position;
+                //var closestPlayer = players.Where(x => x != null && x.IsAlive && x.IsActive).OrderBy(x => (x.position - position).sqrMagnitude).FirstOrDefault();
+
+                //Find closest player
+                var closestPlayer = players.Where(x => x != null && x.IsAlive && x.IsActive).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
+
+                //Find closest unoccupied tile adjacent to player...
+                var closestUnoccupiedAdjacentTile = Geometry.ClosestUnoccupiedAdjacentTileByLocation(closestPlayer.location);
+                if (closestUnoccupiedAdjacentTile != null)
+                {
+                    destination = closestUnoccupiedAdjacentTile.position;
+                    return;
+                }
+
+
+                //...Otherwise, find closest unoccupied tile to player...
+                var closestUnoccupiedTile = Geometry.ClosestUnoccupiedTileByLocation(closestPlayer.location);
+                if (closestUnoccupiedTile != null)
+                {
+                    destination = closestUnoccupiedTile.position;
+                    return;
+                }
+
+                //...Otherwise, find closest occupied tile to player
+                var closestTile = Geometry.ClosestTileByLocation(closestPlayer.location);
+                if (closestTile != null)
+                {
+                    destination = closestTile.position;
+                    return;
+                }
+
+                break;
+
+                //case AttackStrategy.AttackWeakest:
+                //    var weakestPlayer = players.Where(x => x != null && x.IsAlive && IsActive).OrderBy(x => x.HP).FirstOrDefault();
+                //    destination = Geometry.ClosestUnoccupiedTileByLocation(weakestPlayer.location).position;
+                //    break;
+        }
+
+        SetStatus(Status.Move);
     }
 
     private void MoveTowardCursor()
@@ -352,7 +416,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void CheckMovement()
     {
         //Check abort state
-        if (!HasDestination) 
+        if (!HasDestination)
             return;
 
         var delta = this.destination.Value - position;
@@ -379,7 +443,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void CheckBobbing()
     {
         //Check abort state
-        if (!IsAlive || !IsActive || !IsPlayer || !turnManager.IsStartPhase) 
+        if (!IsAlive || !IsActive || !IsPlayer || !turnManager.IsStartPhase)
             return;
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
@@ -398,31 +462,29 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void CheckThrobbing()
     {
         //Check abort state
-        if (!IsAlive || !IsActive || !IsPlayer || !turnManager.IsStartPhase) 
+        if (!IsAlive || !IsActive || !turnManager.IsStartPhase || (turnManager.IsPlayerTurn && !IsPlayer) || (turnManager.IsEnemyTurn && !IsEnemy))
             return;
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         var scale = new Vector3(
-            1.5f + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
-            1.5f + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
+            backScale + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
+            backScale + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24)),
             1);
-        render.back.transform.localScale = scale;
-
-        //var color = new Color(0, 1, 0, 1);
-        var color = new Color(1, 1, 1, 1);
-        render.back.color = color;
+        render.SetBackScale(scale);
+        render.SetBackColor(IsPlayer ? quality.Color : Colors.Translucent.Red);
     }
+
+
+
 
     public void Shake(float intensity)
     {
         gameObject.transform.GetChild(Layer.Thumbnail).gameObject.transform.position = currentTile.position;
-        gameObject.transform.GetChild(Layer.Frame).gameObject.transform.position = currentTile.position;
 
         if (intensity > 0)
         {
             var amount = new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
             gameObject.transform.GetChild(Layer.Thumbnail).gameObject.transform.position += amount;
-            gameObject.transform.GetChild(Layer.Frame).gameObject.transform.position += amount;
         }
 
     }
@@ -435,7 +497,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     void Update()
     {
         //Check abort state
-        if (!IsAlive || !IsActive) 
+        if (!IsAlive || !IsActive)
             return;
 
         if (IsSelectedPlayer || IsCurrentPlayer)
@@ -463,7 +525,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     void FixedUpdate()
     {
         //Check abort state
-        if (!IsAlive || !IsActive || IsSelectedPlayer || IsCurrentPlayer) 
+        if (!IsAlive || !IsActive || IsSelectedPlayer || IsCurrentPlayer)
             return;
 
         CheckMovement();
@@ -471,7 +533,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         CheckThrobbing();
 
 
-        FillActionBar();
+        CheckActionBar();
 
     }
 
@@ -511,6 +573,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public IEnumerator MissAttack()
     {
+        yield return Wait.For(Interval.QuarterSecond);
 
         float ticks = 0;
         float duration = Interval.QuarterSecond;
@@ -525,18 +588,29 @@ public class ActorBehavior : ExtendedMonoBehavior
         Shake(ShakeIntensity.Stop);
     }
 
-    public void FillActionBar()
+
+
+
+
+
+    public void CheckActionBar()
     {
         //Check abort state
-        if (turnManager.IsEnemyTurn || !turnManager.IsStartPhase || titleManager.color.a > 0.5f || !IsAlive || !IsActive) 
+        if (turnManager.IsEnemyTurn || (!turnManager.IsStartPhase && !turnManager.IsMovePhase) || titleManager.color.a > 0.5f || !IsAlive || !IsActive || wait == waitDuration)
             return;
-  
+
         if (wait < waitDuration)
+        {
             wait += Time.deltaTime;
+        }
         else
+        {
             wait = waitDuration;
+            SetStatus(Status.Ready);
+        }
 
         UpdateActionBar();
+        UpdateRadialFill();
     }
 
     private void UpdateActionBar()
@@ -547,9 +621,17 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.actionText.text = wait < waitDuration ? $@"{Math.Round(wait / waitDuration * 100)}%" : "Ready!";
     }
 
+    private void UpdateRadialFill()
+    {
+        var fill = 360 - (360 * (wait / waitDuration));
+        render.radialFill.material.SetFloat("_Arc2", fill);
+    }
+
+
+
     private void UpdateHealthBar()
     {
-        var scale = render.healthBarBack.transform.localScale;
+        var scale = render.healthBarFront.transform.localScale;
         var x = Mathf.Clamp(scale.x * (HP / MaxHP), 0, scale.x);
         render.healthBar.transform.localScale = new Vector3(x, scale.y, scale.z);
         render.healthText.text = $@"{HP}/{MaxHP}";
@@ -559,7 +641,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator Dissolve()
     {
         var alpha = 1f;
-        render.SetColor(new Color(1, 1, 1, alpha));
+        render.SetAlpha(alpha);
 
         portraitManager.Dissolve(this);
         soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
@@ -569,35 +651,80 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            render.SetColor(new Color(1, 1, 1, alpha));
+            render.SetAlpha(alpha);
             yield return Wait.Tick();
         }
     }
 
-    public void SetActionIcon(ActionIcon icon)
-    {
-        //Check abort state
-        if (!IsActive) 
-            return;
-
-        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(icon.ToString())).thumbnail;
-    }
-
-
-    public void StartGlow(Color color)
+    public void SetStatus(Status icon)
     {
         //Check abort state
         if (!IsActive)
             return;
 
-        render.SetGlowColor(color);
+        StartCoroutine(SetStatusIcon(icon));
+    }
+
+    private IEnumerator SetStatusIcon(Status status)
+    {
+        float increment = Increment.FivePercent;
+        float alpha = render.statusIcon.color.a;
+     
+        render.radialBack.enabled = status == Status.Wait;
+        render.radialFill.enabled = status == Status.Wait;
+
+        render.statusIcon.color = new Color(1, 1, 1, alpha);
+        render.radialBack.color = new Color(1, 1, 1, alpha);
+        render.radialFill.color = new Color(1, 1, 1, alpha);
+
+        //Fade out
+        while (alpha > 0)
+        {
+            alpha -= increment;
+            alpha = Mathf.Clamp(alpha, 0, 1);
+            render.statusIcon.color = new Color(1, 1, 1, alpha);
+            yield return Wait.Tick();
+        }
+
+        //Switch status status sprite
+        render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(status.ToString())).thumbnail;
+        render.radialBack.color = new Color(1, 1, 1, alpha);
+        render.radialFill.color = new Color(1, 1, 1, alpha);
+
+        //Fade in
+        alpha = 0;
+        render.statusIcon.color = new Color(1, 1, 1, alpha);
+
+        while (alpha < 1)
+        {
+            alpha += increment;
+            alpha = Mathf.Clamp(alpha, 0, 1);
+            render.statusIcon.color = new Color(1, 1, 1, alpha);
+            render.radialBack.color = new Color(1, 1, 1, alpha);
+            render.radialFill.color = new Color(1, 1, 1, alpha);
+
+            yield return Wait.Tick();
+        }
+
+        render.statusIcon.color = new Color(1, 1, 1, 1);
+        render.radialBack.color = new Color(1, 1, 1, 1);
+        render.radialFill.color = new Color(1, 1, 1, 1);
+    }
+
+    public void StartGlow()
+    {
+        //Check abort state
+        if (!IsActive)
+            return;
+
+        render.SetGlowColor(IsPlayer ? quality.Color : Colors.Solid.Red);
         StartCoroutine(GlowIn());
     }
 
     public void StopGlow()
     {
         //Check abort state
-        if (!IsActive) 
+        if (!IsActive)
             return;
 
         StartCoroutine(GlowOut());
@@ -607,7 +734,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void Die()
     {
         //Check abort state
-        if (!IsActive) 
+        if (!IsActive)
             return;
 
         StartCoroutine(Death());
@@ -646,27 +773,24 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void CalculateWait()
     {
         //Check abort state
-        if (!IsAlive && !IsActive) 
+        if (!IsAlive && !IsActive)
             return;
 
         //TODO: Calculate based on stats....
-        float min = Interval.OneSecond * 20;
-        float max = Interval.OneSecond * 40;
+        float min = (Interval.OneSecond * 20) - Speed * LuckModifier;
+        float max = (Interval.OneSecond * 40) - Speed * LuckModifier;
 
         wait = 0;
         waitDuration = Random.Float(min, max);
 
+        SetStatus(Status.Wait);
         UpdateActionBar();
-
-        SetActionIcon(ActionIcon.None);
     }
-
-
 
     public IEnumerator SpawnIn(float delay = 0)
     {
         float alpha = 0;
-        render.SetColor(new Color(1, 1, 1, alpha));
+        render.SetAlpha(alpha);
         render.SetBackAlpha(alpha);
         render.SetGlowAlpha(0);
 
@@ -676,12 +800,12 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             alpha += Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            render.SetColor(new Color(1, 1, 1, alpha));
+            render.SetAlpha(alpha);
             render.SetBackAlpha(alpha);
             yield return Wait.Tick();
         }
 
-        render.SetColor(Colors.Solid.White);
+        render.SetAlpha(alpha);
         render.SetBackAlpha(0.5f);
     }
 

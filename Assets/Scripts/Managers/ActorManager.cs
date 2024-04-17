@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using UnityEngine;
 
 public class ActorManager : ExtendedMonoBehavior
@@ -12,49 +9,11 @@ public class ActorManager : ExtendedMonoBehavior
     void Update() { }
     void FixedUpdate() { }
 
-    public void CheckEnemySpawn()
-    {
-        //Check abort state
-        if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
-            return;
 
-        var spawnableEnemies = enemies.Where(x => x.IsSpawnable).ToList();
-        spawnableEnemies.ForEach(x => x.Spawn(unoccupiedTile.location));
-    }
 
-    public void CheckEnemyMove()
-    {
-        //Check abort state
-        if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
-            return;
 
-        //var waitingEnemies = enemies.Where(x => x != null && x.IsAlive && x.IsAlive && !x.IsReady).ToList();
-        //waitingEnemies.ForEach(x => x.FillActionBar());
+    #region Player Attack Methods
 
-        var movingEnemies = enemies.Where(x => x.IsReady).ToList();
-        movingEnemies.ForEach(x => x.SetDestination());
-
-        StartCoroutine(StartEnemyMove());
-    }
-
-    private IEnumerator StartEnemyMove()
-    {
-        yield return Wait.For(Interval.OneSecond);
-
-        turnManager.currentPhase = TurnPhase.Move;
-
-        while (enemies.Any(x => x.HasDestination))
-        {
-            yield return Wait.For(Interval.HalfSecond);
-        }
-
-        //enemies.ForEach(x => x.SetActionIcon(ActionIcon.None));
- 
-        yield return Wait.For(Interval.OneSecond);
-
-        turnManager.currentPhase = TurnPhase.Attack;
-        CheckEnemyAttack();
-    }
 
 
     public void CheckPlayerAttack()
@@ -157,7 +116,6 @@ public class ActorManager : ExtendedMonoBehavior
     }
 
 
-    #region Player Attack Methods
 
     private IEnumerator PlayerAttack()
     {
@@ -182,12 +140,12 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator PlayerStartGlow(ActorPair pair)
     {
-        pair.actor1.SetActionIcon(ActionIcon.Attack);
-        pair.actor1.StartGlow(Color.white);
+        pair.actor1.SetStatus(Status.Attack);
+        pair.actor1.StartGlow();
         pair.actor1.sortingOrder = ZAxis.Max;
-  
-        pair.actor2.SetActionIcon(ActionIcon.Attack);
-        pair.actor2.StartGlow(Color.white);
+
+        pair.actor2.SetStatus(Status.Attack);
+        pair.actor2.StartGlow();
         pair.actor2.sortingOrder = ZAxis.Max;
 
         soundSource.PlayOneShot(resourceManager.SoundEffect("PlayerGlow"));
@@ -215,7 +173,7 @@ public class ActorManager : ExtendedMonoBehavior
     {
         foreach (var enemy in pair.enemies)
         {
-            enemy.StartGlow(Colors.Solid.Red);
+            enemy.StartGlow();
         }
 
         yield return Wait.Continue();
@@ -228,10 +186,6 @@ public class ActorManager : ExtendedMonoBehavior
 
         foreach (var enemy in pair.enemies)
         {
-            //TODO: Calculate based on attacker stats
-            var damage = Random.Int(33, 100);
-            //var damage = 100;
-
 
             //var actor1 = pair.actor1;
             //var actor2 = pair.actor2;
@@ -250,7 +204,8 @@ public class ActorManager : ExtendedMonoBehavior
             //Debug.Log($"Attack1: ({attack1}) + Attack2: ({attack2}) / Enemy Defense: ({defense}) = Damage: ({damage})");
 
 
-
+            //TODO: Calculate based on attacker stats
+            var damage = Random.Int(15, 33);
 
             //Attack enemy (one at a time)
             yield return enemy.TakeDamage(damage);
@@ -274,11 +229,11 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator PlayerStopGlow(ActorPair pair)
     {
-        pair.actor1.SetActionIcon(ActionIcon.None);
+        pair.actor1.SetStatus(Status.None);
         pair.actor1.StopGlow();
         pair.actor1.sortingOrder = ZAxis.Min;
 
-        pair.actor2.SetActionIcon(ActionIcon.None);
+        pair.actor2.SetStatus(Status.None);
         pair.actor2.StopGlow();
         pair.actor2.sortingOrder = ZAxis.Min;
 
@@ -302,6 +257,51 @@ public class ActorManager : ExtendedMonoBehavior
 
     #region Enemy Attack Methods
 
+
+
+    public void CheckEnemySpawn()
+    {
+        //Check abort state
+        if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
+            return;
+
+        var spawnableEnemies = enemies.Where(x => x.IsSpawnable).ToList();
+        spawnableEnemies.ForEach(x => x.Spawn(unoccupiedTile.location));
+    }
+
+    public void CheckEnemyMove()
+    {
+        //Check abort state
+        if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
+            return;
+
+        StartCoroutine(StartEnemyMove());
+    }
+
+    private IEnumerator StartEnemyMove()
+    {
+        yield return Wait.For(Interval.OneSecond);
+
+        turnManager.currentPhase = TurnPhase.Move;
+
+        var readyEnemies = enemies.Where(x => x.IsReady).ToList();
+        foreach (var enemy in readyEnemies)
+        {
+            enemy.SetDestination();
+            while (enemy.HasDestination)
+            {
+                yield return Wait.Tick();
+            }
+
+            yield return Wait.For(Interval.QuarterSecond);
+        }
+
+        turnManager.currentPhase = TurnPhase.Attack;
+        CheckEnemyAttack();
+
+    }
+
+
     private void CheckEnemyAttack()
     {
         StartCoroutine(EnemyAttack());
@@ -309,7 +309,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator EnemyAttack()
     {
-        yield return Wait.For(Interval.HalfSecond);
+        yield return Wait.For(Interval.OneSecond);
 
         var readyEnemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsReady).ToList();
         if (readyEnemies.Count > 0)
@@ -321,22 +321,24 @@ public class ActorManager : ExtendedMonoBehavior
                 {
                     foreach (var player in defendingPlayers)
                     {
-                        enemy.SetActionIcon(ActionIcon.Attack);
+                        enemy.SetStatus(Status.Attack);
+                        enemy.StartGlow();
+                        player.StartGlow();
                         yield return Wait.For(Interval.HalfSecond);
 
-
                         //TODO: Calculate based on attacker stats
-                        var damage = Random.Int(15, 33); 
+                        var damage = Random.Int(15, 33);
 
                         //Attack enemy (one at a time)
                         yield return player.TakeDamage(damage);
+                        enemy.StopGlow();
+                        player.StopGlow();
                         enemy.CalculateWait();
                     }
                 }
                 else
                 {
-                    enemy.SetActionIcon(ActionIcon.Attack);
-                    yield return Wait.For(Interval.HalfSecond);
+                    enemy.SetStatus(Status.None);
                     yield return enemy.MissAttack();
                     enemy.CalculateWait();
                 }
@@ -349,11 +351,11 @@ public class ActorManager : ExtendedMonoBehavior
 
     #endregion
 
+
     public void Clear()
     {
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
         actors.Clear();
     }
-
 
 }

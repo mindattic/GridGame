@@ -1,4 +1,6 @@
 ﻿
+using Unity.Burst.Intrinsics;
+
 public enum Team
 {
     Player,
@@ -38,13 +40,14 @@ public enum TurnPhase
 }
 
 
-public enum ActionIcon
+public enum Status
 {
     None,
     Attack,
-    Sleep,
+    Wait,
     Support,
-    Move
+    Move,
+    Ready
 }
 
 //public enum GlowState
@@ -83,5 +86,12 @@ public enum Shadow
     Red,
     Green,
     Blue
+}
+
+public enum AttackStrategy
+{
+    MoveAnywhere,
+    AttackClosest,
+    AttackWeakest
 }
 

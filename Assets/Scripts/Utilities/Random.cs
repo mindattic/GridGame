@@ -45,6 +45,22 @@ static class Random
         };
     }
 
+
+    public static AttackStrategy Strategy()
+    {
+        var result = Int(1, 3);
+        return result switch
+        {
+            1 => AttackStrategy.MoveAnywhere,
+            2 => AttackStrategy.AttackClosest,
+            3 => AttackStrategy.AttackClosest,
+            _ => AttackStrategy.MoveAnywhere,
+        };
+    }
+
+
+
+
     public static ActorBehavior Player()
     {
         var players = GameManager.instance.actors.Where(x => x.team.Equals(Team.Player)).ToList();
