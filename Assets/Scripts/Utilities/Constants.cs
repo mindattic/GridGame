@@ -6,7 +6,6 @@ public static class Constants
 {
     public const string Game = "Game";
     public const string Board = "Board";
-    public const string Timer = "Timer";
     public const string Canvas2D = "Canvas2D";
     public const string Canvas3D = "Canvas3D";
     public const string Art = "Art";

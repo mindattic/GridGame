@@ -105,7 +105,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         ghostManager.Start(currentPlayer);
         footstepManager.Start(currentPlayer);
 
-        timer.Set(scale: 1f, start: true);
+        timer.Set(x: 1f, start: true);
     }
 
     public void Drop()
@@ -136,7 +136,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         tileManager.Reset();
         cardManager.Clear();
-        timer.Set(scale: 0f, start: false);
+        timer.Set(x: 0f, start: false);
         turnManager.currentPhase = TurnPhase.Attack;
         actorManager.CheckPlayerAttack();
     }

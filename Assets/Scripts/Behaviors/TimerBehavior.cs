@@ -1,22 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TimerBehavior : ExtendedMonoBehavior
 {
     private bool isRunning = false;
     private const float maxTime = 6f;
     private float timeRemaining = 6f;
-    private RectTransform rect;
-    private Image progressBar;
+
+
+    private SpriteRenderer spriteRenderer;
+    Vector3 scale = new Vector3(1f, 1f, 1f);
 
     private void Awake()
     {
-        rect = GetComponent<RectTransform>();
-        progressBar = GetComponent<Image>();
-
-      
+        spriteRenderer = GameObject.Find("TimerBar").transform.GetChild(1).GetComponent<SpriteRenderer>();
+        spriteRenderer.transform.localScale = new Vector3(scale.x, scale.y, scale.z);
     }
 
 
@@ -34,12 +31,13 @@ public class TimerBehavior : ExtendedMonoBehavior
 
     }
 
+
     void FixedUpdate()
     {
         if (isRunning && timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
-            rect.localScale = new Vector3(timeRemaining / maxTime * 1f, 1f, 1f);
+            spriteRenderer.transform.localScale = new Vector3(scale.x * (timeRemaining / maxTime), scale.y, scale.z);
         }
         else
         {
@@ -48,9 +46,9 @@ public class TimerBehavior : ExtendedMonoBehavior
         }
     }
 
-    public void Set(float scale = 1f, bool start = false)
+    public void Set(float x = 1f, bool start = false)
     {
-        rect.localScale = new Vector3(scale, 1f, 1f);
+        spriteRenderer.transform.localScale = new Vector3(x, scale.y, scale.z);
         timeRemaining = maxTime;
         isRunning = start;
     }

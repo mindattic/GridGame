@@ -32,7 +32,7 @@ TagManager:
   - DamageText
   - Portrait
   - PostProcessing
-  - 
+  - TimerBar
   - 
   - 
   - 
@@ -64,6 +64,9 @@ TagManager:
     locked: 0
   - name: DamageText
     uniqueID: 2394124353
+    locked: 0
+  - name: TimerBar
+    uniqueID: 3126380569
     locked: 0
   - name: Portrait
     uniqueID: 776177277

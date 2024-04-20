@@ -204,11 +204,30 @@ public class ActorManager : ExtendedMonoBehavior
             //Debug.Log($"Attack1: ({attack1}) + Attack2: ({attack2}) / Enemy Defense: ({defense}) = Damage: ({damage})");
 
 
-            //TODO: Calculate based on attacker stats
-            var damage = Random.Int(15, 33);
 
-            //Attack enemy (one at a time)
-            yield return enemy.TakeDamage(damage);
+
+
+            //TODO: Calculate based on attacker accuracy vs defender evasion
+            var accuracy = Mathf.Round(pair.actor1.Accuracy + pair.actor2.Accuracy) / 2 + Random.Float(0, Mathf.Round(pair.actor1.Accuracy + pair.actor2.Accuracy) / 2);
+            var hit = accuracy > enemy.Evasion;
+            if (hit)
+            {
+                //Attack enemy (one at a time)
+                //TODO: Calculate based on attacker stats
+                var damage = Random.Int(15, 33);
+                yield return enemy.TakeDamage(damage);
+            }
+            else
+            {
+                //Miss (all at once)
+                yield return pair.actor1.MissAttack();
+                yield return pair.actor2.MissAttack();
+            }
+
+
+
+
+            
         }
 
 
@@ -326,11 +345,24 @@ public class ActorManager : ExtendedMonoBehavior
                         player.StartGlow();
                         yield return Wait.For(Interval.HalfSecond);
 
-                        //TODO: Calculate based on attacker stats
-                        var damage = Random.Int(15, 33);
 
-                        //Attack enemy (one at a time)
-                        yield return player.TakeDamage(damage);
+                        //TODO: Calculate based on attacker accuracy vs defender evasion
+                        var accuracy = enemy.Accuracy + Random.Float(0, enemy.Accuracy);
+                        var hit = accuracy > player.Evasion;
+                        if (hit)
+                        {
+                            //Attack enemy (one at a time)
+                            //TODO: Calculate based on attacker stats
+                            var damage = Random.Int(15, 33);
+                            yield return player.TakeDamage(damage);
+                        }
+                        else
+                        {
+                            yield return enemy.MissAttack();
+                        }
+
+
+
                         enemy.StopGlow();
                         player.StopGlow();
                         enemy.CalculateWait();
@@ -338,8 +370,8 @@ public class ActorManager : ExtendedMonoBehavior
                 }
                 else
                 {
-                    enemy.SetStatus(Status.None);
-                    yield return enemy.MissAttack();
+                    //enemy.SetStatus(Status.None);
+                    //yield return enemy.MissAttack();
                     enemy.CalculateWait();
                 }
             }

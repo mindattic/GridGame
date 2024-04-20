@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using TMPro;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 
@@ -44,8 +45,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 {
     public static class Layer
     {
-        public const int Glow = 0;
-        public const int Back = 1;
+        public const int Back = 0;
+        public const int Glow = 1;      
         public const int Thumbnail = 2;
         public const int Frame = 3;
         public const int StatusIcon = 4;
@@ -87,16 +88,17 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     [SerializeField] public int spawnTurn = -1;
 
+     [SerializeField] public AnimationCurve flickering;
     [SerializeField] public AnimationCurve bobbing;
     [SerializeField] public Guid guid;
 
-
+   
     [SerializeField] public float backScale = 1.4f;
 
     private void Awake()
     {
-        render.glow = gameObject.transform.GetChild(Layer.Glow).GetComponent<SpriteRenderer>();
         render.back = gameObject.transform.GetChild(Layer.Back).GetComponent<SpriteRenderer>();
+        render.glow = gameObject.transform.GetChild(Layer.Glow).GetComponent<SpriteRenderer>();      
         render.thumbnail = gameObject.transform.GetChild(Layer.Thumbnail).GetComponent<SpriteRenderer>();
         render.frame = gameObject.transform.GetChild(Layer.Frame).GetComponent<SpriteRenderer>();
         render.statusIcon = gameObject.transform.GetChild(Layer.StatusIcon).GetComponent<SpriteRenderer>();
@@ -157,8 +159,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         set
         {
-            render.glow.sortingOrder = value;
             render.back.sortingOrder = value + Layer.Back;
+            render.glow.sortingOrder = value;      
             render.thumbnail.sortingOrder = value + Layer.Thumbnail;
             render.frame.sortingOrder = value + Layer.Frame;
             render.statusIcon.sortingOrder = value + Layer.StatusIcon;
@@ -251,7 +253,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (this.IsPlayer)
         {
             render.SetAlpha(0);
-            render.SetBackColor(Colors.Solid.White);
+            render.SetBackColor(quality.Color);
+            render.SetGlowColor(quality.Color);
             render.actionBarBack.enabled = false;
             render.actionBar.enabled = false;
             render.actionText.enabled = false;
@@ -261,6 +264,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             render.SetAlpha(0);
             render.SetBackColor(Colors.Translucent.Red);
+            render.SetGlowColor(Colors.Translucent.Red);
             CalculateWait();
             wait = turnManager.currentTurn == 1 ? Random.Float(0, waitDuration / 4) : 0;
         }
@@ -472,10 +476,22 @@ public class ActorBehavior : ExtendedMonoBehavior
             1);
         render.SetBackScale(scale);
         render.SetBackColor(IsPlayer ? quality.Color : Colors.Translucent.Red);
+
+
+
+
     }
 
 
+    private void CheckFlicker()
+    {
+        //Check abort state
+        if (!IsAlive || !IsActive || !turnManager.IsStartPhase || (turnManager.IsPlayerTurn && !IsPlayer) || (turnManager.IsEnemyTurn && !IsEnemy))
+            return;
 
+        var alpha = 0.5f + (bobbing.Evaluate(Time.time % bobbing.length) * (tileSize / 24));
+        render.SetGlowAlpha(alpha);
+    }
 
     public void Shake(float intensity)
     {
@@ -531,7 +547,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         CheckMovement();
         //CheckBobbing();
         CheckThrobbing();
-
+        //CheckFlicker();
 
         CheckActionBar();
 
@@ -551,7 +567,6 @@ public class ActorBehavior : ExtendedMonoBehavior
             HP -= hit;
             HP = Mathf.Clamp(HP, remainingHP, MaxHP);
 
-            //SpawnIn hit text
             damageTextManager.Spawn(hit.ToString(), position);
 
             //Shake actor
@@ -577,6 +592,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         float ticks = 0;
         float duration = Interval.QuarterSecond;
+
+        damageTextManager.Spawn("Miss", position);
 
         while (ticks < duration)
         {
@@ -791,8 +808,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         float alpha = 0;
         render.SetAlpha(alpha);
-        render.SetBackAlpha(alpha);
-        render.SetGlowAlpha(0);
+        //render.SetBackAlpha(alpha);
+        //render.SetGlowAlpha(Mathf.Clamp(alpha, 0.25f, 0.5f));
 
         yield return Wait.For(delay);
 
@@ -801,12 +818,13 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha += Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
             render.SetAlpha(alpha);
-            render.SetBackAlpha(alpha);
+            //render.SetBackAlpha(alpha);
+            //render.SetGlowAlpha(Mathf.Clamp(alpha, 0.25f, 0.5f));
             yield return Wait.Tick();
         }
 
-        render.SetAlpha(alpha);
-        render.SetBackAlpha(0.5f);
+        render.SetAlpha(1);
+        //render.SetBackAlpha(0.5f);
     }
 
     public IEnumerator Death()
@@ -817,7 +835,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
             render.SetGlowAlpha(alpha);
-            render.SetBackAlpha(alpha);
+            //render.SetBackAlpha(alpha);
             yield return Wait.Tick();
         }
 

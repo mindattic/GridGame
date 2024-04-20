@@ -91,8 +91,7 @@ public class GameManager : Singleton<GameManager>
         shakeIntensity = new ShakeIntensity(tileSize);
 
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
-        timer = GameObject.Find(Constants.Timer).GetComponent<TimerBehavior>();
-
+        
         canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>();
         canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>();
         cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>();
@@ -116,6 +115,8 @@ public class GameManager : Singleton<GameManager>
         enemyManager = GameObject.Find(Constants.Game).GetComponent<EnemyManager>();
         tileManager = GameObject.Find(Constants.Game).GetComponent<TileManager>();
         footstepManager = GameObject.Find(Constants.Game).GetComponent<FootstepManager>();
+
+        timer = GameObject.Find(Constants.Game).GetComponent<TimerBehavior>();
 
         const int SoundSourceIndex = 0;
         const int MusicSourceIndex = 1;

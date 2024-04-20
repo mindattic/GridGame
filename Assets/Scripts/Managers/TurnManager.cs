@@ -49,7 +49,7 @@ public class TurnManager : ExtendedMonoBehavior
         {
             currentTurn++;
             titleManager.Print($"Turn {currentTurn}");
-            timer.Set(scale: 1f, start: false);
+            timer.Set(x: 1f, start: false);
         }
         else if (IsEnemyTurn)
         {
