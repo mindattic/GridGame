@@ -219,7 +219,6 @@ public class ActorManager : ExtendedMonoBehavior
             }
             else
             {
-                //Miss (all at once)
                 yield return pair.actor1.MissAttack();
                 yield return pair.actor2.MissAttack();
             }
