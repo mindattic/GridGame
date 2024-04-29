@@ -121,16 +121,17 @@ public class ActorManager : ExtendedMonoBehavior
     {
         foreach (var pair in attackParticipants.attackingPairs)
         {
-            yield return PlayerStartGlow(pair);
-            yield return EnemyStartGlow(pair);
+            yield return PlayerStartAttack(pair);
+            yield return EnemyStartDefend(pair);
         }
 
         foreach (var pair in attackParticipants.attackingPairs)
         {
             yield return PlayerPortrait(pair);
             yield return PlayerAttack(pair);
-            yield return EnemyStopGlow(pair);
-            yield return PlayerStopGlow(pair);
+          
+            yield return PlayerEndAttack(pair);
+            yield return EnemyEndDefend(pair);
         }
 
         ClearAttack();
@@ -138,14 +139,9 @@ public class ActorManager : ExtendedMonoBehavior
     }
 
 
-    private IEnumerator PlayerStartGlow(ActorPair pair)
+    private IEnumerator PlayerStartAttack(ActorPair pair)
     {
-        pair.actor1.SetStatus(Status.Attack);
-        pair.actor1.StartGlow();
         pair.actor1.sortingOrder = ZAxis.Max;
-
-        pair.actor2.SetStatus(Status.Attack);
-        pair.actor2.StartGlow();
         pair.actor2.sortingOrder = ZAxis.Max;
 
         soundSource.PlayOneShot(resourceManager.SoundEffect("PlayerGlow"));
@@ -169,11 +165,11 @@ public class ActorManager : ExtendedMonoBehavior
         yield return Wait.For(Interval.TwoSecond);
     }
 
-    private IEnumerator EnemyStartGlow(ActorPair pair)
+    private IEnumerator EnemyStartDefend(ActorPair pair)
     {
         foreach (var enemy in pair.enemies)
         {
-            enemy.StartGlow();
+            //enemy.StartGlow();
         }
 
         yield return Wait.Continue();
@@ -245,25 +241,25 @@ public class ActorManager : ExtendedMonoBehavior
 
     }
 
-    private IEnumerator PlayerStopGlow(ActorPair pair)
+    private IEnumerator PlayerEndAttack(ActorPair pair)
     {
         pair.actor1.SetStatus(Status.None);
-        pair.actor1.StopGlow();
+        //pair.actor1.StopGlow();
         pair.actor1.sortingOrder = ZAxis.Min;
 
         pair.actor2.SetStatus(Status.None);
-        pair.actor2.StopGlow();
+        //pair.actor2.StopGlow();
         pair.actor2.sortingOrder = ZAxis.Min;
 
         yield return Wait.Continue();
     }
 
-    private IEnumerator EnemyStopGlow(ActorPair pair)
+    private IEnumerator EnemyEndDefend(ActorPair pair)
     {
         //Fade out glow (all at once)
         foreach (var enemy in pair.enemies.Where(x => x.IsAlive))
         {
-            enemy.StopGlow();
+            //enemy.StopGlow();
         }
 
         yield return Wait.Continue();
@@ -292,6 +288,10 @@ public class ActorManager : ExtendedMonoBehavior
         //Check abort state
         if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
             return;
+
+        //Give boost to radial fill
+        //var waitingEnemies = enemies.Where(x => !x.IsReady).ToList();
+        //waitingEnemies.ForEach(x => x.CheckActionBar(x.Speed));
 
         StartCoroutine(StartEnemyMove());
     }
@@ -339,9 +339,6 @@ public class ActorManager : ExtendedMonoBehavior
                 {
                     foreach (var player in defendingPlayers)
                     {
-                        enemy.SetStatus(Status.Attack);
-                        enemy.StartGlow();
-                        player.StartGlow();
                         yield return Wait.For(Interval.HalfSecond);
 
 
@@ -362,8 +359,8 @@ public class ActorManager : ExtendedMonoBehavior
 
 
 
-                        enemy.StopGlow();
-                        player.StopGlow();
+                        //enemy.StopGlow();
+                        //player.StopGlow();
                         enemy.CalculateWait();
                     }
                 }

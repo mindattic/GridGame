@@ -46,7 +46,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public static class Layer
     {
         public const int Back = 0;
-        public const int Glow = 1;      
+        public const int Glow = 1;
         public const int Thumbnail = 2;
         public const int Frame = 3;
         public const int StatusIcon = 4;
@@ -88,17 +88,17 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     [SerializeField] public int spawnTurn = -1;
 
-     [SerializeField] public AnimationCurve flickering;
+    [SerializeField] public AnimationCurve flickering;
     [SerializeField] public AnimationCurve bobbing;
     [SerializeField] public Guid guid;
 
-   
+
     [SerializeField] public float backScale = 1.4f;
 
     private void Awake()
     {
         render.back = gameObject.transform.GetChild(Layer.Back).GetComponent<SpriteRenderer>();
-        render.glow = gameObject.transform.GetChild(Layer.Glow).GetComponent<SpriteRenderer>();      
+        render.glow = gameObject.transform.GetChild(Layer.Glow).GetComponent<SpriteRenderer>();
         render.thumbnail = gameObject.transform.GetChild(Layer.Thumbnail).GetComponent<SpriteRenderer>();
         render.frame = gameObject.transform.GetChild(Layer.Frame).GetComponent<SpriteRenderer>();
         render.statusIcon = gameObject.transform.GetChild(Layer.StatusIcon).GetComponent<SpriteRenderer>();
@@ -160,7 +160,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         set
         {
             render.back.sortingOrder = value + Layer.Back;
-            render.glow.sortingOrder = value;      
+            render.glow.sortingOrder = value;
             render.thumbnail.sortingOrder = value + Layer.Thumbnail;
             render.frame.sortingOrder = value + Layer.Frame;
             render.statusIcon.sortingOrder = value + Layer.StatusIcon;
@@ -184,8 +184,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
     public bool IsPlayer => team.Equals(Team.Player);
     public bool IsEnemy => team.Equals(Team.Enemy);
-    public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
-    public bool IsCurrentPlayer => HasCurrentPlayer && Equals(currentPlayer);
+    public bool IsSelectedPlayer => HasFocusedPlayer && Equals(focusedPlayer);
+    public bool IsCurrentPlayer => HasSelectedPlayer && Equals(selectedPlayer);
     public bool HasLocation => location != Locations.nowhere;
     public bool HasDestination => destination.HasValue;
     public bool IsNorthEdge => location.y == 1;
@@ -265,6 +265,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             render.SetAlpha(0);
             render.SetBackColor(Colors.Translucent.Red);
             render.SetGlowColor(Colors.Translucent.Red);
+            render.SetGlowAlpha(0);
             CalculateWait();
             wait = turnManager.currentTurn == 1 ? Random.Float(0, waitDuration / 4) : 0;
         }
@@ -346,7 +347,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void SetDestination()
     {
-
         //Randomy select an attack strategy
         //var strategy = Random.Strategy();
         var strategy = AttackStrategy.AttackClosest;
@@ -397,7 +397,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                 //    break;
         }
 
-        SetStatus(Status.Move);
+
     }
 
     private void MoveTowardCursor()
@@ -411,10 +411,10 @@ public class ActorBehavior : ExtendedMonoBehavior
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bottom, board.top);
 
         //Move selected player towards cursor
-        position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
+        //position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
 
         //Snap selected player to cursor
-        //this.position = cursorPosition;
+        position = cursorPosition;
     }
 
     private void CheckMovement()
@@ -526,7 +526,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         soundSource.PlayOneShot(resourceManager.SoundEffect($"Move{Random.Int(1, 6)}"));
 
         //Determine if selected player and another actor are occupying the same tile
-        var actor = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !x.Equals(currentPlayer) && x.location.Equals(closestTile.location));
+        var actor = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
         if (actor != null)
         {
             actor.SwapLocation(this);
@@ -605,25 +605,30 @@ public class ActorBehavior : ExtendedMonoBehavior
         Shake(ShakeIntensity.Stop);
     }
 
-
-
-
-
-
-    public void CheckActionBar()
+    public void CheckActionBar(float multiplier = 1f)
     {
         //Check abort state
-        if (turnManager.IsEnemyTurn || (!turnManager.IsStartPhase && !turnManager.IsMovePhase) || titleManager.color.a > 0.5f || !IsAlive || !IsActive || wait == waitDuration)
+        if (turnManager.IsEnemyTurn || !turnManager.IsStartPhase || !IsAlive || !IsActive || wait == waitDuration)
             return;
 
         if (wait < waitDuration)
         {
-            wait += Time.deltaTime;
+            wait += multiplier * Time.deltaTime;
+            wait = Math.Clamp(wait, 0, waitDuration);
         }
         else
         {
             wait = waitDuration;
-            SetStatus(Status.Ready);
+
+            ////Drop selected player immedietly
+            //if (HasSelectedPlayer)
+            //{
+            //    selectedPlayerManager.Drop();
+            //}
+
+            //Force enemy to attack
+            //turnManager.currentTeam = Team.Enemy;
+            //turnManager.currentPhase = TurnPhase.Start;
         }
 
         UpdateActionBar();
@@ -640,8 +645,13 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void UpdateRadialFill()
     {
-        var fill = 360 - (360 * (wait / waitDuration));
-        render.radialFill.material.SetFloat("_Arc2", fill);
+        var fill = (360 * (wait / waitDuration));
+        render.radialFill.material.SetFloat("_Arc1", fill);
+
+        //if(wait >= waitDuration)
+        //{
+
+        //}
     }
 
 
@@ -686,9 +696,6 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         float increment = Increment.FivePercent;
         float alpha = render.statusIcon.color.a;
-     
-        render.radialBack.enabled = status == Status.Wait;
-        render.radialFill.enabled = status == Status.Wait;
 
         render.statusIcon.color = new Color(1, 1, 1, alpha);
         render.radialBack.color = new Color(1, 1, 1, alpha);
@@ -800,7 +807,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         wait = 0;
         waitDuration = Random.Float(min, max);
 
-        SetStatus(Status.Wait);
         UpdateActionBar();
     }
 

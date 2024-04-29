@@ -43,29 +43,29 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //TODO: Update Card display...
-        selectedPlayer = actor;
-        selectedPlayer.sortingOrder = ZAxis.Max;
+        focusedPlayer = actor;
+        focusedPlayer.sortingOrder = ZAxis.Max;
 
         //Assign mouse offset (how off center was selection)
-        mouseOffset = selectedPlayer.position - mousePosition3D;
+        mouseOffset = focusedPlayer.position - mousePosition3D;
 
-        cardManager.Set(selectedPlayer);
+        cardManager.Set(focusedPlayer);
     }
 
     public void Unselect()
     {
         //Verify *HAS* targetted player...
-        if (!HasSelectedPlayer)
+        if (!HasFocusedPlayer)
             return;
 
-        if (!HasCurrentPlayer)
+        if (!HasSelectedPlayer)
         {
-            selectedPlayer.position = selectedPlayer.currentTile.position;
-            selectedPlayer.sortingOrder = ZAxis.Min;
+            focusedPlayer.position = focusedPlayer.currentTile.position;
+            focusedPlayer.sortingOrder = ZAxis.Min;
             //cardManager.Clear();
         }
 
-        selectedPlayer = null;
+        focusedPlayer = null;
      
     }
 
@@ -80,16 +80,13 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //Pickup actor
-        currentPlayer = selectedPlayer;
-        if (!HasCurrentPlayer)
+        selectedPlayer = focusedPlayer;
+        if (!HasSelectedPlayer)
             return;
-
-
-        currentPlayer.SetStatus(Status.Move);
 
         Unselect();
         turnManager.currentPhase = TurnPhase.Move;
-        currentPlayer.sortingOrder = ZAxis.Max;
+        selectedPlayer.sortingOrder = ZAxis.Max;
 
         soundSource.PlayOneShot(resourceManager.SoundEffect($"Select"));
 
@@ -99,11 +96,11 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
 
         //Assign mouse offset (how off center was selection)
-        mouseOffset = currentPlayer.position - mousePosition3D;
+        mouseOffset = selectedPlayer.position - mousePosition3D;
 
         
-        ghostManager.Start(currentPlayer);
-        footstepManager.Start(currentPlayer);
+        ghostManager.Start(selectedPlayer);
+        footstepManager.Start(selectedPlayer);
 
         timer.Set(x: 1f, start: true);
     }
@@ -119,17 +116,17 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //Verify *HAS* selected player...
-        if (!HasCurrentPlayer)
+        if (!HasSelectedPlayer)
             return;
 
         //Assign location and position
-        var closestTile = Geometry.ClosestTileByPosition(currentPlayer.position);
+        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
         closestTile.spriteRenderer.color = Colors.Translucent.White;
-        currentPlayer.location = closestTile.location;
-        currentPlayer.position = Geometry.PositionFromLocation(currentPlayer.location);
-        currentPlayer.sortingOrder = ZAxis.Min;
-        currentPlayer.SetStatus(Status.None);
-        currentPlayer = null;
+        selectedPlayer.location = closestTile.location;
+        selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
+        selectedPlayer.sortingOrder = ZAxis.Min;
+        selectedPlayer.SetStatus(Status.None);
+        selectedPlayer = null;
 
         ghostManager.Stop();
         footstepManager.Stop();

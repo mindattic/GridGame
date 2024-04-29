@@ -43,11 +43,10 @@ public enum TurnPhase
 public enum Status
 {
     None,
-    Attack,
-    Wait,
-    Support,
-    Move,
-    Ready
+    Poisoned,
+    Cursed,
+    Sleeping,
+    Doom
 }
 
 //public enum GlowState

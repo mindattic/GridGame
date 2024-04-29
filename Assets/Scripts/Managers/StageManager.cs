@@ -49,7 +49,7 @@ public class StageManager : ExtendedMonoBehavior
     {
 
         //Clear and clear variables
-        currentPlayer = null;
+        selectedPlayer = null;
         supportLineManager.Clear();
         attackLineManager.Clear();
         turnManager.Reset();

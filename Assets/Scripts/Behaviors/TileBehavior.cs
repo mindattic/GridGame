@@ -52,10 +52,10 @@ public class TileBehavior : ExtendedMonoBehavior
 
     public void Update()
     {
-        //if (!HasCurrentPlayer)
+        //if (!HasSelectedPlayer)
         //    return;
 
-        //if (currentPlayer.location.Equals(this.location))
+        //if (selectedPlayer.location.Equals(this.location))
         //{
         //    spriteRenderer.color = Colors.Solid.Gold;
         //}

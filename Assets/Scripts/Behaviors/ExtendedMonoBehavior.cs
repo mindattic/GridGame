@@ -52,8 +52,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected List<ActorBehavior> enemies => GameManager.instance.actors.Where(x => x.team.Equals(Team.Enemy)).ToList();
 
     //Actor
+    protected bool HasFocusedPlayer => focusedPlayer != null;
     protected bool HasSelectedPlayer => selectedPlayer != null;
-    protected bool HasCurrentPlayer => currentPlayer != null;
 
     //Scale
     protected float tileSize => GameManager.instance.tileSize;
@@ -112,13 +112,13 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //}
 
 
-    protected ActorBehavior selectedPlayer
+    protected ActorBehavior focusedPlayer
     {
         get { return GameManager.instance.selectedPlayer; }
         set { GameManager.instance.selectedPlayer = value; }
     }
 
-    protected ActorBehavior currentPlayer
+    protected ActorBehavior selectedPlayer
     {
         get { return GameManager.instance.currentPlayer; }
         set { GameManager.instance.currentPlayer = value; }
