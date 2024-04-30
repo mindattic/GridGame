@@ -100,7 +100,8 @@ public class ActorManager : ExtendedMonoBehavior
             var hasEnemiesBetween = pair.enemies.Any();
             var hasPlayersBetween = pair.players.Any();
             var hasGapsBetween = pair.gaps.Any();
-            if (!hasEnemiesBetween || hasPlayersBetween || hasGapsBetween)
+            var hasDuplicate = attackParticipants.attackingPairs.Count(x => (x.actor1 == pair.actor1 && x.actor2 == pair.actor2) || (x.actor1 == pair.actor2 && x.actor2 == pair.actor1)) > 0;
+            if (!hasEnemiesBetween || hasPlayersBetween || hasGapsBetween || hasDuplicate)
                 continue;
 
             attackParticipants.attackingPairs.Add(pair);
@@ -129,7 +130,7 @@ public class ActorManager : ExtendedMonoBehavior
         {
             yield return PlayerPortrait(pair);
             yield return PlayerAttack(pair);
-          
+
             yield return PlayerEndAttack(pair);
             yield return EnemyEndDefend(pair);
         }
@@ -203,9 +204,11 @@ public class ActorManager : ExtendedMonoBehavior
 
 
 
-            //TODO: Calculate based on attacker accuracy vs defender evasion
-            var accuracy = Mathf.Round(pair.actor1.Accuracy + pair.actor2.Accuracy) / 2 + Random.Float(0, Mathf.Round(pair.actor1.Accuracy + pair.actor2.Accuracy) / 2);
-            var hit = accuracy > enemy.Evasion;
+            //Calculate hit chance
+            var baseAccuracy = 95f;
+            var accuracy = baseAccuracy + Random.Float(0, pair.actor1.Accuracy + pair.actor2.Accuracy) - Random.Float(0, enemy.Evasion);
+            //var accuracy = Mathf.Round(pair.actor1.Accuracy + pair.actor2.Accuracy) / 3 + Random.Float(0, Mathf.Round(pair.actor1.Accuracy + pair.actor2.Accuracy) / 2);
+            var hit = accuracy > 100f;
             if (hit)
             {
                 //Attack enemy (one at a time)
@@ -215,14 +218,13 @@ public class ActorManager : ExtendedMonoBehavior
             }
             else
             {
-                yield return pair.actor1.MissAttack();
-                yield return pair.actor2.MissAttack();
+                yield return enemy.MissAttack();
             }
 
 
 
 
-            
+
         }
 
 

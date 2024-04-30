@@ -17,11 +17,6 @@ public class Geometry
         return new Vector3(x, y, 0);
     }
 
-    //public static Vector3 PositionFromLocation(Vector2Int other)
-    //{
-    //    return tiles.FirstOrDefault(x => x.other.Equals(other)).other;
-    //}
-
 
     //public static Vector2Int LocationFromPosition(Vector3 other)
     //{
@@ -63,14 +58,12 @@ public class Geometry
     public static TileBehavior ClosestUnoccupiedAdjacentTileByLocation(Vector2Int other)
     {
         return tiles
-            .FirstOrDefault(x => !x.IsOccupied && Vector2Int.Distance(x.location, other).Equals(1)
-            && (x.location.x == other.x - 1 || x.location.x == other.x + 1 || x.location.y == other.y - 1 || x.location.y == other.y + 1));
-
+            .FirstOrDefault(x => !x.IsOccupied && x.IsAdjacentTo(other));
     }
 
     public static ActorBehavior GetActorAtLocation(Vector2Int other)
     {
-        return actors.FirstOrDefault(x => x.location.Equals(other));
+        return actors.FirstOrDefault(x => x.location == other);
     }
 
 

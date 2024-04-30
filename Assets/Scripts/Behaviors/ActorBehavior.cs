@@ -347,15 +347,23 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void SetDestination()
     {
+
+
+
+
+
+
         //Randomy select an attack strategy
         //var strategy = Random.Strategy();
         var strategy = AttackStrategy.AttackClosest;
+
         switch (strategy)
         {
             //case AttackStrategy.MoveAnywhere:
             //    var location = new Vector2Int(Random.Int(1, board.columns), Random.Int(1, board.rows));
             //    destination = Geometry.ClosestTileByLocation(location).position;
             //    break;
+
             case AttackStrategy.AttackClosest:
 
 
