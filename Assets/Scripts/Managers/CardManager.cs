@@ -28,7 +28,7 @@ public class CardManager : ExtendedMonoBehavior
         title = GameObject.Find("Card/Title").GetComponent<TextMeshProUGUI>();
         details = GameObject.Find("Card/Details").GetComponent<TextMeshProUGUI>();
 
-        //Calculate dimensions based on device properties
+        //TODO: Calculate dimensions based on device properties
 
 
         Clear();
@@ -61,5 +61,8 @@ public class CardManager : ExtendedMonoBehavior
         profile.enabled = false;
         title.text = "";
         details.text = "";
+
+        //Clear selection from actor
+        actors.ForEach(x => x.render.SetFocus(false));
     }
 }
