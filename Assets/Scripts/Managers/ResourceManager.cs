@@ -32,10 +32,13 @@ public class ResourceManager : ExtendedMonoBehavior
         return actorSprites.First(x => x.id.Equals(id)).portrait;
     }
 
-
     public string ActorDetails(string id)
     {
-        return actorDetails.First(x => x.id.Equals(id)).details;
+        var details = actorDetails.FirstOrDefault(x => x.id.Equals(id))?.details ?? null;
+        if (details != null)
+            return details;
+
+        return "";
     }
 
     public Sprite Prop(string id)

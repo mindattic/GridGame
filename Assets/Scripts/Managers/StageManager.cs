@@ -53,7 +53,7 @@ public class StageManager : ExtendedMonoBehavior
         supportLineManager.Clear();
         attackLineManager.Clear();
         turnManager.Reset();
-        timer.Set(x: 1f, start: false);
+        timer.Set(scaleX: 1f, start: false);
         actorManager.Clear();
         //overlayManager.Show();
         titleManager.Print($"Stage {currentStage}", showOverlay: true);

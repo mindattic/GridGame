@@ -59,9 +59,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         public const int ActionText = 11;
         public const int RadialBack = 12;
         public const int RadialFill = 13;
-
-
-
+        public const int Focused = 14;
     }
 
     //Variables
@@ -111,6 +109,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.actionText = gameObject.transform.GetChild(Layer.ActionText).GetComponent<TextMeshPro>();
         render.radialBack = gameObject.transform.GetChild(Layer.RadialBack).GetComponent<SpriteRenderer>();
         render.radialFill = gameObject.transform.GetChild(Layer.RadialFill).GetComponent<SpriteRenderer>();
+        render.focused = gameObject.transform.GetChild(Layer.Focused).GetComponent<SpriteRenderer>();
 
     }
 
@@ -173,6 +172,10 @@ public class ActorBehavior : ExtendedMonoBehavior
             render.actionText.sortingOrder = value + Layer.ActionText;
             render.radialBack.sortingOrder = value + Layer.RadialBack;
             render.radialFill.sortingOrder = value + Layer.RadialFill;
+            render.focused.sortingOrder = value + Layer.Focused;
+
+
+
 
         }
     }
@@ -236,17 +239,20 @@ public class ActorBehavior : ExtendedMonoBehavior
         transform.localScale = tileScale;
         gameObject.SetActive(false);
 
-        if (spawn && HasLocation)
+        if (spawn)
             Spawn();
     }
 
 
     public void Spawn(Vector2Int? startLocation = null)
     {
-        gameObject.SetActive(true);
-
         if (startLocation.HasValue)
             location = startLocation.Value;
+
+        if (!HasLocation)
+            return;
+
+        gameObject.SetActive(true);
 
         position = Geometry.PositionFromLocation(location);
 
@@ -258,7 +264,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             render.actionBarBack.enabled = false;
             render.actionBar.enabled = false;
             render.actionText.enabled = false;
-            SetStatus(Status.None);
+            render.radialBack.enabled = false;
+            render.radialFill.enabled = false;
         }
         else if (this.IsEnemy)
         {
@@ -359,20 +366,25 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         switch (strategy)
         {
-            //case AttackStrategy.MoveAnywhere:
-            //    var location = new Vector2Int(Random.Int(1, board.columns), Random.Int(1, board.rows));
-            //    destination = Geometry.ClosestTileByLocation(location).position;
-            //    break;
+            case AttackStrategy.MoveAnywhere:
+                var location = new Vector2Int(Random.Int(1, board.columns), Random.Int(1, board.rows));
+                destination = Geometry.ClosestTileByLocation(location).position;
+                break;
 
             case AttackStrategy.AttackClosest:
-
-
-                //var closestPlayer = players.Where(x => x != null && x.IsAlive && x.IsActive).OrderBy(x => (x.position - position).sqrMagnitude).FirstOrDefault();
+                #region Attack Strategy: Attack Closest
 
                 //Find closest player
                 var closestPlayer = players.Where(x => x != null && x.IsAlive && x.IsActive).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
 
-                //Find closest unoccupied tile adjacent to player...
+                //Determine if already adjacent to player...
+                if (IsAdjacentTo(closestPlayer.location))
+                {
+                    destination = position;
+                    return;
+                }
+
+                //...Otherwise, Find closest unoccupied tile adjacent to player...
                 var closestUnoccupiedAdjacentTile = Geometry.ClosestUnoccupiedAdjacentTileByLocation(closestPlayer.location);
                 if (closestUnoccupiedAdjacentTile != null)
                 {
@@ -380,6 +392,13 @@ public class ActorBehavior : ExtendedMonoBehavior
                     return;
                 }
 
+                //...Otherwise, Find closest tile adjacent to player...
+                var closestAdjacentTile = Geometry.ClosestAdjacentTileByLocation(closestPlayer.location);
+                if (closestAdjacentTile != null)
+                {
+                    destination = closestAdjacentTile.position;
+                    return;
+                }
 
                 //...Otherwise, find closest unoccupied tile to player...
                 var closestUnoccupiedTile = Geometry.ClosestUnoccupiedTileByLocation(closestPlayer.location);
@@ -389,7 +408,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                     return;
                 }
 
-                //...Otherwise, find closest occupied tile to player
+                //...Otherwise, find closest tile to player
                 var closestTile = Geometry.ClosestTileByLocation(closestPlayer.location);
                 if (closestTile != null)
                 {
@@ -397,12 +416,13 @@ public class ActorBehavior : ExtendedMonoBehavior
                     return;
                 }
 
+                #endregion
                 break;
 
-                //case AttackStrategy.AttackWeakest:
-                //    var weakestPlayer = players.Where(x => x != null && x.IsAlive && IsActive).OrderBy(x => x.HP).FirstOrDefault();
-                //    destination = Geometry.ClosestUnoccupiedTileByLocation(weakestPlayer.location).position;
-                //    break;
+            case AttackStrategy.AttackWeakest:
+                var weakestPlayer = players.Where(x => x != null && x.IsAlive && IsActive).OrderBy(x => x.HP).FirstOrDefault();
+                destination = Geometry.ClosestUnoccupiedAdjacentTileByLocation(weakestPlayer.location).position;
+                break;
         }
 
 
@@ -613,30 +633,21 @@ public class ActorBehavior : ExtendedMonoBehavior
         Shake(ShakeIntensity.Stop);
     }
 
-    public void CheckActionBar(float multiplier = 1f)
+    public void CheckActionBar()
     {
         //Check abort state
-        if (turnManager.IsEnemyTurn || !turnManager.IsStartPhase || !IsAlive || !IsActive || wait == waitDuration)
+        if (turnManager.IsEnemyTurn || (!turnManager.IsStartPhase && !turnManager.IsMovePhase) || !IsAlive || !IsActive || wait == waitDuration)
             return;
 
         if (wait < waitDuration)
         {
-            wait += multiplier * Time.deltaTime;
+            wait += Time.deltaTime;
             wait = Math.Clamp(wait, 0, waitDuration);
         }
-        else
+      
+        if(wait == waitDuration)
         {
-            wait = waitDuration;
-
-            ////Drop selected player immedietly
-            //if (HasSelectedPlayer)
-            //{
-            //    selectedPlayerManager.Drop();
-            //}
-
-            //Force enemy to attack
-            //turnManager.currentTeam = Team.Enemy;
-            //turnManager.currentPhase = TurnPhase.Start;
+            StartCoroutine(RadialBackFadeOut());
         }
 
         UpdateActionBar();
@@ -648,18 +659,15 @@ public class ActorBehavior : ExtendedMonoBehavior
         var scale = render.actionBarBack.transform.localScale;
         var x = Mathf.Clamp(scale.x * (wait / waitDuration), 0, scale.x);
         render.actionBar.transform.localScale = new Vector3(x, scale.y, scale.z);
-        render.actionText.text = wait < waitDuration ? $@"{Math.Round(wait / waitDuration * 100)}%" : "Ready!";
+        //render.actionText.text = wait < waitDuration ? $@"{Math.Round(wait / waitDuration * 100)}%" : "Ready!";
+        render.actionText.text = wait < waitDuration ? $"{Math.Round(waitDuration - wait)}" : "";
     }
 
     private void UpdateRadialFill()
     {
+
         var fill = (360 * (wait / waitDuration));
         render.radialFill.material.SetFloat("_Arc1", fill);
-
-        //if(wait >= waitDuration)
-        //{
-
-        //}
     }
 
 
@@ -672,6 +680,40 @@ public class ActorBehavior : ExtendedMonoBehavior
         render.healthText.text = $@"{HP}/{MaxHP}";
     }
 
+
+    public IEnumerator RadialBackFadeIn()
+    {
+        var maxAlpha = 0.5f;
+        var alpha = 0f;
+        render.radialBack.color = new Color(0, 0, 0, alpha);
+
+        while (alpha < maxAlpha)
+        {
+            alpha += Increment.OnePercent;
+            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+            render.radialBack.color = new Color(0, 0, 0, alpha);
+            yield return Wait.Tick();
+        }
+
+        render.radialBack.color = new Color(0, 0, 0, maxAlpha);
+    }
+
+    public IEnumerator RadialBackFadeOut()
+    {
+        var maxAlpha = 0.5f;
+        var alpha = maxAlpha;
+        render.radialBack.color = new Color(0, 0, 0, maxAlpha);
+
+        while (alpha > 0)
+        {
+            alpha -= Increment.OnePercent;
+            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+            render.radialBack.color = new Color(0, 0, 0, alpha);
+            yield return Wait.Tick();
+        }
+
+        render.radialBack.color = new Color(0, 0, 0, 0);
+    }
 
     public IEnumerator Dissolve()
     {
@@ -706,8 +748,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         float alpha = render.statusIcon.color.a;
 
         render.statusIcon.color = new Color(1, 1, 1, alpha);
-        render.radialBack.color = new Color(1, 1, 1, alpha);
-        render.radialFill.color = new Color(1, 1, 1, alpha);
 
         //Fade out
         while (alpha > 0)
@@ -720,8 +760,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //Switch status status sprite
         render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(status.ToString())).thumbnail;
-        render.radialBack.color = new Color(1, 1, 1, alpha);
-        render.radialFill.color = new Color(1, 1, 1, alpha);
 
         //Fade in
         alpha = 0;
@@ -732,15 +770,12 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha += increment;
             alpha = Mathf.Clamp(alpha, 0, 1);
             render.statusIcon.color = new Color(1, 1, 1, alpha);
-            render.radialBack.color = new Color(1, 1, 1, alpha);
-            render.radialFill.color = new Color(1, 1, 1, alpha);
 
             yield return Wait.Tick();
         }
 
         render.statusIcon.color = new Color(1, 1, 1, 1);
-        render.radialBack.color = new Color(1, 1, 1, 1);
-        render.radialFill.color = new Color(1, 1, 1, 1);
+
     }
 
     public void StartGlow()
@@ -763,11 +798,30 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public void Die()
+    public void Destroy()
     {
         //Check abort state
         if (!IsActive)
             return;
+
+
+        IEnumerator Death()
+        {
+            float alpha = 1;
+            while (alpha > 0)
+            {
+                alpha -= Increment.OnePercent;
+                alpha = Mathf.Clamp(alpha, 0, 1);
+                render.SetGlowAlpha(alpha);
+                //render.SetBackAlpha(alpha);
+                yield return Wait.Tick();
+            }
+
+            render.SetGlowAlpha(0);
+            render.SetBackAlpha(0);
+            Destroy(this.gameObject);
+            actors.Remove(this);
+        }
 
         StartCoroutine(Death());
     }
@@ -814,7 +868,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         wait = 0;
         waitDuration = Random.Float(min, max);
-
+        StartCoroutine(RadialBackFadeIn());
         UpdateActionBar();
     }
 
@@ -841,23 +895,23 @@ public class ActorBehavior : ExtendedMonoBehavior
         //render.SetBackAlpha(0.5f);
     }
 
-    public IEnumerator Death()
-    {
-        float alpha = 1;
-        while (alpha > 0)
-        {
-            alpha -= Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, 1);
-            render.SetGlowAlpha(alpha);
-            //render.SetBackAlpha(alpha);
-            yield return Wait.Tick();
-        }
+    //public IEnumerator Death()
+    //{
+    //    float alpha = 1;
+    //    while (alpha > 0)
+    //    {
+    //        alpha -= Increment.OnePercent;
+    //        alpha = Mathf.Clamp(alpha, 0, 1);
+    //        render.SetGlowAlpha(alpha);
+    //        //render.SetBackAlpha(alpha);
+    //        yield return Wait.Tick();
+    //    }
 
-        render.SetGlowAlpha(0);
-        render.SetBackAlpha(0);
-        Destroy(this.gameObject);
-        actors.Remove(this);
-    }
+    //    render.SetGlowAlpha(0);
+    //    render.SetBackAlpha(0);
+    //    Destroy(this.gameObject);
+    //    actors.Remove(this);
+    //}
 
 
 

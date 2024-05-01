@@ -46,9 +46,9 @@ public class TimerBehavior : ExtendedMonoBehavior
         }
     }
 
-    public void Set(float x = 1f, bool start = false)
+    public void Set(float scaleX = 1f, bool start = false)
     {
-        spriteRenderer.transform.localScale = new Vector3(x, scale.y, scale.z);
+        spriteRenderer.transform.localScale = new Vector3(scaleX, scale.y, scale.z);
         timeRemaining = maxTime;
         isRunning = start;
     }

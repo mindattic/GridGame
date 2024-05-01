@@ -61,6 +61,12 @@ public class Geometry
             .FirstOrDefault(x => !x.IsOccupied && x.IsAdjacentTo(other));
     }
 
+    public static TileBehavior ClosestAdjacentTileByLocation(Vector2Int other)
+    {
+        return tiles
+            .FirstOrDefault(x => x.IsAdjacentTo(other));
+    }
+
     public static ActorBehavior GetActorAtLocation(Vector2Int other)
     {
         return actors.FirstOrDefault(x => x.location == other);
@@ -74,6 +80,9 @@ public class Geometry
         return new Vector2Int(col, row);
     }
 
+
+
+  
 
 
 }

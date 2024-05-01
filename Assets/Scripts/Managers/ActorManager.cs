@@ -179,7 +179,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator PlayerAttack(ActorPair pair)
     {
-        yield return Wait.For(Interval.HalfSecond);
+        //yield return Wait.For(Interval.QuarterSecond);
 
         foreach (var enemy in pair.enemies)
         {
@@ -205,8 +205,8 @@ public class ActorManager : ExtendedMonoBehavior
 
 
             //Calculate hit chance
-            var baseAccuracy = 95f;
-            var accuracy = baseAccuracy + Random.Float(0, pair.actor1.Accuracy + pair.actor2.Accuracy) - Random.Float(0, enemy.Evasion);
+
+            var accuracy = 101f; //baseAccuracy + Random.Float(0, pair.actor1.Accuracy + pair.actor2.Accuracy) - Random.Float(0, enemy.Evasion);
             //var accuracy = Mathf.Round(pair.actor1.Accuracy + pair.actor2.Accuracy) / 3 + Random.Float(0, Mathf.Round(pair.actor1.Accuracy + pair.actor2.Accuracy) / 2);
             var hit = accuracy > 100f;
             if (hit)
@@ -237,7 +237,7 @@ public class ActorManager : ExtendedMonoBehavior
         //Fade out (all at once)
         foreach (var enemy in pair.enemies.Where(x => x.IsDead))
         {
-            enemy.Die();
+            enemy.Destroy();
         }
         yield return Wait.Ticks(100);
 
@@ -245,12 +245,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator PlayerEndAttack(ActorPair pair)
     {
-        pair.actor1.SetStatus(Status.None);
-        //pair.actor1.StopGlow();
         pair.actor1.sortingOrder = ZAxis.Min;
-
-        pair.actor2.SetStatus(Status.None);
-        //pair.actor2.StopGlow();
         pair.actor2.sortingOrder = ZAxis.Min;
 
         yield return Wait.Continue();
@@ -300,7 +295,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator StartEnemyMove()
     {
-        yield return Wait.For(Interval.OneSecond);
+        yield return Wait.For(Interval.HalfSecond);
 
         turnManager.currentPhase = TurnPhase.Move;
 

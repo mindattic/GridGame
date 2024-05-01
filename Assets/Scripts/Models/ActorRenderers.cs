@@ -22,6 +22,7 @@ public class ActorRenderers
     public TextMeshPro actionText;
     public SpriteRenderer radialBack;
     public SpriteRenderer radialFill;
+    public SpriteRenderer focused;
 
     public void SetAlpha(float alpha)
     {
@@ -34,11 +35,12 @@ public class ActorRenderers
         healthBar.color = new Color(1, 1, 1, alpha);
         healthBarFront.color = new Color(1, 1, 1, alpha);
         healthText.color = new Color(1, 1, 1, alpha);
-        actionBarBack.color = new Color(1, 1, 1, alpha);
+        actionBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
         actionBar.color = new Color(1, 1, 1, alpha);
         actionText.color = new Color(1, 1, 1, alpha);
-        radialBack.color = new Color(0.2f, 0.2f, 0.2f, Mathf.Clamp(alpha, 0, 0.7f));
+        radialBack.color = new Color(0, 0, 0, Mathf.Clamp(alpha, 0, 0.5f));
         radialFill.color = new Color(1, 1, 1, alpha);
+        focused.color = new Color(1, 1, 1, alpha);
     }
 
     public void SetBackColor(Color color)
@@ -79,7 +81,10 @@ public class ActorRenderers
         var emissionColor = new Color(glowColor.r * factor, glowColor.g * factor, glowColor.b * factor, alpha);
         this.glow.material.SetColor("_EmissionColor", emissionColor);
     }
-
-  
+ 
+    public void SetFocus(bool isActive = true)
+    {
+        focused.gameObject.SetActive(isActive);
+    }
 }
 

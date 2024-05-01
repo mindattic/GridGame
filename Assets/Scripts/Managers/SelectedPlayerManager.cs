@@ -43,9 +43,10 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //TODO: Update Card display...
+        actors.ForEach(x => x.render.SetFocus(false));
         focusedPlayer = actor;
         focusedPlayer.sortingOrder = ZAxis.Max;
-
+        focusedPlayer.render.SetFocus(true);
         //Assign mouse offset (how off center was selection)
         mouseOffset = focusedPlayer.position - mousePosition3D;
 
@@ -102,7 +103,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         ghostManager.Start(selectedPlayer);
         footstepManager.Start(selectedPlayer);
 
-        timer.Set(x: 1f, start: true);
+        timer.Set(scaleX: 1f, start: true);
     }
 
     public void Drop()
@@ -133,7 +134,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         tileManager.Reset();
         cardManager.Clear();
-        timer.Set(x: 0f, start: false);
+        timer.Set(scaleX: 0f, start: false);
         turnManager.currentPhase = TurnPhase.Attack;
         actorManager.CheckPlayerAttack();
     }
