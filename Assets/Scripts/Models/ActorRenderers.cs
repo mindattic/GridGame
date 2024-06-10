@@ -7,9 +7,10 @@ public class ActorRenderers
 
     public Color glowColor;
     public Color backColor;
-    public Color frameColor = new Color(1,1,1,1);
+    public Color frameColor;
 
     public SpriteRenderer Back;
+    public SpriteRenderer Parallax;
     public SpriteRenderer Glow; 
     public SpriteRenderer Thumbnail;
     public SpriteRenderer Frame;
@@ -33,10 +34,12 @@ public class ActorRenderers
 
     public void SetAlpha(float alpha)
     {
-        //Glow.color = new Color(glowColor.r, backColor.g, glowColor.b, Mathf.Clamp(backColor.a, 0, 0.25f));
-        //Back.color = new Color(backColor.r, backColor.g, backColor.b, Mathf.Clamp(backColor.a, 0, 0.7f));
+        Back.color = new Color(backColor.r, backColor.g, backColor.b, Mathf.Clamp(backColor.a, 0, 0.7f));
+        Parallax.color = new Color(backColor.r, backColor.g, backColor.b, Mathf.Clamp(backColor.a, 0, 0.7f));
+        Glow.color = new Color(glowColor.r, backColor.g, glowColor.b, Mathf.Clamp(backColor.a, 0, 0.25f)); 
         Thumbnail.color = new Color(1, 1, 1, alpha);
         Frame.color = new Color(frameColor.r, frameColor.g, frameColor.b, alpha);
+
         StatusIcon.color = new Color(1, 1, 1, alpha);
 
         HealthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
@@ -104,6 +107,12 @@ public class ActorRenderers
     public void SetFocus(bool isActive = true)
     {
         Selection.gameObject.SetActive(isActive);
+    }
+
+
+    public void SetParallaxSprite(Sprite sprite)
+    {
+        Parallax.sprite = sprite;
     }
 }
 

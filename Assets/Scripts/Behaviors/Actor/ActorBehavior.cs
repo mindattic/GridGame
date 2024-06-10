@@ -10,21 +10,22 @@ public class ActorBehavior: ExtendedMonoBehavior
     protected static class Layer
     {
         public const int Back = 0;
-        public const int Glow = 1;
-        public const int Thumbnail = 2;
-        public const int Frame = 3;
-        public const int StatusIcon = 4;
-        public const int HealthBarBack = 5;
-        public const int HealthBar = 6;
-        public const int HealthBarFront = 7;
-        public const int HealthText = 8;
-        public const int ActionBarBack = 9;
-        public const int ActionBar = 10;
-        public const int ActionText = 11;
-        public const int RadialBack = 12;
-        public const int RadialFill = 13;
-        public const int RadialText = 14;
-        public const int Selection = 15;
+        public const int Parallax = 1;
+        public const int Glow = 2;
+        public const int Thumbnail = 3;
+        public const int Frame = 4;
+        public const int StatusIcon = 5;
+        public const int HealthBarBack = 6;
+        public const int HealthBar = 7;
+        public const int HealthBarFront = 8;
+        public const int HealthText = 9;
+        public const int ActionBarBack = 10;
+        public const int ActionBar = 11;
+        public const int ActionText = 12;
+        public const int RadialBack = 13;
+        public const int RadialFill = 14;
+        public const int RadialText = 15;
+        public const int Selection = 16;
     }
 
 
@@ -64,6 +65,7 @@ public class ActorBehavior: ExtendedMonoBehavior
     private void Awake()
     {
         Renderers.Back = gameObject.transform.GetChild(Layer.Back).GetComponent<SpriteRenderer>();
+        Renderers.Parallax = gameObject.transform.GetChild(Layer.Parallax).GetComponent<SpriteRenderer>();
         Renderers.Glow = gameObject.transform.GetChild(Layer.Glow).GetComponent<SpriteRenderer>();
         Renderers.Thumbnail = gameObject.transform.GetChild(Layer.Thumbnail).GetComponent<SpriteRenderer>();
         Renderers.Frame = gameObject.transform.GetChild(Layer.Frame).GetComponent<SpriteRenderer>();
@@ -116,6 +118,7 @@ public class ActorBehavior: ExtendedMonoBehavior
         set
         {
             Renderers.Back.sortingOrder = value + Layer.Back;
+            Renderers.Parallax.sortingOrder = value + Layer.Parallax;
             Renderers.Glow.sortingOrder = value;
             Renderers.Thumbnail.sortingOrder = value + Layer.Thumbnail;
             Renderers.Frame.sortingOrder = value + Layer.Frame;
@@ -212,11 +215,12 @@ public class ActorBehavior: ExtendedMonoBehavior
         position = Geometry.PositionFromLocation(location);
 
         if (this.IsPlayer)
-        {
-            Renderers.SetAlpha(0);
+        {         
             Renderers.SetBackColor(quality.Color);
+            Renderers.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
             Renderers.SetGlowColor(quality.Color);
             Renderers.SetFrameColor(Colors.Solid.White);
+            Renderers.SetAlpha(0);
             Renderers.ActionBarBack.enabled = false;
             Renderers.ActionBar.enabled = false;
             Renderers.RadialText.enabled = false;
@@ -225,16 +229,17 @@ public class ActorBehavior: ExtendedMonoBehavior
         }
         else if (this.IsEnemy)
         {
-            Renderers.SetAlpha(0);
-            Renderers.SetBackColor(Colors.Translucent.Black);
-            Renderers.SetGlowColor(Colors.Translucent.Black);
+           
+            Renderers.SetBackColor(Colors.Solid.White);
+            Renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
+            Renderers.SetGlowColor(Colors.Solid.White);
             Renderers.SetGlowAlpha(0);
             Renderers.SetFrameColor(Colors.Solid.Red);
+            Renderers.SetAlpha(0);
             Renderers.RadialText.enabled = true;
             Renderers.RadialBack.enabled = true;
             Renderers.RadialFill.enabled = true;
             CalculateWait();
-            wait = turnManager.currentTurn == 1 ? Random.Float(0, waitDuration / 4) : 0;
         }
 
 
