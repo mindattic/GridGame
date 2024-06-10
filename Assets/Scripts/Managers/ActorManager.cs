@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using System.Numerics;
 using UnityEngine;
 
 public class ActorManager : ExtendedMonoBehavior
@@ -19,8 +20,9 @@ public class ActorManager : ExtendedMonoBehavior
     public void CheckPlayerAttack()
     {
         ClearAttack();
-        if (!HasAlignedPlayers()) return;
-        if (!HasAttackingPlayers()) return;
+        if (!CheckAlignedPlayers()) return;
+        if (!CheckAttackingPlayers()) return;
+        CheckSupportingPairs();
         StartCoroutine(PlayerAttack());
     }
 
@@ -35,7 +37,7 @@ public class ActorManager : ExtendedMonoBehavior
     /// <summary>
     /// Method which is used to find actors that share first column or row
     /// </summary>
-    private bool HasAlignedPlayers()
+    private bool CheckAlignedPlayers()
     {
         foreach (var actor1 in players)
         {
@@ -75,7 +77,7 @@ public class ActorManager : ExtendedMonoBehavior
     /// <summary>
     /// Method which is used to find actors surrounding enemies without gaps between
     /// </summary>
-    private bool HasAttackingPlayers()
+    private bool CheckAttackingPlayers()
     {
         foreach (var pair in attackParticipants.alignedPairs)
         {
@@ -96,15 +98,20 @@ public class ActorManager : ExtendedMonoBehavior
                 pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && Common.IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x).ToList();
             }
 
-            //Assign attacking pairs
+
             var hasEnemiesBetween = pair.enemies.Any();
             var hasPlayersBetween = pair.players.Any();
+            //var hasDuplicate = attackParticipants.attackingPairs.Count(x => (x.actor1 == pair.actor1 && x.actor2 == pair.actor2) || (x.actor1 == pair.actor2 && x.actor2 == pair.actor1)) > 0;
             var hasGapsBetween = pair.gaps.Any();
-            var hasDuplicate = attackParticipants.attackingPairs.Count(x => (x.actor1 == pair.actor1 && x.actor2 == pair.actor2) || (x.actor1 == pair.actor2 && x.actor2 == pair.actor1)) > 0;
-            if (!hasEnemiesBetween || hasPlayersBetween || hasGapsBetween || hasDuplicate)
-                continue;
 
-            attackParticipants.attackingPairs.Add(pair);
+            if (hasEnemiesBetween && !hasPlayersBetween && !hasGapsBetween && !attackParticipants.HasAttackingPair(pair))
+            {
+                attackParticipants.attackingPairs.Add(pair);
+            }
+            else if (!hasEnemiesBetween && !hasPlayersBetween && hasGapsBetween && !attackParticipants.HasSupportingPair(pair))
+            {
+                attackParticipants.supportingPairs.Add(pair);
+            }
         }
 
         if (attackParticipants.attackingPairs.Count < 1)
@@ -116,6 +123,18 @@ public class ActorManager : ExtendedMonoBehavior
         return true;
     }
 
+
+
+    private void CheckSupportingPairs()
+    {
+        if (attackParticipants.supportingPairs.Count < 1)
+            return;
+
+        foreach (var supportingPair in attackParticipants.supportingPairs)
+        {
+            supportLineManager.Add(supportingPair);
+        }
+    }
 
 
     private IEnumerator PlayerAttack()
@@ -253,7 +272,7 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator EnemyEndDefend(ActorPair pair)
     {
-        //Fade out glow (all at once)
+        //Fade out Glow (all at once)
         foreach (var enemy in pair.enemies.Where(x => x.IsAlive))
         {
             //enemy.StopGlow();
@@ -299,7 +318,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         turnManager.currentPhase = TurnPhase.Move;
 
-        var readyEnemies = enemies.Where(x => x.IsReady).ToList();
+        var readyEnemies = enemies.Where(x => x.IsAlive && x.IsActive && x.IsReady).ToList();
         foreach (var enemy in readyEnemies)
         {
             enemy.SetDestination();

@@ -70,12 +70,14 @@
     <Compile Include="Assets\Scripts\Managers\BoardManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\PortraitBehavior.cs" />
     <Compile Include="Assets\Scripts\Utilities\Common.cs" />
-    <Compile Include="Assets\Scripts\Behaviors\ActorBehavior.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\Actor\ActorBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\DamageTextManager.cs" />
     <Compile Include="Assets\Scripts\Managers\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\GhostBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\ActorPair.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\Actor\ActorAttributes.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\Actor\ActorHealthBar.cs" />
     <Compile Include="Assets\Scripts\Behaviors\FpsMonitor.cs" />
     <Compile Include="Assets\Scripts\Models\ShakeIntensity.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />

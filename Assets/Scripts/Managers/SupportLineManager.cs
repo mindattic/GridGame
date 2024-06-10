@@ -1,10 +1,13 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class SupportLineManager : ExtendedMonoBehavior
 {
     [SerializeField] public GameObject supportLinePrefab;
+
+    public Dictionary<string, SupportLineBehavior> supportLines = new Dictionary<string, SupportLineBehavior>();
+
 
     private void Start()
     {
@@ -16,19 +19,33 @@ public class SupportLineManager : ExtendedMonoBehavior
 
     }
 
-    public void Add(Vector3 a, Vector3 b)
+    public void Add(ActorPair pair)
     {
+        var key = $"SupportLine_{pair.actor1.name}-{pair.actor2.name}";
+        var altKey = $"SupportLine_{pair.actor2.name}-{pair.actor1.name}";
+
+        if (supportLines.ContainsKey(key) || supportLines.ContainsKey(altKey))
+            return;
+
         var prefab = Instantiate(supportLinePrefab, Vector2.zero, Quaternion.identity);
         var supportLine = prefab.GetComponent<SupportLineBehavior>();
-        supportLine.name = $"SupportLine_{Guid.NewGuid()}";
+        supportLine.name = key;
         supportLine.parent = board.transform;
-        supportLine.Set(a, b);
+        supportLine.Add(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
+
+        supportLines.Add(key, supportLine);
+    }
+
+    public void Remove(string key)
+    {
+        supportLines[key].Remove();
+        supportLines.Remove(key);
     }
 
     public void Clear()
     {
-        var gameObjects = GameObject.FindGameObjectsWithTag(Tag.SupportLine).ToList();
-        gameObjects.ForEach(x => Destroy(x));
+        supportLines.ToList().ForEach(x => x.Value.Remove());
+        supportLines.Clear();
     }
 
 }

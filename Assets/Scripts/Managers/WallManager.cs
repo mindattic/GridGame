@@ -8,12 +8,12 @@ public class WallManager : MonoBehaviour
 
     private float cellSize => GameManager.instance.tileSize;
 
-    // Start is called before the first frame update
+    // Start is called before the first Frame update
     void Start()
     {
     }
 
-    // Update is called once per frame
+    // Update is called once per Frame
     void Update()
     {
 

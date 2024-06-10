@@ -32,13 +32,13 @@ public class DamageTextBehavior : ExtendedMonoBehavior
         textMesh = GetComponent<TextMeshPro>();
     }
 
-    // Start is called before the first frame update
+    // Start is called before the first Frame update
     void Start()
     {
 
     }
 
-    // Update is called once per frame
+    // Update is called once per Frame
     void Update()
     {
 

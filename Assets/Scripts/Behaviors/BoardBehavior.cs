@@ -48,7 +48,7 @@ public class BoardBehavior : ExtendedMonoBehavior
 
     }
 
-    // Update is called once per frame
+    // Update is called once per Frame
     void Update()
     {
 

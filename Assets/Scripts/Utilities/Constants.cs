@@ -94,6 +94,7 @@ public static class Colors
     {
         public static Color Gold = RGBA(255, 215, 0, 128);
         public static Color White = RGBA(255, 255, 255, 128);
+        public static Color Black = RGBA(0, 0, 0, 128);
         public static Color LightBlue = RGBA(128, 128, 255, 128);
         public static Color LightRed = RGBA(255, 128, 128, 128);
         public static Color Red = RGBA(255, 0, 0, 128);

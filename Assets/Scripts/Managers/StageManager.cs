@@ -238,7 +238,7 @@ public class StageManager : ExtendedMonoBehavior
         actor.thumbnail = stageActor.thumbnail;
         actor.team = stageActor.team;
         actor.quality = stageActor.rarity;
-        actor.render.SetBackColor(actor.IsPlayer ? Color.white : Color.red);
+        actor.Renderers.SetBackColor(actor.IsPlayer ? Color.white : Color.red);
         actor.sortingOrder = ZAxis.Min;
 
         //Assign attributes

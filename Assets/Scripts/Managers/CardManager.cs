@@ -63,6 +63,6 @@ public class CardManager : ExtendedMonoBehavior
         details.text = "";
 
         //Clear selection from actor
-        actors.ForEach(x => x.render.SetFocus(false));
+        actors.ForEach(x => x.Renderers.SetFocus(false));
     }
 }

@@ -6,13 +6,13 @@ using static UnityEditor.FilePathAttribute;
 
 public class SelectedPlayerManager : ExtendedMonoBehavior
 {
-    // Start is called before the first frame update
+    // Start is called before the first Frame update
     void Start()
     {
 
     }
 
-    // Update is called once per frame
+    // Update is called once per Frame
     void Update()
     {
 
@@ -43,10 +43,10 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //TODO: Update Card display...
-        actors.ForEach(x => x.render.SetFocus(false));
+        actors.ForEach(x => x.Renderers.SetFocus(false));
         focusedPlayer = actor;
         focusedPlayer.sortingOrder = ZAxis.Max;
-        focusedPlayer.render.SetFocus(true);
+        focusedPlayer.Renderers.SetFocus(true);
         //Assign mouse offset (how off center was selection)
         mouseOffset = focusedPlayer.position - mousePosition3D;
 
@@ -144,9 +144,9 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         foreach (var actor in actors)
         {
             if (actor == null || !actor.IsAlive || !actor.IsActive) continue;
-            actor.render.glow.transform.position = actor.position;
-            actor.render.thumbnail.transform.position = actor.position;
-            actor.render.frame.transform.position = actor.position;
+            actor.Renderers.Glow.transform.position = actor.position;
+            actor.Renderers.Thumbnail.transform.position = actor.position;
+            actor.Renderers.Frame.transform.position = actor.position;
         }
     }
 

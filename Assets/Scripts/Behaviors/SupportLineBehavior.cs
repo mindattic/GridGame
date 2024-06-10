@@ -1,11 +1,12 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.U2D;
 
 public class SupportLineBehavior : ExtendedMonoBehavior
 {
     //Variables
-    [SerializeField] public Vector3 start;
-    [SerializeField] public Vector3 end;
+    public Vector3 start;
+    public Vector3 end;
     [SerializeField] public float width;
 
 
@@ -27,29 +28,46 @@ public class SupportLineBehavior : ExtendedMonoBehavior
 
     #endregion
 
-    #region Methods
-
-    public void Set(Vector3 start, Vector3 end)
+  
+    public void Add(Vector3 start, Vector3 end)
     {
         this.start = start;
         this.end = end;
 
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
-        Show();
+
+        IEnumerator FadeIn()
+        {
+            var alpha = 0f;
+            lineRenderer.startColor = new Color(1, 1, 1, alpha);
+            lineRenderer.endColor = new Color(1, 1, 1, alpha);
+
+            while (alpha < 1f)
+            {
+                alpha += Increment.OnePercent;
+                alpha = Mathf.Clamp(alpha, 0, 1);
+
+                lineRenderer.startColor = new Color(1, 1, 1, alpha);
+                lineRenderer.endColor = new Color(1, 1, 1, alpha);
+                yield return Wait.Tick();
+            }
+
+            lineRenderer.startColor = new Color(1, 1, 1, alpha);
+            lineRenderer.endColor = new Color(1, 1, 1, alpha);
+        };
+
+        StartCoroutine(FadeIn());
     }
 
-    public void Show()
-    {
-        gameObject.SetActive(true);
-    }
 
-    public void Hide()
-    {
-        gameObject.SetActive(false);
-    }
 
-    #endregion
+
+
+
+
+
+
 
     private void Awake()
     {
@@ -66,5 +84,10 @@ public class SupportLineBehavior : ExtendedMonoBehavior
     void Update()
     {
 
+    }
+
+    public void Remove()
+    {
+        Destroy(this.gameObject);
     }
 }

@@ -7,84 +7,103 @@ public class ActorRenderers
 
     public Color glowColor;
     public Color backColor;
+    public Color frameColor = new Color(1,1,1,1);
 
-    public SpriteRenderer back;
-    public SpriteRenderer glow; 
-    public SpriteRenderer thumbnail;
-    public SpriteRenderer frame;
-    public SpriteRenderer statusIcon;
-    public SpriteRenderer healthBarBack;
-    public SpriteRenderer healthBar;
-    public SpriteRenderer healthBarFront;
-    public TextMeshPro healthText;
-    public SpriteRenderer actionBarBack;
-    public SpriteRenderer actionBar;
-    public TextMeshPro actionText;
-    public SpriteRenderer radialBack;
-    public SpriteRenderer radialFill;
-    public SpriteRenderer focused;
+    public SpriteRenderer Back;
+    public SpriteRenderer Glow; 
+    public SpriteRenderer Thumbnail;
+    public SpriteRenderer Frame;
+
+    public SpriteRenderer StatusIcon;
+
+    public SpriteRenderer HealthBarBack;
+    public SpriteRenderer HealthBar;
+    public SpriteRenderer HealthBarFront;
+    public TextMeshPro HealthText;
+
+    public SpriteRenderer ActionBarBack;
+    public SpriteRenderer ActionBar;
+    public TextMeshPro ActionText;
+
+    public SpriteRenderer RadialBack;
+    public SpriteRenderer RadialFill;
+    public TextMeshPro RadialText;
+
+    public SpriteRenderer Selection;
 
     public void SetAlpha(float alpha)
     {
-        //glow.color = new Color(glowColor.r, backColor.g, glowColor.b, Mathf.Clamp(backColor.a, 0, 0.25f));
-        //back.color = new Color(backColor.r, backColor.g, backColor.b, Mathf.Clamp(backColor.a, 0, 0.7f));
-        thumbnail.color = new Color(1, 1, 1, alpha);
-        frame.color = new Color(1, 1, 1, alpha);
-        statusIcon.color = new Color(1, 1, 1, alpha);
-        healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
-        healthBar.color = new Color(1, 1, 1, alpha);
-        healthBarFront.color = new Color(1, 1, 1, alpha);
-        healthText.color = new Color(1, 1, 1, alpha);
-        actionBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
-        actionBar.color = new Color(1, 1, 1, alpha);
-        actionText.color = new Color(1, 1, 1, alpha);
-        radialBack.color = new Color(0, 0, 0, Mathf.Clamp(alpha, 0, 0.5f));
-        radialFill.color = new Color(1, 1, 1, alpha);
-        focused.color = new Color(1, 1, 1, alpha);
+        //Glow.color = new Color(glowColor.r, backColor.g, glowColor.b, Mathf.Clamp(backColor.a, 0, 0.25f));
+        //Back.color = new Color(backColor.r, backColor.g, backColor.b, Mathf.Clamp(backColor.a, 0, 0.7f));
+        Thumbnail.color = new Color(1, 1, 1, alpha);
+        Frame.color = new Color(frameColor.r, frameColor.g, frameColor.b, alpha);
+        StatusIcon.color = new Color(1, 1, 1, alpha);
+
+        HealthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        HealthBar.color = new Color(1, 1, 1, alpha);
+        HealthBarFront.color = new Color(1, 1, 1, alpha);
+        HealthText.color = new Color(1, 1, 1, alpha);
+
+        ActionBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        ActionBar.color = new Color(1, 1, 1, alpha);
+        ActionText.color = new Color(1, 1, 1, alpha);
+
+        RadialBack.color = new Color(0, 0, 0, Mathf.Clamp(alpha, 0, 0.5f));
+        RadialFill.color = new Color(1, 1, 1, alpha);
+        RadialText.color = new Color(1, 1, 1, alpha);
+
+        Selection.color = new Color(1, 1, 1, alpha);
     }
 
     public void SetBackColor(Color color)
     {
-        backColor = new Color(color.r, color.g, color.b, Mathf.Min(color.a, 0.5f));
-        this.back.color = color;
+        backColor = new Color(color.r, color.g, color.b, color.a);
+        this.Back.color = backColor;
     }
 
     public void SetBackScale(Vector3 scale)
     {
-        this.back.transform.localScale = scale;
+        this.Back.transform.localScale = scale;
     }
 
     public void SetBackAlpha(float alpha)
     {
         backColor = new Color(backColor.r, backColor.g, backColor.b, Mathf.Min(alpha, 0.5f));
-        this.back.color = backColor;
+        this.Back.color = backColor;
     }
 
     public void SetGlowColor(Color color)
     {
         glowColor = color;
-        this.glow.color = color;
+        this.Glow.color = color;
 
         var intensity = (glowColor.r + glowColor.g + glowColor.b) / 3f;
         var factor = 1f / intensity;
         var emissionColor = new Color(glowColor.r * factor, glowColor.g * factor, glowColor.b * factor, glowColor.a);
-        this.glow.material.SetColor("_EmissionColor", emissionColor);
+        this.Glow.material.SetColor("_EmissionColor", emissionColor);
     }
 
     public void SetGlowAlpha(float alpha)
     {
         glowColor = new Color(glowColor.r, glowColor.g, glowColor.b, alpha);
-        this.glow.color = glowColor;
+        this.Glow.color = glowColor;
 
         var intensity = (glowColor.r + glowColor.g + glowColor.b) / 3f;
         var factor = 1f / intensity;
         var emissionColor = new Color(glowColor.r * factor, glowColor.g * factor, glowColor.b * factor, alpha);
-        this.glow.material.SetColor("_EmissionColor", emissionColor);
+        this.Glow.material.SetColor("_EmissionColor", emissionColor);
     }
- 
+
+    public void SetFrameColor(Color color)
+    {
+        frameColor = new Color(color.r, color.g, color.b, color.a);
+        this.Frame.color = frameColor;
+    }
+
+
     public void SetFocus(bool isActive = true)
     {
-        focused.gameObject.SetActive(isActive);
+        Selection.gameObject.SetActive(isActive);
     }
 }
 
