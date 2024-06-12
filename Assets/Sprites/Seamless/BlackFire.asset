@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dec68c479c3f8e64990ac486462d1c9b, type: 3}
   m_Name: BlackFire
   m_EditorClassIdentifier: 
-  id: 
-  sprite: {fileID: 0}
+  id: BlackFire
+  sprite: {fileID: 21300000, guid: d46c34b7cf0bb4c46957d4af018178cb, type: 3}

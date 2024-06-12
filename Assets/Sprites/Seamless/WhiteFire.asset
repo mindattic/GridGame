@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dec68c479c3f8e64990ac486462d1c9b, type: 3}
   m_Name: WhiteFire
   m_EditorClassIdentifier: 
-  id: 
-  sprite: {fileID: 0}
+  id: WhiteFire
+  sprite: {fileID: 21300000, guid: c099a6acfbc1e1e4fb61dc1c3f805a67, type: 3}

@@ -11,12 +11,14 @@ public class ResourceManager : ExtendedMonoBehavior
 
     //Variables
     [SerializeField] public List<ActorSprite> actorSprites = new List<ActorSprite>();
+    [SerializeField] public List<ActorMaterial> actorMaterials = new List<ActorMaterial>();
     [SerializeField] public List<ActorDetails> actorDetails = new List<ActorDetails>();
     [SerializeField] public List<StatusSprite> statusSprites = new List<StatusSprite>();
     [SerializeField] public List<PropSprite> propSprites = new List<PropSprite>();
     [SerializeField] public List<SeamlessSprite> seamLessSprites = new List<SeamlessSprite>();
     [SerializeField] public List<SoundEffect> soundEffects = new List<SoundEffect>();
     [SerializeField] public List<MusicTrack> musicTracks = new List<MusicTrack>();
+
 
     void Awake() { }
     void Start() { }
@@ -26,6 +28,12 @@ public class ResourceManager : ExtendedMonoBehavior
     public Sprite ActorThumbnail(string id)
     {
         return actorSprites.First(x => x.id.Equals(id)).thumbnail;
+    }
+
+
+    public Material ActorMaterial(string id)
+    {
+        return actorMaterials.First(x => x.id.Equals(id)).material;
     }
 
     public Sprite ActorPortrait(string id)

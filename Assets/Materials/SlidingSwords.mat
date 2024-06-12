@@ -78,7 +78,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.5
+    - _Alpha: 1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -103,9 +103,12 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
+    - _TileAmount: 0.25
     - _TilingMultiplier: 1
-    - _TimeMultiplier: 1
+    - _TimeMultiplier: -1.1
     - _WorkflowMode: 1
+    - _XScroll: -0.05
+    - _YScroll: 0.05
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

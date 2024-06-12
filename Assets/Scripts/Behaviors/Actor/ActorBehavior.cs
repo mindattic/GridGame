@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ActorBehavior: ExtendedMonoBehavior
 {
@@ -26,6 +27,8 @@ public class ActorBehavior: ExtendedMonoBehavior
         public const int RadialFill = 14;
         public const int RadialText = 15;
         public const int Selection = 16;
+        public const int Mask = 17;
+
     }
 
 
@@ -77,12 +80,11 @@ public class ActorBehavior: ExtendedMonoBehavior
         Renderers.ActionBarBack = gameObject.transform.GetChild(Layer.ActionBarBack).GetComponent<SpriteRenderer>();
         Renderers.ActionBar = gameObject.transform.GetChild(Layer.ActionBar).GetComponent<SpriteRenderer>();
         Renderers.ActionText = gameObject.transform.GetChild(Layer.ActionText).GetComponent<TextMeshPro>();
-
         Renderers.RadialBack = gameObject.transform.GetChild(Layer.RadialBack).GetComponent<SpriteRenderer>();
         Renderers.RadialFill = gameObject.transform.GetChild(Layer.RadialFill).GetComponent<SpriteRenderer>();
         Renderers.RadialText = gameObject.transform.GetChild(Layer.RadialText).GetComponent<TextMeshPro>();
         Renderers.Selection = gameObject.transform.GetChild(Layer.Selection).GetComponent<SpriteRenderer>();
-
+        Renderers.Mask = gameObject.transform.GetChild(Layer.Mask).GetComponent<SpriteMask>();
 
         HealthBar = new ActorHealthBar(gameObject);
 
@@ -122,24 +124,19 @@ public class ActorBehavior: ExtendedMonoBehavior
             Renderers.Glow.sortingOrder = value;
             Renderers.Thumbnail.sortingOrder = value + Layer.Thumbnail;
             Renderers.Frame.sortingOrder = value + Layer.Frame;
-
             Renderers.StatusIcon.sortingOrder = value + Layer.StatusIcon;
-
             Renderers.HealthBarBack.sortingOrder = value + Layer.HealthBarBack;
             Renderers.HealthBar.sortingOrder = value + Layer.HealthBar;
             Renderers.HealthBarFront.sortingOrder = value + Layer.HealthBarFront;
             Renderers.HealthText.sortingOrder = value + Layer.HealthText;
-
             Renderers.ActionBarBack.sortingOrder = value + Layer.ActionBarBack;
             Renderers.ActionBar.sortingOrder = value + Layer.ActionBar;
             Renderers.ActionText.sortingOrder = value + Layer.ActionText;
-
             Renderers.RadialBack.sortingOrder = value + Layer.RadialBack;
             Renderers.RadialFill.sortingOrder = value + Layer.RadialFill;
             Renderers.RadialText.sortingOrder = value + Layer.RadialText;
-
             Renderers.Selection.sortingOrder = value + Layer.Selection;
-
+            Renderers.Mask.sortingOrder = value + Layer.Mask;
         }
     }
 
@@ -162,7 +159,6 @@ public class ActorBehavior: ExtendedMonoBehavior
     public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
     public bool IsPlaying => IsAlive && IsActive;
     public bool IsReady => wait == waitDuration;
-
     public float LevelModifier => 1.0f + Random.Float(0, Level * 0.01f);
     public float AttackModifier => 1.0f + Random.Float(0, Attack * 0.01f);
     public float DefenseModifier => 1.0f + Random.Float(0, Defense * 0.01f);
@@ -218,6 +214,7 @@ public class ActorBehavior: ExtendedMonoBehavior
         {         
             Renderers.SetBackColor(quality.Color);
             Renderers.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
+            Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("PlayerParallax"));
             Renderers.SetGlowColor(quality.Color);
             Renderers.SetFrameColor(Colors.Solid.White);
             Renderers.SetAlpha(0);
@@ -232,6 +229,7 @@ public class ActorBehavior: ExtendedMonoBehavior
            
             Renderers.SetBackColor(Colors.Solid.White);
             Renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
+            Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
             Renderers.SetGlowColor(Colors.Solid.White);
             Renderers.SetGlowAlpha(0);
             Renderers.SetFrameColor(Colors.Solid.Red);

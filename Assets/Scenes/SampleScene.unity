@@ -13505,6 +13505,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 168f65728fc44ac42862ed21e1763289, type: 2}
   - {fileID: 11400000, guid: bcd672913a41bb04099c880d857477db, type: 2}
   - {fileID: 11400000, guid: d797516de2996b449af62ceb5b8e8303, type: 2}
+  actorMaterials:
+  - {fileID: 11400000, guid: 1ceab92f21618ca4887501408e84bac0, type: 2}
+  - {fileID: 11400000, guid: 8e423b70a55ec2f44b7457ed81d4f662, type: 2}
   actorDetails:
   - {fileID: 11400000, guid: c1997edaa59603c4c968c2a0dc1ec1f3, type: 2}
   - {fileID: 11400000, guid: 641c664aae2139c499b44c88e24c90fd, type: 2}
@@ -13523,6 +13526,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cd51026f4e87dee4aab54acdec4e0f8d, type: 2}
   - {fileID: 11400000, guid: 8949318a856a2bf458ffc92f0ac77c5a, type: 2}
   - {fileID: 11400000, guid: 61d3740c71aa4e84b8d70bbafb15f226, type: 2}
+  seamLessSprites:
+  - {fileID: 11400000, guid: 0c18f57ac3d9c034a9040f6abfe3f1c6, type: 2}
+  - {fileID: 11400000, guid: 0907e3e8de9fbaf408052127339b28ac, type: 2}
   soundEffects:
   - {fileID: 11400000, guid: 4114cdd851f647842bf7211b176cb70f, type: 2}
   - {fileID: 11400000, guid: 12fe8d6cc678c944090b1db3caa67371, type: 2}

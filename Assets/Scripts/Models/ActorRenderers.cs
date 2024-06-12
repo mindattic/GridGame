@@ -32,11 +32,14 @@ public class ActorRenderers
 
     public SpriteRenderer Selection;
 
+    public SpriteMask Mask;
+
+
     public void SetAlpha(float alpha)
     {
         Back.color = new Color(backColor.r, backColor.g, backColor.b, Mathf.Clamp(backColor.a, 0, 0.7f));
-        Parallax.color = new Color(backColor.r, backColor.g, backColor.b, Mathf.Clamp(backColor.a, 0, 0.7f));
-        Glow.color = new Color(glowColor.r, backColor.g, glowColor.b, Mathf.Clamp(backColor.a, 0, 0.25f)); 
+        Parallax.color = new Color(backColor.r, backColor.g, backColor.b, alpha);
+        Glow.color = new Color(glowColor.r, glowColor.g, glowColor.b, Mathf.Clamp(glowColor.a, 0, 0.25f)); 
         Thumbnail.color = new Color(1, 1, 1, alpha);
         Frame.color = new Color(frameColor.r, frameColor.g, frameColor.b, alpha);
 
@@ -114,5 +117,11 @@ public class ActorRenderers
     {
         Parallax.sprite = sprite;
     }
+
+    public void SetParallaxMaterial(Material material)
+    {
+        Parallax.material = material;
+    }
+
 }
 
