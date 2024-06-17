@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ActorBehavior: ExtendedMonoBehavior
+public class ActorBehavior : ExtendedMonoBehavior
 {
 
     protected static class Layer
@@ -92,7 +92,7 @@ public class ActorBehavior: ExtendedMonoBehavior
 
     private void Start()
     {
-     
+
     }
 
 
@@ -108,7 +108,7 @@ public class ActorBehavior: ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
-  
+
     public Sprite thumbnail
     {
         get => Renderers.Thumbnail.sprite;
@@ -140,7 +140,7 @@ public class ActorBehavior: ExtendedMonoBehavior
         }
     }
 
-  
+
     public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
     public bool IsPlayer => team.Equals(Team.Player);
     public bool IsEnemy => team.Equals(Team.Enemy);
@@ -179,14 +179,23 @@ public class ActorBehavior: ExtendedMonoBehavior
     public bool IsSouthEastOf(Vector2Int other) => this.location.x == other.x + 1 && this.location.y == other.y + 1;
     public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(this.location, other).Equals(1);
 
+    public Direction DirectionTo(Vector2Int other)
+    {
+        if (!IsAdjacentTo(other)) return Direction.None;
+        if (IsNorthOf(other)) return Direction.South;
+        if (IsEastOf(other)) return Direction.West;
+        if (IsSouthOf(other)) return Direction.North;
+        if (IsWestOf(other)) return Direction.East;
 
+        return Direction.None;
+    }
 
     private Vector2Int GoNorth() => location += new Vector2Int(0, -1);
     private Vector2Int GoEast() => location += new Vector2Int(1, 0);
     private Vector2Int GoSouth() => location += new Vector2Int(0, 1);
     private Vector2Int GoWest() => location += new Vector2Int(-1, 0);
 
-   
+
 
     public void Init(bool spawn)
     {
@@ -211,7 +220,7 @@ public class ActorBehavior: ExtendedMonoBehavior
         position = Geometry.PositionFromLocation(location);
 
         if (this.IsPlayer)
-        {         
+        {
             Renderers.SetBackColor(quality.Color);
             Renderers.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
             Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("PlayerParallax"));
@@ -226,7 +235,7 @@ public class ActorBehavior: ExtendedMonoBehavior
         }
         else if (this.IsEnemy)
         {
-           
+
             Renderers.SetBackColor(Colors.Solid.White);
             Renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
             Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
@@ -541,6 +550,84 @@ public class ActorBehavior: ExtendedMonoBehavior
         CheckRadial();
     }
 
+
+    enum BumpStage
+    {
+        Start,
+        MoveToward,
+        MoveAway,
+        End
+    }
+
+
+    public IEnumerator Bump(Direction direction)
+    {
+        BumpStage stage = BumpStage.Start;
+        var destination = Vector3.zero;
+
+        void next(BumpStage nextStage, Vector3 nextDestination)
+        {
+            position = destination;
+            destination = nextDestination;
+            stage = nextStage;
+        }
+
+        while (stage != BumpStage.End)
+        {
+            switch (stage)
+            {
+                case BumpStage.Start:
+                    {
+                        sortingOrder = ZAxis.Max;
+                        position = currentTile.position;
+                        var range = tileSize * percent33;
+                        destination = Geometry.GetDirectionalPosition(position, direction, range);
+                        stage = BumpStage.MoveToward;
+                    }
+                    break;
+
+                case BumpStage.MoveToward:
+                    {
+                        var delta = destination - position;
+                        if (Mathf.Abs(delta.x) > bumpSpeed)
+                            position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), bumpSpeed);
+                        else if (Mathf.Abs(delta.y) > bumpSpeed)
+                            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), bumpSpeed);
+
+                        var isSnapDistance = Vector2.Distance(position, destination) <= bumpSpeed;
+                        if (isSnapDistance)
+                            next(BumpStage.MoveAway, currentTile.position);
+
+                    }
+                    break;
+
+                case BumpStage.MoveAway:
+                    {
+                        var delta = destination - position;
+                        if (Mathf.Abs(delta.x) > bumpSpeed)
+                            position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), bumpSpeed);
+                        else if (Mathf.Abs(delta.y) > bumpSpeed)
+                            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), bumpSpeed);
+
+                        var isSnapDistance = Vector2.Distance(position, destination) <= bumpSpeed;
+                        if (isSnapDistance)
+                            next(BumpStage.End, currentTile.position);
+                    }
+                    break;
+
+                case BumpStage.End:
+                    {
+                        sortingOrder = ZAxis.Min;
+                        position = destination;
+                    }
+                    break;
+            }
+
+            yield return Wait.For(Interval.One);
+        }
+    }
+
+
     public IEnumerator TakeDamage(float damage)
     {
         var remainingHP = Mathf.Clamp(HP - damage, 0, MaxHP);
@@ -572,6 +659,8 @@ public class ActorBehavior: ExtendedMonoBehavior
         HP = remainingHP;
         position = currentTile.position;
     }
+
+
 
 
     public IEnumerator MissAttack()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Geometry
 {
@@ -81,7 +82,17 @@ public class Geometry
     }
 
 
-
+    public static Vector3 GetDirectionalPosition(Vector3 position, Direction direction, float amount)
+    {
+        return direction switch
+        {
+            Direction.North => new Vector3(position.x, position.y + amount, position.z),
+            Direction.East => new Vector3(position.x + amount, position.y, position.z),
+            Direction.South => new Vector3(position.x, position.y + -amount, position.z),
+            Direction.West => new Vector3(position.x + -amount, position.y, position.z),
+            _ => position,
+        };
+    }
   
 
 

@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
     <Compile Include="Assets\Scripts\Managers\SupportLineManager.cs" />
     <Compile Include="Assets\Scripts\Managers\CardManager.cs" />
+    <Compile Include="Assets\Scripts\Models\ActorMaterial.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Constants.cs" />
     <Compile Include="Assets\Scripts\Behaviors\AttackLineBehavior.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Assets\Scripts\Utilities\Wait.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Managers\TurnManager.cs" />
+    <Compile Include="Assets\Scripts\Models\SeamlessSprite.cs" />
     <Compile Include="Assets\Scripts\Behaviors\TileBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
     <Compile Include="Assets\Scripts\Models\MusicTrack.cs" />
@@ -119,8 +121,6 @@
     <Compile Include="Assets\Scripts\Models\AttackParticipants.cs" />
     <Compile Include="Assets\Scripts\Models\GhostRenderers.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
-    <Compile Include="Assets\Scripts\Models\SeamlessSprite.cs" />
-    <Compile Include="Assets\Scripts\Models\ActorMaterial.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

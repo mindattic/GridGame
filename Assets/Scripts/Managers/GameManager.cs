@@ -53,7 +53,7 @@ public class GameManager : Singleton<GameManager>
     public float cursorSpeed;
     public float slideSpeed;
     public float snapDistance;
-
+    public float bumpSpeed;
 
     //Selection
     public ActorBehavior selectedPlayer;
@@ -87,6 +87,7 @@ public class GameManager : Singleton<GameManager>
 
         cursorSpeed = tileSize / 2;
         slideSpeed = tileSize / 4;
+        bumpSpeed = tileSize / 16;
         snapDistance = tileSize / 8;
         shakeIntensity = new ShakeIntensity(tileSize);
 

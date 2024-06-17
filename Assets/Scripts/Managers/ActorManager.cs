@@ -12,6 +12,13 @@ public class ActorManager : ExtendedMonoBehavior
 
 
 
+    public void BumpTest()
+    {
+        var player = players.First(x => x.name == "Paladin");
+        var direction = Random.Direction();
+        StartCoroutine(player.Bump(direction));
+    }
+
 
     #region Player Attack Methods
 
@@ -357,12 +364,14 @@ public class ActorManager : ExtendedMonoBehavior
                     {
                         yield return Wait.For(Interval.HalfSecond);
 
+                        //yield return enemy.Bump(player);
 
                         //TODO: Calculate based on attacker accuracy vs defender evasion
                         var accuracy = enemy.Accuracy + Random.Float(0, enemy.Accuracy);
                         var hit = accuracy > player.Evasion;
                         if (hit)
                         {
+
                             //Attack enemy (one at a time)
                             //TODO: Calculate based on attacker stats
                             var damage = Random.Int(15, 33);
@@ -401,5 +410,7 @@ public class ActorManager : ExtendedMonoBehavior
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
         actors.Clear();
     }
+
+
 
 }

@@ -90,6 +90,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
 
     protected float cursorSpeed => GameManager.instance.cursorSpeed;
     protected float slideSpeed => GameManager.instance.slideSpeed;
+    protected float bumpSpeed => GameManager.instance.bumpSpeed;
     protected float snapDistance => GameManager.instance.snapDistance;
 
 
