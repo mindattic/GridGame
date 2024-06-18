@@ -364,14 +364,14 @@ public class ActorManager : ExtendedMonoBehavior
                     {
                         yield return Wait.For(Interval.HalfSecond);
 
-                        //yield return enemy.Bump(player);
+                        var direction = enemy.DirectionTo(player);
+                        yield return enemy.Bump(direction);
 
                         //TODO: Calculate based on attacker accuracy vs defender evasion
                         var accuracy = enemy.Accuracy + Random.Float(0, enemy.Accuracy);
                         var hit = accuracy > player.Evasion;
                         if (hit)
                         {
-
                             //Attack enemy (one at a time)
                             //TODO: Calculate based on attacker stats
                             var damage = Random.Int(15, 33);

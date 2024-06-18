@@ -179,13 +179,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsSouthEastOf(Vector2Int other) => this.location.x == other.x + 1 && this.location.y == other.y + 1;
     public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(this.location, other).Equals(1);
 
-    public Direction DirectionTo(Vector2Int other)
+    public Direction DirectionTo(ActorBehavior other)
     {
-        if (!IsAdjacentTo(other)) return Direction.None;
-        if (IsNorthOf(other)) return Direction.South;
-        if (IsEastOf(other)) return Direction.West;
-        if (IsSouthOf(other)) return Direction.North;
-        if (IsWestOf(other)) return Direction.East;
+        if (!IsAdjacentTo(other.location)) return Direction.None;
+        if (IsNorthOf(other.location)) return Direction.South;
+        if (IsEastOf(other.location)) return Direction.West;
+        if (IsSouthOf(other.location)) return Direction.North;
+        if (IsWestOf(other.location)) return Direction.East;
 
         return Direction.None;
     }
@@ -459,7 +459,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //Renderers.Glow.transform.position = pos;
         //Renderers.Thumbnail.transform.position = pos;
         //Renderers.Frame.transform.position = pos;
-        Renderers.Back.transform.position = pos;
+        Renderers.Thumbnail.transform.position = pos;
     }
 
 
@@ -563,9 +563,9 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator Bump(Direction direction)
     {
         BumpStage stage = BumpStage.Start;
-        var destination = Vector3.zero;
+        var destination = position;
 
-        void next(BumpStage nextStage, Vector3 nextDestination)
+        void NextStage(BumpStage nextStage, Vector3 nextDestination)
         {
             position = destination;
             destination = nextDestination;
@@ -581,8 +581,8 @@ public class ActorBehavior : ExtendedMonoBehavior
                         sortingOrder = ZAxis.Max;
                         position = currentTile.position;
                         var range = tileSize * percent33;
-                        destination = Geometry.GetDirectionalPosition(position, direction, range);
-                        stage = BumpStage.MoveToward;
+                        var nextDestination = Geometry.GetDirectionalPosition(position, direction, range);
+                        NextStage(BumpStage.MoveToward, nextDestination);
                     }
                     break;
 
@@ -596,7 +596,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                         var isSnapDistance = Vector2.Distance(position, destination) <= bumpSpeed;
                         if (isSnapDistance)
-                            next(BumpStage.MoveAway, currentTile.position);
+                            NextStage(BumpStage.MoveAway, currentTile.position);
 
                     }
                     break;
@@ -611,7 +611,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                         var isSnapDistance = Vector2.Distance(position, destination) <= bumpSpeed;
                         if (isSnapDistance)
-                            next(BumpStage.End, currentTile.position);
+                            NextStage(BumpStage.End, currentTile.position);
                     }
                     break;
 

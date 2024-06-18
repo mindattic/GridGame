@@ -94,3 +94,10 @@ public enum AttackStrategy
     AttackWeakest
 }
 
+public enum BumpStage
+{
+    Start,
+    MoveToward,
+    MoveAway,
+    End
+}
