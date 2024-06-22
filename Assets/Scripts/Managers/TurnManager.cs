@@ -27,8 +27,14 @@ public class TurnManager : ExtendedMonoBehavior
     {
         Reset();
     }
-    void Update() { }
-    void FixedUpdate() { }
+
+    void Update() {
+    
+    }
+
+    void FixedUpdate() { 
+    
+    }
 
     public void Reset()
     {

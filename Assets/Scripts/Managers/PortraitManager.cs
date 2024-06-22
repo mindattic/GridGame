@@ -21,13 +21,6 @@ public class PortraitManager : ExtendedMonoBehavior
     }
 
 
-    public void SlideIn()
-    {
-        var actor = players[Random.Int(0, players.Count - 1)];
-        var direction = Random.Direction();
-        SlideIn(actor, direction);
-    }
-
     public void SlideIn(ActorBehavior actor, Direction direction)
     {
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);

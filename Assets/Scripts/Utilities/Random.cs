@@ -63,9 +63,24 @@ static class Random
 
     public static ActorBehavior Player()
     {
-        var players = GameManager.instance.actors.Where(x => x.team.Equals(Team.Player)).ToList();
-        var index = Int(0, players.Count - 1);
-        return players[index];
+        return GameManager.instance.actors
+            .Where(x => x.team.Equals(Team.Player))
+            .OrderBy(x => Guid.NewGuid())
+            .First();
     }
 
+    public static ActorBehavior Enemy()
+    {
+        return GameManager.instance.actors
+            .Where(x => x.team.Equals(Team.Enemy))
+            .OrderBy(x => Guid.NewGuid())
+            .First();
+    }
+
+    public static TileBehavior Tile()
+    {
+        return GameManager.instance.tiles
+            .OrderBy(x => Guid.NewGuid())
+            .First();
+    }
 }

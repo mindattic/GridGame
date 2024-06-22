@@ -56,8 +56,8 @@ public class GameManager : Singleton<GameManager>
     public float bumpSpeed;
 
     //Selection
+    public ActorBehavior focusedPlayer;
     public ActorBehavior selectedPlayer;
-    public ActorBehavior currentPlayer;
 
     //Behaviors
     public BoardBehavior board;
@@ -87,7 +87,7 @@ public class GameManager : Singleton<GameManager>
 
         cursorSpeed = tileSize / 2;
         slideSpeed = tileSize / 4;
-        bumpSpeed = tileSize / 16;
+        bumpSpeed = tileSize / 14;
         snapDistance = tileSize / 8;
         shakeIntensity = new ShakeIntensity(tileSize);
 

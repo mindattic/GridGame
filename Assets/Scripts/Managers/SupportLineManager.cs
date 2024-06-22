@@ -8,6 +8,8 @@ public class SupportLineManager : ExtendedMonoBehavior
 
     public Dictionary<string, SupportLineBehavior> supportLines = new Dictionary<string, SupportLineBehavior>();
 
+    private const string NameFormat = "SupportLine_{0)+{1}";
+
 
     private void Start()
     {
@@ -19,32 +21,39 @@ public class SupportLineManager : ExtendedMonoBehavior
 
     }
 
-    public void Add(ActorPair pair)
+    public bool Spawn(ActorPair pair)
     {
-        var key = $"SupportLine_{pair.actor1.name}-{pair.actor2.name}";
-        var altKey = $"SupportLine_{pair.actor2.name}-{pair.actor1.name}";
-
+        //Determine if there is a duplicate
+        var key = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
+        var altKey = NameFormat.Replace("{0}", pair.actor2.name).Replace("{1}", pair.actor1.name);
         if (supportLines.ContainsKey(key) || supportLines.ContainsKey(altKey))
-            return;
+            return false;
+
+        CheckAlignment(pair, out bool hasEnemiesBetween, out bool hasPlayersBetween, out bool hasGapsBetween);
+        if (hasEnemiesBetween || hasEnemiesBetween)
+            return false;
 
         var prefab = Instantiate(supportLinePrefab, Vector2.zero, Quaternion.identity);
         var supportLine = prefab.GetComponent<SupportLineBehavior>();
         supportLine.name = key;
         supportLine.parent = board.transform;
-        supportLine.Add(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
+        supportLine.Spawn(pair.actor1.currentTile.position, pair.actor2.currentTile.position);
 
         supportLines.Add(key, supportLine);
+
+        return true;
     }
 
-    public void Remove(string key)
+
+    public void Destroy(string key)
     {
-        supportLines[key].Remove();
+        supportLines[key].Destroy();
         supportLines.Remove(key);
     }
 
     public void Clear()
     {
-        supportLines.ToList().ForEach(x => x.Value.Remove());
+        supportLines.ToList().ForEach(x => x.Value.Destroy());
         supportLines.Clear();
     }
 

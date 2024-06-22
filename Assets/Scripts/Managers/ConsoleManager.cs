@@ -50,9 +50,9 @@ public class ConsoleManager : ExtendedMonoBehavior
         label.text = $"{fps} FPS" + Environment.NewLine + $"Runtime: {Time.time}";
 
 
-        //string archetype = HasSelectedPlayer ? selectedPlayer.archetype : "-";
-        //string location = HasSelectedPlayer ? $@"({selectedPlayer.location.x},{selectedPlayer.location.y})" : "-";
-        //string position = HasSelectedPlayer ? $@"({selectedPlayer.transform.position.x},{selectedPlayer.transform.position.y})" : "-";
+        //string archetype = HasSelectedPlayer ? focusedPlayer.archetype : "-";
+        //string location = HasSelectedPlayer ? $@"({focusedPlayer.location.x},{focusedPlayer.location.y})" : "-";
+        //string position = HasSelectedPlayer ? $@"({focusedPlayer.transform.position.x},{focusedPlayer.transform.position.y})" : "-";
         //string mouse2D = mousePosition2D.x >= 0 ? $@"({mousePosition2D.x.ToString("N0").Replace(",", ""):N0},{mousePosition2D.y.ToString("N0").Replace(",", ""):N0})" : "-";
         //string mouse3D = mousePosition3D.x >= -4 ? $@"({mousePosition3D.x.ToString("N0").Replace(",", ""):N0},{mousePosition3D.y.ToString("N0").Replace(",", ""):N0},{mousePosition3D.z.ToString("N0").Replace(", ", ""):N0})" : "-";
         //string attackers = battle.attackers.Any() ? $"[{string.Join(",", battle.attackers.Pickup(x => x.archetype))}]" : "-";

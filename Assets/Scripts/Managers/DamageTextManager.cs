@@ -18,14 +18,6 @@ public class DamageTextManager : ExtendedMonoBehavior
 
     }
 
-    public void Spawn()
-    {
-        var text = $"{Random.Int(1, 3)}";
-        var position = players[0].position;
-        Spawn(text, position);
-    }
-
-
     public void Spawn(string text, Vector3 position)
     {
         var prefab = Instantiate(damageTextPrefab, Vector2.zero, Quaternion.identity);

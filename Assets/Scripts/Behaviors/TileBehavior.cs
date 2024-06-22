@@ -70,7 +70,7 @@ public class TileBehavior : ExtendedMonoBehavior
         //if (!HasSelectedPlayer)
         //    return;
 
-        //if (selectedPlayer.location.Equals(this.location))
+        //if (focusedPlayer.location.Equals(this.location))
         //{
         //    spriteRenderer.color = Colors.Solid.Gold;
         //}

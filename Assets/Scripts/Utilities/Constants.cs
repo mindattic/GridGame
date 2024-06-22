@@ -152,9 +152,11 @@ public static class Wait
     public static WaitForSeconds Ticks(int amount) => new WaitForSeconds(Interval.One * amount);
 
     public static WaitForSeconds For(float seconds) => new WaitForSeconds(seconds);
-    public static WaitForSeconds Continue() => new WaitForSeconds(0);
+    public static WaitForSeconds None() => new WaitForSeconds(0);
 
 }
+
+
 
 
 public static class ZAxis

@@ -102,6 +102,7 @@
     <Compile Include="Assets\Scripts\Behaviors\DamageTextBehavior.cs" />
     <Compile Include="Assets\Scripts\Utilities\Wait.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\Actor\ActorThumbnail.cs" />
     <Compile Include="Assets\Scripts\Managers\TurnManager.cs" />
     <Compile Include="Assets\Scripts\Models\SeamlessSprite.cs" />
     <Compile Include="Assets\Scripts\Behaviors\TileBehavior.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Assets\Scripts\Models\AttackParticipants.cs" />
     <Compile Include="Assets\Scripts\Models\GhostRenderers.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
+    <Compile Include="Assets\Scripts\Managers\DebugManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -142,6 +144,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\Shader\GradientTransparency.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />

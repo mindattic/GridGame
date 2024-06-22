@@ -8,12 +8,19 @@ using UnityEngine;
 public class ActorHealthBar
 {
 
-    GameObject gameObject;
+    GameObject healthBarBackGameObject;
+    GameObject healthBarGameObject;
 
-    public ActorHealthBar(GameObject gameObject)
+    SpriteRenderer healthbarBack;
+    SpriteRenderer healthbar;
+
+    public ActorHealthBar(GameObject healthBarBackGameObject, GameObject healthBarGameObject)
     {
-        this.gameObject = gameObject;
+        this.healthBarBackGameObject = healthBarBackGameObject;
+        this.healthBarGameObject = healthBarGameObject;
 
+        healthbarBack = healthBarBackGameObject.GetComponent<SpriteRenderer>();
+        healthbar = healthBarGameObject.GetComponent<SpriteRenderer>();
 
 
 

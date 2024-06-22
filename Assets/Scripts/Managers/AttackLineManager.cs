@@ -6,7 +6,7 @@ using UnityEngine;
 public class AttackLineManager : ExtendedMonoBehavior
 {
     [SerializeField] public GameObject attackLinePrefab;
-    private List<AttackLineBehavior> attackLines = new List<AttackLineBehavior>();
+    public Dictionary<string, AttackLineBehavior> attackLines = new Dictionary<string, AttackLineBehavior>();
 
 
     private const string NameFormat = "AttackLine_{0)+{1}";
@@ -24,29 +24,35 @@ public class AttackLineManager : ExtendedMonoBehavior
 
     public void Spawn(ActorPair pair)
     {
+        //Determine if there is a duplicate
+        var key = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
+        var altKey = NameFormat.Replace("{0}", pair.actor2.name).Replace("{1}", pair.actor1.name);
+        if (attackLines.ContainsKey(key) || attackLines.ContainsKey(altKey))
+            return;
+
         var prefab = Instantiate(attackLinePrefab, Vector2.zero, Quaternion.identity);
         var attackLine = prefab.GetComponent<AttackLineBehavior>();
-        var name = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
-        attackLine.name = name;
+        attackLine.name = key;
         attackLine.parent = board.transform;
         attackLine.Spawn(pair);
 
-        attackLines.Add(attackLine);
+        attackLines.Add(key, attackLine);
     }
 
 
     public void Destroy(ActorPair pair)
     {
-        var name = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
-        var attackLine = attackLines.FirstOrDefault(x => x.name == name);
-        if (attackLine == null) return;
-        attackLines.Remove(attackLine);
-        attackLine.FadeOut();
+        var key = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
+        if (!attackLines.ContainsKey(key))
+            return;
+
+        attackLines[key].Destroy();
+        attackLines.Remove(key);
     }
 
     public void Clear()
     {
-        attackLines.ForEach(x => Destroy(x.gameObject));
+        attackLines.ToList().ForEach(x => x.Value.Destroy());
         attackLines.Clear();
     }
 

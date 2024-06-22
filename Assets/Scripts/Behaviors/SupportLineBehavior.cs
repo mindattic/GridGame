@@ -8,7 +8,8 @@ public class SupportLineBehavior : ExtendedMonoBehavior
     public Vector3 start;
     public Vector3 end;
     [SerializeField] public float width;
-
+    float maxAlpha = 0.5f;
+    public Color baseColor = Colors.RGBA(48, 161, 49, 0);
 
     #region Components
 
@@ -29,7 +30,7 @@ public class SupportLineBehavior : ExtendedMonoBehavior
     #endregion
 
   
-    public void Add(Vector3 start, Vector3 end)
+    public void Spawn(Vector3 start, Vector3 end)
     {
         this.start = start;
         this.end = end;
@@ -39,34 +40,31 @@ public class SupportLineBehavior : ExtendedMonoBehavior
 
         IEnumerator FadeIn()
         {
-            var alpha = 0f;
-            lineRenderer.startColor = new Color(1, 1, 1, alpha);
-            lineRenderer.endColor = new Color(1, 1, 1, alpha);
+            float alpha = 0f;
+            Color color = baseColor;
 
-            while (alpha < 1f)
+            lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
+            lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
+
+            while (alpha < maxAlpha)
             {
                 alpha += Increment.OnePercent;
                 alpha = Mathf.Clamp(alpha, 0, 1);
 
-                lineRenderer.startColor = new Color(1, 1, 1, alpha);
-                lineRenderer.endColor = new Color(1, 1, 1, alpha);
+                color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+                lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
+                lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
+
                 yield return Wait.Tick();
             }
 
-            lineRenderer.startColor = new Color(1, 1, 1, alpha);
-            lineRenderer.endColor = new Color(1, 1, 1, alpha);
+            color = baseColor;
+            lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
+            lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
         };
 
         StartCoroutine(FadeIn());
     }
-
-
-
-
-
-
-
-
 
 
     private void Awake()
@@ -86,7 +84,7 @@ public class SupportLineBehavior : ExtendedMonoBehavior
 
     }
 
-    public void Remove()
+    public void Destroy()
     {
         Destroy(this.gameObject);
     }
