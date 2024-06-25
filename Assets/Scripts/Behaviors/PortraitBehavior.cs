@@ -125,7 +125,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
                     break;
             }
 
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         Destroy(this.gameObject);   
@@ -150,7 +150,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
             //Fade
             alpha -= Increment.OnePercent;
             spriteRenderer.color = new Color(1, 1, 1, alpha);
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         Destroy(this.gameObject);

@@ -103,7 +103,7 @@ public class GhostBehavior : ExtendedMonoBehavior
             render.thumbnail.color = color;
             render.frame.color = color;
 
-            yield return Wait.For(Interval.Five);
+            yield return Wait.For(Interval.FiveTicks);
         }
 
         Destroy(this.gameObject);

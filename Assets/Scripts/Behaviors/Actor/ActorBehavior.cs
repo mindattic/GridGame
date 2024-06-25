@@ -61,6 +61,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     [SerializeField] public float backScale = 1.4f;
 
     public float randomBob = Random.Float(0.5f, 1f);
+    public ActorBehavior targetPlayer = null;
 
     public ActorHealthBar HealthBar;
     public ActorThumbnail Thumbnail;
@@ -158,10 +159,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
     public bool IsPlayer => team.Equals(Team.Player);
     public bool IsEnemy => team.Equals(Team.Enemy);
-    public bool IsSelectedPlayer => HasFocusedPlayer && Equals(focusedPlayer);
-    public bool IsCurrentPlayer => HasSelectedPlayer && Equals(selectedPlayer);
+    public bool IsFocusedPlayer => HasFocusedPlayer && Equals(focusedPlayer);
+    public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
     public bool HasLocation => location != Locations.nowhere;
-    public bool HasDestination => destination.HasValue;
+    public bool IsMoving => destination.HasValue;
     public bool IsNorthEdge => location.y == 1;
     public bool IsEastEdge => location.x == board.columns;
     public bool IsSouthEdge => location.y == board.rows;
@@ -170,6 +171,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsDead => HP < 1;
     public bool IsActive => this != null && isActiveAndEnabled;
     public bool IsInactive => this == null || !isActiveAndEnabled;
+
     public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
     public bool IsPlaying => IsAlive && IsActive;
     public bool IsReady => wait == waitDuration;
@@ -300,7 +302,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void SwapLocation(ActorBehavior other)
     {
         //Check abort state
-        if (other == null || HasDestination)
+        if (IsMoving)
             return;
 
         if (IsNorthOf(other.location) || IsNorthWestOf(other.location) || IsNorthEastOf(other.location))
@@ -311,104 +313,81 @@ public class ActorBehavior : ExtendedMonoBehavior
             GoNorth();
         else if (IsWestOf(other.location))
             GoEast();
-        else
-        {
-            //Actors are on top of eachother
-            //TODO: Make sure this never happens in the first place...
-            //Debug.Log($"Conflict: {this.archetype} / {startLocation.archetype}");
-
-            var closestUnoccupiedTile = Geometry.ClosestUnoccupiedTileByLocation(location);
-            if (closestUnoccupiedTile != null)
-                GoToward(closestUnoccupiedTile.location);
-            else if (IsNorthEdge)
-                GoSouth();
-            else if (IsEastEdge)
-                GoWest();
-            else if (IsSouthEdge)
-                GoNorth();
-            else if (IsWestEdge)
-                GoEast();
-            else
-                GoRandomDirection();
-        }
 
         var closestTile = Geometry.ClosestTileByLocation(location);
         this.destination = closestTile.position;
 
+       
+
         soundSource.PlayOneShot(resourceManager.SoundEffect("Slide"));
     }
 
-
-    public void SetDestination()
+    Vector3 ClosestLocation(ActorBehavior other)
     {
+        //Determine if already adjacent to player...
+        if (IsAdjacentTo(other.location))
+            return position;
+
+        //...Otherwise, Find closest unoccupied tile adjacent to player...
+        var closestUnoccupiedAdjacentTile = Geometry.ClosestUnoccupiedAdjacentTileByLocation(other.location);
+        if (closestUnoccupiedAdjacentTile != null)
+            return closestUnoccupiedAdjacentTile.position;
+
+        //...Otherwise, Find closest tile adjacent to player...
+        var closestAdjacentTile = Geometry.ClosestAdjacentTileByLocation(other.location);
+        if (closestAdjacentTile != null)
+            return closestAdjacentTile.position;
+
+        //...Otherwise, find closest unoccupied tile to player...
+        var closestUnoccupiedTile = Geometry.ClosestUnoccupiedTileByLocation(other.location);
+        if (closestUnoccupiedTile != null)
+            return closestUnoccupiedTile.position;
+
+        //...Otherwise, find closest tile to player
+        var closestTile = Geometry.ClosestTileByLocation(other.location);
+        if (closestTile != null)
+            return closestTile.position;
+
+        return position;
+    }
 
 
+    public void SetAttackStrategy()
+    {
+        //Randomly select an attack attackStrategy
+        int[] ratios = { 50, 20, 15, 10, 5 };
+        var attackStrategy = Random.AttackStrategy(ratios);
 
-
-
-
-        //Randomy select an attack strategy
-        //var strategy = Random.Strategy();
-        var strategy = AttackStrategy.AttackClosest;
-
-        switch (strategy)
+        switch (attackStrategy)
         {
-            case AttackStrategy.MoveAnywhere:
-                var location = new Vector2Int(Random.Int(1, board.columns), Random.Int(1, board.rows));
-                destination = Geometry.ClosestTileByLocation(location).position;
-                break;
-
             case AttackStrategy.AttackClosest:
-                #region Attack Strategy: Attack Closest
-
-                //Find closest player
-                var closestPlayer = players.Where(x => x != null && x.IsAlive && x.IsActive).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
-
-                //Determine if already adjacent to player...
-                if (IsAdjacentTo(closestPlayer.location))
-                {
-                    destination = position;
-                    return;
-                }
-
-                //...Otherwise, Find closest unoccupied tile adjacent to player...
-                var closestUnoccupiedAdjacentTile = Geometry.ClosestUnoccupiedAdjacentTileByLocation(closestPlayer.location);
-                if (closestUnoccupiedAdjacentTile != null)
-                {
-                    destination = closestUnoccupiedAdjacentTile.position;
-                    return;
-                }
-
-                //...Otherwise, Find closest tile adjacent to player...
-                var closestAdjacentTile = Geometry.ClosestAdjacentTileByLocation(closestPlayer.location);
-                if (closestAdjacentTile != null)
-                {
-                    destination = closestAdjacentTile.position;
-                    return;
-                }
-
-                //...Otherwise, find closest unoccupied tile to player...
-                var closestUnoccupiedTile = Geometry.ClosestUnoccupiedTileByLocation(closestPlayer.location);
-                if (closestUnoccupiedTile != null)
-                {
-                    destination = closestUnoccupiedTile.position;
-                    return;
-                }
-
-                //...Otherwise, find closest tile to player
-                var closestTile = Geometry.ClosestTileByLocation(closestPlayer.location);
-                if (closestTile != null)
-                {
-                    destination = closestTile.position;
-                    return;
-                }
-
-                #endregion
+                var closestPlayer = players.Where(x => x.IsPlaying).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
+                targetPlayer = closestPlayer;
+                destination = ClosestLocation(targetPlayer);
                 break;
 
             case AttackStrategy.AttackWeakest:
-                var weakestPlayer = players.Where(x => x != null && x.IsAlive && IsActive).OrderBy(x => x.HP).FirstOrDefault();
-                destination = Geometry.ClosestUnoccupiedAdjacentTileByLocation(weakestPlayer.location).position;
+                var weakestPlayer = players.Where(x => x.IsPlaying).OrderBy(x => x.HP).FirstOrDefault();
+                targetPlayer = weakestPlayer;
+                destination = ClosestLocation(targetPlayer);
+                break;
+
+            case AttackStrategy.AttackStrongest:
+                var strongestPlayer = players.Where(x => x.IsPlaying).OrderBy(x => x.HP).FirstOrDefault();
+                targetPlayer = strongestPlayer;
+                destination = ClosestLocation(targetPlayer);
+                break;
+
+            case AttackStrategy.AttackRandom:
+                var randomPlayer = Random.Player();
+                targetPlayer = randomPlayer;
+                destination = ClosestLocation(targetPlayer);
+                break;
+
+            case AttackStrategy.MoveAnywhere:
+                var location = Random.Location();
+                targetPlayer = null;
+                destination = Geometry.ClosestTileByLocation(location).position;
                 break;
         }
 
@@ -418,7 +397,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void MoveTowardCursor()
     {
         //Check abort state
-        if (!IsSelectedPlayer && !IsCurrentPlayer)
+        if (!IsFocusedPlayer && !IsSelectedPlayer)
             return;
 
         var cursorPosition = mousePosition3D + mouseOffset;
@@ -435,21 +414,21 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void CheckMovement()
     {
         //Check abort state
-        if (!HasDestination)
+        if (!IsMoving)
             return;
 
         var delta = this.destination.Value - position;
-        if (Mathf.Abs(delta.x) > snapDistance)
+        if (Mathf.Abs(delta.x) >= snapDistance)
         {
             position = Vector2.MoveTowards(position, new Vector3(destination.Value.x, position.y, position.z), slideSpeed);
         }
-        else if (Mathf.Abs(delta.y) > snapDistance)
+        else if (Mathf.Abs(delta.y) >= snapDistance)
         {
             position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), slideSpeed);
         }
 
         //Determine if actor is close to destination
-        bool isSnapDistance = Vector2.Distance(position, destination.Value) < snapDistance;
+        bool isSnapDistance = Vector2.Distance(position, destination.Value) <= snapDistance;
         if (isSnapDistance)
         {
             //Snap to destination, clear destination, and set actor MoveState: "Idle"
@@ -465,7 +444,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsAlive || !IsActive || !turnManager.IsStartPhase)
             return;
 
-    
+
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         //var pos = new Vector3(
         //    transform.position.x,
@@ -537,7 +516,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsAlive || !IsActive)
             return;
 
-        if (IsSelectedPlayer || IsCurrentPlayer)
+        if (IsFocusedPlayer || IsSelectedPlayer)
             MoveTowardCursor();
 
         var closestTile = Geometry.ClosestTileByPosition(this.position);
@@ -562,7 +541,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     void FixedUpdate()
     {
         //Check abort state
-        if (!IsAlive || !IsActive || IsSelectedPlayer || IsCurrentPlayer)
+        if (!IsAlive || !IsActive || IsFocusedPlayer || IsSelectedPlayer)
             return;
 
         CheckMovement();
@@ -649,7 +628,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                     break;
             }
 
-            yield return Wait.Tick();
+            yield return Wait.None();
         }
     }
 
@@ -678,7 +657,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             //SlideIn sfx
             soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
 
-            yield return Wait.For(Interval.Five);
+            yield return Wait.For(Interval.FiveTicks);
         }
 
         Shake(ShakeIntensity.Stop);
@@ -710,7 +689,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             //SlideIn sfx
             soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
 
-            yield return Wait.For(Interval.Five);
+            yield return Wait.For(Interval.FiveTicks);
         }
 
         Shake(ShakeIntensity.Stop);
@@ -731,9 +710,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         while (ticks < duration)
         {
-            ticks += Interval.One;
+            ticks += Interval.OneTick;
             Shake(ShakeIntensity.Low);
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         Shake(ShakeIntensity.Stop);
@@ -813,7 +792,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha += Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, maxAlpha);
             Renderers.RadialBack.color = new Color(0, 0, 0, alpha);
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         Renderers.RadialBack.color = new Color(0, 0, 0, maxAlpha);
@@ -830,7 +809,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, maxAlpha);
             Renderers.RadialBack.color = new Color(0, 0, 0, alpha);
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         Renderers.RadialBack.color = new Color(0, 0, 0, 0);
@@ -850,7 +829,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
             Renderers.SetAlpha(alpha);
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
     }
 
@@ -876,7 +855,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha -= increment;
             alpha = Mathf.Clamp(alpha, 0, 1);
             Renderers.StatusIcon.color = new Color(1, 1, 1, alpha);
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         //Switch status status sprite
@@ -892,7 +871,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha = Mathf.Clamp(alpha, 0, 1);
             Renderers.StatusIcon.color = new Color(1, 1, 1, alpha);
 
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         Renderers.StatusIcon.color = new Color(1, 1, 1, 1);
@@ -935,7 +914,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                 alpha = Mathf.Clamp(alpha, 0, 1);
                 Renderers.SetGlowAlpha(alpha);
                 //Renderers.SetBackAlpha(alpha);
-                yield return Wait.Tick();
+                yield return Wait.OneTick();
             }
 
             Renderers.SetGlowAlpha(0);
@@ -957,7 +936,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha += Increment.TwoPercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
             Renderers.SetGlowAlpha(alpha);
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         Renderers.SetGlowAlpha(1);
@@ -971,7 +950,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha -= Increment.TwoPercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
             Renderers.SetGlowAlpha(alpha);
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         Renderers.SetGlowAlpha(0);
@@ -993,6 +972,16 @@ public class ActorBehavior : ExtendedMonoBehavior
         UpdateRadial();
     }
 
+    public void ReadyUp()
+    {
+        //Check abort state
+        if (!IsAlive || !IsActive || !IsEnemy)
+            return;
+
+        wait = waitDuration;
+        UpdateActionBar();
+    }
+
     public IEnumerator SpawnIn(float delay = 0)
     {
         float alpha = 0;
@@ -1009,7 +998,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             Renderers.SetAlpha(alpha);
             //Renderers.SetBackAlpha(alpha);
             //Renderers.SetGlowAlpha(Mathf.Clamp(alpha, 0.25f, 0.5f));
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         Renderers.SetAlpha(1);
@@ -1025,7 +1014,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     //        alpha = Mathf.Clamp(alpha, 0, 1);
     //        Renderers.SetGlowAlpha(alpha);
     //        //Renderers.SetBackAlpha(alpha);
-    //        yield return Wait.Tick();
+    //        yield return Wait.OneTick();
     //    }
 
     //    Renderers.SetGlowAlpha(0);

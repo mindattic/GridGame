@@ -71,7 +71,7 @@ public class FootstepBehavior : ExtendedMonoBehavior
             alpha = Mathf.Max(alpha, 0f);
             spriteRenderer.color = new Color(1, 1, 1, alpha);
 
-            yield return Wait.For(Interval.Ten);
+            yield return Wait.For(Interval.TenTicks);
         }
 
         Destroy(this.gameObject);

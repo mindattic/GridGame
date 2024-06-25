@@ -12,7 +12,7 @@ public class ActorManager : ExtendedMonoBehavior
 
 
 
-  
+
 
 
     #region Player Attack Methods
@@ -134,7 +134,7 @@ public class ActorManager : ExtendedMonoBehavior
             yield return PlayerPortrait(pair);
             yield return PlayerAttack(pair);
             yield return EnemyEndDefend(pair);
-            yield return PlayerEndAttack(pair);         
+            yield return PlayerEndAttack(pair);
         }
 
         ClearAttack();
@@ -165,7 +165,7 @@ public class ActorManager : ExtendedMonoBehavior
         portraitManager.SlideIn(pair.actor1, direction1);
         portraitManager.SlideIn(pair.actor2, direction2);
 
-        yield return Wait.For(Interval.TwoSecond);
+        yield return Wait.For(Interval.TwoSeconds);
     }
 
     private IEnumerator EnemyStartDefend(ActorPair pair)
@@ -305,15 +305,16 @@ public class ActorManager : ExtendedMonoBehavior
 
         turnManager.currentPhase = TurnPhase.Move;
 
-        var readyEnemies = enemies.Where(x => x.IsAlive && x.IsActive && x.IsReady).ToList();
+        var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
         foreach (var enemy in readyEnemies)
         {
-            enemy.SetDestination();
-            while (enemy.HasDestination)
+            enemy.SetAttackStrategy();
+            while (enemy.IsMoving)
             {
-                yield return Wait.For(0);
+                yield return Wait.OneTick();
             }
 
+            enemy.targetPlayer = null;
             yield return Wait.For(Interval.QuarterSecond);
         }
 
@@ -337,12 +338,12 @@ public class ActorManager : ExtendedMonoBehavior
     {
         yield return Wait.For(Interval.OneSecond);
 
-        var readyEnemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsReady).ToList();
+        var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
         if (readyEnemies.Count > 0)
         {
             foreach (var enemy in readyEnemies)
             {
-                var defendingPlayers = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsAdjacentTo(enemy.location)).ToList();
+                var defendingPlayers = players.Where(x => x.IsPlaying && x.IsAdjacentTo(enemy.location)).ToList();
                 if (defendingPlayers.Count > 0)
                 {
                     foreach (var player in defendingPlayers)

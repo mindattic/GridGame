@@ -93,7 +93,7 @@ public class AttackLineBehavior : ExtendedMonoBehavior
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
 
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         color = baseColor;
@@ -121,7 +121,7 @@ public class AttackLineBehavior : ExtendedMonoBehavior
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
 
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
 
         Destroy(this.gameObject);

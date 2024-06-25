@@ -55,7 +55,7 @@ public class SupportLineBehavior : ExtendedMonoBehavior
                 lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
                 lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
 
-                yield return Wait.Tick();
+                yield return Wait.OneTick();
             }
 
             color = baseColor;

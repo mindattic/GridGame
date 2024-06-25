@@ -56,17 +56,17 @@ public class TurnManager : ExtendedMonoBehavior
             currentTurn++;
             titleManager.Print($"Turn {currentTurn}");
             timer.Set(scaleX: 1f, start: false);
-            //players.Where(x => x != null && x.IsAlive && x.IsActive).ToList().ForEach(x => StartCoroutine(x.GlowIn()));
-            //enemies.Where(x => x != null && x.IsAlive && x.IsActive).ToList().ForEach(x => StartCoroutine(x.GlowOut()));
+            //players.Where(x => x.IsPlaying).ToList().ForEach(x => StartCoroutine(x.GlowIn()));
+            //enemies.Where(x => x.IsPlaying).ToList().ForEach(x => StartCoroutine(x.GlowOut()));
         }
         else if (IsEnemyTurn)
         {
             actorManager.CheckEnemySpawn();
             actorManager.CheckEnemyMove();
-            //enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsReady).ToList().ForEach(x => StartCoroutine(x.GlowIn()));
-            //players.Where(x => x != null && x.IsAlive && x.IsActive).ToList().ForEach(x => StartCoroutine(x.GlowOut()));
+            //enemies.Where(x => x.IsPlaying && x.IsReady).ToList().ForEach(x => StartCoroutine(x.GlowIn()));
+            //players.Where(x => x.IsPlaying).ToList().ForEach(x => StartCoroutine(x.GlowOut()));
         }
-       
+
         soundSource.PlayOneShot(resourceManager.SoundEffect($"NextTurn"));
     }
 

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class ExtendedMonoBehavior : MonoBehaviour
 {
 
-
+    //Canvases
     protected Canvas canvas2D => GameManager.instance.canvas2D;
     protected Canvas canvas3D => GameManager.instance.canvas3D;
 
@@ -100,19 +98,6 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.attackParticipants = value; }
     }
 
-    //protected bool InSameColumn(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x;
-    //protected bool InSameRow(ActorBehavior a, ActorBehavior b) => a.location.y == b.location.y;
-    //protected bool IsAbove(ActorBehavior a, ActorBehavior b) => InSameColumn(a, b) && a.location.y == b.location.y - 1;
-    //protected bool IsRight(ActorBehavior a, ActorBehavior b) => InSameRow(a, b) && a.location.x == b.location.x + 1;
-    //protected bool IsBelow(ActorBehavior a, ActorBehavior b) => InSameColumn(a, b) && a.location.y == b.location.y + 1;
-    //protected bool IsLeft(ActorBehavior a, ActorBehavior b) => InSameRow(a, b) && a.location.x == b.location.x - 1;
-
-    //protected bool IsAdjacent(ActorBehavior a, ActorBehavior b)
-    //{
-    //    return IsAbove(a, b) || IsRight(a, b) || IsBelow(a, b) || IsLeft(a, b);
-    //}
-
-
     protected ActorBehavior focusedPlayer
     {
         get { return GameManager.instance.focusedPlayer; }
@@ -126,6 +111,20 @@ public class ExtendedMonoBehavior : MonoBehaviour
     }
 
     public TileBehavior unoccupiedTile => tiles.Where(x => !x.IsOccupied).OrderBy(x => Guid.NewGuid()).First();
+
+
+
+    //protected bool InSameColumn(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x;
+    //protected bool InSameRow(ActorBehavior a, ActorBehavior b) => a.location.y == b.location.y;
+    //protected bool IsAbove(ActorBehavior a, ActorBehavior b) => InSameColumn(a, b) && a.location.y == b.location.y - 1;
+    //protected bool IsRight(ActorBehavior a, ActorBehavior b) => InSameRow(a, b) && a.location.x == b.location.x + 1;
+    //protected bool IsBelow(ActorBehavior a, ActorBehavior b) => InSameColumn(a, b) && a.location.y == b.location.y + 1;
+    //protected bool IsLeft(ActorBehavior a, ActorBehavior b) => InSameRow(a, b) && a.location.x == b.location.x - 1;
+
+    //protected bool IsAdjacent(ActorBehavior a, ActorBehavior b)
+    //{
+    //    return IsAbove(a, b) || IsRight(a, b) || IsBelow(a, b) || IsLeft(a, b);
+    //}
 
     public void CheckAlignment(ActorPair pair, out bool hasEnemiesBetween, out bool hasPlayersBetween, out bool hasGapsBetween)
     {

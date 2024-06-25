@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Linq;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEngine;
 
 static class Random
 {
-    [ThreadStatic] public static System.Random random = new System.Random();
+    [ThreadStatic] public static System.Random rng = new System.Random();
 
     public static int Int(int min, int max)
     {
-        return random.Next(min, max + 1);
+        return rng.Next(min, max + 1);
     }
 
     public static float Float(float min, float max)
     {
-        return (float)random.NextDouble() * (max - min) + min;
+        return (float)rng.NextDouble() * (max - min) + min;
     }
 
     public static float Percent()
     {
-        return (float)random.NextDouble();
+        return (float)rng.NextDouble();
     }
 
     public static float Range(float amount)
@@ -46,15 +48,75 @@ static class Random
     }
 
 
-    public static AttackStrategy Strategy()
+    public static AttackStrategy AttackStrategy(params int[] ratios)
     {
-        var result = Int(1, 3);
+        //int sum = Int(0, ratios.Sum());
+
+        //int ratio0 = ratios[0];
+        //int ratio1 = ratio0 + ratios[1];
+        //int ratio2 = ratio1 + ratios[2];
+        //int ratio3 = ratio2 + ratios[3];
+        //int ratio4 = ratio3 + ratios[4];
+        //int ratio5 = ratio4 + ratios[5];
+
+        //int result = Int(0, sum);
+
+        //if ((result -= ratio0) < 0) return global::AttackStrategy.AttackClosest;
+
+        //{
+        //    do_something1();
+        //}
+        //else if ((x -= RATIO_CHANCE_B) < 0) // Test for B
+        //{
+        //    do_something2();
+        //}
+        //// ... etc
+        //else // No need for final if statement
+        //{
+        //    do_somethingN();
+        //}
+
+
+        //TODO: Add in weighted value so some attacks are more common that others...
+
+        //int result = Int(0, ratios.Sum());
+
+        /*
+        int RATIO_CHANCE_A = 10;
+        int RATIO_CHANCE_B = 30;
+        int RATIO_CHANCE_C = 60;    
+        int RATIO_TOTAL = RATIO_CHANCE_A + RATIO_CHANCE_B + RATIO_CHANCE_C;
+
+        Random random = new Random();
+        int x = random.Next(0, RATIO_TOTAL);
+
+        if ((x -= RATIO_CHANCE_A) < 0) // Test for A
+        { 
+             do_something1();
+        } 
+        else if ((x -= RATIO_CHANCE_B) < 0) // Test for B
+        { 
+             do_something2();
+        }
+        // ... etc
+        else // No need for final if statement
+        { 
+             do_somethingN();
+        }
+        */
+
+
+
+
+        var result = Int(1, 5);
         return result switch
         {
-            1 => AttackStrategy.MoveAnywhere,
-            2 => AttackStrategy.AttackClosest,
-            3 => AttackStrategy.AttackClosest,
-            _ => AttackStrategy.MoveAnywhere,
+            1 => global::AttackStrategy.MoveAnywhere,
+            2 => global::AttackStrategy.AttackClosest,
+            3 => global::AttackStrategy.AttackWeakest,
+            4 => global::AttackStrategy.AttackStrongest,
+            5 => global::AttackStrategy.AttackRandom,
+            _ => global::AttackStrategy.MoveAnywhere,
         };
     }
 
@@ -83,4 +145,12 @@ static class Random
             .OrderBy(x => Guid.NewGuid())
             .First();
     }
+
+    public static Vector2Int Location()
+    {
+        int col = Int(1, GameManager.instance.board.columns);
+        int row = Int(1, GameManager.instance.board.rows);
+        return new Vector2Int(col, row);
+    }
+
 }

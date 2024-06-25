@@ -89,9 +89,11 @@ public enum Shadow
 
 public enum AttackStrategy
 {
-    MoveAnywhere,
     AttackClosest,
-    AttackWeakest
+    AttackWeakest,
+    AttackStrongest,
+    AttackRandom,
+    MoveAnywhere
 }
 
 public enum BumpStage

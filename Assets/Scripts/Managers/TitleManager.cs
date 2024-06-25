@@ -70,7 +70,7 @@ public class TitleManager : ExtendedMonoBehavior
             alpha += Increment.TenPercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
             label.color = new Color(1, 1, 1f, alpha);
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
     }
 
@@ -79,14 +79,14 @@ public class TitleManager : ExtendedMonoBehavior
         float alpha = 1f;
         label.color = new Color(1f, 1f, 1f, alpha);
 
-        yield return Wait.For(Interval.TwoSecond);
+        yield return Wait.For(Interval.TwoSeconds);
 
         while (alpha > 0f)
         {
             alpha -= Increment.TenPercent;
             alpha = Mathf.Clamp(alpha, 0f, 1);
             label.color = new Color(1, 1, 1, alpha);
-            yield return Wait.Tick();
+            yield return Wait.OneTick();
         }
     }
 
