@@ -9,18 +9,18 @@ using UnityEngine;
 public class ActorThumbnail
 {
 
-    GameObject gameObject;
+    GameObject GameObject;
 
-    SpriteRenderer spriteRenderer;
+    SpriteRenderer SpriteRenderer;
 
-    Sprite sprite;
+    Sprite Sprite;
 
 
     public ActorThumbnail(GameObject gameObject)
     {
-        this.gameObject = gameObject;
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        sprite = spriteRenderer.sprite;
+        this.GameObject = gameObject;
+        SpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        Sprite = SpriteRenderer.sprite;
     }
 
     public void Awake()

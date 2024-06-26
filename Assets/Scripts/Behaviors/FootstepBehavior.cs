@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class FootstepBehavior : ExtendedMonoBehavior
 {
-    float duration;
+    float Duration;
 
     private void Awake()
     {
-        transform.localScale = tileScale / 2;
+        transform.localScale = TileScale / 2;
         spriteRenderer = GetComponent<SpriteRenderer>();
-        duration = Interval.OneSecond * 10;
+        Duration = Interval.OneSecond * 10;
 
     }
     void Start() { }
@@ -20,19 +20,19 @@ public class FootstepBehavior : ExtendedMonoBehavior
 
     #region Components
 
-    public Transform parent
+    public Transform Parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
 
-    public Vector3 position
+    public Vector3 Position
     {
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
     }
 
-    public Quaternion rotation
+    public Quaternion Rotation
     {
         get => gameObject.transform.rotation;
         set => gameObject.transform.rotation = value;
@@ -52,15 +52,15 @@ public class FootstepBehavior : ExtendedMonoBehavior
 
     public void Spawn(Vector3 position, Quaternion rotation, bool isRightFoot)
     {
-        this.position = position;
-        this.rotation = rotation;
-        spriteRenderer.sprite = resourceManager.Prop($"Footstep{(isRightFoot ? "Right" : "Left")}");
+        this.Position = position;
+        this.Rotation = rotation;
+        spriteRenderer.sprite = ResourceManager.Prop($"Footstep{(isRightFoot ? "Right" : "Left")}");
         StartCoroutine(FadeOut());
     }
 
     private IEnumerator FadeOut()
     {
-        yield return Wait.For(duration);
+        yield return Wait.For(Duration);
 
         float alpha = spriteRenderer.color.a;
         spriteRenderer.color = new Color(1, 1, 1, alpha);

@@ -26,9 +26,9 @@ public class PortraitManager : ExtendedMonoBehavior
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var portrait = prefab.GetComponent<PortraitBehavior>();
         portrait.name = $"Portrait_{Guid.NewGuid()}";
-        portrait.parent = board.transform;
+        portrait.parent = Board.transform;
         portrait.sortingOrder = sortingOrder++;
-        portrait.sprite = resourceManager.ActorPortrait(actor.archetype.ToString());
+        portrait.sprite = ResourceManager.ActorPortrait(actor.Archetype.ToString());
         portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         portrait.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
         portrait.actor = actor;
@@ -41,7 +41,7 @@ public class PortraitManager : ExtendedMonoBehavior
 
     public void Dissolve()
     {
-        var actor = players[Random.Int(0, players.Count - 1)];
+        var actor = Players[Random.Int(0, Players.Count - 1)];
         Dissolve(actor);
     }
 
@@ -50,9 +50,9 @@ public class PortraitManager : ExtendedMonoBehavior
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var portrait = prefab.GetComponent<PortraitBehavior>();
         portrait.name = $"Portrait_{Guid.NewGuid()}";
-        portrait.parent = board.transform;
+        portrait.parent = Board.transform;
         portrait.sortingOrder = 100;
-        portrait.sprite = resourceManager.ActorPortrait(actor.archetype.ToString());
+        portrait.sprite = ResourceManager.ActorPortrait(actor.Archetype.ToString());
         portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         portrait.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
         portrait.actor = actor;

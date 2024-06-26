@@ -54,7 +54,7 @@ public class TitleManager : ExtendedMonoBehavior
 
         if (showOverlay)
         {
-            StartCoroutine(overlayManager.FadeInOut());
+            StartCoroutine(OverlayManager.FadeInOut());
         }
            
         StartCoroutine(FadeInOut());

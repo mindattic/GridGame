@@ -17,7 +17,7 @@ public class GhostManager : ExtendedMonoBehavior
     }
 
     void Start() {
-        threshold = tileSize / 12;
+        threshold = TileSize / 12;
     }
 
     void FixedUpdate() { }
@@ -58,7 +58,7 @@ public class GhostManager : ExtendedMonoBehavior
         GhostBehavior ghost = prefab.GetComponent<GhostBehavior>();
         ghost.thumbnail = actor.thumbnail;
         ghost.name = $"Ghost_{Guid.NewGuid()}";
-        ghost.parent = board.transform;
+        ghost.Parent = Board.transform;
         ghost.Spawn(actor);
     }
 

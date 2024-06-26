@@ -2,30 +2,32 @@
 
 public class ActorPair
 {
+
+    public ActorBehavior Actor1;
+    public ActorBehavior Actor2;
+
+    public ActorBehavior HighestActor;
+    public ActorBehavior LowestActor;
+
+    public Axis Axis;
+    public List<TileBehavior> Gaps;
+    public List<ActorBehavior> Enemies;
+    public List<ActorBehavior> Players;
+
     public ActorPair() { }
     public ActorPair(ActorBehavior actor1, ActorBehavior actor2, Axis axis)
     {
-        this.actor1 = actor1;
-        this.actor2 = actor2;
-        this.axis = axis;
+        this.Actor1 = actor1;
+        this.Actor2 = actor2;
+        this.Axis = axis;
     }
 
-    public ActorBehavior actor1;
-    public ActorBehavior actor2;
+    public float Ceiling => Axis == Axis.Vertical ? HighestActor.Location.y : HighestActor.Location.x;
+    public float Floor => Axis == Axis.Vertical ? LowestActor.Location.y : LowestActor.Location.x;
 
-    public ActorBehavior highest;
-    public ActorBehavior lowest;
-
-    public float ceiling => axis == Axis.Vertical ? highest.location.y : highest.location.x;
-    public float floor => axis == Axis.Vertical ? lowest.location.y : lowest.location.x;
-
-    public Axis axis;
-    public List<TileBehavior> gaps;
-    public List<ActorBehavior> enemies;
-    public List<ActorBehavior> players;
-
+   
     public bool HasMatch(ActorBehavior actor1, ActorBehavior actor2)
     {
-        return (this.actor1 == actor1 && this.actor2 == actor2) || (this.actor1 == actor2 && this.actor2 == actor1);
+        return (this.Actor1 == actor1 && this.Actor2 == actor2) || (this.Actor1 == actor2 && this.Actor2 == actor1);
     }
 }

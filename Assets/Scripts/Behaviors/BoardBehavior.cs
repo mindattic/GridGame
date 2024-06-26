@@ -5,20 +5,18 @@ using UnityEngine;
 
 public class BoardBehavior : ExtendedMonoBehavior
 {
-    public Vector2 offset;
-    public int columns = 6;
-    public int rows = 8;
-    public float top;
-    public float right;
-    public float bottom;
-    public float left;
+    public Vector2 Offset;
+    public int ColumnCount = 6;
+    public int RowCount = 8;
+    public float Top;
+    public float Right;
+    public float Bottom;
+    public float Left;
 
 
     #region Components
 
-    //SpriteRenderer backgroundRenderer;
-
-    public Vector3 position
+    public Vector3 Position
     {
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
@@ -36,15 +34,15 @@ public class BoardBehavior : ExtendedMonoBehavior
 
     void Start()
     {
-        offset = new Vector2(-(tileSize * 3) - tileSize / 2, (tileSize * columns));
-        top = offset.y - tileSize / 2;
-        right = offset.x + (tileSize * columns) + tileSize / 2;
-        bottom = offset.y - (tileSize * rows) - tileSize / 2;
-        left = offset.x + tileSize / 2;
+        Offset = new Vector2(-(TileSize * 3) - TileSize / 2, (TileSize * ColumnCount));
+        Top = Offset.y - TileSize / 2;
+        Right = Offset.x + (TileSize * ColumnCount) + TileSize / 2;
+        Bottom = Offset.y - (TileSize * RowCount) - TileSize / 2;
+        Left = Offset.x + TileSize / 2;
 
-        position = offset;
+        Position = Offset;
 
-        //backgroundRenderer.transform.localScale = new Vector3(tileSize * columns, tileSize * rows, 1);
+        //backgroundRenderer.transform.localScale = new Vector3(TileSize * ColumnCount, TileSize * RowCount, 1);
 
     }
 

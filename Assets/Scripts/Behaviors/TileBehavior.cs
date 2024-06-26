@@ -5,9 +5,9 @@ public class TileBehavior : ExtendedMonoBehavior
 {
 
     //Variables
-    [SerializeField] public Vector2Int location { get; set; }
+    [SerializeField] public Vector2Int Location { get; set; }
   
-    public bool IsOccupied => actors.Any(x => x != null && x.IsAlive && x.IsActive && x.location.Equals(location));
+    public bool IsOccupied => Actors.Any(x => x != null && x.IsAlive && x.IsActive && x.Location.Equals(Location));
 
     #region Components
 
@@ -40,17 +40,17 @@ public class TileBehavior : ExtendedMonoBehavior
     #endregion
 
     #region Properties
-    public bool IsSameColumn(Vector2Int other) => this.location.x == other.x;
-    public bool IsSameRow(Vector2Int other) => this.location.y == other.y;
-    public bool IsNorthOf(Vector2Int other) => IsSameColumn(other) && this.location.y == other.y - 1;
-    public bool IsEastOf(Vector2Int other) => IsSameRow(other) && this.location.x == other.x + 1;
-    public bool IsSouthOf(Vector2Int other) => IsSameColumn(other) && this.location.y == other.y + 1;
-    public bool IsWestOf(Vector2Int other) => IsSameRow(other) && this.location.x == other.x - 1;
-    public bool IsNorthWestOf(Vector2Int other) => this.location.x == other.x - 1 && this.location.y == other.y - 1;
-    public bool IsNorthEastOf(Vector2Int other) => this.location.x == other.x + 1 && this.location.y == other.y - 1;
-    public bool IsSouthWestOf(Vector2Int other) => this.location.x == other.x - 1 && this.location.y == other.y + 1;
-    public bool IsSouthEastOf(Vector2Int other) => this.location.x == other.x + 1 && this.location.y == other.y + 1;
-    public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(this.location, other) == 1;
+    public bool IsSameColumn(Vector2Int other) => this.Location.x == other.x;
+    public bool IsSameRow(Vector2Int other) => this.Location.y == other.y;
+    public bool IsNorthOf(Vector2Int other) => IsSameColumn(other) && this.Location.y == other.y - 1;
+    public bool IsEastOf(Vector2Int other) => IsSameRow(other) && this.Location.x == other.x + 1;
+    public bool IsSouthOf(Vector2Int other) => IsSameColumn(other) && this.Location.y == other.y + 1;
+    public bool IsWestOf(Vector2Int other) => IsSameRow(other) && this.Location.x == other.x - 1;
+    public bool IsNorthWestOf(Vector2Int other) => this.Location.x == other.x - 1 && this.Location.y == other.y - 1;
+    public bool IsNorthEastOf(Vector2Int other) => this.Location.x == other.x + 1 && this.Location.y == other.y - 1;
+    public bool IsSouthWestOf(Vector2Int other) => this.Location.x == other.x - 1 && this.Location.y == other.y + 1;
+    public bool IsSouthEastOf(Vector2Int other) => this.Location.x == other.x + 1 && this.Location.y == other.y + 1;
+    public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(this.Location, other) == 1;
 
     #endregion
 
@@ -61,8 +61,8 @@ public class TileBehavior : ExtendedMonoBehavior
 
     public void Start()
     {
-        transform.position = Geometry.PositionFromLocation(location);
-        transform.localScale = GameManager.instance.tileScale;
+        transform.position = Geometry.PositionFromLocation(Location);
+        transform.localScale = GameManager.instance.TileScale;
     }
 
     public void Update()
@@ -70,13 +70,13 @@ public class TileBehavior : ExtendedMonoBehavior
         //if (!HasSelectedPlayer)
         //    return;
 
-        //if (focusedPlayer.location.Equals(this.location))
+        //if (FocusedPlayer.Location.Equals(this.Location))
         //{
-        //    spriteRenderer.color = Colors.Solid.Gold;
+        //    SpriteRenderer.Color = Colors.Solid.Gold;
         //}
         //else
         //{
-        //    spriteRenderer.color = Colors.Translucent.White;
+        //    SpriteRenderer.Color = Colors.Translucent.White;
         //}
     }
 

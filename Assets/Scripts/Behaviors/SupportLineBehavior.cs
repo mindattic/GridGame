@@ -5,21 +5,21 @@ using UnityEngine.U2D;
 public class SupportLineBehavior : ExtendedMonoBehavior
 {
     //Variables
-    public Vector3 start;
-    public Vector3 end;
-    [SerializeField] public float width;
-    float maxAlpha = 0.5f;
-    public Color baseColor = Colors.RGBA(48, 161, 49, 0);
+    public Vector3 PointA;
+    public Vector3 PointB;
+    [SerializeField] public float Width;
+    float MaxAlpha = 0.5f;
+    public Color BaseColor = Colors.RGBA(48, 161, 49, 0);
 
     #region Components
 
-    public Transform parent
+    public Transform Parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
 
-    public Vector3 position
+    public Vector3 Position
     {
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
@@ -32,8 +32,8 @@ public class SupportLineBehavior : ExtendedMonoBehavior
   
     public void Spawn(Vector3 start, Vector3 end)
     {
-        this.start = start;
-        this.end = end;
+        this.PointA = start;
+        this.PointB = end;
 
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
@@ -41,24 +41,24 @@ public class SupportLineBehavior : ExtendedMonoBehavior
         IEnumerator FadeIn()
         {
             float alpha = 0f;
-            Color color = baseColor;
+            Color color = BaseColor;
 
             lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
             lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
 
-            while (alpha < maxAlpha)
+            while (alpha < MaxAlpha)
             {
                 alpha += Increment.OnePercent;
                 alpha = Mathf.Clamp(alpha, 0, 1);
 
-                color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+                color = new Color(BaseColor.r, BaseColor.g, BaseColor.b, alpha);
                 lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
                 lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
 
                 yield return Wait.OneTick();
             }
 
-            color = baseColor;
+            color = BaseColor;
             lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
             lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
         };
@@ -75,8 +75,8 @@ public class SupportLineBehavior : ExtendedMonoBehavior
     void Start()
     {
         lineRenderer.positionCount = 2;
-        lineRenderer.startWidth = tileSize / 2;
-        lineRenderer.endWidth = tileSize / 2;
+        lineRenderer.startWidth = TileSize / 2;
+        lineRenderer.endWidth = TileSize / 2;
     }
 
     void Update()

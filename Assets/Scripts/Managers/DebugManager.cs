@@ -9,11 +9,11 @@ using Phase = TurnPhase;
 
 public class DebugManager : ExtendedMonoBehavior
 {
-    [SerializeField] private TMP_Dropdown dropdown;
+    [SerializeField] private TMP_Dropdown Dropdown;
 
     public void Run()
     {
-        int index = dropdown.value;
+        int index = Dropdown.value;
 
         switch (index)
         {
@@ -29,19 +29,19 @@ public class DebugManager : ExtendedMonoBehavior
     {
         var player = Random.Player();
         var direction = Random.Direction();
-        portraitManager.SlideIn(player, direction);
+        PortraitManager.SlideIn(player, direction);
     }
 
     public void DamageTextTest()
     {
         var text = $"{Random.Int(1, 3)}";
-        var player = players.First(x => x.name == "Paladin");
-        damageTextManager.Spawn(text, player.position);
+        var player = Players.First(x => x.name == "Paladin");
+        DamageTextManager.Spawn(text, player.position);
     }
 
     public void BumpTest()
     {
-        var player = players.First(x => x.name == "Paladin");
+        var player = Players.First(x => x.name == "Paladin");
         var direction = Random.Direction();
         StartCoroutine(player.Bump(direction));
     }
@@ -50,23 +50,23 @@ public class DebugManager : ExtendedMonoBehavior
     {
 
         var alignedPairs = new HashSet<ActorPair>();
-        foreach (var actor1 in players)
+        foreach (var actor1 in Players)
         {
-            foreach (var actor2 in players)
+            foreach (var actor2 in Players)
             {
                 if (actor1 == null || actor2 == null || actor1.Equals(actor2)
                     || !actor1.IsAlive || !actor1.IsActive || !actor2.IsAlive || !actor2.IsActive)
                     continue;
 
-                if (actor1.IsSameColumn(actor2.location))
+                if (actor1.IsSameColumn(actor2.Location))
                 {
-                    var highest = actor1.location.y > actor2.location.y ? actor1 : actor2;
+                    var highest = actor1.Location.y > actor2.Location.y ? actor1 : actor2;
                     var lowest = highest == actor1 ? actor2 : actor1;
                     alignedPairs.Add(new ActorPair(highest, lowest, Axis.Vertical));
                 }
-                else if (actor1.IsSameRow(actor2.location))
+                else if (actor1.IsSameRow(actor2.Location))
                 {
-                    var highest = actor1.location.x > actor2.location.x ? actor1 : actor2;
+                    var highest = actor1.Location.x > actor2.Location.x ? actor1 : actor2;
                     var lowest = highest == actor1 ? actor2 : actor1;
                     alignedPairs.Add(new ActorPair(highest, lowest, Axis.Horizontal));
                 }
@@ -76,18 +76,18 @@ public class DebugManager : ExtendedMonoBehavior
 
         foreach (var pair in alignedPairs)
         {
-            supportLineManager.Spawn(pair);
+            SupportLineManager.Spawn(pair);
         }
 
     }
 
     public void EnemyAttackTest()
     {
-        var attackingEnemies = enemies.Where(x => x.IsPlaying).ToList();
+        var attackingEnemies = Enemies.Where(x => x.IsPlaying).ToList();
         attackingEnemies.ForEach(x => x.ReadyUp());
 
-        if (turnManager.IsPlayerTurn)
-            turnManager.NextTurn();
+        if (TurnManager.IsPlayerTurn)
+            TurnManager.NextTurn();
 
     }
 

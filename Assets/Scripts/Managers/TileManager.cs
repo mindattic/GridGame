@@ -19,7 +19,7 @@ public class TileManager : ExtendedMonoBehavior
 
     public void Reset()
     {
-        foreach (var tile in tiles)
+        foreach (var tile in Tiles)
         {
             tile.spriteRenderer.color = Colors.Translucent.White;
         }

@@ -25,14 +25,14 @@ public class InputManager : ExtendedMonoBehavior
 
         if (Input.GetMouseButtonDown(0))
         {
-            selectedPlayerManager.Select();
+            SelectedPlayerManager.Select();
             isDragging = HasFocusedPlayer;
 
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            selectedPlayerManager.Unselect();
-            selectedPlayerManager.Drop();
+            SelectedPlayerManager.Unselect();
+            SelectedPlayerManager.Drop();
             isDragging = false;
         }
 
@@ -41,7 +41,7 @@ public class InputManager : ExtendedMonoBehavior
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Pressed R");
-            stageManager.Load();
+            StageManager.Load();
         }
 
     }
@@ -54,10 +54,10 @@ public class InputManager : ExtendedMonoBehavior
         if (!HasFocusedPlayer)
             return;
 
-        var dragDistance = Vector3.Distance(focusedPlayer.position, focusedPlayer.currentTile.position);
-        if (dragDistance > tileSize / 10)
+        var dragDistance = Vector3.Distance(FocusedPlayer.position, FocusedPlayer.currentTile.position);
+        if (dragDistance > TileSize / 10)
         {
-            selectedPlayerManager.Pickup();
+            SelectedPlayerManager.Pickup();
         }
 
     }
@@ -91,7 +91,7 @@ public class InputManager : ExtendedMonoBehavior
 
         if (Input.GetMouseButtonDown(0))
         {
-            selectedPlayerManager.TargetPlayer();
+            SelectedPlayerManager.TargetPlayer();
 
             if (HasFocusedPlayer)
                 dragStart = Input.mousePosition;
@@ -99,7 +99,7 @@ public class InputManager : ExtendedMonoBehavior
         else if (Input.GetMouseButtonUp(0))
         {
             dragStart = null;
-            selectedPlayerManager.Drop();
+            SelectedPlayerManager.Drop();
         }
 
         if (IsDragging)
@@ -108,14 +108,14 @@ public class InputManager : ExtendedMonoBehavior
             var dragDistance = Vector3.Distance(Input.mousePosition, dragStart.Value);
             if (dragDistance > dragThreshold)
             {
-                selectedPlayerManager.Pickup();
+                SelectedPlayerManager.Pickup();
             }
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Pressed R");
-            stageManager.Load();
+            StageManager.Load();
         }
 
     }

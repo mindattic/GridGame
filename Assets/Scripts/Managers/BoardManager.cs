@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BoardManager : ExtendedMonoBehavior
 {
-    [SerializeField] public GameObject tilePrefab;
+    [SerializeField] public GameObject TilePrefab;
 
     void Awake()
     {
@@ -14,7 +14,7 @@ public class BoardManager : ExtendedMonoBehavior
     void Start()
     {
         GenerateTiles();
-        stageManager.Load();
+        StageManager.Load();
     }
 
     void GenerateTiles()
@@ -22,20 +22,20 @@ public class BoardManager : ExtendedMonoBehavior
         GameObject prefab;
         TileBehavior tile;
 
-        for (int col = 1; col <= board.columns; col++)
+        for (int col = 1; col <= Board.ColumnCount; col++)
         {
-            for (int row = 1; row <= board.rows; row++)
+            for (int row = 1; row <= Board.RowCount; row++)
             {
-                prefab = Instantiate(tilePrefab, board.transform);
+                prefab = Instantiate(TilePrefab, Board.transform);
                 tile = prefab.GetComponent<TileBehavior>();
                 tile.name = $"{col}x{row}";
-                tile.location = new Vector2Int(col, row);
+                tile.Location = new Vector2Int(col, row);
             }
         }
 
-        //Assign tiles list
+        //Assign Tiles list
         GameObject.FindGameObjectsWithTag(Tag.Tile).ToList()
-            .ForEach(x => GameManager.instance.tiles.Add(x.GetComponent<TileBehavior>()));
+            .ForEach(x => GameManager.instance.Tiles.Add(x.GetComponent<TileBehavior>()));
 
 
     }

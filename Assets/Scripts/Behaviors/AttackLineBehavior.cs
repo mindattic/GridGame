@@ -4,63 +4,64 @@ using UnityEngine;
 public class AttackLineBehavior : ExtendedMonoBehavior
 {
     //Variables
-    ActorPair pair;
-    float thickness = 1.2f;
-    float maxAlpha = 0.5f;
-    Color baseColor = Colors.RGBA(100, 195, 200, 0);
+    ActorPair Pair;
+    float Thickness = 1.2f;
+    float MaxAlpha = 0.5f;
+    Color BaseColor = Colors.RGBA(100, 195, 200, 0);
+    public LineRenderer LineRenderer;
 
     #region Components
 
-    public Transform parent
+    public Transform Parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
 
-    public Vector3 position
+    public Vector3 Position
     {
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
     }
 
-    public LineRenderer lineRenderer;
+   
 
     #endregion
 
 
     private void Awake()
     {
-        lineRenderer = gameObject.GetComponent<LineRenderer>();
-        lineRenderer.positionCount = 2;
+        LineRenderer = gameObject.GetComponent<LineRenderer>();
+        LineRenderer.positionCount = 2;
 
     }
 
     void Start()
     {
-        lineRenderer.startWidth = tileSize * this.thickness;
-        lineRenderer.endWidth = tileSize * this.thickness;
+        LineRenderer.startWidth = TileSize * this.Thickness;
+        LineRenderer.endWidth = TileSize * this.Thickness;
     }
 
     public void Spawn(ActorPair pair)
     {
-        this.pair = pair;
-        Vector3 start = pair.highest.position;
-        Vector3 end = pair.lowest.position;
+        this.Pair = pair;
+        Vector3 start = pair.HighestActor.position;
+        Vector3 end = pair.LowestActor.position;
 
-        if (pair.axis == Axis.Vertical)
+        if (pair.Axis == Axis.Vertical)
         {
-            start += new Vector3(0, -(tileSize / 2) + -(tileSize * 0.1f) , 0);
-            end += new Vector3(0, tileSize / 2 + (tileSize * 0.1f), 0);
+            start += new Vector3(0, -(TileSize / 2) + -(TileSize * 0.1f) , 0);
+            end += new Vector3(0, TileSize / 2 + (TileSize * 0.1f), 0);
         }
-        else if (pair.axis == Axis.Horizontal)
+        else if (pair.Axis == Axis.Horizontal)
         {
-            start += new Vector3(tileSize / 2 + (tileSize * 0.1f), 0, 0);
-            end += new Vector3(-(tileSize / 2) + -(tileSize * 0.1f), 0, 0);
+            start += new Vector3(TileSize / 2 + (TileSize * 0.1f), 0, 0);
+            end += new Vector3(-(TileSize / 2) + -(TileSize * 0.1f), 0, 0);
         }
 
-        lineRenderer.sortingOrder = ZAxis.Min;
-        lineRenderer.SetPosition(0, start);
-        lineRenderer.SetPosition(1, end);
+        LineRenderer.sortingOrder = ZAxis.Min;
+        LineRenderer.SetPosition(0, start);
+        LineRenderer.SetPosition(1, end);
         StartCoroutine(StartFadeIn());
     }
 
@@ -79,26 +80,26 @@ public class AttackLineBehavior : ExtendedMonoBehavior
     private IEnumerator StartFadeIn()
     {
         float alpha = 0f;
-        Color color = baseColor;
+        Color color = BaseColor;
 
-        lineRenderer.startColor = color;
-        lineRenderer.endColor = color;
+        LineRenderer.startColor = color;
+        LineRenderer.endColor = color;
 
-        while (alpha < maxAlpha)
+        while (alpha < MaxAlpha)
         {
             alpha += Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+            alpha = Mathf.Clamp(alpha, 0, MaxAlpha);
 
-            color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
-            lineRenderer.startColor = color;
-            lineRenderer.endColor = color;
+            color = new Color(BaseColor.r, BaseColor.g, BaseColor.b, alpha);
+            LineRenderer.startColor = color;
+            LineRenderer.endColor = color;
 
             yield return Wait.OneTick();
         }
 
-        color = baseColor;
-        lineRenderer.startColor = color;
-        lineRenderer.endColor = color;
+        color = BaseColor;
+        LineRenderer.startColor = color;
+        LineRenderer.endColor = color;
     }
 
     public void Destroy()
@@ -108,18 +109,18 @@ public class AttackLineBehavior : ExtendedMonoBehavior
 
     private IEnumerator StartFadeOut()
     {
-        float alpha = maxAlpha;
-        var color = baseColor;
-        lineRenderer.startColor = color;
-        lineRenderer.endColor = color;
+        float alpha = MaxAlpha;
+        var color = BaseColor;
+        LineRenderer.startColor = color;
+        LineRenderer.endColor = color;
 
         while (alpha > 0)
         {
             alpha -= Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
-            color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
-            lineRenderer.startColor = color;
-            lineRenderer.endColor = color;
+            alpha = Mathf.Clamp(alpha, 0, MaxAlpha);
+            color = new Color(BaseColor.r, BaseColor.g, BaseColor.b, alpha);
+            LineRenderer.startColor = color;
+            LineRenderer.endColor = color;
 
             yield return Wait.OneTick();
         }

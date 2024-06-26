@@ -4,25 +4,25 @@ using UnityEngine;
 
 public class FpsMonitor
 {
-    const float measurePeriod = 0.5f;
+    const float MeasurePeriod = 0.5f;
     private int i = 0;
-    private float nextPeriod = 0;
-    public int current;
+    private float NextPeriod = 0;
+    public int Current;
 
     public void Start()
     {
-        nextPeriod = Time.realtimeSinceStartup + measurePeriod;
+        NextPeriod = Time.realtimeSinceStartup + MeasurePeriod;
     }
 
     public void Update()
     {
         i++;
 
-        if (Time.realtimeSinceStartup < nextPeriod)
+        if (Time.realtimeSinceStartup < NextPeriod)
             return;
 
-        current = (int)(i / measurePeriod);
-        nextPeriod += measurePeriod;
+        Current = (int)(i / MeasurePeriod);
+        NextPeriod += MeasurePeriod;
         i = 0;
     }
 }

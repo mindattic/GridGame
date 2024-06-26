@@ -125,31 +125,31 @@ static class Random
 
     public static ActorBehavior Player()
     {
-        return GameManager.instance.actors
-            .Where(x => x.team.Equals(Team.Player))
+        return GameManager.instance.Actors
+            .Where(x => x.Team.Equals(Team.Player))
             .OrderBy(x => Guid.NewGuid())
             .First();
     }
 
     public static ActorBehavior Enemy()
     {
-        return GameManager.instance.actors
-            .Where(x => x.team.Equals(Team.Enemy))
+        return GameManager.instance.Actors
+            .Where(x => x.Team.Equals(Team.Enemy))
             .OrderBy(x => Guid.NewGuid())
             .First();
     }
 
     public static TileBehavior Tile()
     {
-        return GameManager.instance.tiles
+        return GameManager.instance.Tiles
             .OrderBy(x => Guid.NewGuid())
             .First();
     }
 
     public static Vector2Int Location()
     {
-        int col = Int(1, GameManager.instance.board.columns);
-        int row = Int(1, GameManager.instance.board.rows);
+        int col = Int(1, GameManager.instance.Board.ColumnCount);
+        int row = Int(1, GameManager.instance.Board.RowCount);
         return new Vector2Int(col, row);
     }
 

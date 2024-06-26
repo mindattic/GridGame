@@ -24,7 +24,7 @@ public class StageActor
         this.archetype = archetype;
         this.name = name;
         this.attributes = attributes;
-        this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
+        this.thumbnail = GameManager.instance.ResourceManager.ActorThumbnail(this.archetype.ToString());
         this.team = team;
         this.rarity = rarity;
         this.location = location;
@@ -37,10 +37,10 @@ public class StageActor
         this.archetype = archetype;
         this.name = name;
         this.attributes = attributes;
-        this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
+        this.thumbnail = GameManager.instance.ResourceManager.ActorThumbnail(this.archetype.ToString());
         this.team = team;
         this.rarity = rarity;
-        this.location = Locations.nowhere;
+        this.location = Locations.Nowhere;
         this.spawnTurn = spawnTurn;
     }
 }

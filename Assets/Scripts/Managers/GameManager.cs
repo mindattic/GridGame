@@ -4,129 +4,127 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    public string deviceType;
+    public string DeviceType;
 
     //Settings
-    public int targetFramerate = 60;
-    public int vSyncCount = 0;
+    public int TargetFramerate = 60;
+    public int VSyncCount = 0;
 
     //Managers
-    public ResourceManager resourceManager;
-    public InputManager inputManager;
-    public StageManager stageManager;
-    public TurnManager turnManager; 
-    public SupportLineManager supportLineManager;
-    public AttackLineManager attackLineManager;
-    public DamageTextManager damageTextManager;
-    public GhostManager ghostManager;
-    public PortraitManager portraitManager;
-    public OverlayManager overlayManager;
-    public TitleManager titleManager;
-    public ConsoleManager consoleManager;
-    public CardManager cardManager;
-    public ActorManager actorManager;
-    public SelectedPlayerManager selectedPlayerManager;
-    public PlayerManager playerManager;
-    public EnemyManager enemyManager;
-    public TileManager tileManager;
-    public FootstepManager footstepManager;
+    public ResourceManager ResourceManager;
+    public InputManager InputManager;
+    public StageManager StageManager;
+    public TurnManager TurnManager; 
+    public SupportLineManager SupportLineManager;
+    public AttackLineManager AttackLineManager;
+    public DamageTextManager DamageTextManager;
+    public GhostManager GhostManager;
+    public PortraitManager PortraitManager;
+    public OverlayManager OverlayManager;
+    public TitleManager TitleManager;
+    public ConsoleManager ConsoleManager;
+    public CardManager CardManager;
+    public ActorManager ActorManager;
+    public SelectedPlayerManager SelectedPlayerManager;
+    public PlayerManager PlayerManager;
+    public EnemyManager EnemyManager;
+    public TileManager TileManager;
+    public FootstepManager FootstepManager;
 
     //Audio
-    public AudioSource soundSource;
-    public AudioSource musicSource;
+    public AudioSource SoundSource;
+    public AudioSource MusicSource;
 
     //Scale
-    public Vector2 screenSize;
-    public float tileSize;
-    public Vector2 tileScale;
-    public Vector2 spriteScale;
+    public Vector2 ScreenSize;
+    public float TileSize;
+    public Vector2 TileScale;
+    public Vector2 SpriteScale;
 
 
-    public Canvas canvas2D;
-    public Canvas canvas3D;
+    public Canvas Canvas2D;
+    public Canvas Canvas3D;
 
     //Mouse
-    public Vector3 mousePosition2D;
-    public Vector3 mousePosition3D;
-    public Vector3 mouseOffset;
+    public Vector3 MousePosition2D;
+    public Vector3 MousePosition3D;
+    public Vector3 MouseOffset;
 
-    public float cursorSpeed;
-    public float slideSpeed;
-    public float snapDistance;
-    public float bumpSpeed;
+    public float CursorSpeed;
+    public float SlideSpeed;
+    public float SnapDistance;
+    public float BumpSpeed;
 
     //Selection
-    public ActorBehavior focusedPlayer;
-    public ActorBehavior selectedPlayer;
+    public ActorBehavior FocusedPlayer;
+    public ActorBehavior SelectedPlayer;
 
     //Behaviors
-    public BoardBehavior board;
-    public TimerBehavior timer;
-    public List<ActorBehavior> actors;
-    //public List<ActorBehavior> players;
-    //public List<ActorBehavior> enemies;
-    public List<TileBehavior> tiles;
-    public List<SupportLineBehavior> lines;
+    public BoardBehavior Board;
+    public TimerBehavior Timer;
+    public List<ActorBehavior> Actors;
+    public List<TileBehavior> Tiles;
+    public List<SupportLineBehavior> Lines;
  
-    public PortraitBehavior playerArt;
+    public PortraitBehavior PlayerArt;
 
 
-    public HashSet<Vector2Int> boardLocations;
+    public HashSet<Vector2Int> BoardLocations;
 
-    public AttackParticipants attackParticipants;
+    public AttackParticipants AttackParticipants;
 
-    public ShakeIntensity shakeIntensity;
+    public ShakeIntensity ShakeIntensity;
 
 
     private void Awake()
     {
 
-        screenSize = Common.ScreenToWorldSize;
-        tileSize = screenSize.x / Constants.percent666;
-        tileScale = new Vector2(tileSize, tileSize);
+        ScreenSize = Common.ScreenToWorldSize;
+        TileSize = ScreenSize.x / Constants.Percent666;
+        TileScale = new Vector2(TileSize, TileSize);
 
-        cursorSpeed = tileSize / 2;
-        slideSpeed = tileSize / 4;
-        bumpSpeed = tileSize / 14;
-        snapDistance = tileSize / 8;
-        shakeIntensity = new ShakeIntensity(tileSize);
+        CursorSpeed = TileSize / 2;
+        SlideSpeed = TileSize / 4;
+        BumpSpeed = TileSize / 14;
+        SnapDistance = TileSize / 8;
+        ShakeIntensity = new ShakeIntensity(TileSize);
 
-        board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
+        Board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
         
-        canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>();
-        canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>();
-        cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>();
+        Canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>();
+        Canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>();
+        CardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>();
 
-        resourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>();
-        stageManager = GameObject.Find(Constants.Game).GetComponent<StageManager>();
-        turnManager = GameObject.Find(Constants.Game).GetComponent<TurnManager>();
-        inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
-        actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
-        supportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>();
-        attackLineManager = GameObject.Find(Constants.Game).GetComponent<AttackLineManager>();
-        damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
-        ghostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>();
-        portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();
-        consoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>();
-        overlayManager = GameObject.Find(Constants.Overlay).GetComponent<OverlayManager>();
-        titleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>();     
-        actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
-        selectedPlayerManager = GameObject.Find(Constants.Game).GetComponent<SelectedPlayerManager>();
-        playerManager = GameObject.Find(Constants.Game).GetComponent<PlayerManager>();
-        enemyManager = GameObject.Find(Constants.Game).GetComponent<EnemyManager>();
-        tileManager = GameObject.Find(Constants.Game).GetComponent<TileManager>();
-        footstepManager = GameObject.Find(Constants.Game).GetComponent<FootstepManager>();
+        ResourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>();
+        StageManager = GameObject.Find(Constants.Game).GetComponent<StageManager>();
+        TurnManager = GameObject.Find(Constants.Game).GetComponent<TurnManager>();
+        InputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
+        ActorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
+        SupportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>();
+        AttackLineManager = GameObject.Find(Constants.Game).GetComponent<AttackLineManager>();
+        DamageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
+        GhostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>();
+        PortraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();
+        ConsoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>();
+        OverlayManager = GameObject.Find(Constants.Overlay).GetComponent<OverlayManager>();
+        TitleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>();     
+        ActorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
+        SelectedPlayerManager = GameObject.Find(Constants.Game).GetComponent<SelectedPlayerManager>();
+        PlayerManager = GameObject.Find(Constants.Game).GetComponent<PlayerManager>();
+        EnemyManager = GameObject.Find(Constants.Game).GetComponent<EnemyManager>();
+        TileManager = GameObject.Find(Constants.Game).GetComponent<TileManager>();
+        FootstepManager = GameObject.Find(Constants.Game).GetComponent<FootstepManager>();
 
-        timer = GameObject.Find(Constants.Game).GetComponent<TimerBehavior>();
+        Timer = GameObject.Find(Constants.Game).GetComponent<TimerBehavior>();
 
         const int SoundSourceIndex = 0;
         const int MusicSourceIndex = 1;
-        soundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[SoundSourceIndex];
-        musicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[MusicSourceIndex];
+        SoundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[SoundSourceIndex];
+        MusicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[MusicSourceIndex];
 
-        attackParticipants = new AttackParticipants();
+        AttackParticipants = new AttackParticipants();
 
-        boardLocations = new HashSet<Vector2Int>()
+        BoardLocations = new HashSet<Vector2Int>()
         {
             new Vector2Int(1, 1), new Vector2Int(1, 2), new Vector2Int(1, 3), new Vector2Int(1, 4), new Vector2Int(1, 5), new Vector2Int(1, 6), new Vector2Int(1, 7), new Vector2Int(1, 8),
             new Vector2Int(2, 1), new Vector2Int(2, 2), new Vector2Int(2, 3), new Vector2Int(2, 4), new Vector2Int(2, 5), new Vector2Int(2, 6), new Vector2Int(2, 7), new Vector2Int(2, 8),
@@ -140,21 +138,21 @@ public class GameManager : Singleton<GameManager>
 
         //https://docs.unity3d.com/520/Documentation/Manual/PlatformDependentCompilation.html
 //#if UNITY_STANDALONE_WIN
-//        deviceType = "UNITY_STANDALONE_WIN";
+//        DeviceType = "UNITY_STANDALONE_WIN";
 //#elif UNITY_STANDALONE_LINUX
-//  deviceType = "UNITY_STANDALONE_LINUX";
+//  DeviceType = "UNITY_STANDALONE_LINUX";
 //#elif UNITY_IPHONE
-//        deviceType = "UNITY_IPHONE";
+//        DeviceType = "UNITY_IPHONE";
 //#elif UNITY_STANDALONE_OSX
-//    deviceType = "UNITY_STANDALONE_OSX"
+//    DeviceType = "UNITY_STANDALONE_OSX"
 //#elif UNITY_WEBPLAYER
-//  deviceType = "UNITY_WEBPLAYER";
+//  DeviceType = "UNITY_WEBPLAYER";
 //#elif UNITY_WEBGL
-//  deviceType = "UNITY_WEBGL";
+//  DeviceType = "UNITY_WEBGL";
 //#else
-//    deviceType = "Unknown";;
+//    DeviceType = "Unknown";;
 //#endif
-//        Debug.Log($"Running on {deviceType}");
+//        Debug.Log($"Running on {DeviceType}");
 
 //#if UNITY_EDITOR
 //        Debug.Log($"Emulated on UNITY_EDITOR");
@@ -166,8 +164,8 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        Application.targetFrameRate = targetFramerate;
-        QualitySettings.vSyncCount = vSyncCount;
+        Application.targetFrameRate = TargetFramerate;
+        QualitySettings.vSyncCount = VSyncCount;
     }
 
     void Update()

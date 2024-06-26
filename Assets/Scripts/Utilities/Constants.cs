@@ -15,28 +15,28 @@ public static class Constants
     public const string Card = "Card";
 
     //Percent
-    public const float percent25 = 0.25f;
-    public const float percent33 = 0.333333f;
-    public const float percent50 = 0.5f;
-    public const float percent66 = 0.666666f;
-    public const float percent75 = 0.75f;
-    public const float percent100 = 1.0f;
-    public const float percent333 = 3.333333f;
-    public const float percent666 = 6.666666f;
+    public const float Percent25 = 0.25f;
+    public const float Percent33 = 0.333333f;
+    public const float Percent50 = 0.5f;
+    public const float Percent66 = 0.666666f;
+    public const float Percent75 = 0.75f;
+    public const float Percent100 = 1.0f;
+    public const float Percent333 = 3.333333f;
+    public const float Percent666 = 6.666666f;
 
     //Size
-    public static readonly Vector2 size25 = new Vector2(percent25, percent25);
-    public static readonly Vector2 size33 = new Vector2(percent33, percent33);
-    public static readonly Vector2 size50 = new Vector2(percent50, percent50);
-    public static readonly Vector2 size66 = new Vector2(percent66, percent66);
-    public static readonly Vector2 size75 = new Vector2(percent75, percent75);
-    public static readonly Vector2 size100 = new Vector2(percent100, percent100);
+    public static readonly Vector2 size25 = new Vector2(Percent25, Percent25);
+    public static readonly Vector2 size33 = new Vector2(Percent33, Percent33);
+    public static readonly Vector2 size50 = new Vector2(Percent50, Percent50);
+    public static readonly Vector2 size66 = new Vector2(Percent66, Percent66);
+    public static readonly Vector2 size75 = new Vector2(Percent75, Percent75);
+    public static readonly Vector2 size100 = new Vector2(Percent100, Percent100);
 
 }
 
 public static class Locations
 {
-    public static readonly Vector2Int nowhere = new Vector2Int(-1, -1);
+    public static readonly Vector2Int Nowhere = new Vector2Int(-1, -1);
 }
 
 public static class Tag

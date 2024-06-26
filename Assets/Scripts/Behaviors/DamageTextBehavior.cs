@@ -8,17 +8,17 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 {
 
 
-    public TextMeshPro textMesh;
+    public TextMeshPro TextMesh;
 
     #region Components
 
-    public Transform parent
+    public Transform Parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
 
-    public Vector3 position
+    public Vector3 Position
     {
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
@@ -29,7 +29,7 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 
     void Awake()
     {
-        textMesh = GetComponent<TextMeshPro>();
+        TextMesh = GetComponent<TextMeshPro>();
     }
 
     // Start is called before the first Frame update
@@ -46,27 +46,27 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 
     public void Spawn(string text, Vector3 position)
     {
-        textMesh.text = text;
-        var x = position.x + Random.Range(tileSize / 4);
-        var y = position.y + (tileSize / 2 * Random.Percent());
+        TextMesh.text = text;
+        var x = position.x + Random.Range(TileSize / 4);
+        var y = position.y + (TileSize / 2 * Random.Percent());
         transform.position = new Vector3(x, y, 1);
         StartCoroutine(FadeOut());
     }
 
     private IEnumerator FadeOut()
     {
-        float alpha = textMesh.color.a;
-        Color color = textMesh.color;
+        float alpha = TextMesh.color.a;
+        Color color = TextMesh.color;
 
-        while (textMesh.color.a > 0)
+        while (TextMesh.color.a > 0)
         {
             alpha -= 0.1f;
             alpha = Mathf.Max(alpha, 0);
             color.a = alpha;
-            textMesh.color = color;
+            TextMesh.color = color;
 
 
-            transform.position += new Vector3(0, tileSize / 16, 0);
+            transform.position += new Vector3(0, TileSize / 16, 0);
             yield return Wait.For(Interval.FiveTicks); // update interval
         }
         StopCoroutine(FadeOut());

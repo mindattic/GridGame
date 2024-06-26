@@ -61,14 +61,14 @@ public class OverlayManager : ExtendedMonoBehavior
 
     public IEnumerator FadeIn()
     {
-        //float alpha = image.color.a;
-        //image.color = new Color(0f, 0f, 0f, alpha);
+        //float alpha = image.Color.a;
+        //image.Color = new Color(0f, 0f, 0f, alpha);
 
         //while (alpha < 1)
         //{
         //    alpha += Increment.FivePercent;
         //    alpha = Mathf.Clamp(alpha, 0, 1);
-        //    image.color = new Color(0, 0, 0, alpha);
+        //    image.Color = new Color(0, 0, 0, alpha);
         //    yield return Wait.OneTick();
         //}
 

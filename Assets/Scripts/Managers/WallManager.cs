@@ -6,7 +6,7 @@ public class WallManager : MonoBehaviour
 {
 
 
-    private float cellSize => GameManager.instance.tileSize;
+    private float cellSize => GameManager.instance.TileSize;
 
     // Start is called before the first Frame update
     void Start()
@@ -22,13 +22,13 @@ public class WallManager : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        //if (other.collider.gameObject.CompareTag(Tag.Actor))
+        //if (other.collider.GameObject.CompareTag(Tag.Actor))
         //{
-        //    var player = other.collider.gameObject;
+        //    var player = other.collider.GameObject;
 
-        //    player.transform.position = new Vector3(transform.position.x - tileSize,
-        //                                            player.transform.position.y,
-        //                                            player.transform.position.z);
+        //    player.transform.Position = new Vector3(transform.Position.x - TileSize,
+        //                                            player.transform.Position.y,
+        //                                            player.transform.Position.z);
 
 
         //}

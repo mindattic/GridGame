@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class AttackLineManager : ExtendedMonoBehavior
 {
-    [SerializeField] public GameObject attackLinePrefab;
-    public Dictionary<string, AttackLineBehavior> attackLines = new Dictionary<string, AttackLineBehavior>();
+    [SerializeField] public GameObject AttackLinePrefab;
+    public Dictionary<string, AttackLineBehavior> AttackLines = new Dictionary<string, AttackLineBehavior>();
 
 
     private const string NameFormat = "AttackLine_{0)+{1}";
@@ -25,35 +25,35 @@ public class AttackLineManager : ExtendedMonoBehavior
     public void Spawn(ActorPair pair)
     {
         //Determine if there is a duplicate
-        var key = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
-        var altKey = NameFormat.Replace("{0}", pair.actor2.name).Replace("{1}", pair.actor1.name);
-        if (attackLines.ContainsKey(key) || attackLines.ContainsKey(altKey))
+        var key = NameFormat.Replace("{0}", pair.Actor1.name).Replace("{1}", pair.Actor2.name);
+        var altKey = NameFormat.Replace("{0}", pair.Actor2.name).Replace("{1}", pair.Actor1.name);
+        if (AttackLines.ContainsKey(key) || AttackLines.ContainsKey(altKey))
             return;
 
-        var prefab = Instantiate(attackLinePrefab, Vector2.zero, Quaternion.identity);
+        var prefab = Instantiate(AttackLinePrefab, Vector2.zero, Quaternion.identity);
         var attackLine = prefab.GetComponent<AttackLineBehavior>();
         attackLine.name = key;
-        attackLine.parent = board.transform;
+        attackLine.Parent = Board.transform;
         attackLine.Spawn(pair);
 
-        attackLines.Add(key, attackLine);
+        AttackLines.Add(key, attackLine);
     }
 
 
     public void Destroy(ActorPair pair)
     {
-        var key = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
-        if (!attackLines.ContainsKey(key))
+        var key = NameFormat.Replace("{0}", pair.Actor1.name).Replace("{1}", pair.Actor2.name);
+        if (!AttackLines.ContainsKey(key))
             return;
 
-        attackLines[key].Destroy();
-        attackLines.Remove(key);
+        AttackLines[key].Destroy();
+        AttackLines.Remove(key);
     }
 
     public void Clear()
     {
-        attackLines.ToList().ForEach(x => x.Value.Destroy());
-        attackLines.Clear();
+        AttackLines.ToList().ForEach(x => x.Value.Destroy());
+        AttackLines.Clear();
     }
 
 }
