@@ -56,8 +56,8 @@ public class PortraitManager : ExtendedMonoBehavior
         portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         portrait.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
         portrait.actor = actor;
-        portrait.position = actor.position;
-        portrait.startPosition = actor.position;
+        portrait.position = actor.Position;
+        portrait.startPosition = actor.Position;
         portrait.transform.localScale = new Vector3(0.25f, 0.25f, 1);
 
         StartCoroutine(portrait.Dissolve());

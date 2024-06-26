@@ -11,6 +11,12 @@ public class TileBehavior : ExtendedMonoBehavior
 
     #region Components
 
+    public string Name
+    {
+        get => name;
+        set => Name = value;
+    }
+
     public Transform parent
     {
         get => gameObject.transform.parent;

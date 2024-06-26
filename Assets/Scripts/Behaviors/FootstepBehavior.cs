@@ -20,6 +20,12 @@ public class FootstepBehavior : ExtendedMonoBehavior
 
     #region Components
 
+    public string Name
+    {
+        get => name;
+        set => Name = value;
+    }
+
     public Transform Parent
     {
         get => gameObject.transform.parent;

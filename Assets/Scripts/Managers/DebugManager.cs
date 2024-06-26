@@ -36,7 +36,7 @@ public class DebugManager : ExtendedMonoBehavior
     {
         var text = $"{Random.Int(1, 3)}";
         var player = Players.First(x => x.name == "Paladin");
-        DamageTextManager.Spawn(text, player.position);
+        DamageTextManager.Spawn(text, player.Position);
     }
 
     public void BumpTest()

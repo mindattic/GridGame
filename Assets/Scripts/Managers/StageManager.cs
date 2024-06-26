@@ -231,7 +231,7 @@ public class StageManager : ExtendedMonoBehavior
     {
         var prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
         var actor = prefab.GetComponent<ActorBehavior>();
-        actor.parent = Board.transform;
+        actor.Parent = Board.transform;
         actor.Archetype = stageActor.archetype;
         actor.name = stageActor.name;
         actor.Guid = Guid.NewGuid();
@@ -239,7 +239,7 @@ public class StageManager : ExtendedMonoBehavior
         actor.Team = stageActor.team;
         actor.Quality = stageActor.rarity;
         actor.Renderers.SetBackColor(actor.IsPlayer ? Color.white : Color.red);
-        actor.sortingOrder = ZAxis.Min;
+        actor.SortingOrder = ZAxis.Min;
 
         //Assign attributes
         actor.Level = stageActor.attributes.Level;

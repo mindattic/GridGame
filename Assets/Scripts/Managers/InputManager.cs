@@ -54,7 +54,7 @@ public class InputManager : ExtendedMonoBehavior
         if (!HasFocusedPlayer)
             return;
 
-        var dragDistance = Vector3.Distance(FocusedPlayer.position, FocusedPlayer.currentTile.position);
+        var dragDistance = Vector3.Distance(FocusedPlayer.Position, FocusedPlayer.CurrentTile.position);
         if (dragDistance > TileSize / 10)
         {
             SelectedPlayerManager.Pickup();

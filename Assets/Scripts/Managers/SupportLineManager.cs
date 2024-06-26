@@ -24,8 +24,8 @@ public class SupportLineManager : ExtendedMonoBehavior
     public bool Spawn(ActorPair pair)
     {
         //Determine if there is a duplicate
-        var key = NameFormat.Replace("{0}", pair.Actor1.name).Replace("{1}", pair.Actor2.name);
-        var altKey = NameFormat.Replace("{0}", pair.Actor2.name).Replace("{1}", pair.Actor1.name);
+        var key = NameFormat.Replace("{0}", pair.Actor1.Name).Replace("{1}", pair.Actor2.Name);
+        var altKey = NameFormat.Replace("{0}", pair.Actor2.Name).Replace("{1}", pair.Actor1.Name);
         if (supportLines.ContainsKey(key) || supportLines.ContainsKey(altKey))
             return false;
 
@@ -37,7 +37,7 @@ public class SupportLineManager : ExtendedMonoBehavior
         var supportLine = prefab.GetComponent<SupportLineBehavior>();
         supportLine.name = key;
         supportLine.Parent = Board.transform;
-        supportLine.Spawn(pair.Actor1.currentTile.position, pair.Actor2.currentTile.position);
+        supportLine.Spawn(pair.Actor1.CurrentTile.position, pair.Actor2.CurrentTile.position);
 
         supportLines.Add(key, supportLine);
 

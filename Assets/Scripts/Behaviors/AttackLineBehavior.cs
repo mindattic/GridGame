@@ -12,6 +12,12 @@ public class AttackLineBehavior : ExtendedMonoBehavior
 
     #region Components
 
+    public string Name
+    {
+        get => name;
+        set => Name = value;
+    }
+
     public Transform Parent
     {
         get => gameObject.transform.parent;
@@ -45,8 +51,8 @@ public class AttackLineBehavior : ExtendedMonoBehavior
     public void Spawn(ActorPair pair)
     {
         this.Pair = pair;
-        Vector3 start = pair.HighestActor.position;
-        Vector3 end = pair.LowestActor.position;
+        Vector3 start = pair.HighestActor.Position;
+        Vector3 end = pair.LowestActor.Position;
 
         if (pair.Axis == Axis.Vertical)
         {

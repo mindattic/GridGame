@@ -8,16 +8,22 @@ public class OverlayManager : ExtendedMonoBehavior
     //Variables
     private RectTransform rectTransform;
     private Image image;
-    
+
     #region Components
 
-    public Transform parent
+    public string Name
+    {
+        get => name;
+        set => Name = value;
+    }
+
+    public Transform Parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
 
-    public Color color
+    public Color Color
     {
         get => image.color;
         set => image.color = value;

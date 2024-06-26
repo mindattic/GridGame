@@ -45,10 +45,10 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         //TODO: Update Card display...
         Actors.ForEach(x => x.Renderers.SetFocus(false));
         FocusedPlayer = actor;
-        FocusedPlayer.sortingOrder = ZAxis.Max;
+        FocusedPlayer.SortingOrder = ZAxis.Max;
         FocusedPlayer.Renderers.SetFocus(true);
         //Assign mouse Offset (how off center was selection)
-        MouseOffset = FocusedPlayer.position - MousePosition3D;
+        MouseOffset = FocusedPlayer.Position - MousePosition3D;
 
         CardManager.Set(FocusedPlayer);
     }
@@ -61,8 +61,8 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         if (!HasSelectedPlayer)
         {
-            FocusedPlayer.position = FocusedPlayer.currentTile.position;
-            FocusedPlayer.sortingOrder = ZAxis.Min;
+            FocusedPlayer.Position = FocusedPlayer.CurrentTile.position;
+            FocusedPlayer.SortingOrder = ZAxis.Min;
             //CardManager.Clear();
         }
 
@@ -87,7 +87,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         Unselect();
         TurnManager.currentPhase = TurnPhase.Move;
-        SelectedPlayer.sortingOrder = ZAxis.Max;
+        SelectedPlayer.SortingOrder = ZAxis.Max;
 
         SoundSource.PlayOneShot(ResourceManager.SoundEffect($"Select"));
 
@@ -97,7 +97,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
 
         //Assign mouse Offset (how off center was selection)
-        MouseOffset = SelectedPlayer.position - MousePosition3D;
+        MouseOffset = SelectedPlayer.Position - MousePosition3D;
 
         
         GhostManager.Start(SelectedPlayer);
@@ -121,11 +121,11 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //Assign Location and Position
-        var closestTile = Geometry.ClosestTileByPosition(SelectedPlayer.position);
+        var closestTile = Geometry.ClosestTileByPosition(SelectedPlayer.Position);
         closestTile.spriteRenderer.color = Colors.Translucent.White;
         SelectedPlayer.Location = closestTile.Location;
-        SelectedPlayer.position = Geometry.PositionFromLocation(SelectedPlayer.Location);
-        SelectedPlayer.sortingOrder = ZAxis.Min;
+        SelectedPlayer.Position = Geometry.PositionFromLocation(SelectedPlayer.Location);
+        SelectedPlayer.SortingOrder = ZAxis.Min;
         SelectedPlayer.SetStatus(Status.None);
         SelectedPlayer = null;
 
@@ -144,9 +144,9 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         foreach (var actor in Actors)
         {
             if (actor == null || !actor.IsAlive || !actor.IsActive) continue;
-            actor.Renderers.Glow.transform.position = actor.position;
-            actor.Renderers.Thumbnail.transform.position = actor.position;
-            actor.Renderers.Frame.transform.position = actor.position;
+            actor.Renderers.Glow.transform.position = actor.Position;
+            actor.Renderers.Thumbnail.transform.position = actor.Position;
+            actor.Renderers.Frame.transform.position = actor.Position;
         }
     }
 

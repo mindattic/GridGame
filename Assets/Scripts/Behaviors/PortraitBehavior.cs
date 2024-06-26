@@ -14,6 +14,12 @@ public class PortraitBehavior : ExtendedMonoBehavior
 
     #region Components
 
+    public string Name
+    {
+        get => name;
+        set => Name = value;
+    }
+
     public Transform parent
     {
         get => gameObject.transform.parent;
@@ -161,7 +167,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
 
     //private void Shake(int factor = 12)
     //{
-    //    this.Position = currentTile.Position;
+    //    this.Position = CurrentTile.Position;
     //    this.Position += new Vector3(Random.Range(TileSize / factor), Random.Range(TileSize / factor), 1);
     //}
 

@@ -11,6 +11,12 @@ public class GhostBehavior : ExtendedMonoBehavior
 
     #region Components
 
+    public string Name
+    {
+        get => name;
+        set => Name = value;
+    }
+
     public Transform Parent
     {
         get => gameObject.transform.parent;
@@ -61,7 +67,7 @@ public class GhostBehavior : ExtendedMonoBehavior
         //this.Renderers.Frame.size = new Vector2(TileSize, TileSize);
         this.Renderers.thumbnail.color = Colors.RGBA(255, 255, 255, 64);
         //this.Renderers.Frame.Color = Common.ColorRGBA(255, 255, 255, 100);
-        this.Position = actor.position;
+        this.Position = actor.Position;
         StartCoroutine(FadeOut());
     }
 

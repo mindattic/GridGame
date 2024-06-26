@@ -42,6 +42,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     public ActorThumbnail Thumbnail;
     public ActorRenderers Renderers = new ActorRenderers();
 
+   
+
 
     private GameObject GameObjectByLayer(int layer)
     {
@@ -85,14 +87,19 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
+    public string Name
+    {
+        get => name;
+        set => Name = value;
+    }
 
-    public Transform parent
+    public Transform Parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
 
-    public Vector3 position
+    public Vector3 Position
     {
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
@@ -105,7 +112,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => Renderers.Thumbnail.sprite = value;
     }
 
-    public int sortingOrder
+    public int SortingOrder
     {
         set
         {
@@ -131,7 +138,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public TileBehavior currentTile => Tiles.First(x => x.Location.Equals(Location));
+    public TileBehavior CurrentTile => Tiles.First(x => x.Location.Equals(Location));
     public bool IsPlayer => Team.Equals(Team.Player);
     public bool IsEnemy => Team.Equals(Team.Enemy);
     public bool IsFocusedPlayer => HasFocusedPlayer && Equals(FocusedPlayer);
@@ -208,7 +215,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         gameObject.SetActive(true);
 
-        position = Geometry.PositionFromLocation(Location);
+        Position = Geometry.PositionFromLocation(Location);
 
         if (IsPlayer)
         {
@@ -308,7 +315,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         switch (attackStrategy)
         {
             case AttackStrategy.AttackClosest:
-                TargetPlayer = Players.Where(x => x.IsPlaying).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
+                TargetPlayer = Players.Where(x => x.IsPlaying).OrderBy(x => Vector3.Distance(x.Position, Position)).FirstOrDefault();
                 Destination = Geometry.ClosestAttackPosition(this, TargetPlayer);
                 break;
 
@@ -351,7 +358,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //Position = Vector2.MoveTowards(Position, cursorPosition, CursorSpeed);
 
         //Snap selected player to cursor
-        position = cursorPosition;
+        Position = cursorPosition;
     }
 
     private void CheckMovement()
@@ -360,18 +367,18 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsMoving)
             return;
 
-        var delta = Destination.Value - position;
+        var delta = Destination.Value - Position;
         if (Mathf.Abs(delta.x) >= SnapDistance)
         {
-            position = Vector2.MoveTowards(position, new Vector3(Destination.Value.x, position.y, position.z), SlideSpeed);
+            Position = Vector2.MoveTowards(Position, new Vector3(Destination.Value.x, Position.y, Position.z), SlideSpeed);
         }
         else if (Mathf.Abs(delta.y) >= SnapDistance)
         {
-            position = Vector2.MoveTowards(position, new Vector3(position.x, Destination.Value.y, position.z), SlideSpeed);
+            Position = Vector2.MoveTowards(Position, new Vector3(Position.x, Destination.Value.y, Position.z), SlideSpeed);
         }
 
         //Determine if Actor is close to Destination
-        bool isSnapDistance = Vector2.Distance(position, Destination.Value) <= SnapDistance;
+        bool isSnapDistance = Vector2.Distance(Position, Destination.Value) <= SnapDistance;
         if (isSnapDistance)
         {
             //Snap to Destination, clear Destination, and set Actor MoveState: "Idle"
@@ -441,7 +448,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void Shake(float intensity)
     {
-        gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position = currentTile.position;
+        gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position = CurrentTile.position;
 
         if (intensity > 0)
         {
@@ -462,7 +469,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (IsFocusedPlayer || IsSelectedPlayer)
             MoveTowardCursor();
 
-        var closestTile = Geometry.ClosestTileByPosition(position);
+        var closestTile = Geometry.ClosestTileByPosition(Position);
         if (closestTile.Location.Equals(Location))
             return;
 
@@ -509,7 +516,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator Bump(Direction direction)
     {
         BumpStage stage = BumpStage.Start;
-        var destination = position;
+        var destination = Position;
         var range = TileSize * Percent33;
 
 
@@ -519,9 +526,9 @@ public class ActorBehavior : ExtendedMonoBehavior
             {
                 case BumpStage.Start:
                     {
-                        sortingOrder = ZAxis.Max;
-                        position = currentTile.position;
-                        destination = Geometry.GetDirectionalPosition(position, direction, range);
+                        SortingOrder = ZAxis.Max;
+                        Position = CurrentTile.position;
+                        destination = Geometry.GetDirectionalPosition(Position, direction, range);
                         stage = BumpStage.MoveToward;
 
                     }
@@ -529,17 +536,17 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case BumpStage.MoveToward:
                     {
-                        var delta = destination - position;
+                        var delta = destination - Position;
                         if (Mathf.Abs(delta.x) > BumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), BumpSpeed);
+                            Position = Vector2.MoveTowards(Position, new Vector3(destination.x, Position.y, Position.z), BumpSpeed);
                         else if (Mathf.Abs(delta.y) > BumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), BumpSpeed);
+                            Position = Vector2.MoveTowards(Position, new Vector3(Position.x, destination.y, Position.z), BumpSpeed);
 
-                        var isSnapDistance = Vector2.Distance(position, destination) <= BumpSpeed;
+                        var isSnapDistance = Vector2.Distance(Position, destination) <= BumpSpeed;
                         if (isSnapDistance)
                         {
-                            position = destination;
-                            destination = currentTile.position;
+                            Position = destination;
+                            destination = CurrentTile.position;
                             stage = BumpStage.MoveAway;
                         }
                     }
@@ -547,17 +554,17 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case BumpStage.MoveAway:
                     {
-                        var delta = destination - position;
+                        var delta = destination - Position;
                         if (Mathf.Abs(delta.x) > BumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), BumpSpeed);
+                            Position = Vector2.MoveTowards(Position, new Vector3(destination.x, Position.y, Position.z), BumpSpeed);
                         else if (Mathf.Abs(delta.y) > BumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), BumpSpeed);
+                            Position = Vector2.MoveTowards(Position, new Vector3(Position.x, destination.y, Position.z), BumpSpeed);
 
-                        var isSnapDistance = Vector2.Distance(position, destination) <= BumpSpeed;
+                        var isSnapDistance = Vector2.Distance(Position, destination) <= BumpSpeed;
                         if (isSnapDistance)
                         {
-                            position = destination;
-                            destination = currentTile.position;
+                            Position = destination;
+                            destination = CurrentTile.position;
                             stage = BumpStage.End;
                         }
                     }
@@ -565,8 +572,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case BumpStage.End:
                     {
-                        sortingOrder = ZAxis.Min;
-                        position = destination;
+                        SortingOrder = ZAxis.Min;
+                        Position = destination;
                     }
                     break;
             }
@@ -590,7 +597,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             HP -= hit;
             HP = Mathf.Clamp(HP, remainingHP, MaxHP);
 
-            DamageTextManager.Spawn(hit.ToString(), position);
+            DamageTextManager.Spawn(hit.ToString(), Position);
 
             //Shake Actor
             Shake(ShakeIntensity.Medium);
@@ -605,7 +612,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         Shake(ShakeIntensity.Stop);
         HP = remainingHP;
-        position = currentTile.position;
+        Position = CurrentTile.position;
     }
 
     public IEnumerator TakeDamage(float damage)
@@ -622,7 +629,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             HP -= hit;
             HP = Mathf.Clamp(HP, remainingHP, MaxHP);
 
-            DamageTextManager.Spawn(hit.ToString(), position);
+            DamageTextManager.Spawn(hit.ToString(), Position);
 
             //Shake Actor
             Shake(ShakeIntensity.Medium);
@@ -637,7 +644,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         Shake(ShakeIntensity.Stop);
         HP = remainingHP;
-        position = currentTile.position;
+        Position = CurrentTile.position;
     }
 
 
@@ -649,7 +656,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         float ticks = 0;
         float duration = Interval.QuarterSecond;
 
-        DamageTextManager.Spawn("Miss", position);
+        DamageTextManager.Spawn("Miss", Position);
 
         while (ticks < duration)
         {
@@ -765,7 +772,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         PortraitManager.Dissolve(this);
         SoundSource.PlayOneShot(ResourceManager.SoundEffect("Death"));
-        sortingOrder = ZAxis.Max;
+        SortingOrder = ZAxis.Max;
 
         while (alpha > 0)
         {

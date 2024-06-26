@@ -67,7 +67,7 @@ public class Geometry
     {
         //Determine if already adjacent to player...
         if (IsAdjacentTo(attacker, other))
-            return attacker.position;
+            return attacker.Position;
 
         //...Otherwise, Find closest unoccupied tile adjacent to player...
         var closestUnoccupiedAdjacentTile = ClosestUnoccupiedAdjacentTileByLocation(other.Location);
@@ -89,7 +89,7 @@ public class Geometry
         if (closestTile != null)
             return closestTile.position;
 
-        return attacker.position;
+        return attacker.Position;
     }
 
 

@@ -144,8 +144,8 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator PlayerStartAttack(ActorPair pair)
     {
-        pair.Actor1.sortingOrder = ZAxis.Max;
-        pair.Actor2.sortingOrder = ZAxis.Max;
+        pair.Actor1.SortingOrder = ZAxis.Max;
+        pair.Actor2.SortingOrder = ZAxis.Max;
 
         SoundSource.PlayOneShot(ResourceManager.SoundEffect("PlayerGlow"));
 
@@ -245,8 +245,8 @@ public class ActorManager : ExtendedMonoBehavior
 
     private IEnumerator PlayerEndAttack(ActorPair pair)
     {
-        pair.Actor1.sortingOrder = ZAxis.Min;
-        pair.Actor2.sortingOrder = ZAxis.Min;
+        pair.Actor1.SortingOrder = ZAxis.Min;
+        pair.Actor2.SortingOrder = ZAxis.Min;
 
         AttackLineManager.Destroy(pair);
 

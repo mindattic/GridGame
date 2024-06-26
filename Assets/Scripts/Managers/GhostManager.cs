@@ -29,7 +29,7 @@ public class GhostManager : ExtendedMonoBehavior
             return;
 
         this.actor = actor;
-        previousPosition = this.actor.position;
+        previousPosition = this.actor.Position;
     }
 
     public void Stop()
@@ -43,11 +43,11 @@ public class GhostManager : ExtendedMonoBehavior
         if (actor == null || actor.IsDead || actor.IsInactive)
             return;
 
-        var distance = Vector3.Distance(actor.position, previousPosition);
+        var distance = Vector3.Distance(actor.Position, previousPosition);
         if (distance < threshold)
             return;
 
-        previousPosition = actor.position;
+        previousPosition = actor.Position;
 
         Spawn();
     }

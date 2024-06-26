@@ -40,7 +40,7 @@ public class FootstepManager : ExtendedMonoBehavior
             return;
 
         this.Actor = actor;
-        PreviousPosition = this.Actor.position;
+        PreviousPosition = this.Actor.Position;
     }
 
     public void Stop()
@@ -55,7 +55,7 @@ public class FootstepManager : ExtendedMonoBehavior
         if (Actor == null || Actor.IsDead || Actor.IsInactive) 
             return;
 
-        var distance = Vector3.Distance(Actor.position, PreviousPosition);
+        var distance = Vector3.Distance(Actor.Position, PreviousPosition);
         if (distance < Threshold) 
             return;
   
@@ -70,8 +70,8 @@ public class FootstepManager : ExtendedMonoBehavior
         footstep.sprite = ResourceManager.Prop("Footstep");
         footstep.name = $"Footstep_{Guid.NewGuid()}";
         footstep.Parent = Board.transform;
-        footstep.Spawn(Actor.position, Common.RotationByDirection(Actor.position, PreviousPosition), IsRightFoot);
-        PreviousPosition = Actor.position;
+        footstep.Spawn(Actor.Position, Common.RotationByDirection(Actor.Position, PreviousPosition), IsRightFoot);
+        PreviousPosition = Actor.Position;
         IsRightFoot = !IsRightFoot;
     }
 
