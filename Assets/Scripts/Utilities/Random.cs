@@ -108,16 +108,25 @@ static class Random
 
 
 
-        var result = Int(1, 5);
+        //var result = Int(1, 5);
+        //return result switch
+        //{
+        //    1 => global::AttackStrategy.MoveAnywhere,
+        //    2 => global::AttackStrategy.AttackClosest,
+        //    3 => global::AttackStrategy.AttackWeakest,
+        //    4 => global::AttackStrategy.AttackStrongest,
+        //    5 => global::AttackStrategy.AttackRandom,
+        //    _ => global::AttackStrategy.MoveAnywhere,
+        //};
+
+        var result = Int(1, 2);
         return result switch
         {
-            1 => global::AttackStrategy.MoveAnywhere,
-            2 => global::AttackStrategy.AttackClosest,
-            3 => global::AttackStrategy.AttackWeakest,
-            4 => global::AttackStrategy.AttackStrongest,
-            5 => global::AttackStrategy.AttackRandom,
-            _ => global::AttackStrategy.MoveAnywhere,
+            1 => global::AttackStrategy.AttackClosest,
+            2 => global::AttackStrategy.AttackRandom,
+            _ => global::AttackStrategy.AttackClosest,
         };
+
     }
 
 
