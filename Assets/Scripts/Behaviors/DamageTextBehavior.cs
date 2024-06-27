@@ -8,7 +8,7 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 {
 
 
-    public TextMeshPro TextMesh;
+    public TextMeshPro textMesh;
 
     #region Components
 
@@ -35,16 +35,16 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 
     void Awake()
     {
-        TextMesh = GetComponent<TextMeshPro>();
+        textMesh = GetComponent<TextMeshPro>();
     }
 
-    // Start is called before the first Frame update
+    // Start is called before the first frame update
     void Start()
     {
 
     }
 
-    // Update is called once per Frame
+    // Update is called once per frame
     void Update()
     {
 
@@ -52,24 +52,24 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 
     public void Spawn(string text, Vector3 position)
     {
-        TextMesh.text = text;
+        textMesh.text = text;
         var x = position.x + Random.Range(TileSize / 4);
-        var y = position.y + (TileSize / 2 * Random.Percent());
+        var y = position.y + (TileSize / 2 * Random.Percent);
         transform.position = new Vector3(x, y, 1);
         StartCoroutine(FadeOut());
     }
 
     private IEnumerator FadeOut()
     {
-        float alpha = TextMesh.color.a;
-        Color color = TextMesh.color;
+        float alpha = textMesh.color.a;
+        Color color = textMesh.color;
 
-        while (TextMesh.color.a > 0)
+        while (textMesh.color.a > 0)
         {
             alpha -= 0.1f;
             alpha = Mathf.Max(alpha, 0);
             color.a = alpha;
-            TextMesh.color = color;
+            textMesh.color = color;
 
 
             transform.position += new Vector3(0, TileSize / 16, 0);

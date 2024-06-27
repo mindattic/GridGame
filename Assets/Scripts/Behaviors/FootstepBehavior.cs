@@ -7,7 +7,7 @@ public class FootstepBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
-        transform.localScale = TileScale / 2;
+        transform.localScale = tileScale / 2;
         spriteRenderer = GetComponent<SpriteRenderer>();
         Duration = Interval.OneSecond * 10;
 
@@ -60,7 +60,7 @@ public class FootstepBehavior : ExtendedMonoBehavior
     {
         this.Position = position;
         this.Rotation = rotation;
-        spriteRenderer.sprite = ResourceManager.Prop($"Footstep{(isRightFoot ? "Right" : "Left")}");
+        spriteRenderer.sprite = resourceManager.Prop($"Footstep{(isRightFoot ? "right" : "left")}");
         StartCoroutine(FadeOut());
     }
 

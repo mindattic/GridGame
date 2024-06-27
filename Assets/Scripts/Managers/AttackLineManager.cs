@@ -33,7 +33,7 @@ public class AttackLineManager : ExtendedMonoBehavior
         var prefab = Instantiate(AttackLinePrefab, Vector2.zero, Quaternion.identity);
         var attackLine = prefab.GetComponent<AttackLineBehavior>();
         attackLine.name = key;
-        attackLine.Parent = Board.transform;
+        attackLine.Parent = board.transform;
         attackLine.Spawn(pair);
 
         AttackLines.Add(key, attackLine);

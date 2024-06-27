@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class BoardBehavior : ExtendedMonoBehavior
 {
-    public Vector2 Offset;
-    public int ColumnCount = 6;
-    public int RowCount = 8;
-    public float Top;
-    public float Right;
-    public float Bottom;
-    public float Left;
+    public Vector2 cornerOffset;
+    public int columnCount = 6;
+    public int rowCount = 8;
+    public float top;
+    public float right;
+    public float bottom;
+    public float left;
 
 
     #region Components
@@ -29,24 +29,24 @@ public class BoardBehavior : ExtendedMonoBehavior
 
     void Awake()
     {
-        //backgroundRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        //backgroundRenderer = transform.GetChild(0).GetComponent<spriteRenderer>();
     }
 
     void Start()
     {
-        Offset = new Vector2(-(TileSize * 3) - TileSize / 2, (TileSize * ColumnCount));
-        Top = Offset.y - TileSize / 2;
-        Right = Offset.x + (TileSize * ColumnCount) + TileSize / 2;
-        Bottom = Offset.y - (TileSize * RowCount) - TileSize / 2;
-        Left = Offset.x + TileSize / 2;
+        cornerOffset = new Vector2(-(TileSize * 3) - TileSize / 2, (TileSize * columnCount));
+        top = cornerOffset.y - TileSize / 2;
+        right = cornerOffset.x + (TileSize * columnCount) + TileSize / 2;
+        bottom = cornerOffset.y - (TileSize * rowCount) - TileSize / 2;
+        left = cornerOffset.x + TileSize / 2;
 
-        Position = Offset;
+        Position = cornerOffset;
 
-        //backgroundRenderer.transform.localScale = new Vector3(TileSize * ColumnCount, TileSize * RowCount, 1);
+        //backgroundRenderer.transform.localScale = new Vector3(TileSize * columnCount, TileSize * rowCount, 1);
 
     }
 
-    // Update is called once per Frame
+    // Update is called once per frame
     void Update()
     {
 

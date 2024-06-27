@@ -39,7 +39,7 @@ public class OverlayManager : ExtendedMonoBehavior
         rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sizeDeltaY);
 
 
-        image = GameObject.Find("Overlay").GetComponent<Image>();
+        image = GameObject.Find(Constants.Overlay).GetComponent<Image>();
         image.color = new Color(0f, 0f, 0f, 1f);
 
         
@@ -75,7 +75,7 @@ public class OverlayManager : ExtendedMonoBehavior
         //    alpha += Increment.FivePercent;
         //    alpha = Mathf.Clamp(alpha, 0, 1);
         //    image.Color = new Color(0, 0, 0, alpha);
-        //    yield return Wait.OneTick();
+        //    yield return wait.OneTick();
         //}
 
 

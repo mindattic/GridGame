@@ -28,20 +28,20 @@ public class TitleManager : ExtendedMonoBehavior
 
     void Awake()
     {
-        label = GameObject.Find("Title").GetComponent<TextMeshProUGUI>();
+        label = GameObject.Find(Constants.Title).GetComponent<TextMeshProUGUI>();
         label.transform.localPosition = new Vector3(0, 0, 0);
         label.color = new Color(1, 1, 1, 0);
     }
 
 
 
-    // Start is called before the first Frame update
+    // Start is called before the first frame update
     void Start()
     {
 
     }
 
-    // Update is called once per Frame
+    // Update is called once per frame
     void Update()
     {
 
@@ -54,7 +54,7 @@ public class TitleManager : ExtendedMonoBehavior
 
         if (showOverlay)
         {
-            StartCoroutine(OverlayManager.FadeInOut());
+            StartCoroutine(overlayManager.FadeInOut());
         }
            
         StartCoroutine(FadeInOut());

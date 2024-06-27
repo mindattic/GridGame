@@ -22,8 +22,8 @@ public class ActorPair
         this.Axis = axis;
     }
 
-    public float Ceiling => Axis == Axis.Vertical ? HighestActor.Location.y : HighestActor.Location.x;
-    public float Floor => Axis == Axis.Vertical ? LowestActor.Location.y : LowestActor.Location.x;
+    public float Ceiling => Axis == Axis.Vertical ? HighestActor.location.y : HighestActor.location.x;
+    public float Floor => Axis == Axis.Vertical ? LowestActor.location.y : LowestActor.location.x;
 
    
     public bool HasMatch(ActorBehavior actor1, ActorBehavior actor2)

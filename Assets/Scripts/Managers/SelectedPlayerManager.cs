@@ -1,18 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
 
 public class SelectedPlayerManager : ExtendedMonoBehavior
 {
-    // Start is called before the first Frame update
+    // Start is called before the first frame update
     void Start()
     {
 
     }
 
-    // Update is called once per Frame
+    // Update is called once per frame
     void Update()
     {
 
@@ -22,15 +19,15 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
     public void Select()
     {
         //Verify is player turn...
-        if (!TurnManager.IsPlayerTurn)
+        if (!turnManager.IsPlayerTurn)
             return;
 
         //Verify Current phase is "PointA"...
-        if (!TurnManager.IsStartPhase)
+        if (!turnManager.IsStartPhase)
             return;
 
         //Find collider attached to Actor
-        var collisions = Physics2D.OverlapPointAll(MousePosition3D);
+        var collisions = Physics2D.OverlapPointAll(mousePosition3D);
         if (collisions == null)
             return;
         var collider = collisions.FirstOrDefault(x => x.CompareTag(Tag.Actor));
@@ -43,14 +40,14 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //TODO: Update Card display...
-        Actors.ForEach(x => x.Renderers.SetFocus(false));
-        FocusedPlayer = actor;
-        FocusedPlayer.SortingOrder = ZAxis.Max;
-        FocusedPlayer.Renderers.SetFocus(true);
-        //Assign mouse Offset (how off center was selection)
-        MouseOffset = FocusedPlayer.Position - MousePosition3D;
+        actors.ForEach(x => x.Renderers.SetFocus(false));
+        focusedPlayer = actor;
+        focusedPlayer.SortingOrder = ZAxis.Max;
+        focusedPlayer.Renderers.SetFocus(true);
+        //Assign mouse cornerOffset (how off center was selection)
+        mouseOffset = focusedPlayer.position - mousePosition3D;
 
-        CardManager.Set(FocusedPlayer);
+        cardManager.Set(focusedPlayer);
     }
 
     public void Unselect()
@@ -61,92 +58,92 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         if (!HasSelectedPlayer)
         {
-            FocusedPlayer.Position = FocusedPlayer.CurrentTile.position;
-            FocusedPlayer.SortingOrder = ZAxis.Min;
-            //CardManager.Clear();
+            focusedPlayer.position = focusedPlayer.CurrentTile.position;
+            focusedPlayer.SortingOrder = ZAxis.Min;
+            //cardManager.Clear();
         }
 
-        FocusedPlayer = null;
-     
+        focusedPlayer = null;
+
     }
 
     public void Pickup()
     {
         //Verify is player turn...
-        if (!TurnManager.IsPlayerTurn)
+        if (!turnManager.IsPlayerTurn)
             return;
 
         //Verify Current phase is "PointA"...
-        if (!TurnManager.IsStartPhase)
+        if (!turnManager.IsStartPhase)
             return;
 
         //Pickup Actor
-        SelectedPlayer = FocusedPlayer;
+        selectedPlayer = focusedPlayer;
         if (!HasSelectedPlayer)
             return;
 
         Unselect();
-        TurnManager.currentPhase = TurnPhase.Move;
-        SelectedPlayer.SortingOrder = ZAxis.Max;
+        turnManager.currentPhase = TurnPhase.Move;
+        selectedPlayer.SortingOrder = ZAxis.Max;
 
-        SoundSource.PlayOneShot(ResourceManager.SoundEffect($"Select"));
+        soundSource.PlayOneShot(resourceManager.SoundEffect($"Select"));
 
-        //Clear BobbingCurve Position
+        //Clear bobbingCurve position
         //ResetBobbing();
 
 
 
-        //Assign mouse Offset (how off center was selection)
-        MouseOffset = SelectedPlayer.Position - MousePosition3D;
+        //Assign mouse cornerOffset (how off center was selection)
+        mouseOffset = selectedPlayer.position - mousePosition3D;
 
-        
-        GhostManager.Start(SelectedPlayer);
-        FootstepManager.Start(SelectedPlayer);
 
-        Timer.Set(scaleX: 1f, start: true);
+        ghostManager.Start(selectedPlayer);
+        footstepManager.Start(selectedPlayer);
+
+        timer.Set(scaleX: 1f, start: true);
     }
 
     public void Drop()
     {
         //Verify is player turn...
-        if (!TurnManager.IsPlayerTurn)
+        if (!turnManager.IsPlayerTurn)
             return;
 
         //Verify Current phase is "move"...
-        if (!TurnManager.IsMovePhase)
+        if (!turnManager.IsMovePhase)
             return;
 
         //Verify *HAS* selected player...
         if (!HasSelectedPlayer)
             return;
 
-        //Assign Location and Position
-        var closestTile = Geometry.ClosestTileByPosition(SelectedPlayer.Position);
+        //Assign location and position
+        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
         closestTile.spriteRenderer.color = Colors.Translucent.White;
-        SelectedPlayer.Location = closestTile.Location;
-        SelectedPlayer.Position = Geometry.PositionFromLocation(SelectedPlayer.Location);
-        SelectedPlayer.SortingOrder = ZAxis.Min;
-        SelectedPlayer.SetStatus(Status.None);
-        SelectedPlayer = null;
+        selectedPlayer.location = closestTile.location;
+        selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
+        selectedPlayer.SortingOrder = ZAxis.Min;
+        selectedPlayer.SetStatus(Status.None);
+        selectedPlayer = null;
 
-        GhostManager.Stop();
-        FootstepManager.Stop();
+        ghostManager.Stop();
+        footstepManager.Stop();
 
-        TileManager.Reset();
-        CardManager.Clear();
-        Timer.Set(scaleX: 0f, start: false);
-        TurnManager.currentPhase = TurnPhase.Attack;
-        ActorManager.CheckPlayerAttack();
+        tileManager.Reset();
+        cardManager.Clear();
+        timer.Set(scaleX: 0f, start: false);
+        turnManager.currentPhase = TurnPhase.Attack;
+        actorManager.CheckPlayerAttack();
     }
 
     private void ResetBobbing()
     {
-        foreach (var actor in Actors)
+        foreach (var actor in actors)
         {
             if (actor == null || !actor.IsAlive || !actor.IsActive) continue;
-            actor.Renderers.Glow.transform.position = actor.Position;
-            actor.Renderers.Thumbnail.transform.position = actor.Position;
-            actor.Renderers.Frame.transform.position = actor.Position;
+            actor.Renderers.glow.transform.position = actor.position;
+            actor.Renderers.thumbnail.transform.position = actor.position;
+            actor.Renderers.frame.transform.position = actor.position;
         }
     }
 

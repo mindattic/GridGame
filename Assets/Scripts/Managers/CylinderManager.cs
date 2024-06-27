@@ -29,7 +29,7 @@ public class CylinderManager : MonoBehaviour
         else
         {
             Speed = Random.Int(2, 5) * 0.01f;
-            Floor = -1f + (-1f * Random.Percent());
+            Floor = -1f + (-1f * Random.Percent);
             isRising = false;
         }
 
@@ -40,7 +40,7 @@ public class CylinderManager : MonoBehaviour
         else
         {
             Speed = Random.Int(2, 5) * 0.01f;
-            Ceiling = 1f + (1f * Random.Percent());
+            Ceiling = 1f + (1f * Random.Percent);
             isRising = true;
         }
 

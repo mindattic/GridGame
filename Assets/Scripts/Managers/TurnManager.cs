@@ -42,8 +42,8 @@ public class TurnManager : ExtendedMonoBehavior
         currentTeam = Team.Player;
         currentPhase = Phase.Start;
 
-        MusicSource.Stop();
-        MusicSource.PlayOneShot(ResourceManager.MusicTrack($"MelancholyLull"));
+        musicSource.Stop();
+        musicSource.PlayOneShot(resourceManager.MusicTrack($"MelancholyLull"));
     }
 
     public void NextTurn()
@@ -54,20 +54,20 @@ public class TurnManager : ExtendedMonoBehavior
         if (IsPlayerTurn)
         {
             currentTurn++;
-            TitleManager.Print($"Turn {currentTurn}");
-            Timer.Set(scaleX: 1f, start: false);
-            //Players.Where(x => x.IsPlaying).ToList().ForEach(x => StartCoroutine(x.GlowIn()));
-            //Enemies.Where(x => x.IsPlaying).ToList().ForEach(x => StartCoroutine(x.GlowOut()));
+            titleManager.Print($"Turn {currentTurn}");
+            timer.Set(scaleX: 1f, start: false);
+            //players.Where(x => x.IsPlaying).ToList().ForEach(x => StartCoroutine(x.GlowIn()));
+            //enemies.Where(x => x.IsPlaying).ToList().ForEach(x => StartCoroutine(x.GlowOut()));
         }
         else if (IsEnemyTurn)
         {
-            ActorManager.CheckEnemySpawn();
-            ActorManager.CheckEnemyMove();
-            //Enemies.Where(x => x.IsPlaying && x.IsReady).ToList().ForEach(x => StartCoroutine(x.GlowIn()));
-            //Players.Where(x => x.IsPlaying).ToList().ForEach(x => StartCoroutine(x.GlowOut()));
+            actorManager.CheckEnemySpawn();
+            actorManager.CheckEnemyMove();
+            //enemies.Where(x => x.IsPlaying && x.IsReady).ToList().ForEach(x => StartCoroutine(x.GlowIn()));
+            //players.Where(x => x.IsPlaying).ToList().ForEach(x => StartCoroutine(x.GlowOut()));
         }
 
-        SoundSource.PlayOneShot(ResourceManager.SoundEffect($"NextTurn"));
+        soundSource.PlayOneShot(resourceManager.SoundEffect($"NextTurn"));
     }
 
 

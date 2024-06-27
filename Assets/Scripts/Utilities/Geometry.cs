@@ -6,23 +6,23 @@ using UnityEngine.UIElements;
 
 public class Geometry
 {
-    private static BoardBehavior board => GameManager.instance.Board;
+    private static BoardBehavior board => GameManager.instance.board;
     private static float tileSize => GameManager.instance.TileSize;
-    private static List<ActorBehavior> actors => GameManager.instance.Actors;
-    private static List<TileBehavior> tiles => GameManager.instance.Tiles;
+    private static List<ActorBehavior> actors => GameManager.instance.actors;
+    private static List<TileBehavior> tiles => GameManager.instance.tiles;
 
     public static Vector3 PositionFromLocation(Vector2Int location)
     {
-        float x = board.Offset.x + (tileSize * location.x);
-        float y = board.Offset.y + -(tileSize * location.y);
+        float x = board.cornerOffset.x + (tileSize * location.x);
+        float y = board.cornerOffset.y + -(tileSize * location.y);
         return new Vector3(x, y, 0);
     }
 
 
     //public static Vector2Int LocationFromPosition(Vector3 other)
     //{
-    //    int x = Mathf.FloorToInt(other.x / TileSize - Board.Offset.x);
-    //    int y = Mathf.FloorToInt(other.y / TileSize - Board.Offset.y);
+    //    int x = Mathf.FloorToInt(other.x / TileSize - board.cornerOffset.x);
+    //    int y = Mathf.FloorToInt(other.y / TileSize - board.cornerOffset.y);
     //    return new Vector2Int(x, y);
     //}
 
@@ -36,22 +36,22 @@ public class Geometry
     public static TileBehavior ClosestTileByLocation(Vector2Int other)
     {
         return tiles
-            .OrderBy(x => Vector2Int.Distance(x.Location, other))
+            .OrderBy(x => Vector2Int.Distance(x.location, other))
             .First();
     }
 
 
-    public static bool IsSameColumn(ActorBehavior a, ActorBehavior b) => a.Location.x == b.Location.x;
-    public static bool IsSameRow(ActorBehavior a, ActorBehavior b) => a.Location.y == b.Location.y;
-    public static bool IsNorthOf(ActorBehavior a, ActorBehavior b) => IsSameColumn(a, b) && a.Location.y == b.Location.y - 1;
-    public static bool IsEastOf(ActorBehavior a, ActorBehavior b) => IsSameRow(a, b) && a.Location.x == b.Location.x + 1;
-    public static bool IsSouthOf(ActorBehavior a, ActorBehavior b) => IsSameColumn(a, b) && a.Location.y == b.Location.y + 1;
-    public static bool IsWestOf(ActorBehavior a, ActorBehavior b) => IsSameRow(a, b) && a.Location.x == b.Location.x - 1;
-    public static bool IsNorthWestOf(ActorBehavior a, ActorBehavior b) => a.Location.x == b.Location.x - 1 && a.Location.y == b.Location.y - 1;
-    public static bool IsNorthEastOf(ActorBehavior a, ActorBehavior b) => a.Location.x == b.Location.x + 1 && a.Location.y == b.Location.y - 1;
-    public static bool IsSouthWestOf(ActorBehavior a, ActorBehavior b) => a.Location.x == b.Location.x - 1 && a.Location.y == b.Location.y + 1;
-    public static bool IsSouthEastOf(ActorBehavior a, ActorBehavior b) => a.Location.x == b.Location.x + 1 && a.Location.y == b.Location.y + 1;
-    public static bool IsAdjacentTo(ActorBehavior a, ActorBehavior b) => (IsSameColumn(a, b) || IsSameRow(a, b)) && Vector2Int.Distance(a.Location, a.Location).Equals(1);
+    public static bool IsSameColumn(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x;
+    public static bool IsSameRow(ActorBehavior a, ActorBehavior b) => a.location.y == b.location.y;
+    public static bool IsNorthOf(ActorBehavior a, ActorBehavior b) => IsSameColumn(a, b) && a.location.y == b.location.y - 1;
+    public static bool IsEastOf(ActorBehavior a, ActorBehavior b) => IsSameRow(a, b) && a.location.x == b.location.x + 1;
+    public static bool IsSouthOf(ActorBehavior a, ActorBehavior b) => IsSameColumn(a, b) && a.location.y == b.location.y + 1;
+    public static bool IsWestOf(ActorBehavior a, ActorBehavior b) => IsSameRow(a, b) && a.location.x == b.location.x - 1;
+    public static bool IsNorthWestOf(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x - 1 && a.location.y == b.location.y - 1;
+    public static bool IsNorthEastOf(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x + 1 && a.location.y == b.location.y - 1;
+    public static bool IsSouthWestOf(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x - 1 && a.location.y == b.location.y + 1;
+    public static bool IsSouthEastOf(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x + 1 && a.location.y == b.location.y + 1;
+    public static bool IsAdjacentTo(ActorBehavior a, ActorBehavior b) => (IsSameColumn(a, b) || IsSameRow(a, b)) && Vector2Int.Distance(a.location, a.location).Equals(1);
 
     public static Direction AdjacentDirectionTo(ActorBehavior a, ActorBehavior b)
     {
@@ -67,29 +67,29 @@ public class Geometry
     {
         //Determine if already adjacent to player...
         if (IsAdjacentTo(attacker, other))
-            return attacker.Position;
+            return attacker.position;
 
         //...Otherwise, Find closest unoccupied tile adjacent to player...
-        var closestUnoccupiedAdjacentTile = ClosestUnoccupiedAdjacentTileByLocation(other.Location);
+        var closestUnoccupiedAdjacentTile = ClosestUnoccupiedAdjacentTileByLocation(other.location);
         if (closestUnoccupiedAdjacentTile != null)
             return closestUnoccupiedAdjacentTile.position;
 
         //...Otherwise, Find closest tile adjacent to player...
-        var closestAdjacentTile = ClosestAdjacentTileByLocation(other.Location);
+        var closestAdjacentTile = ClosestAdjacentTileByLocation(other.location);
         if (closestAdjacentTile != null)
             return closestAdjacentTile.position;
 
         //...Otherwise, find closest unoccupied tile to player...
-        var closestUnoccupiedTile = ClosestUnoccupiedTileByLocation(other.Location);
+        var closestUnoccupiedTile = ClosestUnoccupiedTileByLocation(other.location);
         if (closestUnoccupiedTile != null)
             return closestUnoccupiedTile.position;
 
         //...Otherwise, find closest tile to player
-        var closestTile = ClosestTileByLocation(other.Location);
+        var closestTile = ClosestTileByLocation(other.location);
         if (closestTile != null)
             return closestTile.position;
 
-        return attacker.Position;
+        return attacker.position;
     }
 
 
@@ -104,7 +104,7 @@ public class Geometry
     public static TileBehavior ClosestUnoccupiedTileByLocation(Vector2Int other)
     {
         return tiles
-            .FirstOrDefault(x => !x.IsOccupied && Vector2Int.Distance(x.Location, other) == 1);
+            .FirstOrDefault(x => !x.IsOccupied && Vector2Int.Distance(x.location, other) == 1);
     }
 
 
@@ -122,14 +122,14 @@ public class Geometry
 
     public static ActorBehavior GetActorAtLocation(Vector2Int other)
     {
-        return actors.FirstOrDefault(x => x.Location == other);
+        return actors.FirstOrDefault(x => x.location == other);
     }
 
 
     public static Vector2Int GetLocation(int col, int row)
     {
-        col = Math.Clamp(col, 1, board.ColumnCount);
-        row = Math.Clamp(row, 1, board.RowCount);
+        col = Math.Clamp(col, 1, board.columnCount);
+        row = Math.Clamp(row, 1, board.rowCount);
         return new Vector2Int(col, row);
     }
 

@@ -29,7 +29,7 @@ public class GhostManager : ExtendedMonoBehavior
             return;
 
         this.actor = actor;
-        previousPosition = this.actor.Position;
+        previousPosition = this.actor.position;
     }
 
     public void Stop()
@@ -43,11 +43,11 @@ public class GhostManager : ExtendedMonoBehavior
         if (actor == null || actor.IsDead || actor.IsInactive)
             return;
 
-        var distance = Vector3.Distance(actor.Position, previousPosition);
+        var distance = Vector3.Distance(actor.position, previousPosition);
         if (distance < threshold)
             return;
 
-        previousPosition = actor.Position;
+        previousPosition = actor.position;
 
         Spawn();
     }
@@ -58,7 +58,7 @@ public class GhostManager : ExtendedMonoBehavior
         GhostBehavior ghost = prefab.GetComponent<GhostBehavior>();
         ghost.thumbnail = actor.thumbnail;
         ghost.name = $"Ghost_{Guid.NewGuid()}";
-        ghost.Parent = Board.transform;
+        ghost.Parent = board.transform;
         ghost.Spawn(actor);
     }
 

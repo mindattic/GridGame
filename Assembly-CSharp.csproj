@@ -66,7 +66,7 @@
     <Compile Include="Assets\Scripts\Models\ActorSprite.cs" />
     <Compile Include="Assets\Scripts\Models\Enums.cs" />
     <Compile Include="Assets\Scripts\Behaviors\SupportLineBehavior.cs" />
-    <Compile Include="Assets\Scripts\Models\ActorRenderers.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\Actor\ActorRenderers.cs" />
     <Compile Include="Assets\Scripts\Managers\BoardManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\PortraitBehavior.cs" />
     <Compile Include="Assets\Scripts\Utilities\Common.cs" />

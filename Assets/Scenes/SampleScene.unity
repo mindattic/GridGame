@@ -697,9 +697,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d4e92334250854cb74c04c25324b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ceiling: 1
-  floor: -1
-  speed: 0.05
+  Ceiling: 1
+  Floor: -1
+  Speed: 0.05
 --- !u!1 &485251817
 GameObject:
   m_ObjectHideFlags: 0
@@ -12278,7 +12278,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Option A
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: f29a7a46e6d96b5479633fc3e0e942dd, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -12342,7 +12342,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1353199794
@@ -13252,7 +13252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac66e8615fa08bf4c906e12e503d7834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropdown: {fileID: 1518532252}
+  Dropdown: {fileID: 1518532252}
 --- !u!1 &1526808599
 GameObject:
   m_ObjectHideFlags: 0
@@ -14043,51 +14043,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _persistent: 1
-  deviceType: 
-  targetFramerate: 60
-  vSyncCount: 1
-  resourceManager: {fileID: 0}
-  inputManager: {fileID: 0}
-  stageManager: {fileID: 0}
-  turnManager: {fileID: 0}
-  supportLineManager: {fileID: 0}
-  attackLineManager: {fileID: 0}
-  damageTextManager: {fileID: 0}
-  ghostManager: {fileID: 0}
-  portraitManager: {fileID: 0}
-  overlayManager: {fileID: 0}
-  titleManager: {fileID: 0}
-  consoleManager: {fileID: 0}
-  cardManager: {fileID: 0}
-  actorManager: {fileID: 0}
-  selectedPlayerManager: {fileID: 0}
-  playerManager: {fileID: 0}
-  enemyManager: {fileID: 0}
-  tileManager: {fileID: 0}
-  footstepManager: {fileID: 0}
-  soundSource: {fileID: 0}
-  musicSource: {fileID: 0}
-  screenSize: {x: 0, y: 0}
-  tileSize: 0
-  tileScale: {x: 0, y: 0}
-  spriteScale: {x: 0, y: 0}
-  canvas2D: {fileID: 0}
-  canvas3D: {fileID: 0}
-  mousePosition2D: {x: 0, y: 0, z: 0}
-  mousePosition3D: {x: 0, y: 0, z: 0}
-  mouseOffset: {x: 0, y: 0, z: 0}
-  cursorSpeed: 0
-  slideSpeed: 0
-  snapDistance: 0
-  bumpSpeed: 0
-  focusedPlayer: {fileID: 0}
-  selectedPlayer: {fileID: 0}
-  board: {fileID: 0}
-  timer: {fileID: 0}
-  actors: []
-  tiles: []
-  lines: []
-  playerArt: {fileID: 0}
+  DeviceType: 
+  TargetFramerate: 60
+  VSyncCount: 0
+  ResourceManager: {fileID: 0}
+  InputManager: {fileID: 0}
+  StageManager: {fileID: 0}
+  TurnManager: {fileID: 0}
+  SupportLineManager: {fileID: 0}
+  AttackLineManager: {fileID: 0}
+  DamageTextManager: {fileID: 0}
+  GhostManager: {fileID: 0}
+  PortraitManager: {fileID: 0}
+  OverlayManager: {fileID: 0}
+  TitleManager: {fileID: 0}
+  ConsoleManager: {fileID: 0}
+  CardManager: {fileID: 0}
+  ActorManager: {fileID: 0}
+  SelectedPlayerManager: {fileID: 0}
+  PlayerManager: {fileID: 0}
+  EnemyManager: {fileID: 0}
+  TileManager: {fileID: 0}
+  FootstepManager: {fileID: 0}
+  SoundSource: {fileID: 0}
+  MusicSource: {fileID: 0}
+  ScreenSize: {x: 0, y: 0}
+  TileSize: 0
+  TileScale: {x: 0, y: 0}
+  SpriteScale: {x: 0, y: 0}
+  Canvas2D: {fileID: 0}
+  Canvas3D: {fileID: 0}
+  MousePosition2D: {x: 0, y: 0, z: 0}
+  MousePosition3D: {x: 0, y: 0, z: 0}
+  MouseOffset: {x: 0, y: 0, z: 0}
+  CursorSpeed: 0
+  SlideSpeed: 0
+  SnapDistance: 0
+  BumpSpeed: 0
+  FocusedPlayer: {fileID: 0}
+  SelectedPlayer: {fileID: 0}
+  Board: {fileID: 0}
+  Timer: {fileID: 0}
+  Actors: []
+  Tiles: []
+  Lines: []
+  PlayerArt: {fileID: 0}
 --- !u!114 &1751276278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14112,7 +14112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22072f7b8fcb00f4599e2d617f278898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilePrefab: {fileID: 7233482234801728947, guid: f420fe272613c294eb4bc531748a437e, type: 3}
+  TilePrefab: {fileID: 7233482234801728947, guid: f420fe272613c294eb4bc531748a437e, type: 3}
 --- !u!114 &1751276281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14165,7 +14165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99837d18580e2c84ab4a03eafcd0ef37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageTextPrefab: {fileID: 650995887706566427, guid: 70ed2dcb9cfeb86489b788049c8eeb4c, type: 3}
+  DamageTextPrefab: {fileID: 650995887706566427, guid: 70ed2dcb9cfeb86489b788049c8eeb4c, type: 3}
 --- !u!114 &1751276287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14274,7 +14274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc5b6664491b794bb2a98d0aee5f8de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackLinePrefab: {fileID: 1217694120567122752, guid: fd3cd14ef4856444c8996d9ec5183d59, type: 3}
+  AttackLinePrefab: {fileID: 1217694120567122752, guid: fd3cd14ef4856444c8996d9ec5183d59, type: 3}
 --- !u!114 &1751276291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14541,7 +14541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8089513e7560fe240b3c81142a13b9a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepPrefab: {fileID: 1584721558700783665, guid: 0dc55c1e3bb517c4da449a8973b4f7fb, type: 3}
+  FootstepPrefab: {fileID: 1584721558700783665, guid: 0dc55c1e3bb517c4da449a8973b4f7fb, type: 3}
 --- !u!114 &1751276299
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,35 +8,35 @@ public class ActorBehavior : ExtendedMonoBehavior
 {
 
     //Variables
-    [SerializeField] public Archetype Archetype;
-    [SerializeField] public Vector2Int Location = Locations.Nowhere;
-    [SerializeField] public Vector3? Destination = null;
-    [SerializeField] public Team Team = Team.Independant;
-    [SerializeField] public Quality Quality = Colors.Common;
-    [SerializeField] public float Level;
-    [SerializeField] public float HP;
-    [SerializeField] public float MaxHP;
-    [SerializeField] public float Attack;
-    [SerializeField] public float Defense;
-    [SerializeField] public float Accuracy;
-    [SerializeField] public float Evasion;
-    [SerializeField] public float Speed;
-    [SerializeField] public float Luck;
+    [SerializeField] public Archetype archetype;
+    [SerializeField] public Vector2Int location = Locations.Nowhere;
+    [SerializeField] public Vector3? destination = null;
+    [SerializeField] public Team team = Team.Independant;
+    [SerializeField] public Quality quality = Colors.Common;
+    [SerializeField] public float level;
+    [SerializeField] public float hp;
+    [SerializeField] public float maxHP;
+    [SerializeField] public float attack;
+    [SerializeField] public float defense;
+    [SerializeField] public float accuracy;
+    [SerializeField] public float evasion;
+    [SerializeField] public float speed;
+    [SerializeField] public float luck;
 
-    [SerializeField] public float Wait = 0;
-    [SerializeField] public float WaitDuration = -1;
+    [SerializeField] public float wait = 0;
+    [SerializeField] public float waitDuration = -1;
 
-    [SerializeField] public int SpawnTurn = -1;
+    [SerializeField] public int spawnTurn = -1;
 
-    [SerializeField] public AnimationCurve FlickeringCurve;
-    [SerializeField] public AnimationCurve BobbingCurve;
-    [SerializeField] public Guid Guid;
+    [SerializeField] public AnimationCurve flickeringCurve;
+    [SerializeField] public AnimationCurve bobbingCurve;
+    [SerializeField] public Guid guid;
 
 
-    [SerializeField] public float BackScale = 1.4f;
+    [SerializeField] public float backScale = 1.4f;
 
     public float RandomBob = Random.Float(0.5f, 1f);
-    public ActorBehavior TargetPlayer = null;
+    public ActorBehavior targetPlayer = null;
 
     public ActorHealthBar HealthBar;
     public ActorThumbnail Thumbnail;
@@ -55,24 +55,24 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void Awake()
     {
 
-        Renderers.Back = gameObject.transform.GetChild(ActorLayer.Back).GetComponent<SpriteRenderer>();
-        Renderers.Parallax = gameObject.transform.GetChild(ActorLayer.Parallax).GetComponent<SpriteRenderer>();
-        Renderers.Glow = gameObject.transform.GetChild(ActorLayer.Glow).GetComponent<SpriteRenderer>();
-        Renderers.Thumbnail = gameObject.transform.GetChild(ActorLayer.Thumbnail).GetComponent<SpriteRenderer>();
-        Renderers.Frame = gameObject.transform.GetChild(ActorLayer.Frame).GetComponent<SpriteRenderer>();
-        Renderers.StatusIcon = gameObject.transform.GetChild(ActorLayer.StatusIcon).GetComponent<SpriteRenderer>();
-        Renderers.HealthBarBack = gameObject.transform.GetChild(ActorLayer.HealthBarBack).GetComponent<SpriteRenderer>();
-        Renderers.HealthBar = gameObject.transform.GetChild(ActorLayer.HealthBar).GetComponent<SpriteRenderer>();
-        Renderers.HealthBarFront = gameObject.transform.GetChild(ActorLayer.HealthBarFront).GetComponent<SpriteRenderer>();
-        Renderers.HealthText = gameObject.transform.GetChild(ActorLayer.HealthText).GetComponent<TextMeshPro>();
-        Renderers.ActionBarBack = gameObject.transform.GetChild(ActorLayer.ActionBarBack).GetComponent<SpriteRenderer>();
-        Renderers.ActionBar = gameObject.transform.GetChild(ActorLayer.ActionBar).GetComponent<SpriteRenderer>();
-        Renderers.ActionText = gameObject.transform.GetChild(ActorLayer.ActionText).GetComponent<TextMeshPro>();
-        Renderers.RadialBack = gameObject.transform.GetChild(ActorLayer.RadialBack).GetComponent<SpriteRenderer>();
-        Renderers.RadialFill = gameObject.transform.GetChild(ActorLayer.RadialFill).GetComponent<SpriteRenderer>();
-        Renderers.RadialText = gameObject.transform.GetChild(ActorLayer.RadialText).GetComponent<TextMeshPro>();
-        Renderers.Selection = gameObject.transform.GetChild(ActorLayer.Selection).GetComponent<SpriteRenderer>();
-        Renderers.Mask = gameObject.transform.GetChild(ActorLayer.Mask).GetComponent<SpriteMask>();
+        Renderers.back = gameObject.transform.GetChild(ActorLayer.Back).GetComponent<SpriteRenderer>();
+        Renderers.parallax = gameObject.transform.GetChild(ActorLayer.Parallax).GetComponent<SpriteRenderer>();
+        Renderers.glow = gameObject.transform.GetChild(ActorLayer.Glow).GetComponent<SpriteRenderer>();
+        Renderers.thumbnail = gameObject.transform.GetChild(ActorLayer.Thumbnail).GetComponent<SpriteRenderer>();
+        Renderers.frame = gameObject.transform.GetChild(ActorLayer.Frame).GetComponent<SpriteRenderer>();
+        Renderers.statusIcon = gameObject.transform.GetChild(ActorLayer.StatusIcon).GetComponent<SpriteRenderer>();
+        Renderers.healthBarBack = gameObject.transform.GetChild(ActorLayer.HealthBarBack).GetComponent<SpriteRenderer>();
+        Renderers.healthBar = gameObject.transform.GetChild(ActorLayer.HealthBar).GetComponent<SpriteRenderer>();
+        Renderers.healthBarFront = gameObject.transform.GetChild(ActorLayer.HealthBarFront).GetComponent<SpriteRenderer>();
+        Renderers.healthText = gameObject.transform.GetChild(ActorLayer.HealthText).GetComponent<TextMeshPro>();
+        Renderers.actionBarBack = gameObject.transform.GetChild(ActorLayer.ActionBarBack).GetComponent<SpriteRenderer>();
+        Renderers.actionBar = gameObject.transform.GetChild(ActorLayer.ActionBar).GetComponent<SpriteRenderer>();
+        Renderers.actionText = gameObject.transform.GetChild(ActorLayer.ActionText).GetComponent<TextMeshPro>();
+        Renderers.radialBack = gameObject.transform.GetChild(ActorLayer.RadialBack).GetComponent<SpriteRenderer>();
+        Renderers.radialFill = gameObject.transform.GetChild(ActorLayer.RadialFill).GetComponent<SpriteRenderer>();
+        Renderers.radialText = gameObject.transform.GetChild(ActorLayer.RadialText).GetComponent<TextMeshPro>();
+        Renderers.selection = gameObject.transform.GetChild(ActorLayer.Selection).GetComponent<SpriteRenderer>();
+        Renderers.mask = gameObject.transform.GetChild(ActorLayer.Mask).GetComponent<SpriteMask>();
 
 
         HealthBar = new ActorHealthBar(GameObjectByLayer(ActorLayer.HealthBarBack), GameObjectByLayer(ActorLayer.HealthBar));
@@ -99,7 +99,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.SetParent(value, true);
     }
 
-    public Vector3 Position
+    public Vector3 position
     {
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
@@ -108,96 +108,95 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public Sprite thumbnail
     {
-        get => Renderers.Thumbnail.sprite;
-        set => Renderers.Thumbnail.sprite = value;
+        get => Renderers.thumbnail.sprite;
+        set => Renderers.thumbnail.sprite = value;
     }
 
     public int SortingOrder
     {
         set
         {
-            Renderers.Back.sortingOrder = value + ActorLayer.Back;
-            Renderers.Parallax.sortingOrder = value + ActorLayer.Parallax;
-            Renderers.Glow.sortingOrder = value;
-            Renderers.Thumbnail.sortingOrder = value + ActorLayer.Thumbnail;
-            Renderers.Frame.sortingOrder = value + ActorLayer.Frame;
-            Renderers.StatusIcon.sortingOrder = value + ActorLayer.StatusIcon;
-            Renderers.HealthBarBack.sortingOrder = value + ActorLayer.HealthBarBack;
-            Renderers.HealthBar.sortingOrder = value + ActorLayer.HealthBar;
-            Renderers.HealthBarFront.sortingOrder = value + ActorLayer.HealthBarFront;
-            Renderers.HealthText.sortingOrder = value + ActorLayer.HealthText;
-            Renderers.ActionBarBack.sortingOrder = value + ActorLayer.ActionBarBack;
-            Renderers.ActionBar.sortingOrder = value + ActorLayer.ActionBar;
-            Renderers.ActionText.sortingOrder = value + ActorLayer.ActionText;
-            Renderers.RadialBack.sortingOrder = value + ActorLayer.RadialBack;
-            Renderers.RadialFill.sortingOrder = value + ActorLayer.RadialFill;
-            Renderers.RadialText.sortingOrder = value + ActorLayer.RadialText;
-            Renderers.Selection.sortingOrder = value + ActorLayer.Selection;
-            Renderers.Mask.sortingOrder = value + ActorLayer.Mask;
+            Renderers.back.sortingOrder = value + ActorLayer.Back;
+            Renderers.parallax.sortingOrder = value + ActorLayer.Parallax;
+            Renderers.glow.sortingOrder = value;
+            Renderers.thumbnail.sortingOrder = value + ActorLayer.Thumbnail;
+            Renderers.frame.sortingOrder = value + ActorLayer.Frame;
+            Renderers.statusIcon.sortingOrder = value + ActorLayer.StatusIcon;
+            Renderers.healthBarBack.sortingOrder = value + ActorLayer.HealthBarBack;
+            Renderers.healthBar.sortingOrder = value + ActorLayer.HealthBar;
+            Renderers.healthBarFront.sortingOrder = value + ActorLayer.HealthBarFront;
+            Renderers.healthText.sortingOrder = value + ActorLayer.HealthText;
+            Renderers.actionBarBack.sortingOrder = value + ActorLayer.ActionBarBack;
+            Renderers.actionBar.sortingOrder = value + ActorLayer.ActionBar;
+            Renderers.actionText.sortingOrder = value + ActorLayer.ActionText;
+            Renderers.radialBack.sortingOrder = value + ActorLayer.RadialBack;
+            Renderers.radialFill.sortingOrder = value + ActorLayer.RadialFill;
+            Renderers.radialText.sortingOrder = value + ActorLayer.RadialText;
+            Renderers.selection.sortingOrder = value + ActorLayer.Selection;
+            Renderers.mask.sortingOrder = value + ActorLayer.Mask;
         }
     }
 
 
-    public TileBehavior CurrentTile => Tiles.First(x => x.Location.Equals(Location));
-    public bool IsPlayer => Team.Equals(Team.Player);
-    public bool IsEnemy => Team.Equals(Team.Enemy);
-    public bool IsFocusedPlayer => HasFocusedPlayer && Equals(FocusedPlayer);
-    public bool IsSelectedPlayer => HasSelectedPlayer && Equals(SelectedPlayer);
-    public bool HasLocation => Location != Locations.Nowhere;
-    public bool IsMoving => Destination.HasValue;
-    public bool IsNorthEdge => Location.y == 1;
-    public bool IsEastEdge => Location.x == Board.ColumnCount;
-    public bool IsSouthEdge => Location.y == Board.RowCount;
-    public bool IsWestEdge => Location.x == 1;
-    public bool IsAlive => HP > 0;
-    public bool IsDead => HP < 1;
+    public TileBehavior CurrentTile => tiles.First(x => x.location.Equals(location));
+    public bool IsPlayer => team.Equals(Team.Player);
+    public bool IsEnemy => team.Equals(Team.Enemy);
+    public bool IsFocusedPlayer => HasFocusedPlayer && Equals(focusedPlayer);
+    public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
+    public bool HasLocation => location != Locations.Nowhere;
+    public bool IsMoving => destination.HasValue;
+    public bool IsNorthEdge => location.y == 1;
+    public bool IsEastEdge => location.x == board.columnCount;
+    public bool IsSouthEdge => location.y == board.rowCount;
+    public bool IsWestEdge => location.x == 1;
+    public bool IsAlive => hp > 0;
+    public bool IsDead => hp < 1;
     public bool IsActive => this != null && isActiveAndEnabled;
     public bool IsInactive => this == null || !isActiveAndEnabled;
-
-    public bool IsSpawnable => !IsActive && IsAlive && SpawnTurn <= TurnManager.currentTurn;
+    public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
     public bool IsPlaying => IsAlive && IsActive;
-    public bool IsReady => Wait == WaitDuration;
-    public float LevelModifier => 1.0f + Random.Float(0, Level * 0.01f);
-    public float AttackModifier => 1.0f + Random.Float(0, Attack * 0.01f);
-    public float DefenseModifier => 1.0f + Random.Float(0, Defense * 0.01f);
-    public float AccuracyModifier => 1.0f + Random.Float(0, Accuracy * 0.01f);
-    public float EvasionModifier => 1.0f + Random.Float(0, Evasion * 0.01f);
-    public float LuckModifier => 1.0f + Random.Float(0, Luck * 0.01f);
+    public bool IsReady => wait == waitDuration;
+    public float LevelModifier => 1.0f + Random.Float(0, level * 0.01f);
+    public float AttackModifier => 1.0f + Random.Float(0, attack * 0.01f);
+    public float DefenseModifier => 1.0f + Random.Float(0, defense * 0.01f);
+    public float AccuracyModifier => 1.0f + Random.Float(0, accuracy * 0.01f);
+    public float EvasionModifier => 1.0f + Random.Float(0, evasion * 0.01f);
+    public float LuckModifier => 1.0f + Random.Float(0, luck * 0.01f);
 
 
-    public bool IsSameColumn(Vector2Int other) => Location.x == other.x;
-    public bool IsSameRow(Vector2Int other) => Location.y == other.y;
-    public bool IsNorthOf(Vector2Int other) => IsSameColumn(other) && Location.y == other.y - 1;
-    public bool IsEastOf(Vector2Int other) => IsSameRow(other) && Location.x == other.x + 1;
-    public bool IsSouthOf(Vector2Int other) => IsSameColumn(other) && Location.y == other.y + 1;
-    public bool IsWestOf(Vector2Int other) => IsSameRow(other) && Location.x == other.x - 1;
-    public bool IsNorthWestOf(Vector2Int other) => Location.x == other.x - 1 && Location.y == other.y - 1;
-    public bool IsNorthEastOf(Vector2Int other) => Location.x == other.x + 1 && Location.y == other.y - 1;
-    public bool IsSouthWestOf(Vector2Int other) => Location.x == other.x - 1 && Location.y == other.y + 1;
-    public bool IsSouthEastOf(Vector2Int other) => Location.x == other.x + 1 && Location.y == other.y + 1;
-    public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(Location, other).Equals(1);
+    public bool IsSameColumn(Vector2Int other) => location.x == other.x;
+    public bool IsSameRow(Vector2Int other) => location.y == other.y;
+    public bool IsNorthOf(Vector2Int other) => IsSameColumn(other) && location.y == other.y - 1;
+    public bool IsEastOf(Vector2Int other) => IsSameRow(other) && location.x == other.x + 1;
+    public bool IsSouthOf(Vector2Int other) => IsSameColumn(other) && location.y == other.y + 1;
+    public bool IsWestOf(Vector2Int other) => IsSameRow(other) && location.x == other.x - 1;
+    public bool IsNorthWestOf(Vector2Int other) => location.x == other.x - 1 && location.y == other.y - 1;
+    public bool IsNorthEastOf(Vector2Int other) => location.x == other.x + 1 && location.y == other.y - 1;
+    public bool IsSouthWestOf(Vector2Int other) => location.x == other.x - 1 && location.y == other.y + 1;
+    public bool IsSouthEastOf(Vector2Int other) => location.x == other.x + 1 && location.y == other.y + 1;
+    public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(location, other).Equals(1);
 
     public Direction AdjacentDirectionTo(ActorBehavior other)
     {
-        if (!IsAdjacentTo(other.Location)) return Direction.None;
-        if (IsNorthOf(other.Location)) return Direction.South;
-        if (IsEastOf(other.Location)) return Direction.West;
-        if (IsSouthOf(other.Location)) return Direction.North;
-        if (IsWestOf(other.Location)) return Direction.East;
+        if (!IsAdjacentTo(other.location)) return Direction.None;
+        if (IsNorthOf(other.location)) return Direction.South;
+        if (IsEastOf(other.location)) return Direction.West;
+        if (IsSouthOf(other.location)) return Direction.North;
+        if (IsWestOf(other.location)) return Direction.East;
 
         return Direction.None;
     }
 
-    private Vector2Int GoNorth() => Location += new Vector2Int(0, -1);
-    private Vector2Int GoEast() => Location += new Vector2Int(1, 0);
-    private Vector2Int GoSouth() => Location += new Vector2Int(0, 1);
-    private Vector2Int GoWest() => Location += new Vector2Int(-1, 0);
+    private Vector2Int GoNorth() => location += new Vector2Int(0, -1);
+    private Vector2Int GoEast() => location += new Vector2Int(1, 0);
+    private Vector2Int GoSouth() => location += new Vector2Int(0, 1);
+    private Vector2Int GoWest() => location += new Vector2Int(-1, 0);
 
 
 
     public void Init(bool spawn)
     {
-        transform.localScale = TileScale;
+        transform.localScale = tileScale;
         gameObject.SetActive(false);
 
         if (spawn)
@@ -208,52 +207,52 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void Spawn(Vector2Int? startLocation = null)
     {
         if (startLocation.HasValue)
-            Location = startLocation.Value;
+            location = startLocation.Value;
 
         if (!HasLocation)
             return;
 
         gameObject.SetActive(true);
 
-        Position = Geometry.PositionFromLocation(Location);
+        position = Geometry.PositionFromLocation(location);
 
         if (IsPlayer)
         {
-            Renderers.SetBackColor(Quality.Color);
-            Renderers.SetParallaxSprite(ResourceManager.Seamless("WhiteFire"));
-            Renderers.SetParallaxMaterial(ResourceManager.ActorMaterial("PlayerParallax"));
-            Renderers.SetGlowColor(Quality.Color);
+            Renderers.SetBackColor(quality.Color);
+            Renderers.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
+            Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("PlayerParallax"));
+            Renderers.SetGlowColor(quality.Color);
             Renderers.SetFrameColor(Colors.Solid.White);
             Renderers.SetAlpha(0);
-            Renderers.ActionBarBack.enabled = false;
-            Renderers.ActionBar.enabled = false;
-            Renderers.RadialText.enabled = false;
-            Renderers.RadialBack.enabled = false;
-            Renderers.RadialFill.enabled = false;
+            Renderers.actionBarBack.enabled = false;
+            Renderers.actionBar.enabled = false;
+            Renderers.radialText.enabled = false;
+            Renderers.radialBack.enabled = false;
+            Renderers.radialFill.enabled = false;
         }
         else if (IsEnemy)
         {
-            Renderers.Back.enabled = false;
+            Renderers.back.enabled = false;
             //Renderers.SetBackColor(Colors.Solid.White);
-            Renderers.SetParallaxSprite(ResourceManager.Seamless("BlackFire"));
-            Renderers.SetParallaxMaterial(ResourceManager.ActorMaterial("EnemyParallax"));
+            Renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
+            Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
             Renderers.SetGlowColor(Colors.Solid.White);
             Renderers.SetGlowAlpha(0);
             Renderers.SetFrameColor(Colors.Solid.Red);
             Renderers.SetAlpha(0);
-            Renderers.RadialText.enabled = true;
-            Renderers.RadialBack.enabled = true;
-            Renderers.RadialFill.enabled = true;
+            Renderers.radialText.enabled = true;
+            Renderers.radialBack.enabled = true;
+            Renderers.radialFill.enabled = true;
             CalculateWait();
         }
 
 
-        Renderers.Back.transform.localScale = new Vector3(BackScale, BackScale, 1);
+        Renderers.back.transform.localScale = new Vector3(backScale, backScale, 1);
 
         UpdateHealthBar();
 
 
-        float delay = TurnManager.currentTurn == 1 ? 0 : Random.Float(0f, 2f);
+        float delay = turnManager.currentTurn == 1 ? 0 : Random.Float(0f, 2f);
         StartCoroutine(SpawnIn(delay));
 
     }
@@ -287,21 +286,21 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (IsMoving)
             return;
 
-        if (IsNorthOf(other.Location) || IsNorthWestOf(other.Location) || IsNorthEastOf(other.Location))
+        if (IsNorthOf(other.location) || IsNorthWestOf(other.location) || IsNorthEastOf(other.location))
             GoSouth();
-        else if (IsEastOf(other.Location))
+        else if (IsEastOf(other.location))
             GoWest();
-        else if (IsSouthOf(other.Location) || IsSouthWestOf(other.Location) || IsSouthEastOf(other.Location))
+        else if (IsSouthOf(other.location) || IsSouthWestOf(other.location) || IsSouthEastOf(other.location))
             GoNorth();
-        else if (IsWestOf(other.Location))
+        else if (IsWestOf(other.location))
             GoEast();
 
-        var closestTile = Geometry.ClosestTileByLocation(Location);
-        Destination = closestTile.position;
+        var closestTile = Geometry.ClosestTileByLocation(location);
+        destination = closestTile.position;
 
 
 
-        SoundSource.PlayOneShot(ResourceManager.SoundEffect("Slide"));
+        soundSource.PlayOneShot(resourceManager.SoundEffect("Slide"));
     }
 
 
@@ -315,29 +314,29 @@ public class ActorBehavior : ExtendedMonoBehavior
         switch (attackStrategy)
         {
             case AttackStrategy.AttackClosest:
-                TargetPlayer = Players.Where(x => x.IsPlaying).OrderBy(x => Vector3.Distance(x.Position, Position)).FirstOrDefault();
-                Destination = Geometry.ClosestAttackPosition(this, TargetPlayer);
+                targetPlayer = players.Where(x => x.IsPlaying).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
+                destination = Geometry.ClosestAttackPosition(this, targetPlayer);
                 break;
 
             case AttackStrategy.AttackWeakest:
-                TargetPlayer = Players.Where(x => x.IsPlaying).OrderBy(x => x.HP).FirstOrDefault();
-                Destination = Geometry.ClosestAttackPosition(this, TargetPlayer);
+                targetPlayer = players.Where(x => x.IsPlaying).OrderBy(x => x.hp).FirstOrDefault();
+                destination = Geometry.ClosestAttackPosition(this, targetPlayer);
                 break;
 
             case AttackStrategy.AttackStrongest:
-                TargetPlayer = Players.Where(x => x.IsPlaying).OrderBy(x => x.HP).FirstOrDefault();
-                Destination = Geometry.ClosestAttackPosition(this, TargetPlayer);
+                targetPlayer = players.Where(x => x.IsPlaying).OrderBy(x => x.hp).FirstOrDefault();
+                destination = Geometry.ClosestAttackPosition(this, targetPlayer);
                 break;
 
             case AttackStrategy.AttackRandom:
-                TargetPlayer = Random.Player();
-                Destination = Geometry.ClosestAttackPosition(this, TargetPlayer);
+                targetPlayer = Random.Player;
+                destination = Geometry.ClosestAttackPosition(this, targetPlayer);
                 break;
 
             case AttackStrategy.MoveAnywhere:
-                var location = Random.Location();
-                TargetPlayer = null;
-                Destination = Geometry.ClosestTileByLocation(location).position;
+                var location = Random.Location;
+                targetPlayer = null;
+                destination = Geometry.ClosestTileByLocation(location).position;
                 break;
         }
 
@@ -350,15 +349,15 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsFocusedPlayer && !IsSelectedPlayer)
             return;
 
-        var cursorPosition = MousePosition3D + MouseOffset;
-        cursorPosition.x = Mathf.Clamp(cursorPosition.x, Board.Left, Board.Right);
-        cursorPosition.y = Mathf.Clamp(cursorPosition.y, Board.Bottom, Board.Top);
+        var cursorPosition = mousePosition3D + mouseOffset;
+        cursorPosition.x = Mathf.Clamp(cursorPosition.x, board.left, board.right);
+        cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bottom, board.top);
 
         //Move selected player towards cursor
-        //Position = Vector2.MoveTowards(Position, cursorPosition, CursorSpeed);
+        //position = Vector2.MoveTowards(position, cursorPosition, CursorSpeed);
 
         //Snap selected player to cursor
-        Position = cursorPosition;
+        position = cursorPosition;
     }
 
     private void CheckMovement()
@@ -367,23 +366,23 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsMoving)
             return;
 
-        var delta = Destination.Value - Position;
+        var delta = destination.Value - position;
         if (Mathf.Abs(delta.x) >= SnapDistance)
         {
-            Position = Vector2.MoveTowards(Position, new Vector3(Destination.Value.x, Position.y, Position.z), SlideSpeed);
+            position = Vector2.MoveTowards(position, new Vector3(destination.Value.x, position.y, position.z), SlideSpeed);
         }
         else if (Mathf.Abs(delta.y) >= SnapDistance)
         {
-            Position = Vector2.MoveTowards(Position, new Vector3(Position.x, Destination.Value.y, Position.z), SlideSpeed);
+            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), SlideSpeed);
         }
 
-        //Determine if Actor is close to Destination
-        bool isSnapDistance = Vector2.Distance(Position, Destination.Value) <= SnapDistance;
+        //Determine if Actor is close to destination
+        bool isSnapDistance = Vector2.Distance(position, destination.Value) <= SnapDistance;
         if (isSnapDistance)
         {
-            //Snap to Destination, clear Destination, and set Actor MoveState: "Idle"
-            transform.position = Destination.Value;
-            Destination = null;
+            //Snap to destination, clear destination, and set Actor MoveState: "Idle"
+            transform.position = destination.Value;
+            destination = null;
         }
     }
 
@@ -391,44 +390,44 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void CheckBobbing()
     {
         //Check abort state
-        if (!IsAlive || !IsActive || !TurnManager.IsStartPhase)
+        if (!IsPlaying || !turnManager.IsStartPhase)
             return;
 
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         //var pos = new Vector3(
-        //    transform.Position.x,
-        //    transform.Position.y + (BobbingCurve.Evaluate(Time.time % BobbingCurve.length) * (TileSize / 64)),
-        //    transform.Position.z);
+        //    transform.position.x,
+        //    transform.position.y + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 64)),
+        //    transform.position.z);
 
         //var rot = new Vector3(
         //   transform.Rotation.x,
         //   transform.Rotation.y ,
-        //   transform.Rotation.z + (BobbingCurve.Evaluate(Time.time % BobbingCurve.length) * (TileSize / 128)));
+        //   transform.Rotation.z + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 128)));
 
-        //Renderers.Thumbnail.transform.Rotate(Vector3.up * BobbingCurve.Evaluate(Time.time % BobbingCurve.length) * (TileSize / 3));
+        //Renderers.thumbnail.transform.Rotate(Vector3.up * bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 3));
 
-        //Renderers.Glow.transform.Position = pos;
-        //Renderers.Thumbnail.transform.Position = pos;
-        //Renderers.Frame.transform.Position = pos;
-        //Renderers.Thumbnail.transform.Position = pos;
-        //Renderers.Thumbnail.transform.Rotation = rot;
+        //Renderers.glow.transform.position = pos;
+        //Renderers.thumbnail.transform.position = pos;
+        //Renderers.frame.transform.position = pos;
+        //Renderers.thumbnail.transform.position = pos;
+        //Renderers.thumbnail.transform.Rotation = rot;
     }
 
 
     private void CheckThrobbing()
     {
         //Check abort state
-        if (!IsAlive || !IsActive || !TurnManager.IsStartPhase || (TurnManager.IsPlayerTurn && !IsPlayer) || (TurnManager.IsEnemyTurn && !IsEnemy))
+        if (!IsPlaying || !turnManager.IsStartPhase || (turnManager.IsPlayerTurn && !IsPlayer) || (turnManager.IsEnemyTurn && !IsEnemy))
             return;
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         var scale = new Vector3(
-            BackScale + (BobbingCurve.Evaluate(Time.time % BobbingCurve.length) * (TileSize / 24)),
-            BackScale + (BobbingCurve.Evaluate(Time.time % BobbingCurve.length) * (TileSize / 24)),
+            backScale + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 24)),
+            backScale + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 24)),
             1);
         Renderers.SetBackScale(scale);
-        Renderers.SetBackColor(IsPlayer ? Quality.Color : Colors.Translucent.Black);
+        Renderers.SetBackColor(IsPlayer ? quality.Color : Colors.Translucent.Black);
 
 
 
@@ -439,10 +438,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void CheckFlicker()
     {
         //Check abort state
-        if (!IsAlive || !IsActive || !TurnManager.IsStartPhase || (TurnManager.IsPlayerTurn && !IsPlayer) || (TurnManager.IsEnemyTurn && !IsEnemy))
+        if (!IsPlaying || !turnManager.IsStartPhase || (turnManager.IsPlayerTurn && !IsPlayer) || (turnManager.IsEnemyTurn && !IsEnemy))
             return;
 
-        var alpha = 0.5f + (BobbingCurve.Evaluate(Time.time % BobbingCurve.length) * (TileSize / 24));
+        var alpha = 0.5f + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 24));
         Renderers.SetGlowAlpha(alpha);
     }
 
@@ -463,26 +462,26 @@ public class ActorBehavior : ExtendedMonoBehavior
     void Update()
     {
         //Check abort state
-        if (!IsAlive || !IsActive)
+        if (!IsPlaying)
             return;
 
         if (IsFocusedPlayer || IsSelectedPlayer)
             MoveTowardCursor();
 
-        var closestTile = Geometry.ClosestTileByPosition(Position);
-        if (closestTile.Location.Equals(Location))
+        var closestTile = Geometry.ClosestTileByPosition(position);
+        if (closestTile.location.Equals(location))
             return;
 
-        SoundSource.PlayOneShot(ResourceManager.SoundEffect($"Move{Random.Int(1, 6)}"));
+        soundSource.PlayOneShot(resourceManager.SoundEffect($"Move{Random.Int(1, 6)}"));
 
         //Determine if selected player and another Actor are occupying the same tile
-        var actor = Actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !x.Equals(SelectedPlayer) && x.Location.Equals(closestTile.Location));
+        var actor = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
         if (actor != null)
         {
             actor.SwapLocation(this);
         }
 
-        Location = closestTile.Location;
+        location = closestTile.location;
 
     }
 
@@ -491,7 +490,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     void FixedUpdate()
     {
         //Check abort state
-        if (!IsAlive || !IsActive || IsFocusedPlayer || IsSelectedPlayer)
+        if (!IsPlaying || IsFocusedPlayer || IsSelectedPlayer)
             return;
 
         CheckMovement();
@@ -516,8 +515,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator Bump(Direction direction)
     {
         BumpStage stage = BumpStage.Start;
-        var destination = Position;
-        var range = TileSize * Percent33;
+        var destination = position;
+        var range = TileSize * percent33;
 
 
         while (stage != BumpStage.End)
@@ -527,8 +526,8 @@ public class ActorBehavior : ExtendedMonoBehavior
                 case BumpStage.Start:
                     {
                         SortingOrder = ZAxis.Max;
-                        Position = CurrentTile.position;
-                        destination = Geometry.GetDirectionalPosition(Position, direction, range);
+                        position = CurrentTile.position;
+                        destination = Geometry.GetDirectionalPosition(position, direction, range);
                         stage = BumpStage.MoveToward;
 
                     }
@@ -536,16 +535,16 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case BumpStage.MoveToward:
                     {
-                        var delta = destination - Position;
+                        var delta = destination - position;
                         if (Mathf.Abs(delta.x) > BumpSpeed)
-                            Position = Vector2.MoveTowards(Position, new Vector3(destination.x, Position.y, Position.z), BumpSpeed);
+                            position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), BumpSpeed);
                         else if (Mathf.Abs(delta.y) > BumpSpeed)
-                            Position = Vector2.MoveTowards(Position, new Vector3(Position.x, destination.y, Position.z), BumpSpeed);
+                            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), BumpSpeed);
 
-                        var isSnapDistance = Vector2.Distance(Position, destination) <= BumpSpeed;
+                        var isSnapDistance = Vector2.Distance(position, destination) <= BumpSpeed;
                         if (isSnapDistance)
                         {
-                            Position = destination;
+                            position = destination;
                             destination = CurrentTile.position;
                             stage = BumpStage.MoveAway;
                         }
@@ -554,16 +553,16 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case BumpStage.MoveAway:
                     {
-                        var delta = destination - Position;
+                        var delta = destination - position;
                         if (Mathf.Abs(delta.x) > BumpSpeed)
-                            Position = Vector2.MoveTowards(Position, new Vector3(destination.x, Position.y, Position.z), BumpSpeed);
+                            position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), BumpSpeed);
                         else if (Mathf.Abs(delta.y) > BumpSpeed)
-                            Position = Vector2.MoveTowards(Position, new Vector3(Position.x, destination.y, Position.z), BumpSpeed);
+                            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), BumpSpeed);
 
-                        var isSnapDistance = Vector2.Distance(Position, destination) <= BumpSpeed;
+                        var isSnapDistance = Vector2.Distance(position, destination) <= BumpSpeed;
                         if (isSnapDistance)
                         {
-                            Position = destination;
+                            position = destination;
                             destination = CurrentTile.position;
                             stage = BumpStage.End;
                         }
@@ -573,7 +572,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                 case BumpStage.End:
                     {
                         SortingOrder = ZAxis.Min;
-                        Position = destination;
+                        position = destination;
                     }
                     break;
             }
@@ -585,66 +584,66 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public IEnumerator TakeFlurryDamage(float damage)
     {
-        var remainingHP = Mathf.Clamp(HP - damage, 0, MaxHP);
+        var remainingHP = Mathf.Clamp(hp - damage, 0, maxHP);
 
-        while (HP > remainingHP)
+        while (hp > remainingHP)
         {
 
-            //Decrease HP
+            //Decrease hp
             var min = (int)Math.Max(1, damage * 0.1f);
             var max = (int)Math.Max(1, damage * 0.3f);
             var hit = Random.Int(min, max);
-            HP -= hit;
-            HP = Mathf.Clamp(HP, remainingHP, MaxHP);
+            hp -= hit;
+            hp = Mathf.Clamp(hp, remainingHP, maxHP);
 
-            DamageTextManager.Spawn(hit.ToString(), Position);
+            damageTextManager.Spawn(hit.ToString(), position);
 
             //Shake Actor
-            Shake(ShakeIntensity.Medium);
+            Shake(shakeIntensity.Medium);
 
             UpdateHealthBar();
 
             //SlideIn sfx
-            SoundSource.PlayOneShot(ResourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
+            soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
 
             yield return global::Wait.For(Interval.FiveTicks);
         }
 
-        Shake(ShakeIntensity.Stop);
-        HP = remainingHP;
-        Position = CurrentTile.position;
+        Shake(shakeIntensity.Stop);
+        hp = remainingHP;
+        position = CurrentTile.position;
     }
 
     public IEnumerator TakeDamage(float damage)
     {
-        var remainingHP = Mathf.Clamp(HP - damage, 0, MaxHP);
+        var remainingHP = Mathf.Clamp(hp - damage, 0, maxHP);
 
-        while (HP > remainingHP)
+        while (hp > remainingHP)
         {
 
-            //Decrease HP
+            //Decrease hp
             var min = (int)Math.Max(1, damage * 0.1f);
             var max = (int)Math.Max(1, damage * 0.3f);
             var hit = Random.Int(min, max);
-            HP -= hit;
-            HP = Mathf.Clamp(HP, remainingHP, MaxHP);
+            hp -= hit;
+            hp = Mathf.Clamp(hp, remainingHP, maxHP);
 
-            DamageTextManager.Spawn(hit.ToString(), Position);
+            damageTextManager.Spawn(hit.ToString(), position);
 
             //Shake Actor
-            Shake(ShakeIntensity.Medium);
+            Shake(shakeIntensity.Medium);
 
             UpdateHealthBar();
 
             //SlideIn sfx
-            SoundSource.PlayOneShot(ResourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
+            soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
 
             yield return global::Wait.For(Interval.FiveTicks);
         }
 
-        Shake(ShakeIntensity.Stop);
-        HP = remainingHP;
-        Position = CurrentTile.position;
+        Shake(shakeIntensity.Stop);
+        hp = remainingHP;
+        position = CurrentTile.position;
     }
 
 
@@ -656,31 +655,31 @@ public class ActorBehavior : ExtendedMonoBehavior
         float ticks = 0;
         float duration = Interval.QuarterSecond;
 
-        DamageTextManager.Spawn("Miss", Position);
+        damageTextManager.Spawn("Miss", position);
 
         while (ticks < duration)
         {
             ticks += Interval.OneTick;
-            Shake(ShakeIntensity.Low);
+            Shake(shakeIntensity.Low);
             yield return global::Wait.OneTick();
         }
 
-        Shake(ShakeIntensity.Stop);
+        Shake(shakeIntensity.Stop);
     }
 
     public void CheckActionBar()
     {
         //Check abort state
-        if (TurnManager.IsEnemyTurn || (!TurnManager.IsStartPhase && !TurnManager.IsMovePhase) || !IsAlive || !IsActive || Wait == WaitDuration)
+        if (turnManager.IsEnemyTurn || (!turnManager.IsStartPhase && !turnManager.IsMovePhase) || !IsAlive || !IsActive || wait == waitDuration)
             return;
 
-        if (Wait < WaitDuration)
+        if (wait < waitDuration)
         {
-            Wait += Time.deltaTime;
-            Wait = Math.Clamp(Wait, 0, WaitDuration);
+            wait += Time.deltaTime;
+            wait = Math.Clamp(wait, 0, waitDuration);
         }
 
-        if (Wait == WaitDuration)
+        if (wait == waitDuration)
         {
             StartCoroutine(RadialBackFadeOut());
         }
@@ -692,15 +691,15 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void UpdateActionBar()
     {
-        var scale = Renderers.ActionBarBack.transform.localScale;
-        var x = Mathf.Clamp(scale.x * (Wait / WaitDuration), 0, scale.x);
-        Renderers.ActionBar.transform.localScale = new Vector3(x, scale.y, scale.z);
+        var scale = Renderers.actionBarBack.transform.localScale;
+        var x = Mathf.Clamp(scale.x * (wait / waitDuration), 0, scale.x);
+        Renderers.actionBar.transform.localScale = new Vector3(x, scale.y, scale.z);
 
         //Percent complete
-        Renderers.ActionText.text = Wait < WaitDuration ? $@"{Math.Round(Wait / WaitDuration * 100)}" : "";
+        Renderers.actionText.text = wait < waitDuration ? $@"{Math.Round(wait / waitDuration * 100)}" : "";
 
         //Seconds remaining
-        //Renderers.RadialText.Text = Wait < WaitDuration ? $"{Math.Round(WaitDuration - Wait)}" : "";
+        //Renderers.radialText.Text = wait < waitDuration ? $"{Math.Round(waitDuration - wait)}" : "";
 
     }
 
@@ -713,10 +712,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void UpdateRadial()
     {
-        //var fill = (360 * (Wait / WaitDuration));
-        //Renderers.RadialFill.material.SetFloat("_Arc1", fill);
+        //var fill = (360 * (wait / waitDuration));
+        //Renderers.radialFill.material.SetFloat("_Arc1", fill);
 
-        //Renderers.RadialText.Text = Wait < WaitDuration ? $"{Math.Round(WaitDuration - Wait)}" : "";
+        //Renderers.radialText.Text = wait < waitDuration ? $"{Math.Round(waitDuration - wait)}" : "";
     }
 
 
@@ -724,10 +723,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void UpdateHealthBar()
     {
-        var scale = Renderers.HealthBarBack.transform.localScale;
-        var x = Mathf.Clamp(scale.x * (HP / MaxHP), 0, scale.x);
-        Renderers.HealthBar.transform.localScale = new Vector3(x, scale.y, scale.z);
-        Renderers.HealthText.text = $@"{HP}/{MaxHP}";
+        var scale = Renderers.healthBarBack.transform.localScale;
+        var x = Mathf.Clamp(scale.x * (hp / maxHP), 0, scale.x);
+        Renderers.healthBar.transform.localScale = new Vector3(x, scale.y, scale.z);
+        Renderers.healthText.text = $@"{hp}/{maxHP}";
     }
 
 
@@ -735,34 +734,34 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         var maxAlpha = 0.5f;
         var alpha = 0f;
-        Renderers.RadialBack.color = new Color(0, 0, 0, alpha);
+        Renderers.radialBack.color = new Color(0, 0, 0, alpha);
 
         while (alpha < maxAlpha)
         {
             alpha += Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, maxAlpha);
-            Renderers.RadialBack.color = new Color(0, 0, 0, alpha);
+            Renderers.radialBack.color = new Color(0, 0, 0, alpha);
             yield return global::Wait.OneTick();
         }
 
-        Renderers.RadialBack.color = new Color(0, 0, 0, maxAlpha);
+        Renderers.radialBack.color = new Color(0, 0, 0, maxAlpha);
     }
 
     public IEnumerator RadialBackFadeOut()
     {
         var maxAlpha = 0.5f;
         var alpha = maxAlpha;
-        Renderers.RadialBack.color = new Color(0, 0, 0, maxAlpha);
+        Renderers.radialBack.color = new Color(0, 0, 0, maxAlpha);
 
         while (alpha > 0)
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, maxAlpha);
-            Renderers.RadialBack.color = new Color(0, 0, 0, alpha);
+            Renderers.radialBack.color = new Color(0, 0, 0, alpha);
             yield return global::Wait.OneTick();
         }
 
-        Renderers.RadialBack.color = new Color(0, 0, 0, 0);
+        Renderers.radialBack.color = new Color(0, 0, 0, 0);
     }
 
     public IEnumerator Dissolve()
@@ -770,8 +769,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         var alpha = 1f;
         Renderers.SetAlpha(alpha);
 
-        PortraitManager.Dissolve(this);
-        SoundSource.PlayOneShot(ResourceManager.SoundEffect("Death"));
+        portraitManager.Dissolve(this);
+        soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
         SortingOrder = ZAxis.Max;
 
         while (alpha > 0)
@@ -795,36 +794,36 @@ public class ActorBehavior : ExtendedMonoBehavior
     private IEnumerator SetStatusIcon(Status status)
     {
         float increment = Increment.FivePercent;
-        float alpha = Renderers.StatusIcon.color.a;
+        float alpha = Renderers.statusIcon.color.a;
 
-        Renderers.StatusIcon.color = new Color(1, 1, 1, alpha);
+        Renderers.statusIcon.color = new Color(1, 1, 1, alpha);
 
         //Fade out
         while (alpha > 0)
         {
             alpha -= increment;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            Renderers.StatusIcon.color = new Color(1, 1, 1, alpha);
+            Renderers.statusIcon.color = new Color(1, 1, 1, alpha);
             yield return global::Wait.OneTick();
         }
 
         //Switch status status Sprite
-        Renderers.StatusIcon.sprite = ResourceManager.statusSprites.First(x => x.id.Equals(status.ToString())).thumbnail;
+        Renderers.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(status.ToString())).thumbnail;
 
         //Fade in
         alpha = 0;
-        Renderers.StatusIcon.color = new Color(1, 1, 1, alpha);
+        Renderers.statusIcon.color = new Color(1, 1, 1, alpha);
 
         while (alpha < 1)
         {
             alpha += increment;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            Renderers.StatusIcon.color = new Color(1, 1, 1, alpha);
+            Renderers.statusIcon.color = new Color(1, 1, 1, alpha);
 
             yield return global::Wait.OneTick();
         }
 
-        Renderers.StatusIcon.color = new Color(1, 1, 1, 1);
+        Renderers.statusIcon.color = new Color(1, 1, 1, 1);
 
     }
 
@@ -834,7 +833,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsActive)
             return;
 
-        Renderers.SetGlowColor(IsPlayer ? Quality.Color : Colors.Solid.Black);
+        Renderers.SetGlowColor(IsPlayer ? quality.Color : Colors.Solid.Black);
         StartCoroutine(GlowIn());
     }
 
@@ -870,7 +869,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             Renderers.SetGlowAlpha(0);
             Renderers.SetBackAlpha(0);
             Destroy(gameObject);
-            Actors.Remove(this);
+            actors.Remove(this);
         }
 
         StartCoroutine(Death());
@@ -913,11 +912,11 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
         //TODO: Calculate based on stats....
-        float min = (Interval.OneSecond * 20) - Speed * LuckModifier;
-        float max = (Interval.OneSecond * 40) - Speed * LuckModifier;
+        float min = (Interval.OneSecond * 20) - speed * LuckModifier;
+        float max = (Interval.OneSecond * 40) - speed * LuckModifier;
 
-        Wait = 0;
-        WaitDuration = Random.Float(min, max);
+        wait = 0;
+        waitDuration = Random.Float(min, max);
         StartCoroutine(RadialBackFadeIn());
         UpdateRadial();
     }
@@ -928,7 +927,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsAlive || !IsActive || !IsEnemy)
             return;
 
-        Wait = WaitDuration;
+        wait = waitDuration;
         UpdateActionBar();
     }
 
@@ -964,20 +963,20 @@ public class ActorBehavior : ExtendedMonoBehavior
     //        alpha = Mathf.Clamp(alpha, 0, 1);
     //        Renderers.SetGlowAlpha(alpha);
     //        //Renderers.SetBackAlpha(alpha);
-    //        yield return Wait.OneTick();
+    //        yield return wait.OneTick();
     //    }
 
     //    Renderers.SetGlowAlpha(0);
     //    Renderers.SetBackAlpha(0);
     //    Destroy(GameObject);
-    //    Actors.Destroy(this);
+    //    actors.Destroy(this);
     //}
 
 
 
     //public void CheckLocationConflict()
     //{
-    //    var other = Actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !Equals(x) && Location.Equals(x.Location));
+    //    var other = actors.FirstOrDefault(x => x != null && x.IsAlive && x.IsActive && !Equals(x) && location.Equals(x.location));
     //    if (other == null)
     //        return;
 

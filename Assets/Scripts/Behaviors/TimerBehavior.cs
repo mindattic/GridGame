@@ -2,18 +2,18 @@ using UnityEngine;
 
 public class TimerBehavior : ExtendedMonoBehavior
 {
-    private bool IsRunning = false;
-    private const float MaxDuration = 6f;
-    private float TimeRemaining = 6f;
+    private bool isRunning = false;
+    private const float maxDuration = 6f;
+    private float timeRemaining = 6f;
 
 
-    private SpriteRenderer SpriteRenderer;
+    private SpriteRenderer spriteRenderer;
     Vector3 Scale = new Vector3(1f, 1f, 1f);
 
     private void Awake()
     {
-        SpriteRenderer = GameObject.Find("TimerBar").transform.GetChild(1).GetComponent<SpriteRenderer>();
-        SpriteRenderer.transform.localScale = new Vector3(Scale.x, Scale.y, Scale.z);
+        spriteRenderer = GameObject.Find(Constants.TimerBar).transform.GetChild(1).GetComponent<SpriteRenderer>();
+        spriteRenderer.transform.localScale = new Vector3(Scale.x, Scale.y, Scale.z);
     }
 
 
@@ -34,34 +34,34 @@ public class TimerBehavior : ExtendedMonoBehavior
 
     void FixedUpdate()
     {
-        if (IsRunning && TimeRemaining > 0)
+        if (isRunning && timeRemaining > 0)
         {
-            TimeRemaining -= Time.deltaTime;
-            SpriteRenderer.transform.localScale = new Vector3(Scale.x * (TimeRemaining / MaxDuration), Scale.y, Scale.z);
+            timeRemaining -= Time.deltaTime;
+            spriteRenderer.transform.localScale = new Vector3(Scale.x * (timeRemaining / maxDuration), Scale.y, Scale.z);
         }
         else
         {
-            IsRunning = false;
-            SelectedPlayerManager.Drop();
+            isRunning = false;
+            selectedPlayerManager.Drop();
         }
     }
 
     public void Set(float scaleX = 1f, bool start = false)
     {
-        SpriteRenderer.transform.localScale = new Vector3(scaleX, Scale.y, Scale.z);
-        TimeRemaining = MaxDuration;
-        IsRunning = start;
+        spriteRenderer.transform.localScale = new Vector3(scaleX, Scale.y, Scale.z);
+        timeRemaining = maxDuration;
+        isRunning = start;
     }
 
 
     public void Pause()
     {
-        IsRunning = false;
+        isRunning = false;
     }
 
     public void Play()
     {
-        IsRunning = false;
+        isRunning = false;
     }
 
 }

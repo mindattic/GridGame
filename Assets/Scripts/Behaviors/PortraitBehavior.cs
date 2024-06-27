@@ -67,13 +67,13 @@ public class PortraitBehavior : ExtendedMonoBehavior
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
-    // Start is called before the first Frame update
+    // Start is called before the first frame update
     void Start()
     {
     }
 
 
-    // Update is called once per Frame
+    // Update is called once per frame
     void Update()
     {
     }
@@ -148,7 +148,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
           
             //Shake
             position = startPosition;
-            position += new Vector3(Random.Range(ShakeIntensity.Medium), Random.Range(ShakeIntensity.Medium), 1);
+            position += new Vector3(Random.Range(shakeIntensity.Medium), Random.Range(shakeIntensity.Medium), 1);
 
             //Shrink
             transform.localScale *= 0.99f;
@@ -167,8 +167,8 @@ public class PortraitBehavior : ExtendedMonoBehavior
 
     //private void Shake(int factor = 12)
     //{
-    //    this.Position = CurrentTile.Position;
-    //    this.Position += new Vector3(Random.Range(TileSize / factor), Random.Range(TileSize / factor), 1);
+    //    this.position = CurrentTile.position;
+    //    this.position += new Vector3(Random.Range(TileSize / factor), Random.Range(TileSize / factor), 1);
     //}
 
 }

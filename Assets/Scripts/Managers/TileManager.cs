@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class TileManager : ExtendedMonoBehavior
 {
-    // Start is called before the first Frame update
+    // Start is called before the first frame update
     void Start()
     {
 
     }
 
-    // Update is called once per Frame
+    // Update is called once per frame
     void Update()
     {
 
@@ -19,7 +19,7 @@ public class TileManager : ExtendedMonoBehavior
 
     public void Reset()
     {
-        foreach (var tile in Tiles)
+        foreach (var tile in tiles)
         {
             tile.spriteRenderer.color = Colors.Translucent.White;
         }

@@ -26,9 +26,9 @@ public class PortraitManager : ExtendedMonoBehavior
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var portrait = prefab.GetComponent<PortraitBehavior>();
         portrait.name = $"Portrait_{Guid.NewGuid()}";
-        portrait.parent = Board.transform;
+        portrait.parent = board.transform;
         portrait.sortingOrder = sortingOrder++;
-        portrait.sprite = ResourceManager.ActorPortrait(actor.Archetype.ToString());
+        portrait.sprite = resourceManager.ActorPortrait(actor.archetype.ToString());
         portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         portrait.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
         portrait.actor = actor;
@@ -41,7 +41,7 @@ public class PortraitManager : ExtendedMonoBehavior
 
     public void Dissolve()
     {
-        var actor = Players[Random.Int(0, Players.Count - 1)];
+        var actor = players[Random.Int(0, players.Count - 1)];
         Dissolve(actor);
     }
 
@@ -50,14 +50,14 @@ public class PortraitManager : ExtendedMonoBehavior
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var portrait = prefab.GetComponent<PortraitBehavior>();
         portrait.name = $"Portrait_{Guid.NewGuid()}";
-        portrait.parent = Board.transform;
+        portrait.parent = board.transform;
         portrait.sortingOrder = 100;
-        portrait.sprite = ResourceManager.ActorPortrait(actor.Archetype.ToString());
+        portrait.sprite = resourceManager.ActorPortrait(actor.archetype.ToString());
         portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         portrait.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
         portrait.actor = actor;
-        portrait.position = actor.Position;
-        portrait.startPosition = actor.Position;
+        portrait.position = actor.position;
+        portrait.startPosition = actor.position;
         portrait.transform.localScale = new Vector3(0.25f, 0.25f, 1);
 
         StartCoroutine(portrait.Dissolve());

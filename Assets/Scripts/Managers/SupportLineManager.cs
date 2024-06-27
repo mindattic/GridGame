@@ -36,7 +36,7 @@ public class SupportLineManager : ExtendedMonoBehavior
         var prefab = Instantiate(supportLinePrefab, Vector2.zero, Quaternion.identity);
         var supportLine = prefab.GetComponent<SupportLineBehavior>();
         supportLine.name = key;
-        supportLine.Parent = Board.transform;
+        supportLine.Parent = board.transform;
         supportLine.Spawn(pair.Actor1.CurrentTile.position, pair.Actor2.CurrentTile.position);
 
         supportLines.Add(key, supportLine);

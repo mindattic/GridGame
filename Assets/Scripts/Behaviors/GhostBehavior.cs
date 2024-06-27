@@ -64,10 +64,10 @@ public class GhostBehavior : ExtendedMonoBehavior
         this.Renderers.frame.enabled = false;
 
         this.Renderers.thumbnail.size = new Vector2(TileSize, TileSize);
-        //this.Renderers.Frame.size = new Vector2(TileSize, TileSize);
+        //this.Renderers.frame.size = new Vector2(TileSize, TileSize);
         this.Renderers.thumbnail.color = Colors.RGBA(255, 255, 255, 64);
-        //this.Renderers.Frame.Color = Common.ColorRGBA(255, 255, 255, 100);
-        this.Position = actor.Position;
+        //this.Renderers.frame.Color = Common.ColorRGBA(255, 255, 255, 100);
+        this.Position = actor.position;
         StartCoroutine(FadeOut());
     }
 
@@ -79,14 +79,14 @@ public class GhostBehavior : ExtendedMonoBehavior
         Renderers.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
     }
 
-    // Start is called before the first Frame update
+    // Start is called before the first frame update
     void Start()
     {
         
     }
 
 
-    // Update is called once per Frame
+    // Update is called once per frame
     void Update()
     {
 

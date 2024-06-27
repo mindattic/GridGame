@@ -8,12 +8,12 @@ public class WallManager : MonoBehaviour
 
     private float cellSize => GameManager.instance.TileSize;
 
-    // Start is called before the first Frame update
+    // Start is called before the first frame update
     void Start()
     {
     }
 
-    // Update is called once per Frame
+    // Update is called once per frame
     void Update()
     {
 
@@ -26,9 +26,9 @@ public class WallManager : MonoBehaviour
         //{
         //    var player = other.collider.GameObject;
 
-        //    player.transform.Position = new Vector3(transform.Position.x - TileSize,
-        //                                            player.transform.Position.y,
-        //                                            player.transform.Position.z);
+        //    player.transform.position = new Vector3(transform.position.x - TileSize,
+        //                                            player.transform.position.y,
+        //                                            player.transform.position.z);
 
 
         //}

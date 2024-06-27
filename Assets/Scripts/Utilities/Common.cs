@@ -31,7 +31,7 @@ public class Common
 
 
     /// <summary>
-    /// Assumes Sprite is facing Right, if facing up subtract 90 from angle (or fix Sprite)
+    /// Assumes Sprite is facing right, if facing up subtract 90 from angle (or fix Sprite)
     /// </summary>
     /// <param name="target"></param>
     /// <param name="source"></param>

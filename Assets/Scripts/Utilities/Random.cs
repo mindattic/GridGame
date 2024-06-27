@@ -19,34 +19,31 @@ static class Random
         return (float)rng.NextDouble() * (max - min) + min;
     }
 
-    public static float Percent()
-    {
-        return (float)rng.NextDouble();
-    }
+    public static float Percent => (float)rng.NextDouble();
 
     public static float Range(float amount)
     {
-        return (-amount * Percent()) + (amount * Percent());
+        return (-amount * Percent) + (amount * Percent);
     }
 
 
-    public static bool Boolean()
-    {
-        return Int(1, 2) == 1 ? true : false;
-    }
+    public static bool Boolean => Int(1, 2) == 1;
 
-    public static Direction Direction()
+    public static Direction Direction
     {
-        var result = Int(1, 4);
-        return result switch
+        get
         {
-            1 => global::Direction.North,
-            2 => global::Direction.East,
-            3 => global::Direction.South,
-            _ => global::Direction.West,
-        };
+            var result = Int(1, 4);
+            return result switch
+            {
+                1 => global::Direction.North,
+                2 => global::Direction.East,
+                3 => global::Direction.South,
+                _ => global::Direction.West,
+            };
+        }
     }
-
+  
 
     public static AttackStrategy AttackStrategy(params int[] ratios)
     {
@@ -132,34 +129,16 @@ static class Random
 
 
 
-    public static ActorBehavior Player()
-    {
-        return GameManager.instance.Actors
-            .Where(x => x.Team.Equals(Team.Player))
-            .OrderBy(x => Guid.NewGuid())
-            .First();
-    }
+    public static ActorBehavior Player => GameManager.instance.actors.Where(x => x.team.Equals(Team.Player)).OrderBy(x => Guid.NewGuid()).First();
 
-    public static ActorBehavior Enemy()
-    {
-        return GameManager.instance.Actors
-            .Where(x => x.Team.Equals(Team.Enemy))
-            .OrderBy(x => Guid.NewGuid())
-            .First();
-    }
+    public static ActorBehavior Enemy => GameManager.instance.actors.Where(x => x.team.Equals(Team.Enemy)).OrderBy(x => Guid.NewGuid()).First();
 
-    public static TileBehavior Tile()
-    {
-        return GameManager.instance.Tiles
-            .OrderBy(x => Guid.NewGuid())
-            .First();
-    }
+    public static TileBehavior Tile => GameManager.instance.tiles.OrderBy(x => Guid.NewGuid()).First();
 
-    public static Vector2Int Location()
-    {
-        int col = Int(1, GameManager.instance.Board.ColumnCount);
-        int row = Int(1, GameManager.instance.Board.RowCount);
-        return new Vector2Int(col, row);
-    }
+    public static TileBehavior UnoccupiedTile => GameManager.instance.tiles.Where(x => !x.IsOccupied).OrderBy(x => Guid.NewGuid()).First();
+
+    public static Vector2Int Location => new Vector2Int(Int(1, GameManager.instance.board.columnCount), GameManager.instance.board.rowCount);
+
+    public static Vector2Int UnoccupiedLocation => UnoccupiedTile.location;
 
 }

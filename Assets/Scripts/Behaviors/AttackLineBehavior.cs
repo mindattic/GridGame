@@ -4,11 +4,11 @@ using UnityEngine;
 public class AttackLineBehavior : ExtendedMonoBehavior
 {
     //Variables
-    ActorPair Pair;
-    float Thickness = 1.2f;
-    float MaxAlpha = 0.5f;
-    Color BaseColor = Colors.RGBA(100, 195, 200, 0);
-    public LineRenderer LineRenderer;
+    ActorPair pair;
+    float thickness = 1.2f;
+    float maxAlpha = 0.5f;
+    Color baseColor = Colors.RGBA(100, 195, 200, 0);
+    public LineRenderer lineRenderer;
 
     #region Components
 
@@ -37,22 +37,22 @@ public class AttackLineBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
-        LineRenderer = gameObject.GetComponent<LineRenderer>();
-        LineRenderer.positionCount = 2;
+        lineRenderer = gameObject.GetComponent<LineRenderer>();
+        lineRenderer.positionCount = 2;
 
     }
 
     void Start()
     {
-        LineRenderer.startWidth = TileSize * this.Thickness;
-        LineRenderer.endWidth = TileSize * this.Thickness;
+        lineRenderer.startWidth = TileSize * this.thickness;
+        lineRenderer.endWidth = TileSize * this.thickness;
     }
 
     public void Spawn(ActorPair pair)
     {
-        this.Pair = pair;
-        Vector3 start = pair.HighestActor.Position;
-        Vector3 end = pair.LowestActor.Position;
+        this.pair = pair;
+        Vector3 start = pair.HighestActor.position;
+        Vector3 end = pair.LowestActor.position;
 
         if (pair.Axis == Axis.Vertical)
         {
@@ -65,9 +65,9 @@ public class AttackLineBehavior : ExtendedMonoBehavior
             end += new Vector3(-(TileSize / 2) + -(TileSize * 0.1f), 0, 0);
         }
 
-        LineRenderer.sortingOrder = ZAxis.Min;
-        LineRenderer.SetPosition(0, start);
-        LineRenderer.SetPosition(1, end);
+        lineRenderer.sortingOrder = ZAxis.Min;
+        lineRenderer.SetPosition(0, start);
+        lineRenderer.SetPosition(1, end);
         StartCoroutine(StartFadeIn());
     }
 
@@ -86,26 +86,26 @@ public class AttackLineBehavior : ExtendedMonoBehavior
     private IEnumerator StartFadeIn()
     {
         float alpha = 0f;
-        Color color = BaseColor;
+        Color color = baseColor;
 
-        LineRenderer.startColor = color;
-        LineRenderer.endColor = color;
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
 
-        while (alpha < MaxAlpha)
+        while (alpha < maxAlpha)
         {
             alpha += Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, MaxAlpha);
+            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
 
-            color = new Color(BaseColor.r, BaseColor.g, BaseColor.b, alpha);
-            LineRenderer.startColor = color;
-            LineRenderer.endColor = color;
+            color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            lineRenderer.startColor = color;
+            lineRenderer.endColor = color;
 
             yield return Wait.OneTick();
         }
 
-        color = BaseColor;
-        LineRenderer.startColor = color;
-        LineRenderer.endColor = color;
+        color = baseColor;
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
     }
 
     public void Destroy()
@@ -115,18 +115,18 @@ public class AttackLineBehavior : ExtendedMonoBehavior
 
     private IEnumerator StartFadeOut()
     {
-        float alpha = MaxAlpha;
-        var color = BaseColor;
-        LineRenderer.startColor = color;
-        LineRenderer.endColor = color;
+        float alpha = maxAlpha;
+        var color = baseColor;
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
 
         while (alpha > 0)
         {
             alpha -= Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, MaxAlpha);
-            color = new Color(BaseColor.r, BaseColor.g, BaseColor.b, alpha);
-            LineRenderer.startColor = color;
-            LineRenderer.endColor = color;
+            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+            color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            lineRenderer.startColor = color;
+            lineRenderer.endColor = color;
 
             yield return Wait.OneTick();
         }

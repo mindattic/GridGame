@@ -40,7 +40,7 @@ public class FootstepManager : ExtendedMonoBehavior
             return;
 
         this.Actor = actor;
-        PreviousPosition = this.Actor.Position;
+        PreviousPosition = this.Actor.position;
     }
 
     public void Stop()
@@ -55,7 +55,7 @@ public class FootstepManager : ExtendedMonoBehavior
         if (Actor == null || Actor.IsDead || Actor.IsInactive) 
             return;
 
-        var distance = Vector3.Distance(Actor.Position, PreviousPosition);
+        var distance = Vector3.Distance(Actor.position, PreviousPosition);
         if (distance < Threshold) 
             return;
   
@@ -67,11 +67,11 @@ public class FootstepManager : ExtendedMonoBehavior
     {
         GameObject prefab = Instantiate(FootstepPrefab, Vector2.zero, Quaternion.identity);
         FootstepBehavior footstep = prefab.GetComponent<FootstepBehavior>();
-        footstep.sprite = ResourceManager.Prop("Footstep");
+        footstep.sprite = resourceManager.Prop("Footstep");
         footstep.name = $"Footstep_{Guid.NewGuid()}";
-        footstep.Parent = Board.transform;
-        footstep.Spawn(Actor.Position, Common.RotationByDirection(Actor.Position, PreviousPosition), IsRightFoot);
-        PreviousPosition = Actor.Position;
+        footstep.Parent = board.transform;
+        footstep.Spawn(Actor.position, Common.RotationByDirection(Actor.position, PreviousPosition), IsRightFoot);
+        PreviousPosition = Actor.position;
         IsRightFoot = !IsRightFoot;
     }
 

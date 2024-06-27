@@ -10,7 +10,7 @@ public class Destination
     public Direction direction;
 
 
-    //public bool IsValid => Location != null && Position != null && direction != Direction.None;
+    //public bool IsValid => location != null && position != null && direction != Direction.None;
 
     public void Clear()
     {

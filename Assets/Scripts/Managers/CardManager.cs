@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class CardManager : ExtendedMonoBehavior
 {
-    RectTransform RectTransform;
-    Image BackImage;
-    Image ProfileImage;
-    TextMeshProUGUI Title;
-    TextMeshProUGUI Details;
+    RectTransform rectTransform;
+    Image backImage;
+    Image profileImage;
+    TextMeshProUGUI title;
+    TextMeshProUGUI details;
 
     private void Awake()
     {
@@ -22,11 +22,11 @@ public class CardManager : ExtendedMonoBehavior
 
     public void Init()
     {
-        RectTransform = GetComponent<RectTransform>();
-        BackImage = GameObject.Find("Card/Back").GetComponent<Image>();
-        ProfileImage = GameObject.Find("Card/Profile").GetComponent<Image>();
-        Title = GameObject.Find("Card/Title").GetComponent<TextMeshProUGUI>();
-        Details = GameObject.Find("Card/Details").GetComponent<TextMeshProUGUI>();
+        rectTransform = GetComponent<RectTransform>();
+        backImage = GameObject.Find(Constants.CardBack).GetComponent<Image>();
+        profileImage = GameObject.Find(Constants.CardProfile).GetComponent<Image>();
+        title = GameObject.Find(Constants.CardTitle).GetComponent<TextMeshProUGUI>();
+        details = GameObject.Find(Constants.CardDetails).GetComponent<TextMeshProUGUI>();
 
         //TODO: Calculate dimensions based on device properties
 
@@ -38,31 +38,31 @@ public class CardManager : ExtendedMonoBehavior
 
     public void Set(ActorBehavior actor)
     {
-        BackImage.enabled = true;
-        ProfileImage.sprite = ResourceManager.ActorPortrait(actor.Archetype.ToString());
-        ProfileImage.enabled = true;
-        Title.text = actor.name;
+        backImage.enabled = true;
+        profileImage.sprite = resourceManager.ActorPortrait(actor.archetype.ToString());
+        profileImage.enabled = true;
+        title.text = actor.name;
 
 
         var stats 
-            = $"HP: {actor.HP}/{actor.MaxHP}{Environment.NewLine}" 
+            = $"hp: {actor.hp}/{actor.maxHP}{Environment.NewLine}" 
             + $""
             + $"{Environment.NewLine}" 
-            + ResourceManager.ActorDetails(actor.Archetype.ToString());
+            + resourceManager.ActorDetails(actor.archetype.ToString());
 
 
 
-        Details.text = ResourceManager.ActorDetails(actor.Archetype.ToString()) ;
+        details.text = resourceManager.ActorDetails(actor.archetype.ToString()) ;
     }
 
     public void Clear()
     {
-        BackImage.enabled = false;
-        ProfileImage.enabled = false;
-        Title.text = "";
-        Details.text = "";
+        backImage.enabled = false;
+        profileImage.enabled = false;
+        title.text = "";
+        details.text = "";
 
         //Clear selection from Actor
-        Actors.ForEach(x => x.Renderers.SetFocus(false));
+        actors.ForEach(x => x.Renderers.SetFocus(false));
     }
 }
