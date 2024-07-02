@@ -1,59 +1,62 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AttackLineManager : ExtendedMonoBehavior
+namespace Game.Behaviors
 {
-    [SerializeField] public GameObject AttackLinePrefab;
-    public Dictionary<string, AttackLineBehavior> AttackLines = new Dictionary<string, AttackLineBehavior>();
-
-
-    private const string NameFormat = "AttackLine_{0)+{1}";
-
-
-    private void Start()
+    public class AttackLineManager : ExtendedMonoBehavior
     {
-
-    }
-
-    private void Update()
-    {
-
-    }
-
-    public void Spawn(ActorPair pair)
-    {
-        //Determine if there is a duplicate
-        var key = NameFormat.Replace("{0}", pair.Actor1.name).Replace("{1}", pair.Actor2.name);
-        var altKey = NameFormat.Replace("{0}", pair.Actor2.name).Replace("{1}", pair.Actor1.name);
-        if (AttackLines.ContainsKey(key) || AttackLines.ContainsKey(altKey))
-            return;
-
-        var prefab = Instantiate(AttackLinePrefab, Vector2.zero, Quaternion.identity);
-        var attackLine = prefab.GetComponent<AttackLineBehavior>();
-        attackLine.name = key;
-        attackLine.Parent = board.transform;
-        attackLine.Spawn(pair);
-
-        AttackLines.Add(key, attackLine);
-    }
+        [SerializeField] public GameObject AttackLinePrefab;
+        public Dictionary<string, AttackLineBehavior> attackLines = new Dictionary<string, AttackLineBehavior>();
 
 
-    public void Destroy(ActorPair pair)
-    {
-        var key = NameFormat.Replace("{0}", pair.Actor1.name).Replace("{1}", pair.Actor2.name);
-        if (!AttackLines.ContainsKey(key))
-            return;
+        private const string NameFormat = "AttackLine_{0)+{1}";
 
-        AttackLines[key].Destroy();
-        AttackLines.Remove(key);
-    }
 
-    public void Clear()
-    {
-        AttackLines.ToList().ForEach(x => x.Value.Destroy());
-        AttackLines.Clear();
+        private void Start()
+        {
+
+        }
+
+        private void Update()
+        {
+
+        }
+
+        public void Spawn(ActorPair pair)
+        {
+            //Determine if there is a duplicate
+            var key = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
+            var altKey = NameFormat.Replace("{0}", pair.actor2.name).Replace("{1}", pair.actor1.name);
+            if (attackLines.ContainsKey(key) || attackLines.ContainsKey(altKey))
+                return;
+
+            var prefab = Instantiate(AttackLinePrefab, Vector2.zero, Quaternion.identity);
+            var attackLine = prefab.GetComponent<AttackLineBehavior>();
+            attackLine.name = key;
+            attackLine.parent = board.transform;
+            attackLine.Spawn(pair);
+
+            attackLines.Add(key, attackLine);
+        }
+
+
+        public void Despawn(ActorPair pair)
+        {
+            var key = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
+            if (!attackLines.ContainsKey(key))
+                return;
+
+            attackLines[key].Despawn();
+            attackLines.Remove(key);
+        }
+
+        public void Clear()
+        {
+            attackLines.ToList().ForEach(x => x.Value.Despawn());
+            attackLines.Clear();
+        }
+
     }
 
 }

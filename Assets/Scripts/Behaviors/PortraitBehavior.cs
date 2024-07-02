@@ -1,3 +1,4 @@
+using Game.Behaviors.Actor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -167,8 +168,8 @@ public class PortraitBehavior : ExtendedMonoBehavior
 
     //private void Shake(int factor = 12)
     //{
-    //    this.position = CurrentTile.position;
-    //    this.position += new Vector3(Random.Range(TileSize / factor), Random.Range(TileSize / factor), 1);
+    //    this.position = currentTile.position;
+    //    this.position += new Vector3(Random.Range(tileSize / factor), Random.Range(tileSize / factor), 1);
     //}
 
 }

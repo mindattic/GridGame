@@ -1,5 +1,10 @@
+using Game.Behaviors.Actor;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.UIElements;
+using static UnityEditor.FilePathAttribute;
 
 public class SelectedPlayerManager : ExtendedMonoBehavior
 {
@@ -16,7 +21,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
     }
 
 
-    public void Select()
+    public void Focus()
     {
         //Verify is player turn...
         if (!turnManager.IsPlayerTurn)
@@ -42,15 +47,18 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         //TODO: Update Card display...
         actors.ForEach(x => x.Renderers.SetFocus(false));
         focusedPlayer = actor;
-        focusedPlayer.SortingOrder = ZAxis.Max;
+        focusedPlayer.sortingOrder = ZAxis.Max;
         focusedPlayer.Renderers.SetFocus(true);
-        //Assign mouse cornerOffset (how off center was selection)
+        //Assign mouse upperLeftOffset (how off center was selection)
         mouseOffset = focusedPlayer.position - mousePosition3D;
 
         cardManager.Set(focusedPlayer);
+
+
+        //MoveTowardCursor(focusedPlayer);
     }
 
-    public void Unselect()
+    public void Unfocus()
     {
         //Verify *HAS* targetted player...
         if (!HasFocusedPlayer)
@@ -59,7 +67,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!HasSelectedPlayer)
         {
             focusedPlayer.position = focusedPlayer.CurrentTile.position;
-            focusedPlayer.SortingOrder = ZAxis.Min;
+            focusedPlayer.sortingOrder = ZAxis.Min;
             //cardManager.Clear();
         }
 
@@ -67,7 +75,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
     }
 
-    public void Pickup()
+    public void Select()
     {
         //Verify is player turn...
         if (!turnManager.IsPlayerTurn)
@@ -77,14 +85,18 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!turnManager.IsStartPhase)
             return;
 
-        //Pickup Actor
-        selectedPlayer = focusedPlayer;
-        if (!HasSelectedPlayer)
+        //Verify focused player exists...
+        if (focusedPlayer == null)
             return;
 
-        Unselect();
+
+        //Select player
+        selectedPlayer = focusedPlayer;
+
+        Unfocus();
         turnManager.currentPhase = TurnPhase.Move;
-        selectedPlayer.SortingOrder = ZAxis.Max;
+        actors.ForEach(x => x.sortingOrder = ZAxis.Min);
+        selectedPlayer.sortingOrder = ZAxis.Max;
 
         soundSource.PlayOneShot(resourceManager.SoundEffect($"Select"));
 
@@ -93,9 +105,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
 
 
-        //Assign mouse cornerOffset (how off center was selection)
-        mouseOffset = selectedPlayer.position - mousePosition3D;
-
+        
 
         ghostManager.Start(selectedPlayer);
         footstepManager.Start(selectedPlayer);
@@ -103,7 +113,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         timer.Set(scaleX: 1f, start: true);
     }
 
-    public void Drop()
+    public void Unselect()
     {
         //Verify is player turn...
         if (!turnManager.IsPlayerTurn)
@@ -118,11 +128,11 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //Assign location and position
-        var closestTile = Geometry.ClosestTileByPosition(selectedPlayer.position);
+        var closestTile = Geometry.ClosestTile(selectedPlayer.position);
         closestTile.spriteRenderer.color = Colors.Translucent.White;
         selectedPlayer.location = closestTile.location;
-        selectedPlayer.position = Geometry.PositionFromLocation(selectedPlayer.location);
-        selectedPlayer.SortingOrder = ZAxis.Min;
+        selectedPlayer.position = closestTile.position;
+        selectedPlayer.sortingOrder = ZAxis.Min;
         selectedPlayer.SetStatus(Status.None);
         selectedPlayer = null;
 
@@ -135,6 +145,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         turnManager.currentPhase = TurnPhase.Attack;
         actorManager.CheckPlayerAttack();
     }
+
 
     private void ResetBobbing()
     {

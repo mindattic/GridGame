@@ -6218,11 +6218,11 @@ RectTransform:
   m_Father: {fileID: 655101921}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -140, y: -320}
-  m_SizeDelta: {x: 32, y: 32}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 290, y: -1240}
+  m_SizeDelta: {x: 64, y: 48}
+  m_Pivot: {x: 0, y: 0}
 --- !u!114 &611333396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12003,8 +12003,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -12303,8 +12303,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -13131,11 +13131,11 @@ RectTransform:
   m_Father: {fileID: 655101921}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -260, y: -320}
-  m_SizeDelta: {x: 200, y: 32}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 40, y: -1240}
+  m_SizeDelta: {x: 250, y: 48}
+  m_Pivot: {x: 0, y: 0}
 --- !u!114 &1518532252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14046,48 +14046,48 @@ MonoBehaviour:
   DeviceType: 
   TargetFramerate: 60
   VSyncCount: 0
-  ResourceManager: {fileID: 0}
-  InputManager: {fileID: 0}
-  StageManager: {fileID: 0}
-  TurnManager: {fileID: 0}
-  SupportLineManager: {fileID: 0}
-  AttackLineManager: {fileID: 0}
-  DamageTextManager: {fileID: 0}
-  GhostManager: {fileID: 0}
-  PortraitManager: {fileID: 0}
-  OverlayManager: {fileID: 0}
-  TitleManager: {fileID: 0}
-  ConsoleManager: {fileID: 0}
-  CardManager: {fileID: 0}
-  ActorManager: {fileID: 0}
-  SelectedPlayerManager: {fileID: 0}
-  PlayerManager: {fileID: 0}
-  EnemyManager: {fileID: 0}
-  TileManager: {fileID: 0}
-  FootstepManager: {fileID: 0}
-  SoundSource: {fileID: 0}
-  MusicSource: {fileID: 0}
-  ScreenSize: {x: 0, y: 0}
-  TileSize: 0
-  TileScale: {x: 0, y: 0}
+  resourceManager: {fileID: 0}
+  inputManager: {fileID: 0}
+  stageManager: {fileID: 0}
+  turnManager: {fileID: 0}
+  supportLineManager: {fileID: 0}
+  attackLineManager: {fileID: 0}
+  damageTextManager: {fileID: 0}
+  ghostManager: {fileID: 0}
+  portraitManager: {fileID: 0}
+  overlayManager: {fileID: 0}
+  titleManager: {fileID: 0}
+  consoleManager: {fileID: 0}
+  cardManager: {fileID: 0}
+  actorManager: {fileID: 0}
+  selectedPlayerManager: {fileID: 0}
+  playerManager: {fileID: 0}
+  enemyManager: {fileID: 0}
+  tileManager: {fileID: 0}
+  footstepManager: {fileID: 0}
+  soundSource: {fileID: 0}
+  musicSource: {fileID: 0}
+  screenSize: {x: 0, y: 0}
+  tileSize: 0
+  tileScale: {x: 0, y: 0}
   SpriteScale: {x: 0, y: 0}
-  Canvas2D: {fileID: 0}
-  Canvas3D: {fileID: 0}
-  MousePosition2D: {x: 0, y: 0, z: 0}
-  MousePosition3D: {x: 0, y: 0, z: 0}
-  MouseOffset: {x: 0, y: 0, z: 0}
-  CursorSpeed: 0
-  SlideSpeed: 0
-  SnapDistance: 0
-  BumpSpeed: 0
-  FocusedPlayer: {fileID: 0}
-  SelectedPlayer: {fileID: 0}
-  Board: {fileID: 0}
-  Timer: {fileID: 0}
-  Actors: []
-  Tiles: []
-  Lines: []
-  PlayerArt: {fileID: 0}
+  canvas2D: {fileID: 0}
+  canvas3D: {fileID: 0}
+  mousePosition2D: {x: 0, y: 0, z: 0}
+  mousePosition3D: {x: 0, y: 0, z: 0}
+  mouseOffset: {x: 0, y: 0, z: 0}
+  cursorSpeed: 0
+  slideSpeed: 0
+  snapDistance: 0
+  bumpSpeed: 0
+  focusedPlayer: {fileID: 0}
+  selectedPlayer: {fileID: 0}
+  board: {fileID: 0}
+  timer: {fileID: 0}
+  actors: []
+  tiles: []
+  lines: []
+  playerArt: {fileID: 0}
 --- !u!114 &1751276278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15303,8 +15303,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

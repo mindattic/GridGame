@@ -1,3 +1,4 @@
+using Game.Behaviors.Actor;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -17,7 +18,7 @@ public class GhostManager : ExtendedMonoBehavior
     }
 
     void Start() {
-        threshold = TileSize / 12;
+        threshold = tileSize / 12;
     }
 
     void FixedUpdate() { }

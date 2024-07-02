@@ -112,7 +112,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => Renderers.thumbnail.sprite = value;
     }
 
-    public int SortingOrder
+    public int sortingOrder
     {
         set
         {
@@ -295,7 +295,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         else if (IsWestOf(other.location))
             GoEast();
 
-        var closestTile = Geometry.ClosestTileByLocation(location);
+        var closestTile = Geometry.ClosestTile(location);
         destination = closestTile.position;
 
 
@@ -309,7 +309,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         //Randomly select an attack attackStrategy
         int[] ratios = { 50, 20, 15, 10, 5 };
-        var attackStrategy = Random.AttackStrategy(ratios);
+        var attackStrategy = Random.Strategy(ratios);
 
         switch (attackStrategy)
         {
@@ -336,7 +336,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             case AttackStrategy.MoveAnywhere:
                 var location = Random.Location;
                 targetPlayer = null;
-                destination = Geometry.ClosestTileByLocation(location).position;
+                destination = Geometry.ClosestTile(location).position;
                 break;
         }
 
@@ -397,15 +397,15 @@ public class ActorBehavior : ExtendedMonoBehavior
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         //var pos = new Vector3(
         //    transform.position.x,
-        //    transform.position.y + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 64)),
+        //    transform.position.y + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 64)),
         //    transform.position.z);
 
         //var rot = new Vector3(
         //   transform.Rotation.x,
         //   transform.Rotation.y ,
-        //   transform.Rotation.z + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 128)));
+        //   transform.Rotation.z + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 128)));
 
-        //Renderers.thumbnail.transform.Rotate(Vector3.up * bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 3));
+        //Renderers.thumbnail.transform.Rotate(Vector3.up * bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 3));
 
         //Renderers.glow.transform.position = pos;
         //Renderers.thumbnail.transform.position = pos;
@@ -423,8 +423,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         var scale = new Vector3(
-            backScale + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 24)),
-            backScale + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 24)),
+            backScale + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 24)),
+            backScale + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 24)),
             1);
         Renderers.SetBackScale(scale);
         Renderers.SetBackColor(IsPlayer ? quality.Color : Colors.Translucent.Black);
@@ -441,7 +441,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsPlaying || !turnManager.IsStartPhase || (turnManager.IsPlayerTurn && !IsPlayer) || (turnManager.IsEnemyTurn && !IsEnemy))
             return;
 
-        var alpha = 0.5f + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (TileSize / 24));
+        var alpha = 0.5f + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 24));
         Renderers.SetGlowAlpha(alpha);
     }
 
@@ -468,7 +468,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (IsFocusedPlayer || IsSelectedPlayer)
             MoveTowardCursor();
 
-        var closestTile = Geometry.ClosestTileByPosition(position);
+        var closestTile = Geometry.ClosestTile(position);
         if (closestTile.location.Equals(location))
             return;
 
@@ -516,7 +516,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         BumpStage stage = BumpStage.Start;
         var destination = position;
-        var range = TileSize * percent33;
+        var range = tileSize * percent33;
 
 
         while (stage != BumpStage.End)
@@ -525,7 +525,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             {
                 case BumpStage.Start:
                     {
-                        SortingOrder = ZAxis.Max;
+                        sortingOrder = ZAxis.Max;
                         position = CurrentTile.position;
                         destination = Geometry.GetDirectionalPosition(position, direction, range);
                         stage = BumpStage.MoveToward;
@@ -571,7 +571,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case BumpStage.End:
                     {
-                        SortingOrder = ZAxis.Min;
+                        sortingOrder = ZAxis.Min;
                         position = destination;
                     }
                     break;
@@ -771,7 +771,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         portraitManager.Dissolve(this);
         soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
-        SortingOrder = ZAxis.Max;
+        sortingOrder = ZAxis.Max;
 
         while (alpha > 0)
         {

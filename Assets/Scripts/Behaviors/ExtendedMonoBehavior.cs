@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Game.Behaviors;
+using Game.Behaviors.Actor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,13 +9,13 @@ public class ExtendedMonoBehavior : MonoBehaviour
 {
 
     //Canvases
-    protected Canvas canvas2D => GameManager.instance.Canvas2D;
-    protected Canvas canvas3D => GameManager.instance.Canvas3D;
+    protected Canvas canvas2D => GameManager.instance.canvas2D;
+    protected Canvas canvas3D => GameManager.instance.canvas3D;
 
     //Managers
     protected InputManager inputManager => GameManager.instance.inputManager;
     protected StageManager stageManager => GameManager.instance.stageManager;
-    protected TurnManager turnManager => GameManager.instance.TurnManager;
+    protected TurnManager turnManager => GameManager.instance.turnManager;
     protected ActorManager actorManager => GameManager.instance.actorManager;
     protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
     protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
@@ -76,8 +78,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected bool HasSelectedPlayer => selectedPlayer != null;
 
     //Scale
-    protected float TileSize => GameManager.instance.TileSize;
-    protected Vector2 tileScale => GameManager.instance.TileScale;
+    protected float tileSize => GameManager.instance.tileSize;
+    protected Vector2 tileScale => GameManager.instance.tileScale;
 
     protected ShakeIntensity shakeIntensity => GameManager.instance.shakeIntensity;
 
@@ -108,28 +110,28 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.mouseOffset = value; }
     }
 
-    protected float CursorSpeed => GameManager.instance.CursorSpeed;
-    protected float SlideSpeed => GameManager.instance.SlideSpeed;
-    protected float BumpSpeed => GameManager.instance.BumpSpeed;
-    protected float SnapDistance => GameManager.instance.SnapDistance;
+    protected float CursorSpeed => GameManager.instance.cursorSpeed;
+    protected float SlideSpeed => GameManager.instance.slideSpeed;
+    protected float BumpSpeed => GameManager.instance.bumpSpeed;
+    protected float SnapDistance => GameManager.instance.snapDistance;
 
 
-    protected AttackParticipants AttackParticipants
+    protected AttackParticipants attackParticipants
     {
-        get { return GameManager.instance.AttackParticipants; }
-        set { GameManager.instance.AttackParticipants = value; }
+        get { return GameManager.instance.attackParticipants; }
+        set { GameManager.instance.attackParticipants = value; }
     }
 
     protected ActorBehavior focusedPlayer
     {
-        get { return GameManager.instance.FocusedPlayer; }
-        set { GameManager.instance.FocusedPlayer = value; }
+        get { return GameManager.instance.focusedPlayer; }
+        set { GameManager.instance.focusedPlayer = value; }
     }
 
     protected ActorBehavior selectedPlayer
     {
-        get { return GameManager.instance.SelectedPlayer; }
-        set { GameManager.instance.SelectedPlayer = value; }
+        get { return GameManager.instance.selectedPlayer; }
+        set { GameManager.instance.selectedPlayer = value; }
     }
 
    
@@ -141,27 +143,27 @@ public class ExtendedMonoBehavior : MonoBehaviour
         hasPlayersBetween = false;
         hasGapsBetween = false;
 
-        if (pair.Axis == Axis.Vertical)
+        if (pair.axis == Axis.Vertical)
         {
-            pair.HighestActor = pair.Actor1.location.y > pair.Actor2.location.y ? pair.Actor1 : pair.Actor2;
-            pair.LowestActor = pair.HighestActor == pair.Actor1 ? pair.Actor2 : pair.Actor1;
-            pair.Enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.Actor1.location) && Common.IsBetween(x.location.y, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.y).ToList();
-            pair.Players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.Actor1.location) && Common.IsBetween(x.location.y, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.y).ToList();
-            pair.Gaps = tiles.Where(x => !x.IsOccupied && pair.Actor1.IsSameColumn(x.location) && Common.IsBetween(x.location.y, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.y).ToList();
+            pair.highestActor = pair.actor1.location.y > pair.actor2.location.y ? pair.actor1 : pair.actor2;
+            pair.lowestActor = pair.highestActor == pair.actor1 ? pair.actor2 : pair.actor1;
+            pair.enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.y).ToList();
+            pair.players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.y).ToList();
+            pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && Common.IsBetween(x.location.y, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.y).ToList();
         }
-        else if (pair.Axis == Axis.Horizontal)
+        else if (pair.axis == Axis.Horizontal)
         {
-            pair.HighestActor = pair.Actor1.location.x > pair.Actor2.location.x ? pair.Actor1 : pair.Actor2;
-            pair.LowestActor = pair.HighestActor == pair.Actor1 ? pair.Actor2 : pair.Actor1;
-            pair.Enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.Actor1.location) && Common.IsBetween(x.location.x, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.x).ToList();
-            pair.Players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.Actor1.location) && Common.IsBetween(x.location.x, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.x).ToList();
-            pair.Gaps = tiles.Where(x => !x.IsOccupied && pair.Actor1.IsSameRow(x.location) && Common.IsBetween(x.location.x, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.x).ToList();
+            pair.highestActor = pair.actor1.location.x > pair.actor2.location.x ? pair.actor1 : pair.actor2;
+            pair.lowestActor = pair.highestActor == pair.actor1 ? pair.actor2 : pair.actor1;
+            pair.enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.x).ToList();
+            pair.players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.x).ToList();
+            pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && Common.IsBetween(x.location.x, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.x).ToList();
         }
 
-        hasEnemiesBetween = pair.Enemies.Any();
-        hasPlayersBetween = pair.Players.Any();
-        hasGapsBetween = pair.Gaps.Any();
-        //var hasDuplicate = AttackParticipants.attackingPairs.Count(x => (x.Actor1 == pair.Actor1 && x.Actor2 == pair.Actor2) || (x.Actor1 == pair.Actor2 && x.Actor2 == pair.Actor1)) > 0;
+        hasEnemiesBetween = pair.enemies.Any();
+        hasPlayersBetween = pair.players.Any();
+        hasGapsBetween = pair.gaps.Any();
+        //var hasDuplicate = attackParticipants.attackingPairs.Count(x => (x.actor1 == pair.actor1 && x.actor2 == pair.actor2) || (x.actor1 == pair.actor2 && x.actor2 == pair.actor1)) > 0;
     }
 
 

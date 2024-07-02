@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Behaviors.Actor
+namespace Game.Behaviors.Actor
 {
     public  class ActorAttributes
     {

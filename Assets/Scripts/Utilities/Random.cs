@@ -1,31 +1,19 @@
-﻿using System;
+﻿using Game.Behaviors.Actor;
+using System;
 using System.Linq;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 static class Random
 {
     [ThreadStatic] public static System.Random rng = new System.Random();
 
-    public static int Int(int min, int max)
-    {
-        return rng.Next(min, max + 1);
-    }
+    public static int Int(int min, int max) => rng.Next(min, max + 1);
 
-    public static float Float(float min, float max)
-    {
-        return (float)rng.NextDouble() * (max - min) + min;
-    }
+    public static float Float(float min, float max) => (float)rng.NextDouble() * (max - min) + min;
 
     public static float Percent => (float)rng.NextDouble();
 
-    public static float Range(float amount)
-    {
-        return (-amount * Percent) + (amount * Percent);
-    }
-
+    public static float Range(float amount) => (-amount * Percent) + (amount * Percent);
 
     public static bool Boolean => Int(1, 2) == 1;
 
@@ -36,16 +24,16 @@ static class Random
             var result = Int(1, 4);
             return result switch
             {
-                1 => global::Direction.North,
-                2 => global::Direction.East,
-                3 => global::Direction.South,
-                _ => global::Direction.West,
+                1 => Direction.North,
+                2 => Direction.East,
+                3 => Direction.South,
+                _ => Direction.West,
             };
         }
     }
-  
 
-    public static AttackStrategy AttackStrategy(params int[] ratios)
+
+    public static AttackStrategy Strategy(params int[] ratios)
     {
         //int sum = Int(0, ratios.Sum());
 
@@ -58,7 +46,7 @@ static class Random
 
         //int result = Int(0, sum);
 
-        //if ((result -= ratio0) < 0) return global::AttackStrategy.AttackClosest;
+        //if ((result -= ratio0) < 0) return Strategy.AttackClosest;
 
         //{
         //    do_something1();
@@ -108,20 +96,20 @@ static class Random
         //var result = Int(1, 5);
         //return result switch
         //{
-        //    1 => global::AttackStrategy.MoveAnywhere,
-        //    2 => global::AttackStrategy.AttackClosest,
-        //    3 => global::AttackStrategy.AttackWeakest,
-        //    4 => global::AttackStrategy.AttackStrongest,
-        //    5 => global::AttackStrategy.AttackRandom,
-        //    _ => global::AttackStrategy.MoveAnywhere,
+        //    1 => Strategy.MoveAnywhere,
+        //    2 => Strategy.AttackClosest,
+        //    3 => Strategy.AttackWeakest,
+        //    4 => Strategy.AttackStrongest,
+        //    5 => Strategy.AttackRandom,
+        //    _ => Strategy.MoveAnywhere,
         //};
 
         var result = Int(1, 2);
         return result switch
         {
-            1 => global::AttackStrategy.AttackClosest,
-            2 => global::AttackStrategy.AttackRandom,
-            _ => global::AttackStrategy.AttackClosest,
+            1 => AttackStrategy.AttackClosest,
+            2 => AttackStrategy.AttackRandom,
+            _ => AttackStrategy.AttackClosest,
         };
 
     }

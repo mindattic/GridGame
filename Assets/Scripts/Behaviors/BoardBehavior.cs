@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BoardBehavior : ExtendedMonoBehavior
 {
-    public Vector2 cornerOffset;
+    public Vector2 upperLeftOffset;
     public int columnCount = 6;
     public int rowCount = 8;
     public float top;
@@ -34,15 +34,15 @@ public class BoardBehavior : ExtendedMonoBehavior
 
     void Start()
     {
-        cornerOffset = new Vector2(-(TileSize * 3) - TileSize / 2, (TileSize * columnCount));
-        top = cornerOffset.y - TileSize / 2;
-        right = cornerOffset.x + (TileSize * columnCount) + TileSize / 2;
-        bottom = cornerOffset.y - (TileSize * rowCount) - TileSize / 2;
-        left = cornerOffset.x + TileSize / 2;
+        upperLeftOffset = new Vector2(-(tileSize * 3) - tileSize / 2, (tileSize * columnCount));
+        top = upperLeftOffset.y - tileSize / 2;
+        right = upperLeftOffset.x + (tileSize * columnCount) + tileSize / 2;
+        bottom = upperLeftOffset.y - (tileSize * rowCount) - tileSize / 2;
+        left = upperLeftOffset.x + tileSize / 2;
 
-        Position = cornerOffset;
+        Position = upperLeftOffset;
 
-        //backgroundRenderer.transform.localScale = new Vector3(TileSize * columnCount, TileSize * rowCount, 1);
+        //backgroundRenderer.transform.localScale = new Vector3(tileSize * columnCount, tileSize * rowCount, 1);
 
     }
 

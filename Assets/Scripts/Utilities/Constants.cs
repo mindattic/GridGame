@@ -40,6 +40,8 @@ public static class Constants
     public const string CardTitle = "Card/Title";
     public const string CardDetails = "Card/Details";
 
+    public const int SoundSourceIndex = 0;
+    public const int MusicSourceIndex = 1;
 }
 
 public static class Locations
@@ -55,7 +57,7 @@ public static class Tag
     public static string SupportLine = "SupportLine";
     public static string AttackLine = "AttackLine";
     public static string Trail = "Trail";
-    public static string Select = "Pickup";
+    public static string Select = "Select";
     public static string DamageText = "DamageText";
     public static string AnnouncementText = "AnnouncementText";
     public static string Portrait = "ActorPortrait";

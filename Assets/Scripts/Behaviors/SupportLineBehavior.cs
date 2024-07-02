@@ -44,7 +44,7 @@ public class SupportLineBehavior : ExtendedMonoBehavior
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
 
-        IEnumerator FadeIn()
+        IEnumerator _()
         {
             float alpha = 0f;
             Color color = BaseColor;
@@ -69,7 +69,7 @@ public class SupportLineBehavior : ExtendedMonoBehavior
             lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
         };
 
-        StartCoroutine(FadeIn());
+        StartCoroutine(_());
     }
 
 
@@ -81,8 +81,8 @@ public class SupportLineBehavior : ExtendedMonoBehavior
     void Start()
     {
         lineRenderer.positionCount = 2;
-        lineRenderer.startWidth = TileSize / 2;
-        lineRenderer.endWidth = TileSize / 2;
+        lineRenderer.startWidth = tileSize / 2;
+        lineRenderer.endWidth = tileSize / 2;
     }
 
     void Update()

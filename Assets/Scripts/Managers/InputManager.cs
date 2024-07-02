@@ -25,14 +25,14 @@ public class InputManager : ExtendedMonoBehavior
 
         if (Input.GetMouseButtonDown(0))
         {
-            selectedPlayerManager.Select();
+            selectedPlayerManager.Focus();
             isDragging = HasFocusedPlayer;
 
         }
         else if (Input.GetMouseButtonUp(0))
         {
+            selectedPlayerManager.Unfocus();
             selectedPlayerManager.Unselect();
-            selectedPlayerManager.Drop();
             isDragging = false;
         }
 
@@ -55,9 +55,9 @@ public class InputManager : ExtendedMonoBehavior
             return;
 
         var dragDistance = Vector3.Distance(focusedPlayer.position, focusedPlayer.CurrentTile.position);
-        if (dragDistance > TileSize / 10)
+        if (dragDistance > tileSize / 24)
         {
-            selectedPlayerManager.Pickup();
+            selectedPlayerManager.Select();
         }
 
     }
@@ -99,7 +99,7 @@ public class InputManager : ExtendedMonoBehavior
         else if (Input.GetMouseButtonUp(0))
         {
             dragStart = null;
-            selectedPlayerManager.Drop();
+            selectedPlayerManager.Unselect();
         }
 
         if (IsDragging)
@@ -108,7 +108,7 @@ public class InputManager : ExtendedMonoBehavior
             var dragDistance = Vector3.Distance(Input.mousePosition, dragStart.Value);
             if (dragDistance > dragThreshold)
             {
-                selectedPlayerManager.Pickup();
+                selectedPlayerManager.Select();
             }
         }
 

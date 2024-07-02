@@ -1,3 +1,4 @@
+using Game.Behaviors.Actor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -239,7 +240,7 @@ public class StageManager : ExtendedMonoBehavior
         actor.team = stageActor.team;
         actor.quality = stageActor.rarity;
         actor.Renderers.SetBackColor(actor.IsPlayer ? Color.white : Color.red);
-        actor.SortingOrder = ZAxis.Min;
+        actor.sortingOrder = ZAxis.Min;
 
         //Assign attributes
         actor.level = stageActor.attributes.Level;

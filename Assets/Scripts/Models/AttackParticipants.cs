@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Game.Behaviors.Actor;
+using System.Collections.Generic;
 using System.Linq;
 
 public class AttackParticipants
@@ -28,12 +29,12 @@ public class AttackParticipants
 
     public bool HasAttackingPair(ActorPair pair)
     {
-        return attackingPairs.Count > 0 && attackingPairs.Any(x => x.HasMatch(pair.Actor1, pair.Actor2));
+        return attackingPairs.Count > 0 && attackingPairs.Any(x => x.HasMatch(pair.actor1, pair.actor2));
     }
 
     public bool HasSupportingPair(ActorPair pair)
     {
-        return supportingPairs.Count > 0 && supportingPairs.Any(x => x.HasMatch(pair.Actor1, pair.Actor2));
+        return supportingPairs.Count > 0 && supportingPairs.Any(x => x.HasMatch(pair.actor1, pair.actor2));
     }
 
 }

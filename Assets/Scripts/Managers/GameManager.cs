@@ -1,3 +1,5 @@
+using Game.Behaviors;
+using Game.Behaviors.Actor;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,7 +16,7 @@ public class GameManager : Singleton<GameManager>
     public ResourceManager resourceManager;
     public InputManager inputManager;
     public StageManager stageManager;
-    public TurnManager TurnManager; 
+    public TurnManager turnManager; 
     public SupportLineManager supportLineManager;
     public AttackLineManager attackLineManager;
     public DamageTextManager damageTextManager;
@@ -36,42 +38,42 @@ public class GameManager : Singleton<GameManager>
     public AudioSource musicSource;
 
     //Scale
-    public Vector2 ScreenSize;
-    public float TileSize;
-    public Vector2 TileScale;
+    public Vector2 screenSize;
+    public float tileSize;
+    public Vector2 tileScale;
     public Vector2 SpriteScale;
 
 
-    public Canvas Canvas2D;
-    public Canvas Canvas3D;
+    public Canvas canvas2D;
+    public Canvas canvas3D;
 
     //Mouse
     public Vector3 mousePosition2D;
     public Vector3 mousePosition3D;
     public Vector3 mouseOffset;
 
-    public float CursorSpeed;
-    public float SlideSpeed;
-    public float SnapDistance;
-    public float BumpSpeed;
+    public float cursorSpeed;
+    public float slideSpeed;
+    public float snapDistance;
+    public float bumpSpeed;
 
     //selection
-    public ActorBehavior FocusedPlayer;
-    public ActorBehavior SelectedPlayer;
+    public ActorBehavior focusedPlayer;
+    public ActorBehavior selectedPlayer;
 
     //Behaviors
     public BoardBehavior board;
     public TimerBehavior timer;
     public List<ActorBehavior> actors;
     public List<TileBehavior> tiles;
-    public List<SupportLineBehavior> Lines;
+    public List<SupportLineBehavior> lines;
  
-    public PortraitBehavior PlayerArt;
+    public PortraitBehavior playerArt;
 
 
-    public HashSet<Vector2Int> BoardLocations;
+    public HashSet<Vector2Int> boardLocations;
 
-    public AttackParticipants AttackParticipants;
+    public AttackParticipants attackParticipants;
 
     public ShakeIntensity shakeIntensity;
 
@@ -79,25 +81,25 @@ public class GameManager : Singleton<GameManager>
     private void Awake()
     {
 
-        ScreenSize = Common.ScreenToWorldSize;
-        TileSize = ScreenSize.x / Constants.percent666;
-        TileScale = new Vector2(TileSize, TileSize);
+        screenSize = Common.ScreenToWorldSize;
+        tileSize = screenSize.x / Constants.percent666;
+        tileScale = new Vector2(tileSize, tileSize);
 
-        CursorSpeed = TileSize / 2;
-        SlideSpeed = TileSize / 4;
-        BumpSpeed = TileSize / 14;
-        SnapDistance = TileSize / 8;
-        shakeIntensity = new ShakeIntensity(TileSize);
+        cursorSpeed = tileSize / 2;
+        slideSpeed = tileSize / 4;
+        bumpSpeed = tileSize / 14;
+        snapDistance = tileSize / 8;
+        shakeIntensity = new ShakeIntensity(tileSize);
 
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
         
-        Canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>();
-        Canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>();
+        canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>();
+        canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>();
         cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>();
 
         resourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>();
         stageManager = GameObject.Find(Constants.Game).GetComponent<StageManager>();
-        TurnManager = GameObject.Find(Constants.Game).GetComponent<TurnManager>();
+        turnManager = GameObject.Find(Constants.Game).GetComponent<TurnManager>();
         inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
         supportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>();
@@ -117,14 +119,12 @@ public class GameManager : Singleton<GameManager>
 
         timer = GameObject.Find(Constants.Game).GetComponent<TimerBehavior>();
 
-        const int SoundSourceIndex = 0;
-        const int MusicSourceIndex = 1;
-        soundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[SoundSourceIndex];
-        musicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[MusicSourceIndex];
+        soundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[Constants.SoundSourceIndex];
+        musicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[Constants.MusicSourceIndex];
 
-        AttackParticipants = new AttackParticipants();
+        attackParticipants = new AttackParticipants();
 
-        BoardLocations = new HashSet<Vector2Int>()
+        boardLocations = new HashSet<Vector2Int>()
         {
             new Vector2Int(1, 1), new Vector2Int(1, 2), new Vector2Int(1, 3), new Vector2Int(1, 4), new Vector2Int(1, 5), new Vector2Int(1, 6), new Vector2Int(1, 7), new Vector2Int(1, 8),
             new Vector2Int(2, 1), new Vector2Int(2, 2), new Vector2Int(2, 3), new Vector2Int(2, 4), new Vector2Int(2, 5), new Vector2Int(2, 6), new Vector2Int(2, 7), new Vector2Int(2, 8),

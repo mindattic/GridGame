@@ -1,6 +1,4 @@
 ﻿
-using Unity.Burst.Intrinsics;
-
 public enum Team
 {
     Player,
@@ -103,3 +101,4 @@ public enum BumpStage
     MoveAway,
     End
 }
+

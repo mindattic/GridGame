@@ -53,8 +53,8 @@ public class DamageTextBehavior : ExtendedMonoBehavior
     public void Spawn(string text, Vector3 position)
     {
         textMesh.text = text;
-        var x = position.x + Random.Range(TileSize / 4);
-        var y = position.y + (TileSize / 2 * Random.Percent);
+        var x = position.x + Random.Range(tileSize / 4);
+        var y = position.y + (tileSize / 2 * Random.Percent);
         transform.position = new Vector3(x, y, 1);
         StartCoroutine(FadeOut());
     }
@@ -72,7 +72,7 @@ public class DamageTextBehavior : ExtendedMonoBehavior
             textMesh.color = color;
 
 
-            transform.position += new Vector3(0, TileSize / 16, 0);
+            transform.position += new Vector3(0, tileSize / 16, 0);
             yield return Wait.For(Interval.FiveTicks); // update interval
         }
         StopCoroutine(FadeOut());

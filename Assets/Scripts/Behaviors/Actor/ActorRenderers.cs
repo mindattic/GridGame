@@ -37,11 +37,18 @@ public class ActorRenderers
 
     public void SetAlpha(float alpha)
     {
-        back.color = new Color(backColor.r, backColor.g, backColor.b, Mathf.Clamp(backColor.a, 0, 0.7f));
+        backColor.a = Mathf.Clamp(alpha, 0, 0.7f);
+        back.color = new Color(backColor.r, backColor.g, backColor.b, backColor.a);
+
         parallax.color = new Color(backColor.r, backColor.g, backColor.b, alpha);
-        glow.color = new Color(glowColor.r, glowColor.g, glowColor.b, Mathf.Clamp(glowColor.a, 0, 0.25f)); 
+
+        glowColor.a = Mathf.Clamp(alpha, 0, 0.25f);
+        glow.color = new Color(glowColor.r, glowColor.g, glowColor.b, glowColor.a); 
+
         thumbnail.color = new Color(1, 1, 1, alpha);
-        frame.color = new Color(frameColor.r, frameColor.g, frameColor.b, alpha);
+
+        frameColor.a = Mathf.Clamp(alpha, 0, 1);
+        frame.color = new Color(frameColor.r, frameColor.g, frameColor.b, frameColor.a);
 
         statusIcon.color = new Color(1, 1, 1, alpha);
 
@@ -67,15 +74,15 @@ public class ActorRenderers
         this.back.color = backColor;
     }
 
+    public void SetBackAlpha(float alpha)
+    {
+        backColor.a = Mathf.Clamp(alpha, 0, 0.5f);
+        this.back.color = backColor;
+    }
+
     public void SetBackScale(Vector3 scale)
     {
         this.back.transform.localScale = scale;
-    }
-
-    public void SetBackAlpha(float alpha)
-    {
-        backColor = new Color(backColor.r, backColor.g, backColor.b, Mathf.Min(alpha, 0.5f));
-        this.back.color = backColor;
     }
 
     public void SetGlowColor(Color color)
@@ -91,7 +98,7 @@ public class ActorRenderers
 
     public void SetGlowAlpha(float alpha)
     {
-        glowColor = new Color(glowColor.r, glowColor.g, glowColor.b, alpha);
+        glowColor.a = alpha;
         this.glow.color = glowColor;
 
         var intensity = (glowColor.r + glowColor.g + glowColor.b) / 3f;

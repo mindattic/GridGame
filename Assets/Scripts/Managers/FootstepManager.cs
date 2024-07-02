@@ -1,12 +1,7 @@
+using Game.Behaviors.Actor;
 using System;
-using System.Collections;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static Unity.VisualScripting.Member;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.GridBrushBase;
 
 public class FootstepManager : ExtendedMonoBehavior
 {
@@ -21,13 +16,13 @@ public class FootstepManager : ExtendedMonoBehavior
     void Awake()
     {
 
-        
+
 
     }
 
     void Start()
     {
-        Threshold = TileSize / 4;
+        Threshold = tileSize / 4;
     }
 
 
@@ -52,13 +47,13 @@ public class FootstepManager : ExtendedMonoBehavior
 
     void Update()
     {
-        if (Actor == null || Actor.IsDead || Actor.IsInactive) 
+        if (Actor == null || Actor.IsDead || Actor.IsInactive)
             return;
 
         var distance = Vector3.Distance(Actor.position, PreviousPosition);
-        if (distance < Threshold) 
+        if (distance < Threshold)
             return;
-  
+
         Spawn();
     }
 
