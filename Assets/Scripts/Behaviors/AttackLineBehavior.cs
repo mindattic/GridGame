@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Game.Behaviors
@@ -6,20 +8,17 @@ namespace Game.Behaviors
     public class AttackLineBehavior : ExtendedMonoBehavior
     {
         //Variables
-        ActorPair pair;
-        float thickness = 1.2f;
-        float maxAlpha = 0.5f;
-        Color baseColor = Colors.RGBA(100, 195, 200, 0);
-        public LineRenderer lineRenderer;
+        public ActorPair pair;
+        public float alpha = 0;
+        private  Vector3 start;
+        private Vector3 end;
+        private float thickness = 1.2f;
+        private float maxAlpha = 0.5f;
+        private Color baseColor = Colors.RGBA(100, 195, 200, 0);
+        private LineRenderer lineRenderer;
 
         #region Components
-
-        public string Name
-        {
-            get => name;
-            set => Name = value;
-        }
-
+   
         public Transform parent
         {
             get => gameObject.transform.parent;
@@ -40,7 +39,6 @@ namespace Game.Behaviors
         {
             lineRenderer = gameObject.GetComponent<LineRenderer>();
             lineRenderer.positionCount = 2;
-
         }
 
         void Start()
@@ -49,11 +47,14 @@ namespace Game.Behaviors
             lineRenderer.endWidth = tileSize * thickness;
         }
 
-        public void Spawn(ActorPair pair)
+     
+        public void Spawn()
         {
-            this.pair = pair;
-            Vector3 start = pair.highestActor.position;
-            Vector3 end = pair.lowestActor.position;
+            if (pair == null)
+                return;
+
+            start = pair.highestActor.position;
+            end = pair.lowestActor.position;
 
             if (pair.axis == Axis.Vertical)
             {
@@ -66,26 +67,14 @@ namespace Game.Behaviors
                 end += new Vector3(-(tileSize / 2) + -(tileSize * 0.1f), 0, 0);
             }
 
-            lineRenderer.sortingOrder = ZAxis.Min;
+            lineRenderer.sortingOrder = ZAxis.Half;
             lineRenderer.SetPosition(0, start);
             lineRenderer.SetPosition(1, end);
-            FadeIn();
-        }
 
-
-
-        void Update()
-        {
-
-        }
-
-        public void FadeIn()
-        {
-            IEnumerator fadeIn()
+            IEnumerator _()
             {
-                float alpha = 0f;
-                Color color = baseColor;
-
+                alpha = 0f;
+                Color color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
                 lineRenderer.startColor = color;
                 lineRenderer.endColor = color;
 
@@ -93,47 +82,44 @@ namespace Game.Behaviors
                 {
                     alpha += Increment.OnePercent;
                     alpha = Mathf.Clamp(alpha, 0, maxAlpha);
-
                     color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
                     lineRenderer.startColor = color;
                     lineRenderer.endColor = color;
 
                     yield return Wait.OneTick();
                 }
-
-                color = baseColor;
-                lineRenderer.startColor = color;
-                lineRenderer.endColor = color;
             }
 
-            StartCoroutine(fadeIn());
+            StartCoroutine(_());
         }
 
-
-        public void Despawn()
+        public IEnumerator Despawn()
         {
-            IEnumerator despawn()
+            alpha = maxAlpha;
+            var color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            lineRenderer.startColor = color;
+            lineRenderer.endColor = color;
+
+            while (alpha > 0)
             {
-                float alpha = maxAlpha;
-                var color = baseColor;
+                alpha -= Increment.OnePercent;
+                alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+                color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
                 lineRenderer.startColor = color;
                 lineRenderer.endColor = color;
 
-                while (alpha > 0)
-                {
-                    alpha -= Increment.OnePercent;
-                    alpha = Mathf.Clamp(alpha, 0, maxAlpha);
-                    color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
-                    lineRenderer.startColor = color;
-                    lineRenderer.endColor = color;
-
-                    yield return Wait.OneTick();
-                }
-
-                Destroy(this.gameObject);
+                yield return Wait.OneTick();
             }
+        }
 
-            StartCoroutine(despawn());
+        public void DespawnAsync()
+        {
+            StartCoroutine(Despawn());
+        }
+
+        public void Destroy()
+        {
+            Destroy(this.gameObject);
         }
 
 

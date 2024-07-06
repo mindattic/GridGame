@@ -1,15 +1,19 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.U2D;
 
 public class SupportLineBehavior : ExtendedMonoBehavior
 {
     //Variables
-    public Vector3 PointA;
-    public Vector3 PointB;
-    [SerializeField] public float Width;
-    float MaxAlpha = 0.5f;
-    public Color BaseColor = Colors.RGBA(48, 161, 49, 0);
+    public ActorPair pair;
+    public float alpha = 0;
+    private Vector3 start;
+    private Vector3 end;
+    private float maxAlpha = 0.5f;
+    private Color baseColor = Colors.RGBA(48, 161, 49, 0);
+    private LineRenderer lineRenderer;
 
     #region Components
 
@@ -19,63 +23,26 @@ public class SupportLineBehavior : ExtendedMonoBehavior
         set => Name = value;
     }
 
-    public Transform Parent
+    public Transform parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
 
-    public Vector3 Position
+    public Vector3 position
     {
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
     }
 
-    public LineRenderer lineRenderer;
 
     #endregion
-
-  
-    public void Spawn(Vector3 start, Vector3 end)
-    {
-        this.PointA = start;
-        this.PointB = end;
-
-        lineRenderer.SetPosition(0, start);
-        lineRenderer.SetPosition(1, end);
-
-        IEnumerator _()
-        {
-            float alpha = 0f;
-            Color color = BaseColor;
-
-            lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
-            lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
-
-            while (alpha < MaxAlpha)
-            {
-                alpha += Increment.OnePercent;
-                alpha = Mathf.Clamp(alpha, 0, 1);
-
-                color = new Color(BaseColor.r, BaseColor.g, BaseColor.b, alpha);
-                lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
-                lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
-
-                yield return Wait.OneTick();
-            }
-
-            color = BaseColor;
-            lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
-            lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
-        };
-
-        StartCoroutine(_());
-    }
 
 
     private void Awake()
     {
         lineRenderer = gameObject.GetComponent<LineRenderer>();
+        lineRenderer.positionCount = 2;
     }
 
     void Start()
@@ -85,13 +52,71 @@ public class SupportLineBehavior : ExtendedMonoBehavior
         lineRenderer.endWidth = tileSize / 2;
     }
 
-    void Update()
-    {
 
+    public void Spawn()
+    {
+        if (pair == null)
+            return;
+
+        start = pair.highestActor.position;
+        end = pair.lowestActor.position;
+
+        lineRenderer.sortingOrder = ZAxis.Half;
+        lineRenderer.SetPosition(0, start);
+        lineRenderer.SetPosition(1, end);
+
+        IEnumerator _()
+        {
+            alpha = 0f;
+            var color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            lineRenderer.startColor = color;
+            lineRenderer.endColor = color;
+
+            while (alpha < maxAlpha)
+            {
+                alpha += Increment.OnePercent;
+                alpha = Mathf.Clamp(alpha, 0, 1);
+
+                color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+                lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
+                lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
+
+                yield return Wait.OneTick();
+            }
+        };
+
+        StartCoroutine(_());
+    }
+
+    public IEnumerator Despawn()
+    {
+        alpha = maxAlpha;
+        var color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
+
+        while (alpha > 0)
+        {
+            alpha -= Increment.OnePercent;
+            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+            color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            lineRenderer.startColor = color;
+            lineRenderer.endColor = color;
+
+            yield return Wait.OneTick();
+        }
+    }
+
+    public void DespawnAsync()
+    {
+        StartCoroutine(Despawn());
     }
 
     public void Destroy()
     {
         Destroy(this.gameObject);
     }
+
+
+
 }

@@ -27,7 +27,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!turnManager.IsPlayerTurn)
             return;
 
-        //Verify Current phase is "PointA"...
+        //Verify Current phase is "start"...
         if (!turnManager.IsStartPhase)
             return;
 
@@ -81,7 +81,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!turnManager.IsPlayerTurn)
             return;
 
-        //Verify Current phase is "PointA"...
+        //Verify Current phase is "start"...
         if (!turnManager.IsStartPhase)
             return;
 
@@ -143,6 +143,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         cardManager.Clear();
         timer.Set(scaleX: 0f, start: false);
         turnManager.currentPhase = TurnPhase.Attack;
+
         actorManager.CheckPlayerAttack();
     }
 

@@ -1,6 +1,4 @@
-﻿
-using UnityEditor.PackageManager;
-using UnityEngine;
+﻿using UnityEngine;
 
 public static class Constants
 {
@@ -40,6 +38,7 @@ public static class Constants
     public const string CardTitle = "Card/Title";
     public const string CardDetails = "Card/Details";
 
+    //Audio sources
     public const int SoundSourceIndex = 0;
     public const int MusicSourceIndex = 1;
 }
@@ -79,7 +78,7 @@ public static class Colors
             255 / 255);
     }
 
-    public static Color RGBA(float r, float g, float b, float a = 255)
+    public static Color RGBA(float r, float g, float b, float a)
     {
         return new Color(
             Mathf.Clamp(r, 0, 255) / 255,
@@ -155,10 +154,10 @@ public static class Increment
 
 public static class Wait
 {
-    public static WaitForSeconds OneTick() => new WaitForSeconds(Interval.OneTick);
-    public static WaitForSeconds Ticks(int amount) => new WaitForSeconds(Interval.OneTick * amount);
+    public static WaitForSeconds OneTick() => new WaitForSeconds(Interval.OneTick * GameManager.instance.gameSpeed);
+    public static WaitForSeconds Ticks(int amount) => new WaitForSeconds(Interval.OneTick * amount * GameManager.instance.gameSpeed);
 
-    public static WaitForSeconds For(float seconds) => new WaitForSeconds(seconds);
+    public static WaitForSeconds For(float seconds) => new WaitForSeconds(seconds * GameManager.instance.gameSpeed);
     public static WaitForSeconds None() => new WaitForSeconds(0);
 
 }

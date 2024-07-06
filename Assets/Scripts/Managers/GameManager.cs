@@ -9,14 +9,15 @@ public class GameManager : Singleton<GameManager>
     public string DeviceType;
 
     //Settings
-    public int TargetFramerate = 60;
-    public int VSyncCount = 0;
+    public int targetFramerate = 60;
+    public int vSyncCount = 0;
+    public float gameSpeed = 1.0f;
 
     //Managers
     public ResourceManager resourceManager;
     public InputManager inputManager;
     public StageManager stageManager;
-    public TurnManager turnManager; 
+    public TurnManager turnManager;
     public SupportLineManager supportLineManager;
     public AttackLineManager attackLineManager;
     public DamageTextManager damageTextManager;
@@ -67,11 +68,6 @@ public class GameManager : Singleton<GameManager>
     public List<ActorBehavior> actors;
     public List<TileBehavior> tiles;
     public List<SupportLineBehavior> lines;
- 
-    public PortraitBehavior playerArt;
-
-
-    public HashSet<Vector2Int> boardLocations;
 
     public AttackParticipants attackParticipants;
 
@@ -92,7 +88,7 @@ public class GameManager : Singleton<GameManager>
         shakeIntensity = new ShakeIntensity(tileSize);
 
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
-        
+
         canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>();
         canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>();
         cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>();
@@ -109,7 +105,7 @@ public class GameManager : Singleton<GameManager>
         portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();
         consoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>();
         overlayManager = GameObject.Find(Constants.Overlay).GetComponent<OverlayManager>();
-        titleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>();     
+        titleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>();
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
         selectedPlayerManager = GameObject.Find(Constants.Game).GetComponent<SelectedPlayerManager>();
         playerManager = GameObject.Find(Constants.Game).GetComponent<PlayerManager>();
@@ -124,39 +120,31 @@ public class GameManager : Singleton<GameManager>
 
         attackParticipants = new AttackParticipants();
 
-        boardLocations = new HashSet<Vector2Int>()
-        {
-            new Vector2Int(1, 1), new Vector2Int(1, 2), new Vector2Int(1, 3), new Vector2Int(1, 4), new Vector2Int(1, 5), new Vector2Int(1, 6), new Vector2Int(1, 7), new Vector2Int(1, 8),
-            new Vector2Int(2, 1), new Vector2Int(2, 2), new Vector2Int(2, 3), new Vector2Int(2, 4), new Vector2Int(2, 5), new Vector2Int(2, 6), new Vector2Int(2, 7), new Vector2Int(2, 8),
-            new Vector2Int(3, 1), new Vector2Int(3, 2), new Vector2Int(3, 3), new Vector2Int(3, 4), new Vector2Int(3, 5), new Vector2Int(3, 6), new Vector2Int(3, 7), new Vector2Int(3, 8),
-            new Vector2Int(4, 1), new Vector2Int(4, 2), new Vector2Int(4, 3), new Vector2Int(4, 4), new Vector2Int(4, 5), new Vector2Int(4, 6), new Vector2Int(4, 7), new Vector2Int(4, 8),
-            new Vector2Int(5, 1), new Vector2Int(5, 2), new Vector2Int(5, 3), new Vector2Int(5, 4), new Vector2Int(5, 5), new Vector2Int(5, 6), new Vector2Int(5, 7), new Vector2Int(5, 8),
-            new Vector2Int(6, 1), new Vector2Int(6, 2), new Vector2Int(6, 3), new Vector2Int(6, 4), new Vector2Int(6, 5), new Vector2Int(6, 6), new Vector2Int(6, 7), new Vector2Int(6, 8),
-        };
+
 
         #region Platform Dependent Compilation
 
         //https://docs.unity3d.com/520/Documentation/Manual/PlatformDependentCompilation.html
-//#if UNITY_STANDALONE_WIN
-//        DeviceType = "UNITY_STANDALONE_WIN";
-//#elif UNITY_STANDALONE_LINUX
-//  DeviceType = "UNITY_STANDALONE_LINUX";
-//#elif UNITY_IPHONE
-//        DeviceType = "UNITY_IPHONE";
-//#elif UNITY_STANDALONE_OSX
-//    DeviceType = "UNITY_STANDALONE_OSX"
-//#elif UNITY_WEBPLAYER
-//  DeviceType = "UNITY_WEBPLAYER";
-//#elif UNITY_WEBGL
-//  DeviceType = "UNITY_WEBGL";
-//#else
-//    DeviceType = "Unknown";;
-//#endif
-//        Debug.Log($"Running on {DeviceType}");
+        //#if UNITY_STANDALONE_WIN
+        //        DeviceType = "UNITY_STANDALONE_WIN";
+        //#elif UNITY_STANDALONE_LINUX
+        //  DeviceType = "UNITY_STANDALONE_LINUX";
+        //#elif UNITY_IPHONE
+        //        DeviceType = "UNITY_IPHONE";
+        //#elif UNITY_STANDALONE_OSX
+        //    DeviceType = "UNITY_STANDALONE_OSX"
+        //#elif UNITY_WEBPLAYER
+        //  DeviceType = "UNITY_WEBPLAYER";
+        //#elif UNITY_WEBGL
+        //  DeviceType = "UNITY_WEBGL";
+        //#else
+        //    DeviceType = "Unknown";;
+        //#endif
+        //        Debug.Log($"Running on {DeviceType}");
 
-//#if UNITY_EDITOR
-//        Debug.Log($"Emulated on UNITY_EDITOR");
-//#endif
+        //#if UNITY_EDITOR
+        //        Debug.Log($"Emulated on UNITY_EDITOR");
+        //#endif
 
         #endregion
 
@@ -164,8 +152,8 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        Application.targetFrameRate = TargetFramerate;
-        QualitySettings.vSyncCount = VSyncCount;
+        Application.targetFrameRate = targetFramerate;
+        QualitySettings.vSyncCount = vSyncCount;
     }
 
     void Update()

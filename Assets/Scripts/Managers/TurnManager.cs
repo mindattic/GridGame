@@ -51,6 +51,9 @@ public class TurnManager : ExtendedMonoBehavior
         currentTeam = IsPlayerTurn ? Team.Enemy : Team.Player;
         currentPhase = Phase.Start;
 
+        actors.ForEach(x => x.sortingOrder = ZAxis.Min);
+
+
         if (IsPlayerTurn)
         {
             currentTurn++;

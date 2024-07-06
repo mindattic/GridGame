@@ -75,7 +75,7 @@ public class OverlayManager : ExtendedMonoBehavior
         //    alpha += Increment.FivePercent;
         //    alpha = Mathf.Clamp(alpha, 0, 1);
         //    image.Color = new Color(0, 0, 0, alpha);
-        //    yield return wait.OneTick();
+        //    yield return actionWait.OneTick();
         //}
 
 

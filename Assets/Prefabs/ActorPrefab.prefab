@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 7128737571371094693}
   - component: {fileID: 308395949308277366}
   m_Layer: 8
-  m_Name: ActionText
+  m_Name: ActionBarText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -354,7 +354,7 @@ GameObject:
   - component: {fileID: 594481166773605240}
   - component: {fileID: 1379581425609189733}
   m_Layer: 8
-  m_Name: HealthText
+  m_Name: HealthBarText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -966,76 +966,35 @@ MonoBehaviour:
   archetype: 0
   location: {x: 0, y: 0}
   team: 2
-  Level: 0
-  HP: 0
-  MaxHP: 0
-  Attack: 0
-  Defense: 0
-  Accuracy: 0
-  Evasion: 0
-  Speed: 0
-  Luck: 0
-  wait: 0
-  waitDuration: -1
+  level: 0
+  hp: 0
+  maxHP: 0
+  attack: 0
+  defense: 0
+  accuracy: 0
+  evasion: 0
+  speed: 0
+  luck: 0
+  actionWait: 0
+  actionWaitMax: -1
+  skillWait: 0
+  skillWaitMax: -1
   spawnTurn: -1
-  flickering:
+  flickeringCurve:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.21985313
-      value: 0.41551006
-      inSlope: 0.3623786
-      outSlope: 0.3623786
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.50184005
-      value: 0.21308345
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 0
-    m_PostInfinity: 0
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
     m_RotationOrder: 4
-  bobbing:
+  bobbingCurve:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: -1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 0
-    m_PostInfinity: 0
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
     m_RotationOrder: 4
   backScale: 1.4
+  RandomBob: 0
+  targetPlayer: {fileID: 0}
 --- !u!1 &4211350667117699209
 GameObject:
   m_ObjectHideFlags: 0
@@ -1132,12 +1091,12 @@ GameObject:
   - component: {fileID: 2431816385811217007}
   - component: {fileID: 3529825922162758375}
   m_Layer: 8
-  m_Name: RadialText
+  m_Name: SkillRadialText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2165874276336574119
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1305,7 +1264,7 @@ GameObject:
   - component: {fileID: 2030446323126041855}
   - component: {fileID: 1575524956348287626}
   m_Layer: 8
-  m_Name: RadialBack
+  m_Name: SkillRadialBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1367,7 +1326,7 @@ SpriteRenderer:
   m_SortingLayerID: 1438895807
   m_SortingLayer: 2
   m_SortingOrder: 20
-  m_Sprite: {fileID: 21300000, guid: 67da39125f7777140aba21125cdeed4a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e2a4228a4d10852489a386a6b92b3f28, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1808,7 +1767,7 @@ GameObject:
   - component: {fileID: 399400551369190834}
   - component: {fileID: 1885660289781437484}
   m_Layer: 8
-  m_Name: RadialFill
+  m_Name: SkillRadialFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1870,7 +1829,7 @@ SpriteRenderer:
   m_SortingLayerID: 1438895807
   m_SortingLayer: 2
   m_SortingOrder: 21
-  m_Sprite: {fileID: 21300000, guid: 12406fbcfec5e90499655d4777e56a93, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f142fd65c0b88ad4d80a28cb87508105, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

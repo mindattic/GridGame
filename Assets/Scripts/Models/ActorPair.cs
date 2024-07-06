@@ -1,21 +1,51 @@
-﻿using Game.Behaviors.Actor;
-using System.Collections.Generic;
+﻿using System.Linq;
 
 public class ActorPair
 {
-
+    //Variables
     public ActorBehavior actor1;
     public ActorBehavior actor2;
-
-    public ActorBehavior highestActor;
-    public ActorBehavior lowestActor;
-
     public Axis axis;
-    public List<TileBehavior> gaps;
-    public List<ActorBehavior> enemies;
-    public List<ActorBehavior> players;
+    public Alignment alignment = new Alignment();
 
-    public ActorPair() { }
+    //Properties
+    public ActorBehavior highestActor
+    {
+        get
+        {
+            return (axis == Axis.Vertical)
+                ? actor1.location.y > actor2.location.y ? actor1 : actor2
+                : actor1.location.x > actor2.location.x ? actor1 : actor2;
+        }
+    }
+
+    public ActorBehavior lowestActor
+    {
+        get
+        {
+            return (axis == Axis.Vertical)
+                ? actor1.location.y < actor2.location.y ? actor1 : actor2
+                : actor1.location.x < actor2.location.x ? actor1 : actor2;
+        }
+    }
+
+    public int sortingOrder
+    {
+        get
+        {
+            return actor1.sortingOrder;
+        }
+        set
+        {
+            actor1.sortingOrder = value;
+            actor2.sortingOrder = value;
+            alignment.enemies.ForEach(x => x.sortingOrder = value);
+        }
+    }
+
+    public float ceiling => axis == Axis.Vertical ? highestActor.location.y : highestActor.location.x;
+    public float floor => axis == Axis.Vertical ? lowestActor.location.y : lowestActor.location.x;
+
     public ActorPair(ActorBehavior actor1, ActorBehavior actor2, Axis axis)
     {
         this.actor1 = actor1;
@@ -23,12 +53,9 @@ public class ActorPair
         this.axis = axis;
     }
 
-    public float Ceiling => axis == Axis.Vertical ? highestActor.location.y : highestActor.location.x;
-    public float Floor => axis == Axis.Vertical ? lowestActor.location.y : lowestActor.location.x;
-
-   
-    public bool HasMatch(ActorBehavior actor1, ActorBehavior actor2)
+    public bool HasPair(ActorBehavior actor1, ActorBehavior actor2)
     {
         return (this.actor1 == actor1 && this.actor2 == actor2) || (this.actor1 == actor2 && this.actor2 == actor1);
     }
+
 }

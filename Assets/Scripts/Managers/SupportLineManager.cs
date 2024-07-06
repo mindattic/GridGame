@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,55 +8,62 @@ public class SupportLineManager : ExtendedMonoBehavior
 {
     [SerializeField] public GameObject supportLinePrefab;
 
-    public Dictionary<string, SupportLineBehavior> supportLines = new Dictionary<string, SupportLineBehavior>();
-
+    public List<SupportLineBehavior> supportLines = new List<SupportLineBehavior>();
     private const string NameFormat = "SupportLine_{0)+{1}";
 
-
-    private void Start()
+    public bool HasPair(ActorPair pair)
     {
-
+        return supportLines.Any(x => 
+        (x.pair.actor1 == pair.actor1 && x.pair.actor2 == pair.actor2) 
+        || (x.pair.actor1 == pair.actor2 && x.pair.actor2 == pair.actor1));
     }
 
-    private void Update()
+    public void Spawn(ActorPair pair)
     {
-
-    }
-
-    public bool Spawn(ActorPair pair)
-    {
-        //Determine if there is a duplicate
-        var key = NameFormat.Replace("{0}", pair.actor1.Name).Replace("{1}", pair.actor2.Name);
-        var altKey = NameFormat.Replace("{0}", pair.actor2.Name).Replace("{1}", pair.actor1.Name);
-        if (supportLines.ContainsKey(key) || supportLines.ContainsKey(altKey))
-            return false;
-
-        CheckAlignment(pair, out bool hasEnemiesBetween, out bool hasPlayersBetween, out bool hasGapsBetween);
-        if (hasEnemiesBetween || hasEnemiesBetween)
-            return false;
+        if (HasPair(pair))
+            return;
 
         var prefab = Instantiate(supportLinePrefab, Vector2.zero, Quaternion.identity);
         var supportLine = prefab.GetComponent<SupportLineBehavior>();
-        supportLine.name = key;
-        supportLine.Parent = board.transform;
-        supportLine.Spawn(pair.actor1.CurrentTile.position, pair.actor2.CurrentTile.position);
-
-        supportLines.Add(key, supportLine);
-
-        return true;
+        supportLines.Add(supportLine);
+        supportLine.name = NameFormat.Replace("{0}", pair.actor1.Name).Replace("{1}", pair.actor2.Name);
+        supportLine.parent = board.transform;
+        supportLine.pair = pair;
+        supportLine.Spawn();
     }
 
 
-    public void Destroy(string key)
+    public IEnumerator Despawn(ActorPair pair)
     {
-        supportLines[key].Destroy();
-        supportLines.Remove(key);
+        var supportLine = supportLines.FirstOrDefault(x => x.pair == pair);
+        while (supportLine != null && supportLine.alpha > 0)
+        {
+            yield return supportLine.Despawn();
+        }     
+    }
+
+    public void DespawnAsync(ActorPair pair)
+    {
+        StartCoroutine(Despawn(pair));
     }
 
     public void Clear()
     {
-        supportLines.ToList().ForEach(x => x.Value.Destroy());
-        supportLines.Clear();
+        IEnumerator _()
+        {
+            foreach (var supportLine in supportLines)
+            {
+                while (supportLine != null && supportLine.alpha > 0)
+                {
+                    yield return supportLine.Despawn();
+                }
+
+                supportLine.Destroy();
+            }
+            supportLines.Clear();
+        }
+
+        StartCoroutine(_());
     }
 
 }

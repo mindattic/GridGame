@@ -6220,7 +6220,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 290, y: -1240}
+  m_AnchoredPosition: {x: 700, y: -125}
   m_SizeDelta: {x: 64, y: 48}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &611333396
@@ -13133,7 +13133,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 40, y: -1240}
+  m_AnchoredPosition: {x: 450, y: -125}
   m_SizeDelta: {x: 250, y: 48}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1518532252
@@ -13885,8 +13885,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700541645}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.2, z: 0}
-  m_LocalScale: {x: 0.8, y: 1, z: 1}
+  m_LocalPosition: {x: -1, y: 4.4, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1723687472}
@@ -14044,8 +14044,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _persistent: 1
   DeviceType: 
-  TargetFramerate: 60
-  VSyncCount: 0
+  targetFramerate: 60
+  vSyncCount: 0
+  gameSpeed: 1
   resourceManager: {fileID: 0}
   inputManager: {fileID: 0}
   stageManager: {fileID: 0}
@@ -14087,7 +14088,6 @@ MonoBehaviour:
   actors: []
   tiles: []
   lines: []
-  playerArt: {fileID: 0}
 --- !u!114 &1751276278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14153,6 +14153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   supportLinePrefab: {fileID: 5922598101913747506, guid: 2e72c33cf0bfdfd4996f76ddc0140c31, type: 3}
+  supportLines: []
 --- !u!114 &1751276285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14275,6 +14276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AttackLinePrefab: {fileID: 1217694120567122752, guid: fd3cd14ef4856444c8996d9ec5183d59, type: 3}
+  attackLines: []
 --- !u!114 &1751276291
 MonoBehaviour:
   m_ObjectHideFlags: 0

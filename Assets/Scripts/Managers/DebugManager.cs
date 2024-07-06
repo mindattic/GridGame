@@ -48,7 +48,6 @@ public class DebugManager : ExtendedMonoBehavior
 
     public void SupportLineTest()
     {
-
         var alignedPairs = new HashSet<ActorPair>();
         foreach (var actor1 in players)
         {
@@ -60,15 +59,15 @@ public class DebugManager : ExtendedMonoBehavior
 
                 if (actor1.IsSameColumn(actor2.location))
                 {
-                    var highest = actor1.location.y > actor2.location.y ? actor1 : actor2;
-                    var lowest = highest == actor1 ? actor2 : actor1;
-                    alignedPairs.Add(new ActorPair(highest, lowest, Axis.Vertical));
+                    var pair = new ActorPair(actor1, actor2, Axis.Vertical);
+                    pair.alignment = Common.AssignAlignment(pair);
+                    alignedPairs.Add(pair);
                 }
                 else if (actor1.IsSameRow(actor2.location))
                 {
-                    var highest = actor1.location.x > actor2.location.x ? actor1 : actor2;
-                    var lowest = highest == actor1 ? actor2 : actor1;
-                    alignedPairs.Add(new ActorPair(highest, lowest, Axis.Horizontal));
+                    var pair = new ActorPair(actor1, actor2, Axis.Horizontal);
+                    pair.alignment = Common.AssignAlignment(pair);
+                    alignedPairs.Add(pair);
                 }
 
             }
@@ -76,9 +75,21 @@ public class DebugManager : ExtendedMonoBehavior
 
         foreach (var pair in alignedPairs)
         {
+            pair.sortingOrder = ZAxis.Max;
             supportLineManager.Spawn(pair);
         }
 
+        IEnumerator _()
+        {
+            yield return Wait.For(3);
+
+            foreach (var supportLine in supportLineManager.supportLines)
+            {
+                supportLine.DespawnAsync();
+            }
+        }
+
+        StartCoroutine(_());
     }
 
     public void EnemyAttackTest()

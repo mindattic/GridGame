@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,54 +8,62 @@ namespace Game.Behaviors
     public class AttackLineManager : ExtendedMonoBehavior
     {
         [SerializeField] public GameObject AttackLinePrefab;
-        public Dictionary<string, AttackLineBehavior> attackLines = new Dictionary<string, AttackLineBehavior>();
-
-
+        public List<AttackLineBehavior> attackLines = new List<AttackLineBehavior>();
         private const string NameFormat = "AttackLine_{0)+{1}";
 
-
-        private void Start()
+        public bool HasPair(ActorPair pair)
         {
-
-        }
-
-        private void Update()
-        {
-
+            return attackLines.Any(x =>
+            (x.pair.actor1 == pair.actor1 && x.pair.actor2 == pair.actor2)
+            || (x.pair.actor1 == pair.actor2 && x.pair.actor2 == pair.actor1));
         }
 
         public void Spawn(ActorPair pair)
         {
-            //Determine if there is a duplicate
-            var key = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
-            var altKey = NameFormat.Replace("{0}", pair.actor2.name).Replace("{1}", pair.actor1.name);
-            if (attackLines.ContainsKey(key) || attackLines.ContainsKey(altKey))
+            if (HasPair(pair))
                 return;
 
             var prefab = Instantiate(AttackLinePrefab, Vector2.zero, Quaternion.identity);
             var attackLine = prefab.GetComponent<AttackLineBehavior>();
-            attackLine.name = key;
+            attackLines.Add(attackLine);
+            attackLine.name = NameFormat.Replace("{0}", pair.actor1.Name).Replace("{1}", pair.actor2.Name);
             attackLine.parent = board.transform;
-            attackLine.Spawn(pair);
-
-            attackLines.Add(key, attackLine);
+            attackLine.pair = pair;
+            attackLine.Spawn();
         }
 
 
-        public void Despawn(ActorPair pair)
+        public IEnumerator Despawn(ActorPair pair)
         {
-            var key = NameFormat.Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
-            if (!attackLines.ContainsKey(key))
-                return;
+            var attackLine = attackLines.FirstOrDefault(x => x.pair == pair);
+            while (attackLine != null && attackLine.alpha > 0)
+            {
+                yield return attackLine.Despawn();
+            }
+        }
 
-            attackLines[key].Despawn();
-            attackLines.Remove(key);
+        public void DespawnAsync(ActorPair pair)
+        {
+            StartCoroutine(Despawn(pair));
         }
 
         public void Clear()
         {
-            attackLines.ToList().ForEach(x => x.Value.Despawn());
-            attackLines.Clear();
+            IEnumerator _()
+            {
+                foreach (var attackLine in attackLines)
+                {
+                    while (attackLine != null && attackLine.alpha > 0)
+                    {
+                        yield return attackLine.Despawn();
+                    }
+
+                    attackLine.Destroy();
+                }
+                attackLines.Clear();
+            }
+
+            StartCoroutine(_());
         }
 
     }

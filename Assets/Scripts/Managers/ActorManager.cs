@@ -5,43 +5,62 @@ using UnityEngine;
 
 public class ActorManager : ExtendedMonoBehavior
 {
-    void Awake() { }
-    void Start() { }
-    void Update() { }
-    void FixedUpdate() { }
-
-
-
-
-
-
     #region Player Attack Methods
-
-
 
     public void CheckPlayerAttack()
     {
-        ClearAttack();
-        if (!CheckAlignedPlayers()) return;
-        if (!CheckAttackingPlayers()) return;
-        CheckSupportingPairs();
-
-
-        StartCoroutine(PlayerAttack());
-    }
-
-    private void ClearAttack()
-    {
+        //Clear attack variables
         supportLineManager.Clear();
         attackLineManager.Clear();
         attackParticipants.Clear();
+
+        var hasAlignedPlayers = AssignAlignedPlayers();
+        if (!hasAlignedPlayers)
+        {
+            turnManager.NextTurn();
+            return;
+        }
+
+        var hasAttackParticipants = AssignAttackParticipants();
+        if (!hasAttackParticipants)
+        {
+            turnManager.NextTurn();
+            return;
+        }
+
+        IEnumerator _()
+        {
+            //Spawn attack lines
+            foreach (var pair in attackParticipants.attackingPairs)
+            {
+                pair.sortingOrder = ZAxis.Max;
+                attackLineManager.Spawn(pair);
+            }
+
+            //Spawn supporting lines
+            foreach (var pair in attackParticipants.supportingPairs)
+            {
+                pair.sortingOrder = ZAxis.Max;
+                supportLineManager.Spawn(pair);
+            }
+
+            //Iterate through player attacks
+            foreach (var pair in attackParticipants.attackingPairs)
+            {
+                yield return PlayerAttack(pair);
+            }
+
+            turnManager.NextTurn();
+        }
+
+        StartCoroutine(_());
     }
 
 
     /// <summary>
     /// Method which is used to find actors that share first column or row
     /// </summary>
-    private bool CheckAlignedPlayers()
+    private bool AssignAlignedPlayers()
     {
         foreach (var actor1 in players)
         {
@@ -54,25 +73,21 @@ public class ActorManager : ExtendedMonoBehavior
 
                 if (actor1.IsSameColumn(actor2.location))
                 {
-                    var highest = actor1.location.y > actor2.location.y ? actor1 : actor2;
-                    var lowest = highest == actor1 ? actor2 : actor1;
-                    attackParticipants.alignedPairs.Add(new ActorPair(highest, lowest, Axis.Vertical));
+                    var pair = new ActorPair(actor1, actor2, Axis.Vertical);
+                    pair.alignment = Common.AssignAlignment(pair);
+                    attackParticipants.alignedPairs.Add(pair);
                 }
                 else if (actor1.IsSameRow(actor2.location))
                 {
-                    var highest = actor1.location.x > actor2.location.x ? actor1 : actor2;
-                    var lowest = highest == actor1 ? actor2 : actor1;
-                    attackParticipants.alignedPairs.Add(new ActorPair(highest, lowest, Axis.Horizontal));
+                    var pair = new ActorPair(actor1, actor2, Axis.Horizontal);
+                    pair.alignment = Common.AssignAlignment(pair);
+                    attackParticipants.alignedPairs.Add(pair);
                 }
-
             }
         }
 
         if (attackParticipants.alignedPairs.Count < 1)
-        {
-            turnManager.NextTurn();
             return false;
-        }
 
         return true;
     }
@@ -80,81 +95,36 @@ public class ActorManager : ExtendedMonoBehavior
     /// <summary>
     /// Method which is used to find actors surrounding enemies without gaps between
     /// </summary>
-    private bool CheckAttackingPlayers()
+    private bool AssignAttackParticipants()
     {
+        if (attackParticipants.alignedPairs.Count < 1)
+            return false;
+
+        //Assign attacking pairs
         foreach (var pair in attackParticipants.alignedPairs)
         {
-            CheckAlignment(pair, out bool hasEnemiesBetween, out bool hasPlayersBetween, out bool hasGapsBetween);
-
-            if (hasEnemiesBetween && !hasPlayersBetween && !hasGapsBetween && !attackParticipants.HasAttackingPair(pair))
-            {
+            if (pair.alignment.hasEnemiesBetween && !pair.alignment.hasPlayersBetween && !pair.alignment.hasGapsBetween && !attackParticipants.HasAttackingPair(pair))
                 attackParticipants.attackingPairs.Add(pair);
-            }
-            else if (!hasEnemiesBetween && !hasPlayersBetween && hasGapsBetween && !attackParticipants.HasSupportingPair(pair))
-            {
-                attackParticipants.supportingPairs.Add(pair);
-            }
         }
 
+        //If has no attacking pairs...
         if (attackParticipants.attackingPairs.Count < 1)
-        {
-            turnManager.NextTurn();
             return false;
+
+        //...Otherwise, Assign supporting pairs
+        foreach (var pair in attackParticipants.attackingPairs)
+        {
+            if (!pair.alignment.hasEnemiesBetween && !pair.alignment.hasPlayersBetween && !attackParticipants.HasSupportingPair(pair))
+                attackParticipants.supportingPairs.Add(pair);
         }
 
         return true;
     }
 
-
-
-    private void CheckSupportingPairs()
+    private IEnumerator PlayerAttack(ActorPair pair)
     {
-        //Check abort state
-        if (attackParticipants.supportingPairs.Count < 1)
-            return;
+        #region Player portraits 
 
-        foreach (var supportingPair in attackParticipants.supportingPairs)
-        {
-            supportLineManager.Spawn(supportingPair);
-        }
-    }
-
-
-    private IEnumerator PlayerAttack()
-    {
-        foreach (var pair in attackParticipants.attackingPairs)
-        {
-            yield return PlayerStartAttack(pair);
-            attackLineManager.Spawn(pair);
-            yield return EnemyStartDefend(pair);
-        }
-
-        foreach (var pair in attackParticipants.attackingPairs)
-        {
-            yield return PlayerPortrait(pair);
-            yield return PlayerAttack(pair);
-            yield return EnemyEndDefend(pair);
-            yield return PlayerEndAttack(pair);
-        }
-
-        ClearAttack();
-        turnManager.NextTurn();
-    }
-
-
-    private IEnumerator PlayerStartAttack(ActorPair pair)
-    {
-        pair.actor1.sortingOrder = ZAxis.Max;
-        pair.actor2.sortingOrder = ZAxis.Max;
-
-        soundSource.PlayOneShot(resourceManager.SoundEffect("PlayerGlow"));
-
-        yield return Wait.None();
-    }
-
-
-    private IEnumerator PlayerPortrait(ActorPair pair)
-    {
         yield return Wait.For(Interval.QuarterSecond);
 
         soundSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
@@ -166,24 +136,15 @@ public class ActorManager : ExtendedMonoBehavior
         portraitManager.SlideIn(pair.actor2, direction2);
 
         yield return Wait.For(Interval.TwoSeconds);
-    }
-
-    private IEnumerator EnemyStartDefend(ActorPair pair)
-    {
-        foreach (var enemy in pair.enemies)
-        {
-            //enemy.StartGlow();
-        }
-
-        yield return Wait.None();
-    }
 
 
-    private IEnumerator PlayerAttack(ActorPair pair)
-    {
-        //yield return wait.For(Interval.QuarterSecond);
+        #endregion
 
-        foreach (var enemy in pair.enemies)
+        #region Player attack
+
+        //yield return actionWait.For(Interval.QuarterSecond);
+
+        foreach (var enemy in pair.alignment.enemies)
         {
 
             //var actor1 = pair.actor1;
@@ -216,6 +177,8 @@ public class ActorManager : ExtendedMonoBehavior
                 //attack enemy (one at a time)
                 //TODO: Calculate based on attacker stats
                 var damage = Random.Int(15, 33);
+                pair.actor1.GainSkill(damage);
+                pair.actor2.GainSkill(damage);
                 yield return enemy.TakeDamage(damage);
             }
             else
@@ -225,7 +188,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         }
 
-        var deadEnemies = pair.enemies.Where(x => x.IsDead);
+        var deadEnemies = pair.alignment.enemies.Where(x => x.IsDead).ToList();
 
         //Dissolve dead enemies (one at a time)
         foreach (var enemy in deadEnemies)
@@ -234,32 +197,17 @@ public class ActorManager : ExtendedMonoBehavior
         }
 
         //Fade out (all at once)
-        foreach (var enemy in deadEnemies)
-        {
-            enemy.Destroy();
-        }
+        deadEnemies.ForEach(x => x.Destroy());
 
+        #endregion
+
+        #region Cleanup
+
+        attackLineManager.DespawnAsync(pair);
+        supportLineManager.DespawnAsync(pair);
+
+        #endregion
     }
-
-    private IEnumerator PlayerEndAttack(ActorPair pair)
-    {
-        pair.actor1.sortingOrder = ZAxis.Min;
-        pair.actor2.sortingOrder = ZAxis.Min;
-        yield return Wait.None();
-    }
-
-    private IEnumerator EnemyEndDefend(ActorPair pair)
-    {
-        //Fade out glow (all at once)
-        foreach (var enemy in pair.enemies.Where(x => x.IsAlive))
-        {
-            //enemy.StopGlow();
-        }
-
-        yield return Wait.None();
-    }
-
-
 
     #endregion
 
@@ -286,24 +234,18 @@ public class ActorManager : ExtendedMonoBehavior
         if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
             return;
 
-        //Give boost to radial fill
-        //var waitingEnemies = enemies.Where(x => !x.IsReady).ToList();
-        //waitingEnemies.ForEach(x => x.CheckActionBar(x.speed));
-
         IEnumerator _()
         {
+            actors.ForEach(x => x.sortingOrder = ZAxis.Min);
             turnManager.currentPhase = TurnPhase.Move;
 
             yield return Wait.For(Interval.HalfSecond);
-
-    
-            actors.ForEach(x => x.sortingOrder = ZAxis.Min);
-
             var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
             foreach (var enemy in readyEnemies)
             {
-                enemy.SetAttackStrategy();
                 enemy.sortingOrder = ZAxis.Max;
+                enemy.SetAttackStrategy();
+
                 while (enemy.IsMoving)
                 {
                     yield return Wait.OneTick();
@@ -317,10 +259,8 @@ public class ActorManager : ExtendedMonoBehavior
             CheckEnemyAttack();
         }
 
-
         StartCoroutine(_());
     }
-
 
     private void CheckEnemyAttack()
     {
@@ -342,7 +282,7 @@ public class ActorManager : ExtendedMonoBehavior
                     {
                         foreach (var player in defendingPlayers)
                         {
-                            //yield return wait.For(Interval.HalfSecond);
+                            //yield return actionWait.For(Interval.HalfSecond);
 
                             var direction = enemy.AdjacentDirectionTo(player);
                             yield return enemy.Bump(direction);
@@ -366,14 +306,14 @@ public class ActorManager : ExtendedMonoBehavior
 
                             //enemy.StopGlow();
                             //player.StopGlow();
-                            enemy.CalculateWait();
+                            enemy.CalculateActionWait();
                         }
                     }
                     else
                     {
                         //enemy.SetStatus(Status.None);
                         //yield return enemy.MissAttack();
-                        enemy.CalculateWait();
+                        enemy.CalculateActionWait();
                     }
                 }
             }
@@ -392,7 +332,6 @@ public class ActorManager : ExtendedMonoBehavior
                 player.Destroy();
             }
 
-            //yield return wait.For(Interval.HalfSecond);
             turnManager.NextTurn();
         }
 
@@ -400,14 +339,14 @@ public class ActorManager : ExtendedMonoBehavior
         StartCoroutine(_());
     }
 
-   
-    #endregion
 
+    #endregion
 
     public void Clear()
     {
         actors.ForEach(x => Destroy(x));
         actors.Clear();
     }
+
 
 }

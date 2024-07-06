@@ -26,9 +26,9 @@ public class ActorRenderers
     public SpriteRenderer actionBar;
     public TextMeshPro actionText;
 
-    public SpriteRenderer radialBack;
-    public SpriteRenderer radialFill;
-    public TextMeshPro radialText;
+    public SpriteRenderer skillRadialBack;
+    public SpriteRenderer skillRadial;
+    public TextMeshPro skillRadialText;
 
     public SpriteRenderer selection;
 
@@ -61,9 +61,9 @@ public class ActorRenderers
         actionBar.color = new Color(1, 1, 1, alpha);
         actionText.color = new Color(1, 1, 1, alpha);
 
-        radialBack.color = new Color(0, 0, 0, Mathf.Clamp(alpha, 0, 0.5f));
-        radialFill.color = new Color(1, 1, 1, alpha);
-        radialText.color = new Color(1, 1, 1, alpha);
+        skillRadialBack.color = new Color(0, 0, 0, Mathf.Clamp(alpha, 0, 0.5f));
+        skillRadial.color = new Color(1, 1, 1, alpha);
+        skillRadialText.color = new Color(1, 1, 1, alpha);
 
         selection.color = new Color(1, 1, 1, alpha);
     }

@@ -137,35 +137,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
    
 
 
-    public void CheckAlignment(ActorPair pair, out bool hasEnemiesBetween, out bool hasPlayersBetween, out bool hasGapsBetween)
-    {
-        hasEnemiesBetween = false;
-        hasPlayersBetween = false;
-        hasGapsBetween = false;
-
-        if (pair.axis == Axis.Vertical)
-        {
-            pair.highestActor = pair.actor1.location.y > pair.actor2.location.y ? pair.actor1 : pair.actor2;
-            pair.lowestActor = pair.highestActor == pair.actor1 ? pair.actor2 : pair.actor1;
-            pair.enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.y).ToList();
-            pair.players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameColumn(pair.actor1.location) && Common.IsBetween(x.location.y, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.y).ToList();
-            pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && Common.IsBetween(x.location.y, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.y).ToList();
-        }
-        else if (pair.axis == Axis.Horizontal)
-        {
-            pair.highestActor = pair.actor1.location.x > pair.actor2.location.x ? pair.actor1 : pair.actor2;
-            pair.lowestActor = pair.highestActor == pair.actor1 ? pair.actor2 : pair.actor1;
-            pair.enemies = enemies.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.x).ToList();
-            pair.players = players.Where(x => x != null && x.IsAlive && x.IsActive && x.IsSameRow(pair.actor1.location) && Common.IsBetween(x.location.x, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.x).ToList();
-            pair.gaps = tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && Common.IsBetween(x.location.x, pair.Floor, pair.Ceiling)).OrderBy(x => x.location.x).ToList();
-        }
-
-        hasEnemiesBetween = pair.enemies.Any();
-        hasPlayersBetween = pair.players.Any();
-        hasGapsBetween = pair.gaps.Any();
-        //var hasDuplicate = attackParticipants.attackingPairs.Count(x => (x.actor1 == pair.actor1 && x.actor2 == pair.actor2) || (x.actor1 == pair.actor2 && x.actor2 == pair.actor1)) > 0;
-    }
-
+  
 
 
 

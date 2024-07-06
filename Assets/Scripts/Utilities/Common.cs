@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Common
 {
@@ -44,5 +46,30 @@ public class Common
         var rotation = Quaternion.Euler(targetRotation);
         return rotation;
     }
+
+
+
+    public static Alignment AssignAlignment(ActorPair pair)
+    {
+        var alignment = new Alignment();
+
+        if (pair.axis == Axis.Vertical)
+        {
+            alignment.enemies = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsEnemy && x.IsSameColumn(pair.actor1.location) && IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y).ToList();
+            alignment.players = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsPlayer && x.IsSameColumn(pair.actor1.location) && IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y).ToList();
+            alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y).ToList();
+        }
+        else if (pair.axis == Axis.Horizontal)
+        {
+            alignment.enemies = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsEnemy && x.IsSameRow(pair.actor1.location) && IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x).ToList();
+            alignment.players = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsPlayer && x.IsSameRow(pair.actor1.location) && IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x).ToList();
+            alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x).ToList();
+        }
+
+        return alignment;
+    }
+
+
+
 }
 
