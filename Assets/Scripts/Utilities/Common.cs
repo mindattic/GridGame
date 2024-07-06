@@ -48,22 +48,28 @@ public class Common
     }
 
 
-
-    public static Alignment AssignAlignment(ActorPair pair)
+    
+    public static Alignment AssignAlignment(ActorBehavior actor1, ActorBehavior actor2, Axis axis)
     {
+
+        ActorBehavior highestActor = axis == Axis.Vertical ? actor1.location.y > actor2.location.y ? actor1 : actor2 : actor1.location.x > actor2.location.x ? actor1 : actor2;
+        ActorBehavior lowestActor = (axis == Axis.Vertical) ? actor1.location.y < actor2.location.y ? actor1 : actor2 : actor1.location.x < actor2.location.x ? actor1 : actor2;
+        float ceiling = axis == Axis.Vertical ? highestActor.location.y : highestActor.location.x;
+        float floor = axis == Axis.Vertical ? lowestActor.location.y : lowestActor.location.x;
+
         var alignment = new Alignment();
 
-        if (pair.axis == Axis.Vertical)
+        if (axis == Axis.Vertical)
         {
-            alignment.enemies = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsEnemy && x.IsSameColumn(pair.actor1.location) && IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y).ToList();
-            alignment.players = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsPlayer && x.IsSameColumn(pair.actor1.location) && IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y).ToList();
-            alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameColumn(x.location) && IsBetween(x.location.y, pair.floor, pair.ceiling)).OrderBy(x => x.location.y).ToList();
+            alignment.enemies = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsEnemy && x.IsSameColumn(actor1.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
+            alignment.players = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsPlayer && x.IsSameColumn(actor1.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
+            alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && actor1.IsSameColumn(x.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
         }
-        else if (pair.axis == Axis.Horizontal)
+        else if (axis == Axis.Horizontal)
         {
-            alignment.enemies = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsEnemy && x.IsSameRow(pair.actor1.location) && IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x).ToList();
-            alignment.players = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsPlayer && x.IsSameRow(pair.actor1.location) && IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x).ToList();
-            alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && pair.actor1.IsSameRow(x.location) && IsBetween(x.location.x, pair.floor, pair.ceiling)).OrderBy(x => x.location.x).ToList();
+            alignment.enemies = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsEnemy && x.IsSameRow(actor1.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
+            alignment.players = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsPlayer && x.IsSameRow(actor1.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
+            alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && actor1.IsSameRow(x.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
         }
 
         return alignment;

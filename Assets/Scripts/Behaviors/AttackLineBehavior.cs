@@ -10,15 +10,16 @@ namespace Game.Behaviors
         //Variables
         public ActorPair pair;
         public float alpha = 0;
-        private  Vector3 start;
+        private Vector3 start;
         private Vector3 end;
         private float thickness = 1.2f;
         private float maxAlpha = 0.5f;
         private Color baseColor = Colors.RGBA(100, 195, 200, 0);
+        private Color color;
         private LineRenderer lineRenderer;
-
+    
         #region Components
-   
+
         public Transform parent
         {
             get => gameObject.transform.parent;
@@ -31,14 +32,24 @@ namespace Game.Behaviors
             set => gameObject.transform.position = value;
         }
 
+        public int sortingOrder
+        {
+            get => lineRenderer.sortingOrder;
+            set => lineRenderer.sortingOrder = value;
+        }
+
+        
 
         #endregion
+
+
 
 
         private void Awake()
         {
             lineRenderer = gameObject.GetComponent<LineRenderer>();
             lineRenderer.positionCount = 2;
+            lineRenderer.sortingOrder = ZAxis.Min;
         }
 
         void Start()
@@ -67,14 +78,14 @@ namespace Game.Behaviors
                 end += new Vector3(-(tileSize / 2) + -(tileSize * 0.1f), 0, 0);
             }
 
-            lineRenderer.sortingOrder = ZAxis.Half;
+            //lineRenderer.sortingOrder = ZAxis.Half;
             lineRenderer.SetPosition(0, start);
             lineRenderer.SetPosition(1, end);
 
             IEnumerator _()
             {
                 alpha = 0f;
-                Color color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+                color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
                 lineRenderer.startColor = color;
                 lineRenderer.endColor = color;
 
@@ -96,7 +107,7 @@ namespace Game.Behaviors
         public IEnumerator Despawn()
         {
             alpha = maxAlpha;
-            var color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
 

@@ -44,26 +44,32 @@ namespace Game.Behaviors
 
         public void DespawnAsync(ActorPair pair)
         {
-            StartCoroutine(Despawn(pair));
+            var attackLine = attackLines.FirstOrDefault(x => x.pair == pair);
+            if (attackLine == null)
+                return;
+
+            attackLine.DespawnAsync();
         }
 
         public void Clear()
         {
-            IEnumerator _()
-            {
-                foreach (var attackLine in attackLines)
-                {
-                    while (attackLine != null && attackLine.alpha > 0)
-                    {
-                        yield return attackLine.Despawn();
-                    }
+            attackLines.ForEach(x => x.DespawnAsync());
+            attackLines.Clear();
+            //IEnumerator _()
+            //{
+            //    foreach (var attackLine in attackLines)
+            //    {
+            //        while (attackLine != null && attackLine.alpha > 0)
+            //        {
+            //            yield return attackLine.Despawn();
+            //        }
 
-                    attackLine.Destroy();
-                }
-                attackLines.Clear();
-            }
+            //        attackLine.Destroy();
+            //    }
+            //    attackLines.Clear();
+            //}
 
-            StartCoroutine(_());
+            //StartCoroutine(_());
         }
 
     }

@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Linq;
-using System.Numerics;
-using UnityEngine;
 
 public class ActorManager : ExtendedMonoBehavior
 {
@@ -33,14 +31,14 @@ public class ActorManager : ExtendedMonoBehavior
             //Spawn attack lines
             foreach (var pair in attackParticipants.attackingPairs)
             {
-                pair.sortingOrder = ZAxis.Max;
+                //pair.sortingOrder = ZAxis.Max;
                 attackLineManager.Spawn(pair);
             }
 
             //Spawn supporting lines
             foreach (var pair in attackParticipants.supportingPairs)
             {
-                pair.sortingOrder = ZAxis.Max;
+                //pair.sortingOrder = ZAxis.Max;
                 supportLineManager.Spawn(pair);
             }
 
@@ -74,13 +72,11 @@ public class ActorManager : ExtendedMonoBehavior
                 if (actor1.IsSameColumn(actor2.location))
                 {
                     var pair = new ActorPair(actor1, actor2, Axis.Vertical);
-                    pair.alignment = Common.AssignAlignment(pair);
                     attackParticipants.alignedPairs.Add(pair);
                 }
                 else if (actor1.IsSameRow(actor2.location))
                 {
                     var pair = new ActorPair(actor1, actor2, Axis.Horizontal);
-                    pair.alignment = Common.AssignAlignment(pair);
                     attackParticipants.alignedPairs.Add(pair);
                 }
             }
@@ -103,19 +99,28 @@ public class ActorManager : ExtendedMonoBehavior
         //Assign attacking pairs
         foreach (var pair in attackParticipants.alignedPairs)
         {
-            if (pair.alignment.hasEnemiesBetween && !pair.alignment.hasPlayersBetween && !pair.alignment.hasGapsBetween && !attackParticipants.HasAttackingPair(pair))
+            if (pair.alignment.hasEnemiesBetween
+                && !pair.alignment.hasPlayersBetween
+                && !pair.alignment.hasGapsBetween 
+                && !attackParticipants.HasAttackingPair(pair))
+            {
                 attackParticipants.attackingPairs.Add(pair);
+            }
         }
 
-        //If has no attacking pairs...
         if (attackParticipants.attackingPairs.Count < 1)
             return false;
 
-        //...Otherwise, Assign supporting pairs
-        foreach (var pair in attackParticipants.attackingPairs)
+        //Assign supporting pairs
+        foreach (var pair in attackParticipants.alignedPairs)
         {
-            if (!pair.alignment.hasEnemiesBetween && !pair.alignment.hasPlayersBetween && !attackParticipants.HasSupportingPair(pair))
+            if (!pair.alignment.hasEnemiesBetween
+                && !pair.alignment.hasPlayersBetween
+                && (pair.actor1.IsAttacking || pair.actor2.IsAttacking)
+                && !attackParticipants.HasSupportingPair(pair))
+            {
                 attackParticipants.supportingPairs.Add(pair);
+            }
         }
 
         return true;
@@ -186,6 +191,8 @@ public class ActorManager : ExtendedMonoBehavior
                 yield return enemy.MissAttack();
             }
 
+            attackLineManager.DespawnAsync(pair);
+            supportLineManager.DespawnAsync(pair);
         }
 
         var deadEnemies = pair.alignment.enemies.Where(x => x.IsDead).ToList();
@@ -201,12 +208,6 @@ public class ActorManager : ExtendedMonoBehavior
 
         #endregion
 
-        #region Cleanup
-
-        attackLineManager.DespawnAsync(pair);
-        supportLineManager.DespawnAsync(pair);
-
-        #endregion
     }
 
     #endregion
@@ -236,14 +237,14 @@ public class ActorManager : ExtendedMonoBehavior
 
         IEnumerator _()
         {
-            actors.ForEach(x => x.sortingOrder = ZAxis.Min);
+            //actors.ForEach(x => x.sortingOrder = ZAxis.Min);
             turnManager.currentPhase = TurnPhase.Move;
 
             yield return Wait.For(Interval.HalfSecond);
             var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
             foreach (var enemy in readyEnemies)
             {
-                enemy.sortingOrder = ZAxis.Max;
+                //enemy.sortingOrder = ZAxis.Max;
                 enemy.SetAttackStrategy();
 
                 while (enemy.IsMoving)

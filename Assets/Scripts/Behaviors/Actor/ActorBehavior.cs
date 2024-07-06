@@ -47,6 +47,9 @@ public class ActorBehavior : ExtendedMonoBehavior
     public ActorThumbnail Thumbnail;
     public ActorRenderers Renderers = new ActorRenderers();
 
+
+    public bool IsAttacking => attackParticipants.attackingPairs.Any(x => x.actor1 == this || x.actor2 == this);
+
     private void Awake()
     {
 

@@ -46,16 +46,21 @@ public class ActorPair
     public float ceiling => axis == Axis.Vertical ? highestActor.location.y : highestActor.location.x;
     public float floor => axis == Axis.Vertical ? lowestActor.location.y : lowestActor.location.x;
 
+
+    public bool isValid => actor1 != null && actor2 != null;
+
     public ActorPair(ActorBehavior actor1, ActorBehavior actor2, Axis axis)
     {
         this.actor1 = actor1;
         this.actor2 = actor2;
         this.axis = axis;
+        this.alignment = Common.AssignAlignment(actor1, actor2, axis);
     }
 
     public bool HasPair(ActorBehavior actor1, ActorBehavior actor2)
     {
         return (this.actor1 == actor1 && this.actor2 == actor2) || (this.actor1 == actor2 && this.actor2 == actor1);
     }
+
 
 }

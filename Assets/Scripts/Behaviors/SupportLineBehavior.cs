@@ -13,15 +13,10 @@ public class SupportLineBehavior : ExtendedMonoBehavior
     private Vector3 end;
     private float maxAlpha = 0.5f;
     private Color baseColor = Colors.RGBA(48, 161, 49, 0);
+    private Color color;
     private LineRenderer lineRenderer;
 
     #region Components
-
-    public string Name
-    {
-        get => name;
-        set => Name = value;
-    }
 
     public Transform parent
     {
@@ -35,6 +30,11 @@ public class SupportLineBehavior : ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
+    public int sortingOrder
+    {
+        get => lineRenderer.sortingOrder;
+        set => lineRenderer.sortingOrder = value;
+    }
 
     #endregion
 
@@ -43,6 +43,7 @@ public class SupportLineBehavior : ExtendedMonoBehavior
     {
         lineRenderer = gameObject.GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
+        lineRenderer.sortingOrder = ZAxis.Min;
     }
 
     void Start()
@@ -68,14 +69,14 @@ public class SupportLineBehavior : ExtendedMonoBehavior
         IEnumerator _()
         {
             alpha = 0f;
-            var color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
 
             while (alpha < maxAlpha)
             {
                 alpha += Increment.OnePercent;
-                alpha = Mathf.Clamp(alpha, 0, 1);
+                alpha = Mathf.Clamp(alpha, 0, maxAlpha);
 
                 color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
                 lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
@@ -90,11 +91,6 @@ public class SupportLineBehavior : ExtendedMonoBehavior
 
     public IEnumerator Despawn()
     {
-        alpha = maxAlpha;
-        var color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
-        lineRenderer.startColor = color;
-        lineRenderer.endColor = color;
-
         while (alpha > 0)
         {
             alpha -= Increment.OnePercent;

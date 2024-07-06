@@ -53,20 +53,17 @@ public class DebugManager : ExtendedMonoBehavior
         {
             foreach (var actor2 in players)
             {
-                if (actor1 == null || actor2 == null || actor1.Equals(actor2)
-                    || !actor1.IsAlive || !actor1.IsActive || !actor2.IsAlive || !actor2.IsActive)
+                if (actor1 == null || actor2 == null || actor1.Equals(actor2) || !actor1.IsPlaying || !actor2.IsPlaying)
                     continue;
 
                 if (actor1.IsSameColumn(actor2.location))
                 {
                     var pair = new ActorPair(actor1, actor2, Axis.Vertical);
-                    pair.alignment = Common.AssignAlignment(pair);
                     alignedPairs.Add(pair);
                 }
                 else if (actor1.IsSameRow(actor2.location))
                 {
                     var pair = new ActorPair(actor1, actor2, Axis.Horizontal);
-                    pair.alignment = Common.AssignAlignment(pair);
                     alignedPairs.Add(pair);
                 }
 
@@ -75,7 +72,7 @@ public class DebugManager : ExtendedMonoBehavior
 
         foreach (var pair in alignedPairs)
         {
-            pair.sortingOrder = ZAxis.Max;
+            //pair.sortingOrder = ZAxis.Max;
             supportLineManager.Spawn(pair);
         }
 

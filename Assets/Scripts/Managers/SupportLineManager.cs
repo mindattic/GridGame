@@ -44,26 +44,33 @@ public class SupportLineManager : ExtendedMonoBehavior
 
     public void DespawnAsync(ActorPair pair)
     {
-        StartCoroutine(Despawn(pair));
+        var supportLine = supportLines.FirstOrDefault(x => x.pair == pair);
+        if (supportLine == null)
+            return;
+
+        supportLine.DespawnAsync();
     }
 
     public void Clear()
     {
-        IEnumerator _()
-        {
-            foreach (var supportLine in supportLines)
-            {
-                while (supportLine != null && supportLine.alpha > 0)
-                {
-                    yield return supportLine.Despawn();
-                }
+        supportLines.ForEach(x => x.DespawnAsync());
+        supportLines.Clear();
 
-                supportLine.Destroy();
-            }
-            supportLines.Clear();
-        }
+        //IEnumerator _()
+        //{
+        //    foreach (var supportLine in supportLines)
+        //    {
+        //        while (supportLine != null && supportLine.alpha > 0)
+        //        {
+        //            yield return supportLine.Despawn();
+        //        }
 
-        StartCoroutine(_());
+        //        supportLine.Destroy();
+        //    }
+        //    supportLines.Clear();
+        //}
+
+        //StartCoroutine(_());
     }
 
 }
