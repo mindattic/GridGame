@@ -28,7 +28,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public float skillWaitMax = -1;
     public int spawnTurn = -1;
     [SerializeField] public AnimationCurve glowCurve;
-  
+
 
     public ActorBehavior targetPlayer = null;
 
@@ -77,8 +77,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsPlaying)
             return;
 
-        if (IsFocusedPlayer || IsSelectedPlayer)
-            MoveTowardCursor();
+        //if (IsFocusedPlayer || IsSelectedPlayer)
+        //    MoveTowardCursor();
 
         var closestTile = Geometry.ClosestTile(position);
         if (closestTile.location.Equals(location))
@@ -110,7 +110,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsPlaying || IsFocusedPlayer || IsSelectedPlayer)
             return;
 
-        CheckMovement();
+        //CheckMovement();
         CheckBobbing();
         CheckThrobbing();
         //CheckFlicker();
@@ -276,6 +276,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         location = startLocation;
         position = Geometry.PositionFromLocation(location);
 
+
         if (IsPlayer)
         {
             Renderers.SetBaseColor(quality.Color);
@@ -283,6 +284,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             Renderers.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
             Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("PlayerParallax"));
             Renderers.SetFrameColor(Colors.Solid.White);
+            Renderers.SetHealthBarColor();
             Renderers.actionBarBack.enabled = false;
             Renderers.actionBar.enabled = false;
         }
@@ -293,10 +295,12 @@ public class ActorBehavior : ExtendedMonoBehavior
             Renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
             Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
             Renderers.SetFrameColor(Colors.Solid.Red);
+            Renderers.SetHealthBarColor();
+            Renderers.SetActionBarColor();
             AssignActionWait();
         }
 
-        AssignSkillWait();  
+        AssignSkillWait();
         UpdateHealthBar();
 
         IEnumerator _()
@@ -336,12 +340,10 @@ public class ActorBehavior : ExtendedMonoBehavior
         else if (IsWestOf(other.location))
             SetLocation(Direction.East);
 
+        soundSource.PlayOneShot(resourceManager.SoundEffect("Slide"));
         var closestTile = Geometry.ClosestTile(location);
         destination = closestTile.position;
-
-
-
-        soundSource.PlayOneShot(resourceManager.SoundEffect("Slide"));
+        StartCoroutine(MoveToDestination());
     }
 
 
@@ -427,6 +429,54 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
+
+    public IEnumerator MoveToCursor()
+    {
+        while (IsFocusedPlayer || IsSelectedPlayer)
+        {
+            var cursorPosition = mousePosition3D + mouseOffset;
+            cursorPosition.x = Mathf.Clamp(cursorPosition.x, board.left, board.right);
+            cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bottom, board.top);
+
+            //Move selected player towards cursor
+            //position = Vector2.MoveTowards(position, cursorPosition, CursorSpeed);
+
+            //Snap selected player to cursor
+            position = cursorPosition;
+
+            yield return Wait.None();
+        }
+    }
+
+
+    public IEnumerator MoveToDestination()
+    {
+        while (HasDestination)
+        {
+            var delta = destination.Value - position;
+            if (Mathf.Abs(delta.x) >= snapDistance)
+            {
+                position = Vector2.MoveTowards(position, new Vector3(destination.Value.x, position.y, position.z), slideSpeed);
+            }
+            else if (Mathf.Abs(delta.y) >= snapDistance)
+            {
+                position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), slideSpeed);
+            }
+
+            //Determine if Actor is close to destination
+            bool isSnapDistance = Vector2.Distance(position, destination.Value) <= snapDistance;
+            if (isSnapDistance)
+            {
+                //Snap to destination, clear destination, and set Actor MoveState: "Idle"
+                transform.position = destination.Value;
+                destination = null;
+            }
+
+            yield return Wait.OneTick();
+        }
+    }
+
+
     public void CheckActionBar()
     {
         //Check abort state
@@ -434,17 +484,15 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
 
-        if (actionWait == actionWaitMax)
-        {
-
-            Renderers.actionBar.color = Random.Color;
-            return;
-        }
-
         if (actionWait < actionWaitMax)
         {
             actionWait += Time.deltaTime;
             actionWait = Math.Clamp(actionWait, 0, actionWaitMax);
+        }
+        else
+        {
+
+            Renderers.CycleActionBarColor();
         }
 
         UpdateActionBar();
@@ -462,7 +510,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //Seconds remaining
         //Renderers.skillRadialText.Text = actionWait < actionWaitMax ? $"{Math.Round(actionWaitMax - actionWait)}" : "";
 
-      
+
 
     }
 
@@ -539,7 +587,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             //StartCoroutine(_());
             return;
         }
-            
+
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         var scale = new Vector3(

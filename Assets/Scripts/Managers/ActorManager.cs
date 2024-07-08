@@ -247,10 +247,7 @@ public class ActorManager : ExtendedMonoBehavior
                 //enemy.sortingOrder = ZAxis.Max;
                 enemy.SetAttackStrategy();
 
-                while (enemy.HasDestination)
-                {
-                    yield return Wait.OneTick();
-                }
+                yield return enemy.MoveToDestination();
 
                 enemy.targetPlayer = null;
                 yield return Wait.For(Interval.QuarterSecond);

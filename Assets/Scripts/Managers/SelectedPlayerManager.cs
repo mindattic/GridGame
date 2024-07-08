@@ -55,6 +55,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         cardManager.Set(focusedPlayer);
 
 
+        StartCoroutine(focusedPlayer.MoveToCursor());
         //MoveTowardCursor(focusedPlayer);
     }
 
@@ -111,6 +112,9 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         footstepManager.Start(selectedPlayer);
 
         timer.Set(scaleX: 1f, start: true);
+
+
+        StartCoroutine(selectedPlayer.MoveToCursor());
     }
 
     public void Unselect()

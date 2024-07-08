@@ -8,11 +8,13 @@ public class ActorRenderers
     public Color glowColor;
     public Color baseColor;
     public Color frameColor;
+    public Color healthBarColor;
+    public Color actionBarColor;
 
     public SpriteRenderer @base;
     public SpriteRenderer glow;
     public SpriteRenderer parallax;
-   
+
     public SpriteRenderer thumbnail;
     public SpriteRenderer frame;
 
@@ -44,7 +46,7 @@ public class ActorRenderers
         parallax.color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
 
         glowColor.a = Mathf.Clamp(alpha, 0, 0.25f);
-        glow.color = glowColor; 
+        glow.color = glowColor;
 
         thumbnail.color = new Color(1, 1, 1, alpha);
 
@@ -54,12 +56,17 @@ public class ActorRenderers
         statusIcon.color = new Color(1, 1, 1, alpha);
 
         healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
-        healthBar.color = new Color(1, 1, 1, alpha);
+
+
+        healthBarColor.a = alpha;
+        healthBar.color = healthBarColor;
         healthBarFront.color = new Color(1, 1, 1, alpha);
         healthText.color = new Color(1, 1, 1, alpha);
 
         actionBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
-        actionBar.color = new Color(1, 1, 1, alpha);
+
+        actionBarColor.a = alpha;
+        actionBar.color = actionBarColor;
         actionText.color = new Color(1, 1, 1, alpha);
 
         skillRadialBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
@@ -147,6 +154,59 @@ public class ActorRenderers
     public void SetParallaxMaterial(Material material)
     {
         parallax.material = material;
+    }
+
+
+    public void SetHealthBarColor()
+    {
+
+        healthBarColor = new Color(0f, 0.75f, 0.125f);
+        healthBar.color = actionBarColor;
+    }
+
+    public void SetHealthBarColor(Color color)
+    {
+
+        healthBarColor = color;
+        healthBar.color = actionBarColor;
+    }
+
+
+    public void SetActionBarColor()
+    {
+
+        actionBarColor = new Color(0, 0.35f, 0.75f);
+        actionBar.color = actionBarColor;
+    }
+
+    public void SetActionBarColor(Color color)
+    {
+
+        actionBarColor = color;
+        actionBar.color = actionBarColor;
+    }
+
+
+    float shiftSpeed = 0.01f;
+    float red = 0.5f;
+    float green = 0.5f;
+    float blue = 0.5f;
+    float amp = 1f;
+    float duration = 3f;
+
+    public void CycleActionBarColor()
+    {
+
+        //red = (Mathf.Sin(duration * Time.time) * amp) + 1 * 0.5f;
+        //green = (Mathf.Sin(duration * Time.time) * amp) + 1 * 0.5f;
+        //blue = (Mathf.Sin(duration * Time.time) * amp) + 1 * 0.5f;
+
+        red = Mathf.Clamp(Random.Float(), 0.75f, 1f);
+        green = Mathf.Clamp(Random.Float(), 0.75f, 1f);
+        blue = Mathf.Clamp(Random.Float(), 0.75f, 1f);
+
+        actionBarColor = new Color(red, green, blue, 1f);
+        actionBar.color = actionBarColor;
     }
 
 }
