@@ -6,54 +6,55 @@ using UnityEngine;
 
 public class SupportLineManager : ExtendedMonoBehavior
 {
+    //Variables
     [SerializeField] public GameObject supportLinePrefab;
-
     public List<SupportLineBehavior> supportLines = new List<SupportLineBehavior>();
-    private const string NameFormat = "SupportLine_{0)+{1}";
 
-    public bool HasPair(ActorPair pair)
+    public bool Exists(ActorPair pair)
     {
-        return supportLines.Any(x => 
-        (x.pair.actor1 == pair.actor1 && x.pair.actor2 == pair.actor2) 
-        || (x.pair.actor1 == pair.actor2 && x.pair.actor2 == pair.actor1));
+        var name = NameFormat.SupportLine(pair);
+        return supportLines.Count(x => x.name == name) > 0;
     }
 
     public void Spawn(ActorPair pair)
     {
-        if (HasPair(pair))
+        if (Exists(pair))
             return;
 
         var prefab = Instantiate(supportLinePrefab, Vector2.zero, Quaternion.identity);
-        var supportLine = prefab.GetComponent<SupportLineBehavior>();
+        SupportLineBehavior supportLine = prefab.GetComponent<SupportLineBehavior>();
         supportLines.Add(supportLine);
-        supportLine.name = NameFormat.Replace("{0}", pair.actor1.Name).Replace("{1}", pair.actor2.Name);
-        supportLine.parent = board.transform;
-        supportLine.pair = pair;
-        supportLine.Spawn();
+        supportLine.Spawn(pair);
     }
 
 
     public IEnumerator Despawn(ActorPair pair)
     {
-        var supportLine = supportLines.FirstOrDefault(x => x.pair == pair);
-        while (supportLine != null && supportLine.alpha > 0)
+        var list = supportLines.Where(x => x.name.Contains(pair.actor1.name) || x.name.Contains(pair.actor2.name)).ToList();
+        foreach (var x in list)
         {
-            yield return supportLine.Despawn();
-        }     
+            while (x.alpha > 0)
+            {
+                yield return x.Despawn();
+            }
+        }
+
     }
 
     public void DespawnAsync(ActorPair pair)
     {
-        var supportLine = supportLines.FirstOrDefault(x => x.pair == pair);
-        if (supportLine == null)
-            return;
+        var list = supportLines.Where(x => x.name.Contains(pair.actor1.name) || x.name.Contains(pair.actor2.name));
+        foreach (var x in list)
+        {
+            x.DespawnAsync();
+        }
 
-        supportLine.DespawnAsync();
+
     }
 
     public void Clear()
     {
-        supportLines.ForEach(x => x.DespawnAsync());
+        supportLines.ForEach(x => x.Destroy());
         supportLines.Clear();
 
         //IEnumerator _()

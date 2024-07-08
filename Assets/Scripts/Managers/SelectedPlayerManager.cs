@@ -49,7 +49,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         focusedPlayer = actor;
         focusedPlayer.sortingOrder = ZAxis.Max;
         focusedPlayer.Renderers.SetFocus(true);
-        //Assign mouse upperLeftOffset (how off center was selection)
+        //Assign mouse offset (how off center was selection)
         mouseOffset = focusedPlayer.position - mousePosition3D;
 
         cardManager.Set(focusedPlayer);
@@ -100,7 +100,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         soundSource.PlayOneShot(resourceManager.SoundEffect($"Select"));
 
-        //Clear bobbingCurve position
+        //Clear glowCurve position
         //ResetBobbing();
 
 

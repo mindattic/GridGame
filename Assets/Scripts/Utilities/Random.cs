@@ -9,7 +9,7 @@ static class Random
 
     public static int Int(int min, int max) => rng.Next(min, max + 1);
 
-    public static float Float(float min, float max) => (float)rng.NextDouble() * (max - min) + min;
+    public static float Float(float min = 0f, float max = 1f) => (float)rng.NextDouble() * (max - min) + min;
 
     public static float Percent => (float)rng.NextDouble();
 
@@ -32,6 +32,7 @@ static class Random
         }
     }
 
+    public static Color Color => new Color(Float(), Float(), Float(), 1f);
 
     public static AttackStrategy Strategy(params int[] ratios)
     {

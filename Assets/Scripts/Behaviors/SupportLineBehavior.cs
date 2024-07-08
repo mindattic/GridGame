@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.U2D;
 
 public class SupportLineBehavior : ExtendedMonoBehavior
 {
+    private const string NameFormat = "SupportLine_{0}+{1}";
+
     //Variables
-    public ActorPair pair;
     public float alpha = 0;
     private Vector3 start;
     private Vector3 end;
@@ -15,6 +17,7 @@ public class SupportLineBehavior : ExtendedMonoBehavior
     private Color baseColor = Colors.RGBA(48, 161, 49, 0);
     private Color color;
     private LineRenderer lineRenderer;
+
 
     #region Components
 
@@ -53,11 +56,10 @@ public class SupportLineBehavior : ExtendedMonoBehavior
         lineRenderer.endWidth = tileSize / 2;
     }
 
-
-    public void Spawn()
+    public void Spawn(ActorPair pair)
     {
-        if (pair == null)
-            return;
+        parent = board.transform;
+        name = NameFormat.Replace("{0}", pair.highestActor.name).Replace("{1}", pair.lowestActor.name);
 
         start = pair.highestActor.position;
         end = pair.lowestActor.position;

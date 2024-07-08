@@ -8,39 +8,28 @@ public class ActorBehavior : ExtendedMonoBehavior
 {
 
     //Variables
-    [SerializeField] public Archetype archetype;
-    [SerializeField] public Vector2Int location = Locations.Nowhere;
-    [SerializeField] public Vector3? destination = null;
-    [SerializeField] public Team team = Team.Independant;
-    [SerializeField] public Quality quality = Colors.Common;
-    [SerializeField] public float level;
-    [SerializeField] public float hp;
-    [SerializeField] public float maxHP;
-    [SerializeField] public float attack;
-    [SerializeField] public float defense;
-    [SerializeField] public float accuracy;
-    [SerializeField] public float evasion;
-    [SerializeField] public float speed;
-    [SerializeField] public float luck;
+    public Archetype archetype;
+    public Vector2Int location = Locations.Nowhere;
+    public Vector3? destination = null;
+    public Team team = Team.Independant;
+    public Quality quality = Colors.Common;
+    public float level;
+    public float hp;
+    public float maxHP;
+    public float attack;
+    public float defense;
+    public float accuracy;
+    public float evasion;
+    public float speed;
+    public float luck;
+    public float actionWait = 0;
+    public float actionWaitMax = -1;
+    public float skillWait = 0;
+    public float skillWaitMax = -1;
+    public int spawnTurn = -1;
+    [SerializeField] public AnimationCurve glowCurve;
+  
 
-    [SerializeField] public float actionWait = 0;
-    [SerializeField] public float actionWaitMax = -1;
-
-
-    [SerializeField] public float skillWait = 0;
-    [SerializeField] public float skillWaitMax = -1;
-
-
-    [SerializeField] public int spawnTurn = -1;
-
-    [SerializeField] public AnimationCurve flickeringCurve;
-    [SerializeField] public AnimationCurve bobbingCurve;
-    [SerializeField] public Guid guid;
-
-
-    [SerializeField] public float backScale = 1.4f;
-
-    public float RandomBob = Random.Float(0.5f, 1f);
     public ActorBehavior targetPlayer = null;
 
     public ActorHealthBar HealthBar;
@@ -53,9 +42,9 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void Awake()
     {
 
-        Renderers.back = gameObject.transform.GetChild(ActorLayer.Back).GetComponent<SpriteRenderer>();
-        Renderers.parallax = gameObject.transform.GetChild(ActorLayer.Parallax).GetComponent<SpriteRenderer>();
+        Renderers.@base = gameObject.transform.GetChild(ActorLayer.Base).GetComponent<SpriteRenderer>();
         Renderers.glow = gameObject.transform.GetChild(ActorLayer.Glow).GetComponent<SpriteRenderer>();
+        Renderers.parallax = gameObject.transform.GetChild(ActorLayer.Parallax).GetComponent<SpriteRenderer>();
         Renderers.thumbnail = gameObject.transform.GetChild(ActorLayer.Thumbnail).GetComponent<SpriteRenderer>();
         Renderers.frame = gameObject.transform.GetChild(ActorLayer.Frame).GetComponent<SpriteRenderer>();
         Renderers.statusIcon = gameObject.transform.GetChild(ActorLayer.StatusIcon).GetComponent<SpriteRenderer>();
@@ -98,7 +87,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         soundSource.PlayOneShot(resourceManager.SoundEffect($"Move{Random.Int(1, 6)}"));
 
         //Determine if two actors are occupying same location
-        var actor = actors.FirstOrDefault(x => x.IsPlaying && !x.Equals(this) && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
+        var actor = actors.FirstOrDefault(x => !x.Equals(this) && x.IsPlaying && !x.HasDestination && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
         if (actor != null)
         {
             actor.SwapLocation(this);
@@ -114,7 +103,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     //private float rotSpeed = 0.05f;
     //private bool isRising = true;
 
-    
+
     void FixedUpdate()
     {
         //Check abort state
@@ -187,11 +176,11 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         get
         {
-            return Renderers.back.sortingOrder;
+            return Renderers.@base.sortingOrder;
         }
         set
         {
-            Renderers.back.sortingOrder = value + ActorLayer.Back;
+            Renderers.@base.sortingOrder = value + ActorLayer.Base;
             Renderers.parallax.sortingOrder = value + ActorLayer.Parallax;
             Renderers.glow.sortingOrder = value;
             Renderers.thumbnail.sortingOrder = value + ActorLayer.Thumbnail;
@@ -218,7 +207,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsFocusedPlayer => HasFocusedPlayer && Equals(focusedPlayer);
     public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
     public bool HasLocation => location != Locations.Nowhere;
-    public bool IsMoving => destination.HasValue;
+    public bool HasDestination => destination.HasValue;
     public bool IsNorthEdge => location.y == 1;
     public bool IsEastEdge => location.x == board.columnCount;
     public bool IsSouthEdge => location.y == board.rowCount;
@@ -253,7 +242,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsSouthEastOf(Vector2Int other) => location.x == other.x + 1 && location.y == other.y + 1;
     public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(location, other).Equals(1);
 
-    public Direction AdjacentDirectionTo(ActorBehavior other)
+    public Direction GetAdjacentDirectionTo(ActorBehavior other)
     {
         if (!IsAdjacentTo(other.location)) return Direction.None;
         if (IsNorthOf(other.location)) return Direction.South;
@@ -264,145 +253,88 @@ public class ActorBehavior : ExtendedMonoBehavior
         return Direction.None;
     }
 
-    private Vector2Int GoNorth() => location += new Vector2Int(0, -1);
-    private Vector2Int GoEast() => location += new Vector2Int(1, 0);
-    private Vector2Int GoSouth() => location += new Vector2Int(0, 1);
-    private Vector2Int GoWest() => location += new Vector2Int(-1, 0);
-
-
-    private Vector2Int GoRandomDirection()
+    private Vector2Int SetLocation(Direction direction)
     {
-        return Random.Int(1, 4) switch
+        switch (direction)
         {
-            1 => GoNorth(),
-            2 => GoEast(),
-            3 => GoSouth(),
-            _ => GoWest(),
-        };
-    }
+            case Direction.North: location += new Vector2Int(0, -1); break;
+            case Direction.East: location += new Vector2Int(1, 0); break;
+            case Direction.South: location += new Vector2Int(0, 1); break;
+            case Direction.West: location += new Vector2Int(-1, 0); break;
+        }
 
-    private void GoToward(Vector2Int other)
-    {
-        if (IsNorthOf(other) || IsNorthWestOf(other) || IsNorthEastOf(other))
-            GoSouth();
-        else if (IsEastOf(other))
-            GoWest();
-        else if (IsSouthOf(other) || IsSouthWestOf(other) || IsSouthEastOf(other))
-            GoNorth();
-        else if (IsWestOf(other))
-            GoEast();
+        return location;
     }
-
 
     #endregion
 
-
-    public void Init(bool spawn)
+    public void Spawn(Vector2Int startLocation)
     {
-        transform.localScale = tileScale;
-        gameObject.SetActive(false);
-
-        if (spawn)
-            Spawn();
-    }
-
-
-    public void Spawn(Vector2Int? startLocation = null)
-    {
-        if (startLocation.HasValue)
-            location = startLocation.Value;
-
-        if (!HasLocation)
-            return;
-
+        Renderers.SetAlpha(0);
         gameObject.SetActive(true);
 
+        location = startLocation;
         position = Geometry.PositionFromLocation(location);
 
         if (IsPlayer)
         {
-            Renderers.SetBackColor(quality.Color);
+            Renderers.SetBaseColor(quality.Color);
+            Renderers.SetGlowColor(quality.Color);
             Renderers.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
             Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("PlayerParallax"));
-            Renderers.SetGlowColor(quality.Color);
             Renderers.SetFrameColor(Colors.Solid.White);
-            Renderers.SetAlpha(0);
             Renderers.actionBarBack.enabled = false;
             Renderers.actionBar.enabled = false;
         }
         else if (IsEnemy)
         {
-            Renderers.back.enabled = false;
-            //Renderers.SetBackColor(Colors.Solid.White);
+            Renderers.SetBaseAlpha(0);
+            Renderers.SetGlowAlpha(0);
             Renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
             Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
-            Renderers.SetGlowColor(Colors.Solid.White);
-            Renderers.SetGlowAlpha(0);
             Renderers.SetFrameColor(Colors.Solid.Red);
-            Renderers.SetAlpha(0);
-            CalculateActionWait();
+            AssignActionWait();
         }
 
-        CalculateSkillWait();
-        Renderers.back.transform.localScale = new Vector3(backScale, backScale, 1);
-
+        AssignSkillWait();  
         UpdateHealthBar();
 
-
-        float delay = turnManager.currentTurn == 1 ? 0 : Random.Float(0f, 2f);
-
-
-
-
-        IEnumerator SpawnIn(float delay = 0)
+        IEnumerator _()
         {
             float alpha = 0;
             Renderers.SetAlpha(alpha);
-            //Renderers.SetBackAlpha(alpha);
-            //Renderers.SetGlowAlpha(Mathf.Clamp(alpha, 0.25f, 0.5f));
 
-            yield return global::Wait.For(delay);
+            float delay = Random.Float(0f, 2f);
+            yield return Wait.For(delay);
 
             while (alpha < 1)
             {
                 alpha += Increment.OnePercent;
                 alpha = Mathf.Clamp(alpha, 0, 1);
                 Renderers.SetAlpha(alpha);
-                //Renderers.SetBackAlpha(alpha);
+                //Renderers.SetBaseAlpha(alpha);
                 //Renderers.SetGlowAlpha(Mathf.Clamp(alpha, 0.25f, 0.5f));
-                yield return global::Wait.OneTick();
+                yield return Wait.OneTick();
             }
-
-            Renderers.SetAlpha(1);
-            //Renderers.SetBackAlpha(0.5f);
         }
 
-
-
-
-
-
-
-
-
-        StartCoroutine(SpawnIn(delay));
-
+        StartCoroutine(_());
     }
 
     public void SwapLocation(ActorBehavior other)
     {
         //Check abort state
-        if (IsMoving)
+        if (HasDestination)
             return;
 
         if (IsNorthOf(other.location) || IsNorthWestOf(other.location) || IsNorthEastOf(other.location))
-            GoSouth();
+            SetLocation(Direction.South);
         else if (IsEastOf(other.location))
-            GoWest();
+            SetLocation(Direction.West);
         else if (IsSouthOf(other.location) || IsSouthWestOf(other.location) || IsSouthEastOf(other.location))
-            GoNorth();
+            SetLocation(Direction.North);
         else if (IsWestOf(other.location))
-            GoEast();
+            SetLocation(Direction.East);
 
         var closestTile = Geometry.ClosestTile(location);
         destination = closestTile.position;
@@ -471,21 +403,21 @@ public class ActorBehavior : ExtendedMonoBehavior
     private void CheckMovement()
     {
         //Check abort state
-        if (!IsMoving)
+        if (!HasDestination)
             return;
 
         var delta = destination.Value - position;
-        if (Mathf.Abs(delta.x) >= SnapDistance)
+        if (Mathf.Abs(delta.x) >= snapDistance)
         {
-            position = Vector2.MoveTowards(position, new Vector3(destination.Value.x, position.y, position.z), SlideSpeed);
+            position = Vector2.MoveTowards(position, new Vector3(destination.Value.x, position.y, position.z), slideSpeed);
         }
-        else if (Mathf.Abs(delta.y) >= SnapDistance)
+        else if (Mathf.Abs(delta.y) >= snapDistance)
         {
-            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), SlideSpeed);
+            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), slideSpeed);
         }
 
         //Determine if Actor is close to destination
-        bool isSnapDistance = Vector2.Distance(position, destination.Value) <= SnapDistance;
+        bool isSnapDistance = Vector2.Distance(position, destination.Value) <= snapDistance;
         if (isSnapDistance)
         {
             //Snap to destination, clear destination, and set Actor MoveState: "Idle"
@@ -498,8 +430,16 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void CheckActionBar()
     {
         //Check abort state
-        if (turnManager.IsEnemyTurn || (!turnManager.IsStartPhase && !turnManager.IsMovePhase) || !IsPlaying || actionWait == actionWaitMax)
+        if (!IsPlaying || turnManager.IsEnemyTurn || (!turnManager.IsStartPhase && !turnManager.IsMovePhase))
             return;
+
+
+        if (actionWait == actionWaitMax)
+        {
+
+            Renderers.actionBar.color = Random.Color;
+            return;
+        }
 
         if (actionWait < actionWaitMax)
         {
@@ -522,6 +462,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         //Seconds remaining
         //Renderers.skillRadialText.Text = actionWait < actionWaitMax ? $"{Math.Round(actionWaitMax - actionWait)}" : "";
 
+      
+
     }
 
     public void CheckSkillRadial()
@@ -537,8 +479,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void UpdateSkillRadial()
     {
-        var fill = 360 - (360 * (skillWait / skillWaitMax));
-        Renderers.skillRadial.material.SetFloat("_Arc2", fill);
+        //var fill = 360 - (360 * (skillWait / skillWaitMax));
+        //Renderers.skillRadial.material.SetFloat("_Arc2", fill);
+
+        var fill = (360 * (skillWait / skillWaitMax));
+        Renderers.skillRadial.material.SetFloat("_Arc1", fill);
         Renderers.skillRadialText.text = skillWait < skillWaitMax ? $"{Math.Round(skillWait / skillWaitMax * 100)}%" : "100%";
     }
 
@@ -553,15 +498,15 @@ public class ActorBehavior : ExtendedMonoBehavior
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         //var pos = new Vector3(
         //    transform.position.x,
-        //    transform.position.y + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 64)),
+        //    transform.position.y + (glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 64)),
         //    transform.position.z);
 
         //var rot = new Vector3(
         //   transform.Rotation.x,
         //   transform.Rotation.y ,
-        //   transform.Rotation.z + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 128)));
+        //   transform.Rotation.z + (glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 128)));
 
-        //Renderers.thumbnail.transform.Rotate(Vector3.up * bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 3));
+        //Renderers.thumbnail.transform.Rotate(Vector3.up * glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 3));
 
         //Renderers.glow.transform.position = pos;
         //Renderers.thumbnail.transform.position = pos;
@@ -575,30 +520,33 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         //Check abort state
         if (!IsPlaying || !turnManager.IsStartPhase || (turnManager.IsPlayerTurn && !IsPlayer) || (turnManager.IsEnemyTurn && !IsEnemy))
+        {
+
+            //IEnumerator _()
+            //{
+            //    var scale = Renderers.glow.transform.localScale;
+
+            //    while(scale.x > 1.0f || scale.y > 1.0f)
+            //    {
+            //        scale *= 0.99f;
+            //        Renderers.SetGlowScale(scale);
+            //        yield return Wait.OneTick();
+            //    }
+            //    scale = Vector3.one;
+            //    Renderers.SetGlowScale(scale);
+            //}
+
+            //StartCoroutine(_());
             return;
+        }
+            
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         var scale = new Vector3(
-            backScale + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 24)),
-            backScale + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 24)),
-            1);
-        Renderers.SetBackScale(scale);
-        Renderers.SetBackColor(IsPlayer ? quality.Color : Colors.Translucent.Black);
-
-
-
-
-    }
-
-
-    private void CheckFlicker()
-    {
-        //Check abort state
-        if (!IsPlaying || !turnManager.IsStartPhase || (turnManager.IsPlayerTurn && !IsPlayer) || (turnManager.IsEnemyTurn && !IsEnemy))
-            return;
-
-        var alpha = 0.5f + (bobbingCurve.Evaluate(Time.time % bobbingCurve.length) * (tileSize / 24));
-        Renderers.SetGlowAlpha(alpha);
+            1.0f + glowCurve.Evaluate(Time.time * gameSpeed % glowCurve.length),
+            1.0f + glowCurve.Evaluate(Time.time * gameSpeed % glowCurve.length),
+            1.0f);
+        Renderers.SetGlowScale(scale);
     }
 
     private void Shake(float intensity)
@@ -964,12 +912,12 @@ public class ActorBehavior : ExtendedMonoBehavior
                 alpha -= Increment.OnePercent;
                 alpha = Mathf.Clamp(alpha, 0, 1);
                 Renderers.SetGlowAlpha(alpha);
-                //Renderers.SetBackAlpha(alpha);
+                //Renderers.SetBaseAlpha(alpha);
                 yield return global::Wait.OneTick();
             }
 
             Renderers.SetGlowAlpha(0);
-            Renderers.SetBackAlpha(0);
+            Renderers.SetBaseAlpha(0);
             Destroy(gameObject);
             actors.Remove(this);
         }
@@ -977,11 +925,11 @@ public class ActorBehavior : ExtendedMonoBehavior
         StartCoroutine(_());
     }
 
-  
 
-   
 
-    public void CalculateActionWait()
+
+
+    public void AssignActionWait()
     {
         //Check abort state
         if (!IsPlaying)
@@ -996,7 +944,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         StartCoroutine(RadialBackFadeIn());
     }
 
-    public void CalculateSkillWait()
+    public void AssignSkillWait()
     {
         //Check abort state
         if (!IsPlaying)
@@ -1021,7 +969,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         UpdateActionBar();
     }
 
-  
+
 
     private GameObject GameObjectByLayer(int layer)
     {

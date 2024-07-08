@@ -8,6 +8,9 @@ using UnityEngine;
 public class ExtendedMonoBehavior : MonoBehaviour
 {
 
+
+    protected float gameSpeed => GameManager.instance.gameSpeed;
+
     //Canvases
     protected Canvas canvas2D => GameManager.instance.canvas2D;
     protected Canvas canvas3D => GameManager.instance.canvas3D;
@@ -53,9 +56,9 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //Layers
     protected static class ActorLayer
     {
-        public const int Back = 0;
-        public const int Parallax = 1;
-        public const int Glow = 2;
+        public const int Base = 0;
+        public const int Glow = 1;
+        public const int Parallax = 2;        
         public const int Thumbnail = 3;
         public const int Frame = 4;
         public const int StatusIcon = 5;
@@ -111,9 +114,9 @@ public class ExtendedMonoBehavior : MonoBehaviour
     }
 
     protected float CursorSpeed => GameManager.instance.cursorSpeed;
-    protected float SlideSpeed => GameManager.instance.slideSpeed;
+    protected float slideSpeed => GameManager.instance.slideSpeed;
     protected float BumpSpeed => GameManager.instance.bumpSpeed;
-    protected float SnapDistance => GameManager.instance.snapDistance;
+    protected float snapDistance => GameManager.instance.snapDistance;
 
 
     protected AttackParticipants attackParticipants

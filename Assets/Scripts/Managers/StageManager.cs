@@ -50,6 +50,7 @@ public class StageManager : ExtendedMonoBehavior
     {
 
         //Clear and clear variables
+        focusedPlayer = null;
         selectedPlayer = null;
         supportLineManager.Clear();
         attackLineManager.Clear();
@@ -235,11 +236,10 @@ public class StageManager : ExtendedMonoBehavior
         actor.Parent = board.transform;
         actor.archetype = stageActor.archetype;
         actor.name = stageActor.name;
-        actor.guid = Guid.NewGuid();
         actor.thumbnail = stageActor.thumbnail;
         actor.team = stageActor.team;
         actor.quality = stageActor.rarity;
-        actor.Renderers.SetBackColor(actor.IsPlayer ? Color.white : Color.red);
+        actor.Renderers.SetBaseColor(actor.IsPlayer ? Color.white : Color.red);
         actor.sortingOrder = ZAxis.Min;
 
         //Assign attributes
@@ -252,18 +252,17 @@ public class StageManager : ExtendedMonoBehavior
         actor.evasion = stageActor.attributes.Evasion;
         actor.speed = stageActor.attributes.Speed;
         actor.luck = stageActor.attributes.Luck;
+        actor.transform.localScale = tileScale;
 
         if (stageActor.IsSpawning)
-        {
-            actor.location = stageActor.location;
-            actor.Init(spawn: true);
+        {   
+            actor.Spawn(stageActor.location);
         }
         else
         {
             actor.spawnTurn = stageActor.spawnTurn;
-            actor.Init(spawn: false);
+            actor.gameObject.SetActive(false);
         }
-
 
         actors.Add(actor);
     }

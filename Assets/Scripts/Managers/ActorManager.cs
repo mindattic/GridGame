@@ -247,7 +247,7 @@ public class ActorManager : ExtendedMonoBehavior
                 //enemy.sortingOrder = ZAxis.Max;
                 enemy.SetAttackStrategy();
 
-                while (enemy.IsMoving)
+                while (enemy.HasDestination)
                 {
                     yield return Wait.OneTick();
                 }
@@ -285,7 +285,7 @@ public class ActorManager : ExtendedMonoBehavior
                         {
                             //yield return actionWait.For(Interval.HalfSecond);
 
-                            var direction = enemy.AdjacentDirectionTo(player);
+                            var direction = enemy.GetAdjacentDirectionTo(player);
                             yield return enemy.Bump(direction);
 
                             //TODO: Calculate based on attacker accuracy vs defender evasion
@@ -307,14 +307,14 @@ public class ActorManager : ExtendedMonoBehavior
 
                             //enemy.StopGlow();
                             //player.StopGlow();
-                            enemy.CalculateActionWait();
+                            enemy.AssignActionWait();
                         }
                     }
                     else
                     {
                         //enemy.SetStatus(Status.None);
                         //yield return enemy.MissAttack();
-                        enemy.CalculateActionWait();
+                        enemy.AssignActionWait();
                     }
                 }
             }

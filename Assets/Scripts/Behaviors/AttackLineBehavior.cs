@@ -1,14 +1,13 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Game.Behaviors
 {
     public class AttackLineBehavior : ExtendedMonoBehavior
     {
+        private const string NameFormat = "AttackLine_{0}+{1}";
+
         //Variables
-        public ActorPair pair;
         public float alpha = 0;
         private Vector3 start;
         private Vector3 end;
@@ -17,7 +16,7 @@ namespace Game.Behaviors
         private Color baseColor = Colors.RGBA(100, 195, 200, 0);
         private Color color;
         private LineRenderer lineRenderer;
-    
+
         #region Components
 
         public Transform parent
@@ -38,11 +37,7 @@ namespace Game.Behaviors
             set => lineRenderer.sortingOrder = value;
         }
 
-        
-
         #endregion
-
-
 
 
         private void Awake()
@@ -58,11 +53,10 @@ namespace Game.Behaviors
             lineRenderer.endWidth = tileSize * thickness;
         }
 
-     
-        public void Spawn()
+        public void Spawn(ActorPair pair)
         {
-            if (pair == null)
-                return;
+            parent = board.transform;
+            name = NameFormat.Replace("{0}", pair.highestActor.name).Replace("{1}", pair.lowestActor.name);
 
             start = pair.highestActor.position;
             end = pair.lowestActor.position;

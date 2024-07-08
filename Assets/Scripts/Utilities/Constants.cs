@@ -171,3 +171,15 @@ public static class ZAxis
     public static int Half = 50;
     public static int Max = 100;
 }
+
+
+
+public static class NameFormat
+{
+    public static string AttackLine(ActorPair pair) 
+        => "AttackLine_{0}+{1}".Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
+
+    public static string SupportLine(ActorPair pair) 
+        => "SupportLine_{0}+{1}".Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
+
+}

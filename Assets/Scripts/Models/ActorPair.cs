@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 public class ActorPair
 {
@@ -7,7 +8,7 @@ public class ActorPair
     public ActorBehavior actor2;
     public Axis axis;
     public Alignment alignment = new Alignment();
-
+ 
     //Properties
     public ActorBehavior highestActor
     {
@@ -47,7 +48,6 @@ public class ActorPair
     public float floor => axis == Axis.Vertical ? lowestActor.location.y : lowestActor.location.x;
 
 
-    public bool isValid => actor1 != null && actor2 != null;
 
     public ActorPair(ActorBehavior actor1, ActorBehavior actor2, Axis axis)
     {

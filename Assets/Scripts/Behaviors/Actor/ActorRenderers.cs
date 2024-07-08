@@ -6,12 +6,13 @@ public class ActorRenderers
     public ActorRenderers() { }
 
     public Color glowColor;
-    public Color backColor;
+    public Color baseColor;
     public Color frameColor;
 
-    public SpriteRenderer back;
+    public SpriteRenderer @base;
+    public SpriteRenderer glow;
     public SpriteRenderer parallax;
-    public SpriteRenderer glow; 
+   
     public SpriteRenderer thumbnail;
     public SpriteRenderer frame;
 
@@ -37,13 +38,13 @@ public class ActorRenderers
 
     public void SetAlpha(float alpha)
     {
-        backColor.a = Mathf.Clamp(alpha, 0, 0.7f);
-        back.color = new Color(backColor.r, backColor.g, backColor.b, backColor.a);
+        baseColor.a = Mathf.Clamp(alpha, 0, 0.7f);
+        @base.color = baseColor;
 
-        parallax.color = new Color(backColor.r, backColor.g, backColor.b, alpha);
+        parallax.color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
 
         glowColor.a = Mathf.Clamp(alpha, 0, 0.25f);
-        glow.color = new Color(glowColor.r, glowColor.g, glowColor.b, glowColor.a); 
+        glow.color = glowColor; 
 
         thumbnail.color = new Color(1, 1, 1, alpha);
 
@@ -61,51 +62,69 @@ public class ActorRenderers
         actionBar.color = new Color(1, 1, 1, alpha);
         actionText.color = new Color(1, 1, 1, alpha);
 
-        skillRadialBack.color = new Color(0, 0, 0, Mathf.Clamp(alpha, 0, 0.5f));
-        skillRadial.color = new Color(1, 1, 1, alpha);
+        skillRadialBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        skillRadial.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.5f));
         skillRadialText.color = new Color(1, 1, 1, alpha);
 
         selection.color = new Color(1, 1, 1, alpha);
     }
 
-    public void SetBackColor(Color color)
+    public void SetBaseColor(Color color)
     {
-        backColor = new Color(color.r, color.g, color.b, color.a);
-        this.back.color = backColor;
+        baseColor = new Color(color.r, color.g, color.b, color.a);
+        this.@base.color = baseColor;
     }
 
-    public void SetBackAlpha(float alpha)
+    public void SetBaseAlpha(float alpha)
     {
-        backColor.a = Mathf.Clamp(alpha, 0, 0.5f);
-        this.back.color = backColor;
+        baseColor.a = Mathf.Clamp(alpha, 0, 0.5f);
+        this.@base.color = baseColor;
     }
 
-    public void SetBackScale(Vector3 scale)
+    public void SetBaseScale(Vector3 scale)
     {
-        this.back.transform.localScale = scale;
+        this.@base.transform.localScale = scale;
     }
 
     public void SetGlowColor(Color color)
     {
-        glowColor = color;
-        this.glow.color = color;
-
-        var intensity = (glowColor.r + glowColor.g + glowColor.b) / 3f;
-        var factor = 1f / intensity;
-        var emissionColor = new Color(glowColor.r * factor, glowColor.g * factor, glowColor.b * factor, glowColor.a);
-        this.glow.material.SetColor("_EmissionColor", emissionColor);
+        glowColor = new Color(color.r, color.g, color.b, color.a);
+        this.glow.color = glowColor;
     }
 
     public void SetGlowAlpha(float alpha)
     {
-        glowColor.a = alpha;
-        this.glow.color = glowColor;
-
-        var intensity = (glowColor.r + glowColor.g + glowColor.b) / 3f;
-        var factor = 1f / intensity;
-        var emissionColor = new Color(glowColor.r * factor, glowColor.g * factor, glowColor.b * factor, alpha);
-        this.glow.material.SetColor("_EmissionColor", emissionColor);
+        glowColor.a = Mathf.Clamp(alpha, 0, 0.5f);
+        this.glow.color = baseColor;
     }
+
+    public void SetGlowScale(Vector3 scale)
+    {
+        this.glow.transform.localScale = scale;
+    }
+
+
+    //public void SetBloomColor(Color color)
+    //{
+    //    bloomColor = color;
+    //    this.bloom.color = color;
+
+    //    var intensity = (bloomColor.r + bloomColor.g + bloomColor.b) / 3f;
+    //    var factor = 1f / intensity;
+    //    var emissionColor = new Color(bloomColor.r * factor, bloomColor.g * factor, bloomColor.b * factor, bloomColor.a);
+    //    this.bloom.material.SetColor("_EmissionColor", emissionColor);
+    //}
+
+    //public void SetBloomAlpha(float alpha)
+    //{
+    //    bloomColor.a = alpha;
+    //    this.bloom.color = bloomColor;
+
+    //    var intensity = (bloomColor.r + bloomColor.g + bloomColor.b) / 3f;
+    //    var factor = 1f / intensity;
+    //    var emissionColor = new Color(bloomColor.r * factor, bloomColor.g * factor, bloomColor.b * factor, alpha);
+    //    this.bloom.material.SetColor("_EmissionColor", emissionColor);
+    //}
 
     public void SetFrameColor(Color color)
     {

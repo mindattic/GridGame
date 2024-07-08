@@ -13,8 +13,8 @@ public class Geometry
 
     public static Vector3 PositionFromLocation(Vector2Int location)
     {
-        float x = board.upperLeftOffset.x + (tileSize * location.x);
-        float y = board.upperLeftOffset.y + -(tileSize * location.y);
+        float x = board.offset.x + (tileSize * location.x);
+        float y = board.offset.y + -(tileSize * location.y);
         return new Vector3(x, y, 0);
     }
 
@@ -27,8 +27,8 @@ public class Geometry
 
     //public static Vector2Int LocationFromPosition(Vector3 location)
     //{
-    //    int x = Mathf.FloorToInt(location.x / tileSize - board.upperLeftOffset.x);
-    //    int y = Mathf.FloorToInt(location.y / tileSize - board.upperLeftOffset.y);
+    //    int x = Mathf.FloorToInt(location.x / tileSize - board.offset.x);
+    //    int y = Mathf.FloorToInt(location.y / tileSize - board.offset.y);
     //    return new Vector2Int(x, y);
     //}
 
@@ -74,11 +74,20 @@ public class Geometry
 
         return Direction.None;
     }
+
     public static Vector3 ClosestAttackPosition(ActorBehavior attacker, ActorBehavior other)
     {
         //Determine if already adjacent to player...
         if (IsAdjacentTo(attacker, other))
             return attacker.position;
+
+        //Swap position with target
+        return other.position;
+
+
+
+        /*
+
 
         //...Otherwise, Find closest unoccupied tile adjacent to player...
         var closestUnoccupiedAdjacentTile = ClosestUnoccupiedAdjacentTileByLocation(other.location);
@@ -101,6 +110,7 @@ public class Geometry
             return closestTile.position;
 
         return attacker.position;
+        */
     }
 
     public static TileBehavior ClosestUnoccupiedTileByLocation(Vector2Int other)

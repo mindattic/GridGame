@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1217694120567122767}
   - component: {fileID: 8715564105573050084}
   - component: {fileID: 1855390701985079410}
-  m_Layer: 11
+  m_Layer: 7
   m_Name: AttackLinePrefab
   m_TagString: AttackLine
   m_Icon: {fileID: 0}
@@ -144,4 +144,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47b883045a16f34999a81e7db4eceed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineRenderer: {fileID: 0}
+  alpha: 0
