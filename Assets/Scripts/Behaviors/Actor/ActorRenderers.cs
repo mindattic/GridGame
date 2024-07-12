@@ -157,10 +157,10 @@ public class ActorRenderers
     }
 
 
-    public void SetHealthBarColor()
+    public void ResetHealthBarColor()
     {
 
-        healthBarColor = new Color(0f, 0.75f, 0.125f);
+        healthBarColor = Colors.HealthBar.Green;
         healthBar.color = actionBarColor;
     }
 
@@ -172,10 +172,10 @@ public class ActorRenderers
     }
 
 
-    public void SetActionBarColor()
+    public void ResetActionBarColor()
     {
 
-        actionBarColor = new Color(0, 0.35f, 0.75f);
+        actionBarColor = Colors.ActionBar.Blue;
         actionBar.color = actionBarColor;
     }
 
@@ -187,27 +187,39 @@ public class ActorRenderers
     }
 
 
-    float shiftSpeed = 0.01f;
-    float red = 0.5f;
-    float green = 0.5f;
-    float blue = 0.5f;
-    float amp = 1f;
-    float duration = 3f;
+    float timer = 0.0f;
+    ActionBarColorCycle cycle = ActionBarColorCycle.Phase1;
 
     public void CycleActionBarColor()
     {
+        const float duration = 0.1f;
+        timer += Time.deltaTime / duration;
 
-        //red = (Mathf.Sin(duration * Time.time) * amp) + 1 * 0.5f;
-        //green = (Mathf.Sin(duration * Time.time) * amp) + 1 * 0.5f;
-        //blue = (Mathf.Sin(duration * Time.time) * amp) + 1 * 0.5f;
+        switch (cycle)
+        {
+            case ActionBarColorCycle.Phase1: actionBarColor = Colors.ActionBar.Yellow; break;
+            case ActionBarColorCycle.Phase2: actionBarColor = Colors.ActionBar.Pink; break;
+            case ActionBarColorCycle.Phase3: actionBarColor = Colors.ActionBar.White; break;
+            case ActionBarColorCycle.Phase4: actionBarColor = Colors.ActionBar.Blue; break;
+        }
 
-        red = Mathf.Clamp(Random.Float(), 0.75f, 1f);
-        green = Mathf.Clamp(Random.Float(), 0.75f, 1f);
-        blue = Mathf.Clamp(Random.Float(), 0.75f, 1f);
+        if (timer >= 1f)
+        {
+            timer = 0f;
+            cycle = cycle.Next();
+        }
 
-        actionBarColor = new Color(red, green, blue, 1f);
         actionBar.color = actionBarColor;
     }
 
+}
+
+
+public enum ActionBarColorCycle
+{
+    Phase1,
+    Phase2,
+    Phase3,
+    Phase4
 }
 

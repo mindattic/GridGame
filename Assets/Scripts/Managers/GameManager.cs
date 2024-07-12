@@ -54,7 +54,8 @@ public class GameManager : Singleton<GameManager>
     public Vector3 mouseOffset;
 
     public float cursorSpeed;
-    public float slideSpeed;
+    public float swapSpeed;
+    public float moveSpeed;
     public float snapDistance;
     public float bumpSpeed;
 
@@ -82,7 +83,8 @@ public class GameManager : Singleton<GameManager>
         tileScale = new Vector2(tileSize, tileSize);
 
         cursorSpeed = tileSize / 2;
-        slideSpeed = tileSize / 4;
+        swapSpeed = tileSize / 4;
+        moveSpeed = tileSize / 6;
         bumpSpeed = tileSize / 14;
         snapDistance = tileSize / 8;
         shakeIntensity = new ShakeIntensity(tileSize);

@@ -6,48 +6,56 @@ namespace Game.Behaviors
 {
     public class ConsoleManager : ExtendedMonoBehavior
     {
-        private TextMeshProUGUI Label;
-        private FpsMonitor FpsMonitor = new FpsMonitor();
+        private TextMeshProUGUI console;
+        private FpsMonitor fpsMonitor = new FpsMonitor();
 
         #region Components
 
         public string Text
         {
-            get => Label.text;
-            set => Label.text = value;
+            get => console.text;
+            set => console.text = value;
         }
 
 
         public Color Color
         {
-            get => Label.color;
-            set => Label.color = value;
+            get => console.color;
+            set => console.color = value;
         }
 
         #endregion
 
         private void Awake()
         {
-            Label = GetComponent<TextMeshProUGUI>();
-            //Label.font = new Font("Consolas");
+            console = GetComponent<TextMeshProUGUI>();
+            //console.font = new Font("Consolas");
         }
 
         void Start()
         {
-            FpsMonitor.Start();
+            fpsMonitor.Start();
 
 
         }
 
         void Update()
         {
-            FpsMonitor.Update();
+            fpsMonitor.Update();
         }
 
         private void FixedUpdate()
         {
-            string fps = $@"{FpsMonitor.Current}";
-            Label.text = $"{fps} FPS" + Environment.NewLine + $"Runtime: {Time.time}";
+            string fps = $@"{fpsMonitor.Current}";
+            string turn = turnManager.IsPlayerTurn ? "Player" : "Enemy";
+            string phase = turnManager.currentPhase.ToString();
+
+            console.text = ""
+                + $"{fps} FPS" + Environment.NewLine 
+                + $"Runtime: {Time.time}" + Environment.NewLine
+                + $"   Turn: {turn}" + Environment.NewLine
+                + $"  Phase: {phase}" + Environment.NewLine
+                + "";
 
 
             //string archetype = HasSelectedPlayer ? focusedPlayer.archetype : "-";
@@ -78,7 +86,7 @@ namespace Game.Behaviors
             //string a13 = actors[13] != null ? $"{actors[13].name}: {actors[13].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
 
 
-            //Label.Text = a0 + a1+ a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10 + a11 + a12 + a13;
+            //console.Text = a0 + a1+ a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10 + a11 + a12 + a13;
 
         }
     }

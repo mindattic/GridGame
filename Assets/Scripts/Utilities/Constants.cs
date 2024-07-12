@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor.PackageManager;
+using UnityEngine;
 
 public static class Constants
 {
@@ -69,6 +70,10 @@ public static class Tag
 
 public static class Colors
 {
+
+   
+
+
     public static Color RGB(float r, float g, float b)
     {
         return new Color(
@@ -97,6 +102,21 @@ public static class Colors
         public static Color LightRed = RGB(255, 128, 128);
         public static Color Red = RGB(255, 0, 0);
         public static Color Green = RGB(0, 255, 0);
+    }
+
+    public static class HealthBar
+    {
+        public static Color Green = new Color(0f, 0.75f, 0.125f);
+
+    }
+
+    public static class ActionBar
+    {
+        public static Color Blue = new Color(0, 0.35f, 0.75f);
+        public static Color Yellow = Color.yellow;
+        public static Color Pink = RGB(100, 75, 80);
+        public static Color White = Color.white;
+
     }
 
     public static class Translucent
@@ -176,10 +196,10 @@ public static class ZAxis
 
 public static class NameFormat
 {
-    public static string AttackLine(ActorPair pair) 
+    public static string AttackLine(ActorPair pair)
         => "AttackLine_{0}+{1}".Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
 
-    public static string SupportLine(ActorPair pair) 
+    public static string SupportLine(ActorPair pair)
         => "SupportLine_{0}+{1}".Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
 
 }

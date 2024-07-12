@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class ActorBehavior : ExtendedMonoBehavior
 {
@@ -201,7 +202,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
     }
 
-    public TileBehavior CurrentTile => tiles.First(x => x.location.Equals(location));
+    public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
     public bool IsPlayer => team.Equals(Team.Player);
     public bool IsEnemy => team.Equals(Team.Enemy);
     public bool IsFocusedPlayer => HasFocusedPlayer && Equals(focusedPlayer);
@@ -284,7 +285,6 @@ public class ActorBehavior : ExtendedMonoBehavior
             Renderers.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
             Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("PlayerParallax"));
             Renderers.SetFrameColor(Colors.Solid.White);
-            Renderers.SetHealthBarColor();
             Renderers.actionBarBack.enabled = false;
             Renderers.actionBar.enabled = false;
         }
@@ -294,12 +294,12 @@ public class ActorBehavior : ExtendedMonoBehavior
             Renderers.SetGlowAlpha(0);
             Renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
             Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
-            Renderers.SetFrameColor(Colors.Solid.Red);
-            Renderers.SetHealthBarColor();
-            Renderers.SetActionBarColor();
+            Renderers.SetFrameColor(Colors.Solid.Red);      
+            Renderers.ResetActionBarColor();
             AssignActionWait();
         }
 
+        Renderers.ResetHealthBarColor();
         AssignSkillWait();
         UpdateHealthBar();
 
@@ -396,7 +396,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bottom, board.top);
 
         //Move selected player towards cursor
-        //position = Vector2.MoveTowards(position, cursorPosition, CursorSpeed);
+        //position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
 
         //Snap selected player to cursor
         position = cursorPosition;
@@ -411,11 +411,11 @@ public class ActorBehavior : ExtendedMonoBehavior
         var delta = destination.Value - position;
         if (Mathf.Abs(delta.x) >= snapDistance)
         {
-            position = Vector2.MoveTowards(position, new Vector3(destination.Value.x, position.y, position.z), slideSpeed);
+            position = Vector2.MoveTowards(position, new Vector3(destination.Value.x, position.y, position.z), swapSpeed);
         }
         else if (Mathf.Abs(delta.y) >= snapDistance)
         {
-            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), slideSpeed);
+            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), swapSpeed);
         }
 
         //Determine if Actor is close to destination
@@ -439,7 +439,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bottom, board.top);
 
             //Move selected player towards cursor
-            //position = Vector2.MoveTowards(position, cursorPosition, CursorSpeed);
+            //position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
 
             //Snap selected player to cursor
             position = cursorPosition;
@@ -456,11 +456,11 @@ public class ActorBehavior : ExtendedMonoBehavior
             var delta = destination.Value - position;
             if (Mathf.Abs(delta.x) >= snapDistance)
             {
-                position = Vector2.MoveTowards(position, new Vector3(destination.Value.x, position.y, position.z), slideSpeed);
+                position = Vector2.MoveTowards(position, new Vector3(destination.Value.x, position.y, position.z), moveSpeed);
             }
             else if (Mathf.Abs(delta.y) >= snapDistance)
             {
-                position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), slideSpeed);
+                position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), moveSpeed);
             }
 
             //Determine if Actor is close to destination
@@ -472,7 +472,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                 destination = null;
             }
 
-            yield return Wait.OneTick();
+            yield return Wait.None();
         }
     }
 
@@ -591,15 +591,15 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         var scale = new Vector3(
-            1.0f + glowCurve.Evaluate(Time.time * gameSpeed % glowCurve.length),
-            1.0f + glowCurve.Evaluate(Time.time * gameSpeed % glowCurve.length),
+            1.5f + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
+            1.5f + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
             1.0f);
         Renderers.SetGlowScale(scale);
     }
 
     private void Shake(float intensity)
     {
-        gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position = CurrentTile.position;
+        gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position = currentTile.position;
 
         if (intensity > 0)
         {
@@ -624,7 +624,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                 case BumpStage.Start:
                     {
                         sortingOrder = ZAxis.Max;
-                        position = CurrentTile.position;
+                        position = currentTile.position;
                         destination = Geometry.GetDirectionalPosition(position, direction, range);
                         stage = BumpStage.MoveToward;
 
@@ -634,16 +634,16 @@ public class ActorBehavior : ExtendedMonoBehavior
                 case BumpStage.MoveToward:
                     {
                         var delta = destination - position;
-                        if (Mathf.Abs(delta.x) > BumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), BumpSpeed);
-                        else if (Mathf.Abs(delta.y) > BumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), BumpSpeed);
+                        if (Mathf.Abs(delta.x) > bumpSpeed)
+                            position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), bumpSpeed);
+                        else if (Mathf.Abs(delta.y) > bumpSpeed)
+                            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), bumpSpeed);
 
-                        var isSnapDistance = Vector2.Distance(position, destination) <= BumpSpeed;
+                        var isSnapDistance = Vector2.Distance(position, destination) <= bumpSpeed;
                         if (isSnapDistance)
                         {
                             position = destination;
-                            destination = CurrentTile.position;
+                            destination = currentTile.position;
                             stage = BumpStage.MoveAway;
                         }
                     }
@@ -652,16 +652,16 @@ public class ActorBehavior : ExtendedMonoBehavior
                 case BumpStage.MoveAway:
                     {
                         var delta = destination - position;
-                        if (Mathf.Abs(delta.x) > BumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), BumpSpeed);
-                        else if (Mathf.Abs(delta.y) > BumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), BumpSpeed);
+                        if (Mathf.Abs(delta.x) > bumpSpeed)
+                            position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), bumpSpeed);
+                        else if (Mathf.Abs(delta.y) > bumpSpeed)
+                            position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), bumpSpeed);
 
-                        var isSnapDistance = Vector2.Distance(position, destination) <= BumpSpeed;
+                        var isSnapDistance = Vector2.Distance(position, destination) <= bumpSpeed;
                         if (isSnapDistance)
                         {
                             position = destination;
-                            destination = CurrentTile.position;
+                            destination = currentTile.position;
                             stage = BumpStage.End;
                         }
                     }
@@ -709,7 +709,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         Shake(shakeIntensity.Stop);
         hp = remainingHP;
-        position = CurrentTile.position;
+        position = currentTile.position;
     }
 
     public IEnumerator TakeDamage(float damage)
@@ -743,7 +743,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         Shake(shakeIntensity.Stop);
         hp = remainingHP;
-        position = CurrentTile.position;
+        position = currentTile.position;
     }
 
 
@@ -836,7 +836,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         Renderers.SetAlpha(alpha);
 
         portraitManager.Dissolve(this);
-        soundSource.PlayOneShot(resourceManager.SoundEffect("Destroy"));
+        soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
         sortingOrder = ZAxis.Max;
 
         while (alpha > 0)
@@ -958,24 +958,18 @@ public class ActorBehavior : ExtendedMonoBehavior
             while (alpha > 0)
             {
                 alpha -= Increment.OnePercent;
-                alpha = Mathf.Clamp(alpha, 0, 1);
+                alpha = Mathf.Clamp(alpha, 0, 1);         
+                Renderers.SetBaseAlpha(alpha);
                 Renderers.SetGlowAlpha(alpha);
-                //Renderers.SetBaseAlpha(alpha);
-                yield return global::Wait.OneTick();
+                yield return Wait.OneTick();
             }
 
-            Renderers.SetGlowAlpha(0);
-            Renderers.SetBaseAlpha(0);
             Destroy(gameObject);
             actors.Remove(this);
         }
 
         StartCoroutine(_());
     }
-
-
-
-
 
     public void AssignActionWait()
     {
@@ -989,7 +983,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         actionWait = 0;
         actionWaitMax = Random.Float(min, max);
-        StartCoroutine(RadialBackFadeIn());
+
+        Renderers.ResetActionBarColor();
     }
 
     public void AssignSkillWait()

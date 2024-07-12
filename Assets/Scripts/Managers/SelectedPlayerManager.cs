@@ -67,7 +67,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         if (!HasSelectedPlayer)
         {
-            focusedPlayer.position = focusedPlayer.CurrentTile.position;
+            focusedPlayer.position = focusedPlayer.currentTile.position;
             focusedPlayer.sortingOrder = ZAxis.Min;
             //cardManager.Clear();
         }

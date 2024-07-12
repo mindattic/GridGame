@@ -113,9 +113,10 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.mouseOffset = value; }
     }
 
-    protected float CursorSpeed => GameManager.instance.cursorSpeed;
-    protected float slideSpeed => GameManager.instance.slideSpeed;
-    protected float BumpSpeed => GameManager.instance.bumpSpeed;
+    protected float cursorSpeed => GameManager.instance.cursorSpeed;
+    protected float swapSpeed => GameManager.instance.swapSpeed;
+    protected float moveSpeed => GameManager.instance.moveSpeed;
+    protected float bumpSpeed => GameManager.instance.bumpSpeed;
     protected float snapDistance => GameManager.instance.snapDistance;
 
 

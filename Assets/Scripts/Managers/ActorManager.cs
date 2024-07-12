@@ -101,7 +101,7 @@ public class ActorManager : ExtendedMonoBehavior
         {
             if (pair.alignment.hasEnemiesBetween
                 && !pair.alignment.hasPlayersBetween
-                && !pair.alignment.hasGapsBetween 
+                && !pair.alignment.hasGapsBetween
                 && !attackParticipants.HasAttackingPair(pair))
             {
                 attackParticipants.attackingPairs.Add(pair);
@@ -299,36 +299,40 @@ public class ActorManager : ExtendedMonoBehavior
                             {
                                 yield return enemy.MissAttack();
                             }
-
-
-
-                            //enemy.StopGlow();
-                            //player.StopGlow();
-                            enemy.AssignActionWait();
                         }
                     }
-                    else
-                    {
-                        //enemy.SetStatus(Status.None);
-                        //yield return enemy.MissAttack();
-                        enemy.AssignActionWait();
-                    }
+                }
+
+
+                foreach (var enemy in readyEnemies)
+                {
+                    enemy.AssignActionWait();
                 }
             }
 
-            var deadPlayers = actors.Where(x => x.IsDead);
 
-            //Dissolve dead enemies (one at a time)
-            foreach (var player in deadPlayers)
+
+
+
+            var deadPlayers = actors.Where(x => x.IsDead).ToList();
+            if (deadPlayers != null && deadPlayers.Count > 0)
             {
-                yield return player.Dissolve();
+                //Dissolve dead enemies (one at a time)
+                foreach (var player in deadPlayers)
+                {
+                    yield return player.Dissolve();
+                }
+
+                //Fade out (all at once)
+                foreach (var player in deadPlayers)
+                {
+                    player.Destroy();
+                }
             }
 
-            //Fade out (all at once)
-            foreach (var player in deadPlayers)
-            {
-                player.Destroy();
-            }
+
+
+
 
             turnManager.NextTurn();
         }
