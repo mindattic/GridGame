@@ -28,13 +28,18 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected PortraitManager portraitManager => GameManager.instance.portraitManager;
     protected OverlayManager overlayManager => GameManager.instance.overlayManager;
     protected TitleManager titleManager => GameManager.instance.titleManager;
-    protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
+ 
     protected CardManager cardManager => GameManager.instance.cardManager;
     protected SelectedPlayerManager selectedPlayerManager => GameManager.instance.selectedPlayerManager;
     protected PlayerManager playerManager => GameManager.instance.playerManager;
     protected EnemyManager enemyManager => GameManager.instance.enemyManager;
     protected TileManager tileManager => GameManager.instance.tileManager;
     protected FootstepManager footstepManager => GameManager.instance.footstepManager;
+    protected AudioManager audioManager => GameManager.instance.audioManager;
+
+    //UI
+    protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
+    protected LogManager logManager => GameManager.instance.logManager;
 
     //Audio
     protected AudioSource soundSource => GameManager.instance.soundSource;

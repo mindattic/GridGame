@@ -24,8 +24,7 @@ public class GameManager : Singleton<GameManager>
     public GhostManager ghostManager;
     public PortraitManager portraitManager;
     public OverlayManager overlayManager;
-    public TitleManager titleManager;
-    public ConsoleManager consoleManager;
+    public TitleManager titleManager; 
     public CardManager cardManager;
     public ActorManager actorManager;
     public SelectedPlayerManager selectedPlayerManager;
@@ -33,6 +32,12 @@ public class GameManager : Singleton<GameManager>
     public EnemyManager enemyManager;
     public TileManager tileManager;
     public FootstepManager footstepManager;
+    public AudioManager audioManager;
+
+
+    //UI Managers
+    public ConsoleManager consoleManager;
+    public LogManager logManager;
 
     //Audio
     public AudioSource soundSource;
@@ -104,8 +109,7 @@ public class GameManager : Singleton<GameManager>
         attackLineManager = GameObject.Find(Constants.Game).GetComponent<AttackLineManager>();
         damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
         ghostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>();
-        portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();
-        consoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>();
+        portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();     
         overlayManager = GameObject.Find(Constants.Overlay).GetComponent<OverlayManager>();
         titleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>();
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
@@ -114,6 +118,11 @@ public class GameManager : Singleton<GameManager>
         enemyManager = GameObject.Find(Constants.Game).GetComponent<EnemyManager>();
         tileManager = GameObject.Find(Constants.Game).GetComponent<TileManager>();
         footstepManager = GameObject.Find(Constants.Game).GetComponent<FootstepManager>();
+        audioManager = GameObject.Find(Constants.Game).GetComponent<AudioManager>();
+
+
+        consoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>();
+        logManager = GameObject.Find(Constants.Log).GetComponent<LogManager>();
 
         timer = GameObject.Find(Constants.Game).GetComponent<TimerBehavior>();
 

@@ -70,7 +70,7 @@ public class TurnManager : ExtendedMonoBehavior
             //players.Where(x => x.IsPlaying).ToList().ForEach(x => StartCoroutine(x.GlowOut()));
         }
 
-        soundSource.PlayOneShot(resourceManager.SoundEffect($"NextTurn"));
+        audioManager.Play("NextTurn");
     }
 
 

@@ -29,7 +29,7 @@ namespace Game.Behaviors
         private void Awake()
         {
             console = GetComponent<TextMeshProUGUI>();
-            //console.font = new Font("Consolas");
+            //log.font = new Font("Consolas");
         }
 
         void Start()
@@ -86,7 +86,7 @@ namespace Game.Behaviors
             //string a13 = actors[13] != null ? $"{actors[13].name}: {actors[13].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
 
 
-            //console.Text = a0 + a1+ a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10 + a11 + a12 + a13;
+            //log.Text = a0 + a1+ a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10 + a11 + a12 + a13;
 
         }
     }

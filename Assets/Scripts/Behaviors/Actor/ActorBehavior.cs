@@ -85,7 +85,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (closestTile.location.Equals(location))
             return;
 
-        soundSource.PlayOneShot(resourceManager.SoundEffect($"Move{Random.Int(1, 6)}"));
+        audioManager.Play($"Move{Random.Int(1, 6)}");
 
         //Determine if two actors are occupying same location
         var actor = actors.FirstOrDefault(x => !x.Equals(this) && x.IsPlaying && !x.HasDestination && !x.Equals(selectedPlayer) && x.location.Equals(closestTile.location));
@@ -340,7 +340,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         else if (IsWestOf(other.location))
             SetLocation(Direction.East);
 
-        soundSource.PlayOneShot(resourceManager.SoundEffect("Slide"));
+        audioManager.Play($"Slide");
+
         var closestTile = Geometry.ClosestTile(location);
         destination = closestTile.position;
         StartCoroutine(MoveToDestination());
@@ -701,8 +702,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             UpdateHealthBar();
 
-            //SlideIn sfx
-            soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
+            audioManager.Play($"Slash{Random.Int(1, 7)}");
 
             yield return Wait.For(Interval.FiveTicks);
         }
@@ -735,8 +735,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             UpdateHealthBar();
 
-            //SlideIn sfx
-            soundSource.PlayOneShot(resourceManager.SoundEffect($"Slash{Random.Int(1, 7)}"));
+            audioManager.Play($"Slash{Random.Int(1, 7)}");
 
             yield return Wait.For(Interval.FiveTicks);
         }

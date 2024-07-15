@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 
 
@@ -19,64 +18,137 @@ public class ResourceManager : ExtendedMonoBehavior
     [SerializeField] public List<SoundEffect> soundEffects = new List<SoundEffect>();
     [SerializeField] public List<MusicTrack> musicTracks = new List<MusicTrack>();
 
-
-    void Awake() { }
-    void Start() { }
-    void Update() { }
-    void FixedUpdate() { }
-
     public Sprite ActorThumbnail(string id)
     {
-        return actorSprites.First(x => x.id.Equals(id)).thumbnail;
+        try
+        {
+            return actorSprites.First(x => x.id.Equals(id)).thumbnail;
+        }
+        catch (Exception ex)
+        {
+            logManager.error(ex.Message);
+        }
+
+        return null;
     }
 
 
     public Material ActorMaterial(string id)
     {
-        return actorMaterials.First(x => x.id.Equals(id)).material;
+        try
+        {
+            return actorMaterials.First(x => x.id.Equals(id)).material;
+        }
+        catch (Exception ex)
+        {
+            logManager.error(ex.Message);
+        }
+
+        return null;
     }
 
     public Sprite ActorPortrait(string id)
     {
-        return actorSprites.First(x => x.id.Equals(id)).portrait;
+        try
+        {
+            return actorSprites.First(x => x.id.Equals(id)).portrait;
+        }
+        catch (Exception ex)
+        {
+            logManager.error(ex.Message);
+        }
+
+        return null;
     }
 
     public string ActorDetails(string id)
     {
-        var details = actorDetails.FirstOrDefault(x => x.id.Equals(id))?.details ?? null;
-        if (details != null)
-            return details;
+        try
+        {
+            var details = actorDetails.FirstOrDefault(x => x.id.Equals(id))?.details ?? null;
+            if (details != null)
+                return details;
+        }
+        catch (Exception ex)
+        {
+            logManager.error(ex.Message);
+        }
 
-        return "";
+        return null;
     }
 
     public Sprite Prop(string id)
     {
-        return propSprites.First(x => x.id.Equals(id)).sprite;
+        try
+        {
+            return propSprites.First(x => x.id.Equals(id)).sprite;
+        }
+        catch (Exception ex)
+        {
+            logManager.error(ex.Message);
+        }
+
+        return null;
     }
 
 
     public Sprite Seamless(string id)
     {
-        return seamLessSprites.First(x => x.id.Equals(id)).sprite;
+        try
+        {
+            return seamLessSprites.First(x => x.id.Equals(id)).sprite;
+        }
+        catch (Exception ex)
+        {
+            logManager.error(ex.Message);
+        }
+
+        return null;
     }
 
 
     public Sprite StatusThumbnail(string id)
     {
-        return statusSprites.First(x => x.id.Equals(id)).thumbnail;
+        try
+        {
+            return statusSprites.First(x => x.id.Equals(id)).thumbnail;
+        }
+        catch (Exception ex)
+        {
+            logManager.error(ex.Message);
+        }
+
+        return null;
     }
 
 
     public AudioClip SoundEffect(string id)
     {
-        return soundEffects.First(x => x.id.Equals(id)).audio;
+        try
+        {
+            return soundEffects.First(x => x.id.Equals(id)).audio;
+        }
+        catch (Exception ex)
+        {
+            logManager.error(ex.Message);
+        }
+
+        return null;
     }
 
 
     public AudioClip MusicTrack(string id)
     {
-        return musicTracks.First(x => x.id.Equals(id)).audio;
+        try
+        {
+            return musicTracks.First(x => x.id.Equals(id)).audio;
+        }
+        catch (Exception ex)
+        {
+            logManager.error(ex.Message);
+        }
+
+        return null;
     }
 
 

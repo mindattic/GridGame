@@ -132,7 +132,7 @@ public class ActorManager : ExtendedMonoBehavior
 
         yield return Wait.For(Interval.QuarterSecond);
 
-        soundSource.PlayOneShot(resourceManager.SoundEffect("Portrait"));
+        audioManager.Play("Portrait");
         var first = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
         var second = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
         var direction1 = pair.actor1 == pair.highestActor ? first : second;

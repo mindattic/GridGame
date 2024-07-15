@@ -99,14 +99,14 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         actors.ForEach(x => x.sortingOrder = ZAxis.Min);
         selectedPlayer.sortingOrder = ZAxis.Max;
 
-        soundSource.PlayOneShot(resourceManager.SoundEffect($"Select"));
+        audioManager.Play("Select");
 
         //Clear glowCurve position
         //ResetBobbing();
 
 
 
-        
+
 
         ghostManager.Start(selectedPlayer);
         footstepManager.Start(selectedPlayer);
