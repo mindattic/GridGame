@@ -835,7 +835,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         Renderers.SetAlpha(alpha);
 
         portraitManager.Dissolve(this);
-        soundSource.PlayOneShot(resourceManager.SoundEffect("Death"));
+        audioManager.Play("Death");
         sortingOrder = ZAxis.Max;
 
         while (alpha > 0)
