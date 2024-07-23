@@ -26,7 +26,7 @@ public class GhostManager : ExtendedMonoBehavior
 
     public void Start(ActorBehavior actor)
     {
-        if (actor == null || actor.IsDead || actor.IsInactive)
+        if (actor == null || actor.IsDying || actor.IsInactive)
             return;
 
         this.actor = actor;
@@ -41,7 +41,7 @@ public class GhostManager : ExtendedMonoBehavior
 
     void Update()
     {
-        if (actor == null || actor.IsDead || actor.IsInactive)
+        if (actor == null || actor.IsDying || actor.IsInactive)
             return;
 
         var distance = Vector3.Distance(actor.position, previousPosition);

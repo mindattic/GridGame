@@ -65,9 +65,9 @@ public class GhostBehavior : ExtendedMonoBehavior
         this.Renderers.frame.enabled = false;
 
         this.Renderers.thumbnail.size = new Vector2(tileSize, tileSize);
-        //this.Renderers.frame.size = new Vector2(tileSize, tileSize);
+        //this.SpriteRenderer.frame.size = new Vector2(tileSize, tileSize);
         this.Renderers.thumbnail.color = Colors.RGBA(255, 255, 255, 64);
-        //this.Renderers.frame.Color = Common.ColorRGBA(255, 255, 255, 100);
+        //this.SpriteRenderer.frame.Color = Common.ColorRGBA(255, 255, 255, 100);
         this.Position = actor.position;
         StartCoroutine(FadeOut());
     }

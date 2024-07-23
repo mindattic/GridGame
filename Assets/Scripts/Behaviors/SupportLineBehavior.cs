@@ -104,7 +104,7 @@ public class SupportLineBehavior : ExtendedMonoBehavior
             yield return Wait.OneTick();
         }
 
-        //DestroyAll(this.gameObject);
+        //Clear(this.gameObject);
     }
 
     public void DespawnAsync()

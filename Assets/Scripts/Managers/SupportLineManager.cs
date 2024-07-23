@@ -55,7 +55,7 @@ public class SupportLineManager : ExtendedMonoBehavior
 
     }
 
-    public void DestroyAll()
+    public void Clear()
     {
         supportLines.ForEach(x => Destroy(x.gameObject));
         supportLines.Clear();

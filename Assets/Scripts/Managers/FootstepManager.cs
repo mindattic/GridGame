@@ -31,7 +31,7 @@ public class FootstepManager : ExtendedMonoBehavior
 
     public void Start(ActorBehavior actor)
     {
-        if (actor == null || actor.IsDead || actor.IsInactive)
+        if (actor == null || actor.IsDying || actor.IsInactive)
             return;
 
         this.Actor = actor;
@@ -47,7 +47,7 @@ public class FootstepManager : ExtendedMonoBehavior
 
     void Update()
     {
-        if (Actor == null || Actor.IsDead || Actor.IsInactive)
+        if (Actor == null || Actor.IsDying || Actor.IsInactive)
             return;
 
         var distance = Vector3.Distance(Actor.position, PreviousPosition);

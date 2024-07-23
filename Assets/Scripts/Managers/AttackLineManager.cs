@@ -44,7 +44,7 @@ namespace Game.Behaviors
             attackLines.ForEach(x => x.DespawnAsync());
         }
 
-        public void DestroyAll()
+        public void Clear()
         {
             attackLines.ForEach(x => Destroy(x.gameObject));
             attackLines.Clear();

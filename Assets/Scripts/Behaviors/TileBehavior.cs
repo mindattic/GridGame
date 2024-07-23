@@ -67,7 +67,7 @@ public class TileBehavior : ExtendedMonoBehavior
 
     public void Start()
     {
-        transform.position = Geometry.PositionFromLocation(location);
+        transform.position = Geometry.GetPosition(location);
         transform.localScale = GameManager.instance.tileScale;
     }
 

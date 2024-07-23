@@ -117,7 +117,7 @@ namespace Game.Behaviors
             }
 
 
-            //DestroyAll(this.gameObject);
+            //Clear(this.gameObject);
         }
 
         public void DespawnAsync()

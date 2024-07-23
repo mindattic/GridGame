@@ -11,7 +11,7 @@ public class Geometry
     private static List<ActorBehavior> actors => GameManager.instance.actors;
     private static List<TileBehavior> tiles => GameManager.instance.tiles;
 
-    public static Vector3 PositionFromLocation(Vector2Int location)
+    public static Vector3 GetPosition(Vector2Int location)
     {
         float x = board.offset.x + (tileSize * location.x);
         float y = board.offset.y + -(tileSize * location.y);
@@ -37,7 +37,7 @@ public class Geometry
         return tiles.OrderBy(x => Vector3.Distance(x.transform.position, other)).First();
     }
 
-    public static TileBehavior ClosestTile(Vector2Int location)
+    public static TileBehavior GetClosestTile(Vector2Int location)
     {
         return tiles.OrderBy(x => Vector2Int.Distance(x.location, location)).First();
     }
@@ -105,7 +105,7 @@ public class Geometry
             return closestUnoccupiedTile.position;
 
         //...Otherwise, find closest tile to player
-        var closestTile = ClosestTile(other.location);
+        var closestTile = GetClosestTile(other.location);
         if (closestTile != null)
             return closestTile.position;
 

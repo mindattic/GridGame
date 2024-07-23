@@ -43,8 +43,8 @@ public class TurnManager : ExtendedMonoBehavior
         currentTeam = Team.Player;
         currentPhase = Phase.Start;
 
-        musicSource.Stop();
-        musicSource.PlayOneShot(resourceManager.MusicTrack($"MelancholyLull"));
+       //musicSource.Stop();
+        //musicSource.PlayOneShot(resourceManager.MusicTrack($"MelancholyLull"));
     }
 
     public void NextTurn()
@@ -53,8 +53,8 @@ public class TurnManager : ExtendedMonoBehavior
         currentPhase = Phase.Start;
   
         //DespawnAll attack variables
-        supportLineManager.DestroyAll();
-        attackLineManager.DestroyAll();
+        supportLineManager.Clear();
+        attackLineManager.Clear();
         combatParticipants.Clear();
 
         //Reset actors sorting
@@ -81,17 +81,17 @@ public class TurnManager : ExtendedMonoBehavior
     {
         combatParticipants.Clear();
 
-        var hasAlignedPlayers = AssignAlignedPlayers();
+        bool hasAlignedPlayers = AssignAlignedPlayers();
         if (!hasAlignedPlayers)
         {
-            turnManager.NextTurn();
+            NextTurn();
             return;
         }
 
-        var hasAttackParticipants = AssignAttackParticipants();
-        if (!hasAttackParticipants)
+        bool hasCombatParticipants = AssignCombatParticipants();
+        if (!hasCombatParticipants)
         {
-            turnManager.NextTurn();
+            NextTurn();
             return;
         }
 
@@ -124,7 +124,7 @@ public class TurnManager : ExtendedMonoBehavior
                 yield return PlayerAttack(pair);
             }
 
-            turnManager.NextTurn();
+            NextTurn();
         }
 
         StartCoroutine(_());
@@ -167,7 +167,7 @@ public class TurnManager : ExtendedMonoBehavior
     /// <summary>
     /// Method which is used to find actors surrounding enemies without gaps between
     /// </summary>
-    private bool AssignAttackParticipants()
+    private bool AssignCombatParticipants()
     {
         if (combatParticipants.alignedPairs.Count < 1)
             return false;
@@ -271,19 +271,13 @@ public class TurnManager : ExtendedMonoBehavior
             supportLineManager.DespawnAsync(pair);
         }
 
-        var deadEnemies = pair.alignment.enemies.Where(x => x.IsDead).ToList();
+        var deadEnemies = pair.alignment.enemies.Where(x => x.IsDying).ToList();
 
         //Dissolve dead enemies (one at a time)
         foreach (var enemy in deadEnemies)
         {
             yield return enemy.Dissolve();
         }
-
-        //Fade out (all at once)
-        //foreach (var enemy in deadEnemies)
-        //{
-        //    enemy.Destroy();
-        //}
 
         #endregion
 
@@ -298,7 +292,7 @@ public class TurnManager : ExtendedMonoBehavior
     public void CheckEnemySpawn()
     {
         //Check abort state
-        if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
+        if (!IsEnemyTurn || !IsStartPhase)
             return;
 
         var spawnableEnemies = enemies.Where(x => x.IsSpawnable).ToList();
@@ -311,13 +305,13 @@ public class TurnManager : ExtendedMonoBehavior
     public void CheckEnemyMove()
     {
         //Check abort state
-        if (!turnManager.IsEnemyTurn || !turnManager.IsStartPhase)
+        if (!IsEnemyTurn || !IsStartPhase)
             return;
 
         IEnumerator _()
         {
             //actors.ForEach(x => x.sortingOrder = SortingOrder.Min);
-            turnManager.currentPhase = TurnPhase.Move;
+            currentPhase = TurnPhase.Move;
 
             yield return Wait.For(Interval.HalfSecond);
             var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
@@ -332,7 +326,7 @@ public class TurnManager : ExtendedMonoBehavior
                 yield return Wait.For(Interval.QuarterSecond);
             }
 
-            turnManager.currentPhase = TurnPhase.Attack;
+            currentPhase = TurnPhase.Attack;
             CheckEnemyAttack();
         }
 
@@ -342,7 +336,7 @@ public class TurnManager : ExtendedMonoBehavior
     private void CheckEnemyAttack()
     {
         //Check abort state
-        if (!turnManager.IsEnemyTurn || !turnManager.IsAttackPhase)
+        if (!IsEnemyTurn || !IsAttackPhase)
             return;
 
         IEnumerator _()
@@ -393,7 +387,7 @@ public class TurnManager : ExtendedMonoBehavior
 
 
 
-            var deadPlayers = actors.Where(x => x.IsDead).ToList();
+            var deadPlayers = actors.Where(x => x.IsDying).ToList();
             if (deadPlayers != null && deadPlayers.Count > 0)
             {
                 //Dissolve dead enemies (one at a time)
@@ -403,17 +397,17 @@ public class TurnManager : ExtendedMonoBehavior
                 }
 
                 //Fade out (all at once)
-                foreach (var player in deadPlayers)
-                {
-                    player.Destroy();
-                }
+                //foreach (var player in deadPlayers)
+                //{
+                //    player.Destroy();
+                //}
             }
 
 
 
 
 
-            turnManager.NextTurn();
+            NextTurn();
         }
 
 

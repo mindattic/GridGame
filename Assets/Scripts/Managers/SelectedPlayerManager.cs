@@ -45,10 +45,10 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //TODO: Update Card display...
-        actors.ForEach(x => x.Renderers.SetFocus(false));
+        actors.ForEach(x => x.SpriteRenderer.SetSelectionActive(false));
         focusedPlayer = actor;
         focusedPlayer.sortingOrder = SortingOrder.Max;
-        focusedPlayer.Renderers.SetFocus(true);
+        focusedPlayer.SpriteRenderer.SetSelectionActive(true);
 
         //Assign mouse offset (how off center was selection)
         mouseOffset = focusedPlayer.position - mousePosition3D;
@@ -160,9 +160,9 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         foreach (var actor in actors)
         {
             if (actor == null || !actor.IsAlive || !actor.IsActive) continue;
-            actor.Renderers.glow.transform.position = actor.position;
-            actor.Renderers.thumbnail.transform.position = actor.position;
-            actor.Renderers.frame.transform.position = actor.position;
+            actor.SpriteRenderer.glow.transform.position = actor.position;
+            actor.SpriteRenderer.thumbnail.transform.position = actor.position;
+            actor.SpriteRenderer.frame.transform.position = actor.position;
         }
     }
 

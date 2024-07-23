@@ -5,13 +5,13 @@ public class ActorRenderers
 {
     public ActorRenderers() { }
 
-    public Color glowColor;
-    public Color baseColor;
-    public Color frameColor;
-    public Color healthBarColor;
-    public Color actionBarColor;
+    public Color glowColor = Colors.Solid.White;
+    public Color baseColor = Colors.Solid.White;
+    public Color frameColor = Colors.Solid.White;
+    public Color healthBarColor = Colors.HealthBar.Green;
+    public Color actionBarColor = Colors.ActionBar.Blue;
 
-    public SpriteRenderer @base;
+    public SpriteRenderer quality;
     public SpriteRenderer glow;
     public SpriteRenderer parallax;
 
@@ -41,7 +41,7 @@ public class ActorRenderers
     public void SetAlpha(float alpha)
     {
         baseColor.a = Mathf.Clamp(alpha, 0, 0.7f);
-        @base.color = baseColor;
+        quality.color = baseColor;
 
         parallax.color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
 
@@ -76,21 +76,16 @@ public class ActorRenderers
         selection.color = new Color(1, 1, 1, alpha);
     }
 
-    public void SetBaseColor(Color color)
+    public void SetQualityColor(Color color)
     {
         baseColor = new Color(color.r, color.g, color.b, color.a);
-        this.@base.color = baseColor;
+        quality.color = baseColor;
     }
 
-    public void SetBaseAlpha(float alpha)
+    public void SetQualityAlpha(float alpha)
     {
         baseColor.a = Mathf.Clamp(alpha, 0, 0.5f);
-        this.@base.color = baseColor;
-    }
-
-    public void SetBaseScale(Vector3 scale)
-    {
-        this.@base.transform.localScale = scale;
+        this.quality.color = baseColor;
     }
 
     public void SetGlowColor(Color color)
@@ -140,7 +135,7 @@ public class ActorRenderers
     }
 
 
-    public void SetFocus(bool isActive = true)
+    public void SetSelectionActive(bool isActive = true)
     {
         selection.gameObject.SetActive(isActive);
     }
@@ -157,12 +152,7 @@ public class ActorRenderers
     }
 
 
-    public void ResetHealthBarColor()
-    {
 
-        healthBarColor = Colors.HealthBar.Green;
-        healthBar.color = actionBarColor;
-    }
 
     public void SetHealthBarColor(Color color)
     {
@@ -171,17 +161,14 @@ public class ActorRenderers
         healthBar.color = actionBarColor;
     }
 
-
-    public void ResetActionBarColor()
+    public void SetActionBarEnabled(bool isEnabled)
     {
-
-        actionBarColor = Colors.ActionBar.Blue;
-        actionBar.color = actionBarColor;
+        actionBarBack.enabled = isEnabled;
+        actionBar.enabled = isEnabled;
     }
 
     public void SetActionBarColor(Color color)
     {
-
         actionBarColor = color;
         actionBar.color = actionBarColor;
     }
@@ -192,7 +179,7 @@ public class ActorRenderers
 
     public void CycleActionBarColor()
     {
-        const float duration = 0.1f;
+        const float duration = 0.2f;
         timer += Time.deltaTime / duration;
 
         switch (cycle)

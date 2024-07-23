@@ -61,7 +61,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //Layers
     protected static class ActorLayer
     {
-        public const int Base = 0;
+        public const int Quality = 0;
         public const int Glow = 1;
         public const int Parallax = 2;        
         public const int Thumbnail = 3;

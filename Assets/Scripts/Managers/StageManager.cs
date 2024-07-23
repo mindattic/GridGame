@@ -52,8 +52,8 @@ public class StageManager : ExtendedMonoBehavior
         //DespawnAll and clear variables
         focusedPlayer = null;
         selectedPlayer = null;
-        supportLineManager.DestroyAll();
-        attackLineManager.DestroyAll();
+        supportLineManager.Clear();
+        attackLineManager.Clear();
         turnManager.Reset();
         timer.Reset();
         actorManager.Clear();
@@ -239,7 +239,7 @@ public class StageManager : ExtendedMonoBehavior
         actor.thumbnail = stageActor.thumbnail;
         actor.team = stageActor.team;
         actor.quality = stageActor.rarity;
-        actor.Renderers.SetBaseColor(actor.IsPlayer ? Color.white : Color.red);
+        actor.SpriteRenderer.SetQualityColor(actor.IsPlayer ? Color.white : Color.red);
         actor.sortingOrder = SortingOrder.Min;
 
         //Assign attributes
