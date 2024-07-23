@@ -47,12 +47,15 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         //TODO: Update Card display...
         actors.ForEach(x => x.Renderers.SetFocus(false));
         focusedPlayer = actor;
-        focusedPlayer.sortingOrder = ZAxis.Max;
+        focusedPlayer.sortingOrder = SortingOrder.Max;
         focusedPlayer.Renderers.SetFocus(true);
+
         //Assign mouse offset (how off center was selection)
         mouseOffset = focusedPlayer.position - mousePosition3D;
 
         cardManager.Set(focusedPlayer);
+
+
 
 
         StartCoroutine(focusedPlayer.MoveToCursor());
@@ -68,8 +71,8 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!HasSelectedPlayer)
         {
             focusedPlayer.position = focusedPlayer.currentTile.position;
-            focusedPlayer.sortingOrder = ZAxis.Min;
-            //cardManager.Clear();
+            focusedPlayer.sortingOrder = SortingOrder.Min;
+            //cardManager.DespawnAll();
         }
 
         focusedPlayer = null;
@@ -96,12 +99,12 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         Unfocus();
         turnManager.currentPhase = TurnPhase.Move;
-        actors.ForEach(x => x.sortingOrder = ZAxis.Min);
-        selectedPlayer.sortingOrder = ZAxis.Max;
+        actors.ForEach(x => x.sortingOrder = SortingOrder.Min);
+        selectedPlayer.sortingOrder = SortingOrder.Max;
 
         audioManager.Play("Select");
 
-        //Clear glowCurve position
+        //DespawnAll glowCurve position
         //ResetBobbing();
 
 
@@ -111,7 +114,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         ghostManager.Start(selectedPlayer);
         footstepManager.Start(selectedPlayer);
 
-        timer.Set(scaleX: 1f, start: true);
+        timer.Restart();
 
 
         StartCoroutine(selectedPlayer.MoveToCursor());
@@ -136,7 +139,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         closestTile.spriteRenderer.color = Colors.Translucent.White;
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = closestTile.position;
-        selectedPlayer.sortingOrder = ZAxis.Min;
+        selectedPlayer.sortingOrder = SortingOrder.Min;
         selectedPlayer.SetStatus(Status.None);
         selectedPlayer = null;
 
@@ -145,10 +148,10 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         tileManager.Reset();
         cardManager.Clear();
-        timer.Set(scaleX: 0f, start: false);
+        timer.Empty();
         turnManager.currentPhase = TurnPhase.Attack;
 
-        actorManager.CheckPlayerAttack();
+        turnManager.CheckPlayerAttack();
     }
 
 

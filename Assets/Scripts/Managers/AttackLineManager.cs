@@ -15,7 +15,7 @@ namespace Game.Behaviors
         public bool Exists(ActorPair pair)
         {
             var name = NameFormat.AttackLine(pair);
-            return attackLines.Count(x => x.name == name) > 0;
+            return attackLines.Any(x => x.name == name);
         }
 
         public void Spawn(ActorPair pair)
@@ -30,18 +30,6 @@ namespace Game.Behaviors
 
         }
 
-        public IEnumerator Despawn(ActorPair pair)
-        {
-            var list = attackLines.Where(x => x.name.Contains(pair.actor1.name) || x.name.Contains(pair.actor2.name));
-            foreach (var x in list)
-            {
-                while (x.alpha > 0)
-                {
-                    yield return x.Despawn();
-                }
-            }
-        }
-
         public void DespawnAsync(ActorPair pair)
         {
             var list = attackLines.Where(x => x.name.Contains(pair.actor1.name) || x.name.Contains(pair.actor2.name));
@@ -51,25 +39,15 @@ namespace Game.Behaviors
             }
         }
 
-        public void Clear()
+        public void DespawnAll()
         {
-            attackLines.ForEach(x => x.Destroy());
+            attackLines.ForEach(x => x.DespawnAsync());
+        }
+
+        public void DestroyAll()
+        {
+            attackLines.ForEach(x => Destroy(x.gameObject));
             attackLines.Clear();
-            //IEnumerator _()
-            //{
-            //    foreach (var attackLine in attackLines)
-            //    {
-            //        while (attackLine != null && attackLine.alpha > 0)
-            //        {
-            //            yield return attackLine.Despawn();
-            //        }
-
-            //        attackLine.Destroy();
-            //    }
-            //    attackLines.Clear();
-            //}
-
-            //StartCoroutine(_());
         }
 
     }

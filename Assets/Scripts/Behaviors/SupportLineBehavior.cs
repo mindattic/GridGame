@@ -46,7 +46,7 @@ public class SupportLineBehavior : ExtendedMonoBehavior
     {
         lineRenderer = gameObject.GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
-        lineRenderer.sortingOrder = ZAxis.Min;
+        lineRenderer.sortingOrder = SortingOrder.Min;
     }
 
     void Start()
@@ -64,7 +64,7 @@ public class SupportLineBehavior : ExtendedMonoBehavior
         start = pair.highestActor.position;
         end = pair.lowestActor.position;
 
-        lineRenderer.sortingOrder = ZAxis.Half;
+        lineRenderer.sortingOrder = SortingOrder.SupportLine;
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
 
@@ -103,6 +103,8 @@ public class SupportLineBehavior : ExtendedMonoBehavior
 
             yield return Wait.OneTick();
         }
+
+        //DestroyAll(this.gameObject);
     }
 
     public void DespawnAsync()

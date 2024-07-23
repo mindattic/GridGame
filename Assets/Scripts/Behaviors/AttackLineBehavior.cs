@@ -44,7 +44,7 @@ namespace Game.Behaviors
         {
             lineRenderer = gameObject.GetComponent<LineRenderer>();
             lineRenderer.positionCount = 2;
-            lineRenderer.sortingOrder = ZAxis.Min;
+            lineRenderer.sortingOrder = SortingOrder.Min;
         }
 
         void Start()
@@ -72,7 +72,7 @@ namespace Game.Behaviors
                 end += new Vector3(-(tileSize / 2) + -(tileSize * 0.1f), 0, 0);
             }
 
-            //lineRenderer.sortingOrder = ZAxis.Half;
+            lineRenderer.sortingOrder = SortingOrder.AttackLine;
             lineRenderer.SetPosition(0, start);
             lineRenderer.SetPosition(1, end);
 
@@ -115,16 +115,14 @@ namespace Game.Behaviors
 
                 yield return Wait.OneTick();
             }
+
+
+            //DestroyAll(this.gameObject);
         }
 
         public void DespawnAsync()
         {
             StartCoroutine(Despawn());
-        }
-
-        public void Destroy()
-        {
-            Destroy(this.gameObject);
         }
 
 

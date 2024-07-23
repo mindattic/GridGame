@@ -49,18 +49,18 @@ public class StageManager : ExtendedMonoBehavior
     public void Load()
     {
 
-        //Clear and clear variables
+        //DespawnAll and clear variables
         focusedPlayer = null;
         selectedPlayer = null;
-        supportLineManager.Clear();
-        attackLineManager.Clear();
+        supportLineManager.DestroyAll();
+        attackLineManager.DestroyAll();
         turnManager.Reset();
-        timer.Set(scaleX: 1f, start: false);
+        timer.Reset();
         actorManager.Clear();
         //overlayManager.Show();
         titleManager.Print($"Stage {currentStage}", showOverlay: true);
 
-        //Clear existing actors
+        //DespawnAll existing actors
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
         actors.Clear();
 
@@ -240,7 +240,7 @@ public class StageManager : ExtendedMonoBehavior
         actor.team = stageActor.team;
         actor.quality = stageActor.rarity;
         actor.Renderers.SetBaseColor(actor.IsPlayer ? Color.white : Color.red);
-        actor.sortingOrder = ZAxis.Min;
+        actor.sortingOrder = SortingOrder.Min;
 
         //Assign attributes
         actor.level = stageActor.attributes.Level;

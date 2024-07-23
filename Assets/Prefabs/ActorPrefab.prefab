@@ -695,12 +695,12 @@ GameObject:
   - component: {fileID: 2772228459841442197}
   - component: {fileID: 8082881993169445759}
   m_Layer: 8
-  m_Name: Focused
+  m_Name: Selection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2772228459841442197
 Transform:
   m_ObjectHideFlags: 0
@@ -757,7 +757,7 @@ SpriteRenderer:
   m_SortingLayerID: 1438895807
   m_SortingLayer: 2
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: a2a7668aee0892c4bad9f679080176a0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c98baf8ad6f11604fa049a416c05ad7f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -765,7 +765,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &3237102041834732807

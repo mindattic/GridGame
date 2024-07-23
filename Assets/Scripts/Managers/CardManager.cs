@@ -65,7 +65,7 @@ namespace Game.Behaviors
             title.text = "";
             details.text = "";
 
-            //Clear selection from Actor
+            //DespawnAll selection from Actor
             actors.ForEach(x => x.Renderers.SetFocus(false));
         }
     }

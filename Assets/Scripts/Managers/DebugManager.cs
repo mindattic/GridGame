@@ -72,7 +72,6 @@ public class DebugManager : ExtendedMonoBehavior
 
         foreach (var pair in alignedPairs)
         {
-            //pair.sortingOrder = ZAxis.Max;
             supportLineManager.Spawn(pair);
         }
 

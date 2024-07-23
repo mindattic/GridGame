@@ -13,7 +13,7 @@ public class SupportLineManager : ExtendedMonoBehavior
     public bool Exists(ActorPair pair)
     {
         var name = NameFormat.SupportLine(pair);
-        return supportLines.Count(x => x.name == name) > 0;
+        return supportLines.Any(x => x.name == name);
     }
 
     public void Spawn(ActorPair pair)
@@ -38,7 +38,6 @@ public class SupportLineManager : ExtendedMonoBehavior
                 yield return x.Despawn();
             }
         }
-
     }
 
     public void DespawnAsync(ActorPair pair)
@@ -48,30 +47,17 @@ public class SupportLineManager : ExtendedMonoBehavior
         {
             x.DespawnAsync();
         }
-
-
     }
 
-    public void Clear()
+    public void DespawnAll()
     {
-        supportLines.ForEach(x => x.Destroy());
-        supportLines.Clear();
+        supportLines.ForEach(x => x.DespawnAsync());
 
-        //IEnumerator _()
-        //{
-        //    foreach (var supportLine in supportLines)
-        //    {
-        //        while (supportLine != null && supportLine.alpha > 0)
-        //        {
-        //            yield return supportLine.Despawn();
-        //        }
-
-        //        supportLine.Destroy();
-        //    }
-        //    supportLines.Clear();
-        //}
-
-        //StartCoroutine(_());
     }
 
+    public void DestroyAll()
+    {
+        supportLines.ForEach(x => Destroy(x.gameObject));
+        supportLines.Clear();
+    }
 }

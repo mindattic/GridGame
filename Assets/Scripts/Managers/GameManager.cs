@@ -34,7 +34,6 @@ public class GameManager : Singleton<GameManager>
     public FootstepManager footstepManager;
     public AudioManager audioManager;
 
-
     //UI Managers
     public ConsoleManager consoleManager;
     public LogManager logManager;
@@ -75,7 +74,7 @@ public class GameManager : Singleton<GameManager>
     public List<TileBehavior> tiles;
     public List<SupportLineBehavior> lines;
 
-    public AttackParticipants attackParticipants;
+    public CombatParticipants combatParticipants;
 
     public ShakeIntensity shakeIntensity;
 
@@ -119,8 +118,7 @@ public class GameManager : Singleton<GameManager>
         tileManager = GameObject.Find(Constants.Game).GetComponent<TileManager>();
         footstepManager = GameObject.Find(Constants.Game).GetComponent<FootstepManager>();
         audioManager = GameObject.Find(Constants.Game).GetComponent<AudioManager>();
-
-
+     
         consoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>();
         logManager = GameObject.Find(Constants.Log).GetComponent<LogManager>();
 
@@ -129,7 +127,7 @@ public class GameManager : Singleton<GameManager>
         soundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[Constants.SoundSourceIndex];
         musicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[Constants.MusicSourceIndex];
 
-        attackParticipants = new AttackParticipants();
+        combatParticipants = new CombatParticipants();
 
 
 

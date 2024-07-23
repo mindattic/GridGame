@@ -46,13 +46,27 @@ public class TimerBehavior : ExtendedMonoBehavior
         }
     }
 
-    public void Set(float scaleX = 1f, bool start = false)
+    public void Set(float scaleX, bool start)
     {
         spriteRenderer.transform.localScale = new Vector3(scaleX, Scale.y, Scale.z);
         timeRemaining = maxDuration;
         isRunning = start;
     }
 
+    public void Reset()
+    {
+        Set(scaleX: 1f, start: false);
+    }
+
+    public void Restart()
+    {
+        Set(scaleX: 1f, start: true);
+    }
+
+    public void Empty()
+    {
+        Set(scaleX: 0f, start: false);
+    }
 
     public void Pause()
     {

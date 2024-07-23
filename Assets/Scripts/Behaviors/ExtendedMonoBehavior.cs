@@ -36,7 +36,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected TileManager tileManager => GameManager.instance.tileManager;
     protected FootstepManager footstepManager => GameManager.instance.footstepManager;
     protected AudioManager audioManager => GameManager.instance.audioManager;
-
+ 
     //UI
     protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
     protected LogManager logManager => GameManager.instance.logManager;
@@ -125,10 +125,10 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected float snapDistance => GameManager.instance.snapDistance;
 
 
-    protected AttackParticipants attackParticipants
+    protected CombatParticipants combatParticipants
     {
-        get { return GameManager.instance.attackParticipants; }
-        set { GameManager.instance.attackParticipants = value; }
+        get { return GameManager.instance.combatParticipants; }
+        set { GameManager.instance.combatParticipants = value; }
     }
 
     protected ActorBehavior focusedPlayer

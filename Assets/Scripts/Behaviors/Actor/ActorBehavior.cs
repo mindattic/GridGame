@@ -3,7 +3,6 @@ using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class ActorBehavior : ExtendedMonoBehavior
 {
@@ -37,8 +36,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public ActorThumbnail Thumbnail;
     public ActorRenderers Renderers = new ActorRenderers();
 
-
-    public bool IsAttacking => attackParticipants.attackingPairs.Any(x => x.actor1 == this || x.actor2 == this);
+    public bool IsAttacking => combatParticipants.attackingPairs.Any(x => x.actor1 == this || x.actor2 == this);
 
     private void Awake()
     {
@@ -218,7 +216,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsActive => this != null && isActiveAndEnabled;
     public bool IsInactive => this == null || !isActiveAndEnabled;
     public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
-    public bool IsPlaying => IsAlive && IsActive;
+    public bool IsPlaying => IsActive && IsAlive;
     public bool IsReady => actionWait == actionWaitMax;
     public float LevelModifier => 1.0f + Random.Float(0, level * 0.01f);
     public float AttackModifier => 1.0f + Random.Float(0, attack * 0.01f);
@@ -294,11 +292,12 @@ public class ActorBehavior : ExtendedMonoBehavior
             Renderers.SetGlowAlpha(0);
             Renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
             Renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
-            Renderers.SetFrameColor(Colors.Solid.Red);      
+            Renderers.SetFrameColor(Colors.Solid.Red);
             Renderers.ResetActionBarColor();
             AssignActionWait();
         }
 
+        Renderers.SetFocus(false);
         Renderers.ResetHealthBarColor();
         AssignSkillWait();
         UpdateHealthBar();
@@ -624,7 +623,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             {
                 case BumpStage.Start:
                     {
-                        sortingOrder = ZAxis.Max;
+                        sortingOrder = SortingOrder.Max;
                         position = currentTile.position;
                         destination = Geometry.GetDirectionalPosition(position, direction, range);
                         stage = BumpStage.MoveToward;
@@ -670,7 +669,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case BumpStage.End:
                     {
-                        sortingOrder = ZAxis.Min;
+                        sortingOrder = SortingOrder.Min;
                         position = destination;
                     }
                     break;
@@ -836,7 +835,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         portraitManager.Dissolve(this);
         audioManager.Play("Death");
-        sortingOrder = ZAxis.Max;
+        sortingOrder = SortingOrder.Max;
 
         while (alpha > 0)
         {
@@ -845,6 +844,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             Renderers.SetAlpha(alpha);
             yield return Wait.OneTick();
         }
+
+        gameObject.SetActive(false);
     }
 
     public void SetStatus(Status icon)
@@ -957,7 +958,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             while (alpha > 0)
             {
                 alpha -= Increment.OnePercent;
-                alpha = Mathf.Clamp(alpha, 0, 1);         
+                alpha = Mathf.Clamp(alpha, 0, 1);
                 Renderers.SetBaseAlpha(alpha);
                 Renderers.SetGlowAlpha(alpha);
                 yield return Wait.OneTick();
