@@ -55,8 +55,10 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set => GameManager.instance.actors = value;
     }
 
-    protected List<ActorBehavior> players => GameManager.instance.actors.Where(x => x.team.Equals(Team.Player)).ToList();
-    protected List<ActorBehavior> enemies => GameManager.instance.actors.Where(x => x.team.Equals(Team.Enemy)).ToList();
+    //DEBUG: Should these be IQueryable<> instead of List<>?...
+    //https://medium.com/@shahrukhkhan_7802/understanding-the-differences-between-ienumerable-and-iqueryable-in-c-9dbc9ac145f3
+    protected IQueryable<ActorBehavior> players => GameManager.instance.actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
+    protected IQueryable<ActorBehavior> enemies => GameManager.instance.actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
 
     //Layers
     protected static class ActorLayer

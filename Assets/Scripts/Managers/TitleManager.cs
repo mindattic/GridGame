@@ -29,7 +29,7 @@ public class TitleManager : ExtendedMonoBehavior
     void Awake()
     {
         label = GameObject.Find(Constants.Title).GetComponent<TextMeshProUGUI>();
-        label.transform.localPosition = new Vector3(0, 0, 0);
+        label.transform.localPosition = new Vector3(0, 680, 0);
         label.color = new Color(1, 1, 1, 0);
     }
 

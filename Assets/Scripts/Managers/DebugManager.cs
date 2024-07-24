@@ -14,6 +14,8 @@ public class DebugManager : ExtendedMonoBehavior
     public void Run()
     {
         int index = Dropdown.value;
+        if (index < 1) 
+            return;
 
         switch (index)
         {
@@ -22,6 +24,7 @@ public class DebugManager : ExtendedMonoBehavior
             case 3: BumpTest(); break;
             case 4: SupportLineTest(); break;
             case 5: EnemyAttackTest(); break;
+            case 6: TitleTest(); break;
         }
     }
 
@@ -96,6 +99,11 @@ public class DebugManager : ExtendedMonoBehavior
         if (turnManager.IsPlayerTurn)
             turnManager.NextTurn();
 
+    }
+
+    public void TitleTest()
+    {
+        titleManager.Print(DateTime.UtcNow.Ticks.ToString());
     }
 
 }

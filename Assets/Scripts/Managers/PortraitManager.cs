@@ -42,7 +42,7 @@ public class PortraitManager : ExtendedMonoBehavior
 
     public void Dissolve()
     {
-        var actor = players[Random.Int(0, players.Count - 1)];
+        var actor = players.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
         Dissolve(actor);
     }
 

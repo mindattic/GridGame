@@ -93,39 +93,39 @@ public class GameManager : Singleton<GameManager>
         snapDistance = tileSize / 8;
         shakeIntensity = new ShakeIntensity(tileSize);
 
-        board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>();
+        board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>() ?? throw new UnityException("BoardBehavior is null");
 
-        canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>();
-        canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>();
-        cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>();
+        canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>() ?? throw new UnityException("Canvas2D is null");
+        canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>() ?? throw new UnityException("Canvas3D is null");
+        cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>() ?? throw new UnityException("CardManager is null");
 
-        resourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>();
-        stageManager = GameObject.Find(Constants.Game).GetComponent<StageManager>();
-        turnManager = GameObject.Find(Constants.Game).GetComponent<TurnManager>();
-        inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>();
-        actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
-        supportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>();
-        attackLineManager = GameObject.Find(Constants.Game).GetComponent<AttackLineManager>();
-        damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>();
-        ghostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>();
-        portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>();     
-        overlayManager = GameObject.Find(Constants.Overlay).GetComponent<OverlayManager>();
-        titleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>();
-        actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>();
-        selectedPlayerManager = GameObject.Find(Constants.Game).GetComponent<SelectedPlayerManager>();
-        playerManager = GameObject.Find(Constants.Game).GetComponent<PlayerManager>();
-        enemyManager = GameObject.Find(Constants.Game).GetComponent<EnemyManager>();
-        tileManager = GameObject.Find(Constants.Game).GetComponent<TileManager>();
-        footstepManager = GameObject.Find(Constants.Game).GetComponent<FootstepManager>();
-        audioManager = GameObject.Find(Constants.Game).GetComponent<AudioManager>();
+        resourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>() ?? throw new UnityException("ResourceManager is null"); 
+        stageManager = GameObject.Find(Constants.Game).GetComponent<StageManager>() ?? throw new UnityException("StageManager is null");
+        turnManager = GameObject.Find(Constants.Game).GetComponent<TurnManager>() ?? throw new UnityException("TurnManager is null");
+        inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>() ?? throw new UnityException("InputManager is null");
+        actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>() ?? throw new UnityException("ActorManager is null");
+        supportLineManager = GameObject.Find(Constants.Game).GetComponent<SupportLineManager>() ?? throw new UnityException("SupportLineManager is null");
+        attackLineManager = GameObject.Find(Constants.Game).GetComponent<AttackLineManager>() ?? throw new UnityException("AttackLineManager is null");
+        damageTextManager = GameObject.Find(Constants.Game).GetComponent<DamageTextManager>() ?? throw new UnityException("DamageTextManager is null");
+        ghostManager = GameObject.Find(Constants.Game).GetComponent<GhostManager>() ?? throw new UnityException("GhostManager is null");
+        portraitManager = GameObject.Find(Constants.Game).GetComponent<PortraitManager>() ?? throw new UnityException("PortraitManager is null");     
+        overlayManager = GameObject.Find(Constants.Overlay).GetComponent<OverlayManager>() ?? throw new UnityException("OverlayManager is null");
+        titleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>() ?? throw new UnityException("TitleManager is null");
+        actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>() ?? throw new UnityException("ActorManager is null");
+        selectedPlayerManager = GameObject.Find(Constants.Game).GetComponent<SelectedPlayerManager>() ?? throw new UnityException("SelectedPlayerManager is null");
+        playerManager = GameObject.Find(Constants.Game).GetComponent<PlayerManager>() ?? throw new UnityException("PlayerManager is null");
+        enemyManager = GameObject.Find(Constants.Game).GetComponent<EnemyManager>() ?? throw new UnityException("EnemyManager is null");
+        tileManager = GameObject.Find(Constants.Game).GetComponent<TileManager>() ?? throw new UnityException("TileManager is null");
+        footstepManager = GameObject.Find(Constants.Game).GetComponent<FootstepManager>() ?? throw new UnityException("FootstepManager is null");
+        audioManager = GameObject.Find(Constants.Game).GetComponent<AudioManager>() ?? throw new UnityException("AudioManager is null");
      
-        consoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>();
-        logManager = GameObject.Find(Constants.Log).GetComponent<LogManager>();
+        consoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>() ?? throw new UnityException("ConsoleManager is null");
+        logManager = GameObject.Find(Constants.Log).GetComponent<LogManager>() ?? throw new UnityException("LogManager is null");
 
-        timer = GameObject.Find(Constants.Game).GetComponent<TimerBehavior>();
+        timer = GameObject.Find(Constants.Game).GetComponent<TimerBehavior>() ?? throw new UnityException("TimerBehavior is null");
 
-        soundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[Constants.SoundSourceIndex];
-        musicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[Constants.MusicSourceIndex];
+        soundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");
+        musicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[Constants.MusicSourceIndex] ?? throw new UnityException("MusicSource is null");
 
         combatParticipants = new CombatParticipants();
 
