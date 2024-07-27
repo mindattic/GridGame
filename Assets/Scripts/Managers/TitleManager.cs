@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TitleManager : ExtendedMonoBehavior
 {
@@ -47,59 +46,91 @@ public class TitleManager : ExtendedMonoBehavior
 
     }
 
-    public void Print(string text, bool showOverlay = false)
-    {
-        label.text = text;
-        label.color = new Color(1, 1, 1, 0);
 
-        if (showOverlay)
+    public void Print(string text, Color color)
+    {
+        IEnumerator _()
         {
-            StartCoroutine(overlayManager.FadeInOut());
+            const float start = -90f;
+            const float end = 0f;
+            const float increment = 4f;
+
+            //Before...
+            float x = start;
+            transform.eulerAngles = new Vector3(x, 0, 0);
+            label.color = color;
+            label.text = text;
+
+            //During
+            while (x < 0)
+            {
+                x += increment;
+                x = Mathf.Clamp(x, -90f, 0f);
+                transform.eulerAngles = new Vector3(x, 0, 0);
+                yield return Wait.For(Interval.OneTick);
+            }
+
+            //After...
+            x = end;
+            transform.eulerAngles = new Vector3(x, 0, 0);
         }
-           
-        StartCoroutine(FadeInOut());
+
+        StartCoroutine(_());
     }
 
-    public IEnumerator FadeIn()
+    public void Print(string text)
     {
-        float alpha = 0f;
-        label.color = new Color(1f, 1f, 1f, alpha);
+        Print(text, Colors.Solid.White);
+    }
 
-        while (alpha < 1)
+    //public IEnumerator FadeIn()
+    //{
+    //    float alpha = 0f;
+    //    label.color = new Color(1f, 1f, 1f, alpha);
+
+    //    while (alpha < 1)
+    //    {
+    //        alpha += Increment.TenPercent;
+    //        alpha = Mathf.Clamp(alpha, 0, 1);
+    //        label.color = new Color(1, 1, 1f, alpha);
+    //        yield return Wait.OneTick();
+    //    }
+    //}
+
+
+
+    public void FadeOutAsync()
+    {
+        IEnumerator _()
         {
-            alpha += Increment.TenPercent;
-            alpha = Mathf.Clamp(alpha, 0, 1);
-            label.color = new Color(1, 1, 1f, alpha);
-            yield return Wait.OneTick();
+            float alpha = 1f;
+            label.color = new Color(1f, 1f, 1f, alpha);
+
+            yield return Wait.For(Interval.TwoSeconds);
+
+            while (alpha > 0f)
+            {
+                alpha -= Increment.TenPercent;
+                alpha = Mathf.Clamp(alpha, 0f, 1);
+                label.color = new Color(1, 1, 1, alpha);
+                yield return Wait.OneTick();
+            }
         }
+
+        StartCoroutine(_());
     }
 
-    public IEnumerator FadeOut()
-    {
-        float alpha = 1f;
-        label.color = new Color(1f, 1f, 1f, alpha);
 
-        yield return Wait.For(Interval.TwoSeconds);
+    //public IEnumerator FadeInOut()
+    //{
+    //    StopCoroutine(FadeInOut());
+    //    StopCoroutine(FadeIn());
+    //    StopCoroutine(FadeOutAsync());
 
-        while (alpha > 0f)
-        {
-            alpha -= Increment.TenPercent;
-            alpha = Mathf.Clamp(alpha, 0f, 1);
-            label.color = new Color(1, 1, 1, alpha);
-            yield return Wait.OneTick();
-        }
-    }
-
-    public IEnumerator FadeInOut()
-    {
-        StopCoroutine(FadeInOut());
-        StopCoroutine(FadeIn());
-        StopCoroutine(FadeOut());
-
-        yield return FadeIn();
-        yield return Wait.For(Interval.OneSecond);
-        yield return FadeOut();
-    }
+    //    yield return FadeIn();
+    //    yield return Wait.For(Interval.OneSecond);
+    //    yield return FadeOutAsync();
+    //}
 
 
 

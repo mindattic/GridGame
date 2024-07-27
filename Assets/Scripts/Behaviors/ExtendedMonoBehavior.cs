@@ -1,5 +1,6 @@
 ﻿using Game.Behaviors;
 using Game.Behaviors.Actor;
+using Game.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using UnityEngine;
 public class ExtendedMonoBehavior : MonoBehaviour
 {
 
-
+    //Variables
     protected float gameSpeed => GameManager.instance.gameSpeed;
 
     //Canvases
@@ -16,6 +17,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected Canvas canvas3D => GameManager.instance.canvas3D;
 
     //Managers
+    protected CameraManager cameraManager => GameManager.instance.cameraManager;
     protected InputManager inputManager => GameManager.instance.inputManager;
     protected StageManager stageManager => GameManager.instance.stageManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
@@ -28,7 +30,6 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected PortraitManager portraitManager => GameManager.instance.portraitManager;
     protected OverlayManager overlayManager => GameManager.instance.overlayManager;
     protected TitleManager titleManager => GameManager.instance.titleManager;
- 
     protected CardManager cardManager => GameManager.instance.cardManager;
     protected SelectedPlayerManager selectedPlayerManager => GameManager.instance.selectedPlayerManager;
     protected PlayerManager playerManager => GameManager.instance.playerManager;

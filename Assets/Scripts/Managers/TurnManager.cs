@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -29,12 +30,14 @@ public class TurnManager : ExtendedMonoBehavior
         Reset();
     }
 
-    void Update() {
-    
+    void Update()
+    {
+
     }
 
-    void FixedUpdate() { 
-    
+    void FixedUpdate()
+    {
+
     }
 
     public void Reset()
@@ -43,7 +46,7 @@ public class TurnManager : ExtendedMonoBehavior
         currentTeam = Team.Player;
         currentPhase = Phase.Start;
 
-       //musicSource.Stop();
+        //musicSource.Stop();
         //musicSource.PlayOneShot(resourceManager.MusicTrack($"MelancholyLull"));
     }
 
@@ -51,8 +54,7 @@ public class TurnManager : ExtendedMonoBehavior
     {
         currentTeam = IsPlayerTurn ? Team.Enemy : Team.Player;
         currentPhase = Phase.Start;
-  
-        //DespawnAll attack variables
+
         supportLineManager.Clear();
         attackLineManager.Clear();
         combatParticipants.Clear();
@@ -63,15 +65,19 @@ public class TurnManager : ExtendedMonoBehavior
         if (IsPlayerTurn)
         {
             currentTurn++;
-            titleManager.Print($"Turn {currentTurn}");
-            audioManager.Play("NextTurn");
+            //audioManager.Play("NextTurn");
             timer.Reset();
         }
         else if (IsEnemyTurn)
         {
+
+          
             CheckEnemySpawn();
             CheckEnemyMove();
         }
+
+       
+        titleManager.Print($"{(IsPlayerTurn ? "Player" : "Enemy")} Turn", IsPlayerTurn ? Colors.Solid.White : Colors.Solid.Red);
     }
 
 
@@ -120,7 +126,7 @@ public class TurnManager : ExtendedMonoBehavior
 
             //Iterate through player attacks
             foreach (var pair in combatParticipants.attackingPairs)
-            {          
+            {
                 yield return PlayerAttack(pair);
             }
 
@@ -223,7 +229,7 @@ public class TurnManager : ExtendedMonoBehavior
 
         #region Player attack
 
-        //yield return actionWait.For(Interval.QuarterSecond);
+        //yield return ap.For(Interval.QuarterSecond);
 
         foreach (var enemy in pair.alignment.enemies)
         {
@@ -240,9 +246,9 @@ public class TurnManager : ExtendedMonoBehavior
 
             //var defense = enemy.defense * groupedEnemyModifier * Math.Pow(enemy.defense, enemy.LuckModifier);
 
-            //var damage = (float)((attack1 + attack2) / defense);
+            //var amount = (float)((attack1 + attack2) / defense);
 
-            //Debug.Log($"Attack1: ({attack1}) + Attack2: ({attack2}) / Enemy defense: ({defense}) = Damage: ({damage})");
+            //Debug.Log($"Attack1: ({attack1}) + Attack2: ({attack2}) / Enemy defense: ({defense}) = Damage: ({amount})");
 
 
 
@@ -257,10 +263,10 @@ public class TurnManager : ExtendedMonoBehavior
             {
                 //attack enemy (one at a time)
                 //TODO: Calculate based on attacker stats
-                var damage = Random.Int(15, 33);
-                pair.actor1.GainSkill(damage);
-                pair.actor2.GainSkill(damage);
-                yield return enemy.TakeDamage(damage);
+                var amount = Random.Int(15, 33);
+                pair.actor1.ChangeSpAsync(amount);
+                pair.actor2.ChangeSpAsync(amount);
+                yield return enemy.ChangeHp(-amount);
             }
             else
             {
@@ -288,6 +294,7 @@ public class TurnManager : ExtendedMonoBehavior
     #region Enemy Attack Methods
 
 
+  
 
     public void CheckEnemySpawn()
     {
@@ -310,20 +317,25 @@ public class TurnManager : ExtendedMonoBehavior
 
         IEnumerator _()
         {
-            //actors.ForEach(x => x.sortingOrder = SortingOrder.Min);
-            currentPhase = TurnPhase.Move;
+            var notReadyEnemies = enemies.Where(x => x.IsPlaying && !x.IsReady).ToList();
+            foreach (var enemy in notReadyEnemies)
+            {
+                //TODO: Calculate based on attacker stats
+                int amount = Convert.ToInt32(enemy.speed * 3 * enemy.LuckModifier); 
+                //int amount = Random.Int(15, 33);
+                enemy.ChangeApAsync(amount);
+            }
 
-            yield return Wait.For(Interval.HalfSecond);
+            currentPhase = TurnPhase.Move;
+            yield return Wait.For(Interval.OneSecond);
+
             var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
             foreach (var enemy in readyEnemies)
             {
                 //enemy.sortingOrder = SortingOrder.Max;
                 enemy.SetAttackStrategy();
 
-                yield return enemy.MoveToDestination();
-
-                enemy.targetPlayer = null;
-                yield return Wait.For(Interval.QuarterSecond);
+                yield return enemy.MoveTowardDestination();
             }
 
             currentPhase = TurnPhase.Attack;
@@ -353,7 +365,7 @@ public class TurnManager : ExtendedMonoBehavior
                     {
                         foreach (var player in defendingPlayers)
                         {
-                            //yield return actionWait.For(Interval.HalfSecond);
+                            //yield return ap.For(Interval.HalfSecond);
 
                             var direction = enemy.GetAdjacentDirectionTo(player);
                             yield return enemy.Bump(direction);
@@ -365,8 +377,8 @@ public class TurnManager : ExtendedMonoBehavior
                             {
                                 //attack enemy (one at a time)
                                 //TODO: Calculate based on attacker stats
-                                var damage = Random.Int(15, 33);
-                                yield return player.TakeDamage(damage);
+                                var amount = Random.Int(15, 33);
+                                yield return player.ChangeHp(-amount);
                             }
                             else
                             {
@@ -379,7 +391,9 @@ public class TurnManager : ExtendedMonoBehavior
 
                 foreach (var enemy in readyEnemies)
                 {
-                    enemy.AssignActionWait();
+                    //enemy.AssignActionWait();
+                    enemy.ap = 0;
+                    enemy.UpdateActionBar();
                 }
             }
 

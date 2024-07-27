@@ -1,5 +1,6 @@
 using Game.Behaviors;
 using Game.Behaviors.Actor;
+using Game.Manager;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,6 +17,7 @@ public class GameManager : Singleton<GameManager>
     //Managers
     public ResourceManager resourceManager;
     public InputManager inputManager;
+    public CameraManager cameraManager;
     public StageManager stageManager;
     public TurnManager turnManager;
     public SupportLineManager supportLineManager;
@@ -93,13 +95,15 @@ public class GameManager : Singleton<GameManager>
         snapDistance = tileSize / 8;
         shakeIntensity = new ShakeIntensity(tileSize);
 
+
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>() ?? throw new UnityException("BoardBehavior is null");
 
         canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>() ?? throw new UnityException("Canvas2D is null");
         canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>() ?? throw new UnityException("Canvas3D is null");
         cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>() ?? throw new UnityException("CardManager is null");
 
-        resourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>() ?? throw new UnityException("ResourceManager is null"); 
+        resourceManager = GameObject.Find(Constants.Game).GetComponent<ResourceManager>() ?? throw new UnityException("ResourceManager is null");
+        cameraManager = GameObject.Find(Constants.Game).GetComponent<CameraManager>() ?? throw new UnityException("CameraManager is null");
         stageManager = GameObject.Find(Constants.Game).GetComponent<StageManager>() ?? throw new UnityException("StageManager is null");
         turnManager = GameObject.Find(Constants.Game).GetComponent<TurnManager>() ?? throw new UnityException("TurnManager is null");
         inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>() ?? throw new UnityException("InputManager is null");

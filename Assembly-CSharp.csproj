@@ -102,7 +102,7 @@
     <Compile Include="Assets\Scripts\Models\ActorAttributes.cs" />
     <Compile Include="Assets\Scripts\Behaviors\DamageTextBehavior.cs" />
     <Compile Include="Assets\Scripts\Utilities\Wait.cs" />
-    <Compile Include="Assets\AudioManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Models\Alignment.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorThumbnail.cs" />
@@ -126,6 +126,8 @@
     <Compile Include="Assets\Scripts\Models\GhostRenderers.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
     <Compile Include="Assets\Scripts\Managers\DebugManager.cs" />
+    <Compile Include="Assets\Scripts\Models\RectFloat.cs" />
+    <Compile Include="Assets\Scripts\Models\RectInt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

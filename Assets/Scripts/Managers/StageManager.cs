@@ -58,7 +58,8 @@ public class StageManager : ExtendedMonoBehavior
         timer.Reset();
         actorManager.Clear();
         //overlayManager.Show();
-        titleManager.Print($"Stage {currentStage}", showOverlay: true);
+        overlayManager.Show();
+        titleManager.Print($"Stage {currentStage}");
 
         //DespawnAll existing actors
         GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
@@ -244,7 +245,7 @@ public class StageManager : ExtendedMonoBehavior
 
         //Assign attributes
         actor.level = stageActor.attributes.Level;
-        actor.maxHP = stageActor.attributes.MaxHP;
+        actor.maxHp = stageActor.attributes.MaxHP;
         actor.hp = stageActor.attributes.HP;
         actor.attack = stageActor.attributes.Attack;
         actor.defense = stageActor.attributes.Defense;

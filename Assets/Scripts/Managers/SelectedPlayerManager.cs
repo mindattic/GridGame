@@ -1,10 +1,5 @@
-using Game.Behaviors.Actor;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.UIElements;
-using static UnityEditor.FilePathAttribute;
 
 public class SelectedPlayerManager : ExtendedMonoBehavior
 {
@@ -35,13 +30,14 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         var collisions = Physics2D.OverlapPointAll(mousePosition3D);
         if (collisions == null)
             return;
+
         var collider = collisions.FirstOrDefault(x => x.CompareTag(Tag.Actor));
         if (collider == null)
             return;
 
         //Retrieve Actor from collider
         var actor = collider.gameObject.GetComponent<ActorBehavior>();
-        if (actor == null || !actor.IsAlive || !actor.IsActive || !actor.IsPlayer)
+        if (actor == null || !actor.IsPlaying || !actor.IsPlayer)
             return;
 
         //TODO: Update Card display...
@@ -56,9 +52,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         cardManager.Set(focusedPlayer);
 
 
-
-
-        StartCoroutine(focusedPlayer.MoveToCursor());
+        StartCoroutine(focusedPlayer.MoveTowardCursor());
         //MoveTowardCursor(focusedPlayer);
     }
 
@@ -99,7 +93,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         Unfocus();
         turnManager.currentPhase = TurnPhase.Move;
-        actors.ForEach(x => x.sortingOrder = SortingOrder.Min);
+        actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
         selectedPlayer.sortingOrder = SortingOrder.Max;
 
         audioManager.Play("Select");
@@ -117,7 +111,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         timer.Restart();
 
 
-        StartCoroutine(selectedPlayer.MoveToCursor());
+        StartCoroutine(selectedPlayer.MoveTowardCursor());
     }
 
     public void Unselect()

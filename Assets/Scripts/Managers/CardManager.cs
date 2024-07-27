@@ -48,7 +48,7 @@ namespace Game.Behaviors
 
 
             var stats
-                = $"hp: {actor.hp}/{actor.maxHP}{Environment.NewLine}"
+                = $"hp: {actor.hp}/{actor.maxHp}{Environment.NewLine}"
                 + $""
                 + $"{Environment.NewLine}"
                 + resourceManager.ActorDetails(actor.archetype.ToString());

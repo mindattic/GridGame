@@ -94,7 +94,7 @@ public class DebugManager : ExtendedMonoBehavior
     public void EnemyAttackTest()
     {
         var attackingEnemies = enemies.Where(x => x.IsPlaying).ToList();
-        attackingEnemies.ForEach(x => x.ReadyUp());
+        attackingEnemies.ForEach(x => x.SetApMax());
 
         if (turnManager.IsPlayerTurn)
             turnManager.NextTurn();

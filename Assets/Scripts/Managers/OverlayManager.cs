@@ -57,59 +57,64 @@ public class OverlayManager : ExtendedMonoBehavior
 
     public void Show()
     {
-        StartCoroutine(FadeIn());
+        FadeOutAsync();
+        titleManager.FadeOutAsync();
     }
 
-    public void Hide()
+   
+
+    //public IEnumerator FadeIn()
+    //{
+    //    //float alpha = image.Color.a;
+    //    //image.Color = new Color(0f, 0f, 0f, alpha);
+
+    //    //while (alpha < 1)
+    //    //{
+    //    //    alpha += Increment.FivePercent;
+    //    //    alpha = Mathf.Clamp(alpha, 0, 1);
+    //    //    image.Color = new Color(0, 0, 0, alpha);
+    //    //    yield return ap.OneTick();
+    //    //}
+
+
+    //    image.color = new Color(0, 0, 0, 1);
+    //    yield return Wait.Ticks(20);
+    //}
+
+    public void FadeOutAsync()
     {
-        StartCoroutine(FadeOut());
-    }
-
-    public IEnumerator FadeIn()
-    {
-        //float alpha = image.Color.a;
-        //image.Color = new Color(0f, 0f, 0f, alpha);
-
-        //while (alpha < 1)
-        //{
-        //    alpha += Increment.FivePercent;
-        //    alpha = Mathf.Clamp(alpha, 0, 1);
-        //    image.Color = new Color(0, 0, 0, alpha);
-        //    yield return actionWait.OneTick();
-        //}
-
-
-        image.color = new Color(0, 0, 0, 1);
-        yield return Wait.Ticks(20);
-    }
-
-    public IEnumerator FadeOut()
-    {
-        float alpha = 1f;
-        image.color = new Color(0, 0, 0, alpha);
-
-        yield return Wait.For(Interval.TwoSeconds);
-
-        while (alpha > 0f)
+        IEnumerator _()
         {
-            alpha -= Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, 1);
+            float alpha = 1f;
             image.color = new Color(0, 0, 0, alpha);
-            yield return Wait.OneTick();
+
+            yield return Wait.For(Interval.TwoSeconds);
+
+            while (alpha > 0f)
+            {
+                alpha -= Increment.TenPercent;
+                alpha = Mathf.Clamp(alpha, 0, 1);
+                image.color = new Color(0, 0, 0, alpha);
+                yield return Wait.OneTick();
+            }
+
+            image.color = new Color(0, 0, 0, 0);
         }
 
-        image.color = new Color(0, 0, 0, 0);
+        StartCoroutine(_());
     }
 
 
-    public IEnumerator FadeInOut()
-    {
-        StopCoroutine(FadeInOut());
-        StopCoroutine(FadeIn());
-        StopCoroutine(FadeOut());
 
-        yield return FadeIn();
-        yield return Wait.For(Interval.OneSecond);
-        yield return FadeOut();
-    }
+
+    //public IEnumerator FadeInOut()
+    //{
+    //    StopCoroutine(FadeInOut());
+    //    StopCoroutine(FadeIn());
+    //    StopCoroutine(FadeOutAsync());
+
+    //    yield return FadeIn();
+    //    yield return Wait.For(Interval.OneSecond);
+    //    yield return FadeOutAsync();
+    //}
 }

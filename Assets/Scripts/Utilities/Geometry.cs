@@ -11,19 +11,34 @@ public class Geometry
     private static List<ActorBehavior> actors => GameManager.instance.actors;
     private static List<TileBehavior> tiles => GameManager.instance.tiles;
 
+
+
+    //private static Dictionary<Vector2Int, Vector3> boardPositions = new Dictionary<Vector2Int, Vector3>();
+    //private static Dictionary<Vector3, Vector2Int> boardLocations = new Dictionary<Vector3, Vector2Int>();
+
+
+    public Geometry() {
+
+        //Assign lookup dictionaries
+        //tiles.ForEach(x => boardPositions.Add(x.location, x.position));
+        //tiles.ForEach(x => boardLocations.Add(x.position, x.location));
+    }
+
+
     public static Vector3 GetPosition(Vector2Int location)
     {
+        //return boardPositions[location];
         float x = board.offset.x + (tileSize * location.x);
         float y = board.offset.y + -(tileSize * location.y);
         return new Vector3(x, y, 0);
     }
 
-    public static Vector2Int GetLocation(int col, int row)
-    {
-        col = Math.Clamp(col, 1, board.columnCount);
-        row = Math.Clamp(row, 1, board.rowCount);
-        return new Vector2Int(col, row);
-    }
+    //public static Vector2Int GetLocation(int col, int row)
+    //{
+    //    col = Math.Clamp(col, 1, board.columnCount);
+    //    row = Math.Clamp(row, 1, board.rowCount);
+    //    return new Vector2Int(col, row);
+    //}
 
     //public static Vector2Int LocationFromPosition(Vector3 location)
     //{
@@ -32,7 +47,7 @@ public class Geometry
     //    return new Vector2Int(x, y);
     //}
 
-    public static TileBehavior ClosestTile(Vector2 other)
+    public static TileBehavior ClosestTile(Vector3 other)
     {
         return tiles.OrderBy(x => Vector3.Distance(x.transform.position, other)).First();
     }
@@ -43,10 +58,10 @@ public class Geometry
     }
 
 
-    public static Vector3 ClosestTilePosition(Vector2Int location)
-    {
-        return tiles.OrderBy(x => Vector2Int.Distance(x.location, location)).First().position;
-    }
+    //public static Vector3 ClosestTilePosition(Vector2Int location)
+    //{
+    //    return tiles.OrderBy(x => Vector2Int.Distance(x.location, location)).First().position;
+    //}
 
 
 

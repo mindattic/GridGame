@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Linq;
 
-public class ActorManager : ExtendedMonoBehavior
+namespace Game.Manager
 {
-
-    public void Clear()
+    public class ActorManager : ExtendedMonoBehavior
     {
-        actors.ForEach(x => Destroy(x.gameObject));
-        actors.Clear();
+
+        public void Clear()
+        {
+            actors.ForEach(x => Destroy(x.gameObject));
+            actors.Clear();
+        }
     }
-
-
 }
