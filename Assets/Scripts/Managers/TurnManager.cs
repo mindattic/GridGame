@@ -118,8 +118,8 @@ public class TurnManager : ExtendedMonoBehavior
             //Spawn attack lines
             foreach (var pair in combatParticipants.attackingPairs)
             {
-                pair.actor1.sortingOrder = SortingOrder.Attacker;
-                pair.actor2.sortingOrder = SortingOrder.Attacker;
+                pair.actor1.GrowAsync();
+                pair.actor2.GrowAsync();
                 pair.alignment.enemies.ForEach(x => x.sortingOrder = SortingOrder.Defender);
                 attackLineManager.Spawn(pair);
             }
@@ -284,6 +284,10 @@ public class TurnManager : ExtendedMonoBehavior
         {
             yield return enemy.Dissolve();
         }
+
+
+        pair.actor1.ShrinkAsync();
+        pair.actor2.ShrinkAsync();
 
         #endregion
 

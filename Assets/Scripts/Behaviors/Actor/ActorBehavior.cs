@@ -159,6 +159,13 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
+    public Vector3 scale
+    {
+        get => gameObject.transform.localScale;
+        set => gameObject.transform.localScale = value;
+    }
+
+
     public Sprite thumbnail
     {
         get => SpriteRenderer.thumbnail.sprite;
@@ -643,7 +650,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         position = targetPosition;
     }
 
-    
+
     public IEnumerator ChangeHp(float amount)
     {
         //Before...
@@ -913,5 +920,68 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         return gameObject.transform.GetChild(layer).gameObject;
     }
+
+
+
+    public void GrowAsync()
+    {
+        IEnumerator _()
+        {
+            //Before...
+            sortingOrder = SortingOrder.Attacker;
+            var maxSize = tileSize * 1.1f;
+            var minSize = tileSize;
+            var increment = tileSize * 0.01f;
+            var size = minSize;
+            scale = new Vector3(size, size, 0);
+
+            //During...
+            while (size < maxSize)
+            {
+                size += increment;
+                size = Mathf.Clamp(size, minSize, maxSize);
+                scale = new Vector3(size, size, 0);
+                yield return Wait.OneTick();
+            }
+
+            //After...
+            scale = new Vector3(maxSize, maxSize, 0);
+        }
+
+        StartCoroutine(_());
+    }
+
+
+    public void ShrinkAsync()
+    {
+        IEnumerator _()
+        {
+            //Before...
+            var maxSize = tileSize * 1.1f;
+            var minSize = tileSize;
+            var increment = tileSize * 0.01f;
+            var size = maxSize;
+            scale = new Vector3(size, size, 0);
+
+            //During...
+            while (size > minSize)
+            {
+                size -= increment;
+                size = Mathf.Clamp(size, minSize, maxSize);
+                scale = new Vector3(size, size, 0);
+                yield return Wait.OneTick();
+            }
+
+            //After...
+            scale = new Vector3(minSize, minSize, 0);
+            sortingOrder = SortingOrder.Default;
+
+        }
+
+        StartCoroutine(_());
+    }
+
+
+
 
 }

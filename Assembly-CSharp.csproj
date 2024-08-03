@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Behaviors\PortraitBehavior.cs" />
     <Compile Include="Assets\Scripts\Utilities\Common.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorBehavior.cs" />
+    <Compile Include="Assets\Scripts\Models\RectFloat.cs" />
     <Compile Include="Assets\Scripts\Managers\DamageTextManager.cs" />
     <Compile Include="Assets\Scripts\Managers\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\GhostBehavior.cs" />
@@ -123,11 +124,10 @@
     <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
     <Compile Include="Assets\Scripts\Managers\WallManager.cs" />
     <Compile Include="Assets\Scripts\Models\CombatParticipants.cs" />
+    <Compile Include="Assets\Scripts\Models\RectInt.cs" />
     <Compile Include="Assets\Scripts\Models\GhostRenderers.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
     <Compile Include="Assets\Scripts\Managers\DebugManager.cs" />
-    <Compile Include="Assets\Scripts\Models\RectFloat.cs" />
-    <Compile Include="Assets\Scripts\Models\RectInt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
