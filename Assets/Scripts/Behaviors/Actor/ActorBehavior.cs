@@ -32,31 +32,31 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public ActorHealthBar HealthBar;
     public ActorThumbnail Thumbnail;
-    public ActorRenderers SpriteRenderer = new ActorRenderers();
+    public ActorRenderers renderers = new ActorRenderers();
 
     public bool IsAttacking => combatParticipants.attackingPairs.Any(x => x.actor1 == this || x.actor2 == this);
 
     private void Awake()
     {
 
-        SpriteRenderer.quality = gameObject.transform.GetChild(ActorLayer.Quality).GetComponent<SpriteRenderer>();
-        SpriteRenderer.glow = gameObject.transform.GetChild(ActorLayer.Glow).GetComponent<SpriteRenderer>();
-        SpriteRenderer.parallax = gameObject.transform.GetChild(ActorLayer.Parallax).GetComponent<SpriteRenderer>();
-        SpriteRenderer.thumbnail = gameObject.transform.GetChild(ActorLayer.Thumbnail).GetComponent<SpriteRenderer>();
-        SpriteRenderer.frame = gameObject.transform.GetChild(ActorLayer.Frame).GetComponent<SpriteRenderer>();
-        SpriteRenderer.statusIcon = gameObject.transform.GetChild(ActorLayer.StatusIcon).GetComponent<SpriteRenderer>();
-        SpriteRenderer.healthBarBack = gameObject.transform.GetChild(ActorLayer.HealthBarBack).GetComponent<SpriteRenderer>();
-        SpriteRenderer.healthBar = gameObject.transform.GetChild(ActorLayer.HealthBar).GetComponent<SpriteRenderer>();
-        SpriteRenderer.healthBarFront = gameObject.transform.GetChild(ActorLayer.HealthBarFront).GetComponent<SpriteRenderer>();
-        SpriteRenderer.healthText = gameObject.transform.GetChild(ActorLayer.HealthText).GetComponent<TextMeshPro>();
-        SpriteRenderer.actionBarBack = gameObject.transform.GetChild(ActorLayer.ActionBarBack).GetComponent<SpriteRenderer>();
-        SpriteRenderer.actionBar = gameObject.transform.GetChild(ActorLayer.ActionBar).GetComponent<SpriteRenderer>();
-        SpriteRenderer.actionText = gameObject.transform.GetChild(ActorLayer.ActionText).GetComponent<TextMeshPro>();
-        SpriteRenderer.skillRadialBack = gameObject.transform.GetChild(ActorLayer.RadialBack).GetComponent<SpriteRenderer>();
-        SpriteRenderer.skillRadial = gameObject.transform.GetChild(ActorLayer.RadialFill).GetComponent<SpriteRenderer>();
-        SpriteRenderer.skillRadialText = gameObject.transform.GetChild(ActorLayer.RadialText).GetComponent<TextMeshPro>();
-        SpriteRenderer.selection = gameObject.transform.GetChild(ActorLayer.Selection).GetComponent<SpriteRenderer>();
-        SpriteRenderer.mask = gameObject.transform.GetChild(ActorLayer.Mask).GetComponent<SpriteMask>();
+        renderers.quality = gameObject.transform.GetChild(ActorLayer.Quality).GetComponent<SpriteRenderer>();
+        renderers.glow = gameObject.transform.GetChild(ActorLayer.Glow).GetComponent<SpriteRenderer>();
+        renderers.parallax = gameObject.transform.GetChild(ActorLayer.Parallax).GetComponent<SpriteRenderer>();
+        renderers.thumbnail = gameObject.transform.GetChild(ActorLayer.Thumbnail).GetComponent<SpriteRenderer>();
+        renderers.frame = gameObject.transform.GetChild(ActorLayer.Frame).GetComponent<SpriteRenderer>();
+        renderers.statusIcon = gameObject.transform.GetChild(ActorLayer.StatusIcon).GetComponent<SpriteRenderer>();
+        renderers.healthBarBack = gameObject.transform.GetChild(ActorLayer.HealthBarBack).GetComponent<SpriteRenderer>();
+        renderers.healthBar = gameObject.transform.GetChild(ActorLayer.HealthBar).GetComponent<SpriteRenderer>();
+        renderers.healthBarFront = gameObject.transform.GetChild(ActorLayer.HealthBarFront).GetComponent<SpriteRenderer>();
+        renderers.healthText = gameObject.transform.GetChild(ActorLayer.HealthText).GetComponent<TextMeshPro>();
+        renderers.actionBarBack = gameObject.transform.GetChild(ActorLayer.ActionBarBack).GetComponent<SpriteRenderer>();
+        renderers.actionBar = gameObject.transform.GetChild(ActorLayer.ActionBar).GetComponent<SpriteRenderer>();
+        renderers.actionText = gameObject.transform.GetChild(ActorLayer.ActionText).GetComponent<TextMeshPro>();
+        renderers.skillRadialBack = gameObject.transform.GetChild(ActorLayer.RadialBack).GetComponent<SpriteRenderer>();
+        renderers.skillRadial = gameObject.transform.GetChild(ActorLayer.RadialFill).GetComponent<SpriteRenderer>();
+        renderers.skillRadialText = gameObject.transform.GetChild(ActorLayer.RadialText).GetComponent<TextMeshPro>();
+        renderers.selection = gameObject.transform.GetChild(ActorLayer.Selection).GetComponent<SpriteRenderer>();
+        renderers.mask = gameObject.transform.GetChild(ActorLayer.Mask).GetComponent<SpriteMask>();
 
         HealthBar = new ActorHealthBar(GetGameObjectByLayer(ActorLayer.HealthBarBack), GetGameObjectByLayer(ActorLayer.HealthBar));
         Thumbnail = new ActorThumbnail(GetGameObjectByLayer(ActorLayer.Thumbnail));
@@ -113,9 +113,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
 
 
-        //if (isRising && SpriteRenderer.thumbnail.transform.rotation.z < maxRot)
+        //if (isRising && renderers.thumbnail.transform.rotation.z < maxRot)
         //{
-        //    SpriteRenderer.thumbnail.transform.Rotate(new Vector3(0, 0, rotSpeed));
+        //    renderers.thumbnail.transform.Rotate(new Vector3(0, 0, rotSpeed));
         //}
         //else
         //{
@@ -124,9 +124,9 @@ public class ActorBehavior : ExtendedMonoBehavior
         //    isRising = false;
         //}
 
-        //if (!isRising && SpriteRenderer.thumbnail.transform.rotation.z > minRot)
+        //if (!isRising && renderers.thumbnail.transform.rotation.z > minRot)
         //{
-        //    SpriteRenderer.thumbnail.transform.Rotate(new Vector3(0, 0, -rotSpeed));
+        //    renderers.thumbnail.transform.Rotate(new Vector3(0, 0, -rotSpeed));
 
         //}
         //else
@@ -168,8 +168,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public Sprite thumbnail
     {
-        get => SpriteRenderer.thumbnail.sprite;
-        set => SpriteRenderer.thumbnail.sprite = value;
+        get => renderers.thumbnail.sprite;
+        set => renderers.thumbnail.sprite = value;
     }
 
 
@@ -178,28 +178,28 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         get
         {
-            return SpriteRenderer.quality.sortingOrder;
+            return renderers.quality.sortingOrder;
         }
         set
         {
-            SpriteRenderer.quality.sortingOrder = value + ActorLayer.Quality;
-            SpriteRenderer.parallax.sortingOrder = value + ActorLayer.Parallax;
-            SpriteRenderer.glow.sortingOrder = value;
-            SpriteRenderer.thumbnail.sortingOrder = value + ActorLayer.Thumbnail;
-            SpriteRenderer.frame.sortingOrder = value + ActorLayer.Frame;
-            SpriteRenderer.statusIcon.sortingOrder = value + ActorLayer.StatusIcon;
-            SpriteRenderer.healthBarBack.sortingOrder = value + ActorLayer.HealthBarBack;
-            SpriteRenderer.healthBar.sortingOrder = value + ActorLayer.HealthBar;
-            SpriteRenderer.healthBarFront.sortingOrder = value + ActorLayer.HealthBarFront;
-            SpriteRenderer.healthText.sortingOrder = value + ActorLayer.HealthText;
-            SpriteRenderer.actionBarBack.sortingOrder = value + ActorLayer.ActionBarBack;
-            SpriteRenderer.actionBar.sortingOrder = value + ActorLayer.ActionBar;
-            SpriteRenderer.actionText.sortingOrder = value + ActorLayer.ActionText;
-            SpriteRenderer.skillRadialBack.sortingOrder = value + ActorLayer.RadialBack;
-            SpriteRenderer.skillRadial.sortingOrder = value + ActorLayer.RadialFill;
-            SpriteRenderer.skillRadialText.sortingOrder = value + ActorLayer.RadialText;
-            SpriteRenderer.selection.sortingOrder = value + ActorLayer.Selection;
-            SpriteRenderer.mask.sortingOrder = value + ActorLayer.Mask;
+            renderers.quality.sortingOrder = value + ActorLayer.Quality;
+            renderers.parallax.sortingOrder = value + ActorLayer.Parallax;
+            renderers.glow.sortingOrder = value;
+            renderers.thumbnail.sortingOrder = value + ActorLayer.Thumbnail;
+            renderers.frame.sortingOrder = value + ActorLayer.Frame;
+            renderers.statusIcon.sortingOrder = value + ActorLayer.StatusIcon;
+            renderers.healthBarBack.sortingOrder = value + ActorLayer.HealthBarBack;
+            renderers.healthBar.sortingOrder = value + ActorLayer.HealthBar;
+            renderers.healthBarFront.sortingOrder = value + ActorLayer.HealthBarFront;
+            renderers.healthText.sortingOrder = value + ActorLayer.HealthText;
+            renderers.actionBarBack.sortingOrder = value + ActorLayer.ActionBarBack;
+            renderers.actionBar.sortingOrder = value + ActorLayer.ActionBar;
+            renderers.actionText.sortingOrder = value + ActorLayer.ActionText;
+            renderers.skillRadialBack.sortingOrder = value + ActorLayer.RadialBack;
+            renderers.skillRadial.sortingOrder = value + ActorLayer.RadialFill;
+            renderers.skillRadialText.sortingOrder = value + ActorLayer.RadialText;
+            renderers.selection.sortingOrder = value + ActorLayer.Selection;
+            renderers.mask.sortingOrder = value + ActorLayer.Mask;
         }
     }
 
@@ -284,57 +284,58 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         if (IsPlayer)
         {
-            SpriteRenderer.SetQualityColor(quality.Color);
-            SpriteRenderer.SetGlowColor(quality.Color);
-            SpriteRenderer.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
-            SpriteRenderer.SetParallaxMaterial(resourceManager.ActorMaterial("PlayerParallax"));
-            SpriteRenderer.SetFrameColor(Colors.Solid.White);
-            SpriteRenderer.SetHealthBarColor(Colors.HealthBar.Green);
-            SpriteRenderer.SetActionBarEnabled(isEnabled: false);
-            SpriteRenderer.SetSelectionActive(false);
-            AssignSkillWait();
+            renderers.SetQualityColor(quality.Color);
+            renderers.SetGlowColor(quality.Color);
+            renderers.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
+            renderers.SetParallaxMaterial(resourceManager.ActorMaterial("PlayerParallax"));
+            renderers.SetFrameColor(Colors.Solid.White);
+            renderers.SetHealthBarColor(Colors.HealthBar.Green);
+            renderers.SetActionBarEnabled(isEnabled: false);
+            renderers.SetSelectionActive(false);
         }
         else if (IsEnemy)
         {
-            SpriteRenderer.SetQualityColor(Colors.Solid.Red);
-            SpriteRenderer.SetGlowColor(Colors.Solid.Red);
-            SpriteRenderer.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
-            SpriteRenderer.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
-            SpriteRenderer.SetFrameColor(Colors.Solid.Red);
-            SpriteRenderer.SetHealthBarColor(Colors.HealthBar.Green);
-            SpriteRenderer.SetActionBarEnabled(isEnabled: true);
-            SpriteRenderer.SetSelectionActive(false);
-            //AssignActionWait();
-            AssignSkillWait();
+            renderers.SetQualityColor(Colors.Solid.Red);
+            renderers.SetGlowColor(Colors.Solid.Red);
+            renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
+            renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
+            renderers.SetFrameColor(Colors.Solid.Red);
+            renderers.SetHealthBarColor(Colors.HealthBar.Green);
+            renderers.SetActionBarEnabled(isEnabled: true);
+            renderers.SetSelectionActive(false);
         }
 
-
+        AssignSkillWait();
         UpdateHealthBar();
         UpdateActionBar();
 
-        IEnumerator _()
+
+        if (turnManager.IsFirstTurn)
+            renderers.SetAlpha(1);
+        else
+            StartCoroutine(FadeIn());
+    }
+
+    public IEnumerator FadeIn()
+    {
+        //Before:
+        float alpha = 0;
+        renderers.SetAlpha(alpha);
+        float delay = Random.Float(0f, 2f);
+        yield return Wait.For(delay);
+
+        //During:
+        while (alpha < 1)
         {
-            //Before...
-            float alpha = 0;
-            SpriteRenderer.SetAlpha(alpha);
-            float delay = Random.Float(0f, 2f);
-            yield return Wait.For(delay);
-
-            //During...
-            while (alpha < 1)
-            {
-                alpha += Increment.OnePercent;
-                alpha = Mathf.Clamp(alpha, 0, 1);
-                SpriteRenderer.SetAlpha(alpha);
-                yield return Wait.OneTick();
-            }
-
-            //After...
-            alpha = 1;
-            SpriteRenderer.SetAlpha(alpha);
+            alpha += Increment.OnePercent;
+            alpha = Mathf.Clamp(alpha, 0, 1);
+            renderers.SetAlpha(alpha);
+            yield return Wait.OneTick();
         }
 
-        StartCoroutine(_());
+        //After:
+        alpha = 1;
+        renderers.SetAlpha(alpha);
     }
 
     public void SwapLocation(Vector2Int other)
@@ -404,9 +405,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public IEnumerator MoveTowardCursor()
     {
-        //Before...
+        //Before:
 
-        //During...
+        //During:
         while (IsFocusedPlayer || IsSelectedPlayer)
         {
             var cursorPosition = mousePosition3D + mouseOffset;
@@ -422,16 +423,16 @@ public class ActorBehavior : ExtendedMonoBehavior
             yield return Wait.None();
         }
 
-        //After...
+        //After:
     }
 
 
     public IEnumerator MoveTowardDestination()
     {
-        //Before...
+        //Before:
         audioManager.Play($"Slide");
 
-        //During...
+        //During:
 
         while (HasDestination)
         {
@@ -457,7 +458,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             yield return Wait.OneTick();
         }
 
-        //After...
+        //After:
 
     }
 
@@ -476,7 +477,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //else
         //{
 
-        //    SpriteRenderer.CycleActionBarColor();
+        //    renderers.CycleActionBarColor();
         //}
 
         //UpdateActionBar();
@@ -484,15 +485,15 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void UpdateActionBar()
     {
-        var scale = SpriteRenderer.actionBarBack.transform.localScale;
+        var scale = renderers.actionBarBack.transform.localScale;
         var x = Mathf.Clamp(scale.x * (ap / maxAp), 0, scale.x);
-        SpriteRenderer.actionBar.transform.localScale = new Vector3(x, scale.y, scale.z);
+        renderers.actionBar.transform.localScale = new Vector3(x, scale.y, scale.z);
 
         //Percent complete
-        SpriteRenderer.actionText.text = ap < maxAp ? $@"{Math.Round(ap / maxAp * 100)}" : "";
+        renderers.actionText.text = ap < maxAp ? $@"{Math.Round(ap / maxAp * 100)}" : "";
 
         //Seconds remaining
-        //SpriteRenderer.skillRadialText.Text = ap < maxAp ? $"{Math.Round(maxAp - ap)}" : "";
+        //renderers.skillRadialText.Text = ap < maxAp ? $"{Math.Round(maxAp - ap)}" : "";
 
 
 
@@ -512,11 +513,11 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void UpdateSkillRadial()
     {
         //var fill = 360 - (360 * (sp / spMax));
-        //SpriteRenderer.skillRadial.material.SetFloat("_Arc2", fill);
+        //renderers.skillRadial.material.SetFloat("_Arc2", fill);
 
         var fill = (360 * (sp / spMax));
-        SpriteRenderer.skillRadial.material.SetFloat("_Arc1", fill);
-        SpriteRenderer.skillRadialText.text = sp < spMax ? $"{Math.Round(sp / spMax * 100)}%" : "100%";
+        renderers.skillRadial.material.SetFloat("_Arc1", fill);
+        renderers.skillRadialText.text = sp < spMax ? $"{Math.Round(sp / spMax * 100)}%" : "100%";
     }
 
 
@@ -538,13 +539,13 @@ public class ActorBehavior : ExtendedMonoBehavior
         //   transform.Rotation.y ,
         //   transform.Rotation.z + (glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 128)));
 
-        //SpriteRenderer.thumbnail.transform.Rotate(Vector3.up * glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 3));
+        //renderers.thumbnail.transform.Rotate(Vector3.up * glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 3));
 
-        //SpriteRenderer.glow.transform.position = pos;
-        //SpriteRenderer.thumbnail.transform.position = pos;
-        //SpriteRenderer.frame.transform.position = pos;
-        //SpriteRenderer.thumbnail.transform.position = pos;
-        //SpriteRenderer.thumbnail.transform.Rotation = rot;
+        //renderers.glow.transform.position = pos;
+        //renderers.thumbnail.transform.position = pos;
+        //renderers.frame.transform.position = pos;
+        //renderers.thumbnail.transform.position = pos;
+        //renderers.thumbnail.transform.Rotation = rot;
     }
 
 
@@ -559,7 +560,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             1.5f + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
             1.5f + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
             1.0f);
-        SpriteRenderer.SetGlowScale(scale);
+        renderers.SetGlowScale(scale);
     }
 
     private void Shake(float intensity)
@@ -578,12 +579,12 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator Bump(Direction direction)
     {
 
-        //Before...
+        //Before:
         BumpStage stage = BumpStage.Start;
         var targetPosition = position;
         var range = tileSize * percent33;
 
-        //During...
+        //During:
         while (stage != BumpStage.End)
         {
             switch (stage)
@@ -645,7 +646,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             yield return Wait.None();
         }
 
-        //After...
+        //After:
         sortingOrder = SortingOrder.Default;
         position = targetPosition;
     }
@@ -653,10 +654,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public IEnumerator ChangeHp(float amount)
     {
-        //Before...
+        //Before:
         var remainingHP = Mathf.Clamp(hp + amount, 0, maxHp);
 
-        //During...
+        //During:
         while (hp > remainingHP)
         {
 
@@ -681,7 +682,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             yield return Wait.For(Interval.FiveTicks);
         }
 
-        //After...
+        //After:
         Shake(shakeIntensity.Stop);
         hp = remainingHP;
         UpdateHealthBar();
@@ -696,11 +697,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public IEnumerator ChangeAp(float amount)
     {
-        //Before...
+        //Before:
         var targetAP = Mathf.Clamp(ap + amount, 0, maxAp);
         var increment = 1f;
 
-        //During...
+        //During:
         while (ap < targetAP)
         {
             ap += increment;
@@ -710,7 +711,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             yield return Wait.For(Interval.FiveTicks);
         }
 
-        //After...
+        //After:
         ap = targetAP;
         UpdateActionBar();
     }
@@ -724,11 +725,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public IEnumerator ChangeSp(float amount)
     {
-        //Before...
+        //Before:
         float ticks = 0f;
         float duration = Interval.OneSecond;
 
-        //During...
+        //During:
         while (ticks < duration)
         {
             ticks += Interval.OneTick;
@@ -736,7 +737,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             yield return Wait.OneTick();
         }
 
-        //After...
+        //After:
     }
 
     public void ChangeSpAsync(float amount)
@@ -747,12 +748,12 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public IEnumerator MissAttack()
     {
-        //Before...
+        //Before:
         float ticks = 0;
         float duration = Interval.QuarterSecond;
         damageTextManager.Spawn("Miss", position);
 
-        //During...
+        //During:
         while (ticks < duration)
         {
             ticks += Interval.OneTick;
@@ -760,77 +761,77 @@ public class ActorBehavior : ExtendedMonoBehavior
             yield return Wait.OneTick();
         }
 
-        //After...
+        //After:
         Shake(shakeIntensity.Stop);
     }
 
     private void UpdateHealthBar()
     {
-        var scale = SpriteRenderer.healthBarBack.transform.localScale;
+        var scale = renderers.healthBarBack.transform.localScale;
         var x = Mathf.Clamp(scale.x * (hp / maxHp), 0, scale.x);
-        SpriteRenderer.healthBar.transform.localScale = new Vector3(x, scale.y, scale.z);
-        SpriteRenderer.healthText.text = $@"{hp}/{maxHp}";
+        renderers.healthBar.transform.localScale = new Vector3(x, scale.y, scale.z);
+        renderers.healthText.text = $@"{hp}/{maxHp}";
     }
 
     public IEnumerator RadialBackFadeIn()
     {
-        //Before...
+        //Before:
         var maxAlpha = 0.5f;
         var alpha = 0f;
-        SpriteRenderer.skillRadialBack.color = new Color(0, 0, 0, alpha);
+        renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
 
-        //During...
+        //During:
         while (alpha < maxAlpha)
         {
             alpha += Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, maxAlpha);
-            SpriteRenderer.skillRadialBack.color = new Color(0, 0, 0, alpha);
+            renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
             yield return global::Wait.OneTick();
         }
 
-        //After...
-        SpriteRenderer.skillRadialBack.color = new Color(0, 0, 0, maxAlpha);
+        //After:
+        renderers.skillRadialBack.color = new Color(0, 0, 0, maxAlpha);
     }
 
     public IEnumerator RadialBackFadeOut()
     {
-        //Before...
+        //Before:
         var maxAlpha = 0.5f;
         var alpha = maxAlpha;
-        SpriteRenderer.skillRadialBack.color = new Color(0, 0, 0, maxAlpha);
+        renderers.skillRadialBack.color = new Color(0, 0, 0, maxAlpha);
 
-        //During...
+        //During:
         while (alpha > 0)
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, maxAlpha);
-            SpriteRenderer.skillRadialBack.color = new Color(0, 0, 0, alpha);
+            renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
             yield return global::Wait.OneTick();
         }
 
-        //After...
-        SpriteRenderer.skillRadialBack.color = new Color(0, 0, 0, 0);
+        //After:
+        renderers.skillRadialBack.color = new Color(0, 0, 0, 0);
     }
 
     public IEnumerator Dissolve()
     {
-        //Before...
+        //Before:
         var alpha = 1f;
-        SpriteRenderer.SetAlpha(alpha);
+        renderers.SetAlpha(alpha);
         portraitManager.Dissolve(this);
         audioManager.Play("Death");
         sortingOrder = SortingOrder.Max;
 
-        //During...
+        //During:
         while (alpha > 0)
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            SpriteRenderer.SetAlpha(alpha);
+            renderers.SetAlpha(alpha);
             yield return Wait.OneTick();
         }
 
-        //After...
+        //After:
         gameObject.SetActive(false);
     }
 
@@ -845,31 +846,31 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private IEnumerator SetStatusIcon(Status status)
     {
-        //Before...
+        //Before:
         float increment = Increment.FivePercent;
-        float alpha = SpriteRenderer.statusIcon.color.a;
-        SpriteRenderer.statusIcon.color = new Color(1, 1, 1, alpha);
+        float alpha = renderers.statusIcon.color.a;
+        renderers.statusIcon.color = new Color(1, 1, 1, alpha);
 
-        //During...
+        //During:
         while (alpha > 0)
         {
             alpha -= increment;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            SpriteRenderer.statusIcon.color = new Color(1, 1, 1, alpha);
+            renderers.statusIcon.color = new Color(1, 1, 1, alpha);
             yield return Wait.OneTick();
         }
 
-        //Before...
-        SpriteRenderer.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(status.ToString())).thumbnail;
+        //Before:
+        renderers.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(status.ToString())).thumbnail;
         alpha = 0;
-        SpriteRenderer.statusIcon.color = new Color(1, 1, 1, alpha);
+        renderers.statusIcon.color = new Color(1, 1, 1, alpha);
 
-        //During...
+        //During:
         while (alpha < 1)
         {
             alpha += increment;
             alpha = Mathf.Clamp(alpha, 0, 1);
-            SpriteRenderer.statusIcon.color = new Color(1, 1, 1, alpha);
+            renderers.statusIcon.color = new Color(1, 1, 1, alpha);
 
             yield return Wait.OneTick();
         }
@@ -888,7 +889,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     //    ap = 0;
     //    maxAp = Random.Float(min, max);
 
-    //    SpriteRenderer.SetActionBarColor(Colors.ActionBar.Blue);
+    //    renderers.SetActionBarColor(Colors.ActionBar.Blue);
     //}
 
     public void AssignSkillWait()
@@ -906,10 +907,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public void SetApMax()
+    public void SetReady()
     {
         //Check abort state
-        if (!IsAlive || !IsActive || !IsEnemy)
+        if (!IsPlaying || !IsEnemy)
             return;
 
         ap = maxAp;
@@ -921,67 +922,68 @@ public class ActorBehavior : ExtendedMonoBehavior
         return gameObject.transform.GetChild(layer).gameObject;
     }
 
-
-
-    public void GrowAsync()
+    public void GrowAsync(float maxSize = 0f)
     {
-        IEnumerator _()
-        {
-            //Before...
-            sortingOrder = SortingOrder.Attacker;
-            var maxSize = tileSize * 1.1f;
-            var minSize = tileSize;
-            var increment = tileSize * 0.01f;
-            var size = minSize;
-            scale = new Vector3(size, size, 0);
-
-            //During...
-            while (size < maxSize)
-            {
-                size += increment;
-                size = Mathf.Clamp(size, minSize, maxSize);
-                scale = new Vector3(size, size, 0);
-                yield return Wait.OneTick();
-            }
-
-            //After...
-            scale = new Vector3(maxSize, maxSize, 0);
-        }
-
-        StartCoroutine(_());
+        if (maxSize == 0)
+            maxSize = tileSize * 1.1f;
+        StartCoroutine(Grow(maxSize));
     }
 
-
-    public void ShrinkAsync()
+    public IEnumerator Grow(float maxSize = 0f)
     {
-        IEnumerator _()
+        //Before:
+        if (maxSize == 0)
+            maxSize = tileSize * 1.1f;
+        sortingOrder = SortingOrder.Attacker;
+        float minSize = scale.x;
+        float increment = tileSize * 0.01f;
+        float size = minSize;
+        scale = new Vector3(size, size, 0);
+
+        //During:
+        while (size < maxSize)
         {
-            //Before...
-            var maxSize = tileSize * 1.1f;
-            var minSize = tileSize;
-            var increment = tileSize * 0.01f;
-            var size = maxSize;
+            size += increment;
+            size = Mathf.Clamp(size, minSize, maxSize);
             scale = new Vector3(size, size, 0);
-
-            //During...
-            while (size > minSize)
-            {
-                size -= increment;
-                size = Mathf.Clamp(size, minSize, maxSize);
-                scale = new Vector3(size, size, 0);
-                yield return Wait.OneTick();
-            }
-
-            //After...
-            scale = new Vector3(minSize, minSize, 0);
-            sortingOrder = SortingOrder.Default;
-
+            yield return Wait.OneTick();
         }
 
-        StartCoroutine(_());
+        //After:
+        scale = new Vector3(maxSize, maxSize, 0);
     }
 
+    public void ShrinkAsync(float minSize = 0f)
+    {
+        if (minSize == 0)
+            minSize = tileSize;
+        StartCoroutine(Shrink(minSize));
+    }
 
+    public IEnumerator Shrink(float minSize = 0f)
+    {
+        //Before:
+        if (minSize == 0)
+            minSize = tileSize;
+        float maxSize = scale.x;
+        float increment = tileSize * 0.01f;
+        float size = maxSize;
+        scale = new Vector3(size, size, 0);
+
+        //During:
+        while (size > minSize)
+        {
+            size -= increment;
+            size = Mathf.Clamp(size, minSize, maxSize);
+            scale = new Vector3(size, size, 0);
+            yield return Wait.OneTick();
+        }
+
+        //After:
+        scale = new Vector3(minSize, minSize, 0);
+        sortingOrder = SortingOrder.Default;
+
+    }
 
 
 }

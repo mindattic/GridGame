@@ -12,19 +12,13 @@ public class DamageTextBehavior : ExtendedMonoBehavior
 
     #region Components
 
-    public string Name
-    {
-        get => name;
-        set => Name = value;
-    }
-
-    public Transform Parent
+    public Transform parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
 
-    public Vector3 Position
+    public Vector3 position
     {
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
@@ -38,24 +32,12 @@ public class DamageTextBehavior : ExtendedMonoBehavior
         textMesh = GetComponent<TextMeshPro>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void Spawn(string text, Vector3 position)
     {
         textMesh.text = text;
         var x = position.x + Random.Range(tileSize / 4);
         var y = position.y + (tileSize / 2 * Random.Percent);
-        transform.position = new Vector3(x, y, 1);
+        transform.position = new Vector3(x, y, 0);
         StartCoroutine(FadeOut());
     }
 

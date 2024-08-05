@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SelectedPlayerManager : ExtendedMonoBehavior
 {
-    // Start is called before the first frame update
+    // Play is called before the first frame update
     void Start()
     {
 
@@ -41,10 +41,10 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //TODO: Update Card display...
-        actors.ForEach(x => x.SpriteRenderer.SetSelectionActive(false));
+        actors.ForEach(x => x.renderers.SetSelectionActive(false));
         focusedPlayer = actor;
         focusedPlayer.sortingOrder = SortingOrder.Max;
-        focusedPlayer.SpriteRenderer.SetSelectionActive(true);
+        focusedPlayer.renderers.SetSelectionActive(true);
 
         //Assign mouse offset (how off center was selection)
         mouseOffset = focusedPlayer.position - mousePosition3D;
@@ -105,8 +105,8 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
 
 
-        ghostManager.Start(selectedPlayer);
-        footstepManager.Start(selectedPlayer);
+        ghostManager.Play(selectedPlayer);
+        footstepManager.Play(selectedPlayer);
 
         timer.Restart();
 
@@ -154,9 +154,9 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         foreach (var actor in actors)
         {
             if (actor == null || !actor.IsAlive || !actor.IsActive) continue;
-            actor.SpriteRenderer.glow.transform.position = actor.position;
-            actor.SpriteRenderer.thumbnail.transform.position = actor.position;
-            actor.SpriteRenderer.frame.transform.position = actor.position;
+            actor.renderers.glow.transform.position = actor.position;
+            actor.renderers.thumbnail.transform.position = actor.position;
+            actor.renderers.frame.transform.position = actor.position;
         }
     }
 

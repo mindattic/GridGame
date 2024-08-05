@@ -240,7 +240,7 @@ public class StageManager : ExtendedMonoBehavior
         actor.thumbnail = stageActor.thumbnail;
         actor.team = stageActor.team;
         actor.quality = stageActor.rarity;
-        actor.SpriteRenderer.SetQualityColor(actor.IsPlayer ? Color.white : Color.red);
+        actor.renderers.SetQualityColor(actor.IsPlayer ? Color.white : Color.red);
         actor.sortingOrder = SortingOrder.Min;
 
         //Assign attributes

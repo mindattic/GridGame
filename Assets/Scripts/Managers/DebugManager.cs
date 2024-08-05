@@ -25,6 +25,7 @@ public class DebugManager : ExtendedMonoBehavior
             case 4: SupportLineTest(); break;
             case 5: EnemyAttackTest(); break;
             case 6: TitleTest(); break;
+            case 7: TooltipTest(); break;
         }
     }
 
@@ -94,7 +95,7 @@ public class DebugManager : ExtendedMonoBehavior
     public void EnemyAttackTest()
     {
         var attackingEnemies = enemies.Where(x => x.IsPlaying).ToList();
-        attackingEnemies.ForEach(x => x.SetApMax());
+        attackingEnemies.ForEach(x => x.SetReady());
 
         if (turnManager.IsPlayerTurn)
             turnManager.NextTurn();
@@ -104,6 +105,13 @@ public class DebugManager : ExtendedMonoBehavior
     public void TitleTest()
     {
         titleManager.Print(DateTime.UtcNow.Ticks.ToString());
+    }
+
+    public void TooltipTest()
+    {
+        var text = $"Test {Random.Int(1000, 9999)}";
+        var position = Random.Player.currentTile.position;
+        tooltipManager.Spawn(text, position);
     }
 
 }

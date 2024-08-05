@@ -8,7 +8,7 @@ public class WallManager : MonoBehaviour
 
     private float cellSize => GameManager.instance.tileSize;
 
-    // Start is called before the first frame update
+    // Play is called before the first frame update
     void Start()
     {
     }

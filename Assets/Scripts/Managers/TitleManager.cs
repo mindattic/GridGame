@@ -34,7 +34,7 @@ public class TitleManager : ExtendedMonoBehavior
 
 
 
-    // Start is called before the first frame update
+    // Play is called before the first frame update
     void Start()
     {
 
@@ -55,7 +55,7 @@ public class TitleManager : ExtendedMonoBehavior
             const float end = 0f;
             const float increment = 4f;
 
-            //Before...
+            //Before:
             float x = start;
             transform.eulerAngles = new Vector3(x, 0, 0);
             label.color = color;
@@ -70,7 +70,7 @@ public class TitleManager : ExtendedMonoBehavior
                 yield return Wait.For(Interval.OneTick);
             }
 
-            //After...
+            //After:
             x = end;
             transform.eulerAngles = new Vector3(x, 0, 0);
         }

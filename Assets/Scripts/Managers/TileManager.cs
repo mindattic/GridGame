@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TileManager : ExtendedMonoBehavior
 {
-    // Start is called before the first frame update
+    // Play is called before the first frame update
     void Start()
     {
 

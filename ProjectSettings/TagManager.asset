@@ -19,6 +19,7 @@ TagManager:
   - Ghost
   - AttackLine
   - Footstep
+  - Tooltip
   layers:
   - Default
   - TransparentFX
@@ -33,7 +34,7 @@ TagManager:
   - Portrait
   - PostProcessing
   - TimerBar
-  - 
+  - Tooltip
   - 
   - 
   - 

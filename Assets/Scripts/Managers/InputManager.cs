@@ -74,7 +74,7 @@ public class InputManager : ExtendedMonoBehavior
 
     }
 
-    void Start()
+    void Play()
     {
 
     }

@@ -13349,6 +13349,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Title
       m_Image: {fileID: 0}
+    - m_Text: Tooltip
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -14161,6 +14163,7 @@ GameObject:
   - component: {fileID: 1751276298}
   - component: {fileID: 1751276299}
   - component: {fileID: 1751276300}
+  - component: {fileID: 1751276302}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -14219,6 +14222,7 @@ MonoBehaviour:
   enemyManager: {fileID: 0}
   tileManager: {fileID: 0}
   footstepManager: {fileID: 0}
+  tooltipManager: {fileID: 0}
   audioManager: {fileID: 0}
   consoleManager: {fileID: 0}
   logManager: {fileID: 0}
@@ -14738,6 +14742,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0274e3d20fbcae644a388995bed0e644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1751276302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751276275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc1162697f09824d81817c3a4875305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 8802531427282824641, guid: 8dcbe09a25d23aa468bbcf1da143f0c6, type: 3}
 --- !u!1 &1830783914
 GameObject:
   m_ObjectHideFlags: 0

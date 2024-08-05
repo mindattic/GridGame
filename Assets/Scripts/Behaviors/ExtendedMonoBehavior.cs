@@ -36,6 +36,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected EnemyManager enemyManager => GameManager.instance.enemyManager;
     protected TileManager tileManager => GameManager.instance.tileManager;
     protected FootstepManager footstepManager => GameManager.instance.footstepManager;
+    protected TooltipManager tooltipManager => GameManager.instance.tooltipManager;
+
     protected AudioManager audioManager => GameManager.instance.audioManager;
  
     //UI
@@ -86,7 +88,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected bool HasFocusedPlayer => focusedPlayer != null;
     protected bool HasSelectedPlayer => selectedPlayer != null;
 
-    //Scale
+    //scale
     protected float tileSize => GameManager.instance.tileSize;
     protected Vector2 tileScale => GameManager.instance.tileScale;
 

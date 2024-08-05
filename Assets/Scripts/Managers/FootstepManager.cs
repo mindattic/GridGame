@@ -29,7 +29,7 @@ public class FootstepManager : ExtendedMonoBehavior
     void FixedUpdate() { }
 
 
-    public void Start(ActorBehavior actor)
+    public void Play(ActorBehavior actor)
     {
         if (actor == null || actor.IsDying || actor.IsInactive)
             return;

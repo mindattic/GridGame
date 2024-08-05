@@ -1,4 +1,5 @@
-﻿using UnityEditor.PackageManager;
+﻿using System.Collections;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public static class Constants
@@ -65,6 +66,7 @@ public static class Tag
     public static string Ghost = "Ghost";
     public static string Footstep = "Footstep";
     public static string Wall = "Wall";
+    public static string Tooltip = "Tooltip";
 
 }
 
@@ -180,6 +182,18 @@ public static class Wait
 
     public static WaitForSeconds For(float seconds) => new WaitForSeconds(seconds * GameManager.instance.gameSpeed);
     public static WaitForSeconds None() => new WaitForSeconds(0);
+
+
+
+    public static IEnumerator Duration(float amount)
+    {
+        float ticks = 0f;
+        while (ticks < amount)
+        {
+            ticks += Interval.OneTick;
+            yield return OneTick();
+        }
+    }
 
 }
 

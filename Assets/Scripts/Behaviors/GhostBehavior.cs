@@ -18,7 +18,7 @@ public class GhostBehavior : ExtendedMonoBehavior
         set => Name = value;
     }
 
-    public Transform Parent
+    public Transform parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
@@ -65,9 +65,9 @@ public class GhostBehavior : ExtendedMonoBehavior
         this.Renderers.frame.enabled = false;
 
         this.Renderers.thumbnail.size = new Vector2(tileSize, tileSize);
-        //this.SpriteRenderer.frame.size = new Vector2(tileSize, tileSize);
+        //this.renderers.frame.size = new Vector2(tileSize, tileSize);
         this.Renderers.thumbnail.color = Colors.RGBA(255, 255, 255, 64);
-        //this.SpriteRenderer.frame.Color = Common.ColorRGBA(255, 255, 255, 100);
+        //this.renderers.frame.Color = Common.ColorRGBA(255, 255, 255, 100);
         this.Position = actor.position;
         StartCoroutine(FadeOut());
     }
@@ -80,7 +80,7 @@ public class GhostBehavior : ExtendedMonoBehavior
         Renderers.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
     }
 
-    // Start is called before the first frame update
+    // Play is called before the first frame update
     void Start()
     {
         

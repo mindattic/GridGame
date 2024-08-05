@@ -23,7 +23,7 @@ public class DamageTextManager : ExtendedMonoBehavior
         var prefab = Instantiate(DamageTextPrefab, Vector2.zero, Quaternion.identity);
         var damageText = prefab.GetComponent<DamageTextBehavior>();
         damageText.name = $"DamageText_{Guid.NewGuid()}";
-        damageText.Parent = canvas3D.transform;
+        damageText.parent = canvas3D.transform;
         damageText.Spawn(text, position);
     }
 

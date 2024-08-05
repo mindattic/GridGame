@@ -24,7 +24,7 @@ public class GhostManager : ExtendedMonoBehavior
     void FixedUpdate() { }
 
 
-    public void Start(ActorBehavior actor)
+    public void Play(ActorBehavior actor)
     {
         if (actor == null || actor.IsDying || actor.IsInactive)
             return;
@@ -59,7 +59,7 @@ public class GhostManager : ExtendedMonoBehavior
         GhostBehavior ghost = prefab.GetComponent<GhostBehavior>();
         ghost.thumbnail = actor.thumbnail;
         ghost.name = $"Ghost_{Guid.NewGuid()}";
-        ghost.Parent = board.transform;
+        ghost.parent = board.transform;
         ghost.Spawn(actor);
     }
 

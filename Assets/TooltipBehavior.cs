@@ -1,0 +1,72 @@
+using System.Collections;
+using TMPro;
+using UnityEngine;
+
+public class TooltipBehavior : ExtendedMonoBehavior
+{
+    //Variables
+    SpriteRenderer spriteRenderer;
+    TextMeshPro textMesh;
+    Vector2 offset;
+    
+    #region Components
+
+    public Transform parent
+    {
+        get => gameObject.transform.parent;
+        set => gameObject.transform.SetParent(value, true);
+    }
+
+    public Vector3 position
+    {
+        get => gameObject.transform.position;
+        set => gameObject.transform.position = value;
+    }
+
+    #endregion
+
+
+    void Awake()
+    {
+
+        spriteRenderer = gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>();
+        textMesh = gameObject.transform.GetChild(1).GetComponent<TextMeshPro>();
+        offset = new Vector2(tileSize / 2, 0);
+    }
+
+    public void Spawn(string text, Vector3 position)
+    {
+        textMesh.text = text;
+        var x = position.x + offset.x;
+        var y = position.y + offset.y;
+        this.position = new Vector3(x, y, 0);
+
+        IEnumerator _()
+        {
+            //Before:
+            float alpha = 1f;
+            Color color = Colors.Solid.White;
+            textMesh.color = color;
+            spriteRenderer.color = color;
+
+            //During:
+            yield return Wait.Duration(Interval.FourSeconds);
+            while (textMesh.color.a > 0)
+            {
+                alpha -= Increment.OnePercent;
+                alpha = Mathf.Max(alpha, 0);
+                color.a = alpha;
+                textMesh.color = color;
+                spriteRenderer.color = color;
+                yield return Wait.For(Interval.OneTick);
+            }
+
+            //After:
+            textMesh.color = Colors.Transparent.White;
+            spriteRenderer.color = Colors.Transparent.White;
+        }
+
+        StartCoroutine(_());
+    }
+
+}

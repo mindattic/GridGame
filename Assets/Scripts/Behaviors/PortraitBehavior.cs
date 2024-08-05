@@ -68,7 +68,7 @@ public class PortraitBehavior : ExtendedMonoBehavior
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
-    // Start is called before the first frame update
+    // Play is called before the first frame update
     void Start()
     {
     }
