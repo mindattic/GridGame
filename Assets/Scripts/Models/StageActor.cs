@@ -7,7 +7,7 @@ public class StageActor
     public ActorAttributes attributes;
     public Sprite thumbnail;
     public Team team;
-    public Quality rarity;
+    public Quality quality;
     public Vector2Int location;
     public int spawnTurn = -1;
 
@@ -19,28 +19,31 @@ public class StageActor
 
     public StageActor() { }
 
-    public StageActor(Archetype archetype, string name, ActorAttributes attributes, Team team, Quality rarity, Vector2Int location)
+    public StageActor(Archetype archetype, string name, ActorAttributes attributes, Team team, Quality quality, Vector2Int? location = null, int spawnTurn = -1)
     {
         this.archetype = archetype;
         this.name = name;
         this.attributes = attributes;
         this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
         this.team = team;
-        this.rarity = rarity;
-        this.location = location;
-        this.spawnTurn = -1;
-    }
-
-
-    public StageActor(Archetype archetype, string name, ActorAttributes attributes, Team team, Quality rarity, int spawnTurn)
-    {
-        this.archetype = archetype;
-        this.name = name;
-        this.attributes = attributes;
-        this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
-        this.team = team;
-        this.rarity = rarity;
-        this.location = Locations.Nowhere;
+        this.quality = quality;
+        this.location = location.HasValue ? location.Value : Random.UnoccupiedLocation;
         this.spawnTurn = spawnTurn;
     }
+
+
+    //public StageActor(Archetype archetype, string name, ActorAttributes attributes, Team team, Quality quality, int spawnTurn)
+    //{
+    //    this.archetype = archetype;
+    //    this.name = name;
+    //    this.attributes = attributes;
+    //    this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
+    //    this.team = team;
+    //    this.quality = quality;
+    //    this.location = Location.Nowhere;
+    //    this.spawnTurn = spawnTurn;
+    //}
+
+
+
 }

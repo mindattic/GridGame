@@ -9,7 +9,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     //Variables
     public Archetype archetype;
-    public Vector2Int location = Locations.Nowhere;
+    public Vector2Int location = Location.Nowhere;
     public Vector3? destination = null;
     public Team team = Team.Independant;
     public Quality quality = Colors.Common;
@@ -208,7 +208,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsEnemy => team.Equals(Team.Enemy);
     public bool IsFocusedPlayer => HasFocusedPlayer && Equals(focusedPlayer);
     public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
-    public bool HasLocation => location != Locations.Nowhere;
+    public bool HasLocation => location != Location.Nowhere;
     public bool HasDestination => destination.HasValue;
     public bool IsNorthEdge => location.y == 1;
     public bool IsEastEdge => location.x == board.columnCount;
@@ -374,22 +374,22 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             case AttackStrategy.AttackClosest:
                 targetPlayer = players.Where(x => x.IsPlaying).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
-                destination = Geometry.ClosestAttackPosition(this, targetPlayer);
+                destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
                 break;
 
             case AttackStrategy.AttackWeakest:
                 targetPlayer = players.Where(x => x.IsPlaying).OrderBy(x => x.hp).FirstOrDefault();
-                destination = Geometry.ClosestAttackPosition(this, targetPlayer);
+                destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
                 break;
 
             case AttackStrategy.AttackStrongest:
                 targetPlayer = players.Where(x => x.IsPlaying).OrderBy(x => x.hp).FirstOrDefault();
-                destination = Geometry.ClosestAttackPosition(this, targetPlayer);
+                destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
                 break;
 
             case AttackStrategy.AttackRandom:
                 targetPlayer = Random.Player;
-                destination = Geometry.ClosestAttackPosition(this, targetPlayer);
+                destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
                 break;
 
             case AttackStrategy.MoveAnywhere:

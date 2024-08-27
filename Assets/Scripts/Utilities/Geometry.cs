@@ -90,7 +90,7 @@ public class Geometry
         return Direction.None;
     }
 
-    public static Vector3 ClosestAttackPosition(ActorBehavior attacker, ActorBehavior other)
+    public static Vector3 GetClosestAttackPosition(ActorBehavior attacker, ActorBehavior other)
     {
         //Determine if already adjacent to player...
         if (IsAdjacentTo(attacker, other))
@@ -110,12 +110,12 @@ public class Geometry
             return closestUnoccupiedAdjacentTile.position;
 
         //...Otherwise, Find closest tile adjacent to player...
-        var closestAdjacentTile = ClosestAdjacentTileByLocation(other.location);
+        var closestAdjacentTile = GetClosestAdjacentTileByLocation(other.location);
         if (closestAdjacentTile != null)
             return closestAdjacentTile.position;
 
         //...Otherwise, find closest unoccupied tile to player...
-        var closestUnoccupiedTile = ClosestUnoccupiedTileByLocation(other.location);
+        var closestUnoccupiedTile = GetClosestUnoccupiedTileByLocation(other.location);
         if (closestUnoccupiedTile != null)
             return closestUnoccupiedTile.position;
 
@@ -128,7 +128,7 @@ public class Geometry
         */
     }
 
-    public static TileBehavior ClosestUnoccupiedTileByLocation(Vector2Int other)
+    public static TileBehavior GetClosestUnoccupiedTileByLocation(Vector2Int other)
     {
         return tiles.FirstOrDefault(x => !x.IsOccupied && Vector2Int.Distance(x.location, other) == 1);
     }
@@ -138,7 +138,7 @@ public class Geometry
         return tiles.FirstOrDefault(x => !x.IsOccupied && x.IsAdjacentTo(other));
     }
 
-    public static TileBehavior ClosestAdjacentTileByLocation(Vector2Int other)
+    public static TileBehavior GetClosestAdjacentTileByLocation(Vector2Int other)
     {
         return tiles.FirstOrDefault(x => x.IsAdjacentTo(other));
     }
@@ -154,7 +154,10 @@ public class Geometry
             _ => position,
         };
     }
-  
 
+    public static bool IsInCorner(Vector2Int location)
+    {
+        return location == Location.A1 || location == Location.A6 || location == Location.H1 || location == Location.H6;
+    }
 
 }

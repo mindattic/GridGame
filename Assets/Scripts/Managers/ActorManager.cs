@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using UnityEngine;
 
 namespace Game.Manager
 {
@@ -8,7 +9,7 @@ namespace Game.Manager
 
         public void Clear()
         {
-            actors.ForEach(x => Destroy(x.gameObject));
+            GameObject.FindGameObjectsWithTag(Tag.Actor).ToList().ForEach(x => Destroy(x));
             actors.Clear();
         }
     }
