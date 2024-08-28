@@ -5,8 +5,9 @@ public class ActorRenderers
 {
     public ActorRenderers() { }
 
-    public Color glowColor = Colors.Solid.White;
     public Color baseColor = Colors.Solid.White;
+    public Color glowColor = Colors.Solid.White;
+    public Color parallaxColor = Colors.Solid.White;
     public Color frameColor = Colors.Solid.White;
     public Color healthBarColor = Colors.HealthBar.Green;
     public Color actionBarColor = Colors.ActionBar.Blue;
@@ -43,7 +44,8 @@ public class ActorRenderers
         baseColor.a = Mathf.Clamp(alpha, 0, 0.7f);
         quality.color = baseColor;
 
-        parallax.color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+        //parallaxColor.a = alpha;
+        //parallax.color = new Color(parallaxColor.r, parallaxColor.g, parallaxColor.b, Mathf.Clamp(alpha, 0, 0.5f));
 
         glowColor.a = Mathf.Clamp(alpha, 0, 0.25f);
         glow.color = glowColor;
@@ -106,6 +108,31 @@ public class ActorRenderers
     }
 
 
+    public void SetParallaxSprite(Sprite sprite)
+    {
+        parallax.sprite = sprite;
+    }
+
+    public void SetParallaxMaterial(Material material)
+    {
+        parallax.material = material;
+    }
+
+
+    public void SetParallaxAlpha(float alpha)
+    {
+        parallaxColor.a = Mathf.Clamp(alpha, 0, 0.7f);
+        this.parallax.color = parallaxColor;
+    }
+
+    public void SetParallaxSpeed(float xScroll, float yScroll)
+    {
+ 
+        this.parallax.material.SetFloat("_XScroll", xScroll);
+        this.parallax.material.SetFloat("_YScroll", yScroll);
+    }
+
+
     //public void SetBloomColor(Color color)
     //{
     //    bloomColor = color;
@@ -138,17 +165,6 @@ public class ActorRenderers
     public void SetSelectionActive(bool isActive = true)
     {
         selection.gameObject.SetActive(isActive);
-    }
-
-
-    public void SetParallaxSprite(Sprite sprite)
-    {
-        parallax.sprite = sprite;
-    }
-
-    public void SetParallaxMaterial(Material material)
-    {
-        parallax.material = material;
     }
 
 

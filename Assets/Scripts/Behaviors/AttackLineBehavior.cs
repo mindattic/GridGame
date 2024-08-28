@@ -13,7 +13,7 @@ namespace Game.Behaviors
         private Vector3 end;
         private float thickness = 1.2f;
         private float maxAlpha = 0.5f;
-        private Color baseColor = Colors.RGBA(100, 195, 200, 0);
+        private Color baseColor = Shared.RGBA(100, 195, 200, 0);
         private Color color;
         private LineRenderer lineRenderer;
 

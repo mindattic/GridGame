@@ -14,7 +14,7 @@ public class SupportLineBehavior : ExtendedMonoBehavior
     private Vector3 start;
     private Vector3 end;
     private float maxAlpha = 0.5f;
-    private Color baseColor = Colors.RGBA(48, 161, 49, 0);
+    private Color baseColor = Shared.RGBA(48, 161, 49, 0);
     private Color color;
     private LineRenderer lineRenderer;
 

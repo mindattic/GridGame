@@ -126,30 +126,11 @@ public static class Tag
 
 }
 
-
 public static class Colors
 {
-
-   
-
-
-    public static Color RGB(float r, float g, float b)
-    {
-        return new Color(
-            Mathf.Clamp(r, 0, 255) / 255,
-            Mathf.Clamp(g, 0, 255) / 255,
-            Mathf.Clamp(b, 0, 255) / 255,
-            255 / 255);
-    }
-
-    public static Color RGBA(float r, float g, float b, float a)
-    {
-        return new Color(
-            Mathf.Clamp(r, 0, 255) / 255,
-            Mathf.Clamp(g, 0, 255) / 255,
-            Mathf.Clamp(b, 0, 255) / 255,
-            Mathf.Clamp(a, 0, 255) / 255);
-    }
+    public static Color RGB(float r, float g, float b) => Shared.RGB(r, g, b);
+    public static Color RGBA(float r, float g, float b, float a) => Shared.RGBA(r, g, b, a);
+  
 
     public static class Solid
     {
@@ -175,7 +156,6 @@ public static class Colors
         public static Color Yellow = Color.yellow;
         public static Color Pink = RGB(100, 75, 80);
         public static Color White = Color.white;
-
     }
 
     public static class Translucent
@@ -195,16 +175,17 @@ public static class Colors
         public static Color Red = RGBA(255, 0, 0, 0);
     }
 
-    public static Quality Junk = new Quality("Junk", RGB(128, 128, 128));
-    public static Quality Common = new Quality("Common", RGB(255, 255, 255));
-    public static Quality Uncommon = new Quality("Uncommon", RGB(30, 255, 0));
-    public static Quality Rare = new Quality("Rare", RGB(0, 112, 221));
-    public static Quality Epic = new Quality("Epic", RGB(163, 53, 238));
-    public static Quality Legendary = new Quality("Legendary", RGB(255, 128, 0));
-
 }
 
-
+public static class Qualities
+{
+    public static Quality Junk = new Quality("Junk", Shared.RGB(128, 128, 128));
+    public static Quality Common = new Quality("Common", Shared.RGB(255, 255, 255));
+    public static Quality Uncommon = new Quality("Uncommon", Shared.RGB(30, 255, 0));
+    public static Quality Rare = new Quality("Rare", Shared.RGB(0, 112, 221));
+    public static Quality Epic = new Quality("Epic", Shared.RGB(163, 53, 238));
+    public static Quality Legendary = new Quality("Legendary", Shared.RGB(255, 128, 0));
+}
 
 public static class Interval
 {

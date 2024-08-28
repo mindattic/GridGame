@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\Managers\PointerManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\TileBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
+    <Compile Include="Assets\Scripts\Utilities\Shared.cs" />
     <Compile Include="Assets\Scripts\Behaviors\FootstepBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\PropSprite.cs" />
     <Compile Include="Assets\Scripts\Managers\CameraManager.cs" />
@@ -96,7 +97,6 @@
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Managers\LogManager.cs" />
-    <Compile Include="Assets\Scripts\Utilities\Common.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorRenderers.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorBehavior.cs" />

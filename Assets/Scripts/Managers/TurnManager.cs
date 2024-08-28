@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Phase = TurnPhase;
@@ -71,12 +72,12 @@ public class TurnManager : ExtendedMonoBehavior
         else if (IsEnemyTurn)
         {
 
-          
+
             CheckEnemySpawn();
             CheckEnemyMove();
         }
 
-       
+
         titleManager.Print($"{(IsPlayerTurn ? "Player" : "Enemy")} Turn", IsPlayerTurn ? Colors.Solid.White : Colors.Solid.Red);
     }
 
@@ -115,7 +116,6 @@ public class TurnManager : ExtendedMonoBehavior
                 supportLineManager.Spawn(pair);
             }
 
-            //Spawn attack lines
             int i = 1;
             foreach (var pair in combatParticipants.attackingPairs)
             {
@@ -213,6 +213,15 @@ public class TurnManager : ExtendedMonoBehavior
 
     private IEnumerator PlayerAttack(ActorPair pair)
     {
+
+        #region Parallax Fade In
+
+        pair.actor1.ParallaxFadeInAsync();
+        pair.actor2.ParallaxFadeInAsync();
+        pair.alignment.enemies.ForEach(x => x.ParallaxFadeInAsync());
+
+        #endregion
+
         #region Player portraits 
 
         yield return Wait.For(Interval.QuarterSecond);
@@ -293,6 +302,13 @@ public class TurnManager : ExtendedMonoBehavior
 
         #endregion
 
+        #region Parallax Fade Out
+
+        pair.actor1.ParallaxFadeOutAsync();
+        pair.actor2.ParallaxFadeOutAsync();
+        pair.alignment.enemies.ForEach(x => x.ParallaxFadeOutAsync());
+
+        #endregion
     }
 
     #endregion
@@ -300,7 +316,7 @@ public class TurnManager : ExtendedMonoBehavior
     #region Enemy Attack Methods
 
 
-  
+
 
     public void CheckEnemySpawn()
     {
@@ -327,7 +343,7 @@ public class TurnManager : ExtendedMonoBehavior
             foreach (var enemy in notReadyEnemies)
             {
                 //TODO: Calculate based on attacker stats
-                int amount = Convert.ToInt32(enemy.speed * 3 * enemy.LuckModifier); 
+                int amount = Convert.ToInt32(enemy.speed * 3 * enemy.LuckModifier);
                 //int amount = Random.Int(15, 33);
                 enemy.ChangeApAsync(amount);
             }

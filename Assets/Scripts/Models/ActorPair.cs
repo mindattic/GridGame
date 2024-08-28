@@ -54,7 +54,7 @@ public class ActorPair
         this.actor1 = actor1;
         this.actor2 = actor2;
         this.axis = axis;
-        this.alignment = Common.AssignAlignment(actor1, actor2, axis);
+        this.alignment = Shared.AssignAlignment(actor1, actor2, axis);
     }
 
     public bool HasPair(ActorBehavior actor1, ActorBehavior actor2)

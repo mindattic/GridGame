@@ -12,7 +12,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public Vector2Int location = Location.Nowhere;
     public Vector3? destination = null;
     public Team team = Team.Independant;
-    public Quality quality = Colors.Common;
+    public Quality quality = Qualities.Common;
     public float level;
     public float hp;
     public float maxHp;
@@ -288,6 +288,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetGlowColor(quality.Color);
             renderers.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
             renderers.SetParallaxMaterial(resourceManager.ActorMaterial("PlayerParallax"));
+            renderers.SetParallaxAlpha(0);
             renderers.SetFrameColor(Colors.Solid.White);
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: false);
@@ -299,6 +300,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetGlowColor(Colors.Solid.Red);
             renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
             renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
+            renderers.SetParallaxAlpha(0);
             renderers.SetFrameColor(Colors.Solid.Red);
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: true);
@@ -922,12 +924,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         return gameObject.transform.GetChild(layer).gameObject;
     }
 
-    public void GrowAsync(float maxSize = 0f)
-    {
-        if (maxSize == 0)
-            maxSize = tileSize * 1.1f;
-        StartCoroutine(Grow(maxSize));
-    }
 
     public IEnumerator Grow(float maxSize = 0f)
     {
@@ -952,13 +948,14 @@ public class ActorBehavior : ExtendedMonoBehavior
         //After:
         scale = new Vector3(maxSize, maxSize, 0);
     }
-
-    public void ShrinkAsync(float minSize = 0f)
+    public void GrowAsync(float maxSize = 0f)
     {
-        if (minSize == 0)
-            minSize = tileSize;
-        StartCoroutine(Shrink(minSize));
+        if (maxSize == 0)
+            maxSize = tileSize * 1.1f;
+        StartCoroutine(Grow(maxSize));
     }
+
+
 
     public IEnumerator Shrink(float minSize = 0f)
     {
@@ -984,6 +981,82 @@ public class ActorBehavior : ExtendedMonoBehavior
         sortingOrder = SortingOrder.Default;
 
     }
+    public void ShrinkAsync(float minSize = 0f)
+    {
+        if (minSize == 0)
+            minSize = tileSize;
+        StartCoroutine(Shrink(minSize));
+    }
+
+
+    public static IEnumerator FadeIn(
+         SpriteRenderer spriteRenderer,
+         float increment,
+         float interval,
+         float startAlpha = 0f,
+         float endAlpha = 1f)
+    {
+        //Before:
+        var alpha = startAlpha;
+        spriteRenderer.color = new Color(1, 1, 1, alpha);
+
+        //During:
+        while (alpha < endAlpha)
+        {
+            alpha += increment;
+            alpha = Mathf.Clamp(alpha, 0, endAlpha);
+            spriteRenderer.color = new Color(1, 1, 1, alpha);
+            yield return interval;
+        }
+
+        //After:
+        spriteRenderer.color = new Color(1, 1, 1, endAlpha);
+    }
+
+    public void FadeInAsync(
+       SpriteRenderer spriteRenderer,
+       float increment,
+       float interval,
+       float startAlpha = 0f,
+       float endAlpha = 1f)
+    {
+        StartCoroutine(FadeIn(spriteRenderer, increment, interval, startAlpha, endAlpha));
+    }
+
+    public void ParallaxFadeInAsync()
+    {
+        FadeInAsync(renderers.parallax, Increment.FivePercent, Interval.OneTick, startAlpha: 0f, endAlpha: 0.5f);
+    }
+
+    public static IEnumerator FadeOut(SpriteRenderer spriteRenderer, float increment, float interval, float startAlpha, float endAlpha)
+    {
+        //Before:
+        var alpha = startAlpha;
+        spriteRenderer.color = new Color(1, 1, 1, alpha);
+
+        //During:
+        while (alpha > 0)
+        {
+            alpha -= increment;
+            alpha = Mathf.Clamp(alpha, 0, endAlpha);
+            spriteRenderer.color = new Color(1, 1, 1, alpha);
+            yield return interval;
+        }
+
+        //After:
+        spriteRenderer.color = new Color(1, 1, 1, endAlpha);
+    }
+
+    public void FadeOutAsync(SpriteRenderer spriteRenderer, float increment, float interval, float startAlpha, float endAlpha)
+    {
+        StartCoroutine(FadeOut(spriteRenderer, increment, interval, startAlpha, endAlpha));
+    }
+
+    public void ParallaxFadeOutAsync()
+    {
+        FadeOutAsync(renderers.parallax, Increment.FivePercent, Interval.OneTick, startAlpha: 0.5f, endAlpha: 0f);
+    }
+
 
 
 }

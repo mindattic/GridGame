@@ -65,7 +65,7 @@ public class FootstepManager : ExtendedMonoBehavior
         footstep.sprite = resourceManager.Prop("Footstep");
         footstep.name = $"Footstep_{Guid.NewGuid()}";
         footstep.Parent = board.transform;
-        footstep.Spawn(Actor.position, Common.RotationByDirection(Actor.position, PreviousPosition), IsRightFoot);
+        footstep.Spawn(Actor.position, Shared.RotationByDirection(Actor.position, PreviousPosition), IsRightFoot);
         PreviousPosition = Actor.position;
         IsRightFoot = !IsRightFoot;
     }

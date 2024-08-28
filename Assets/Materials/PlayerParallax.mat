@@ -106,10 +106,10 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
-    - _TileAmount: 0.25
+    - _TileAmount: 1
     - _WorkflowMode: 1
-    - _XScroll: -0.05
-    - _YScroll: -0.05
+    - _XScroll: -1
+    - _YScroll: -1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

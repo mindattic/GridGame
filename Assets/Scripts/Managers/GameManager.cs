@@ -83,7 +83,7 @@ public class GameManager : Singleton<GameManager>
     private void Awake()
     {
 
-        screenSize = Common.ScreenToWorldSize;
+        screenSize = Shared.ScreenToWorldSize;
         tileSize = screenSize.x / Constants.percent666;
         tileScale = new Vector2(tileSize, tileSize);
 

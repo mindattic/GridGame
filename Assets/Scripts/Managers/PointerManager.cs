@@ -16,7 +16,7 @@ public class PointerManager : MonoBehaviour, IPointerMoveHandler, IPointerDownHa
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-     
+
     }
 
     public void OnPointerMove(PointerEventData eventData)
@@ -71,7 +71,8 @@ public class PointerManager : MonoBehaviour, IPointerMoveHandler, IPointerDownHa
     public void Update()
     {
         GameManager.instance.mousePosition2D = Input.mousePosition;
-        GameManager.instance.mousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (Input.mousePosition.x > 0 && Input.mousePosition.y > 0)
+            GameManager.instance.mousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
 }
