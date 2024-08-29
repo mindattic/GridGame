@@ -119,9 +119,9 @@ public class TurnManager : ExtendedMonoBehavior
             int i = 1;
             foreach (var pair in combatParticipants.attackingPairs)
             {
-                pair.actor1.GrowAsync();
+                pair.actor1.sortingOrder = SortingOrder.Attacker;
+                pair.actor2.sortingOrder = SortingOrder.Attacker;
                 tooltipManager.Spawn($"Attack {i++}", pair.actor1.currentTile.position);
-                pair.actor2.GrowAsync();
                 tooltipManager.Spawn($"Attack {i++}", pair.actor1.currentTile.position);
                 pair.alignment.enemies.ForEach(x => x.sortingOrder = SortingOrder.Defender);
                 attackLineManager.Spawn(pair);
@@ -284,7 +284,11 @@ public class TurnManager : ExtendedMonoBehavior
             {
                 yield return enemy.MissAttack();
             }
+        }
 
+
+        foreach (var enemy in pair.alignment.enemies)
+        {
             attackLineManager.DespawnAsync(pair);
             supportLineManager.DespawnAsync(pair);
         }

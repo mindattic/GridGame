@@ -29,6 +29,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public int spawnTurn = -1;
 
     [SerializeField] public AnimationCurve glowCurve;
+    [SerializeField] public AnimationCurve slideCurve;
 
     public ActorHealthBar HealthBar;
     public ActorThumbnail Thumbnail;
@@ -74,7 +75,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsPlaying)
             return;
 
-        var closestTile = Geometry.ClosestTile(position);
+        var closestTile = Geometry.GetClosestTileByPosition(position);
         if (location == closestTile.location)
             return;
 
@@ -280,7 +281,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         gameObject.SetActive(true);
 
         location = startLocation;
-        position = Geometry.GetPosition(location);
+        position = Geometry.GetPositionByLocation(location);
 
         if (IsPlayer)
         {
@@ -296,12 +297,12 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
         else if (IsEnemy)
         {
-            renderers.SetQualityColor(Colors.Solid.Red);
+            renderers.SetQualityColor(Colors.Solid.Black);
             renderers.SetGlowColor(Colors.Solid.Red);
             renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
             renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
             renderers.SetParallaxAlpha(0);
-            renderers.SetFrameColor(Colors.Solid.Red);
+            renderers.SetFrameColor(Colors.Solid.White);
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: true);
             renderers.SetSelectionActive(false);
@@ -357,7 +358,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             SetLocation(Direction.East);
 
         //Assign targetPosition based on new location
-        destination = Geometry.GetPosition(location);
+        destination = Geometry.GetPositionByLocation(location);
 
         //Move actor toward targetPosition
         StartCoroutine(MoveTowardDestination());
@@ -397,7 +398,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             case AttackStrategy.MoveAnywhere:
                 var location = Random.Location;
                 targetPlayer = null;
-                destination = Geometry.GetPosition(location);
+                destination = Geometry.GetPositionByLocation(location);
                 break;
         }
 
@@ -433,9 +434,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         //Before:
         audioManager.Play($"Slide");
+        Vector3 initialPosition = position;
+        Vector3 initialScale = scale;
 
         //During:
-
         while (HasDestination)
         {
             var delta = destination.Value - position;
@@ -448,12 +450,17 @@ public class ActorBehavior : ExtendedMonoBehavior
                 position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), moveSpeed);
             }
 
+
+            float percentage = Geometry.GetPercentageBetween(initialPosition, destination.Value, position);
+            scale = initialScale * slideCurve.Evaluate(percentage);
+
+
             //Determine if Actor is close to targetPosition
             bool isSnapDistance = Vector2.Distance(position, destination.Value) <= snapDistance;
             if (isSnapDistance)
             {
                 //Snap to targetPosition, clear targetPosition, and set Actor MoveState: "Idle"
-                transform.position = destination.Value;
+                position = destination.Value;
                 destination = null;
             }
 

@@ -88,7 +88,7 @@ public class GameManager : Singleton<GameManager>
         tileScale = new Vector2(tileSize, tileSize);
 
         cursorSpeed = tileSize / 2;
-        swapSpeed = tileSize / 4;
+        swapSpeed = tileSize / 6;
         moveSpeed = tileSize / 6;
         bumpSpeed = tileSize / 14;
         snapDistance = tileSize / 8;

@@ -47,7 +47,7 @@ public class ActorRenderers
         //parallaxColor.a = alpha;
         //parallax.color = new Color(parallaxColor.r, parallaxColor.g, parallaxColor.b, Mathf.Clamp(alpha, 0, 0.5f));
 
-        glowColor.a = Mathf.Clamp(alpha, 0, 0.25f);
+        glowColor.a = Mathf.Clamp(alpha, 0, 1);
         glow.color = glowColor;
 
         thumbnail.color = new Color(1, 1, 1, alpha);
@@ -121,7 +121,7 @@ public class ActorRenderers
 
     public void SetParallaxAlpha(float alpha)
     {
-        parallaxColor.a = Mathf.Clamp(alpha, 0, 0.7f);
+        parallaxColor.a = Mathf.Clamp(alpha, 0, 0.5f);
         this.parallax.color = parallaxColor;
     }
 

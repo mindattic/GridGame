@@ -129,7 +129,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //Assign location and position
-        var closestTile = Geometry.ClosestTile(selectedPlayer.position);
+        var closestTile = Geometry.GetClosestTileByPosition(selectedPlayer.position);
         closestTile.spriteRenderer.color = Colors.Translucent.White;
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = closestTile.position;

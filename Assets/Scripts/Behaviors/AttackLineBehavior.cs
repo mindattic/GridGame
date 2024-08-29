@@ -78,11 +78,13 @@ namespace Game.Behaviors
 
             IEnumerator _()
             {
+                //Before:
                 alpha = 0f;
                 color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
                 lineRenderer.startColor = color;
                 lineRenderer.endColor = color;
 
+                //During:
                 while (alpha < maxAlpha)
                 {
                     alpha += Increment.OnePercent;
@@ -93,6 +95,13 @@ namespace Game.Behaviors
 
                     yield return Wait.OneTick();
                 }
+
+                //After:
+                alpha = maxAlpha;
+                color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+                lineRenderer.startColor = color;
+                lineRenderer.endColor = color;
+
             }
 
             StartCoroutine(_());
@@ -100,11 +109,13 @@ namespace Game.Behaviors
 
         public IEnumerator Despawn()
         {
+            //Before:
             alpha = maxAlpha;
             color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
 
+            //During:
             while (alpha > 0)
             {
                 alpha -= Increment.OnePercent;
@@ -116,8 +127,11 @@ namespace Game.Behaviors
                 yield return Wait.OneTick();
             }
 
-
-            //Clear(this.gameObject);
+            //After:
+            alpha = 0;
+            color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            lineRenderer.startColor = color;
+            lineRenderer.endColor = color;
         }
 
         public void DespawnAsync()

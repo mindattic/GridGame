@@ -25,7 +25,7 @@ public class Geometry
     }
 
 
-    public static Vector3 GetPosition(Vector2Int location)
+    public static Vector3 GetPositionByLocation(Vector2Int location)
     {
         //return boardPositions[location];
         float x = board.offset.x + (tileSize * location.x);
@@ -47,12 +47,12 @@ public class Geometry
     //    return new Vector2Int(x, y);
     //}
 
-    public static TileBehavior ClosestTile(Vector3 other)
+    public static TileBehavior GetClosestTileByPosition(Vector3 position)
     {
-        return tiles.OrderBy(x => Vector3.Distance(x.transform.position, other)).First();
+        return tiles.OrderBy(x => Vector3.Distance(x.transform.position, position)).First();
     }
 
-    public static TileBehavior GetClosestTile(Vector2Int location)
+    public static TileBehavior GetClosestTileByLocation(Vector2Int location)
     {
         return tiles.OrderBy(x => Vector2Int.Distance(x.location, location)).First();
     }
@@ -105,22 +105,22 @@ public class Geometry
 
 
         //...Otherwise, Find closest unoccupied tile adjacent to player...
-        var closestUnoccupiedAdjacentTile = ClosestUnoccupiedAdjacentTileByLocation(other.location);
+        var closestUnoccupiedAdjacentTile = GetClosestUnoccupiedAdjacentTileByLocation(position.location);
         if (closestUnoccupiedAdjacentTile != null)
             return closestUnoccupiedAdjacentTile.position;
 
         //...Otherwise, Find closest tile adjacent to player...
-        var closestAdjacentTile = GetClosestAdjacentTileByLocation(other.location);
+        var closestAdjacentTile = GetClosestAdjacentTileByLocation(position.location);
         if (closestAdjacentTile != null)
             return closestAdjacentTile.position;
 
         //...Otherwise, find closest unoccupied tile to player...
-        var closestUnoccupiedTile = GetClosestUnoccupiedTileByLocation(other.location);
+        var closestUnoccupiedTile = GetClosestUnoccupiedTileByLocation(position.location);
         if (closestUnoccupiedTile != null)
             return closestUnoccupiedTile.position;
 
         //...Otherwise, find closest tile to player
-        var closestTile = GetClosestTile(other.location);
+        var closestTile = GetClosestTileByPosition(position.location);
         if (closestTile != null)
             return closestTile.position;
 
@@ -133,7 +133,7 @@ public class Geometry
         return tiles.FirstOrDefault(x => !x.IsOccupied && Vector2Int.Distance(x.location, other) == 1);
     }
 
-    public static TileBehavior ClosestUnoccupiedAdjacentTileByLocation(Vector2Int other)
+    public static TileBehavior GetClosestUnoccupiedAdjacentTileByLocation(Vector2Int other)
     {
         return tiles.FirstOrDefault(x => !x.IsOccupied && x.IsAdjacentTo(other));
     }
@@ -158,6 +158,19 @@ public class Geometry
     public static bool IsInCorner(Vector2Int location)
     {
         return location == Location.A1 || location == Location.A6 || location == Location.H1 || location == Location.H6;
+    }
+
+
+    public static float GetPercentageBetween(Vector3 start, Vector3 end, Vector3 point)
+    {
+        // Calculate the vectors
+        Vector3 AB = end - start;
+        Vector3 AP = point - start;
+
+        // Calculate the percentage along the line segment
+        float percentage = AP.magnitude / AB.magnitude;
+
+        return percentage;
     }
 
 }
