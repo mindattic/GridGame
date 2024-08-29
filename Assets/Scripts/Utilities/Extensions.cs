@@ -44,35 +44,41 @@ public static class ListExtensions
 
 public static class Vector3Extensions
 {
-    public static Vector3 SetX(this Vector3 v3, float x)
+    public static Vector3 SetX(this Vector3 v, float x)
     {
-        return new Vector3(x, v3.y, v3.z);
+        return new Vector3(x, v.y, v.z);
     }
 
-    public static Vector3 AddX(this Vector3 v3, float x)
+    public static Vector3 AddX(this Vector3 v, float x)
     {
-        return new Vector3(v3.x + x, v3.y, v3.z);
+        return new Vector3(v.x + x, v.y, v.z);
     }
 
-    public static Vector3 SetY(this Vector3 v3, float y)
+    public static Vector3 SetY(this Vector3 v, float y)
     {
-        return new Vector3(v3.x, y, v3.z);
+        return new Vector3(v.x, y, v.z);
     }
 
-    public static Vector3 AddY(this Vector3 v3, float y)
+    public static Vector3 AddY(this Vector3 v, float y)
     {
-        return new Vector3(v3.x, v3.y + y, v3.z);
+        return new Vector3(v.x, v.y + y, v.z);
     }
 
-    public static Vector3 SetZ(this Vector3 v3, float z)
+    public static Vector3 SetZ(this Vector3 v, float z)
     {
-        return new Vector3(v3.x, v3.y, z);
+        return new Vector3(v.x, v.y, z);
     }
 
-    public static Vector3 AddZ(this Vector3 v3, float z)
+    public static Vector3 AddZ(this Vector3 v, float z)
     {
-        return new Vector3(v3.x, v3.y, v3.z + z);
+        return new Vector3(v.x, v.y, v.z + z);
     }
+
+    public static bool HasNaN(this Vector3 v)
+    {
+        return v.x == float.NaN || v.y == float.NaN || v.z == float.NaN;
+    }
+
 }
 
 public static class ColorExtensions

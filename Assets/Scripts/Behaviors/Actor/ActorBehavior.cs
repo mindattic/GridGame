@@ -10,7 +10,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     //Variables
     public Archetype archetype;
     public Vector2Int location = Location.Nowhere;
-    public Vector3? destination = null;
+    public Vector3 destination;
     public Team team = Team.Independant;
     public Quality quality = Qualities.Common;
     public float level;
@@ -71,7 +71,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void Update()
     {
-        //Check abort stateub
+        //Check abort status
         if (!IsPlaying)
             return;
 
@@ -85,7 +85,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         var overlappingActor = actors.FirstOrDefault(x => x != null
                                             && !x.Equals(this)
                                             && x.IsPlaying
-                                            && !x.HasDestination
                                             && !x.Equals(focusedPlayer)
                                             && !x.Equals(selectedPlayer)
                                             && x.location.Equals(closestTile.location));
@@ -210,7 +209,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsFocusedPlayer => HasFocusedPlayer && Equals(focusedPlayer);
     public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
     public bool HasLocation => location != Location.Nowhere;
-    public bool HasDestination => destination.HasValue;
+    public bool HasReachedDestination => position == destination;
     public bool IsNorthEdge => location.y == 1;
     public bool IsEastEdge => location.x == board.columnCount;
     public bool IsSouthEdge => location.y == board.rowCount;
@@ -258,7 +257,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         return Direction.None;
     }
 
-    private Vector2Int SetLocation(Direction direction)
+    private void SetLocation(Direction direction)
     {
         switch (direction)
         {
@@ -267,8 +266,6 @@ public class ActorBehavior : ExtendedMonoBehavior
             case Direction.South: location += new Vector2Int(0, 1); break;
             case Direction.West: location += new Vector2Int(-1, 0); break;
         }
-
-        return location;
     }
 
     public void SetSortingOrder(int sortingOrder) => this.sortingOrder = sortingOrder;
@@ -282,6 +279,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         location = startLocation;
         position = Geometry.GetPositionByLocation(location);
+        destination = position;
 
         if (IsPlayer)
         {
@@ -343,10 +341,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void SwapLocation(Vector2Int other)
     {
-        //Check abort state
-        if (HasDestination)
-            return;
-
         //Assign location based on relative direction
         if (IsNorthOf(other) || IsNorthWestOf(other) || IsNorthEastOf(other))
             SetLocation(Direction.South);
@@ -357,7 +351,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         else if (IsWestOf(other))
             SetLocation(Direction.East);
 
-        //Assign targetPosition based on new location
+        //Assign destination based on new location
         destination = Geometry.GetPositionByLocation(location);
 
         //Move actor toward targetPosition
@@ -422,6 +416,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             //Snap selected player to cursor
             position = cursorPosition;
+            destination = position;
 
             yield return Wait.None();
         }
@@ -433,42 +428,40 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator MoveTowardDestination()
     {
         //Before:
-        audioManager.Play($"Slide");
         Vector3 initialPosition = position;
-        Vector3 initialScale = scale;
+        Vector3 initialScale = tileScale;
+        scale = tileScale;
+        audioManager.Play($"Slide");
 
         //During:
-        while (HasDestination)
+        while (!HasReachedDestination)
         {
-            var delta = destination.Value - position;
+            var delta = destination - position;
             if (Mathf.Abs(delta.x) >= snapDistance)
             {
-                position = Vector2.MoveTowards(position, new Vector3(destination.Value.x, position.y, position.z), moveSpeed);
+                position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), moveSpeed);
             }
             else if (Mathf.Abs(delta.y) >= snapDistance)
             {
-                position = Vector2.MoveTowards(position, new Vector3(position.x, destination.Value.y, position.z), moveSpeed);
+                position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), moveSpeed);
             }
 
-
-            float percentage = Geometry.GetPercentageBetween(initialPosition, destination.Value, position);
+            float percentage = Geometry.GetPercentageBetween(initialPosition, destination, position);
             scale = initialScale * slideCurve.Evaluate(percentage);
 
-
-            //Determine if Actor is close to targetPosition
-            bool isSnapDistance = Vector2.Distance(position, destination.Value) <= snapDistance;
+            //Determine whether to snap to destination
+            bool isSnapDistance = Vector2.Distance(position, destination) <= snapDistance;
             if (isSnapDistance)
             {
-                //Snap to targetPosition, clear targetPosition, and set Actor MoveState: "Idle"
-                position = destination.Value;
-                destination = null;
+                position = destination;
             }
 
             yield return Wait.OneTick();
         }
 
         //After:
-
+        scale = tileScale;
+        position = destination;
     }
 
     public void CheckActionBar()

@@ -12,6 +12,13 @@ public class PointerManager : MonoBehaviour, IPointerMoveHandler, IPointerDownHa
     private CanvasGroup canvasGroup;
 
 
+
+    public bool IsMouseOnScreen =>
+        Input.mousePosition.x >= 0
+        && Input.mousePosition.x <= Screen.width
+        && Input.mousePosition.y > 0
+        && Input.mousePosition.x <= Screen.height;
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -71,7 +78,7 @@ public class PointerManager : MonoBehaviour, IPointerMoveHandler, IPointerDownHa
     public void Update()
     {
         GameManager.instance.mousePosition2D = Input.mousePosition;
-        if (Input.mousePosition.x > 0 && Input.mousePosition.y > 0)
+        if (IsMouseOnScreen)
             GameManager.instance.mousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 

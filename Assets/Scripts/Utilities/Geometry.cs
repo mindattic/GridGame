@@ -161,15 +161,18 @@ public class Geometry
     }
 
 
-    public static float GetPercentageBetween(Vector3 start, Vector3 end, Vector3 point)
+    public static float GetPercentageBetween(Vector3 start, Vector3 end, Vector3 current)
     {
-        // Calculate the vectors
+        //Calculate the vectors
         Vector3 AB = end - start;
-        Vector3 AP = point - start;
+        Vector3 AC = current - start;
 
-        // Calculate the percentage along the line segment
-        float percentage = AP.magnitude / AB.magnitude;
+        //Check for division by zero; Handle the case where start and end are the same point
+        if (AB.magnitude == 0)
+            return 0;
 
+        //Calculate the percentage along the line segment
+        float percentage = AC.magnitude / AB.magnitude;
         return percentage;
     }
 

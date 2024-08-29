@@ -3,6 +3,7 @@ Shader "Unlit/TileMask"
     Properties
     {
         _Color("Color", Color) = (1,1,1,1)
+        _StencilRef("Stencil Ref", Range(0,255)) = 1 // Exposing the _StencilRef property
     }
         SubShader
     {
@@ -11,11 +12,11 @@ Shader "Unlit/TileMask"
 
         Stencil
         {
-            Ref 1
+            Ref[_StencilRef]  // Use the _StencilRef property
             Comp Always
             Pass Replace
-            ReadMask 1
-            WriteMask 1
+            ReadMask 255
+            WriteMask 255
         }
 
         Pass
