@@ -352,7 +352,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             SetLocation(Direction.East);
 
         //Assign destination based on new location
-        destination = Geometry.GetPositionByLocation(location);
+        var closetTile = Geometry.GetClosestTileByLocation(location);
+        destination = closetTile.position;
 
         //Move actor toward targetPosition
         StartCoroutine(MoveTowardDestination());
@@ -412,13 +413,14 @@ public class ActorBehavior : ExtendedMonoBehavior
             cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bounds.Bottom, board.bounds.Top);
 
             //Move selected player towards cursor
-            //position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
+            position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
 
             //Snap selected player to cursor
-            position = cursorPosition;
+            //position = cursorPosition;
+
             destination = position;
 
-            yield return Wait.None();
+            yield return Wait.OneTick();
         }
 
         //After:
