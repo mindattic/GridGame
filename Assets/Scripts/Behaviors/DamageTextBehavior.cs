@@ -1,14 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class DamageTextBehavior : ExtendedMonoBehavior
 {
-
-
     public TextMeshPro textMesh;
+    public float floatSpeed;
 
     #region Components
 
@@ -30,35 +27,44 @@ public class DamageTextBehavior : ExtendedMonoBehavior
     void Awake()
     {
         textMesh = GetComponent<TextMeshPro>();
+        floatSpeed = tileSize / 32;
     }
 
     public void Spawn(string text, Vector3 position)
     {
         textMesh.text = text;
-        var x = position.x + Random.Range(tileSize / 4);
-        var y = position.y + (tileSize / 2 * Random.Percent);
+        var x = position.x + -(tileSize / 12 * Random.Percent) + (tileSize / 12 * Random.Percent);
+        var y = position.y + -(tileSize / 12 * Random.Percent) + (tileSize / 12 * Random.Percent);
         transform.position = new Vector3(x, y, 0);
         StartCoroutine(FadeOut());
     }
 
     private IEnumerator FadeOut()
     {
-        float alpha = textMesh.color.a;
-        Color color = textMesh.color;
 
+        //Before:
+        float alpha = 1;
+        Color color = Colors.Solid.White;
+
+        //During:
         while (textMesh.color.a > 0)
         {
-            alpha -= 0.1f;
+            alpha -= Increment.OnePercent * 3;
             alpha = Mathf.Max(alpha, 0);
-            color.a = alpha;
-            textMesh.color = color;
 
+            if (alpha < 0.5)
+            {
+                color.a = alpha;
+                textMesh.color = color;
+            }
 
-            transform.position += new Vector3(0, tileSize / 16, 0);
-            yield return Wait.For(Interval.FiveTicks); // update interval
+            transform.position += new Vector3(0, floatSpeed, 0);
+            yield return Wait.For(Interval.OneTick);
         }
-        StopCoroutine(FadeOut());
+
+        //After:
         Destroy(gameObject);
+
     }
 
 }

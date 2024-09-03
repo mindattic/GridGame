@@ -571,12 +571,11 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position = currentTile.position;
 
-        if (intensity > 0)
-        {
-            var amount = new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
-            gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position += amount;
-        }
+        if (intensity <= 0)
+            return;
 
+        var amount = new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
+        gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position += amount;
     }
 
 
@@ -659,39 +658,107 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator ChangeHp(float amount)
     {
         //Before:
-        var remainingHP = Mathf.Clamp(hp + amount, 0, maxHp);
+        float ticks = 0f;
+        float duration = Interval.QuarterSecond;
+        bool isDamage = amount < 0f;
+        bool isHeal = amount >= 0f;
+        bool isIneffective = amount == 0f;
 
-        //During:
-        while (hp > remainingHP)
+        hp += amount;
+        hp = Mathf.Clamp(hp, 0, maxHp);
+        UpdateHealthBar();
+
+        if (isDamage)
+        {
+            damageTextManager.Spawn(Math.Abs(amount).ToString(), position);
+            audioManager.Play($"Slash{Random.Int(1, 7)}");
+        }
+        else if (isHeal)
         {
 
-            //Decrease hp
-            var min = (int)Math.Max(1, amount * 0.1f);
-            var max = (int)Math.Max(1, amount * 0.3f);
-            var hit = Random.Int(min, max);
-            hp -= hit;
-            hp = Mathf.Clamp(hp, remainingHP, maxHp);
+        }
+        else if (isIneffective)
+        {
 
-            sp += hit * 0.1f;
+        }
 
-            damageTextManager.Spawn(hit.ToString(), position);
+        //During:
+        while (ticks < duration)
+        {
+            if (isDamage)
+            {
+                GrowAsync();
+                Shake(shakeIntensity.Medium);
+            }
+            else if (isHeal)
+            {
 
-            //Shake Actor
-            Shake(shakeIntensity.Medium);
+            }
+            else if (isIneffective)
+            {
 
-            UpdateHealthBar();
+            }
 
-            audioManager.Play($"Slash{Random.Int(1, 7)}");
 
-            yield return Wait.For(Interval.FiveTicks);
+
+            ticks += Interval.OneTick;
+            yield return Wait.For(Interval.OneTick);
         }
 
         //After:
-        Shake(shakeIntensity.Stop);
-        hp = remainingHP;
-        UpdateHealthBar();
-        position = currentTile.position;
+        if (isDamage)
+        {
+            ShrinkAsync();
+            Shake(shakeIntensity.Stop);
+        }
+        else if (isHeal)
+        {
+
+        }
+        else if (isIneffective)
+        {
+
+        }
+
+     
     }
+
+    //public IEnumerator ChangeHp(float amount)
+    //{
+    //    //Before:
+    //    var remainingHP = Mathf.Clamp(hp + amount, 0, maxHp);
+
+    //    //During:
+    //    while (hp > remainingHP)
+    //    {
+
+    //        //Decrease hp
+    //        var min = (int)Math.Max(1, amount * 0.1f);
+    //        var max = (int)Math.Max(1, amount * 0.3f);
+    //        var hit = Random.Int(min, max);
+    //        hp -= hit;
+    //        hp = Mathf.Clamp(hp, remainingHP, maxHp);
+
+    //        sp += hit * 0.1f;
+
+    //        damageTextManager.Spawn(hit.ToString(), position);
+
+    //        //Shake Actor
+    //        Shake(shakeIntensity.Medium);
+
+    //        UpdateHealthBar();
+
+    //        audioManager.Play($"Slash{Random.Int(1, 7)}");
+
+    //        yield return Wait.For(Interval.FiveTicks);
+    //    }
+
+    //    //After:
+    //    Shake(shakeIntensity.Stop);
+    //    hp = remainingHP;
+    //    UpdateHealthBar();
+    //    position = currentTile.position;
+    //}
 
     public void ChangeHpAsync(float amount)
     {
@@ -742,6 +809,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
 
         //After:
+        Shake(shakeIntensity.Stop);
     }
 
     public void ChangeSpAsync(float amount)
@@ -954,6 +1022,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         if (maxSize == 0)
             maxSize = tileSize * 1.1f;
+
         StartCoroutine(Grow(maxSize));
     }
 

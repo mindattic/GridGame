@@ -12,7 +12,7 @@
         High = maxSize / 6f;
         Medium = maxSize / 12f;
         Low = maxSize / 24f;
-        Stop = 0;
+        Stop = 0f;
     }
 
 }
