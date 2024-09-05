@@ -20,6 +20,7 @@ TagManager:
   - AttackLine
   - Footstep
   - Tooltip
+  - VFX
   layers:
   - Default
   - TransparentFX

@@ -67,7 +67,6 @@
     <Compile Include="Assets\Scripts\Models\Quality.cs" />
     <Compile Include="Assets\Scripts\Models\ShakeIntensity.cs" />
     <Compile Include="Assets\Scripts\Managers\SelectedPlayerManager.cs" />
-    <Compile Include="Assets\VFXManager.cs" />
     <Compile Include="Assets\Scripts\Models\ActorDetails.cs" />
     <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
@@ -80,6 +79,7 @@
     <Compile Include="Assets\Scripts\Models\MusicTrack.cs" />
     <Compile Include="Assets\Scripts\Models\CombatParticipants.cs" />
     <Compile Include="Assets\Scripts\Models\StatusSprite.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\VFXBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\PointerManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\TileBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
@@ -90,6 +90,7 @@
     <Compile Include="Assets\Scripts\Managers\FootstepManager.cs" />
     <Compile Include="Assets\Scripts\Models\GhostRenderers.cs" />
     <Compile Include="Assets\Scripts\Models\ActorMaterial.cs" />
+    <Compile Include="Assets\Scripts\Managers\VFXManager.cs" />
     <Compile Include="Assets\Scripts\Models\ActorPair.cs" />
     <Compile Include="Assets\Scripts\Behaviors\FpsMonitor.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorHealthBar.cs" />
@@ -99,7 +100,6 @@
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Managers\LogManager.cs" />
-    <Compile Include="Assets\VFXBehavior.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorRenderers.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorBehavior.cs" />

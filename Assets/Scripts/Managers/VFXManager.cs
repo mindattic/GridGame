@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class VFXManager : ExtendedMonoBehavior
@@ -11,6 +12,11 @@ public class VFXManager : ExtendedMonoBehavior
         vfxBehavior.name = $"VFX_{id}_{Guid.NewGuid()}";
         vfxBehavior.parent = board.transform;
         vfxBehavior.Spawn(position, scale);
+    }
+
+    public void Clear()
+    {
+        GameObject.FindGameObjectsWithTag(Tag.VFX).ToList().ForEach(x => Destroy(x));
     }
 
 }

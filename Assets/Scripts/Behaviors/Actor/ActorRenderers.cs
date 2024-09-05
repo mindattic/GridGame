@@ -5,13 +5,18 @@ public class ActorRenderers
 {
     public ActorRenderers() { }
 
-    public Color baseColor = Colors.Solid.White;
+    public Color opaqueColor = Colors.Solid.White;
+    public Color qualityColor = Colors.Solid.White;
+    public float qualityAlphaMax = 0.7f;
+
+
     public Color glowColor = Colors.Solid.White;
     public Color parallaxColor = Colors.Solid.White;
     public Color frameColor = Colors.Solid.White;
     public Color healthBarColor = Colors.HealthBar.Green;
     public Color actionBarColor = Colors.ActionBar.Blue;
 
+    public SpriteRenderer opaque;
     public SpriteRenderer quality;
     public SpriteRenderer glow;
     public SpriteRenderer parallax;
@@ -41,14 +46,18 @@ public class ActorRenderers
 
     public void SetAlpha(float alpha)
     {
-        baseColor.a = Mathf.Clamp(alpha, 0, 0.7f);
-        quality.color = baseColor;
+        opaqueColor.a = Mathf.Clamp(alpha, 0, 1);
+        opaque.color = opaqueColor;
+
+        qualityColor.a = Mathf.Clamp(alpha, 0, qualityAlphaMax);
+        quality.color = qualityColor;
+
+        
+        glowColor.a = Mathf.Clamp(alpha, 0, 1);
+        glow.color = glowColor;
 
         //parallaxColor.a = alpha;
         //parallax.color = new Color(parallaxColor.r, parallaxColor.g, parallaxColor.b, Mathf.Clamp(alpha, 0, 0.5f));
-
-        glowColor.a = Mathf.Clamp(alpha, 0, 1);
-        glow.color = glowColor;
 
         thumbnail.color = new Color(1, 1, 1, alpha);
 
@@ -80,14 +89,14 @@ public class ActorRenderers
 
     public void SetQualityColor(Color color)
     {
-        baseColor = new Color(color.r, color.g, color.b, color.a);
-        quality.color = baseColor;
+        qualityColor = new Color(color.r, color.g, color.b, Mathf.Clamp(color.a, 0, qualityAlphaMax));
+        quality.color = qualityColor;
     }
 
     public void SetQualityAlpha(float alpha)
     {
-        baseColor.a = Mathf.Clamp(alpha, 0, 0.5f);
-        this.quality.color = baseColor;
+        qualityColor.a = Mathf.Clamp(alpha, 0, qualityAlphaMax);
+        this.quality.color = qualityColor;
     }
 
     public void SetGlowColor(Color color)
@@ -99,7 +108,7 @@ public class ActorRenderers
     public void SetGlowAlpha(float alpha)
     {
         glowColor.a = Mathf.Clamp(alpha, 0, 0.5f);
-        this.glow.color = baseColor;
+        this.glow.color = qualityColor;
     }
 
     public void SetGlowScale(Vector3 scale)

@@ -13447,6 +13447,9 @@ MonoBehaviour:
     - m_Text: Tooltip
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Slash'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -14266,6 +14269,7 @@ GameObject:
   - component: {fileID: 1751276299}
   - component: {fileID: 1751276300}
   - component: {fileID: 1751276302}
+  - component: {fileID: 1751276303}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -14326,6 +14330,7 @@ MonoBehaviour:
   footstepManager: {fileID: 0}
   tooltipManager: {fileID: 0}
   audioManager: {fileID: 0}
+  vfxManager: {fileID: 0}
   consoleManager: {fileID: 0}
   logManager: {fileID: 0}
   soundSource: {fileID: 0}
@@ -14500,6 +14505,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 38e3b958db9388c47a824bef5e7b900b, type: 2}
   musicTracks:
   - {fileID: 11400000, guid: 8d74182f04b1c0447aa31106ce247f1c, type: 2}
+  visualEffects:
+  - {fileID: 11400000, guid: 00b5e479d110ba840b7385036d5cb57f, type: 2}
 --- !u!114 &1751276288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14859,6 +14866,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tooltipPrefab: {fileID: 8802531427282824641, guid: 8dcbe09a25d23aa468bbcf1da143f0c6, type: 3}
+--- !u!114 &1751276303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751276275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e8b632a57187a74a922b4c81f6dc3cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1830783914
 GameObject:
   m_ObjectHideFlags: 0

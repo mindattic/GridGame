@@ -65,24 +65,25 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //Layers
     protected static class ActorLayer
     {
-        public const int Quality = 0;
-        public const int Glow = 1;
-        public const int Parallax = 2;        
-        public const int Thumbnail = 3;
-        public const int Frame = 4;
-        public const int StatusIcon = 5;
-        public const int HealthBarBack = 6;
-        public const int HealthBar = 7;
-        public const int HealthBarFront = 8;
-        public const int HealthText = 9;
-        public const int ActionBarBack = 10;
-        public const int ActionBar = 11;
-        public const int ActionText = 12;
-        public const int RadialBack = 13;
-        public const int RadialFill = 14;
-        public const int RadialText = 15;
-        public const int Selection = 16;
-        public const int Mask = 17;
+        public const int Opaque = 0;
+        public const int Quality = 1;
+        public const int Glow = 2;
+        public const int Parallax = 3;        
+        public const int Thumbnail = 4;
+        public const int Frame = 5;
+        public const int StatusIcon = 6;
+        public const int HealthBarBack = 7;
+        public const int HealthBar = 8;
+        public const int HealthBarFront = 9;
+        public const int HealthText = 10;
+        public const int ActionBarBack = 11;
+        public const int ActionBar = 12;
+        public const int ActionText = 13;
+        public const int RadialBack = 14;
+        public const int RadialFill = 15;
+        public const int RadialText = 16;
+        public const int Selection = 17;
+        public const int Mask = 18;
     }
 
     //Actor

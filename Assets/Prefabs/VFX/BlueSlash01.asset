@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186a5226611841d439be9262545faef8, type: 3}
   m_Name: BlueSlash01
   m_EditorClassIdentifier: 
-  id: 
-  gameObject: {fileID: 0}
+  id: BlueSlash01
+  gameObject: {fileID: 1488368475546491885, guid: a86390364cf186544a67357d14718a7a, type: 3}

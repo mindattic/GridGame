@@ -123,7 +123,7 @@ public static class Tag
     public static string Footstep = "Footstep";
     public static string Wall = "Wall";
     public static string Tooltip = "Tooltip";
-
+    public static string VFX = "VFX";
 }
 
 public static class Colors

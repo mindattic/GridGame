@@ -39,7 +39,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
-
+        renderers.opaque = gameObject.transform.GetChild(ActorLayer.Opaque).GetComponent<SpriteRenderer>();
         renderers.quality = gameObject.transform.GetChild(ActorLayer.Quality).GetComponent<SpriteRenderer>();
         renderers.glow = gameObject.transform.GetChild(ActorLayer.Glow).GetComponent<SpriteRenderer>();
         renderers.parallax = gameObject.transform.GetChild(ActorLayer.Parallax).GetComponent<SpriteRenderer>();
@@ -182,9 +182,10 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
         set
         {
+            renderers.opaque.sortingOrder = value + ActorLayer.Opaque;
             renderers.quality.sortingOrder = value + ActorLayer.Quality;
             renderers.parallax.sortingOrder = value + ActorLayer.Parallax;
-            renderers.glow.sortingOrder = value;
+            renderers.glow.sortingOrder = value + ActorLayer.Glow;
             renderers.thumbnail.sortingOrder = value + ActorLayer.Thumbnail;
             renderers.frame.sortingOrder = value + ActorLayer.Frame;
             renderers.statusIcon.sortingOrder = value + ActorLayer.StatusIcon;

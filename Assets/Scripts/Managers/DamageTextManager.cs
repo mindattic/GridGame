@@ -8,16 +8,6 @@ public class DamageTextManager : ExtendedMonoBehavior
 {
     [SerializeField] public GameObject DamageTextPrefab;
 
-    private void Start()
-    {
-
-    }
-
-    private void Update()
-    {
-
-    }
-
     public void Spawn(string text, Vector3 position)
     {
         var prefab = Instantiate(DamageTextPrefab, Vector2.zero, Quaternion.identity);
