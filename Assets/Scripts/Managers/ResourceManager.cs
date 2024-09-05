@@ -17,6 +17,8 @@ public class ResourceManager : ExtendedMonoBehavior
     [SerializeField] public List<SeamlessSprite> seamLessSprites = new List<SeamlessSprite>();
     [SerializeField] public List<SoundEffect> soundEffects = new List<SoundEffect>();
     [SerializeField] public List<MusicTrack> musicTracks = new List<MusicTrack>();
+    [SerializeField] public List<VisualEffect> visualEffects = new List<VisualEffect>();
+
 
     public Sprite ActorThumbnail(string id)
     {
@@ -151,5 +153,19 @@ public class ResourceManager : ExtendedMonoBehavior
         return null;
     }
 
+
+    public GameObject VisualEffect(string id)
+    {
+        try
+        {
+            return visualEffects.First(x => x.id.Equals(id)).gameObject;
+        }
+        catch (Exception ex)
+        {
+            logManager.error(ex.Message);
+        }
+
+        return null;
+    }
 
 }

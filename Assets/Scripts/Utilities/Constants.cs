@@ -15,7 +15,7 @@ public static class Constants
     public const string Title = "Title";
     public const string Card = "Card";
     public const string TimerBar = "TimerBar";
-
+   
     //Percent
     public const float percent25 = 0.25f;
     public const float percent33 = 0.333333f;

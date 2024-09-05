@@ -26,6 +26,7 @@ public class DebugManager : ExtendedMonoBehavior
             case 5: EnemyAttackTest(); break;
             case 6: TitleTest(); break;
             case 7: TooltipTest(); break;
+            case 8: VFXTest(); break;
         }
     }
 
@@ -113,5 +114,13 @@ public class DebugManager : ExtendedMonoBehavior
         var position = Random.Player.currentTile.position;
         tooltipManager.Spawn(text, position);
     }
+
+    public void VFXTest()
+    {
+        var position = Random.Player.currentTile.position;
+        var scale = new Vector3(1,1,1);
+        vfxManager.Spawn("BlueSlash01", position, scale);
+    }
+
 
 }

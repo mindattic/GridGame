@@ -34,6 +34,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public FootstepManager footstepManager;
     [HideInInspector] public TooltipManager tooltipManager;
     [HideInInspector] public AudioManager audioManager;
+    [HideInInspector] public VFXManager vfxManager;
 
     //UI Managers
     [HideInInspector] public ConsoleManager consoleManager;
@@ -124,6 +125,7 @@ public class GameManager : Singleton<GameManager>
         audioManager = GameObject.Find(Constants.Game).GetComponent<AudioManager>() ?? throw new UnityException("AudioManager is null");
         consoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>() ?? throw new UnityException("ConsoleManager is null");
         logManager = GameObject.Find(Constants.Log).GetComponent<LogManager>() ?? throw new UnityException("LogManager is null");
+        vfxManager = GameObject.Find(Constants.Game).GetComponent<VFXManager>() ?? throw new UnityException("VFXManager is null");
 
         timer = GameObject.Find(Constants.Game).GetComponent<TimerBehavior>() ?? throw new UnityException("TimerBehavior is null");
 

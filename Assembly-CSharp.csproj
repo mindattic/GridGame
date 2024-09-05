@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\Models\Quality.cs" />
     <Compile Include="Assets\Scripts\Models\ShakeIntensity.cs" />
     <Compile Include="Assets\Scripts\Managers\SelectedPlayerManager.cs" />
+    <Compile Include="Assets\VFXManager.cs" />
     <Compile Include="Assets\Scripts\Models\ActorDetails.cs" />
     <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
@@ -94,9 +95,11 @@
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorHealthBar.cs" />
     <Compile Include="Assets\Scripts\Managers\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Managers\DebugManager.cs" />
+    <Compile Include="Assets\Scripts\Models\VisualEffect.cs" />
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Managers\LogManager.cs" />
+    <Compile Include="Assets\VFXBehavior.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorRenderers.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorBehavior.cs" />
@@ -143,6 +146,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+    <None Include="Assets\FX_Slash_Collection\Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
@@ -156,7 +160,9 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\FX_Slash_Collection\Shader\Alpha Blended.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\FX_Slash_Collection\Shader\Additive.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\Shader\GradientTransparency.shader" />

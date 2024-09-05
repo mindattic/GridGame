@@ -539,9 +539,9 @@ public class ActorBehavior : ExtendedMonoBehavior
         //    transform.position.z);
 
         //var rot = new Vector3(
-        //   transform.Rotation.x,
-        //   transform.Rotation.y ,
-        //   transform.Rotation.z + (glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 128)));
+        //   transform.rotation.x,
+        //   transform.rotation.y ,
+        //   transform.rotation.z + (glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 128)));
 
         //renderers.thumbnail.transform.Rotate(Vector3.up * glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 3));
 
@@ -549,7 +549,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //renderers.thumbnail.transform.position = pos;
         //renderers.frame.transform.position = pos;
         //renderers.thumbnail.transform.position = pos;
-        //renderers.thumbnail.transform.Rotation = rot;
+        //renderers.thumbnail.transform.rotation = rot;
     }
 
 

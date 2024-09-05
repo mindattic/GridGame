@@ -37,6 +37,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected TileManager tileManager => GameManager.instance.tileManager;
     protected FootstepManager footstepManager => GameManager.instance.footstepManager;
     protected TooltipManager tooltipManager => GameManager.instance.tooltipManager;
+    protected VFXManager vfxManager => GameManager.instance.vfxManager;
 
     protected AudioManager audioManager => GameManager.instance.audioManager;
  
