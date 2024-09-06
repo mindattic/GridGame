@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 6abcac340e3d4ad4aabb748349ef49ab
+timeCreated: 1467861852
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: fx_textures_line_rotate_materials.unity3d
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 286708
+  packageName: RPG_GameVFX Collection
+  packageVersion: 1.0
+  assetPath: Assets/GameVFX Collection(URP)/FX_HolyWings/Textures/Materials/sl-g01g_14.mat
+  uploadId: 671947

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5732584993690702375}
   - component: {fileID: 5191872031970301904}
   - component: {fileID: 5047699772447412414}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -186,7 +186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3622447823352348307}
   - component: {fileID: 1718621717616884480}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -273,7 +273,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1500945737048968713}
   - component: {fileID: 4006318630656734982}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: TooltipPrefab
   m_TagString: Tooltip
   m_Icon: {fileID: 0}
