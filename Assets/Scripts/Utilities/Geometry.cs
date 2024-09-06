@@ -177,16 +177,14 @@ public class Geometry
         return percentage;
     }
 
-
-
-    public static Vector3 GetScale(float x, float y, float z)
+    /// <summary>
+    /// Method which is used to calculate a proportion of a tile size as a Vector3
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    public static Vector3 GetCoefficient(float x, float y, float z)
     {
         return new Vector3(x / tileSize, y / tileSize, z / tileSize);
     }
-
-    public static Vector3 GetScale(Vector3 v)
-    {
-        return GetScale(v.x, v.y, v.z);
-    }
-
 }
