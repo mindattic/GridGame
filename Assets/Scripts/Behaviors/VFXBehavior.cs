@@ -40,9 +40,9 @@ public class VFXBehavior : ExtendedMonoBehavior
     float duration;
     bool isLooping;
 
-    public void Spawn(VisualEffect vfx)
+    public void Spawn(VisualEffect vfx, Vector3 position)
     {
-        this.position = vfx.position + vfx.offset;
+        this.position = position + vfx.offset;
         this.rotation = vfx.rotation;
         this.scale = vfx.scale;
         this.duration = vfx.duration;

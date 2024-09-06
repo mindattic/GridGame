@@ -92,7 +92,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
 
     //scale
     protected float tileSize => GameManager.instance.tileSize;
-    protected Vector2 tileScale => GameManager.instance.tileScale;
+    protected Vector3 tileScale => GameManager.instance.tileScale;
 
     protected ShakeIntensity shakeIntensity => GameManager.instance.shakeIntensity;
 

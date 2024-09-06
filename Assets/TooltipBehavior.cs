@@ -23,6 +23,18 @@ public class TooltipBehavior : ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
+    public Quaternion rotation
+    {
+        get => gameObject.transform.rotation;
+        set => gameObject.transform.rotation = value;
+    }
+
+    public Vector3 scale
+    {
+        get => gameObject.transform.localScale;
+        set => gameObject.transform.localScale = value;
+    }
+
     #endregion
 
 
@@ -40,6 +52,7 @@ public class TooltipBehavior : ExtendedMonoBehavior
         var x = position.x + offset.x;
         var y = position.y + offset.y;
         this.position = new Vector3(x, y, 0);
+        this.scale = Geometry.RelativeTo.Tile.Scale(3, 1, 1);
 
         IEnumerator _()
         {

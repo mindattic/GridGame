@@ -5,6 +5,7 @@ using UnityEngine;
 public static class Constants
 {
     public const string Game = "Game";
+    public const string Resources = "Resources";
     public const string Board = "Board";
     public const string Canvas2D = "Canvas2D";
     public const string Canvas3D = "Canvas3D";

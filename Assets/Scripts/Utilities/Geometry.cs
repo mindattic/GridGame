@@ -8,9 +8,9 @@ public class Geometry
 {
     private static BoardBehavior board => GameManager.instance.board;
     private static float tileSize => GameManager.instance.tileSize;
+    private static Vector3 tileScale => GameManager.instance.tileScale;
     private static List<ActorBehavior> actors => GameManager.instance.actors;
     private static List<TileBehavior> tiles => GameManager.instance.tiles;
-
 
 
     //private static Dictionary<Vector2Int, Vector3> boardPositions = new Dictionary<Vector2Int, Vector3>();
@@ -178,13 +178,37 @@ public class Geometry
     }
 
     /// <summary>
-    /// Method which is used to calculate a proportion of a tile size as a Vector3
+    /// Methods which calculate values relative to another unit
+    /// (which is calculated based on current device aspect ratio, screen size, etc)
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
-    public static Vector3 GetCoefficient(float x, float y, float z)
+    public static class RelativeTo
     {
-        return new Vector3(x / tileSize, y / tileSize, z / tileSize);
+
+        public static class Tile
+        {
+            public static Vector3 Translation(float x, float y, float z)
+            {
+                return new Vector3(
+                    tileSize * (x / tileSize),
+                    tileSize * (y / tileSize),
+                    tileSize * (z / tileSize));
+            }
+
+            public static Vector3 Scale(float x, float y, float z)
+            {
+                return new Vector3(
+                    tileSize * (x / tileSize),
+                    tileSize * (y / tileSize),
+                    tileSize * (z / tileSize));
+            }
+        }
+
     }
+
+    public static Quaternion Rotation(float x, float y, float z)
+    {
+        return Quaternion.Euler(new Vector3(x, y, z));
+    }
+
+
 }

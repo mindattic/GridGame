@@ -11,6 +11,9 @@ public class DebugManager : ExtendedMonoBehavior
 {
     [SerializeField] private TMP_Dropdown Dropdown;
 
+    ActorBehavior Paladin => players.First(x => x.name == "Paladin");
+    ActorBehavior Barbarian => players.First(x => x.name == "Barbarian");
+
     public void Run()
     {
         int index = Dropdown.value;
@@ -44,15 +47,13 @@ public class DebugManager : ExtendedMonoBehavior
     public void DamageTextTest()
     {
         var text = $"{Random.Int(1, 3)}";
-        var player = players.First(x => x.name == "Paladin");
-        damageTextManager.Spawn(text, player.position);
+        damageTextManager.Spawn(text, Paladin.position);
     }
 
     public void BumpTest()
     {
-        var player = players.First(x => x.name == "Paladin");
         var direction = Random.Direction;
-        StartCoroutine(player.Bump(direction));
+        StartCoroutine(Paladin.Bump(direction));
     }
 
     public void SupportLineTest()
@@ -122,74 +123,56 @@ public class DebugManager : ExtendedMonoBehavior
     public void VFXTest_Blue_Slash_01()
     {
         var vfx = resourceManager.VisualEffect("Blue_Slash_01");
-  
-        vfx.position = players.First(x => x.name == "Paladin").position;
-        vfx.offset = new Vector3(0, 0, 0);
-        vfx.rotation = Quaternion.Euler(new Vector3(0, 0, 0f));
-        vfx.scale = tileScale * Geometry.GetCoefficient(0.08f, 1f, 0.08f);
-        vfxManager.Spawn(vfx);
+        vfx.offset = Geometry.RelativeTo.Tile.Translation(0,0,0);
+        vfx.rotation = Geometry.Rotation(0,0,0);
+        vfx.scale = Geometry.RelativeTo.Tile.Scale(0.08f, 1f, 0.08f);
 
-        vfx.position = players.First(x => x.name == "Barbarian").position;
-        vfxManager.Spawn(vfx);
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
     }
 
     public void VFXTest_Blue_Slash_02()
     {
         var vfx = resourceManager.VisualEffect("Blue_Slash_02");
+        vfx.offset = Geometry.RelativeTo.Tile.Translation(0.05f, 0, 0f);
+        vfx.rotation = Geometry.Rotation(0, 0, 0);
+        vfx.scale = Geometry.RelativeTo.Tile.Scale(0.08f, 0.05f, 0f);
 
-        vfx.position = players.First(x => x.name == "Paladin").position;
-        vfx.offset = tileScale * Geometry.GetCoefficient(0.05f, 0, 0f);
-        vfx.rotation = Quaternion.Euler(new Vector3(0, 0, 0f));
-        vfx.scale = tileScale * Geometry.GetCoefficient(0.08f, 0.05f, 0f);
-        vfxManager.Spawn(vfx);
-
-        vfx.position = players.First(x => x.name == "Barbarian").position;
-        vfxManager.Spawn(vfx);
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
     }
 
     public void VFXTest_Blue_Slash_03()
     {
         var vfx = resourceManager.VisualEffect("Blue_Slash_03");
+        vfx.offset = Geometry.RelativeTo.Tile.Translation(0.06f, -0.15f, 0f);
+        vfx.rotation = Geometry.Rotation(30, 0, 0);
+        vfx.scale = Geometry.RelativeTo.Tile.Scale(0.08f, 0.08f, 0);
 
-        vfx.position = players.First(x => x.name == "Paladin").position;
-        vfx.offset = tileScale * Geometry.GetCoefficient(0.06f, -0.15f, 0f);
-        vfx.rotation = Quaternion.Euler(new Vector3(30, 0, 0));
-        vfx.scale = tileScale * Geometry.GetCoefficient(0.08f, 0.08f, 0);
-
-        vfxManager.Spawn(vfx);
-
-        vfx.position = players.First(x => x.name == "Barbarian").position;
-        vfxManager.Spawn(vfx);
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
     }
 
     public void VFXTest_Blue_Sword()
     {
-        var vfx = resourceManager.VisualEffect("Blue_Sword");
+        var vfx = resourceManager.VisualEffect("Blue_Sword");  
+        vfx.offset = Geometry.RelativeTo.Tile.Translation(0, 0.05f, 0f);
+        vfx.rotation = Geometry.Rotation(0, 0, 0);
+        vfx.scale = Geometry.RelativeTo.Tile.Scale(0.12f, 0.08f, 0f);
 
-        vfx.position = players.First(x => x.name == "Paladin").position;
-        vfx.offset = tileScale * Geometry.GetCoefficient(0, 0, 0f);
-        vfx.rotation = Quaternion.Euler(new Vector3(0, 0, 0f));
-        vfx.scale = tileScale * Geometry.GetCoefficient(0.12f, 0.08f, 0f);
-
-        vfxManager.Spawn(vfx);
-
-        vfx.position = players.First(x => x.name == "Barbarian").position;
-        vfxManager.Spawn(vfx);
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
     }
 
     public void VFXTest_Blue_Sword_4X()
     {
         var vfx = resourceManager.VisualEffect("Blue_Sword_4X");
+        vfx.offset = Geometry.RelativeTo.Tile.Translation(-0.05f, -0.1f, 0f);
+        vfx.rotation = Geometry.Rotation(0, 0, 0);
+        vfx.scale = Geometry.RelativeTo.Tile.Scale(0.08f, 0.08f, 0f);
 
-        vfx.position = players.First(x => x.name == "Paladin").position;
-        vfx.offset = tileScale * Geometry.GetCoefficient(0, -0.1f, 0f);
-        vfx.rotation = Quaternion.Euler(new Vector3(0, 0, 0f));
-        vfx.scale = tileScale * Geometry.GetCoefficient(0.08f, 0.08f, 0f);
-
-        vfxManager.Spawn(vfx);
-
-        vfx.position = players.First(x => x.name == "Barbarian").position;
-        vfxManager.Spawn(vfx);
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
     }
 
 }
