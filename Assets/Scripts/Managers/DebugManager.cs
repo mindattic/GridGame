@@ -26,9 +26,11 @@ public class DebugManager : ExtendedMonoBehavior
             case 5: EnemyAttackTest(); break;
             case 6: TitleTest(); break;
             case 7: TooltipTest(); break;
-            case 8: VFXTest_BlueSlash01(); break;
-            case 9: VFXTest_BlueSword (); break;
-
+            case 8: VFXTest_Blue_Slash_01(); break;
+            case 9: VFXTest_Blue_Slash_02(); break;
+            case 10: VFXTest_Blue_Slash_03(); break;
+            case 11: VFXTest_Blue_Sword(); break;
+            case 12: VFXTest_Blue_Sword_4X(); break;
         }
     }
 
@@ -117,27 +119,67 @@ public class DebugManager : ExtendedMonoBehavior
         tooltipManager.Spawn(text, position);
     }
 
-    public void VFXTest_BlueSlash01()
+    public void VFXTest_Blue_Slash_01()
     {
-        var vfx = resourceManager.VisualEffect("BlueSlash01");
+        var vfx = resourceManager.VisualEffect("Blue_Slash_01");
   
         vfx.position = players.First(x => x.name == "Paladin").position;
         vfx.offset = new Vector3(0, 0, 0);
-        vfx.rotation = Quaternion.Euler(new Vector3(90, 0, 0f));
-        vfx.scale = new Vector3(0.1f, 1, 0.1f);
+        vfx.rotation = Quaternion.Euler(new Vector3(0, 0, 0f));
+        vfx.scale = tileScale * Geometry.GetScale(0.08f, 1f, 0.08f);
+        //new Vector3(0.1f, 1, 0.1f);
+
 
         vfxManager.Spawn(vfx);
     }
 
-    public void VFXTest_BlueSword()
+    public void VFXTest_Blue_Slash_02()
     {
-        var vfx = resourceManager.VisualEffect("BlueSword");
+        var vfx = resourceManager.VisualEffect("Blue_Slash_02");
+
+        vfx.position = players.First(x => x.name == "Paladin").position;
+        vfx.offset = new Vector3(0.05f, 0, 0);
+        vfx.rotation = Quaternion.Euler(new Vector3(0, 0, 0f));
+        vfx.scale = tileScale * Geometry.GetScale(0.08f, 0.05f, 0f);
+        vfxManager.Spawn(vfx);
+
+
+    }
+
+    public void VFXTest_Blue_Slash_03()
+    {
+        var vfx = resourceManager.VisualEffect("Blue_Slash_03");
+
+        vfx.position = players.First(x => x.name == "Paladin").position;
+        vfx.offset = new Vector3(tileSize / 14, -tileSize / 4, 0);
+        vfx.rotation = Quaternion.Euler(new Vector3(30, 0, 0));
+        vfx.scale = tileScale * Geometry.GetScale(0.08f, 0.08f, 0);
+
+        vfxManager.Spawn(vfx);
+    }
+
+    public void VFXTest_Blue_Sword()
+    {
+        var vfx = resourceManager.VisualEffect("Blue_Sword");
 
         vfx.position = players.First(x => x.name == "Paladin").position;
         vfx.offset = new Vector3(0.05f, 0.1f, 0);
         vfx.rotation = Quaternion.Euler(new Vector3(0, 0, 0f));
-        vfx.scale = new Vector3(0.15f, 0.1f, 0);
+        vfx.scale = tileScale * Geometry.GetScale(0.15f, 0.1f, 0f);
 
         vfxManager.Spawn(vfx);
     }
+
+    public void VFXTest_Blue_Sword_4X()
+    {
+        var vfx = resourceManager.VisualEffect("Blue_Sword_4X");
+
+        vfx.position = players.First(x => x.name == "Paladin").position;
+        vfx.offset = new Vector3(0.05f, 0.1f, 0);
+        vfx.rotation = Quaternion.Euler(new Vector3(0, 0, 0f));
+        vfx.scale = tileScale * Geometry.GetScale(0.15f, 0.1f, 0f);
+
+        vfxManager.Spawn(vfx);
+    }
+
 }

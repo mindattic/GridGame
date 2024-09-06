@@ -3,10 +3,6 @@ using UnityEngine;
 
 public class VFXBehavior : ExtendedMonoBehavior
 {
-
-    bool isLooping;
-
-
     #region Components
 
     public Transform parent
@@ -35,7 +31,6 @@ public class VFXBehavior : ExtendedMonoBehavior
 
     #endregion
 
-
     public void Awake()
     {
         isLooping = GetComponent<ParticleSystem>().main.loop;
@@ -43,6 +38,7 @@ public class VFXBehavior : ExtendedMonoBehavior
 
     float elapsed = 0;
     float duration;
+    bool isLooping;
 
     public void Spawn(VisualEffect vfx)
     {
@@ -67,13 +63,13 @@ public class VFXBehavior : ExtendedMonoBehavior
             }
 
             //After:     
-            Destroy(gameObject);
+            DespawnAsync();
         }
 
         StartCoroutine(_());
     }
 
-    public void Despawn()
+    public void DespawnAsync()
     {
         Destroy(gameObject);
     }

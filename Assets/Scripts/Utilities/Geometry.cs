@@ -17,7 +17,8 @@ public class Geometry
     //private static Dictionary<Vector3, Vector2Int> boardLocations = new Dictionary<Vector3, Vector2Int>();
 
 
-    public Geometry() {
+    public Geometry()
+    {
 
         //Assign lookup dictionaries
         //tiles.ForEach(x => boardPositions.Add(x.location, x.position));
@@ -174,6 +175,18 @@ public class Geometry
         //Calculate the percentage along the line segment
         float percentage = AC.magnitude / AB.magnitude;
         return percentage;
+    }
+
+
+
+    public static Vector3 GetScale(float x, float y, float z)
+    {
+        return new Vector3(x / tileSize, y / tileSize, z / tileSize);
+    }
+
+    public static Vector3 GetScale(Vector3 v)
+    {
+        return GetScale(v.x, v.y, v.z);
     }
 
 }

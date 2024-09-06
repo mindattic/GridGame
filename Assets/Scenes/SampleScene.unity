@@ -13450,6 +13450,12 @@ MonoBehaviour:
     - m_Text: 'VFX: Blue Slash 01'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Blue Slash 02'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Blue Slash 03'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: 'VFX: Blue Sword'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -14340,8 +14346,7 @@ MonoBehaviour:
   musicSource: {fileID: 0}
   screenSize: {x: 0, y: 0}
   tileSize: 0
-  tileScale: {x: 0, y: 0}
-  SpriteScale: {x: 0, y: 0}
+  tileScale: {x: 0, y: 0, z: 0}
   canvas2D: {fileID: 0}
   canvas3D: {fileID: 0}
   mousePosition2D: {x: 0, y: 0, z: 0}
@@ -14510,6 +14515,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8d74182f04b1c0447aa31106ce247f1c, type: 2}
   visualEffects:
   - {fileID: 11400000, guid: eb6fe27b121e14f4e88b29ba9d27f25a, type: 2}
+  - {fileID: 11400000, guid: 524feb0891d406342944ce0aa5935e0d, type: 2}
   - {fileID: 11400000, guid: f2d37833278d26b429337c21d35df9fb, type: 2}
 --- !u!114 &1751276288
 MonoBehaviour:

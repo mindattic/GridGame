@@ -47,9 +47,7 @@ public class GameManager : Singleton<GameManager>
     //scale
     [HideInInspector] public Vector2 screenSize;
     [HideInInspector] public float tileSize;
-    [HideInInspector] public Vector2 tileScale;
-    [HideInInspector] public Vector2 SpriteScale;
-
+    [HideInInspector] public Vector3 tileScale;
 
     [HideInInspector] public Canvas canvas2D;
     [HideInInspector] public Canvas canvas3D;
@@ -86,7 +84,7 @@ public class GameManager : Singleton<GameManager>
 
         screenSize = Shared.ScreenToWorldSize;
         tileSize = screenSize.x / Constants.percent666;
-        tileScale = new Vector2(tileSize, tileSize);
+        tileScale = new Vector3(tileSize, tileSize, 1f);
 
         cursorSpeed = tileSize / 2;
         swapSpeed = tileSize / 6;
