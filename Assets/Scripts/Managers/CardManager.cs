@@ -31,7 +31,7 @@ namespace Game.Behaviors
             title = GameObject.Find(Constants.CardTitle).GetComponent<TextMeshProUGUI>();
             details = GameObject.Find(Constants.CardDetails).GetComponent<TextMeshProUGUI>();
 
-            //TODO: Calculate dimensions based on device properties
+            //TODO: Calculate dimensions based on device vfx
 
 
             Clear();

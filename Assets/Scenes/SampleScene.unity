@@ -554,7 +554,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 2}
-  m_SizeDelta: {x: 0, y: 150}
+  m_SizeDelta: {x: 0, y: 250}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &244374791
 MonoBehaviour:
@@ -12501,7 +12501,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Option A
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 0}
+  m_fontAsset: {fileID: 11400000, guid: d7990ddf116fb5748bba571a76162c10, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -12526,8 +12526,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 16
+  m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -13447,7 +13447,10 @@ MonoBehaviour:
     - m_Text: Tooltip
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: 'VFX: Slash'
+    - m_Text: 'VFX: Blue Slash 01'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Blue Sword'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
@@ -14506,7 +14509,8 @@ MonoBehaviour:
   musicTracks:
   - {fileID: 11400000, guid: 8d74182f04b1c0447aa31106ce247f1c, type: 2}
   visualEffects:
-  - {fileID: 11400000, guid: 00b5e479d110ba840b7385036d5cb57f, type: 2}
+  - {fileID: 11400000, guid: eb6fe27b121e14f4e88b29ba9d27f25a, type: 2}
+  - {fileID: 11400000, guid: f2d37833278d26b429337c21d35df9fb, type: 2}
 --- !u!114 &1751276288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15628,8 +15632,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 16
+  m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

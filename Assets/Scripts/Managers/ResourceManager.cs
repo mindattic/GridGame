@@ -154,11 +154,11 @@ public class ResourceManager : ExtendedMonoBehavior
     }
 
 
-    public GameObject VisualEffect(string id)
+    public VisualEffect VisualEffect(string id)
     {
         try
         {
-            return visualEffects.First(x => x.id.Equals(id)).gameObject;
+            return visualEffects.First(x => x.id.Equals(id));
         }
         catch (Exception ex)
         {

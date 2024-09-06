@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: BlueSlash01
   m_EditorClassIdentifier: 
   id: BlueSlash01
-  gameObject: {fileID: 1488368475546491885, guid: a86390364cf186544a67357d14718a7a, type: 3}
+  gameObject: {fileID: 1276384610587253169, guid: 4a1dc68d5e5bcae4199c381af285909c, type: 3}
+  rotation: {x: 0, y: 0, z: 0, w: 1}
+  scale: {x: 1, y: 1, z: 1}
+  duration: 1

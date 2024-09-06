@@ -26,7 +26,9 @@ public class DebugManager : ExtendedMonoBehavior
             case 5: EnemyAttackTest(); break;
             case 6: TitleTest(); break;
             case 7: TooltipTest(); break;
-            case 8: VFXTest(); break;
+            case 8: VFXTest_BlueSlash01(); break;
+            case 9: VFXTest_BlueSword (); break;
+
         }
     }
 
@@ -115,12 +117,27 @@ public class DebugManager : ExtendedMonoBehavior
         tooltipManager.Spawn(text, position);
     }
 
-    public void VFXTest()
+    public void VFXTest_BlueSlash01()
     {
-        var position = Random.Player.currentTile.position;
-        var scale = new Vector3(1,1,1);
-        vfxManager.Spawn("BlueSlash01", position, scale);
+        var vfx = resourceManager.VisualEffect("BlueSlash01");
+  
+        vfx.position = players.First(x => x.name == "Paladin").position;
+        vfx.offset = new Vector3(0, 0, 0);
+        vfx.rotation = Quaternion.Euler(new Vector3(90, 0, 0f));
+        vfx.scale = new Vector3(0.1f, 1, 0.1f);
+
+        vfxManager.Spawn(vfx);
     }
 
+    public void VFXTest_BlueSword()
+    {
+        var vfx = resourceManager.VisualEffect("BlueSword");
 
+        vfx.position = players.First(x => x.name == "Paladin").position;
+        vfx.offset = new Vector3(0.05f, 0.1f, 0);
+        vfx.rotation = Quaternion.Euler(new Vector3(0, 0, 0f));
+        vfx.scale = new Vector3(0.15f, 0.1f, 0);
+
+        vfxManager.Spawn(vfx);
+    }
 }
