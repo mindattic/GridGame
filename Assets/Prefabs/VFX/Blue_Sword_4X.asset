@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186a5226611841d439be9262545faef8, type: 3}
   m_Name: Blue_Sword_4X
   m_EditorClassIdentifier: 
-  id: 
-  gameObject: {fileID: 0}
-  position: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 0, z: 0}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
-  scale: {x: 0, y: 0, z: 0}
-  duration: 0
+  id: Blue_Sword_4X
+  gameObject: {fileID: 8469597111650863683, guid: 90048088c3ac2664f947d102cfa8a373, type: 3}
+  position: {x: 1.0396922, y: -1.3862562, z: 0}
+  offset: {x: 0.05, y: 0.1, z: 0}
+  rotation: {x: 0, y: 0, z: 0, w: 1}
+  scale: {x: 0.15, y: 0.1, z: 0}
+  duration: 3

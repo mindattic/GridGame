@@ -13459,6 +13459,9 @@ MonoBehaviour:
     - m_Text: 'VFX: Blue Sword'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Blue Sword 4X'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -14516,7 +14519,9 @@ MonoBehaviour:
   visualEffects:
   - {fileID: 11400000, guid: eb6fe27b121e14f4e88b29ba9d27f25a, type: 2}
   - {fileID: 11400000, guid: 524feb0891d406342944ce0aa5935e0d, type: 2}
+  - {fileID: 11400000, guid: 5ae298897dff1ff4e8d606c92d05fd75, type: 2}
   - {fileID: 11400000, guid: f2d37833278d26b429337c21d35df9fb, type: 2}
+  - {fileID: 11400000, guid: 4bab48f3d0f2e8245bbadacae48c8605, type: 2}
 --- !u!114 &1751276288
 MonoBehaviour:
   m_ObjectHideFlags: 0
