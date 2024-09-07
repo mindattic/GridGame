@@ -16,6 +16,6 @@ MonoBehaviour:
   prefab: {fileID: 7144120407574256781, guid: bcb44ed878601234bb60041a0a8f4e7a, type: 3}
   relativeOffset: {x: 0, y: 0, z: 0}
   angularRotation: {x: 0, y: 0, z: 0}
-  relativeScale: {x: 0.2, y: 0.2, z: 0}
+  relativeScale: {x: 0.15, y: 0.15, z: 0}
   duration: 1
   isLoop: 0

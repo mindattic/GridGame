@@ -38,23 +38,9 @@ public class DebugManager : ExtendedMonoBehavior
             case 14: VFXTest_Level_Up(); break;
             case 15: VFXTest_Yellow_Hit(); break;
             case 16: VFXTest_Double_Claw(); break;
+            case 17: VFXTest_Lightning_Explosion(); break;
 
-            //~~~
-
-            case 17: break;
-            case 18: break;
-            case 19: break;
-            case 20: break;
-            case 21: break;
-            case 22: break;
-            case 23: break;
-            case 24: break;
-            case 25: break;
-            case 26: break;
-            case 27: break;
-            case 28: break;
-            case 29: break;
-            case 30: break;
+          
         }
     }
 
@@ -203,5 +189,13 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Paladin.position);
         vfxManager.Spawn(vfx, Barbarian.position);
     }
+
+    public void VFXTest_Lightning_Explosion()
+    {
+        var vfx = resourceManager.VisualEffect("Lightning_Explosion");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
+
 
 }
