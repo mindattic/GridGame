@@ -41,8 +41,9 @@ public class DebugManager : ExtendedMonoBehavior
             case 17: VFXTest_Lightning_Explosion(); break;
             case 18: VFXTest_Buff_Life(); break;
             case 19: VFXTest_Rotary_Knife(); break;
+            case 20: VFXTest_Air_Slash(); break;
 
-
+                
         }
     }
 
@@ -213,4 +214,10 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Barbarian.position);
     }
 
+    public void VFXTest_Air_Slash()
+    {
+        var vfx = resourceManager.VisualEffect("Air_Slash");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
 }
