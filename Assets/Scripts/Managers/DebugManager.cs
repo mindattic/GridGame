@@ -122,11 +122,7 @@ public class DebugManager : ExtendedMonoBehavior
 
     public void VFXTest_Blue_Slash_01()
     {
-        var vfx = resourceManager.VisualEffect("Blue_Slash_01");
-        vfx.offset = Geometry.RelativeTo.Tile.Translation(0,0,0);
-        vfx.rotation = Geometry.Rotation(0,0,0);
-        vfx.scale = Geometry.RelativeTo.Tile.Scale(0.08f, 1f, 0.08f);
-
+        var vfx = resourceManager.VisualEffect("Blue_Slash_01");  
         vfxManager.Spawn(vfx, Paladin.position);
         vfxManager.Spawn(vfx, Barbarian.position);
     }
@@ -134,10 +130,6 @@ public class DebugManager : ExtendedMonoBehavior
     public void VFXTest_Blue_Slash_02()
     {
         var vfx = resourceManager.VisualEffect("Blue_Slash_02");
-        vfx.offset = Geometry.RelativeTo.Tile.Translation(0.05f, 0, 0f);
-        vfx.rotation = Geometry.Rotation(0, 0, 0);
-        vfx.scale = Geometry.RelativeTo.Tile.Scale(0.08f, 0.05f, 0f);
-
         vfxManager.Spawn(vfx, Paladin.position);
         vfxManager.Spawn(vfx, Barbarian.position);
     }
@@ -145,10 +137,6 @@ public class DebugManager : ExtendedMonoBehavior
     public void VFXTest_Blue_Slash_03()
     {
         var vfx = resourceManager.VisualEffect("Blue_Slash_03");
-        vfx.offset = Geometry.RelativeTo.Tile.Translation(0.06f, -0.15f, 0f);
-        vfx.rotation = Geometry.Rotation(30, 0, 0);
-        vfx.scale = Geometry.RelativeTo.Tile.Scale(0.08f, 0.08f, 0);
-
         vfxManager.Spawn(vfx, Paladin.position);
         vfxManager.Spawn(vfx, Barbarian.position);
     }
@@ -156,10 +144,6 @@ public class DebugManager : ExtendedMonoBehavior
     public void VFXTest_Blue_Sword()
     {
         var vfx = resourceManager.VisualEffect("Blue_Sword");  
-        vfx.offset = Geometry.RelativeTo.Tile.Translation(0, 0.05f, 0f);
-        vfx.rotation = Geometry.Rotation(0, 0, 0);
-        vfx.scale = Geometry.RelativeTo.Tile.Scale(0.12f, 0.08f, 0f);
-
         vfxManager.Spawn(vfx, Paladin.position);
         vfxManager.Spawn(vfx, Barbarian.position);
     }
@@ -167,10 +151,6 @@ public class DebugManager : ExtendedMonoBehavior
     public void VFXTest_Blue_Sword_4X()
     {
         var vfx = resourceManager.VisualEffect("Blue_Sword_4X");
-        vfx.offset = Geometry.RelativeTo.Tile.Translation(-0.05f, -0.1f, 0f);
-        vfx.rotation = Geometry.Rotation(0, 0, 0);
-        vfx.scale = Geometry.RelativeTo.Tile.Scale(0.08f, 0.08f, 0f);
-
         vfxManager.Spawn(vfx, Paladin.position);
         vfxManager.Spawn(vfx, Barbarian.position);
     }

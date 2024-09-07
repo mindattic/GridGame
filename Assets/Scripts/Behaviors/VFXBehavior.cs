@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class VFXBehavior : ExtendedMonoBehavior
@@ -33,40 +35,61 @@ public class VFXBehavior : ExtendedMonoBehavior
 
     public void Awake()
     {
-        isLooping = GetComponent<ParticleSystem>().main.loop;
+        isLoop = GetComponent<ParticleSystem>().main.loop;
     }
 
     float elapsed = 0;
     float duration;
-    bool isLooping;
+    bool isLoop;
+    bool isPlaying;
 
     public void Spawn(VisualEffect vfx, Vector3 position)
     {
-        this.position = position + vfx.offset;
-        this.rotation = vfx.rotation;
-        this.scale = vfx.scale;
+        //Translate, rotate, and relativeScale relative to tile dimensions (determined by device)
+        var offset = Geometry.RelativeTo.Tile.Translation(vfx.relativeOffset);
+        var scale = Geometry.RelativeTo.Tile.Scale(vfx.relativeScale);
+        var rotation = Geometry.Rotation(vfx.rotation);
+
+        this.position = position + offset;
+        this.rotation = rotation;
+        this.scale = scale;
         this.duration = vfx.duration;
+        this.isLoop = vfx.isLoop;
 
-        if (isLooping)
-            return;
+        Init();     
+    }
 
-        IEnumerator _()
+    public void Init()
+    {
+        //Toggle looping programatically by assigning flag in all child ParticleSystem components
+        var psList = new List<ParticleSystem> { GetComponent<ParticleSystem>() };
+        psList.AddRange(GetComponentsInChildren<ParticleSystem>().ToList());
+        foreach (var ps in psList)
         {
-            //Before:
-
-
-            //During:
-            while (elapsed < duration)
-            {
-                elapsed += Interval.OneTick;
-                yield return Wait.OneTick();
-            }
-
-            //After:     
-            DespawnAsync();
+            var main = ps.main;
+            main.loop = isLoop;
         }
 
-        StartCoroutine(_());
+        //Start playing particle system
+        isPlaying = true;
+    }
+
+
+    public void FixedUpdate()
+    {
+        Play();
+    }
+
+    public void Play()
+    {
+        if (!isPlaying)
+            return;
+
+        elapsed += Time.deltaTime;
+        if (elapsed > duration)
+        {
+            DespawnAsync();
+        }
     }
 
     public void DespawnAsync()

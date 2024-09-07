@@ -64,6 +64,9 @@ TagManager:
   - name: Actor
     uniqueID: 1438895807
     locked: 0
+  - name: VFX
+    uniqueID: 406368527
+    locked: 0
   - name: DamageText
     uniqueID: 2394124353
     locked: 0

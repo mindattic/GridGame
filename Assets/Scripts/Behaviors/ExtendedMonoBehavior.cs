@@ -90,7 +90,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected bool HasFocusedPlayer => focusedPlayer != null;
     protected bool HasSelectedPlayer => selectedPlayer != null;
 
-    //scale
+    //relativeScale
     protected float tileSize => GameManager.instance.tileSize;
     protected Vector3 tileScale => GameManager.instance.tileScale;
 

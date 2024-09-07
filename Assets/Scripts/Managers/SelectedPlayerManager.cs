@@ -46,7 +46,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         focusedPlayer.sortingOrder = SortingOrder.Max;
         focusedPlayer.renderers.SetSelectionActive(true);
 
-        //Assign mouse offset (how off center was selection)
+        //Assign mouse relativeOffset (how off center was selection)
         mouseOffset = focusedPlayer.position - mousePosition3D;
 
         cardManager.Set(focusedPlayer);

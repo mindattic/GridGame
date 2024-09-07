@@ -44,7 +44,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public AudioSource soundSource;
     [HideInInspector] public AudioSource musicSource;
 
-    //scale
+    //relativeScale
     [HideInInspector] public Vector2 screenSize;
     [HideInInspector] public float tileSize;
     [HideInInspector] public Vector3 tileScale;

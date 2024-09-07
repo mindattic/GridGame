@@ -43,8 +43,8 @@ public class Geometry
 
     //public static Vector2Int LocationFromPosition(Vector3 location)
     //{
-    //    int x = Mathf.FloorToInt(location.x / tileSize - board.offset.x);
-    //    int y = Mathf.FloorToInt(location.y / tileSize - board.offset.y);
+    //    int x = Mathf.FloorToInt(location.x / tileSize - board.relativeOffset.x);
+    //    int y = Mathf.FloorToInt(location.y / tileSize - board.relativeOffset.y);
     //    return new Vector2Int(x, y);
     //}
 
@@ -193,6 +193,7 @@ public class Geometry
                     tileSize * (y / tileSize),
                     tileSize * (z / tileSize));
             }
+            public static Vector3 Translation(Vector3 v) => Translation(v.x, v.y, v.z);
 
             public static Vector3 Scale(float x, float y, float z)
             {
@@ -201,6 +202,8 @@ public class Geometry
                     tileSize * (y / tileSize),
                     tileSize * (z / tileSize));
             }
+            public static Vector3 Scale(Vector3 v) => Scale(v.x, v.y, v.z);
+
         }
 
     }
@@ -209,6 +212,6 @@ public class Geometry
     {
         return Quaternion.Euler(new Vector3(x, y, z));
     }
-
+    public static Quaternion Rotation(Vector3 v) => Rotation(v.x, v.y, v.z);
 
 }
