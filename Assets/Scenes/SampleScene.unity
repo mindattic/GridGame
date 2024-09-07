@@ -647,7 +647,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1168586727
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 0ee3ae1ba21abe74bb79ed4c698e1b8b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2404,6 +2404,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5ae298897dff1ff4e8d606c92d05fd75, type: 2}
   - {fileID: 11400000, guid: f2d37833278d26b429337c21d35df9fb, type: 2}
   - {fileID: 11400000, guid: 4bab48f3d0f2e8245bbadacae48c8605, type: 2}
+  - {fileID: 11400000, guid: 061ee940053ea6348a97ea92b2b46380, type: 2}
+  - {fileID: 11400000, guid: 7978ae3cfa0d2414ca3d6483097a2b56, type: 2}
+  - {fileID: 11400000, guid: 50e3bf670420d074b87ea145794ac7a2, type: 2}
 --- !u!4 &988052023
 Transform:
   m_ObjectHideFlags: 0
@@ -3005,7 +3008,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1168586727
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 0e9a9e932842dd245b64b836328213c2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3726,6 +3729,42 @@ MonoBehaviour:
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: 'VFX: Blue Sword 4X'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Blood Claw'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Level Up'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Yellow Hit'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: '-'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: '-'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: '-'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: '-'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: '-'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: '-'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: '-'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: '-'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: '-'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
@@ -4502,7 +4541,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1168586727
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c3538dd9d975bda4e8ffa93c0ae1bd97, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}

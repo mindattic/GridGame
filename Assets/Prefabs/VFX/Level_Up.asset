@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186a5226611841d439be9262545faef8, type: 3}
   m_Name: Level_Up
   m_EditorClassIdentifier: 
-  id: 
-  prefab: {fileID: 0}
-  relativeOffset: {x: 0, y: 0, z: 0}
+  id: Level_Up
+  prefab: {fileID: 675445769285226232, guid: 5a29be4b80b9626459f6a82b1afd3fcd, type: 3}
+  relativeOffset: {x: 0, y: -0.15, z: 0}
   angularRotation: {x: 0, y: 0, z: 0}
-  relativeScale: {x: 0, y: 0, z: 0}
-  duration: 0
+  relativeScale: {x: 0.3, y: 0.3, z: 0}
+  duration: 3
   isLoop: 0

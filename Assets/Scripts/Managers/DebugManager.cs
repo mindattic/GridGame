@@ -36,23 +36,25 @@ public class DebugManager : ExtendedMonoBehavior
             case 12: VFXTest_Blue_Sword_4X(); break;
             case 13: VFXTest_Blood_Claw(); break;
             case 14: VFXTest_Level_Up(); break;
-                //~~~
-            case 15: VFXTest_Level_Up(); break;
-            case 16: VFXTest_Level_Up(); break;
-            case 17: VFXTest_Level_Up(); break;
-            case 18: VFXTest_Level_Up(); break;
-            case 19: VFXTest_Level_Up(); break;
-            case 20: VFXTest_Level_Up(); break;
-            case 21: VFXTest_Level_Up(); break;
-            case 22: VFXTest_Level_Up(); break;
-            case 23: VFXTest_Level_Up(); break;
-            case 24: VFXTest_Level_Up(); break;
-            case 25: VFXTest_Level_Up(); break;
-            case 26: VFXTest_Level_Up(); break;
-            case 27: VFXTest_Level_Up(); break;
-            case 28: VFXTest_Level_Up(); break;
-            case 29: VFXTest_Level_Up(); break;
-            case 30: VFXTest_Level_Up(); break;
+            case 15: VFXTest_Yellow_Hit(); break;
+
+            //~~~
+
+            case 16: break;
+            case 17: break;
+            case 18: break;
+            case 19: break;
+            case 20: break;
+            case 21: break;
+            case 22: break;
+            case 23: break;
+            case 24: break;
+            case 25: break;
+            case 26: break;
+            case 27: break;
+            case 28: break;
+            case 29: break;
+            case 30: break;
         }
     }
 
@@ -184,6 +186,13 @@ public class DebugManager : ExtendedMonoBehavior
     public void VFXTest_Level_Up()
     {
         var vfx = resourceManager.VisualEffect("Level_Up");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
+
+    public void VFXTest_Yellow_Hit()
+    {
+        var vfx = resourceManager.VisualEffect("Yellow_Hit");
         vfxManager.Spawn(vfx, Paladin.position);
         vfxManager.Spawn(vfx, Barbarian.position);
     }
