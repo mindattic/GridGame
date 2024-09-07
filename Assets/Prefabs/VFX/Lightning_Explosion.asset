@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Lightning_Explosion
   prefab: {fileID: 6094919540921992403, guid: c02c4b6d5a9ee6940b44fdcfd029ec3b, type: 3}
-  relativeOffset: {x: 0, y: 0, z: 0}
+  relativeOffset: {x: 0, y: -0.1, z: 0}
   angularRotation: {x: 0, y: 0, z: 0}
   relativeScale: {x: 0.1, y: 0.1, z: 0}
-  duration: 5
+  duration: 3
   isLoop: 0
