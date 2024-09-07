@@ -2412,6 +2412,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4d392d6790641544e8ea3eb56e122c27, type: 2}
   - {fileID: 11400000, guid: 1ead8acebc269524ea8f5e729e6999ee, type: 2}
   - {fileID: 11400000, guid: 1f6eb7e1abb7a5e459b30f087ed3942d, type: 2}
+  - {fileID: 11400000, guid: 8bf1acedde750634785a923b69203336, type: 2}
 --- !u!4 &988052023
 Transform:
   m_ObjectHideFlags: 0
@@ -3760,7 +3761,7 @@ MonoBehaviour:
     - m_Text: 'VFX: Air Slash'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: '-'
+    - m_Text: 'VFX: Fire Rain'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: '-'
