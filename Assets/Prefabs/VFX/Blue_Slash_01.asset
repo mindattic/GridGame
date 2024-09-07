@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Blue_Slash_01
   m_EditorClassIdentifier: 
   id: Blue_Slash_01
-  gameObject: {fileID: 1276384610587253169, guid: 4a1dc68d5e5bcae4199c381af285909c, type: 3}
+  prefab: {fileID: 1276384610587253169, guid: 4a1dc68d5e5bcae4199c381af285909c, type: 3}
   relativeOffset: {x: 0, y: 0, z: 0}
+  angularRotation: {x: 0, y: 0, z: 0}
   relativeScale: {x: 0.08, y: 1, z: 0.08}
-  rotation: {x: 0, y: 0, z: 0}
   duration: 1
   isLoop: 0

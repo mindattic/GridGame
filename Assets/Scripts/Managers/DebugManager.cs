@@ -34,6 +34,7 @@ public class DebugManager : ExtendedMonoBehavior
             case 10: VFXTest_Blue_Slash_03(); break;
             case 11: VFXTest_Blue_Sword(); break;
             case 12: VFXTest_Blue_Sword_4X(); break;
+            case 13: VFXTest_Blood_Claw(); break;
         }
     }
 
@@ -155,4 +156,12 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Barbarian.position);
     }
 
+    public void VFXTest_Blood_Claw()
+    {
+        var vfx = resourceManager.VisualEffect("Blood_Claw");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
+
+    
 }

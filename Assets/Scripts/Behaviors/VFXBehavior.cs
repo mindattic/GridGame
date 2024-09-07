@@ -41,7 +41,6 @@ public class VFXBehavior : ExtendedMonoBehavior
     float elapsed = 0;
     float duration;
     bool isLoop;
-    bool isPlaying;
 
     public void Spawn(VisualEffect vfx, Vector3 position)
     {
@@ -69,27 +68,14 @@ public class VFXBehavior : ExtendedMonoBehavior
             var main = ps.main;
             main.loop = isLoop;
         }
-
-        //Start playing particle system
-        isPlaying = true;
     }
-
 
     public void FixedUpdate()
     {
-        Play();
-    }
-
-    public void Play()
-    {
-        if (!isPlaying)
-            return;
 
         elapsed += Time.deltaTime;
         if (elapsed > duration)
-        {
             DespawnAsync();
-        }
     }
 
     public void DespawnAsync()
