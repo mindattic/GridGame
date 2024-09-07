@@ -35,6 +35,24 @@ public class DebugManager : ExtendedMonoBehavior
             case 11: VFXTest_Blue_Sword(); break;
             case 12: VFXTest_Blue_Sword_4X(); break;
             case 13: VFXTest_Blood_Claw(); break;
+            case 14: VFXTest_Level_Up(); break;
+                //~~~
+            case 15: VFXTest_Level_Up(); break;
+            case 16: VFXTest_Level_Up(); break;
+            case 17: VFXTest_Level_Up(); break;
+            case 18: VFXTest_Level_Up(); break;
+            case 19: VFXTest_Level_Up(); break;
+            case 20: VFXTest_Level_Up(); break;
+            case 21: VFXTest_Level_Up(); break;
+            case 22: VFXTest_Level_Up(); break;
+            case 23: VFXTest_Level_Up(); break;
+            case 24: VFXTest_Level_Up(); break;
+            case 25: VFXTest_Level_Up(); break;
+            case 26: VFXTest_Level_Up(); break;
+            case 27: VFXTest_Level_Up(); break;
+            case 28: VFXTest_Level_Up(); break;
+            case 29: VFXTest_Level_Up(); break;
+            case 30: VFXTest_Level_Up(); break;
         }
     }
 
@@ -163,5 +181,10 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Barbarian.position);
     }
 
-    
+    public void VFXTest_Level_Up()
+    {
+        var vfx = resourceManager.VisualEffect("Level_Up");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
 }
