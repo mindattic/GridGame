@@ -37,10 +37,10 @@ public class DebugManager : ExtendedMonoBehavior
             case 13: VFXTest_Blood_Claw(); break;
             case 14: VFXTest_Level_Up(); break;
             case 15: VFXTest_Yellow_Hit(); break;
+            case 16: VFXTest_Double_Claw(); break;
 
             //~~~
 
-            case 16: break;
             case 17: break;
             case 18: break;
             case 19: break;
@@ -196,4 +196,12 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Paladin.position);
         vfxManager.Spawn(vfx, Barbarian.position);
     }
+
+    public void VFXTest_Double_Claw()
+    {
+        var vfx = resourceManager.VisualEffect("Double_Claw");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
+
 }
