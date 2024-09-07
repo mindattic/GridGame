@@ -6,15 +6,11 @@ using UnityEngine.VFX;
 
 public class VFXManager : ExtendedMonoBehavior
 {
-    //public List<VFXBehavior> visualEffects = new List<VFXBehavior>();
-
     public void Spawn(VisualEffect vfx, Vector3 position)
     {
-        var prefab = Instantiate(vfx.gameObject, Vector2.zero, Quaternion.identity);
+        var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
         var visualEffect = prefab.GetComponent<VFXBehavior>();
         visualEffect.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
-        //visualEffect.parent = board.transform;
-        //visualEffects.Add(visualEffect);
         visualEffect.Spawn(vfx, position);
     }
 
@@ -22,6 +18,5 @@ public class VFXManager : ExtendedMonoBehavior
     {
         GameObject.FindGameObjectsWithTag(Tag.VFX).ToList().ForEach(x => Destroy(x));
     }
-
 
 }

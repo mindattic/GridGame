@@ -113,7 +113,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
 
 
-        //if (isRising && renderers.thumbnail.transform.rotation.z < maxRot)
+        //if (isRising && renderers.thumbnail.transform.angularRotation.z < maxRot)
         //{
         //    renderers.thumbnail.transform.Rotate(new Vector3(0, 0, rotSpeed));
         //}
@@ -124,7 +124,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //    isRising = false;
         //}
 
-        //if (!isRising && renderers.thumbnail.transform.rotation.z > minRot)
+        //if (!isRising && renderers.thumbnail.transform.angularRotation.z > minRot)
         //{
         //    renderers.thumbnail.transform.Rotate(new Vector3(0, 0, -rotSpeed));
 
@@ -540,9 +540,9 @@ public class ActorBehavior : ExtendedMonoBehavior
         //    transform.position.z);
 
         //var rot = new Vector3(
-        //   transform.rotation.x,
-        //   transform.rotation.y ,
-        //   transform.rotation.z + (glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 128)));
+        //   transform.angularRotation.x,
+        //   transform.angularRotation.y ,
+        //   transform.angularRotation.z + (glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 128)));
 
         //renderers.thumbnail.transform.Rotate(Vector3.up * glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 3));
 
@@ -550,7 +550,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //renderers.thumbnail.transform.position = pos;
         //renderers.frame.transform.position = pos;
         //renderers.thumbnail.transform.position = pos;
-        //renderers.thumbnail.transform.rotation = rot;
+        //renderers.thumbnail.transform.angularRotation = rot;
     }
 
 

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Blue_Slash_02
   gameObject: {fileID: 209052244674254142, guid: 8602632b1a66410438810a692c7b16d1, type: 3}
-  position: {x: 0, y: 0, z: 0}
-  offset: {x: 0.05, y: 0, z: 0}
-  rotation: {x: 0, y: 0, z: 0, w: 1}
-  scale: {x: 1, y: 1, z: 0}
+  relativeOffset: {x: 0.05, y: 0, z: 0}
+  relativeScale: {x: 0.08, y: 0.05, z: 0}
+  rotation: {x: 0, y: 0, z: 0}
   duration: 1
+  isLoop: 0

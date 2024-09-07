@@ -48,7 +48,7 @@ public class VFXBehavior : ExtendedMonoBehavior
         //Translate, rotate, and relativeScale relative to tile dimensions (determined by device)
         var offset = Geometry.RelativeTo.Tile.Translation(vfx.relativeOffset);
         var scale = Geometry.RelativeTo.Tile.Scale(vfx.relativeScale);
-        var rotation = Geometry.Rotation(vfx.rotation);
+        var rotation = Geometry.Rotation(vfx.angularRotation);
 
         this.position = position + offset;
         this.rotation = rotation;
@@ -62,9 +62,9 @@ public class VFXBehavior : ExtendedMonoBehavior
     public void Init()
     {
         //Toggle looping programatically by assigning flag in all child ParticleSystem components
-        var psList = new List<ParticleSystem> { GetComponent<ParticleSystem>() };
-        psList.AddRange(GetComponentsInChildren<ParticleSystem>().ToList());
-        foreach (var ps in psList)
+        var particleSystems = new List<ParticleSystem> { GetComponent<ParticleSystem>() };
+        particleSystems.AddRange(GetComponentsInChildren<ParticleSystem>().ToList());
+        foreach (var ps in particleSystems)
         {
             var main = ps.main;
             main.loop = isLoop;

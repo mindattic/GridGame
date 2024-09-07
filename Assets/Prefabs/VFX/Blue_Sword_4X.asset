@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Blue_Sword_4X
   gameObject: {fileID: 8469597111650863683, guid: 90048088c3ac2664f947d102cfa8a373, type: 3}
-  position: {x: 1.0396922, y: -1.3862562, z: 0}
-  offset: {x: 0.05, y: 0.1, z: 0}
-  rotation: {x: 0, y: 0, z: 0, w: 1}
-  scale: {x: 0.15, y: 0.1, z: 0}
+  relativeOffset: {x: -0.05, y: -0.1, z: 0}
+  relativeScale: {x: 0.08, y: 0.08, z: 0}
+  rotation: {x: 0, y: 0, z: 0}
   duration: 3
+  isLoop: 0

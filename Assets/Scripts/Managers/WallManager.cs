@@ -22,9 +22,9 @@ public class WallManager : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        //if (other.collider.gameObject.CompareTag(Tag.Actor))
+        //if (other.collider.prefab.CompareTag(Tag.Actor))
         //{
-        //    var player = other.collider.gameObject;
+        //    var player = other.collider.prefab;
 
         //    player.transform.position = new Vector3(transform.position.x - tileSize,
         //                                            player.transform.position.y,
