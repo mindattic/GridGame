@@ -2407,6 +2407,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 061ee940053ea6348a97ea92b2b46380, type: 2}
   - {fileID: 11400000, guid: 7978ae3cfa0d2414ca3d6483097a2b56, type: 2}
   - {fileID: 11400000, guid: 50e3bf670420d074b87ea145794ac7a2, type: 2}
+  - {fileID: 11400000, guid: c2b354bf42af6fc4aa8c875a057541a9, type: 2}
+  - {fileID: 11400000, guid: 4e17cfbbfb865cf4f89d383db3a15d04, type: 2}
+  - {fileID: 11400000, guid: 4d392d6790641544e8ea3eb56e122c27, type: 2}
+  - {fileID: 11400000, guid: 1ead8acebc269524ea8f5e729e6999ee, type: 2}
 --- !u!4 &988052023
 Transform:
   m_ObjectHideFlags: 0
@@ -3740,13 +3744,13 @@ MonoBehaviour:
     - m_Text: 'VFX: Yellow Hit'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: '-'
+    - m_Text: 'VFX: Double Claw'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: '-'
+    - m_Text: 'VFX: Lightning Explosion'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: '-'
+    - m_Text: 'VFX: Buff Life'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: '-'
