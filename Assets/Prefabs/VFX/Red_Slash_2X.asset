@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186a5226611841d439be9262545faef8, type: 3}
   m_Name: Red_Slash_2X
   m_EditorClassIdentifier: 
-  id: 
-  prefab: {fileID: 0}
-  relativeOffset: {x: 0, y: 0, z: 0}
+  id: Red_Slash_2X
+  prefab: {fileID: 578304924444073550, guid: c8132ad252c62b14ca1cf8b2c8052417, type: 3}
+  relativeOffset: {x: 0.05, y: -0.07, z: 0}
   angularRotation: {x: 0, y: 0, z: 0}
-  relativeScale: {x: 0, y: 0, z: 0}
-  duration: 0
+  relativeScale: {x: 0.08, y: 0.08, z: 0}
+  duration: 1
   isLoop: 0
   triggerTimestamp: 0

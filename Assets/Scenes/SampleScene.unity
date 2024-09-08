@@ -2415,6 +2415,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8bf1acedde750634785a923b69203336, type: 2}
   - {fileID: 11400000, guid: 2393188a613f6a64194431d6aba16d8b, type: 2}
   - {fileID: 11400000, guid: a6eaf27da19bc8d46a5519090b6b62e2, type: 2}
+  - {fileID: 11400000, guid: 1c5a87ff1ff421c42a5c406eaf050a85, type: 2}
+  - {fileID: 11400000, guid: e786d22f17fb243479f0d61ea06eaf5c, type: 2}
+  - {fileID: 11400000, guid: e65cfd769f5d31e419709d5fcefe1d17, type: 2}
 --- !u!4 &988052023
 Transform:
   m_ObjectHideFlags: 0
@@ -3770,6 +3773,21 @@ MonoBehaviour:
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: 'VFX: Lightning Strike'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Puffy Explosion'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Red Slash 2X'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: God Rays'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: '-'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: '-'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: '-'
