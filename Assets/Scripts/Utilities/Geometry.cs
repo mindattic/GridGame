@@ -181,10 +181,10 @@ public class Geometry
     /// Methods which calculate values relative to another unit
     /// (which is calculated based on current device aspect ratio, screen size, etc)
     /// </summary>
-    public static class RelativeTo
+    public static class Tile
     {
 
-        public static class Tile
+        public static class Relative
         {
             public static Vector3 Translation(float x, float y, float z)
             {

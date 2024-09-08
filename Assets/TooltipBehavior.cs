@@ -52,7 +52,7 @@ public class TooltipBehavior : ExtendedMonoBehavior
         var x = position.x + offset.x;
         var y = position.y + offset.y;
         this.position = new Vector3(x, y, 0);
-        this.scale = Geometry.RelativeTo.Tile.Scale(3, 1, 1);
+        this.scale = Geometry.Tile.Relative.Scale(3, 1, 1);
 
         IEnumerator _()
         {

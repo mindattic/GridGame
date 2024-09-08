@@ -42,11 +42,12 @@ public class VFXBehavior : ExtendedMonoBehavior
     float duration;
     bool isLoop;
 
+
     public void Spawn(VisualEffect vfx, Vector3 position)
     {
         //Translate, rotate, and relativeScale relative to tile dimensions (determined by device)
-        var offset = Geometry.RelativeTo.Tile.Translation(vfx.relativeOffset);
-        var scale = Geometry.RelativeTo.Tile.Scale(vfx.relativeScale);
+        var offset = Geometry.Tile.Relative.Translation(vfx.relativeOffset);
+        var scale = Geometry.Tile.Relative.Scale(vfx.relativeScale);
         var rotation = Geometry.Rotation(vfx.angularRotation);
 
         this.position = position + offset;
