@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class VFXBehavior : ExtendedMonoBehavior
 {
+
     #region Components
 
     public Transform parent
@@ -33,17 +34,24 @@ public class VFXBehavior : ExtendedMonoBehavior
 
     #endregion
 
+    //Startup
     public void Awake()
     {
         isLoop = GetComponent<ParticleSystem>().main.loop;
     }
 
+    //Variables
     float elapsed = 0;
     float duration;
     bool isLoop;
+    float coroutineStart = -1;
+    IEnumerator coroutine = null;
+    bool hasCoroutineStarted;
 
+    //Properties
+    private bool hasCoroutine => coroutine != null && coroutineStart != -1;
 
-    public void Spawn(VisualEffect vfx, Vector3 position)
+    public void Spawn(VisualEffect vfx, Vector3 position, IEnumerator coroutine = null)
     {
         //Translate, rotate, and relativeScale relative to tile dimensions (determined by device)
         var offset = Geometry.Tile.Relative.Translation(vfx.relativeOffset);
@@ -55,12 +63,9 @@ public class VFXBehavior : ExtendedMonoBehavior
         this.scale = scale;
         this.duration = vfx.duration;
         this.isLoop = vfx.isLoop;
+        this.coroutineStart = vfx.coroutineStart;
+        this.coroutine = coroutine;
 
-        Init();     
-    }
-
-    public void Init()
-    {
         //Toggle looping programatically by assigning flag in all child ParticleSystem components
         var particleSystems = new List<ParticleSystem> { GetComponent<ParticleSystem>() };
         particleSystems.AddRange(GetComponentsInChildren<ParticleSystem>().ToList());
@@ -73,15 +78,21 @@ public class VFXBehavior : ExtendedMonoBehavior
 
     public void FixedUpdate()
     {
-
         elapsed += Time.deltaTime;
+
+        if (hasCoroutine && !hasCoroutineStarted && elapsed >= coroutineStart)
+        {
+            hasCoroutineStarted = true;
+            StartCoroutine(coroutine);
+        }
+
         if (elapsed > duration)
-            DespawnAsync();
+            Despawn(name);
     }
 
-    public void DespawnAsync()
+    private void Despawn(string name)
     {
-        Destroy(gameObject);
+        vfxManager.Despawn(name);
     }
 
 }

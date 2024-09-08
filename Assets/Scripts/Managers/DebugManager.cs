@@ -141,8 +141,9 @@ public class DebugManager : ExtendedMonoBehavior
     public void VFXTest_Blue_Slash_01()
     {
         var vfx = resourceManager.VisualEffect("Blue_Slash_01");  
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+
+        vfxManager.Spawn(vfx, Paladin.position, Paladin.ChangeHp(-10));
+        vfxManager.Spawn(vfx, Barbarian.position, Barbarian.ChangeHp(-15));
     }
 
     public void VFXTest_Blue_Slash_02()
