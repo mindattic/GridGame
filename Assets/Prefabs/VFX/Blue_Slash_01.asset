@@ -15,7 +15,7 @@ MonoBehaviour:
   id: Blue_Slash_01
   prefab: {fileID: 1276384610587253169, guid: 4a1dc68d5e5bcae4199c381af285909c, type: 3}
   relativeOffset: {x: 0, y: 0, z: 0}
-  angularRotation: {x: 0, y: 0, z: 0}
-  relativeScale: {x: 0.08, y: 1, z: 0.08}
+  angularRotation: {x: 45, y: 0, z: 30}
+  relativeScale: {x: 0.08, y: 0.05, z: 0.05}
   duration: 1
   isLoop: 0

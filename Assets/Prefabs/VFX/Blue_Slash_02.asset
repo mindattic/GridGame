@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Blue_Slash_02
   prefab: {fileID: 209052244674254142, guid: 8602632b1a66410438810a692c7b16d1, type: 3}
-  relativeOffset: {x: 0.05, y: 0, z: 0}
-  angularRotation: {x: 0, y: 0, z: 0}
-  relativeScale: {x: 0.08, y: 0.05, z: 0}
+  relativeOffset: {x: 0.07, y: 0, z: 0}
+  angularRotation: {x: 30, y: 0, z: 0}
+  relativeScale: {x: 0.08, y: 0.08, z: 0}
   duration: 1
   isLoop: 0

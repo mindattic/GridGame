@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Ray_Blast
   prefab: {fileID: 6421294110930809421, guid: 6e0be8351479eda44bf898242ef51602, type: 3}
-  relativeOffset: {x: 0, y: 0, z: 0}
+  relativeOffset: {x: 0.02, y: -0.02, z: 0}
   angularRotation: {x: 0, y: 0, z: 0}
   relativeScale: {x: 0.1, y: 0.1, z: 0}
   duration: 3
