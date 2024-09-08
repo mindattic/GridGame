@@ -45,6 +45,11 @@ public class DebugManager : ExtendedMonoBehavior
             case 21: VFXTest_Fire_Rain(); break;
             case 22: VFXTest_Ray_Blast(); break;
             case 23: VFXTest_Lightning_Strike(); break;
+            case 24: VFXTest_Puffy_Explosion(); break;
+
+
+
+
 
         }
     }
@@ -244,6 +249,12 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Barbarian.position);
     }
 
+    public void VFXTest_Puffy_Explosion()
+    {
+        var vfx = resourceManager.VisualEffect("Puffy_Explosion");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
 
 
 
