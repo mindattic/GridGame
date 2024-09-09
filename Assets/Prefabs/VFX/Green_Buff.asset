@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Green_Buff
   prefab: {fileID: 3154239977406802269, guid: 2c432fcb68c98ad4c94e58c819927de2, type: 3}
-  relativeOffset: {x: 0, y: 0, z: 0}
+  relativeOffset: {x: 0.02, y: -0.25, z: 0}
   angularRotation: {x: 0, y: 0, z: 0}
-  relativeScale: {x: 0.1, y: 0.1, z: 0}
+  relativeScale: {x: 0.08, y: 0.08, z: 0.08}
   duration: 2
   isLoop: 0
   coroutineStart: -1
