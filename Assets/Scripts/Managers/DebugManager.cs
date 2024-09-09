@@ -56,8 +56,10 @@ public class DebugManager : ExtendedMonoBehavior
             case 32: VFXTest_Orange_Slash(); break;
             case 33: VFXTest_Moon_Feather(); break;
             case 34: VFXTest_Pink_Spark(); break;
+            case 35: VFXTest_BlueYellow_Sword(); break;
 
 
+                
 
 
         }
@@ -335,5 +337,10 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Barbarian.position);
     }
 
-
+    public void VFXTest_BlueYellow_Sword()
+    {
+        var vfx = resourceManager.VisualEffect("BlueYellow_Sword");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
 }
