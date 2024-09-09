@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186a5226611841d439be9262545faef8, type: 3}
   m_Name: Hex_Shield
   m_EditorClassIdentifier: 
-  id: 
-  prefab: {fileID: 0}
+  id: Hex_Shield
+  prefab: {fileID: 1547153050576274, guid: adc8b05849acbcb4db958419bfc77438, type: 3}
   relativeOffset: {x: 0, y: 0, z: 0}
   angularRotation: {x: 0, y: 0, z: 0}
-  relativeScale: {x: 0, y: 0, z: 0}
-  duration: 0
+  relativeScale: {x: 0.16, y: 0.16, z: 0.16}
+  duration: 6
   isLoop: 0
   coroutineStart: -1

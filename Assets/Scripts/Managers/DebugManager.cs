@@ -54,6 +54,7 @@ public class DebugManager : ExtendedMonoBehavior
             case 30: VFXTest_Hex_Shield(); break;
             case 31: VFXTest_Toxic_Cloud(); break;
             case 32: VFXTest_Orange_Slash(); break;
+            case 33: VFXTest_Moon_Feather(); break;
 
 
 
@@ -319,8 +320,12 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Barbarian.position);
     }
 
-        
-
+    public void VFXTest_Moon_Feather()
+    {
+        var vfx = resourceManager.VisualEffect("Moon_Feather");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
 
 
 

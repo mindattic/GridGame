@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186a5226611841d439be9262545faef8, type: 3}
   m_Name: Orange_Slash
   m_EditorClassIdentifier: 
-  id: 
-  prefab: {fileID: 0}
-  relativeOffset: {x: 0, y: 0, z: 0}
+  id: Orange_Slash
+  prefab: {fileID: 7597915466547962151, guid: 01f27eb87f0fb214e8418e55d2428f41, type: 3}
+  relativeOffset: {x: -0.12, y: 0.01, z: 0}
   angularRotation: {x: 0, y: 0, z: 0}
-  relativeScale: {x: 0.1, y: 0.1, z: 0.1}
+  relativeScale: {x: 0.03, y: 0.03, z: 0.03}
   duration: 2
   isLoop: 0
   coroutineStart: -1
