@@ -7,8 +7,8 @@ public class VisualEffect : ScriptableObject
     [SerializeField] public GameObject prefab;
     [SerializeField] public Vector3 relativeOffset;
     [SerializeField] public Vector3 angularRotation;
-    [SerializeField] public Vector3 relativeScale;
-    [SerializeField] public float duration;
+    [SerializeField] public Vector3 relativeScale = new Vector3(0.1f, 0.1f, 0.1f);
+    [SerializeField] public float duration = 2;
     [SerializeField] public bool isLoop;
     [SerializeField] public float coroutineStart = -1;
 }

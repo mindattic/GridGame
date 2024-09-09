@@ -51,6 +51,9 @@ public class DebugManager : ExtendedMonoBehavior
             case 27: VFXTest_Acid_Splash(); break;
             case 28: VFXTest_Green_Buff(); break;
             case 29: VFXTest_Gold_Buff(); break;
+            case 30: VFXTest_Hex_Shield(); break;
+            case 31: VFXTest_Toxic_Cloud(); break;
+            case 32: VFXTest_Orange_Slash(); break;
 
 
 
@@ -294,4 +297,31 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Paladin.position);
         vfxManager.Spawn(vfx, Barbarian.position);
     }
+
+    public void VFXTest_Hex_Shield()
+    {
+        var vfx = resourceManager.VisualEffect("Hex_Shield");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
+
+    public void VFXTest_Toxic_Cloud()
+    {
+        var vfx = resourceManager.VisualEffect("Toxic_Cloud");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
+
+    public void VFXTest_Orange_Slash()
+    {
+        var vfx = resourceManager.VisualEffect("Orange_Slash");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
+
+        
+
+
+
+
 }
