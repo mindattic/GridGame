@@ -48,8 +48,9 @@ public class DebugManager : ExtendedMonoBehavior
             case 24: VFXTest_Puffy_Explosion(); break;
             case 25: VFXTest_Red_Slash_2X(); break;
             case 26: VFXTest_God_Rays(); break;
+            case 27: VFXTest_Acid_Splash(); break;
 
-
+                
 
 
         }
@@ -272,7 +273,12 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Barbarian.position);
     }
 
-
+    public void VFXTest_Acid_Splash()
+    {
+        var vfx = resourceManager.VisualEffect("Acid_Splash");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
 
 
 

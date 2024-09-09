@@ -921,7 +921,10 @@ public class ActorBehavior : ExtendedMonoBehavior
             yield return Interval.FiveTicks;
         }
 
-        //After:
+        //After:       
+        location = Location.Nowhere;
+        destination = new Vector3(-100, -100, 0);
+        position = destination;
         gameObject.SetActive(false);
     }
 
