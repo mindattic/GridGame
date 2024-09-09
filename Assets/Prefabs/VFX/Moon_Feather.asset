@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Moon_Feather
   prefab: {fileID: 7953046229737379623, guid: 0a22fbdf671c2a746ae4e4a5cfb4cd2b, type: 3}
-  relativeOffset: {x: 0, y: 0, z: 0}
+  relativeOffset: {x: 0, y: -0.02, z: 0}
   angularRotation: {x: 0, y: 0, z: 0}
-  relativeScale: {x: 0.01, y: 1, z: 1}
-  duration: 2
+  relativeScale: {x: 4, y: 4, z: 0}
+  duration: 3
   isLoop: 0
   coroutineStart: -1

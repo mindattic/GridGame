@@ -55,6 +55,7 @@ public class DebugManager : ExtendedMonoBehavior
             case 31: VFXTest_Toxic_Cloud(); break;
             case 32: VFXTest_Orange_Slash(); break;
             case 33: VFXTest_Moon_Feather(); break;
+            case 34: VFXTest_Pink_Spark(); break;
 
 
 
@@ -327,6 +328,12 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Barbarian.position);
     }
 
+    public void VFXTest_Pink_Spark()
+    {
+        var vfx = resourceManager.VisualEffect("Pink_Spark");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
 
 
 }

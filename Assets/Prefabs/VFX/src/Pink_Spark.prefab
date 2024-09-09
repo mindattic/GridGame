@@ -4863,6 +4863,7 @@ GameObject:
   - component: {fileID: 9053933418112283928}
   - component: {fileID: 7903406191080603473}
   - component: {fileID: 8328950800510460711}
+  - component: {fileID: 982610023628646243}
   m_Layer: 9
   m_Name: Pink_Spark
   m_TagString: VFX
@@ -9698,6 +9699,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &982610023628646243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670983578734417822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d03afed6f1e6dd74eae6f47eec7d62ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1725425841433547509
 GameObject:
   m_ObjectHideFlags: 0
