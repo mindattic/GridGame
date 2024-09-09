@@ -2420,6 +2420,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e65cfd769f5d31e419709d5fcefe1d17, type: 2}
   - {fileID: 11400000, guid: ed9b29936fc13234785e09f76382b772, type: 2}
   - {fileID: 11400000, guid: 2306e3fa81d7f6e489e5b42bc841b1f8, type: 2}
+  - {fileID: 11400000, guid: 48c9b393e1c3fc54896b0afed590342b, type: 2}
+  - {fileID: 11400000, guid: 96ce4a7636f63784586a2ac76133e75c, type: 2}
+  - {fileID: 11400000, guid: cf64a4d20363e454eb10d003023ef517, type: 2}
+  - {fileID: 11400000, guid: 9b7274c2c5fa8e24ca4a8dcad7088ef5, type: 2}
+  - {fileID: 11400000, guid: 4245e73b83b2f0d4ca2dd4d5926f6ecf, type: 2}
+  - {fileID: 11400000, guid: 0a5ec8365bfadb34698b1848d512c946, type: 2}
+  - {fileID: 11400000, guid: c4b60c9e9bb27b841b39b7eeb14b2a9f, type: 2}
+  - {fileID: 11400000, guid: 09a2459015bd1eb4093bc384f4118293, type: 2}
 --- !u!4 &988052023
 Transform:
   m_ObjectHideFlags: 0
@@ -3792,7 +3800,28 @@ MonoBehaviour:
     - m_Text: 'VFX: Green Buff'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: '-'
+    - m_Text: 'VFX: Gold Buff'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Hex Shield'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Toxic Cloud'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Orange Slash'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Moon Feather'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Pink Spark'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Blue/Yellow Sword'
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: 'VFX: Blue/Yellow Sword 3X'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
