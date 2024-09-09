@@ -104,7 +104,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
         //CheckMovement();
-        CheckBobbing();
+        //CheckBobbing();
         CheckThrobbing();
         //CheckFlicker();
 
@@ -139,7 +139,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-    #region Properties
+    #region Components
 
     public string Name
     {
@@ -159,6 +159,12 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
+    public Vector3 thumbnailPosition
+    {
+        get => gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position;
+        set => gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position = value;
+    }
+
     public Vector3 scale
     {
         get => gameObject.transform.localScale;
@@ -171,6 +177,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         get => renderers.thumbnail.sprite;
         set => renderers.thumbnail.sprite = value;
     }
+
 
 
 
@@ -570,13 +577,13 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void Shake(float intensity)
     {
-        gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position = currentTile.position;
+        thumbnailPosition = currentTile.position;
 
         if (intensity <= 0)
             return;
 
         var amount = new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
-        gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position += amount;
+        thumbnailPosition += amount;
     }
 
 
@@ -658,6 +665,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public IEnumerator ChangeHp(float amount)
     {
+        //Check abort state
+        if (!IsAlive)
+            yield break;
+ 
         //Before:
         float ticks = 0f;
         float duration = Interval.QuarterSecond;
@@ -700,8 +711,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             }
 
-
-
             ticks += Interval.OneTick;
             yield return Wait.For(Interval.OneTick);
         }
@@ -711,6 +720,10 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             ShrinkAsync();
             Shake(shakeIntensity.Stop);
+
+            if (IsDying)
+                DieAsync();
+
         }
         else if (isHeal)
         {
@@ -721,7 +734,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         }
 
-     
+
     }
 
     //public IEnumerator ChangeHp(float amount)
@@ -763,6 +776,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void ChangeHpAsync(float amount)
     {
+        //Check abort state
+        if (!IsAlive)
+            return;
+
         StartCoroutine(ChangeHp(amount));
     }
 
@@ -846,47 +863,47 @@ public class ActorBehavior : ExtendedMonoBehavior
         renderers.healthText.text = $@"{hp}/{maxHp}";
     }
 
-    public IEnumerator RadialBackFadeIn()
-    {
-        //Before:
-        var maxAlpha = 0.5f;
-        var alpha = 0f;
-        renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
+    //public IEnumerator RadialBackFadeIn()
+    //{
+    //    //Before:
+    //    var maxAlpha = 0.5f;
+    //    var alpha = 0f;
+    //    renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
 
-        //During:
-        while (alpha < maxAlpha)
-        {
-            alpha += Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
-            renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
-            yield return global::Wait.OneTick();
-        }
+    //    //During:
+    //    while (alpha < maxAlpha)
+    //    {
+    //        alpha += Increment.OnePercent;
+    //        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+    //        renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
+    //        yield return global::Wait.OneTick();
+    //    }
 
-        //After:
-        renderers.skillRadialBack.color = new Color(0, 0, 0, maxAlpha);
-    }
+    //    //After:
+    //    renderers.skillRadialBack.color = new Color(0, 0, 0, maxAlpha);
+    //}
 
-    public IEnumerator RadialBackFadeOut()
-    {
-        //Before:
-        var maxAlpha = 0.5f;
-        var alpha = maxAlpha;
-        renderers.skillRadialBack.color = new Color(0, 0, 0, maxAlpha);
+    //public IEnumerator RadialBackFadeOut()
+    //{
+    //    //Before:
+    //    var maxAlpha = 0.5f;
+    //    var alpha = maxAlpha;
+    //    renderers.skillRadialBack.color = new Color(0, 0, 0, maxAlpha);
 
-        //During:
-        while (alpha > 0)
-        {
-            alpha -= Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
-            renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
-            yield return global::Wait.OneTick();
-        }
+    //    //During:
+    //    while (alpha > 0)
+    //    {
+    //        alpha -= Increment.OnePercent;
+    //        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+    //        renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
+    //        yield return Wait.OneTick();
+    //    }
 
-        //After:
-        renderers.skillRadialBack.color = new Color(0, 0, 0, 0);
-    }
+    //    //After:
+    //    renderers.skillRadialBack.color = new Color(0, 0, 0, 0);
+    //}
 
-    public IEnumerator Dissolve()
+    public IEnumerator Die()
     {
         //Before:
         var alpha = 1f;
@@ -896,16 +913,21 @@ public class ActorBehavior : ExtendedMonoBehavior
         sortingOrder = SortingOrder.Max;
 
         //During:
-        while (alpha > 0)
+        while (alpha > 0f)
         {
             alpha -= Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, 1);
+            alpha = Mathf.Clamp(alpha, 0f, 1f);
             renderers.SetAlpha(alpha);
-            yield return Wait.OneTick();
+            yield return Interval.FiveTicks;
         }
 
         //After:
         gameObject.SetActive(false);
+    }
+
+    public void DieAsync()
+    {
+        StartCoroutine(Die());
     }
 
     public void SetStatus(Status icon)

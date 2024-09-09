@@ -278,6 +278,7 @@ public class TurnManager : ExtendedMonoBehavior
                 var amount = Random.Int(15, 33);
                 pair.actor1.ChangeSpAsync(amount);
                 pair.actor2.ChangeSpAsync(amount);
+
                 yield return enemy.ChangeHp(-amount);
             }
             else
@@ -295,10 +296,10 @@ public class TurnManager : ExtendedMonoBehavior
 
         var deadEnemies = pair.alignment.enemies.Where(x => x.IsDying).ToList();
 
-        //Dissolve dead enemies (one at a time)
+        //Die dead enemies (one at a time)
         foreach (var enemy in deadEnemies)
         {
-            yield return enemy.Dissolve();
+            yield return enemy.Die();
         }
 
         pair.actor1.ShrinkAsync();
@@ -430,10 +431,10 @@ public class TurnManager : ExtendedMonoBehavior
             var deadPlayers = actors.Where(x => x.IsDying).ToList();
             if (deadPlayers != null && deadPlayers.Count > 0)
             {
-                //Dissolve dead enemies (one at a time)
+                //Die dead enemies (one at a time)
                 foreach (var player in deadPlayers)
                 {
-                    yield return player.Dissolve();
+                    yield return player.Die();
                 }
 
                 //Fade out (all at once)

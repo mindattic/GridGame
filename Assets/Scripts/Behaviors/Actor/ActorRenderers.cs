@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class ActorRenderers
@@ -8,10 +10,10 @@ public class ActorRenderers
     public Color opaqueColor = Colors.Solid.White;
     public Color qualityColor = Colors.Solid.White;
     public float qualityAlphaMax = 0.7f;
-
-
     public Color glowColor = Colors.Solid.White;
     public Color parallaxColor = Colors.Solid.White;
+    public float parallaxAlphaMax = 0.5f;
+    public Color thumbnailColor = Colors.Solid.White;
     public Color frameColor = Colors.Solid.White;
     public Color healthBarColor = Colors.HealthBar.Green;
     public Color actionBarColor = Colors.ActionBar.Blue;
@@ -46,45 +48,24 @@ public class ActorRenderers
 
     public void SetAlpha(float alpha)
     {
-        opaqueColor.a = Mathf.Clamp(alpha, 0, 1);
-        opaque.color = opaqueColor;
-
-        qualityColor.a = Mathf.Clamp(alpha, 0, qualityAlphaMax);
-        quality.color = qualityColor;
-
-        
-        glowColor.a = Mathf.Clamp(alpha, 0, 1);
-        glow.color = glowColor;
-
-        //parallaxColor.a = alpha;
-        //parallax.color = new Color(parallaxColor.r, parallaxColor.g, parallaxColor.b, Mathf.Clamp(alpha, 0, 0.5f));
-
-        thumbnail.color = new Color(1, 1, 1, alpha);
-
-        frameColor.a = Mathf.Clamp(alpha, 0, 1);
-        frame.color = new Color(frameColor.r, frameColor.g, frameColor.b, frameColor.a);
-
-        statusIcon.color = new Color(1, 1, 1, alpha);
-
-        healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
-
-
-        healthBarColor.a = alpha;
-        healthBar.color = healthBarColor;
-        healthBarFront.color = new Color(1, 1, 1, alpha);
-        healthText.color = new Color(1, 1, 1, alpha);
-
-        actionBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
-
-        actionBarColor.a = alpha;
-        actionBar.color = actionBarColor;
-        actionText.color = new Color(1, 1, 1, alpha);
-
-        skillRadialBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
-        skillRadial.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.5f));
-        skillRadialText.color = new Color(1, 1, 1, alpha);
+        SetOpaqueAlpha(alpha);
+        SetQualityAlpha(alpha);
+        SetGlowAlpha(alpha);
+        //SetParallaxAlpha(alpha);
+        SetThumbnailAlpha(alpha);
+        SetFrameAlpha(alpha);
+        //statusIcon.color = new Color(1, 1, 1, alpha);
+        SetHealthBarAlpha(alpha);
+        SetActionBarAlpha(alpha);
+        SetSkillRadialAlpha(alpha);
 
         selection.color = new Color(1, 1, 1, alpha);
+    }
+
+    public void SetOpaqueAlpha(float alpha)
+    {
+        opaqueColor.a = Mathf.Clamp(alpha, 0, 1);
+        opaque.color = opaqueColor;
     }
 
     public void SetQualityColor(Color color)
@@ -92,6 +73,7 @@ public class ActorRenderers
         qualityColor = new Color(color.r, color.g, color.b, Mathf.Clamp(color.a, 0, qualityAlphaMax));
         quality.color = qualityColor;
     }
+
 
     public void SetQualityAlpha(float alpha)
     {
@@ -116,7 +98,6 @@ public class ActorRenderers
         this.glow.transform.localScale = scale;
     }
 
-
     public void SetParallaxSprite(Sprite sprite)
     {
         parallax.sprite = sprite;
@@ -127,19 +108,57 @@ public class ActorRenderers
         parallax.material = material;
     }
 
-
     public void SetParallaxAlpha(float alpha)
     {
-        parallaxColor.a = Mathf.Clamp(alpha, 0, 0.5f);
+        parallaxColor.a = Mathf.Clamp(alpha, 0, parallaxAlphaMax);
         this.parallax.color = parallaxColor;
     }
 
     public void SetParallaxSpeed(float xScroll, float yScroll)
     {
- 
+
         this.parallax.material.SetFloat("_XScroll", xScroll);
         this.parallax.material.SetFloat("_YScroll", yScroll);
     }
+
+    public void SetThumbnailAlpha(float alpha)
+    {
+        thumbnailColor.a = Mathf.Clamp(alpha, 0, 1);
+        thumbnail.color = thumbnailColor;
+    }
+
+    public void SetFrameAlpha(float alpha)
+    {
+        frameColor.a = Mathf.Clamp(alpha, 0, 1);
+        frame.color = frameColor;
+    }
+
+    public void SetHealthBarAlpha(float alpha)
+    {
+        healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        healthBarColor.a = alpha;
+        healthBar.color = healthBarColor;
+        healthBarFront.color = new Color(1, 1, 1, alpha);
+        healthText.color = new Color(1, 1, 1, alpha);
+    }
+
+    public void SetActionBarAlpha(float alpha)
+    {
+        actionBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        actionBarColor.a = alpha;
+        actionBar.color = actionBarColor;
+        actionText.color = new Color(1, 1, 1, alpha);
+    }
+
+    public void SetSkillRadialAlpha(float alpha)
+    {
+        skillRadialBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        skillRadial.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.5f));
+        skillRadialText.color = new Color(1, 1, 1, alpha);
+    }
+
+
+  
 
 
     //public void SetBloomColor(Color color)

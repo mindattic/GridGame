@@ -7,7 +7,7 @@ using UnityEngine.VFX;
 
 public class VFXManager : ExtendedMonoBehavior
 {
-
+    //Variables
     Dictionary<string, VFXBehavior> visualEffects = new Dictionary<string, VFXBehavior>();
 
     public void Spawn(VisualEffect vfx, Vector3 position, IEnumerator coroutine = null)
