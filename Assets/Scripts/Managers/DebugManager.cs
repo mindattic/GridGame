@@ -49,8 +49,9 @@ public class DebugManager : ExtendedMonoBehavior
             case 25: VFXTest_Red_Slash_2X(); break;
             case 26: VFXTest_God_Rays(); break;
             case 27: VFXTest_Acid_Splash(); break;
+            case 28: VFXTest_Green_Buff(); break;
 
-                
+
 
 
         }
@@ -279,7 +280,12 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.Spawn(vfx, Paladin.position);
         vfxManager.Spawn(vfx, Barbarian.position);
     }
-
-
+    public void VFXTest_Green_Buff()
+    {
+        var vfx = resourceManager.VisualEffect("Green_Buff");
+        vfxManager.Spawn(vfx, Paladin.position);
+        vfxManager.Spawn(vfx, Barbarian.position);
+    }
+    
 
 }

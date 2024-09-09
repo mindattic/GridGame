@@ -2418,6 +2418,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1c5a87ff1ff421c42a5c406eaf050a85, type: 2}
   - {fileID: 11400000, guid: e786d22f17fb243479f0d61ea06eaf5c, type: 2}
   - {fileID: 11400000, guid: e65cfd769f5d31e419709d5fcefe1d17, type: 2}
+  - {fileID: 11400000, guid: ed9b29936fc13234785e09f76382b772, type: 2}
+  - {fileID: 11400000, guid: 2306e3fa81d7f6e489e5b42bc841b1f8, type: 2}
 --- !u!4 &988052023
 Transform:
   m_ObjectHideFlags: 0
@@ -3784,10 +3786,10 @@ MonoBehaviour:
     - m_Text: 'VFX: God Rays'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: '-'
+    - m_Text: 'VFX: Acid Splash'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: '-'
+    - m_Text: 'VFX: Green Buff'
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: '-'
