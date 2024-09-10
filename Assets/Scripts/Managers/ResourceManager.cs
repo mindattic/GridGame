@@ -28,7 +28,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error(ex.Message);
+            logManager.error($"Failed to retrieve actor thumbnail `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
@@ -43,7 +43,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error(ex.Message);
+            logManager.error($"Failed to retrieve actor material `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
@@ -57,7 +57,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error(ex.Message);
+            logManager.error($"Failed to retrieve actor sprite `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
@@ -73,7 +73,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error(ex.Message);
+            logManager.error($"Failed to retrieve actor details `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
@@ -87,7 +87,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error(ex.Message);
+            logManager.error($"Failed to retrieve prop sprite `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
@@ -102,7 +102,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error(ex.Message);
+            logManager.error($"Failed to retrieve seamless sprite `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
@@ -117,7 +117,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error(ex.Message);
+            logManager.error($"Failed to retrieve status thumbnail `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
@@ -132,7 +132,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error(ex.Message);
+            logManager.error($"Failed to retrieve sound effect `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
@@ -147,7 +147,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error(ex.Message);
+            logManager.error($"Failed to retrieve music track `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
@@ -162,7 +162,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error(ex.Message);
+            logManager.error($"Failed to retrieve visual effect `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
