@@ -4,6 +4,15 @@ namespace Game.Models
 {
     public class RectFloat
     {
+        public RectFloat() { }
+        public RectFloat(float top, float right, float bottom, float left)
+        {
+            Top = top;
+            Right = right;
+            Bottom = bottom;
+            Left = left;
+        }
+
         //Variables
         public float Top { get; set; }
         public float Right { get; set; }

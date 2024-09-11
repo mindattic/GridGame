@@ -1,10 +1,11 @@
-﻿using System.Linq;
+﻿using Game.Models;
+using System.Linq;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Shared
 {
-    public static Vector2 ScreenToWorldSize
+    public static RectFloat ScreenInWorldUnits
     {
         get
         {
@@ -12,7 +13,15 @@ public class Shared
             Vector2 edgeVector = Camera.main.ViewportToWorldPoint(topRightCorner);
             var width = edgeVector.x * 2f;
             var height = edgeVector.y * 2f;
-            return new Vector2(width, height);
+            return new RectFloat(0, width, height, 0);
+        }
+    }
+
+    public static RectFloat ScreenInPixels
+    {
+        get
+        {
+            return new RectFloat(0, Screen.width, Screen.height, 0);
         }
     }
 

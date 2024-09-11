@@ -1,11 +1,12 @@
 using Game.Behaviors;
 using Game.Manager;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    [HideInInspector] public string DeviceType;
+    [HideInInspector] public string deviceType;
 
     //Settings
     [HideInInspector] public int targetFramerate = 60;
@@ -45,9 +46,10 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public AudioSource musicSource;
 
     //relativeScale
-    [HideInInspector] public Vector2 screenSize;
+    [HideInInspector] public Vector2 viewport;
     [HideInInspector] public float tileSize;
     [HideInInspector] public Vector3 tileScale;
+    [HideInInspector] public float cardPortraitSize;
 
     [HideInInspector] public Canvas canvas2D;
     [HideInInspector] public Canvas canvas3D;
@@ -79,16 +81,23 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public ShakeIntensity shakeIntensity;
 
 
+    public IQueryable<ActorBehavior> players => actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
+    public IQueryable<ActorBehavior> enemies => actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
+
+
     private void Awake()
     {
 
-        screenSize = Shared.ScreenToWorldSize;
-        tileSize = screenSize.x / Constants.percent666;
+        tileSize = Shared.ScreenInWorldUnits.Width / 6;
         tileScale = new Vector3(tileSize, tileSize, 1f);
+
+
+
+        cardPortraitSize = Shared.ScreenInPixels.Width / 2;
 
         cursorSpeed = tileSize / 2;
         swapSpeed = tileSize / 6;
-        moveSpeed = tileSize / 6;
+        moveSpeed = tileSize / 8;
         bumpSpeed = tileSize / 14;
         snapDistance = tileSize / 8;
         shakeIntensity = new ShakeIntensity(tileSize);
@@ -138,21 +147,21 @@ public class GameManager : Singleton<GameManager>
 
         //https://docs.unity3d.com/520/Documentation/Manual/PlatformDependentCompilation.html
         //#if UNITY_STANDALONE_WIN
-        //        DeviceType = "UNITY_STANDALONE_WIN";
+        //        deviceType = "UNITY_STANDALONE_WIN";
         //#elif UNITY_STANDALONE_LINUX
-        //  DeviceType = "UNITY_STANDALONE_LINUX";
+        //  deviceType = "UNITY_STANDALONE_LINUX";
         //#elif UNITY_IPHONE
-        //        DeviceType = "UNITY_IPHONE";
+        //        deviceType = "UNITY_IPHONE";
         //#elif UNITY_STANDALONE_OSX
-        //    DeviceType = "UNITY_STANDALONE_OSX"
+        //    deviceType = "UNITY_STANDALONE_OSX"
         //#elif UNITY_WEBPLAYER
-        //  DeviceType = "UNITY_WEBPLAYER";
+        //  deviceType = "UNITY_WEBPLAYER";
         //#elif UNITY_WEBGL
-        //  DeviceType = "UNITY_WEBGL";
+        //  deviceType = "UNITY_WEBGL";
         //#else
-        //    DeviceType = "Unknown";;
+        //    deviceType = "Unknown";;
         //#endif
-        //        Debug.Log($"Running on {DeviceType}");
+        //        Debug.Log($"Running on {deviceType}");
 
         //#if UNITY_EDITOR
         //        Debug.Log($"Emulated on UNITY_EDITOR");

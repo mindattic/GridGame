@@ -1,11 +1,20 @@
 ﻿using Game.Behaviors.Actor;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 static class Random
 {
     [ThreadStatic] public static System.Random rng = new System.Random();
+
+    //Properties
+    private static IQueryable<ActorBehavior> players => GameManager.instance.players;
+    private static IQueryable<ActorBehavior> enemies => GameManager.instance.enemies;
+    private static List<ActorBehavior> actors => GameManager.instance.actors;
+    private static List<TileBehavior> tiles => GameManager.instance.tiles;
+    private static int columnCount => GameManager.instance.board.columnCount;
+    private static int rowCount => GameManager.instance.board.rowCount;
 
     public static int Int(int min, int max) => rng.Next(min, max + 1);
 
@@ -22,8 +31,7 @@ static class Random
         get
         {
             var result = Int(1, 4);
-            return result switch
-            {
+            return result switch {
                 1 => Direction.North,
                 2 => Direction.East,
                 3 => Direction.South,
@@ -118,15 +126,16 @@ static class Random
 
 
 
-    public static ActorBehavior Player => GameManager.instance.actors.Where(x => x.team.Equals(Team.Player)).OrderBy(x => Guid.NewGuid()).First();
 
-    public static ActorBehavior Enemy => GameManager.instance.actors.Where(x => x.team.Equals(Team.Enemy)).OrderBy(x => Guid.NewGuid()).First();
+    public static ActorBehavior Player => players.Where(x => x.IsPlaying).OrderBy(x => Guid.NewGuid()).First();
 
-    public static TileBehavior Tile => GameManager.instance.tiles.OrderBy(x => Guid.NewGuid()).First();
+    public static ActorBehavior Enemy => enemies.Where(x => x.IsPlaying).OrderBy(x => Guid.NewGuid()).First();
 
-    public static TileBehavior UnoccupiedTile => GameManager.instance.tiles.Where(x => !x.IsOccupied).OrderBy(x => Guid.NewGuid()).First();
+    public static TileBehavior Tile => tiles.OrderBy(x => Guid.NewGuid()).First();
 
-    public static Vector2Int Location => new Vector2Int(Int(1, GameManager.instance.board.columnCount), GameManager.instance.board.rowCount);
+    public static TileBehavior UnoccupiedTile => tiles.Where(x => !x.IsOccupied).OrderBy(x => Guid.NewGuid()).First();
+
+    public static Vector2Int Location => new Vector2Int(Int(1, columnCount), Int(1, rowCount));
 
     public static Vector2Int UnoccupiedLocation => UnoccupiedTile.location;
 

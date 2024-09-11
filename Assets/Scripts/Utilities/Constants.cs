@@ -37,8 +37,8 @@ public static class Constants
 
 
     //Card
-    public const string CardBack = "Card/Back";
-    public const string CardProfile = "Card/Profile";
+    public const string CardBackdrop = "Card/Backdrop";
+    public const string CardPortrait = "Card/Portrait";
     public const string CardTitle = "Card/Title";
     public const string CardDetails = "Card/Details";
 

@@ -9,41 +9,31 @@ namespace Game.Behaviors
     public class CardManager : ExtendedMonoBehavior
     {
         RectTransform rectTransform;
-        Image backImage;
-        Image profileImage;
+        Image backdrop;
+        Image portrait;
         TextMeshProUGUI title;
         TextMeshProUGUI details;
 
         private void Awake()
         {
-            Init();
-        }
-        void Start() { }
-        void Update() { }
-        void FixedUpdate() { }
-
-
-        public void Init()
-        {
             rectTransform = GetComponent<RectTransform>();
-            backImage = GameObject.Find(Constants.CardBack).GetComponent<Image>();
-            profileImage = GameObject.Find(Constants.CardProfile).GetComponent<Image>();
+            backdrop = GameObject.Find(Constants.CardBackdrop).GetComponent<Image>();
+            portrait = GameObject.Find(Constants.CardPortrait).GetComponent<Image>();     
             title = GameObject.Find(Constants.CardTitle).GetComponent<TextMeshProUGUI>();
             details = GameObject.Find(Constants.CardDetails).GetComponent<TextMeshProUGUI>();
-
-            //TODO: Calculate dimensions based on device vfx
-
-
             Clear();
+        }
 
-
+        private void Start()
+        {
+            portrait.rectTransform.sizeDelta = new Vector2(cardPortraitSize, cardPortraitSize);
         }
 
         public void Set(ActorBehavior actor)
         {
-            backImage.enabled = true;
-            profileImage.sprite = resourceManager.ActorPortrait(actor.archetype.ToString());
-            profileImage.enabled = true;
+            backdrop.enabled = true;
+            portrait.sprite = resourceManager.ActorPortrait(actor.archetype.ToString());
+            portrait.enabled = true;
             title.text = actor.name;
 
 
@@ -60,8 +50,8 @@ namespace Game.Behaviors
 
         public void Clear()
         {
-            backImage.enabled = false;
-            profileImage.enabled = false;
+            backdrop.enabled = false;
+            portrait.enabled = false;
             title.text = "";
             details.text = "";
 

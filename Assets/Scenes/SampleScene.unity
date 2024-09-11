@@ -2455,7 +2455,7 @@ GameObject:
   - component: {fileID: 995675047}
   - component: {fileID: 995675046}
   m_Layer: 5
-  m_Name: Back
+  m_Name: Backdrop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4678,7 +4678,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _persistent: 1
-  DeviceType: 
+  deviceType: 
   targetFramerate: 60
   vSyncCount: 0
   gameSpeed: 1
@@ -4708,9 +4708,10 @@ MonoBehaviour:
   logManager: {fileID: 0}
   soundSource: {fileID: 0}
   musicSource: {fileID: 0}
-  screenSize: {x: 0, y: 0}
+  viewport: {x: 0, y: 0}
   tileSize: 0
   tileScale: {x: 0, y: 0, z: 0}
+  cardPortraitSize: 0
   canvas2D: {fileID: 0}
   canvas3D: {fileID: 0}
   mousePosition2D: {x: 0, y: 0, z: 0}
@@ -5239,7 +5240,7 @@ GameObject:
   - component: {fileID: 1884944202}
   - component: {fileID: 1884944201}
   m_Layer: 5
-  m_Name: Profile
+  m_Name: Portrait
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

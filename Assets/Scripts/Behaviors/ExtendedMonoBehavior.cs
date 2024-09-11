@@ -59,8 +59,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set => GameManager.instance.actors = value;
     }
 
-    protected IQueryable<ActorBehavior> players => GameManager.instance.actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
-    protected IQueryable<ActorBehavior> enemies => GameManager.instance.actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
+    protected IQueryable<ActorBehavior> players => GameManager.instance.players;
+    protected IQueryable<ActorBehavior> enemies => GameManager.instance.enemies;
 
     //Layers
     protected static class ActorLayer
@@ -93,6 +93,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //relativeScale
     protected float tileSize => GameManager.instance.tileSize;
     protected Vector3 tileScale => GameManager.instance.tileScale;
+    
+    protected float cardPortraitSize => GameManager.instance.cardPortraitSize;
 
     protected ShakeIntensity shakeIntensity => GameManager.instance.shakeIntensity;
 

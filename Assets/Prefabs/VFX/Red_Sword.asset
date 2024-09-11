@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Red_Sword
   prefab: {fileID: 5987591639799670305, guid: 18b66ea9d48de574eb658217b305257c, type: 3}
-  relativeOffset: {x: -0.03, y: 0.01, z: 0}
-  angularRotation: {x: 0, y: 0, z: 145}
-  relativeScale: {x: 0.15, y: 0.15, z: 0.15}
+  relativeOffset: {x: -0.06, y: 0.05, z: 0}
+  angularRotation: {x: 0, y: 0, z: 142}
+  relativeScale: {x: 0.2, y: 0.2, z: 0.2}
   duration: 2
   isLoop: 0
   coroutineStart: -1
