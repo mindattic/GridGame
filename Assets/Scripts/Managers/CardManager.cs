@@ -13,6 +13,12 @@ namespace Game.Behaviors
         Image portrait;
         TextMeshProUGUI title;
         TextMeshProUGUI details;
+        Vector3 initialPosition;
+        [SerializeField] AnimationCurve verticalCurve;
+        [SerializeField] AnimationCurve horizontalCurve;
+        [SerializeField] Vector2 range;
+        [SerializeField] Vector2 speed;
+        private float elapsedTime = 0f;
 
         private void Awake()
         {
@@ -27,6 +33,7 @@ namespace Game.Behaviors
         private void Start()
         {
             portrait.rectTransform.sizeDelta = new Vector2(cardPortraitSize, cardPortraitSize);
+            initialPosition = portrait.rectTransform.localPosition;
         }
 
         public void Set(ActorBehavior actor)
@@ -34,18 +41,33 @@ namespace Game.Behaviors
             backdrop.enabled = true;
             portrait.sprite = resourceManager.ActorPortrait(actor.archetype.ToString());
             portrait.enabled = true;
+           
             title.text = actor.name;
 
-
             var stats
-                = $"hp: {actor.hp}/{actor.maxHp}{Environment.NewLine}"
+                = $" HP: {actor.hp}/{actor.maxHp}{Environment.NewLine}"
+                + $"ATK: { actor.attack}    DEF: {actor.defense}{Environment.NewLine}"
+                + $"ACC: {actor.accuracy}     DEX: {actor.evasion}{Environment.NewLine}"
+                + $"SPD: {actor.speed}    LCK: {actor.luck}{Environment.NewLine}"
                 + $""
                 + $"{Environment.NewLine}"
                 + resourceManager.ActorDetails(actor.archetype.ToString());
+            details.text = stats;
+        }
 
+        public void FixedUpdate()
+        {
+            elapsedTime += Time.deltaTime;
 
+            //var hover = new Vector3(
+            //    initialPosition.x + horizontalCurve.Evaluate(elapsedTime / speed.x) * range.x * gameSpeed,
+            //    initialPosition.y + verticalCurve.Evaluate(elapsedTime / speed.y) * range.y * gameSpeed,
+            //    initialPosition.z);
 
-            details.text = resourceManager.ActorDetails(actor.archetype.ToString());
+            //var rot = Geometry.Rotation(new Vector3(0, 5 * verticalCurve.Evaluate(Time.time % verticalCurve.length), 0));
+            //portrait.rectTransform.localPosition = hover;
+            //portrait.rectTransform.localRotation = rot;
+
         }
 
         public void Clear()

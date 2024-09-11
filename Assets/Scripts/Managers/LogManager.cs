@@ -27,13 +27,13 @@ namespace Game.Behaviors
 
         void Update()
         {
-            const float duration = 3f;
-            delay += Time.deltaTime / duration;
-            if (delay >= 1f)
-            {
-                delay = 0f;
-                info($"Ticks: {DateTime.Now.Ticks}");
-            }
+            //const float duration = 3f;
+            //delay += Time.deltaTime / duration;
+            //if (delay >= 1f)
+            //{
+            //    delay = 0f;
+            //    info($"Ticks: {DateTime.Now.Ticks}");
+            //}
         }
 
         private void FixedUpdate()

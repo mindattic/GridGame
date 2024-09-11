@@ -981,8 +981,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     //        return;
 
     //    //TODO: Calculate based on stats....
-    //    float min = (Interval.OneSecond * 10) - speed * LuckModifier;
-    //    float max = (Interval.OneSecond * 20) - speed * LuckModifier;
+    //    float min = (Interval.OneSecond * 10) - range * LuckModifier;
+    //    float max = (Interval.OneSecond * 20) - range * LuckModifier;
 
     //    ap = 0;
     //    maxAp = Random.Float(min, max);

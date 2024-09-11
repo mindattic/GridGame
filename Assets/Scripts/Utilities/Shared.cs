@@ -1,7 +1,6 @@
 ﻿using Game.Models;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Shared
 {
@@ -25,9 +24,14 @@ public class Shared
         }
     }
 
-    public static Vector3 WorldToScreenPosition(Vector3 position)
+    public static Vector3 ConvertWorldToScreenPosition(Vector3 position)
     {
         return Camera.main.WorldToScreenPoint(position);
+    }
+
+    public static Vector3 ConvertScreenToWorldPosition(Vector3 position)
+    {
+        return Camera.main.ScreenToWorldPoint(position);
     }
 
     public static bool IsInRange(float a, float b, float range)
@@ -57,7 +61,7 @@ public class Shared
     }
 
 
-    
+
     public static Alignment AssignAlignment(ActorBehavior actor1, ActorBehavior actor2, Axis axis)
     {
 
