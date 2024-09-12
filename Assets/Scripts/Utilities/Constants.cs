@@ -147,7 +147,7 @@ public static class Colors
 
     public static class HealthBar
     {
-        public static Color Green = new Color(0f, 0.75f, 0.125f);
+        public static Color Green = new Color(0f, 1f, 0f);
 
     }
 

@@ -146,7 +146,6 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Shader\TileMask.shader" />
     <None Include="Assets\Shader\dissolve_c.shader" />
-    <None Include="Assets\VFX\GameVFX Collection Vol3\Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
     <None Include="Assets\VFX\GameVFX Collection(URP)\FX_Dragonfire\Shader\ParticleAdd_UV.shader" />
     <None Include="Assets\Shader\Add_DisUV.shader" />
@@ -167,7 +166,7 @@
     <None Include="Assets\Shader\Innerglow.shader" />
     <None Include="Assets\Shader\RadialFill.shader" />
     <None Include="Assets\Shader\kongjianniuqu.shader" />
-    <None Include="Assets\VFX\Particle Trails\Readme.txt" />
+    <None Include="Assets\Trails\Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
@@ -186,13 +185,12 @@
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Shader\Alpha Blended.shader" />
     <None Include="Assets\Shader\FireDartsOriginalFinal.shader" />
-    <None Include="Assets\VFX\Game VFX Collection Vol 2(URP)\ReadMe.txt" />
     <None Include="Assets\Shader\Add_CenterGlow.shader" />
     <None Include="Assets\VFX\GameVFX Collection(URP)\FX_UI_Waterball\Shader\water_add.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\Shader\pmxg.shader" />
     <None Include="Assets\Shader\Particle Add.shader" />
-    <None Include="Assets\VFX\Particle Trails\Shaders\Add_CenterGlow.shader" />
+    <None Include="Assets\Shader\Add_CenterGlow 3.shader" />
     <None Include="Assets\Shader\Additive.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\Shader\ParticleAdd_UV.shader" />
@@ -203,7 +201,6 @@
     <None Include="Assets\VFX\GameVFX Collection(URP)\Shaders\Alpha Blended.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Shader\ModelDouble.shader" />
-    <None Include="Assets\VFX\Game VFX Collection Vol 2(URP)\FX_Dissolve\Dissolve.shader" />
     <None Include="Assets\VFX\GameVFX Collection(URP)\Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\Shader\MobileParticleAddMultiColor.shader" />

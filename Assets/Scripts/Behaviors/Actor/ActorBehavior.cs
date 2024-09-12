@@ -27,6 +27,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public float sp = 0;
     public float spMax = -1;
     public int spawnTurn = -1;
+    public Vector3 initialHealthBarScale;
 
     [SerializeField] public AnimationCurve glowCurve;
     [SerializeField] public AnimationCurve slideCurve;
@@ -61,81 +62,12 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         HealthBar = new ActorHealthBar(GetGameObjectByLayer(ActorLayer.HealthBarBack), GetGameObjectByLayer(ActorLayer.HealthBar));
         Thumbnail = new ActorThumbnail(GetGameObjectByLayer(ActorLayer.Thumbnail));
+
+        initialHealthBarScale = renderers.healthBar.transform.localScale;
     }
 
     private void Start()
     {
-
-    }
-
-
-    void Update()
-    {
-        //Check abort status
-        if (!IsPlaying)
-            return;
-
-        var closestTile = Geometry.GetClosestTileByPosition(position);
-        if (location == closestTile.location)
-            return;
-
-        audioManager.Play($"Move{Random.Int(1, 6)}");
-
-        //Determine if two actors are overlapping the same location
-        var overlappingActor = actors.FirstOrDefault(x => x != null
-                                            && !x.Equals(this)
-                                            && x.IsPlaying
-                                            && !x.Equals(focusedPlayer)
-                                            && !x.Equals(selectedPlayer)
-                                            && x.location.Equals(closestTile.location));
-
-        //Assign overlapping actors location to current actor's location
-        if (overlappingActor != null)
-            overlappingActor.SwapLocation(location);
-
-        //Assign current actor's location to closest tile location
-        location = closestTile.location;
-    }
-
-    void FixedUpdate()
-    {
-        //Check abort state
-        if (!IsPlaying || IsFocusedPlayer || IsSelectedPlayer)
-            return;
-
-        //CheckMovement();
-        //CheckBobbing();
-        CheckThrobbing();
-        //CheckFlicker();
-
-        //CheckActionBar();
-        CheckSkillRadial();
-
-
-
-        //if (isRising && renderers.thumbnail.transform.angularRotation.z < maxRot)
-        //{
-        //    renderers.thumbnail.transform.Rotate(new Vector3(0, 0, rotSpeed));
-        //}
-        //else
-        //{
-        //    rotSpeed = Random.Int(2, 5) * 0.01f;
-        //    minRot = -1f + (-1f * Random.Percent);
-        //    isRising = false;
-        //}
-
-        //if (!isRising && renderers.thumbnail.transform.angularRotation.z > minRot)
-        //{
-        //    renderers.thumbnail.transform.Rotate(new Vector3(0, 0, -rotSpeed));
-
-        //}
-        //else
-        //{
-        //    rotSpeed = Random.Int(2, 5) * 0.01f;
-        //    maxRot = 1f + (1f * Random.Percent);
-        //    isRising = true;
-        //}
-
 
     }
 
@@ -296,7 +228,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
             renderers.SetParallaxMaterial(resourceManager.ActorMaterial("PlayerParallax"));
             renderers.SetParallaxAlpha(0);
-            renderers.SetFrameColor(Colors.Solid.White);
+            renderers.SetFrameColor(quality.Color);
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: false);
             renderers.SetSelectionActive(false);
@@ -308,11 +240,14 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
             renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
             renderers.SetParallaxAlpha(0);
-            renderers.SetFrameColor(Colors.Solid.White);
+            renderers.SetFrameColor(Colors.Solid.Red);
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: true);
             renderers.SetSelectionActive(false);
         }
+
+
+       
 
         AssignSkillWait();
         UpdateHealthBar();
@@ -324,6 +259,77 @@ public class ActorBehavior : ExtendedMonoBehavior
         else
             StartCoroutine(FadeIn());
     }
+
+    void Update()
+    {
+        //Check abort status
+        if (!IsPlaying)
+            return;
+
+        var closestTile = Geometry.GetClosestTileByPosition(position);
+        if (location == closestTile.location)
+            return;
+
+        audioManager.Play($"Move{Random.Int(1, 6)}");
+
+        //Determine if two actors are overlapping the same location
+        var overlappingActor = actors.FirstOrDefault(x => x != null
+                                            && !x.Equals(this)
+                                            && x.IsPlaying
+                                            && !x.Equals(focusedPlayer)
+                                            && !x.Equals(selectedPlayer)
+                                            && x.location.Equals(closestTile.location));
+
+        //Assign overlapping actors location to current actor's location
+        if (overlappingActor != null)
+            overlappingActor.SwapLocation(location);
+
+        //Assign current actor's location to closest tile location
+        location = closestTile.location;
+    }
+
+    void FixedUpdate()
+    {
+        //Check abort state
+        if (!IsPlaying || IsFocusedPlayer || IsSelectedPlayer)
+            return;
+
+        //CheckMovement();
+        //CheckBobbing();
+        CheckThrobbing();
+        //CheckFlicker();
+
+        //CheckActionBar();
+        CheckSkillRadial();
+
+
+
+        //if (isRising && renderers.thumbnail.transform.angularRotation.z < maxRot)
+        //{
+        //    renderers.thumbnail.transform.Rotate(new Vector3(0, 0, rotSpeed));
+        //}
+        //else
+        //{
+        //    rotSpeed = Random.Int(2, 5) * 0.01f;
+        //    minRot = -1f + (-1f * Random.Percent);
+        //    isRising = false;
+        //}
+
+        //if (!isRising && renderers.thumbnail.transform.angularRotation.z > minRot)
+        //{
+        //    renderers.thumbnail.transform.Rotate(new Vector3(0, 0, -rotSpeed));
+
+        //}
+        //else
+        //{
+        //    rotSpeed = Random.Int(2, 5) * 0.01f;
+        //    maxRot = 1f + (1f * Random.Percent);
+        //    isRising = true;
+        //}
+
+
+    }
+
 
     public IEnumerator FadeIn()
     {
@@ -857,9 +863,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void UpdateHealthBar()
     {
-        var scale = renderers.healthBarBack.transform.localScale;
-        var x = Mathf.Clamp(scale.x * (hp / maxHp), 0, scale.x);
-        renderers.healthBar.transform.localScale = new Vector3(x, scale.y, scale.z);
+        var x = Mathf.Clamp(initialHealthBarScale.x * (hp / maxHp), 0, initialHealthBarScale.x);
+        renderers.healthBar.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
         renderers.healthText.text = $@"{hp}/{maxHp}";
     }
 

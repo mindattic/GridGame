@@ -185,7 +185,7 @@ public class ActorRenderers
 
     public void SetFrameColor(Color color)
     {
-        frameColor = new Color(color.r, color.g, color.b, color.a);
+        frameColor = color;
         this.frame.color = frameColor;
     }
 
