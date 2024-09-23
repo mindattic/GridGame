@@ -3,6 +3,7 @@ using Game.Manager;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -18,6 +19,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public CameraManager cameraManager;
     [HideInInspector] public StageManager stageManager;
+    [HideInInspector] public BoardManager boardManager;
     [HideInInspector] public TurnManager turnManager;
     [HideInInspector] public SupportLineManager supportLineManager;
     [HideInInspector] public AttackLineManager attackLineManager;
@@ -70,9 +72,9 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public ActorBehavior selectedPlayer;
 
     //Behaviors
-    [HideInInspector] public BoardBehavior board;
     [HideInInspector] public TimerBehavior timer;
     [HideInInspector] public List<ActorBehavior> actors;
+    [HideInInspector] public BoardBehavior board;
     [HideInInspector] public List<TileBehavior> tiles;
     [HideInInspector] public List<SupportLineBehavior> lines;
 
@@ -81,17 +83,16 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public ShakeIntensity shakeIntensity;
 
 
-    public IQueryable<ActorBehavior> players => actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
-    public IQueryable<ActorBehavior> enemies => actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
+    [HideInInspector] public IQueryable<ActorBehavior> players => actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
+    [HideInInspector] public IQueryable<ActorBehavior> enemies => actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
 
 
+  
     private void Awake()
     {
 
         tileSize = Shared.ScreenInWorldUnits.Width / 6;
         tileScale = new Vector3(tileSize, tileSize, 1f);
-
-
 
         cardPortraitSize = Shared.ScreenInPixels.Width / 2;
 
@@ -102,16 +103,16 @@ public class GameManager : Singleton<GameManager>
         snapDistance = tileSize / 8;
         shakeIntensity = new ShakeIntensity(tileSize);
 
-
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>() ?? throw new UnityException("BoardBehavior is null");
-
         canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>() ?? throw new UnityException("Canvas2D is null");
         canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>() ?? throw new UnityException("Canvas3D is null");
         cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>() ?? throw new UnityException("CardManager is null");
 
         resourceManager = GameObject.Find(Constants.Resources).GetComponent<ResourceManager>() ?? throw new UnityException("ResourceManager is null");
         cameraManager = GameObject.Find(Constants.Game).GetComponent<CameraManager>() ?? throw new UnityException("CameraManager is null");
+        
         stageManager = GameObject.Find(Constants.Game).GetComponent<StageManager>() ?? throw new UnityException("StageManager is null");
+        boardManager = GameObject.Find(Constants.Game).GetComponent<BoardManager>() ?? throw new UnityException("BoardManager is null");
         turnManager = GameObject.Find(Constants.Game).GetComponent<TurnManager>() ?? throw new UnityException("TurnManager is null");
         inputManager = GameObject.Find(Constants.Game).GetComponent<InputManager>() ?? throw new UnityException("InputManager is null");
         actorManager = GameObject.Find(Constants.Game).GetComponent<ActorManager>() ?? throw new UnityException("ActorManager is null");

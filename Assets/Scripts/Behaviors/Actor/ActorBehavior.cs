@@ -9,7 +9,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     //Variables
     public Archetype archetype;
-    public Vector2Int location = Location.Nowhere;
+    public Vector2Int location;
     public Vector3 destination;
     public Team team = Team.Independant;
     public Quality quality = Qualities.Common;
@@ -148,7 +148,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsEnemy => team.Equals(Team.Enemy);
     public bool IsFocusedPlayer => HasFocusedPlayer && Equals(focusedPlayer);
     public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
-    public bool HasLocation => location != Location.Nowhere;
+    public bool HasLocation => location != board.Location.Nowhere;
     public bool HasReachedDestination => position == destination;
     public bool IsNorthEdge => location.y == 1;
     public bool IsEastEdge => location.x == board.columnCount;
@@ -218,7 +218,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         gameObject.SetActive(true);
 
         location = startLocation;
-        position = Geometry.GetPositionByLocation(location);
+        position = Geometry.CalculatePositionByLocation(location);
         destination = position;
 
         if (IsPlayer)
@@ -927,7 +927,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
 
         //After:       
-        location = Location.Nowhere;
+        location = board.Location.Nowhere;
         destination = new Vector3(-100, -100, 0);
         position = destination;
         gameObject.SetActive(false);

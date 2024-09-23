@@ -20,6 +20,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected CameraManager cameraManager => GameManager.instance.cameraManager;
     protected InputManager inputManager => GameManager.instance.inputManager;
     protected StageManager stageManager => GameManager.instance.stageManager;
+    protected BoardManager boardManager => GameManager.instance.boardManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
     protected ActorManager actorManager => GameManager.instance.actorManager;
     protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
@@ -50,14 +51,15 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected AudioSource musicSource => GameManager.instance.musicSource;
 
     //Behaviors
-    protected BoardBehavior board => GameManager.instance.board;
     protected TimerBehavior timer => GameManager.instance.timer;
+    protected BoardBehavior board => GameManager.instance.board;
     protected List<TileBehavior> tiles => GameManager.instance.tiles;
     protected List<ActorBehavior> actors
     {
         get => GameManager.instance.actors;
         set => GameManager.instance.actors = value;
     }
+
 
     protected IQueryable<ActorBehavior> players => GameManager.instance.players;
     protected IQueryable<ActorBehavior> enemies => GameManager.instance.enemies;

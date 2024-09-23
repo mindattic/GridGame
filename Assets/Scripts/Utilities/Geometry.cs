@@ -1,4 +1,5 @@
-﻿using Game.Behaviors.Actor;
+﻿using Game.Behaviors;
+using Game.Behaviors.Actor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,6 @@ public class Geometry
     private static Vector3 tileScale => GameManager.instance.tileScale;
     private static List<ActorBehavior> actors => GameManager.instance.actors;
     private static List<TileBehavior> tiles => GameManager.instance.tiles;
-
 
     //private static Dictionary<Vector2Int, Vector3> boardPositions = new Dictionary<Vector2Int, Vector3>();
     //private static Dictionary<Vector3, Vector2Int> boardLocations = new Dictionary<Vector3, Vector2Int>();
@@ -26,12 +26,20 @@ public class Geometry
     }
 
 
-    public static Vector3 GetPositionByLocation(Vector2Int location)
+    public static Vector3 CalculatePositionByLocation(Vector2Int location)
     {
         //return boardPositions[location];
         float x = board.offset.x + (tileSize * location.x);
         float y = board.offset.y + -(tileSize * location.y);
         return new Vector3(x, y, 0);
+    }
+
+  
+
+
+    public static Vector3 GetPositionByLocation(Vector2Int location)
+    {
+        return board.LocationPosition[location];
     }
 
     //public static Vector2Int GetLocation(int col, int row)
@@ -158,7 +166,10 @@ public class Geometry
 
     public static bool IsInCorner(Vector2Int location)
     {
-        return location == Location.A1 || location == Location.A6 || location == Location.H1 || location == Location.H6;
+        return location == board.Location.A1 
+            || location == board.Location.A6 
+            || location == board.Location.H1 
+            || location == board.Location.H6;
     }
 
 

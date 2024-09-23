@@ -3484,6 +3484,10 @@ PrefabInstance:
       propertyPath: offset.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4086587420172569240, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}
+      propertyPath: TilePrefab
+      value: 
+      objectReference: {fileID: 7233482234801728947, guid: f420fe272613c294eb4bc531748a437e, type: 3}
     - target: {fileID: 4096525108897354175, guid: 231b405edfadab84ebe1ec2b74eeed52, type: 3}
       propertyPath: m_Name
       value: Cell_3x1
@@ -4754,6 +4758,7 @@ MonoBehaviour:
   inputManager: {fileID: 0}
   cameraManager: {fileID: 0}
   stageManager: {fileID: 0}
+  boardManager: {fileID: 0}
   turnManager: {fileID: 0}
   supportLineManager: {fileID: 0}
   attackLineManager: {fileID: 0}
@@ -4792,9 +4797,9 @@ MonoBehaviour:
   bumpSpeed: 0
   focusedPlayer: {fileID: 0}
   selectedPlayer: {fileID: 0}
-  board: {fileID: 0}
   timer: {fileID: 0}
   actors: []
+  board: {fileID: 0}
   tiles: []
   lines: []
 --- !u!114 &1751276278
@@ -4821,7 +4826,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22072f7b8fcb00f4599e2d617f278898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TilePrefab: {fileID: 7233482234801728947, guid: f420fe272613c294eb4bc531748a437e, type: 3}
 --- !u!114 &1751276281
 MonoBehaviour:
   m_ObjectHideFlags: 0

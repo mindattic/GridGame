@@ -47,66 +47,7 @@ public static class Constants
     public const int MusicSourceIndex = 1;
 }
 
-public static class Location
-{
-    public static readonly Vector2Int Nowhere = new Vector2Int(-1, -1);
 
-    public static readonly Vector2Int A1 = new Vector2Int(1, 1);
-    public static readonly Vector2Int A2 = new Vector2Int(1, 2);
-    public static readonly Vector2Int A3 = new Vector2Int(1, 3);
-    public static readonly Vector2Int A4 = new Vector2Int(1, 4);
-    public static readonly Vector2Int A5 = new Vector2Int(1, 5);
-    public static readonly Vector2Int A6 = new Vector2Int(1, 6);
-
-    public static readonly Vector2Int B1 = new Vector2Int(2, 1);
-    public static readonly Vector2Int B2 = new Vector2Int(2, 2);
-    public static readonly Vector2Int B3 = new Vector2Int(2, 3);
-    public static readonly Vector2Int B4 = new Vector2Int(2, 4);
-    public static readonly Vector2Int B5 = new Vector2Int(2, 5);
-    public static readonly Vector2Int B6 = new Vector2Int(2, 6);
-
-    public static readonly Vector2Int C1 = new Vector2Int(3, 1);
-    public static readonly Vector2Int C2 = new Vector2Int(3, 2);
-    public static readonly Vector2Int C3 = new Vector2Int(3, 3);
-    public static readonly Vector2Int C4 = new Vector2Int(3, 4);
-    public static readonly Vector2Int C5 = new Vector2Int(3, 5);
-    public static readonly Vector2Int C6 = new Vector2Int(3, 6);
-
-    public static readonly Vector2Int D1 = new Vector2Int(4, 1);
-    public static readonly Vector2Int D2 = new Vector2Int(4, 2);
-    public static readonly Vector2Int D3 = new Vector2Int(4, 3);
-    public static readonly Vector2Int D4 = new Vector2Int(4, 4);
-    public static readonly Vector2Int D5 = new Vector2Int(4, 5);
-    public static readonly Vector2Int D6 = new Vector2Int(4, 6);
-
-    public static readonly Vector2Int E1 = new Vector2Int(5, 1);
-    public static readonly Vector2Int E2 = new Vector2Int(5, 2);
-    public static readonly Vector2Int E3 = new Vector2Int(5, 3);
-    public static readonly Vector2Int E4 = new Vector2Int(5, 4);
-    public static readonly Vector2Int E5 = new Vector2Int(5, 5);
-    public static readonly Vector2Int E6 = new Vector2Int(5, 6);
-
-    public static readonly Vector2Int F1 = new Vector2Int(6, 1);
-    public static readonly Vector2Int F2 = new Vector2Int(6, 2);
-    public static readonly Vector2Int F3 = new Vector2Int(6, 3);
-    public static readonly Vector2Int F4 = new Vector2Int(6, 4);
-    public static readonly Vector2Int F5 = new Vector2Int(6, 5);
-    public static readonly Vector2Int F6 = new Vector2Int(6, 6);
-
-    public static readonly Vector2Int G1 = new Vector2Int(7, 1);
-    public static readonly Vector2Int G2 = new Vector2Int(7, 2);
-    public static readonly Vector2Int G3 = new Vector2Int(7, 3);
-    public static readonly Vector2Int G4 = new Vector2Int(7, 4);
-    public static readonly Vector2Int G5 = new Vector2Int(7, 5);
-    public static readonly Vector2Int G6 = new Vector2Int(7, 6);
-
-    public static readonly Vector2Int H1 = new Vector2Int(8, 1);
-    public static readonly Vector2Int H2 = new Vector2Int(8, 2);
-    public static readonly Vector2Int H3 = new Vector2Int(8, 3);
-    public static readonly Vector2Int H4 = new Vector2Int(8, 4);
-    public static readonly Vector2Int H5 = new Vector2Int(8, 5);
-    public static readonly Vector2Int H6 = new Vector2Int(8, 6);
-}
 
 public static class Tag
 {
