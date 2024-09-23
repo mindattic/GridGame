@@ -137,19 +137,10 @@ public class BoardBehavior : ExtendedMonoBehavior
 
     [HideInInspector] public RectFloat bounds;
 
-    [HideInInspector] public Location Location;
-    [HideInInspector] public Position Position;
-    [HideInInspector] public Dictionary<Vector2Int, Vector3> LocationPosition = new Dictionary<Vector2Int, Vector3>();
-
-    #region Components
-
-    public Vector3 position
-    {
-        get => gameObject.transform.position;
-        set => gameObject.transform.position = value;
-    }
-
-    #endregion
+    [HideInInspector] public Location location;
+    [HideInInspector] public Position position;
+    [HideInInspector] public Dictionary<Vector2Int, Vector3> locationPosition = new Dictionary<Vector2Int, Vector3>();
+    [HideInInspector] public Dictionary<Vector3, Vector2Int> positionLocation = new Dictionary<Vector3, Vector2Int>();
 
     private void Start()
     {
@@ -163,7 +154,7 @@ public class BoardBehavior : ExtendedMonoBehavior
 
         transform.position = offset;
 
-        Location = new Location()
+        location = new Location()
         {
             Nowhere = new Vector2Int(-1, -1),
 
@@ -224,128 +215,188 @@ public class BoardBehavior : ExtendedMonoBehavior
             H6 = new Vector2Int(6, 8)
         };
 
-        Position = new Position()
+        position = new Position()
         {
             Nowhere = new Vector3(-1000, -1000),
 
-            A1 = Geometry.CalculatePositionByLocation(Location.A1),
-            A2 = Geometry.CalculatePositionByLocation(Location.A2),
-            A3 = Geometry.CalculatePositionByLocation(Location.A3),
-            A4 = Geometry.CalculatePositionByLocation(Location.A4),
-            A5 = Geometry.CalculatePositionByLocation(Location.A5),
-            A6 = Geometry.CalculatePositionByLocation(Location.A6),
+            A1 = Geometry.CalculatePositionByLocation(location.A1),
+            A2 = Geometry.CalculatePositionByLocation(location.A2),
+            A3 = Geometry.CalculatePositionByLocation(location.A3),
+            A4 = Geometry.CalculatePositionByLocation(location.A4),
+            A5 = Geometry.CalculatePositionByLocation(location.A5),
+            A6 = Geometry.CalculatePositionByLocation(location.A6),
 
-            B1 = Geometry.CalculatePositionByLocation(Location.B1),
-            B2 = Geometry.CalculatePositionByLocation(Location.B2),
-            B3 = Geometry.CalculatePositionByLocation(Location.B3),
-            B4 = Geometry.CalculatePositionByLocation(Location.B4),
-            B5 = Geometry.CalculatePositionByLocation(Location.B5),
-            B6 = Geometry.CalculatePositionByLocation(Location.B6),
+            B1 = Geometry.CalculatePositionByLocation(location.B1),
+            B2 = Geometry.CalculatePositionByLocation(location.B2),
+            B3 = Geometry.CalculatePositionByLocation(location.B3),
+            B4 = Geometry.CalculatePositionByLocation(location.B4),
+            B5 = Geometry.CalculatePositionByLocation(location.B5),
+            B6 = Geometry.CalculatePositionByLocation(location.B6),
 
-            C1 = Geometry.CalculatePositionByLocation(Location.C1),
-            C2 = Geometry.CalculatePositionByLocation(Location.C2),
-            C3 = Geometry.CalculatePositionByLocation(Location.C3),
-            C4 = Geometry.CalculatePositionByLocation(Location.C4),
-            C5 = Geometry.CalculatePositionByLocation(Location.C5),
-            C6 = Geometry.CalculatePositionByLocation(Location.C6),
+            C1 = Geometry.CalculatePositionByLocation(location.C1),
+            C2 = Geometry.CalculatePositionByLocation(location.C2),
+            C3 = Geometry.CalculatePositionByLocation(location.C3),
+            C4 = Geometry.CalculatePositionByLocation(location.C4),
+            C5 = Geometry.CalculatePositionByLocation(location.C5),
+            C6 = Geometry.CalculatePositionByLocation(location.C6),
 
-            D1 = Geometry.CalculatePositionByLocation(Location.D1),
-            D2 = Geometry.CalculatePositionByLocation(Location.D2),
-            D3 = Geometry.CalculatePositionByLocation(Location.D3),
-            D4 = Geometry.CalculatePositionByLocation(Location.D4),
-            D5 = Geometry.CalculatePositionByLocation(Location.D5),
-            D6 = Geometry.CalculatePositionByLocation(Location.D6),
+            D1 = Geometry.CalculatePositionByLocation(location.D1),
+            D2 = Geometry.CalculatePositionByLocation(location.D2),
+            D3 = Geometry.CalculatePositionByLocation(location.D3),
+            D4 = Geometry.CalculatePositionByLocation(location.D4),
+            D5 = Geometry.CalculatePositionByLocation(location.D5),
+            D6 = Geometry.CalculatePositionByLocation(location.D6),
 
-            E1 = Geometry.CalculatePositionByLocation(Location.E1),
-            E2 = Geometry.CalculatePositionByLocation(Location.E2),
-            E3 = Geometry.CalculatePositionByLocation(Location.E3),
-            E4 = Geometry.CalculatePositionByLocation(Location.E4),
-            E5 = Geometry.CalculatePositionByLocation(Location.E5),
-            E6 = Geometry.CalculatePositionByLocation(Location.E6),
+            E1 = Geometry.CalculatePositionByLocation(location.E1),
+            E2 = Geometry.CalculatePositionByLocation(location.E2),
+            E3 = Geometry.CalculatePositionByLocation(location.E3),
+            E4 = Geometry.CalculatePositionByLocation(location.E4),
+            E5 = Geometry.CalculatePositionByLocation(location.E5),
+            E6 = Geometry.CalculatePositionByLocation(location.E6),
 
-            F1 = Geometry.CalculatePositionByLocation(Location.F1),
-            F2 = Geometry.CalculatePositionByLocation(Location.F2),
-            F3 = Geometry.CalculatePositionByLocation(Location.F3),
-            F4 = Geometry.CalculatePositionByLocation(Location.F4),
-            F5 = Geometry.CalculatePositionByLocation(Location.F5),
-            F6 = Geometry.CalculatePositionByLocation(Location.F6),
+            F1 = Geometry.CalculatePositionByLocation(location.F1),
+            F2 = Geometry.CalculatePositionByLocation(location.F2),
+            F3 = Geometry.CalculatePositionByLocation(location.F3),
+            F4 = Geometry.CalculatePositionByLocation(location.F4),
+            F5 = Geometry.CalculatePositionByLocation(location.F5),
+            F6 = Geometry.CalculatePositionByLocation(location.F6),
 
-            G1 = Geometry.CalculatePositionByLocation(Location.G1),
-            G2 = Geometry.CalculatePositionByLocation(Location.G2),
-            G3 = Geometry.CalculatePositionByLocation(Location.G3),
-            G4 = Geometry.CalculatePositionByLocation(Location.G4),
-            G5 = Geometry.CalculatePositionByLocation(Location.G5),
-            G6 = Geometry.CalculatePositionByLocation(Location.G6),
+            G1 = Geometry.CalculatePositionByLocation(location.G1),
+            G2 = Geometry.CalculatePositionByLocation(location.G2),
+            G3 = Geometry.CalculatePositionByLocation(location.G3),
+            G4 = Geometry.CalculatePositionByLocation(location.G4),
+            G5 = Geometry.CalculatePositionByLocation(location.G5),
+            G6 = Geometry.CalculatePositionByLocation(location.G6),
 
-            H1 = Geometry.CalculatePositionByLocation(Location.H1),
-            H2 = Geometry.CalculatePositionByLocation(Location.H2),
-            H3 = Geometry.CalculatePositionByLocation(Location.H3),
-            H4 = Geometry.CalculatePositionByLocation(Location.H4),
-            H5 = Geometry.CalculatePositionByLocation(Location.H5),
-            H6 = Geometry.CalculatePositionByLocation(Location.H6)
+            H1 = Geometry.CalculatePositionByLocation(location.H1),
+            H2 = Geometry.CalculatePositionByLocation(location.H2),
+            H3 = Geometry.CalculatePositionByLocation(location.H3),
+            H4 = Geometry.CalculatePositionByLocation(location.H4),
+            H5 = Geometry.CalculatePositionByLocation(location.H5),
+            H6 = Geometry.CalculatePositionByLocation(location.H6)
         };
 
-        LocationPosition = new Dictionary<Vector2Int, Vector3>()
+        locationPosition = new Dictionary<Vector2Int, Vector3>()
         {
-            { Location.Nowhere, Position.Nowhere },
+            { location.Nowhere, position.Nowhere },
 
-            { Location.A1, Position.A1 },
-            { Location.A2, Position.A2 },
-            { Location.A3, Position.A3 },
-            { Location.A4, Position.A4 },
-            { Location.A5, Position.A5 },
-            { Location.A6, Position.A6 },
+            { location.A1, position.A1 },
+            { location.A2, position.A2 },
+            { location.A3, position.A3 },
+            { location.A4, position.A4 },
+            { location.A5, position.A5 },
+            { location.A6, position.A6 },
 
-            { Location.B1, Position.B1 },
-            { Location.B2, Position.B2 },
-            { Location.B3, Position.B3 },
-            { Location.B4, Position.B4 },
-            { Location.B5, Position.B5 },
-            { Location.B6, Position.B6 },
+            { location.B1, position.B1 },
+            { location.B2, position.B2 },
+            { location.B3, position.B3 },
+            { location.B4, position.B4 },
+            { location.B5, position.B5 },
+            { location.B6, position.B6 },
 
-            { Location.C1, Position.C1 },
-            { Location.C2, Position.C2 },
-            { Location.C3, Position.C3 },
-            { Location.C4, Position.C4 },
-            { Location.C5, Position.C5 },
-            { Location.C6, Position.C6 },
+            { location.C1, position.C1 },
+            { location.C2, position.C2 },
+            { location.C3, position.C3 },
+            { location.C4, position.C4 },
+            { location.C5, position.C5 },
+            { location.C6, position.C6 },
 
-            { Location.D1, Position.D1 },
-            { Location.D2, Position.D2 },
-            { Location.D3, Position.D3 },
-            { Location.D4, Position.D4 },
-            { Location.D5, Position.D5 },
-            { Location.D6, Position.D6 },
+            { location.D1, position.D1 },
+            { location.D2, position.D2 },
+            { location.D3, position.D3 },
+            { location.D4, position.D4 },
+            { location.D5, position.D5 },
+            { location.D6, position.D6 },
 
-            { Location.E1, Position.E1 },
-            { Location.E2, Position.E2 },
-            { Location.E3, Position.E3 },
-            { Location.E4, Position.E4 },
-            { Location.E5, Position.E5 },
-            { Location.E6, Position.E6 },
+            { location.E1, position.E1 },
+            { location.E2, position.E2 },
+            { location.E3, position.E3 },
+            { location.E4, position.E4 },
+            { location.E5, position.E5 },
+            { location.E6, position.E6 },
 
-            { Location.F1, Position.F1 },
-            { Location.F2, Position.F2 },
-            { Location.F3, Position.F3 },
-            { Location.F4, Position.F4 },
-            { Location.F5, Position.F5 },
-            { Location.F6, Position.F6 },
+            { location.F1, position.F1 },
+            { location.F2, position.F2 },
+            { location.F3, position.F3 },
+            { location.F4, position.F4 },
+            { location.F5, position.F5 },
+            { location.F6, position.F6 },
 
-            { Location.G1, Position.G1 },
-            { Location.G2, Position.G2 },
-            { Location.G3, Position.G3 },
-            { Location.G4, Position.G4 },
-            { Location.G5, Position.G5 },
-            { Location.G6, Position.G6 },
+            { location.G1, position.G1 },
+            { location.G2, position.G2 },
+            { location.G3, position.G3 },
+            { location.G4, position.G4 },
+            { location.G5, position.G5 },
+            { location.G6, position.G6 },
 
-            { Location.H1, Position.H1 },
-            { Location.H2, Position.H2 },
-            { Location.H3, Position.H3 },
-            { Location.H4, Position.H4 },
-            { Location.H5, Position.H5 },
-            { Location.H6, Position.H6 }
+            { location.H1, position.H1 },
+            { location.H2, position.H2 },
+            { location.H3, position.H3 },
+            { location.H4, position.H4 },
+            { location.H5, position.H5 },
+            { location.H6, position.H6 }
         };
 
+        positionLocation = new Dictionary<Vector3, Vector2Int>()
+        {
+            { position.Nowhere, location.Nowhere },
+
+            { position.A1, location.A1 },
+            { position.A2, location.A2 },
+            { position.A3, location.A3 },
+            { position.A4, location.A4 },
+            { position.A5, location.A5 },
+            { position.A6, location.A6 },
+
+            { position.B1, location.B1 },
+            { position.B2, location.B2 },
+            { position.B3, location.B3 },
+            { position.B4, location.B4 },
+            { position.B5, location.B5 },
+            { position.B6, location.B6 },
+
+            { position.C1, location.C1 },
+            { position.C2, location.C2 },
+            { position.C3, location.C3 },
+            { position.C4, location.C4 },
+            { position.C5, location.C5 },
+            { position.C6, location.C6 },
+
+            { position.D1, location.D1 },
+            { position.D2, location.D2 },
+            { position.D3, location.D3 },
+            { position.D4, location.D4 },
+            { position.D5, location.D5 },
+            { position.D6, location.D6 },
+
+            { position.E1, location.E1 },
+            { position.E2, location.E2 },
+            { position.E3, location.E3 },
+            { position.E4, location.E4 },
+            { position.E5, location.E5 },
+            { position.E6, location.E6 },
+
+            { position.F1, location.F1 },
+            { position.F2, location.F2 },
+            { position.F3, location.F3 },
+            { position.F4, location.F4 },
+            { position.F5, location.F5 },
+            { position.F6, location.F6 },
+
+            { position.G1, location.G1 },
+            { position.G2, location.G2 },
+            { position.G3, location.G3 },
+            { position.G4, location.G4 },
+            { position.G5, location.G5 },
+            { position.G6, location.G6 },
+
+            { position.H1, location.H1 },
+            { position.H2, location.H2 },
+            { position.H3, location.H3 },
+            { position.H4, location.H4 },
+            { position.H5, location.H5 },
+            { position.H6, location.H6 }
+        };
 
         GenerateTiles();
 

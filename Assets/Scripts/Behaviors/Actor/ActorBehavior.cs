@@ -148,7 +148,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsEnemy => team.Equals(Team.Enemy);
     public bool IsFocusedPlayer => HasFocusedPlayer && Equals(focusedPlayer);
     public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
-    public bool HasLocation => location != board.Location.Nowhere;
+    public bool HasLocation => location != board.location.Nowhere;
     public bool HasReachedDestination => position == destination;
     public bool IsNorthEdge => location.y == 1;
     public bool IsEastEdge => location.x == board.columnCount;
@@ -927,7 +927,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
 
         //After:       
-        location = board.Location.Nowhere;
+        location = board.location.Nowhere;
         destination = new Vector3(-100, -100, 0);
         position = destination;
         gameObject.SetActive(false);

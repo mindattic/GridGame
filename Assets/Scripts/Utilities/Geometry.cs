@@ -39,7 +39,7 @@ public class Geometry
 
     public static Vector3 GetPositionByLocation(Vector2Int location)
     {
-        return board.LocationPosition[location];
+        return board.locationPosition[location];
     }
 
     //public static Vector2Int GetLocation(int col, int row)
@@ -63,7 +63,8 @@ public class Geometry
 
     public static TileBehavior GetClosestTileByLocation(Vector2Int location)
     {
-        return tiles.OrderBy(x => Vector2Int.Distance(x.location, location)).First();
+        return tiles.First(x => x.location == location);
+        //return tiles.OrderBy(x => Vector2Int.Distance(x.location, location)).First();
     }
 
 
@@ -166,10 +167,10 @@ public class Geometry
 
     public static bool IsInCorner(Vector2Int location)
     {
-        return location == board.Location.A1 
-            || location == board.Location.A6 
-            || location == board.Location.H1 
-            || location == board.Location.H6;
+        return location == board.location.A1 
+            || location == board.location.A6 
+            || location == board.location.H1 
+            || location == board.location.H6;
     }
 
 
