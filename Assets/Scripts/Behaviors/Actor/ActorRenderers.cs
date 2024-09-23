@@ -9,7 +9,7 @@ public class ActorRenderers
 
     public Color opaqueColor = Colors.Solid.White;
     public Color qualityColor = Colors.Solid.White;
-    public float qualityAlphaMax = 0.7f;
+    public float qualityAlphaMax = 1.0f;
     public Color glowColor = Colors.Solid.White;
     public Color parallaxColor = Colors.Solid.White;
     public float parallaxAlphaMax = 0.5f;
