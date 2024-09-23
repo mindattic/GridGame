@@ -218,7 +218,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         gameObject.SetActive(true);
 
         location = startLocation;
-        position = Geometry.CalculatePositionByLocation(location);
+        position = Geometry.GetPositionByLocation(location);
         destination = position;
 
         if (IsPlayer)
