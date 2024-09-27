@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class VFXBehavior : ExtendedMonoBehavior
@@ -41,17 +43,18 @@ public class VFXBehavior : ExtendedMonoBehavior
     }
 
     //Variables
+    bool isAsync = true;
     float elapsed = 0;
     float duration;
     bool isLoop;
-    float coroutineStart = -1;
-    IEnumerator coroutine = null;
-    bool hasCoroutineStarted;
+    float triggerEventAt = -1;
+    IEnumerator triggeredEvent = null;
+    bool hasTriggeredEventStarted;
 
     //Properties
-    private bool hasCoroutine => coroutine != null && coroutineStart != -1;
+    private bool hasTriggeredEvent => triggeredEvent != null && triggerEventAt != -1;
 
-    public void Spawn(VisualEffect vfx, Vector3 position, IEnumerator coroutine = null)
+    private void Init(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         //Translate, rotate, and relativeScale relative to tile dimensions (determined by device)
         var offset = Geometry.Tile.Relative.Translation(vfx.relativeOffset);
@@ -63,8 +66,8 @@ public class VFXBehavior : ExtendedMonoBehavior
         this.scale = scale;
         this.duration = vfx.duration;
         this.isLoop = vfx.isLoop;
-        this.coroutineStart = vfx.coroutineStart;
-        this.coroutine = coroutine;
+        this.triggerEventAt = vfx.triggerEventAt;
+        this.triggeredEvent = triggeredEvent;
 
         //Toggle looping programatically by assigning flag in all child ParticleSystem components
         var particleSystems = new List<ParticleSystem> { GetComponent<ParticleSystem>() };
@@ -76,14 +79,49 @@ public class VFXBehavior : ExtendedMonoBehavior
         }
     }
 
+
+    public IEnumerator Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    {
+        isAsync = false;
+        Init(vfx, position, triggeredEvent);
+
+        if (!hasTriggeredEvent)
+            yield break;
+
+        while (elapsed < triggerEventAt)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        yield return triggeredEvent;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        Despawn(name);
+    }
+
+    public void SpawnAsync(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    {
+        isAsync = true;
+        Init(vfx, position, triggeredEvent);
+    }
+
     public void FixedUpdate()
     {
+        if (!isAsync)
+            return;
+
         elapsed += Time.deltaTime;
 
-        if (hasCoroutine && !hasCoroutineStarted && elapsed >= coroutineStart)
+        if (hasTriggeredEvent && !hasTriggeredEventStarted && elapsed >= triggerEventAt)
         {
-            hasCoroutineStarted = true;
-            StartCoroutine(coroutine);
+            hasTriggeredEventStarted = true;
+            StartCoroutine(triggeredEvent);
         }
 
         if (elapsed > duration)

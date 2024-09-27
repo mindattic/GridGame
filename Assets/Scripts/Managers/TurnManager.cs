@@ -108,7 +108,7 @@ public class TurnManager : ExtendedMonoBehavior
             //Sort all actors to default
             actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
 
-            //Spawn supporting lines
+            //SpawnAsync supporting lines
             foreach (var pair in combatParticipants.supportingPairs)
             {
                 pair.actor1.sortingOrder = SortingOrder.Supporter;
@@ -279,7 +279,13 @@ public class TurnManager : ExtendedMonoBehavior
                 pair.actor1.ChangeSpAsync(amount);
                 pair.actor2.ChangeSpAsync(amount);
 
-                yield return enemy.ChangeHp(-amount);
+
+                var vfx = resourceManager.VisualEffect("Blue_Slash_01");
+                yield return vfxManager.Spawn(vfx, enemy.position, enemy.ChangeHp(-20));
+
+
+
+                //yield return enemy.ChangeHp(-amount);
             }
             else
             {
@@ -405,7 +411,12 @@ public class TurnManager : ExtendedMonoBehavior
                                 //attack enemy (one at a time)
                                 //TODO: Calculate based on attacker stats
                                 var amount = Random.Int(15, 33);
-                                yield return player.ChangeHp(-amount);
+                                //yield return player.ChangeHp(-amount);
+
+                                var vfx = resourceManager.VisualEffect("Blue_Slash_01");
+                                yield return vfxManager.Spawn(vfx, enemy.position, enemy.ChangeHp(-amount));
+
+
                             }
                             else
                             {

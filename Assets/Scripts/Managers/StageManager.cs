@@ -51,7 +51,7 @@ public class StageManager : ExtendedMonoBehavior
     {
 
         //DespawnAll and clear variables
-        focusedPlayer = null;
+        focusedActor = null;
         selectedPlayer = null;
         supportLineManager.Clear();
         attackLineManager.Clear();

@@ -10,14 +10,26 @@ public class VFXManager : ExtendedMonoBehavior
     //Variables
     Dictionary<string, VFXBehavior> visualEffects = new Dictionary<string, VFXBehavior>();
 
-    public void Spawn(VisualEffect vfx, Vector3 position, IEnumerator coroutine = null)
+    public void SpawnAsync(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
         var visualEffect = prefab.GetComponent<VFXBehavior>();
         visualEffect.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
         visualEffects.Add(visualEffect.name, visualEffect);
-        visualEffect.Spawn(vfx, position, coroutine);
+        visualEffect.SpawnAsync(vfx, position, triggeredEvent);
     }
+
+
+    public IEnumerator Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    {
+        var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
+        var visualEffect = prefab.GetComponent<VFXBehavior>();
+        visualEffect.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
+        visualEffects.Add(visualEffect.name, visualEffect);
+        
+        yield return visualEffect.Spawn(vfx, position, triggeredEvent);
+    }
+
 
     public void Despawn(string name)
     {

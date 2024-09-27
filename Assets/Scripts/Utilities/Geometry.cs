@@ -56,12 +56,12 @@ public class Geometry
     //    return new Vector2Int(x, y);
     //}
 
-    public static TileBehavior GetClosestTileByPosition(Vector3 position)
+    public static TileBehavior GetClosestTile(Vector3 position)
     {
         return tiles.OrderBy(x => Vector3.Distance(x.transform.position, position)).First();
     }
 
-    public static TileBehavior GetClosestTileByLocation(Vector2Int location)
+    public static TileBehavior GetClosestTile(Vector2Int location)
     {
         return tiles.First(x => x.location == location);
         //return tiles.OrderBy(x => Vector2Int.Distance(x.location, location)).First();
@@ -130,7 +130,7 @@ public class Geometry
             return closestUnoccupiedTile.position;
 
         //...Otherwise, find closest tile to player
-        var closestTile = GetClosestTileByPosition(position.location);
+        var closestTile = GetClosestTile(position.location);
         if (closestTile != null)
             return closestTile.position;
 

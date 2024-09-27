@@ -37,40 +37,38 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         //Retrieve Actor from collider
         var actor = collider.gameObject.GetComponent<ActorBehavior>();
-        if (actor == null || !actor.IsPlaying || !actor.IsPlayer)
+        if (actor == null || !actor.IsPlaying)
             return;
 
         //TODO: Update Card display...
         actors.ForEach(x => x.renderers.SetSelectionActive(false));
-        focusedPlayer = actor;
-        focusedPlayer.sortingOrder = SortingOrder.Max;
-        focusedPlayer.renderers.SetSelectionActive(true);
+        focusedActor = actor;
+        focusedActor.sortingOrder = SortingOrder.Max;
+        focusedActor.renderers.SetSelectionActive(true);
 
         //Assign mouse relativeOffset (how off center was selection)
-        mouseOffset = focusedPlayer.position - mousePosition3D;
+        mouseOffset = focusedActor.position - mousePosition3D;
 
-        cardManager.Set(focusedPlayer);
+        cardManager.Set(focusedActor);
 
-
-        StartCoroutine(focusedPlayer.MoveTowardCursor());
-        //MoveTowardCursor(focusedPlayer);
+        if (focusedActor.IsPlayer)
+            StartCoroutine(focusedActor.MoveTowardCursor());
     }
 
     public void Unfocus()
     {
-        //Verify *HAS* targetted player...
-        if (!HasFocusedPlayer)
+        //Verify *HAS* focused actor...
+        if (!HasFocusedActor)
             return;
 
         if (!HasSelectedPlayer)
         {
-            focusedPlayer.position = focusedPlayer.currentTile.position;
-            focusedPlayer.sortingOrder = SortingOrder.Min;
+            focusedActor.position = focusedActor.currentTile.position;
+            focusedActor.sortingOrder = SortingOrder.Min;
             //cardManager.DespawnAll();
         }
 
-        focusedPlayer = null;
-
+        focusedActor = null;
     }
 
     public void Select()
@@ -83,13 +81,16 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!turnManager.IsStartPhase)
             return;
 
-        //Verify focused player exists...
-        if (focusedPlayer == null)
+        //Verify focused actor exists...
+        if (focusedActor == null || focusedActor.IsEnemy)
             return;
 
+        //Verify focused actor is player...
+        if (focusedActor.IsEnemy)
+            return;
 
         //Select player
-        selectedPlayer = focusedPlayer;
+        selectedPlayer = focusedActor;
 
         Unfocus();
         turnManager.currentPhase = TurnPhase.Move;
@@ -129,7 +130,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //Assign location and position
-        var closestTile = Geometry.GetClosestTileByPosition(selectedPlayer.position);
+        var closestTile = Geometry.GetClosestTile(selectedPlayer.position);
         closestTile.spriteRenderer.color = Colors.Translucent.White;
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = closestTile.position;

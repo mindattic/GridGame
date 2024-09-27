@@ -153,210 +153,210 @@ public class DebugManager : ExtendedMonoBehavior
     {
         var vfx = resourceManager.VisualEffect("Blue_Slash_01");  
 
-        vfxManager.Spawn(vfx, Paladin.position, Paladin.ChangeHp(-20));
-        //vfxManager.Spawn(vfx, Barbarian.position, Barbarian.ChangeHp(-15));
+        vfxManager.SpawnAsync(vfx, Paladin.position, Paladin.ChangeHp(-20));
+        //vfxManager.SpawnAsync(vfx, Barbarian.position, Barbarian.ChangeHp(-15));
     }
 
     public void VFXTest_Blue_Slash_02()
     {
         var vfx = resourceManager.VisualEffect("Blue_Slash_02");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Blue_Slash_03()
     {
         var vfx = resourceManager.VisualEffect("Blue_Slash_03");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Blue_Sword()
     {
         var vfx = resourceManager.VisualEffect("Blue_Sword");  
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Blue_Sword_4X()
     {
         var vfx = resourceManager.VisualEffect("Blue_Sword_4X");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Blood_Claw()
     {
         var vfx = resourceManager.VisualEffect("Blood_Claw");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Level_Up()
     {
         var vfx = resourceManager.VisualEffect("Level_Up");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Yellow_Hit()
     {
         var vfx = resourceManager.VisualEffect("Yellow_Hit");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Double_Claw()
     {
         var vfx = resourceManager.VisualEffect("Double_Claw");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Lightning_Explosion()
     {
         var vfx = resourceManager.VisualEffect("Lightning_Explosion");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Buff_Life()
     {
         var vfx = resourceManager.VisualEffect("Buff_Life");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Rotary_Knife()
     {
         var vfx = resourceManager.VisualEffect("Rotary_Knife");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Air_Slash()
     {
         var vfx = resourceManager.VisualEffect("Air_Slash");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Fire_Rain()
     {
         var vfx = resourceManager.VisualEffect("Fire_Rain");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Ray_Blast()
     {
         var vfx = resourceManager.VisualEffect("Ray_Blast");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Lightning_Strike()
     {
         var vfx = resourceManager.VisualEffect("Lightning_Strike");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Puffy_Explosion()
     {
         var vfx = resourceManager.VisualEffect("Puffy_Explosion");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Red_Slash_2X()
     {
         var vfx = resourceManager.VisualEffect("Red_Slash_2X");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_God_Rays()
     {
         var vfx = resourceManager.VisualEffect("God_Rays");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Acid_Splash()
     {
         var vfx = resourceManager.VisualEffect("Acid_Splash");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
     public void VFXTest_Green_Buff()
     {
         var vfx = resourceManager.VisualEffect("Green_Buff");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Gold_Buff()
     {
         var vfx = resourceManager.VisualEffect("Gold_Buff");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Hex_Shield()
     {
         var vfx = resourceManager.VisualEffect("Hex_Shield");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Toxic_Cloud()
     {
         var vfx = resourceManager.VisualEffect("Toxic_Cloud");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Orange_Slash()
     {
         var vfx = resourceManager.VisualEffect("Orange_Slash");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Moon_Feather()
     {
         var vfx = resourceManager.VisualEffect("Moon_Feather");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Pink_Spark()
     {
         var vfx = resourceManager.VisualEffect("Pink_Spark");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_BlueYellow_Sword()
     {
         var vfx = resourceManager.VisualEffect("BlueYellow_Sword");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_BlueYellow_Sword_3X()
     {
         var vfx = resourceManager.VisualEffect("BlueYellow_Sword_3X");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
     public void VFXTest_Red_Sword()
     {
         var vfx = resourceManager.VisualEffect("Red_Sword");
-        vfxManager.Spawn(vfx, Paladin.position);
-        vfxManager.Spawn(vfx, Barbarian.position);
+        vfxManager.SpawnAsync(vfx, Paladin.position);
+        vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
 }

@@ -146,7 +146,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
     public bool IsPlayer => team.Equals(Team.Player);
     public bool IsEnemy => team.Equals(Team.Enemy);
-    public bool IsFocusedPlayer => HasFocusedPlayer && Equals(focusedPlayer);
+    public bool IsFocusedPlayer => HasFocusedActor && Equals(focusedActor);
     public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
     public bool HasLocation => location != board.location.Nowhere;
     public bool HasReachedDestination => position == destination;
@@ -266,7 +266,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsPlaying)
             return;
 
-        var closestTile = Geometry.GetClosestTileByPosition(position);
+        var closestTile = Geometry.GetClosestTile(position);
         if (location == closestTile.location)
             return;
 
@@ -276,7 +276,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         var overlappingActor = actors.FirstOrDefault(x => x != null
                                             && !x.Equals(this)
                                             && x.IsPlaying
-                                            && !x.Equals(focusedPlayer)
+                                            && !x.Equals(focusedActor)
                                             && !x.Equals(selectedPlayer)
                                             && x.location.Equals(closestTile.location));
 
@@ -366,7 +366,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             SetLocation(Direction.East);
 
         //Assign destination based on new location
-        var closetTile = Geometry.GetClosestTileByLocation(location);
+        var closetTile = Geometry.GetClosestTile(location);
         destination = closetTile.position;
 
         //Move actor toward targetPosition
@@ -761,7 +761,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     //        sp += hit * 0.1f;
 
-    //        damageTextManager.Spawn(hit.ToString(), position);
+    //        damageTextManager.SpawnAsync(hit.ToString(), position);
 
     //        //Shake Actor
     //        Shake(shakeIntensity.Medium);

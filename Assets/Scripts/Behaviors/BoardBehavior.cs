@@ -145,14 +145,13 @@ public class BoardBehavior : ExtendedMonoBehavior
     private void Start()
     {
         offset = new Vector2(-(tileSize * 3) - tileSize / 2, (tileSize * board.columnCount));
+        transform.position = offset;
 
         bounds = new RectFloat();
         bounds.Top = offset.y - tileSize / 2;
         bounds.Right = offset.x + (tileSize * columnCount) + tileSize / 2;
         bounds.Bottom = offset.y - (tileSize * rowCount) - tileSize / 2;
         bounds.Left = offset.x + tileSize / 2;
-
-        transform.position = offset;
 
         location = new Location()
         {

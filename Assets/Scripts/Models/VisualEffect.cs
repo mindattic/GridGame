@@ -10,5 +10,5 @@ public class VisualEffect : ScriptableObject
     [SerializeField] public Vector3 relativeScale = new Vector3(0.1f, 0.1f, 0.1f);
     [SerializeField] public float duration = 2;
     [SerializeField] public bool isLoop;
-    [SerializeField] public float coroutineStart = -1;
+    [SerializeField] public float triggerEventAt = -1; //-1 = disabled, 0 = immediately
 }

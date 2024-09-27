@@ -89,7 +89,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     }
 
     //Actor
-    protected bool HasFocusedPlayer => focusedPlayer != null;
+    protected bool HasFocusedActor => focusedActor != null;
     protected bool HasSelectedPlayer => selectedPlayer != null;
 
     //relativeScale
@@ -140,7 +140,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.combatParticipants = value; }
     }
 
-    protected ActorBehavior focusedPlayer
+    protected ActorBehavior focusedActor
     {
         get { return GameManager.instance.focusedPlayer; }
         set { GameManager.instance.focusedPlayer = value; }
