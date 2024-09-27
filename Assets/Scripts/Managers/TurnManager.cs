@@ -413,8 +413,8 @@ public class TurnManager : ExtendedMonoBehavior
                                 var amount = Random.Int(15, 33);
                                 //yield return player.ChangeHp(-amount);
 
-                                var vfx = resourceManager.VisualEffect("Blue_Slash_01");
-                                yield return vfxManager.Spawn(vfx, enemy.position, enemy.ChangeHp(-amount));
+                                var vfx = resourceManager.VisualEffect("Double_Claw");
+                                yield return vfxManager.Spawn(vfx, player.position, player.ChangeHp(-amount));
 
 
                             }

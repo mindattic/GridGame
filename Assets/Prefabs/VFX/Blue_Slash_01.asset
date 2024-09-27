@@ -19,4 +19,4 @@ MonoBehaviour:
   relativeScale: {x: 0.08, y: 0.05, z: 0.05}
   duration: 1
   isLoop: 0
-  coroutineStart: 0.13
+  triggerEventAt: 0.13

@@ -88,20 +88,24 @@ public class VFXBehavior : ExtendedMonoBehavior
         if (!hasTriggeredEvent)
             yield break;
 
+        //Wait until time to trigger event
         while (elapsed < triggerEventAt)
         {
             elapsed += Time.deltaTime;
             yield return null;
         }
 
+        //Trigger event and wait for it to finish
         yield return triggeredEvent;
 
+        //Wait until duration
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
             yield return null;
         }
 
+        //Despawn VFX
         Despawn(name);
     }
 
