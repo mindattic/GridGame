@@ -46,8 +46,8 @@ namespace Game.Behaviors
 
             var stats
                 = $" HP: {actor.hp}/{actor.maxHp}{Environment.NewLine}"
-                + $"ATK: { actor.attack}    DEF: {actor.defense}{Environment.NewLine}"
-                + $"ACC: {actor.accuracy}     DEX: {actor.evasion}{Environment.NewLine}"
+                + $"ATK: { actor.attack}    DEF: {actor.endurance}{Environment.NewLine}"
+                + $"ACC: {actor.focus}     DEX: {actor.dexterity}{Environment.NewLine}"
                 + $"SPD: {actor.speed}    LCK: {actor.luck}{Environment.NewLine}"
                 + $""
                 + $"{Environment.NewLine}"

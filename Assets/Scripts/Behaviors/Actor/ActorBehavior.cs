@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class ActorBehavior : ExtendedMonoBehavior
 {
@@ -16,10 +17,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     public float level;
     public float hp;
     public float maxHp;
-    public float attack;
-    public float defense;
-    public float accuracy;
-    public float evasion;
+    public float strength;
+    public float endurance;
+    public float focus;
+    public float dexterity;
     public float speed;
     public float luck;
     public float ap = 0;
@@ -37,6 +38,9 @@ public class ActorBehavior : ExtendedMonoBehavior
     public ActorRenderers renderers = new ActorRenderers();
 
     public bool IsAttacking => combatParticipants.attackingPairs.Any(x => x.actor1 == this || x.actor2 == this);
+
+
+    public VisualEffect attack;
 
     private void Awake()
     {
@@ -164,10 +168,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsPlaying => IsActive && IsAlive;
     public bool IsReady => ap == maxAp;
     public float LevelModifier => 1.0f + Random.Float(0, level * 0.01f);
-    public float AttackModifier => 1.0f + Random.Float(0, attack * 0.01f);
-    public float DefenseModifier => 1.0f + Random.Float(0, defense * 0.01f);
-    public float AccuracyModifier => 1.0f + Random.Float(0, accuracy * 0.01f);
-    public float EvasionModifier => 1.0f + Random.Float(0, evasion * 0.01f);
+    public float StrengthModifier => 1.0f + Random.Float(0, strength * 0.01f);
+    public float EnduranceModifier => 1.0f + Random.Float(0, endurance * 0.01f);
+    public float FosusModifier => 1.0f + Random.Float(0, focus * 0.01f);
+    public float DexterityModifier => 1.0f + Random.Float(0, dexterity * 0.01f);
     public float LuckModifier => 1.0f + Random.Float(0, luck * 0.01f);
 
     #endregion
@@ -232,6 +236,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: false);
             renderers.SetSelectionActive(false);
+            attack = resourceManager.VisualEffect("Blue_Slash_01");
+
         }
         else if (IsEnemy)
         {
@@ -244,10 +250,11 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: true);
             renderers.SetSelectionActive(false);
+            attack = resourceManager.VisualEffect("Double_Claw");
         }
 
 
-       
+
 
         AssignSkillWait();
         UpdateHealthBar();
@@ -330,6 +337,18 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
+    public IEnumerator Attack(ActorBehavior opponent, float damage, bool isCriticalHit = false)
+    {
+        if (isCriticalHit)
+        {
+            var crit = resourceManager.VisualEffect("Yellow_Hit");
+            vfxManager.SpawnAsync(crit, opponent.position);
+        }
+
+        return vfxManager.Spawn(attack, opponent.position, opponent.SubtractHp(damage, isCriticalHit));
+    }
+
+
 
     public IEnumerator FadeIn()
     {
@@ -376,7 +395,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void SetAttackStrategy()
     {
-        //Randomly select an attack attackStrategy
+        //Randomly select an strength attackStrategy
         int[] ratios = { 50, 20, 15, 10, 5 };
         var attackStrategy = Random.Strategy(ratios);
 
@@ -669,128 +688,54 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public IEnumerator ChangeHp(float amount)
+    public IEnumerator SubtractHp(float amount, bool isCriticalHit = false)
     {
         //Check abort state
-        if (!IsAlive)
+        if (!IsPlaying)
             yield break;
- 
+
         //Before:
         float ticks = 0f;
         float duration = Interval.QuarterSecond;
-        bool isDamage = amount < 0f;
-        bool isHeal = amount >= 0f;
-        bool isIneffective = amount == 0f;
 
-        hp += amount;
+        hp -= amount;
         hp = Mathf.Clamp(hp, 0, maxHp);
         UpdateHealthBar();
 
-        if (isDamage)
-        {
-            damageTextManager.Spawn(Math.Abs(amount).ToString(), position);
-            audioManager.Play($"Slash{Random.Int(1, 7)}");
-        }
-        else if (isHeal)
-        {
-
-        }
-        else if (isIneffective)
-        {
-
-        }
+        damageTextManager.Spawn(Math.Abs(amount).ToString(), position);
+        audioManager.Play($"Slash{Random.Int(1, 7)}");
 
         //During:
         while (ticks < duration)
         {
-            if (isDamage)
-            {
-                GrowAsync();
+            GrowAsync();
+            if (isCriticalHit)
                 Shake(shakeIntensity.Medium);
-            }
-            else if (isHeal)
-            {
-
-            }
-            else if (isIneffective)
-            {
-
-            }
 
             ticks += Interval.OneTick;
             yield return Wait.For(Interval.OneTick);
         }
 
         //After:
-        if (isDamage)
-        {
-            ShrinkAsync();
-            Shake(shakeIntensity.Stop);
+        ShrinkAsync();
+        Shake(shakeIntensity.Stop);
 
-            if (IsDying)
-                DieAsync();
-
-        }
-        else if (isHeal)
-        {
-
-        }
-        else if (isIneffective)
-        {
-
-        }
-
-
+        if (IsDying)
+            DieAsync();
     }
 
-    //public IEnumerator ChangeHp(float amount)
-    //{
-    //    //Before:
-    //    var remainingHP = Mathf.Clamp(hp + amount, 0, maxHp);
 
-    //    //During:
-    //    while (hp > remainingHP)
-    //    {
-
-    //        //Decrease hp
-    //        var min = (int)Math.Max(1, amount * 0.1f);
-    //        var max = (int)Math.Max(1, amount * 0.3f);
-    //        var hit = Random.Int(min, max);
-    //        hp -= hit;
-    //        hp = Mathf.Clamp(hp, remainingHP, maxHp);
-
-    //        sp += hit * 0.1f;
-
-    //        damageTextManager.SpawnAsync(hit.ToString(), position);
-
-    //        //Shake Actor
-    //        Shake(shakeIntensity.Medium);
-
-    //        UpdateHealthBar();
-
-    //        audioManager.Play($"Slash{Random.Int(1, 7)}");
-
-    //        yield return Wait.For(Interval.FiveTicks);
-    //    }
-
-    //    //After:
-    //    Shake(shakeIntensity.Stop);
-    //    hp = remainingHP;
-    //    UpdateHealthBar();
-    //    position = currentTile.position;
-    //}
-
-    public void ChangeHpAsync(float amount)
+    public void SubtractHpAsync(float damage, bool isCriticalHit = false)
     {
         //Check abort state
-        if (!IsAlive)
+        if (!IsPlaying)
             return;
 
-        StartCoroutine(ChangeHp(amount));
+        StartCoroutine(SubtractHp(damage, isCriticalHit));
     }
 
 
-    public IEnumerator ChangeAp(float amount)
+    public IEnumerator AddAp(float amount)
     {
         //Before:
         var targetAP = Mathf.Clamp(ap + amount, 0, maxAp);
@@ -813,12 +758,12 @@ public class ActorBehavior : ExtendedMonoBehavior
 
 
 
-    public void ChangeApAsync(float amount)
+    public void AddApAsync(float amount)
     {
-        StartCoroutine(ChangeAp(amount));
+        StartCoroutine(AddAp(amount));
     }
 
-    public IEnumerator ChangeSp(float amount)
+    public IEnumerator AddSp(float amount)
     {
         //Before:
         float ticks = 0f;
@@ -836,9 +781,9 @@ public class ActorBehavior : ExtendedMonoBehavior
         Shake(shakeIntensity.Stop);
     }
 
-    public void ChangeSpAsync(float amount)
+    public void AddSpAsync(float amount)
     {
-        StartCoroutine(ChangeSp(amount));
+        StartCoroutine(AddSp(amount));
     }
 
 

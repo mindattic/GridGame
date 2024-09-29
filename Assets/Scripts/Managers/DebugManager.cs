@@ -151,10 +151,18 @@ public class DebugManager : ExtendedMonoBehavior
 
     public void VFXTest_Blue_Slash_01()
     {
-        var vfx = resourceManager.VisualEffect("Blue_Slash_01");  
+      
+        var damage = 5;
+        var isCriticalHit = Random.Int(1, 10) == 10;
+        if (isCriticalHit)
+        {
+            var crit = resourceManager.VisualEffect("Yellow_Hit");
+            vfxManager.SpawnAsync(crit, Paladin.position);
+            damage = (int)Math.Round(damage * 1.5f);
+        }
 
-        vfxManager.SpawnAsync(vfx, Paladin.position, Paladin.ChangeHp(-20));
-        //vfxManager.SpawnAsync(vfx, Barbarian.position, Barbarian.ChangeHp(-15));
+        var vfx = resourceManager.VisualEffect("Blue_Slash_01");
+        vfxManager.SpawnAsync(vfx, Paladin.position, Paladin.SubtractHp(damage, isCriticalHit));
     }
 
     public void VFXTest_Blue_Slash_02()

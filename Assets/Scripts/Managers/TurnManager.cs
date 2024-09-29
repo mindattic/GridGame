@@ -253,39 +253,44 @@ public class TurnManager : ExtendedMonoBehavior
 
 
 
-            //var attack1 = (actor1.attack + (actor1.attack * actor1.LevelModifier)) * Math.Pow(actor1.attack, actor1.LuckModifier);
-            //var attack2 = (actor2.attack + (actor2.attack * actor2.LevelModifier)) * Math.Pow(actor2.attack, actor2.LuckModifier);
+            //var attack1 = (actor1.strength + (actor1.strength * actor1.LevelModifier)) * Math.Pow(actor1.strength, actor1.LuckModifier);
+            //var attack2 = (actor2.strength + (actor2.strength * actor2.LevelModifier)) * Math.Pow(actor2.strength, actor2.LuckModifier);
 
-            //var defense = enemy.defense * groupedEnemyModifier * Math.Pow(enemy.defense, enemy.LuckModifier);
+            //var endurance = enemy.endurance * groupedEnemyModifier * Math.Pow(enemy.endurance, enemy.LuckModifier);
 
-            //var amount = (float)((attack1 + attack2) / defense);
+            //var damage = (float)((attack1 + attack2) / endurance);
 
-            //Debug.Log($"Attack1: ({attack1}) + Attack2: ({attack2}) / Enemy defense: ({defense}) = Damage: ({amount})");
+            //Debug.Log($"Attack1: ({attack1}) + Attack2: ({attack2}) / Enemy endurance: ({endurance}) = Damage: ({damage})");
 
+
+
+
+
+            //var attackOutcome = AttackOutcome.None;
 
 
 
 
             //Calculate hit chance
 
-            var accuracy = 101f; //baseAccuracy + Random.Float(0, pair.actor1.accuracy + pair.actor2.accuracy) - Random.Float(0, enemy.evasion);
-            //var accuracy = Mathf.Round(pair.actor1.accuracy + pair.actor2.accuracy) / 3 + Random.Float(0, Mathf.Round(pair.actor1.accuracy + pair.actor2.accuracy) / 2);
+            var accuracy = 90f + Random.Float(0f, 20f); //baseAccuracy + Random.Float(0, pair.actor1.focus + pair.actor2.focus) - Random.Float(0, enemy.dexterity);
+            //var focus = Mathf.Round(pair.actor1.focus + pair.actor2.focus) / 3 + Random.Float(0, Mathf.Round(pair.actor1.focus + pair.actor2.focus) / 2);
             var hit = accuracy > 100f;
             if (hit)
             {
-                //attack enemy (one at a time)
+            
+                pair.actor1.AddSpAsync(10);
+                pair.actor2.AddSpAsync(10);
+
                 //TODO: Calculate based on attacker stats
-                var amount = Random.Int(15, 33);
-                pair.actor1.ChangeSpAsync(amount);
-                pair.actor2.ChangeSpAsync(amount);
+                var damage = Random.Int(15, 33);
 
+                var isCriticalHit = accuracy >= 110f;
+                if (isCriticalHit) 
+                    damage = (int)Math.Round(damage * 1.5f);
 
-                var vfx = resourceManager.VisualEffect("Blue_Slash_01");
-                yield return vfxManager.Spawn(vfx, enemy.position, enemy.ChangeHp(-20));
+                yield return pair.actor1.Attack(enemy, damage, isCriticalHit);
 
-
-
-                //yield return enemy.ChangeHp(-amount);
             }
             else
             {
@@ -355,8 +360,8 @@ public class TurnManager : ExtendedMonoBehavior
             {
                 //TODO: Calculate based on attacker stats
                 int amount = Convert.ToInt32(enemy.speed * 3 * enemy.LuckModifier);
-                //int amount = Random.Int(15, 33);
-                enemy.ChangeApAsync(amount);
+                //int damage = Random.Int(15, 33);
+                enemy.AddApAsync(amount);
             }
 
             currentPhase = TurnPhase.Move;
@@ -403,20 +408,18 @@ public class TurnManager : ExtendedMonoBehavior
                             var direction = enemy.GetAdjacentDirectionTo(player);
                             yield return enemy.Bump(direction);
 
-                            //TODO: Calculate based on attacker accuracy vs defender evasion
-                            var accuracy = enemy.accuracy + Random.Float(0, enemy.accuracy);
-                            var hit = accuracy > player.evasion;
+                            //TODO: Calculate based on attacker focus vs defender dexterity
+                            var accuracy = enemy.focus + Random.Float(0, enemy.focus);
+                            var hit = accuracy > player.dexterity;
                             if (hit)
                             {
-                                //attack enemy (one at a time)
                                 //TODO: Calculate based on attacker stats
-                                var amount = Random.Int(15, 33);
-                                //yield return player.ChangeHp(-amount);
+                                var damage = Random.Int(15, 33);
+                                var isCriticalHit = Random.Int(1, 10) == 10;
+                                if (isCriticalHit)
+                                    damage = (int)Math.Round(damage * 1.5f);
 
-                                var vfx = resourceManager.VisualEffect("Double_Claw");
-                                yield return vfxManager.Spawn(vfx, player.position, player.ChangeHp(-amount));
-
-
+                                yield return enemy.Attack(player, damage, isCriticalHit);
                             }
                             else
                             {

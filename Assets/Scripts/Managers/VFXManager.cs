@@ -26,7 +26,10 @@ public class VFXManager : ExtendedMonoBehavior
         var visualEffect = prefab.GetComponent<VFXBehavior>();
         visualEffect.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
         visualEffects.Add(visualEffect.name, visualEffect);
-        
+
+        if (triggeredEvent == null)
+            yield break; 
+
         yield return visualEffect.Spawn(vfx, position, triggeredEvent);
     }
 

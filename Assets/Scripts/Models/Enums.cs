@@ -102,3 +102,10 @@ public enum BumpStage
     End
 }
 
+public enum AttackOutcome
+{
+    None = 0,
+    Miss = 1,
+    Hit = 2,
+    CriticalHit = 3
+}

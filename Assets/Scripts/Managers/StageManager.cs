@@ -257,10 +257,10 @@ public class StageManager : ExtendedMonoBehavior
         actor.level = stageActor.attributes.Level;
         actor.maxHp = stageActor.attributes.MaxHP;
         actor.hp = stageActor.attributes.HP;
-        actor.attack = stageActor.attributes.Attack;
-        actor.defense = stageActor.attributes.Defense;
-        actor.accuracy = stageActor.attributes.Accuracy;
-        actor.evasion = stageActor.attributes.Evasion;
+        actor.strength = stageActor.attributes.Attack;
+        actor.endurance = stageActor.attributes.Defense;
+        actor.focus = stageActor.attributes.Accuracy;
+        actor.dexterity = stageActor.attributes.Evasion;
         actor.speed = stageActor.attributes.Speed;
         actor.luck = stageActor.attributes.Luck;
         actor.transform.localScale = tileScale;
