@@ -283,7 +283,7 @@ public class TurnManager : ExtendedMonoBehavior
                 pair.actor2.AddSpAsync(10);
 
                 //TODO: Calculate based on attacker stats
-                var damage = Random.Int(15, 33);
+                var damage = (float)Math.Round(Random.Float(15f, 33f));
 
                 var isCriticalHit = accuracy >= 110f;
                 if (isCriticalHit) 
@@ -414,7 +414,7 @@ public class TurnManager : ExtendedMonoBehavior
                             if (hit)
                             {
                                 //TODO: Calculate based on attacker stats
-                                var damage = Random.Int(15, 33);
+                                var damage = (float)Math.Round(Random.Float(15f, 33f));
                                 var isCriticalHit = Random.Int(1, 10) == 10;
                                 if (isCriticalHit)
                                     damage = (int)Math.Round(damage * 1.5f);

@@ -695,7 +695,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public IEnumerator TakeDamage(float amount, bool isCriticalHit = false)
+    public IEnumerator TakeDamage(float damage, bool isCriticalHit = false)
     {
         //Check abort state
         if (!IsPlaying)
@@ -705,11 +705,12 @@ public class ActorBehavior : ExtendedMonoBehavior
         float ticks = 0f;
         float duration = Interval.TenTicks;
 
-        hp -= amount;
+        hp -= damage;
         hp = Mathf.Clamp(hp, 0, maxHp);
         UpdateHealthBar();
 
-        damageTextManager.Spawn(Math.Abs(amount).ToString(), position);
+        var text = Math.Abs(damage).ToString();
+        damageTextManager.Spawn(text, position);
         audioManager.Play($"Slash{Random.Int(1, 7)}");
 
         //During:
