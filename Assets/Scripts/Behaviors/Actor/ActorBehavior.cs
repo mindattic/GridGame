@@ -95,10 +95,17 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
+
     public Vector3 thumbnailPosition
     {
         get => gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position;
         set => gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position = value;
+    }
+
+    public Quaternion rotation
+    {
+        get => gameObject.transform.rotation;
+        set => gameObject.transform.rotation = value;
     }
 
     public Vector3 scale
@@ -345,7 +352,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             vfxManager.SpawnAsync(crit, opponent.position);
         }
 
-        return vfxManager.Spawn(attack, opponent.position, opponent.SubtractHp(damage, isCriticalHit));
+        return vfxManager.Spawn(attack, opponent.position, opponent.TakeDamage(damage, isCriticalHit));
     }
 
 
@@ -688,7 +695,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public IEnumerator SubtractHp(float amount, bool isCriticalHit = false)
+    public IEnumerator TakeDamage(float amount, bool isCriticalHit = false)
     {
         //Check abort state
         if (!IsPlaying)
@@ -696,7 +703,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //Before:
         float ticks = 0f;
-        float duration = Interval.QuarterSecond;
+        float duration = Interval.TenTicks;
 
         hp -= amount;
         hp = Mathf.Clamp(hp, 0, maxHp);
@@ -725,13 +732,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public void SubtractHpAsync(float damage, bool isCriticalHit = false)
+    public void TakeDamageAsync(float damage, bool isCriticalHit = false)
     {
         //Check abort state
         if (!IsPlaying)
             return;
 
-        StartCoroutine(SubtractHp(damage, isCriticalHit));
+        StartCoroutine(TakeDamage(damage, isCriticalHit));
     }
 
 
@@ -790,20 +797,41 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator MissAttack()
     {
         //Before:
-        float ticks = 0;
-        float duration = Interval.QuarterSecond;
+        //float ticks = 0;
+        //float duration = Interval.QuarterSecond;
         damageTextManager.Spawn("Miss", position);
 
+        //yield return Spin360Y();
+
         //During:
-        while (ticks < duration)
+        //while (ticks < duration)
+        //{
+        //    ticks += Interval.OneTick;
+        //    Shake(shakeIntensity.Low);
+        //    yield return Wait.OneTick();
+        //}
+
+        //After:
+        //Shake(shakeIntensity.Stop);
+
+        //Before:
+        bool isDone = false;
+        var rotY = 0f;
+        var speed = tileSize * 24f;
+
+        rotation = Geometry.Rotation(new Vector3(0, rotY, 0));
+
+        //During:
+        while (!isDone)
         {
-            ticks += Interval.OneTick;
-            Shake(shakeIntensity.Low);
+            rotY += speed;
+            rotation = Geometry.Rotation(new Vector3(0, rotY, 0));
+            isDone = rotY >= 360f;
             yield return Wait.OneTick();
         }
 
         //After:
-        Shake(shakeIntensity.Stop);
+        rotation = Geometry.Rotation(new Vector3(0, 0, 0));
     }
 
     private void UpdateHealthBar()
@@ -1028,6 +1056,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         sortingOrder = SortingOrder.Default;
 
     }
+
     public void ShrinkAsync(float minSize = 0f)
     {
         if (minSize == 0)
@@ -1035,6 +1064,27 @@ public class ActorBehavior : ExtendedMonoBehavior
         StartCoroutine(Shrink(minSize));
     }
 
+    public IEnumerator Spin360Y()
+    {
+        //Before:
+        bool isDone = false;
+        var rotY = 0f;
+        var speed = tileSize * 24f;
+
+        rotation = Geometry.Rotation(new Vector3(0, rotY, 0));
+
+        //During:
+        while (!isDone)
+        {
+            rotY += speed;
+            rotation = Geometry.Rotation(new Vector3(0, rotY, 0));
+            isDone = rotY >= 360f;
+            yield return Wait.OneTick();
+        }
+
+        //After:
+        rotation = Geometry.Rotation(new Vector3(0, 0, 0));
+    }
 
     public static IEnumerator FadeIn(
          SpriteRenderer spriteRenderer,

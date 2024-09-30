@@ -162,7 +162,7 @@ public class DebugManager : ExtendedMonoBehavior
         }
 
         var vfx = resourceManager.VisualEffect("Blue_Slash_01");
-        vfxManager.SpawnAsync(vfx, Paladin.position, Paladin.SubtractHp(damage, isCriticalHit));
+        vfxManager.SpawnAsync(vfx, Paladin.position, Paladin.TakeDamage(damage, isCriticalHit));
     }
 
     public void VFXTest_Blue_Slash_02()
