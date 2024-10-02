@@ -44,12 +44,20 @@ namespace Game.Behaviors
            
             title.text = actor.name;
 
+            var hp = actor.hp;
+            var mhp = actor.maxHp;
+            var str = actor.strength;
+            var end = actor.endurance;
+            var acc = actor.accuracy;
+            var agi = actor.agility;
+            var spd = actor.speed;
+            var lck = actor.luck;
+
             var stats
-                = $" HP: {actor.hp}/{actor.maxHp}{Environment.NewLine}"
-                + $"ATK: { actor.attack}    DEF: {actor.endurance}{Environment.NewLine}"
-                + $"ACC: {actor.focus}     DEX: {actor.dexterity}{Environment.NewLine}"
-                + $"SPD: {actor.speed}    LCK: {actor.luck}{Environment.NewLine}"
-                + $""
+                = $" HP: {hp}/{mhp}    {Environment.NewLine}"
+                + $"STR: {str}    END: {end}{Environment.NewLine}"
+                + $"ACC: {acc}    AGI: {agi}{Environment.NewLine}"
+                + $"SPD: {spd}    LCK: {lck}{Environment.NewLine}"
                 + $"{Environment.NewLine}"
                 + resourceManager.ActorDetails(actor.archetype.ToString());
             details.text = stats;

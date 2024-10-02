@@ -19,8 +19,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     public float maxHp;
     public float strength;
     public float endurance;
-    public float focus;
-    public float dexterity;
+    public float accuracy;
+    public float agility;
     public float speed;
     public float luck;
     public float ap = 0;
@@ -29,6 +29,9 @@ public class ActorBehavior : ExtendedMonoBehavior
     public float spMax = -1;
     public int spawnTurn = -1;
     public Vector3 initialHealthBarScale;
+
+
+    public int turnDelay = 0;
 
     [SerializeField] public AnimationCurve glowCurve;
     [SerializeField] public AnimationCurve slideCurve;
@@ -177,8 +180,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     public float LevelModifier => 1.0f + Random.Float(0, level * 0.01f);
     public float StrengthModifier => 1.0f + Random.Float(0, strength * 0.01f);
     public float EnduranceModifier => 1.0f + Random.Float(0, endurance * 0.01f);
-    public float FosusModifier => 1.0f + Random.Float(0, focus * 0.01f);
-    public float DexterityModifier => 1.0f + Random.Float(0, dexterity * 0.01f);
+    public float AccuracyModifier => 1.0f + Random.Float(0, accuracy * 0.01f);
+    public float AgilityModifier => 1.0f + Random.Float(0, agility * 0.01f);
     public float LuckModifier => 1.0f + Random.Float(0, luck * 0.01f);
 
     #endregion
@@ -619,6 +622,70 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
+
+    public IEnumerator Dodge()
+    {
+        //Before:
+        DodgeStage stage = DodgeStage.Start;
+        var targetRotation = 70f;
+        var currentRotation = 0f;
+        var rotationSpeed = tileSize * 16f;
+      
+        //During:
+        while (stage != DodgeStage.End)
+        {
+            switch (stage)
+            {
+                case DodgeStage.Start:
+                    {
+                        currentRotation = 0f;
+                        rotation = Geometry.Rotation(0, currentRotation, 0);
+                        stage = DodgeStage.TwistForward;
+                    }
+                    break;
+
+                case DodgeStage.TwistForward:
+                    {
+                        currentRotation += rotationSpeed;
+                        if (currentRotation >= targetRotation)
+                        {
+                            currentRotation = targetRotation;
+                            stage = DodgeStage.TwistBackward;
+                        }
+                        rotation = Geometry.Rotation(0, currentRotation, 0);
+                    }
+                    break;
+
+                case DodgeStage.TwistBackward:
+                    {
+                        currentRotation -= rotationSpeed;
+                        if (currentRotation <= 0f)
+                        {
+                            currentRotation = 0f;
+                            stage = DodgeStage.End;
+                        }
+                        rotation = Geometry.Rotation(0, currentRotation, 0);
+                    }
+                    break;
+
+                case DodgeStage.End:
+                    {
+                        currentRotation = 0f;
+                        rotation = Geometry.Rotation(0, currentRotation, 0);
+                    }
+                    break;
+            }
+
+            yield return Wait.OneTick(); 
+        }
+
+        //After:
+        currentRotation = 0f;
+        rotation = Geometry.Rotation(0, currentRotation, 0);
+    }
+
+
+
     public IEnumerator Bump(Direction direction)
     {
 
@@ -638,7 +705,6 @@ public class ActorBehavior : ExtendedMonoBehavior
                         position = currentTile.position;
                         targetPosition = Geometry.GetDirectionalPosition(position, direction, range);
                         stage = BumpStage.MoveToward;
-
                     }
                     break;
 
@@ -686,7 +752,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                     break;
             }
 
-            yield return Wait.None();
+            yield return Wait.OneTick();
         }
 
         //After:
@@ -816,23 +882,25 @@ public class ActorBehavior : ExtendedMonoBehavior
         //Shake(shakeIntensity.Stop);
 
         //Before:
-        bool isDone = false;
-        var rotY = 0f;
-        var speed = tileSize * 24f;
+        //bool isDone = false;
+        //var rotY = 0f;
+        //var speed = tileSize * 24f;
 
-        rotation = Geometry.Rotation(new Vector3(0, rotY, 0));
+        //rotation = Geometry.Rotation(0, rotY, 0);
 
-        //During:
-        while (!isDone)
-        {
-            rotY += speed;
-            rotation = Geometry.Rotation(new Vector3(0, rotY, 0));
-            isDone = rotY >= 360f;
-            yield return Wait.OneTick();
-        }
+        ////During:
+        //while (!isDone)
+        //{
+        //    rotY += speed;
+        //    rotation = Geometry.Rotation(0, rotY, 0);
+        //    isDone = rotY >= 360f;
+        //    yield return Wait.OneTick();
+        //}
 
-        //After:
-        rotation = Geometry.Rotation(new Vector3(0, 0, 0));
+        ////After:
+        //rotation = Geometry.Rotation(0, 0, 0);
+
+        yield return Dodge();
     }
 
     private void UpdateHealthBar()

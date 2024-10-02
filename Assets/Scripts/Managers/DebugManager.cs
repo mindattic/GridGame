@@ -59,9 +59,7 @@ public class DebugManager : ExtendedMonoBehavior
             case 35: VFXTest_BlueYellow_Sword(); break;
             case 36: VFXTest_BlueYellow_Sword_3X(); break;
             case 37: VFXTest_Red_Sword(); break;
-
-
-
+            case 38: DodgeTest(); break;
 
         }
     }
@@ -365,6 +363,11 @@ public class DebugManager : ExtendedMonoBehavior
         var vfx = resourceManager.VisualEffect("Red_Sword");
         vfxManager.SpawnAsync(vfx, Paladin.position);
         vfxManager.SpawnAsync(vfx, Barbarian.position);
+    }
+
+    public void DodgeTest()
+    {
+        StartCoroutine(Paladin.Dodge());
     }
 
 }

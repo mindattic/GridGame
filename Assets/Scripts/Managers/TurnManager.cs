@@ -273,8 +273,8 @@ public class TurnManager : ExtendedMonoBehavior
 
             //Calculate hit chance
 
-            var accuracy = 90f + Random.Float(0f, 20f); //baseAccuracy + Random.Float(0, pair.actor1.focus + pair.actor2.focus) - Random.Float(0, enemy.dexterity);
-            //var focus = Mathf.Round(pair.actor1.focus + pair.actor2.focus) / 3 + Random.Float(0, Mathf.Round(pair.actor1.focus + pair.actor2.focus) / 2);
+            var accuracy = 90f + Random.Float(0f, 20f); //baseAccuracy + Random.Float(0, pair.actor1.accuracy + pair.actor2.accuracy) - Random.Float(0, enemy.agility);
+            //var accuracy = Mathf.Round(pair.actor1.accuracy + pair.actor2.accuracy) / 3 + Random.Float(0, Mathf.Round(pair.actor1.accuracy + pair.actor2.accuracy) / 2);
             var hit = accuracy > 100f;
             if (hit)
             {
@@ -408,9 +408,9 @@ public class TurnManager : ExtendedMonoBehavior
                             var direction = enemy.GetAdjacentDirectionTo(player);
                             yield return enemy.Bump(direction);
 
-                            //TODO: Calculate based on attacker focus vs defender dexterity
-                            var accuracy = enemy.focus + Random.Float(0, enemy.focus);
-                            var hit = accuracy > player.dexterity;
+                            //TODO: Calculate based on attacker accuracy vs defender agility
+                            var accuracy = enemy.accuracy + Random.Float(0, enemy.accuracy);
+                            var hit = accuracy > player.agility;
                             if (hit)
                             {
                                 //TODO: Calculate based on attacker stats

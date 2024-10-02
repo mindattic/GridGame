@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Yellow_Hit
   prefab: {fileID: 4470765696984652748, guid: ba8a3b693b384c247bc5d9908969afc7, type: 3}
-  relativeOffset: {x: 0, y: 0, z: 0}
+  relativeOffset: {x: -0.02, y: 0, z: 0}
   angularRotation: {x: 0, y: 0, z: 0}
-  relativeScale: {x: 0.15, y: 0.15, z: 0}
+  relativeScale: {x: 0.2, y: 0.2, z: 0}
   duration: 2
   isLoop: 0
+  triggerEventAt: -1

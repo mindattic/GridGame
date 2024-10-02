@@ -102,6 +102,14 @@ public enum BumpStage
     End
 }
 
+public enum DodgeStage
+{
+    Start,
+    TwistForward,
+    TwistBackward,
+    End
+}
+
 public enum AttackOutcome
 {
     None = 0,
