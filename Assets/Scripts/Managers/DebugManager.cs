@@ -60,6 +60,7 @@ public class DebugManager : ExtendedMonoBehavior
             case 36: VFXTest_BlueYellow_Sword_3X(); break;
             case 37: VFXTest_Red_Sword(); break;
             case 38: DodgeTest(); break;
+            case 39: SpinTest(); break;
 
         }
     }
@@ -370,4 +371,8 @@ public class DebugManager : ExtendedMonoBehavior
         StartCoroutine(Paladin.Dodge());
     }
 
+    public void SpinTest()
+    {
+        StartCoroutine(Paladin.Spin());
+    }
 }

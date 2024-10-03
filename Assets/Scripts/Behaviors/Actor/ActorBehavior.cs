@@ -621,67 +621,108 @@ public class ActorBehavior : ExtendedMonoBehavior
         thumbnailPosition += amount;
     }
 
-
-
     public IEnumerator Dodge()
     {
-        //Before:
+        // Before:
         DodgeStage stage = DodgeStage.Start;
-        var targetRotation = 70f;
-        var currentRotation = 0f;
-        var rotationSpeed = tileSize * 16f;
-      
-        //During:
+        var targetRotation = new Vector3(
+            Random.Float(10f, 15f), 
+            70f,
+            Random.Float(10f, 15f));
+        var currentRotation = Vector3.zero;
+        var rotationSpeed = 500f;
+        var minScale = 0.9f;
+        float progress = 0f; 
+        var randomDirection = new Vector3Int(
+            Random.Boolean ? -1 : 1, 
+            Random.Boolean ? -1 : 1, 
+            Random.Boolean ? -1 : 1);
+
+        // During:
         while (stage != DodgeStage.End)
         {
             switch (stage)
             {
                 case DodgeStage.Start:
                     {
-                        currentRotation = 0f;
-                        rotation = Geometry.Rotation(0, currentRotation, 0);
+                        currentRotation = Vector3.zero; 
+                        progress = 0f;
+                        scale = tileScale;
+                        rotation = Geometry.Rotation(currentRotation); 
+
                         stage = DodgeStage.TwistForward;
                     }
                     break;
 
                 case DodgeStage.TwistForward:
                     {
-                        currentRotation += rotationSpeed;
-                        if (currentRotation >= targetRotation)
+                        // Update forward progress and sync rotation/scale
+                        progress += rotationSpeed * Time.deltaTime / targetRotation.y; // Normalize progress
+                        progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
+
+                        // Random twist direction on X, Y, and Z axes
+                        currentRotation.x = Mathf.Lerp(0f, targetRotation.x, progress) * randomDirection.x;
+                        currentRotation.y = Mathf.Lerp(0f, targetRotation.y, progress) * randomDirection.y;
+                        currentRotation.z = Mathf.Lerp(0f, targetRotation.z, progress) * randomDirection.z;
+
+                        // Calculate scale based on forward progress
+                        float scaleFactor = Mathf.Lerp(1f, minScale, progress);
+                        scale = tileScale * scaleFactor;
+
+                        // Apply rotation (random X, Y, and Z axis twisting) and scaling
+                        rotation = Geometry.Rotation(currentRotation.x, currentRotation.y, currentRotation.z);
+
+                        // If fully twisted forward, move to TwistBackward
+                        if (progress >= 1f)
                         {
-                            currentRotation = targetRotation;
+                            progress = 0f; // Reset backward progress
                             stage = DodgeStage.TwistBackward;
                         }
-                        rotation = Geometry.Rotation(0, currentRotation, 0);
                     }
                     break;
 
                 case DodgeStage.TwistBackward:
                     {
-                        currentRotation -= rotationSpeed;
-                        if (currentRotation <= 0f)
+                        // Update backward progress and sync rotation/scale
+                        progress += rotationSpeed * Time.deltaTime / targetRotation.y; // Normalize progress
+                        progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
+
+                        // Reverse random twist direction on X, Y, and Z axes
+                        currentRotation.x = Mathf.Lerp(targetRotation.x, 0f, progress) * randomDirection.x;
+                        currentRotation.y = Mathf.Lerp(targetRotation.y, 0f, progress) * randomDirection.y;
+                        currentRotation.z = Mathf.Lerp(targetRotation.z, 0f, progress) * randomDirection.z;
+
+                        // Calculate scale based on backward progress
+                        float scaleFactor = Mathf.Lerp(minScale, 1f, progress);
+                        scale = tileScale * scaleFactor;
+
+                        // Apply reverse rotation (random X, Y, and Z axis twisting) and scaling
+                        rotation = Geometry.Rotation(currentRotation);
+
+                        // If fully twisted back, move to End
+                        if (progress >= 1f)
                         {
-                            currentRotation = 0f;
                             stage = DodgeStage.End;
                         }
-                        rotation = Geometry.Rotation(0, currentRotation, 0);
                     }
                     break;
 
                 case DodgeStage.End:
                     {
-                        currentRotation = 0f;
-                        rotation = Geometry.Rotation(0, currentRotation, 0);
+                        currentRotation = Vector3.zero;
+                        scale = tileScale;
+                        rotation = Geometry.Rotation(currentRotation);
                     }
                     break;
             }
 
-            yield return Wait.OneTick(); 
+            yield return Wait.OneTick();
         }
 
-        //After:
-        currentRotation = 0f;
-        rotation = Geometry.Rotation(0, currentRotation, 0);
+        // After:
+        currentRotation = Vector3.zero;
+        scale = tileScale;
+        rotation = Geometry.Rotation(currentRotation);
     }
 
 
@@ -1133,26 +1174,25 @@ public class ActorBehavior : ExtendedMonoBehavior
         StartCoroutine(Shrink(minSize));
     }
 
-    public IEnumerator Spin360Y()
+    public IEnumerator Spin()
     {
         //Before:
         bool isDone = false;
         var rotY = 0f;
         var speed = tileSize * 24f;
-
-        rotation = Geometry.Rotation(new Vector3(0, rotY, 0));
+        rotation = Geometry.Rotation(0, rotY, 0);
 
         //During:
         while (!isDone)
         {
             rotY += speed;
-            rotation = Geometry.Rotation(new Vector3(0, rotY, 0));
+            rotation = Geometry.Rotation(0, rotY, 0);
             isDone = rotY >= 360f;
             yield return Wait.OneTick();
         }
 
         //After:
-        rotation = Geometry.Rotation(new Vector3(0, 0, 0));
+        rotation = Geometry.Rotation(0, 0, 0);
     }
 
     public static IEnumerator FadeIn(
