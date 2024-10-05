@@ -70,20 +70,20 @@ namespace Game.Behaviors
             //string currentPhase = turnManager != null ? turnManager.currentPhase.ToString() : "-";
 
 
-            //string a0 = actors[0] != null ? $"{actors[0].name}: {actors[0].hp}{Environment.NewLine}": $"{Environment.NewLine}";
-            //string a1 = actors[1] != null ? $"{actors[1].name}: {actors[1].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a2 = actors[2] != null ? $"{actors[2].name}: {actors[2].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a3 = actors[3] != null ? $"{actors[3].name}: {actors[3].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a4 = actors[4] != null ? $"{actors[4].name}: {actors[4].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a5 = actors[5] != null ? $"{actors[5].name}: {actors[5].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a6 = actors[6] != null ? $"{actors[6].name}: {actors[6].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a7 = actors[7] != null ? $"{actors[7].name}: {actors[7].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a8 = actors[8] != null ? $"{actors[8].name}: {actors[8].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a9 = actors[9] != null ? $"{actors[9].name}: {actors[9].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a10 = actors[10] != null ? $"{actors[10].name}: {actors[10].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a11 = actors[11] != null ? $"{actors[11].name}: {actors[11].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a12 = actors[12] != null ? $"{actors[12].name}: {actors[12].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
-            //string a13 = actors[13] != null ? $"{actors[13].name}: {actors[13].hp}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a0 = actors[0] != null ? $"{actors[0].name}: {actors[0].HP}{Environment.NewLine}": $"{Environment.NewLine}";
+            //string a1 = actors[1] != null ? $"{actors[1].name}: {actors[1].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a2 = actors[2] != null ? $"{actors[2].name}: {actors[2].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a3 = actors[3] != null ? $"{actors[3].name}: {actors[3].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a4 = actors[4] != null ? $"{actors[4].name}: {actors[4].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a5 = actors[5] != null ? $"{actors[5].name}: {actors[5].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a6 = actors[6] != null ? $"{actors[6].name}: {actors[6].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a7 = actors[7] != null ? $"{actors[7].name}: {actors[7].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a8 = actors[8] != null ? $"{actors[8].name}: {actors[8].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a9 = actors[9] != null ? $"{actors[9].name}: {actors[9].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a10 = actors[10] != null ? $"{actors[10].name}: {actors[10].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a11 = actors[11] != null ? $"{actors[11].name}: {actors[11].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a12 = actors[12] != null ? $"{actors[12].name}: {actors[12].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
+            //string a13 = actors[13] != null ? $"{actors[13].name}: {actors[13].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
 
 
             //log.Text = a0 + a1+ a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10 + a11 + a12 + a13;

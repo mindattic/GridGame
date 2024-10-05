@@ -1,3 +1,4 @@
+using Assets.Scripts.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -121,8 +122,8 @@ public class TurnManager : ExtendedMonoBehavior
             {
                 pair.actor1.sortingOrder = SortingOrder.Attacker;
                 pair.actor2.sortingOrder = SortingOrder.Attacker;
-                tooltipManager.Spawn($"Attack {i++}", pair.actor1.currentTile.position);
-                tooltipManager.Spawn($"Attack {i++}", pair.actor1.currentTile.position);
+                tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.position);
+                tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.position);
                 pair.alignment.enemies.ForEach(x => x.sortingOrder = SortingOrder.Defender);
                 attackLineManager.Spawn(pair);
             }
@@ -241,56 +242,19 @@ public class TurnManager : ExtendedMonoBehavior
 
         #region Player attack
 
-        //yield return ap.For(Interval.QuarterSecond);
 
         foreach (var enemy in pair.alignment.enemies)
         {
-
-            //var actor1 = pair.actor1;
-            //var actor2 = pair.actor2;
-            //var totalEnemies = pair.enemies.Count - 1;
-            //var groupedEnemyModifier = Mathf.Max(1.0f - (0.1f * totalEnemies), 0.1f);
-
-
-
-            //var attack1 = (actor1.strength + (actor1.strength * actor1.LevelModifier)) * Math.Pow(actor1.strength, actor1.LuckModifier);
-            //var attack2 = (actor2.strength + (actor2.strength * actor2.LevelModifier)) * Math.Pow(actor2.strength, actor2.LuckModifier);
-
-            //var endurance = enemy.endurance * groupedEnemyModifier * Math.Pow(enemy.endurance, enemy.LuckModifier);
-
-            //var damage = (float)((attack1 + attack2) / endurance);
-
-            //Debug.Log($"Attack1: ({attack1}) + Attack2: ({attack2}) / Enemy endurance: ({endurance}) = Damage: ({damage})");
-
-
-
-
-
-            //var attackOutcome = AttackOutcome.None;
-
-
-
-
-            //Calculate hit chance
-
-            var accuracy = 90f + Random.Float(0f, 20f); //baseAccuracy + Random.Float(0, pair.actor1.accuracy + pair.actor2.accuracy) - Random.Float(0, enemy.agility);
-            //var accuracy = Mathf.Round(pair.actor1.accuracy + pair.actor2.accuracy) / 3 + Random.Float(0, Mathf.Round(pair.actor1.accuracy + pair.actor2.accuracy) / 2);
-            var hit = accuracy > 100f;
-            if (hit)
+            var isHit = Formulas.IsHit(pair.actor1.stats, enemy.stats);
+            if (isHit)
             {
-            
                 pair.actor1.AddSpAsync(10);
                 pair.actor2.AddSpAsync(10);
 
-                //TODO: Calculate based on attacker stats
-                var damage = (float)Math.Round(Random.Float(15f, 33f));
-
-                var isCriticalHit = accuracy >= 110f;
-                if (isCriticalHit) 
-                    damage = (int)Math.Round(damage * 1.5f);
-
+                //TODO: Generate adhoc ActorStats where you take highest or median stats between both actors in ActorPair
+                var damage = Formulas.CalculateDamage(pair.actor1.stats, enemy.stats);
+                var isCriticalHit = false;
                 yield return pair.actor1.Attack(enemy, damage, isCriticalHit);
-
             }
             else
             {
@@ -359,7 +323,7 @@ public class TurnManager : ExtendedMonoBehavior
             foreach (var enemy in notReadyEnemies)
             {
                 //TODO: Calculate based on attacker stats
-                int amount = Convert.ToInt32(enemy.speed * 3 * enemy.LuckModifier);
+                int amount = Convert.ToInt32(enemy.stats.Accuracy * 3 * (1 + enemy.stats.Luck * 0.01f));
                 //int damage = Random.Int(15, 33);
                 enemy.AddApAsync(amount);
             }
@@ -403,22 +367,16 @@ public class TurnManager : ExtendedMonoBehavior
                     {
                         foreach (var player in defendingPlayers)
                         {
-                            //yield return ap.For(Interval.HalfSecond);
-
                             var direction = enemy.GetAdjacentDirectionTo(player);
+
+                            //TODO: Add triggeredEvent at moment bump reaches zenith
                             yield return enemy.Bump(direction);
 
-                            //TODO: Calculate based on attacker accuracy vs defender agility
-                            var accuracy = enemy.accuracy + Random.Float(0, enemy.accuracy);
-                            var hit = accuracy > player.agility;
-                            if (hit)
+                            var isHit = Formulas.IsHit(enemy.stats, player.stats);
+                            if (isHit)
                             {
-                                //TODO: Calculate based on attacker stats
-                                var damage = (float)Math.Round(Random.Float(15f, 33f));
-                                var isCriticalHit = Random.Int(1, 10) == 10;
-                                if (isCriticalHit)
-                                    damage = (int)Math.Round(damage * 1.5f);
-
+                                var damage = Formulas.CalculateDamage(enemy.stats, player.stats);
+                                var isCriticalHit = false;
                                 yield return enemy.Attack(player, damage, isCriticalHit);
                             }
                             else

@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\Models\ShakeIntensity.cs" />
     <Compile Include="Assets\Scripts\Managers\SelectedPlayerManager.cs" />
     <Compile Include="Assets\Scripts\Models\ActorDetails.cs" />
+    <Compile Include="Assets\Scripts\Utilities\Formulas.cs" />
     <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
     <Compile Include="Assets\Scripts\Models\Destination.cs" />
@@ -99,6 +100,8 @@
     <Compile Include="Assets\Scripts\Models\VisualEffect.cs" />
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
+    <Compile Include="Assets\Scripts\Models\ActorStats.cs" />
+    <Compile Include="Assets\Scripts\Models\DamageDetails.cs" />
     <Compile Include="Assets\Scripts\Managers\LogManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorRenderers.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
@@ -120,7 +123,6 @@
     <Compile Include="Assets\Scripts\Behaviors\AttackLineBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\Stage.cs" />
     <Compile Include="Assets\Scripts\Managers\TurnManager.cs" />
-    <Compile Include="Assets\Scripts\Models\ActorAttributes.cs" />
     <Compile Include="Assets\Scripts\Models\Enums.cs" />
     <Compile Include="Assets\Scripts\Models\SeamlessSprite.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />

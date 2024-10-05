@@ -34,16 +34,15 @@ public class StageManager : ExtendedMonoBehavior
     }
 
 
-    private ActorAttributes RandomAttributes => new ActorAttributes()
+    private ActorStats RandomAttributes => new ActorStats()
     {
         Level = 1,
         MaxHP = 100,
         HP = 100,
-        Attack = Random.Int(5, 10),
-        Defense = Random.Int(5, 10),
+        Strength = Random.Int(5, 10),
+        Endurance = Random.Int(5, 10),
         Accuracy = Random.Int(5, 10),
         Evasion = Random.Int(5, 10),
-        Speed = Random.Int(5, 10),
         Luck = Random.Int(5, 10)
     };
 
@@ -65,16 +64,15 @@ public class StageManager : ExtendedMonoBehavior
         //DespawnAll existing actors
         actorManager.Clear();
 
-        var attributes = new ActorAttributes()
+        var stats = new ActorStats()
         {
             Level = 1,
             MaxHP = 100,
             HP = 100,
-            Attack = 10,
-            Defense = 10,
+            Strength = 10,
+            Endurance = 10,
             Accuracy = 5,
             Evasion = 5,
-            Speed = 10,
             Luck = 10
         };
 
@@ -84,45 +82,45 @@ public class StageManager : ExtendedMonoBehavior
         {
             case 1:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime A", stats, Team.Enemy, Qualities.Common));
 
                 break;
 
             case 2:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime A", stats, Team.Enemy, Qualities.Common));
 
                 break;
 
             case 3:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime A", stats, Team.Enemy, Qualities.Common));
 
                 break;
 
             case 4:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime A", stats, Team.Enemy, Qualities.Common));
 
                 //Dynamic enemies
-                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, Qualities.Common, spawnTurn: 1));
+                Add(new StageActor(Archetype.Slime, "Slime A", stats, Team.Enemy, Qualities.Common, spawnTurn: 1));
 
                 break;
 
             case 5:
 
                 //Players
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, Qualities.Rare));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, Qualities.Uncommon));
-                Add(new StageActor(Archetype.Cleric, "Cleric", attributes, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", stats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", stats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Cleric, "Cleric", stats, Team.Player, Qualities.Common));
 
                 //Enemies
                 Add(new StageActor(Archetype.Slime, "Slime A", RandomAttributes, Team.Enemy, Qualities.Common));
@@ -159,12 +157,12 @@ public class StageManager : ExtendedMonoBehavior
             case 6:
 
                 //players
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Cleric, "Cleric", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Ninja, "Ninja", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Sentinel, "Sentinel", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.PandaGirl, "Panda Girl", attributes, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Cleric, "Cleric", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Ninja, "Ninja", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Sentinel, "Sentinel", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.PandaGirl, "Panda Girl", stats, Team.Player, Qualities.Common));
 
                 //enemies
                 Add(new StageActor(Archetype.Slime, "Slime", RandomAttributes, Team.Enemy, Qualities.Common));
@@ -198,42 +196,42 @@ public class StageManager : ExtendedMonoBehavior
 
             case 7:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime A", stats, Team.Enemy, Qualities.Common));
 
                 break;
 
 
             case 8:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime A", stats, Team.Enemy, Qualities.Common));
 
                 break;
 
             case 9:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime A", stats, Team.Enemy, Qualities.Common));
 
                 break;
 
             case 10:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime A", stats, Team.Enemy, Qualities.Common));
 
                 break;
 
             default:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", attributes, Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", attributes, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", stats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime A", stats, Team.Enemy, Qualities.Common));
 
                 break;
         }
@@ -253,16 +251,8 @@ public class StageManager : ExtendedMonoBehavior
         actor.renderers.SetQualityColor(actor.IsPlayer ? Color.white : Color.red);
         actor.sortingOrder = SortingOrder.Min;
 
-        //Assign attributes
-        actor.level = stageActor.attributes.Level;
-        actor.maxHp = stageActor.attributes.MaxHP;
-        actor.hp = stageActor.attributes.HP;
-        actor.strength = stageActor.attributes.Attack;
-        actor.endurance = stageActor.attributes.Defense;
-        actor.accuracy = stageActor.attributes.Accuracy;
-        actor.agility = stageActor.attributes.Evasion;
-        actor.speed = stageActor.attributes.Speed;
-        actor.luck = stageActor.attributes.Luck;
+        //Assign stats
+        actor.stats = stageActor.attributes;
         actor.transform.localScale = tileScale;
 
         if (stageActor.IsSpawning)

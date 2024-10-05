@@ -44,20 +44,21 @@ namespace Game.Behaviors
            
             title.text = actor.name;
 
-            var hp = actor.hp;
-            var mhp = actor.maxHp;
-            var str = actor.strength;
-            var end = actor.endurance;
-            var acc = actor.accuracy;
-            var agi = actor.agility;
-            var spd = actor.speed;
-            var lck = actor.luck;
+            var hp = actor.HP;
+            var mhp = actor.MaxHP;
+            var str = actor.Strength;
+            var end = actor.Endurance;
+            var acc = actor.Accuracy;
+            var evd = actor.Evasion;
+            var lck = actor.Luck;
 
             var stats
                 = $" HP: {hp}/{mhp}    {Environment.NewLine}"
-                + $"STR: {str}    END: {end}{Environment.NewLine}"
-                + $"ACC: {acc}    AGI: {agi}{Environment.NewLine}"
-                + $"SPD: {spd}    LCK: {lck}{Environment.NewLine}"
+                + $"STR: {str}         {Environment.NewLine}"
+                + $"END: {end}         {Environment.NewLine}"
+                + $"ACC: {acc}         {Environment.NewLine}"
+                + $"EVD: {evd}         {Environment.NewLine}"
+                + $"LCK: {lck}         {Environment.NewLine}"
                 + $"{Environment.NewLine}"
                 + resourceManager.ActorDetails(actor.archetype.ToString());
             details.text = stats;
@@ -68,8 +69,8 @@ namespace Game.Behaviors
             elapsedTime += Time.deltaTime;
 
             //var hover = new Vector3(
-            //    initialPosition.x + horizontalCurve.Evaluate(elapsedTime / speed.x) * range.x * gameSpeed,
-            //    initialPosition.y + verticalCurve.Evaluate(elapsedTime / speed.y) * range.y * gameSpeed,
+            //    initialPosition.x + horizontalCurve.Evaluate(elapsedTime / Accuracy.x) * range.x * gameSpeed,
+            //    initialPosition.y + verticalCurve.Evaluate(elapsedTime / Accuracy.y) * range.y * gameSpeed,
             //    initialPosition.z);
 
             //var rot = Geometry.Rotation(new Vector3(0, 5 * verticalCurve.Evaluate(Time.time % verticalCurve.length), 0));

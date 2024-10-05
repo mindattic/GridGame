@@ -1,3 +1,4 @@
+using Assets.Scripts.Utilities;
 using System;
 using System.Collections;
 using System.Linq;
@@ -14,15 +15,19 @@ public class ActorBehavior : ExtendedMonoBehavior
     public Vector3 destination;
     public Team team = Team.Independant;
     public Quality quality = Qualities.Common;
-    public float level;
-    public float hp;
-    public float maxHp;
-    public float strength;
-    public float endurance;
-    public float accuracy;
-    public float agility;
-    public float speed;
-    public float luck;
+
+    public ActorStats stats;
+
+    //public float level;
+    //public float HP;
+    //public float MaxHP;
+    //public float Strength;
+    //public float Endurance;
+    //public float Accuracy;
+    //public float Evasion;
+    //public float Accuracy;
+    //public float Luck;
+
     public float ap = 0;
     public float maxAp = 100;
     public float sp = 0;
@@ -78,6 +83,50 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
+    #region Properties
+
+    public int Level { get => stats.Level; set => stats.Level = value; }
+    public int HP { get => stats.HP; set => stats.HP = value; }
+    public int MaxHP { get => stats.MaxHP; set => stats.MaxHP = value; }
+    public int Strength { get => stats.Strength; set => stats.Strength = value; }
+    public int Endurance { get => stats.Endurance; set => stats.Endurance = value; }
+    public int Accuracy { get => stats.Accuracy; set => stats.Accuracy = value; }
+    public int Evasion { get => stats.Evasion; set => stats.Evasion = value; }
+    public int Luck { get => stats.Luck; set => stats.Luck = value; }
+
+    //public float LevelModifier => stats.LevelModifier;
+    //public float StrengthModifier => stats.StrengthModifier;
+    //public float EnduranceModifier => stats.EnduranceModifier;
+    //public float AgilityModifier => stats.AgilityModifier;
+    //public float SpeedModifier => stats.SpeedModifier;
+    //public float LuckModifier => stats.LuckModifier;
+
+
+    public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
+    public bool IsPlayer => team.Equals(Team.Player);
+    public bool IsEnemy => team.Equals(Team.Enemy);
+    public bool IsFocusedPlayer => HasFocusedActor && Equals(focusedActor);
+    public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
+    public bool HasLocation => location != board.location.Nowhere;
+    public bool HasReachedDestination => position == destination;
+    public bool IsNorthEdge => location.y == 1;
+    public bool IsEastEdge => location.x == board.columnCount;
+    public bool IsSouthEdge => location.y == board.rowCount;
+    public bool IsWestEdge => location.x == 1;
+    public bool IsAlive => IsActive && stats.HP > 0;
+    public bool IsDying => IsActive && stats.HP < 1;
+    public bool IsDead => !IsActive && stats.HP < 1;
+
+    public bool IsActive => this != null && isActiveAndEnabled;
+    public bool IsInactive => this == null || !isActiveAndEnabled;
+    public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
+    public bool IsPlaying => IsActive && IsAlive;
+    public bool IsReady => ap == maxAp;
+
+
+    #endregion
+
+
     #region Components
 
     public string Name
@@ -124,9 +173,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => renderers.thumbnail.sprite = value;
     }
 
-
-
-
     public int sortingOrder
     {
         get
@@ -157,32 +203,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
     }
 
-    public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
-    public bool IsPlayer => team.Equals(Team.Player);
-    public bool IsEnemy => team.Equals(Team.Enemy);
-    public bool IsFocusedPlayer => HasFocusedActor && Equals(focusedActor);
-    public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
-    public bool HasLocation => location != board.location.Nowhere;
-    public bool HasReachedDestination => position == destination;
-    public bool IsNorthEdge => location.y == 1;
-    public bool IsEastEdge => location.x == board.columnCount;
-    public bool IsSouthEdge => location.y == board.rowCount;
-    public bool IsWestEdge => location.x == 1;
-    public bool IsAlive => IsActive && hp > 0;
-    public bool IsDying => IsActive && hp < 1;
-    public bool IsDead => !IsActive && hp < 1;
 
-    public bool IsActive => this != null && isActiveAndEnabled;
-    public bool IsInactive => this == null || !isActiveAndEnabled;
-    public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
-    public bool IsPlaying => IsActive && IsAlive;
-    public bool IsReady => ap == maxAp;
-    public float LevelModifier => 1.0f + Random.Float(0, level * 0.01f);
-    public float StrengthModifier => 1.0f + Random.Float(0, strength * 0.01f);
-    public float EnduranceModifier => 1.0f + Random.Float(0, endurance * 0.01f);
-    public float AccuracyModifier => 1.0f + Random.Float(0, accuracy * 0.01f);
-    public float AgilityModifier => 1.0f + Random.Float(0, agility * 0.01f);
-    public float LuckModifier => 1.0f + Random.Float(0, luck * 0.01f);
 
     #endregion
 
@@ -347,7 +368,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-    public IEnumerator Attack(ActorBehavior opponent, float damage, bool isCriticalHit = false)
+    public IEnumerator Attack(ActorBehavior opponent, int damage, bool isCriticalHit = false)
     {
         if (isCriticalHit)
         {
@@ -405,7 +426,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void SetAttackStrategy()
     {
-        //Randomly select an strength attackStrategy
+        //Randomly select an Strength attackStrategy
         int[] ratios = { 50, 20, 15, 10, 5 };
         var attackStrategy = Random.Strategy(ratios);
 
@@ -419,12 +440,12 @@ public class ActorBehavior : ExtendedMonoBehavior
                 break;
 
             case AttackStrategy.AttackWeakest:
-                targetPlayer = players.Where(x => x.IsPlaying).OrderBy(x => x.hp).FirstOrDefault();
+                targetPlayer = players.Where(x => x.IsPlaying).OrderBy(x => x.stats.HP).FirstOrDefault();
                 destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
                 break;
 
             case AttackStrategy.AttackStrongest:
-                targetPlayer = players.Where(x => x.IsPlaying).OrderBy(x => x.hp).FirstOrDefault();
+                targetPlayer = players.Where(x => x.IsPlaying).OrderByDescending(x => x.stats.HP).FirstOrDefault();
                 destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
                 break;
 
@@ -626,11 +647,11 @@ public class ActorBehavior : ExtendedMonoBehavior
         // Before:
         DodgeStage stage = DodgeStage.Start;
         var targetRotation = new Vector3(
-            Random.Float(10f, 15f), 
+            15f, 
             70f,
-            Random.Float(10f, 15f));
+            15f);
         var currentRotation = Vector3.zero;
-        var rotationSpeed = 500f;
+        var rotationSpeed = 12f;
         var minScale = 0.9f;
         float progress = 0f; 
         var randomDirection = new Vector3Int(
@@ -657,7 +678,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                 case DodgeStage.TwistForward:
                     {
                         // Update forward progress and sync rotation/scale
-                        progress += rotationSpeed * Time.deltaTime / targetRotation.y; // Normalize progress
+                        progress += rotationSpeed / targetRotation.y; // Normalize progress
                         progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
 
                         // Random twist direction on X, Y, and Z axes
@@ -684,7 +705,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                 case DodgeStage.TwistBackward:
                     {
                         // Update backward progress and sync rotation/scale
-                        progress += rotationSpeed * Time.deltaTime / targetRotation.y; // Normalize progress
+                        progress += rotationSpeed / targetRotation.y; // Normalize progress
                         progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
 
                         // Reverse random twist direction on X, Y, and Z axes
@@ -802,7 +823,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public IEnumerator TakeDamage(float damage, bool isCriticalHit = false)
+    public IEnumerator TakeDamage(int damage, bool isCriticalHit = false)
     {
         //Check abort state
         if (!IsPlaying)
@@ -812,8 +833,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         float ticks = 0f;
         float duration = Interval.TenTicks;
 
-        hp -= damage;
-        hp = Mathf.Clamp(hp, 0, maxHp);
+        stats.HP -= damage;
+        stats.HP = Mathf.Clamp(stats.HP, 0, stats.MaxHP);
         UpdateHealthBar();
 
         var text = Math.Abs(damage).ToString();
@@ -840,7 +861,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public void TakeDamageAsync(float damage, bool isCriticalHit = false)
+    public void TakeDamageAsync(int damage, bool isCriticalHit = false)
     {
         //Check abort state
         if (!IsPlaying)
@@ -925,14 +946,14 @@ public class ActorBehavior : ExtendedMonoBehavior
         //Before:
         //bool isDone = false;
         //var rotY = 0f;
-        //var speed = tileSize * 24f;
+        //var Accuracy = tileSize * 24f;
 
         //rotation = Geometry.Rotation(0, rotY, 0);
 
         ////During:
         //while (!isDone)
         //{
-        //    rotY += speed;
+        //    rotY += Accuracy;
         //    rotation = Geometry.Rotation(0, rotY, 0);
         //    isDone = rotY >= 360f;
         //    yield return Wait.OneTick();
@@ -946,9 +967,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void UpdateHealthBar()
     {
-        var x = Mathf.Clamp(initialHealthBarScale.x * (hp / maxHp), 0, initialHealthBarScale.x);
+        var x = Mathf.Clamp(initialHealthBarScale.x * (stats.HP / stats.MaxHP), 0, initialHealthBarScale.x);
         renderers.healthBar.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
-        renderers.healthText.text = $@"{hp}/{maxHp}";
+        renderers.healthText.text = $@"{stats.HP}/{stats.MaxHP}";
     }
 
     //public IEnumerator RadialBackFadeIn()
@@ -1085,8 +1106,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
         //TODO: Calculate based on stats....
-        float min = (Interval.OneSecond * 20) - speed * LuckModifier;
-        float max = (Interval.OneSecond * 40) - speed * LuckModifier;
+        float min = (Interval.OneSecond * 20) - stats.Accuracy * Formulas.CalculateLuckModifier(stats.Luck);
+        float max = (Interval.OneSecond * 40) - stats.Accuracy * Formulas.CalculateLuckModifier(stats.Luck);
 
         sp = 0;
         spMax = Random.Float(min, max);
