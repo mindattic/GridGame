@@ -12,6 +12,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     //Variables
     public Archetype archetype;
     public Vector2Int location;
+    public Vector2Int previousLocation;
+    public bool isMoving = false;
+
+
     public Vector3 destination;
     public Team team = Team.Independant;
     public Quality quality = Qualities.Common;
@@ -243,8 +247,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
     }
 
-    public void SetSortingOrder(int sortingOrder) => this.sortingOrder = sortingOrder;
-
 
     #endregion
 
@@ -298,18 +300,12 @@ public class ActorBehavior : ExtendedMonoBehavior
             StartCoroutine(FadeIn());
     }
 
-    void Update()
+
+
+
+
+    ActorBehavior FindOverlappingActor(TileBehavior closestTile)
     {
-        //Check abort status
-        if (!IsPlaying)
-            return;
-
-        var closestTile = Geometry.GetClosestTile(position);
-        if (location == closestTile.location)
-            return;
-
-        audioManager.Play($"Move{Random.Int(1, 6)}");
-
         //Determine if two actors are overlapping the same location
         var overlappingActor = actors.FirstOrDefault(x => x != null
                                             && !x.Equals(this)
@@ -318,13 +314,56 @@ public class ActorBehavior : ExtendedMonoBehavior
                                             && !x.Equals(selectedPlayer)
                                             && x.location.Equals(closestTile.location));
 
-        //Assign overlapping actors location to current actor's location
-        if (overlappingActor != null)
-            overlappingActor.SwapLocation(location);
-
-        //Assign current actor's location to closest tile location
-        location = closestTile.location;
+        return overlappingActor;
     }
+
+
+
+
+
+
+    void Update()
+    {
+        //Check abort status
+        if (!IsPlaying || isMoving)
+            return;
+
+        var closestTile = Geometry.GetClosestTile(position);
+        if (location != closestTile.location)
+        {
+            previousLocation = location;
+
+
+            audioManager.Play($"Move{Random.Int(1, 6)}");
+
+            var overlappingActor = FindOverlappingActor(closestTile);
+
+            //Assign overlapping actors location to current actor's location
+            if (overlappingActor != null)
+            {
+                overlappingActor.location = location;
+                overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.location);
+                overlappingActor.isMoving = true;
+                StartCoroutine(overlappingActor.MoveTowardDestination());
+            }
+
+            //Assign current actor's location to closest tile location
+            location = closestTile.location;
+            StartCoroutine(MoveTowardDestination());
+        }
+
+
+
+    }
+
+
+    //private void Swap(Vector2Int newLocation)
+    //{
+    //    location = newLocation;
+    //    destination = Geometry.GetPositionByLocation(location);
+    //    isMoving = true;
+    //    StartCoroutine(MoveTowardDestination());
+    //}
 
     void FixedUpdate()
     {
@@ -403,26 +442,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         renderers.SetAlpha(alpha);
     }
 
-    public void SwapLocation(Vector2Int other)
-    {
-        //Assign location based on relative direction
-        if (IsNorthOf(other) || IsNorthWestOf(other) || IsNorthEastOf(other))
-            SetLocation(Direction.South);
-        else if (IsEastOf(other))
-            SetLocation(Direction.West);
-        else if (IsSouthOf(other) || IsSouthWestOf(other) || IsSouthEastOf(other))
-            SetLocation(Direction.North);
-        else if (IsWestOf(other))
-            SetLocation(Direction.East);
-
-        //Assign destination based on new location
-        var closetTile = Geometry.GetClosestTile(location);
-        destination = closetTile.position;
-
-        //Move actor toward targetPosition
-        StartCoroutine(MoveTowardDestination());
-    }
-
 
     public void SetAttackStrategy()
     {
@@ -468,10 +487,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator MoveTowardCursor()
     {
         //Before:
+        sortingOrder = SortingOrder.Max;
 
         //During:
         while (IsFocusedPlayer || IsSelectedPlayer)
         {
+            sortingOrder = SortingOrder.Max;
+
             var cursorPosition = mousePosition3D + mouseOffset;
             cursorPosition.x = Mathf.Clamp(cursorPosition.x, board.bounds.Left, board.bounds.Right);
             cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bounds.Bottom, board.bounds.Top);
@@ -488,20 +510,25 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
 
         //After:
+        sortingOrder = SortingOrder.Default;
     }
 
 
     public IEnumerator MoveTowardDestination()
     {
         //Before:
+        isMoving = true;
         Vector3 initialPosition = position;
         Vector3 initialScale = tileScale;
         scale = tileScale;
         audioManager.Play($"Slide");
+        sortingOrder = SortingOrder.Moving;
 
         //During:
         while (!HasReachedDestination)
         {
+            sortingOrder = SortingOrder.Moving;
+
             var delta = destination - position;
             if (Mathf.Abs(delta.x) >= snapDistance)
             {
@@ -518,16 +545,15 @@ public class ActorBehavior : ExtendedMonoBehavior
             //Determine whether to snap to destination
             bool isSnapDistance = Vector2.Distance(position, destination) <= snapDistance;
             if (isSnapDistance)
-            {
                 position = destination;
-            }
 
             yield return Wait.OneTick();
         }
 
         //After:
+        isMoving = false;
         scale = tileScale;
-        position = destination;
+        sortingOrder = SortingOrder.Default;
     }
 
     public void CheckActionBar()
@@ -647,16 +673,16 @@ public class ActorBehavior : ExtendedMonoBehavior
         // Before:
         DodgeStage stage = DodgeStage.Start;
         var targetRotation = new Vector3(
-            15f, 
+            15f,
             70f,
             15f);
         var currentRotation = Vector3.zero;
         var rotationSpeed = 12f;
         var minScale = 0.9f;
-        float progress = 0f; 
+        float progress = 0f;
         var randomDirection = new Vector3Int(
-            Random.Boolean ? -1 : 1, 
-            Random.Boolean ? -1 : 1, 
+            Random.Boolean ? -1 : 1,
+            Random.Boolean ? -1 : 1,
             Random.Boolean ? -1 : 1);
 
         // During:
@@ -666,10 +692,10 @@ public class ActorBehavior : ExtendedMonoBehavior
             {
                 case DodgeStage.Start:
                     {
-                        currentRotation = Vector3.zero; 
+                        currentRotation = Vector3.zero;
                         progress = 0f;
                         scale = tileScale;
-                        rotation = Geometry.Rotation(currentRotation); 
+                        rotation = Geometry.Rotation(currentRotation);
 
                         stage = DodgeStage.TwistForward;
                     }
@@ -755,6 +781,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         BumpStage stage = BumpStage.Start;
         var targetPosition = position;
         var range = tileSize * percent33;
+        sortingOrder = SortingOrder.Default;
 
         //During:
         while (stage != BumpStage.End)

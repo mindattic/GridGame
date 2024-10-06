@@ -188,6 +188,7 @@ public static class SortingOrder
     public const int Defender = 120;
     public const int Supporter = 140;
     public const int Attacker = 150;
+    public const int Moving = 900;
     public const int Max = 999;
 }
 

@@ -64,7 +64,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!HasSelectedPlayer)
         {
             focusedActor.position = focusedActor.currentTile.position;
-            focusedActor.sortingOrder = SortingOrder.Min;
+            focusedActor.sortingOrder = SortingOrder.Default;
             //cardManager.DespawnAll();
         }
 
@@ -134,7 +134,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         closestTile.spriteRenderer.color = Colors.Translucent.White;
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = closestTile.position;
-        selectedPlayer.sortingOrder = SortingOrder.Min;
+        selectedPlayer.sortingOrder = SortingOrder.Default;
         selectedPlayer.SetStatus(Status.None);
         selectedPlayer = null;
 
