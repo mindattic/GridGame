@@ -96,11 +96,11 @@ public class GameManager : Singleton<GameManager>
 
         cardPortraitSize = Shared.ScreenInPixels.Width / 2;
 
-        cursorSpeed = tileSize / 2;
-        swapSpeed = tileSize / 6;
-        moveSpeed = tileSize / 8;
-        bumpSpeed = tileSize / 14;
-        snapDistance = tileSize / 8;
+        cursorSpeed = tileSize * 0.5f;
+        swapSpeed = tileSize * 0.1666f;
+        moveSpeed = tileSize * 0.125f;
+        bumpSpeed = tileSize * 0.08f;
+        snapDistance = tileSize * 0.125f;
         shakeIntensity = new ShakeIntensity(tileSize);
 
         board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>() ?? throw new UnityException("BoardBehavior is null");

@@ -324,36 +324,33 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void Update()
     {
-        //Check abort status
-        if (!IsPlaying || isMoving)
-            return;
+        ////Check abort status
+        //if (!IsPlaying || isMoving)
+        //    return;
 
-        var closestTile = Geometry.GetClosestTile(position);
-        if (location != closestTile.location)
-        {
-            previousLocation = location;
-
-
-            audioManager.Play($"Move{Random.Int(1, 6)}");
-
-            var overlappingActor = FindOverlappingActor(closestTile);
-
-            //Assign overlapping actors location to current actor's location
-            if (overlappingActor != null)
-            {
-                overlappingActor.location = location;
-                overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.location);
-                overlappingActor.isMoving = true;
-                StartCoroutine(overlappingActor.MoveTowardDestination());
-            }
-
-            //Assign current actor's location to closest tile location
-            location = closestTile.location;
-            StartCoroutine(MoveTowardDestination());
-        }
+        //var closestTile = Geometry.GetClosestTile(position);
+        //if (location != closestTile.location)
+        //{
+        //    previousLocation = location;
 
 
+        //    audioManager.Play($"Move{Random.Int(1, 6)}");
 
+        //    var overlappingActor = FindOverlappingActor(closestTile);
+
+        //    //Assign overlapping actors location to current actor's location
+        //    if (overlappingActor != null)
+        //    {
+        //        overlappingActor.location = location;
+        //        overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.location);
+        //        overlappingActor.isMoving = true;
+        //        StartCoroutine(overlappingActor.MoveTowardDestination());
+        //    }
+
+        //    //Assign current actor's location to closest tile location
+        //    location = closestTile.location;
+        //    StartCoroutine(MoveTowardDestination());
+        //}
     }
 
 
@@ -484,9 +481,35 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
+    public void CheckOverlap()
+    {
+        //Check if current actor is closer to another tile (i.e.: it has moved)
+        var closestTile = Geometry.GetClosestTile(position);
+        if (location == closestTile.location)
+            return;
+
+        previousLocation = location;
+
+        //audioManager.Play($"Move{Random.Int(1, 6)}");
+
+        var overlappingActor = FindOverlappingActor(closestTile);
+        if (overlappingActor != null)
+        {
+            overlappingActor.location = location;
+            overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.location);
+            overlappingActor.isMoving = true;
+            StartCoroutine(overlappingActor.MoveTowardDestination());
+        }
+
+        //Assign current actor's location to closest tile location
+        location = closestTile.location;
+
+    }
+
     public IEnumerator MoveTowardCursor()
     {
         //Before:
+        isMoving = true;
         sortingOrder = SortingOrder.Max;
 
         //During:
@@ -501,6 +524,9 @@ public class ActorBehavior : ExtendedMonoBehavior
             //Move selected player towards cursor
             position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
 
+            CheckOverlap();
+
+
             //Snap selected player to cursor
             //position = cursorPosition;
 
@@ -510,6 +536,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
 
         //After:
+        isMoving = false;
         sortingOrder = SortingOrder.Default;
     }
 
@@ -541,6 +568,20 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             float percentage = Geometry.GetPercentageBetween(initialPosition, destination, position);
             scale = initialScale * slideCurve.Evaluate(percentage);
+
+            CheckOverlap();
+
+
+
+
+
+
+
+
+
+
+
+
 
             //Determine whether to snap to destination
             bool isSnapDistance = Vector2.Distance(position, destination) <= snapDistance;
@@ -950,7 +991,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public IEnumerator MissAttack()
+    public IEnumerator AttackMiss()
     {
         //Before:
         //float ticks = 0;

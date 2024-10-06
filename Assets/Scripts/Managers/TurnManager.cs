@@ -245,6 +245,7 @@ public class TurnManager : ExtendedMonoBehavior
 
         foreach (var enemy in pair.alignment.enemies)
         {
+            //TODO: Combine actor1 + actor2 + support actors stats somehow...
             var isHit = Formulas.IsHit(pair.actor1.stats, enemy.stats);
             if (isHit)
             {
@@ -258,7 +259,7 @@ public class TurnManager : ExtendedMonoBehavior
             }
             else
             {
-                yield return enemy.MissAttack();
+                yield return enemy.AttackMiss();
             }
         }
 
@@ -324,11 +325,10 @@ public class TurnManager : ExtendedMonoBehavior
             {
                 //TODO: Calculate based on attacker stats
                 int amount = Convert.ToInt32(enemy.stats.Dexterity * 3 * (1 + enemy.stats.Luck * 0.01f));
-                //int damage = Random.Int(15, 33);
                 enemy.AddApAsync(amount);
             }
 
-            currentPhase = TurnPhase.Move;
+            currentPhase = Phase.Move;
             yield return Wait.For(Interval.OneSecond);
 
             var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
@@ -355,7 +355,7 @@ public class TurnManager : ExtendedMonoBehavior
 
         IEnumerator _()
         {
-            yield return Wait.For(Interval.OneSecond);
+            yield return Wait.For(Interval.HalfSecond);
 
             var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
             if (readyEnemies.Count > 0)
@@ -381,7 +381,7 @@ public class TurnManager : ExtendedMonoBehavior
                             }
                             else
                             {
-                                yield return enemy.MissAttack();
+                                yield return player.AttackMiss();
                             }
                         }
                     }
@@ -395,10 +395,6 @@ public class TurnManager : ExtendedMonoBehavior
                     enemy.UpdateActionBar();
                 }
             }
-
-
-
-
 
             var deadPlayers = actors.Where(x => x.IsDying).ToList();
             if (deadPlayers != null && deadPlayers.Count > 0)
@@ -415,10 +411,6 @@ public class TurnManager : ExtendedMonoBehavior
                 //    player.Destroy();
                 //}
             }
-
-
-
-
 
             NextTurn();
         }
