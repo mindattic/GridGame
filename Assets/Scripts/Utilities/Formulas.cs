@@ -8,8 +8,6 @@ namespace Assets.Scripts.Utilities
     {
         private static LogManager log => GameManager.instance.logManager;
 
-
-        // Method to calculate StatGrowth
         public static float StatGrowth(int level)
         {
             return Mathf.Round(100f * (level / 100.0f) * Random.Float(0.4f, 0.8f));
@@ -42,7 +40,7 @@ namespace Assets.Scripts.Utilities
         public static float Accuracy(ActorStats stats)
         {
             var baseAccuracy = 50f + ((stats.Level - 1) / 99.0f) * 50f;
-            var multiplier = 1.0f;
+            var multiplier = 2.0f;
             var dex = (stats.Dexterity * multiplier / 100f * 100f);
             var lck = LuckModifier(stats);
             return Mathf.Round(baseAccuracy + dex + lck);
@@ -59,50 +57,58 @@ namespace Assets.Scripts.Utilities
             return Mathf.Round(spd + lck - armorModifier);
         }
 
-        // Method to calculate Offense
-        public static float Offense(ActorStats stats)
-        {
-            var weapon = 10;
-            var atk = ((stats.Strength * (1f + weapon / 100f)) * 0.65f / 100f * 100f);
-            var lck = LuckModifier(stats);
-
-            return Mathf.Round(atk + lck);
-        }
-
-        // Method to calculate Defense
-        public static float Defense(ActorStats stats)
-        {
-            var armor = 10;
-            var def = ((stats.Endurance * (1f + armor / 100f)) * 0.25f / 100f * 100f);
-            var lck = LuckModifier(stats);
-
-            return Mathf.Round(def + lck);
-        }
-
-        
-
         public static bool IsHit(ActorStats attacker, ActorStats defender)
         {
             var accuracy = Accuracy(attacker);
-            var evasion = Evasion(defender);   
+            var evasion = Evasion(defender);
             var d100 = Random.Int(1, 100);
             var isHit = accuracy - evasion >= d100;
 
             var msg
-                = $@"Accuracy({accuracy}) - Evasion({evasion}) "
+                = $@"Accuracy(<color=""yellow"">{accuracy}</color>) - " 
+                + $@"Evasion(<color=""yellow"">{evasion}</color>) "
                 + $@"{(isHit ? ">" : "<")} "
-                + $@"1d100({d100}) => {(isHit ? "Hit" : "Miss")}";
+                + $@"1d100(<color=""yellow"">{d100}</color>) => " 
+                + $@"{(isHit ? "Hit" : "Miss")}";
             log.info(msg);
 
             return isHit;
+        }
+
+        public static float Offense(ActorStats stats)
+        {
+            var multiplier = 2.0f;
+            var atk = stats.Strength * multiplier / 100f * 100f;
+            var weapon = 10;
+            var weaponModifier = (weapon * multiplier / 100f * 100f);
+            var lck = LuckModifier(stats);
+
+            return Mathf.Round(atk + weaponModifier + lck);
+        }
+
+        public static float Defense(ActorStats stats)
+        {
+            var multiplier = 1.0f;
+            var def = stats.Endurance * multiplier / 100f * 100f;
+            var armor = 10;
+            var armorModifier = (armor * 1.0f / 100f * 100f);
+            var lck = LuckModifier(stats);
+
+            return Mathf.Round(def + armorModifier + lck);
         }
 
         public static int CalculateDamage(ActorStats attacker, ActorStats defender)
         {
             var offense = Offense(attacker);
             var defense = Defense(defender);
+            var damage = Math.Clamp((int)Math.Round(offense - defense), 1, 999);
+            var msg 
+                = $@"Offense(<color=""yellow"">{offense}</color>) " 
+                + $@"- Defense(<color=""yellow"">{defense}</color>) => " 
+                + $@"Damage(<color=""yellow"">{damage}</color>)";
+            log.info(msg);
 
-            return (int)Math.Round(offense - defense);
+            return damage;
         }
 
     }

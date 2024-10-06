@@ -61,6 +61,7 @@ public class DebugManager : ExtendedMonoBehavior
             case 37: VFXTest_Red_Sword(); break;
             case 38: DodgeTest(); break;
             case 39: SpinTest(); break;
+            case 40: AlignTest(); break;
 
         }
     }
@@ -374,5 +375,33 @@ public class DebugManager : ExtendedMonoBehavior
     public void SpinTest()
     {
         StartCoroutine(Paladin.Spin());
+    }
+
+    public void AlignTest()
+    {
+        var enemy1 = enemies.Skip(0).Take(1).FirstOrDefault();
+        var enemy2 = enemies.Skip(1).Take(1).FirstOrDefault();
+        var enemy3 = enemies.Skip(2).Take(1).FirstOrDefault();
+        var enemy4 = enemies.Skip(3).Take(1).FirstOrDefault();
+        var enemy5 = enemies.Skip(4).Take(1).FirstOrDefault();
+        var enemy6 = enemies.Skip(5).Take(1).FirstOrDefault();
+
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 1))?.Relocate(new Vector2Int(1, 1));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 2))?.Relocate(new Vector2Int(1, 2));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 3))?.Relocate(new Vector2Int(1, 3));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 4))?.Relocate(new Vector2Int(1, 4));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 5))?.Relocate(new Vector2Int(1, 5));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 6))?.Relocate(new Vector2Int(1, 6));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 7))?.Relocate(new Vector2Int(1, 7));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 8))?.Relocate(new Vector2Int(1, 8));
+
+        Paladin.Relocate(new Vector2Int(3, 1));
+        enemy1?.Relocate(new Vector2Int(3, 2));
+        enemy2?.Relocate(new Vector2Int(3, 3));
+        enemy3?.Relocate(new Vector2Int(3, 4));
+        enemy4?.Relocate(new Vector2Int(3, 5));
+        enemy5?.Relocate(new Vector2Int(3, 6));
+        enemy6?.Relocate(new Vector2Int(3, 7));
+        Barbarian.Relocate(new Vector2Int(3, 8));
     }
 }

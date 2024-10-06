@@ -1285,5 +1285,12 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
+    public void Relocate(Vector2Int location)
+    {
+        this.location = location;
+        this.position = Geometry.GetPositionByLocation(this.location);
+    }
+
+
 
 }
