@@ -323,7 +323,7 @@ public class TurnManager : ExtendedMonoBehavior
             foreach (var enemy in notReadyEnemies)
             {
                 //TODO: Calculate based on attacker stats
-                int amount = Convert.ToInt32(enemy.stats.Accuracy * 3 * (1 + enemy.stats.Luck * 0.01f));
+                int amount = Convert.ToInt32(enemy.stats.Dexterity * 3 * (1 + enemy.stats.Luck * 0.01f));
                 //int damage = Random.Int(15, 33);
                 enemy.AddApAsync(amount);
             }

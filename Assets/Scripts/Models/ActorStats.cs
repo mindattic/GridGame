@@ -1,13 +1,13 @@
 ﻿public class ActorStats
 {
-    public int Level;
-    public int HP;
-    public int MaxHP;
-    public int Strength;
-    public int Endurance;
-    public int Accuracy;
-    public int Evasion;
-    public int Luck;
+    public float Level;
+    public float HP;
+    public float MaxHP;
+    public float Strength;
+    public float Endurance;
+    public float Dexterity;
+    public float Speed;
+    public float Luck;
 
     //Resistances
     //public ActorResistence Resistence = new ActorResistence();

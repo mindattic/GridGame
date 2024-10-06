@@ -4,7 +4,7 @@ public class StageActor
 {
     public Archetype archetype;
     public string name;
-    public ActorStats attributes;
+    public ActorStats stats;
     public Sprite thumbnail;
     public Team team;
     public Quality quality;
@@ -23,7 +23,7 @@ public class StageActor
     {
         this.archetype = archetype;
         this.name = name;
-        this.attributes = stats;
+        this.stats = stats;
         this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
         this.team = team;
         this.quality = quality;

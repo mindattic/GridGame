@@ -23,9 +23,9 @@ public class ActorBehavior : ExtendedMonoBehavior
     //public float MaxHP;
     //public float Strength;
     //public float Endurance;
-    //public float Accuracy;
-    //public float Evasion;
-    //public float Accuracy;
+    //public float Dexterity;
+    //public float Speed;
+    //public float Dexterity;
     //public float Luck;
 
     public float ap = 0;
@@ -85,14 +85,14 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     #region Properties
 
-    public int Level { get => stats.Level; set => stats.Level = value; }
-    public int HP { get => stats.HP; set => stats.HP = value; }
-    public int MaxHP { get => stats.MaxHP; set => stats.MaxHP = value; }
-    public int Strength { get => stats.Strength; set => stats.Strength = value; }
-    public int Endurance { get => stats.Endurance; set => stats.Endurance = value; }
-    public int Accuracy { get => stats.Accuracy; set => stats.Accuracy = value; }
-    public int Evasion { get => stats.Evasion; set => stats.Evasion = value; }
-    public int Luck { get => stats.Luck; set => stats.Luck = value; }
+    public float Level { get => stats.Level; set => stats.Level = value; }
+    public float HP { get => stats.HP; set => stats.HP = value; }
+    public float MaxHP { get => stats.MaxHP; set => stats.MaxHP = value; }
+    public float Strength { get => stats.Strength; set => stats.Strength = value; }
+    public float Endurance { get => stats.Endurance; set => stats.Endurance = value; }
+    public float Dexterity { get => stats.Dexterity; set => stats.Dexterity = value; }
+    public float Speed { get => stats.Speed; set => stats.Speed = value; }
+    public float Luck { get => stats.Luck; set => stats.Luck = value; }
 
     //public float LevelModifier => stats.LevelModifier;
     //public float StrengthModifier => stats.StrengthModifier;
@@ -135,7 +135,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         set => Name = value;
     }
 
-    public Transform Parent
+    public Transform parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
@@ -946,14 +946,14 @@ public class ActorBehavior : ExtendedMonoBehavior
         //Before:
         //bool isDone = false;
         //var rotY = 0f;
-        //var Accuracy = tileSize * 24f;
+        //var Dexterity = tileSize * 24f;
 
         //rotation = Geometry.Rotation(0, rotY, 0);
 
         ////During:
         //while (!isDone)
         //{
-        //    rotY += Accuracy;
+        //    rotY += Dexterity;
         //    rotation = Geometry.Rotation(0, rotY, 0);
         //    isDone = rotY >= 360f;
         //    yield return Wait.OneTick();
@@ -1106,8 +1106,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
         //TODO: Calculate based on stats....
-        float min = (Interval.OneSecond * 20) - stats.Accuracy * Formulas.CalculateLuckModifier(stats.Luck);
-        float max = (Interval.OneSecond * 40) - stats.Accuracy * Formulas.CalculateLuckModifier(stats.Luck);
+        float min = (Interval.OneSecond * 20) - stats.Dexterity * Formulas.LuckModifier(stats);
+        float max = (Interval.OneSecond * 40) - stats.Dexterity * Formulas.LuckModifier(stats);
 
         sp = 0;
         spMax = Random.Float(min, max);
