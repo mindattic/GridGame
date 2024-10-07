@@ -4,8 +4,8 @@
     public float HP;
     public float MaxHP;
     public float Strength;
-    public float Endurance;
-    public float Dexterity;
+    public float Vitality;
+    public float Agility;
     public float Speed;
     public float Luck;
 

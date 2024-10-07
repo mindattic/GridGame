@@ -17,6 +17,7 @@ public class StageManager : ExtendedMonoBehavior
 
     }
 
+    private ActorStats RandomStats => Formulas.RandomStats(10);
 
     public void PreviousStage()
     {
@@ -56,156 +57,156 @@ public class StageManager : ExtendedMonoBehavior
 
 
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", RandomStats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", RandomStats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common));
 
                 break;
 
             case 2:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", RandomStats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", RandomStats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common));
 
                 break;
 
             case 3:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", RandomStats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", RandomStats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common));
 
                 break;
 
             case 4:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", RandomStats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", RandomStats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common));
 
                 //Dynamic enemies
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 1));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 1));
 
                 break;
 
             case 5:
 
                 //Players
-                Add(new StageActor(Archetype.Paladin, "Paladin", Formulas.RandomStats(10), Team.Player, Qualities.Rare));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", Formulas.RandomStats(10), Team.Player, Qualities.Uncommon));
-                Add(new StageActor(Archetype.Cleric, "Cleric", Formulas.RandomStats(10), Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", RandomStats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", RandomStats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Cleric, "Cleric", RandomStats, Team.Player, Qualities.Common));
 
                 //Enemies
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime B", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime C", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime D", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime E", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime F", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime G", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime B", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime C", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime D", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime E", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime F", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime G", RandomStats, Team.Enemy, Qualities.Common));
 
-                Add(new StageActor(Archetype.Scorpion, "Scorpion A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Scorpion, "Scorpion B", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Scorpion, "Scorpion C", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Scorpion, "Scorpion D", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion A", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion B", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion C", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion D", RandomStats, Team.Enemy, Qualities.Common));
 
-                Add(new StageActor(Archetype.Bat, "Bat A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Bat, "Bat B", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Bat, "Bat A", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Bat, "Bat B", RandomStats, Team.Enemy, Qualities.Common));
 
-                Add(new StageActor(Archetype.Yeti, "Yeti A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Yeti, "Yeti A", RandomStats, Team.Enemy, Qualities.Common));
 
                 //Dynamic enemies
-                Add(new StageActor(Archetype.Slime, "Slime H", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 3));
-                Add(new StageActor(Archetype.Slime, "Slime I", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 4));
-                Add(new StageActor(Archetype.Slime, "Slime J", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 5));
-                Add(new StageActor(Archetype.Scorpion, "Scorpion E", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 6));
-                Add(new StageActor(Archetype.Scorpion, "Scorpion F", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 6));
-                Add(new StageActor(Archetype.Bat, "Bat C", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 7));
-                Add(new StageActor(Archetype.Bat, "Bat D", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 8));
-                Add(new StageActor(Archetype.Bat, "Bat E", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 9));
-                Add(new StageActor(Archetype.Yeti, "Yeti B", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 10));
+                Add(new StageActor(Archetype.Slime, "Slime H", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 3));
+                Add(new StageActor(Archetype.Slime, "Slime I", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 4));
+                Add(new StageActor(Archetype.Slime, "Slime J", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 5));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion E", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 6));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion F", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 6));
+                Add(new StageActor(Archetype.Bat, "Bat C", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 7));
+                Add(new StageActor(Archetype.Bat, "Bat D", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 8));
+                Add(new StageActor(Archetype.Bat, "Bat E", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 9));
+                Add(new StageActor(Archetype.Yeti, "Yeti B", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 10));
 
                 break;
 
             case 6:
 
-                //players
-                Add(new StageActor(Archetype.Paladin, "Paladin", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Cleric, "Cleric", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Ninja, "Ninja", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Sentinel, "Sentinel", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.PandaGirl, "Panda Girl", Formulas.RandomStats(10), Team.Player, Qualities.Common));
+                //Players
+                Add(new StageActor(Archetype.Paladin, "Paladin", RandomStats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", RandomStats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Cleric, "Cleric", RandomStats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Ninja, "Ninja", RandomStats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.Sentinel, "Sentinel", RandomStats, Team.Player, Qualities.Common));
+                Add(new StageActor(Archetype.PandaGirl, "Panda Girl", RandomStats, Team.Player, Qualities.Common));
 
                 //enemies
-                Add(new StageActor(Archetype.Slime, "Slime", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Scorpion, "Scorpion", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Bat, "Bat", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
-                Add(new StageActor(Archetype.Yeti, "Yeti", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Slime, "Slime", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Bat, "Bat", RandomStats, Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Yeti, "Yeti", RandomStats, Team.Enemy, Qualities.Common));
 
                 //Dynamic enemies
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 1));
-                Add(new StageActor(Archetype.Slime, "Slime B", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 2));
-                Add(new StageActor(Archetype.Slime, "Slime C", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 3));
-                Add(new StageActor(Archetype.Slime, "Slime D", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 4));
-                Add(new StageActor(Archetype.Slime, "Slime E", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 5));
-                Add(new StageActor(Archetype.Scorpion, "Scorpion A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 1));
-                Add(new StageActor(Archetype.Scorpion, "Scorpion B", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 2));
-                Add(new StageActor(Archetype.Scorpion, "Scorpion C", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 3));
-                Add(new StageActor(Archetype.Scorpion, "Scorpion D", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 4));
-                Add(new StageActor(Archetype.Scorpion, "Scorpion E", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 5));
-                Add(new StageActor(Archetype.Bat, "Bat A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 1));
-                Add(new StageActor(Archetype.Bat, "Bat B", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 2));
-                Add(new StageActor(Archetype.Bat, "Bat C", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 3));
-                Add(new StageActor(Archetype.Bat, "Bat D", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 4));
-                Add(new StageActor(Archetype.Bat, "Bat E", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 5));
-                Add(new StageActor(Archetype.Yeti, "Yeti A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 1));
-                Add(new StageActor(Archetype.Yeti, "Yeti B", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 2));
-                Add(new StageActor(Archetype.Yeti, "Yeti C", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 3));
-                Add(new StageActor(Archetype.Yeti, "Yeti D", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 4));
-                Add(new StageActor(Archetype.Yeti, "Yeti E", Formulas.RandomStats(10), Team.Enemy, Qualities.Common, spawnTurn: 5));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 1));
+                Add(new StageActor(Archetype.Slime, "Slime B", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 2));
+                Add(new StageActor(Archetype.Slime, "Slime C", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 3));
+                Add(new StageActor(Archetype.Slime, "Slime D", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 4));
+                Add(new StageActor(Archetype.Slime, "Slime E", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 5));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion A", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 1));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion B", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 2));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion C", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 3));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion D", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 4));
+                Add(new StageActor(Archetype.Scorpion, "Scorpion E", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 5));
+                Add(new StageActor(Archetype.Bat, "Bat A", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 1));
+                Add(new StageActor(Archetype.Bat, "Bat B", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 2));
+                Add(new StageActor(Archetype.Bat, "Bat C", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 3));
+                Add(new StageActor(Archetype.Bat, "Bat D", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 4));
+                Add(new StageActor(Archetype.Bat, "Bat E", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 5));
+                Add(new StageActor(Archetype.Yeti, "Yeti A", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 1));
+                Add(new StageActor(Archetype.Yeti, "Yeti B", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 2));
+                Add(new StageActor(Archetype.Yeti, "Yeti C", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 3));
+                Add(new StageActor(Archetype.Yeti, "Yeti D", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 4));
+                Add(new StageActor(Archetype.Yeti, "Yeti E", RandomStats, Team.Enemy, Qualities.Common, spawnTurn: 5));
 
                 break;
 
             case 7:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", RandomStats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", RandomStats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common));
 
                 break;
 
 
             case 8:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", RandomStats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", RandomStats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common));
 
                 break;
 
             case 9:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", RandomStats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", RandomStats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common));
 
                 break;
 
             case 10:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", RandomStats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", RandomStats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common));
 
                 break;
 
             default:
 
-                Add(new StageActor(Archetype.Paladin, "Paladin", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Barbarian, "Barbarian", Formulas.RandomStats(10), Team.Player, Qualities.Common));
-                Add(new StageActor(Archetype.Slime, "Slime A", Formulas.RandomStats(10), Team.Enemy, Qualities.Common));
+                Add(new StageActor(Archetype.Paladin, "Paladin", RandomStats, Team.Player, Qualities.Rare));
+                Add(new StageActor(Archetype.Barbarian, "Barbarian", RandomStats, Team.Player, Qualities.Uncommon));
+                Add(new StageActor(Archetype.Slime, "Slime A", RandomStats, Team.Enemy, Qualities.Common));
 
                 break;
         }

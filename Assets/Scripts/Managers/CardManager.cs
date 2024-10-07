@@ -47,16 +47,16 @@ namespace Game.Behaviors
             var hp = actor.HP;
             var mhp = actor.MaxHP;
             var str = actor.Strength;
-            var end = actor.Endurance;
-            var dex = actor.Dexterity;
+            var vit = actor.Vitality;
+            var agi = actor.Agility;
             var spd = actor.Speed;
             var lck = actor.Luck;
 
             var stats
                 = $" HP: {hp}/{mhp}    {Environment.NewLine}"
                 + $"STR: {str}         {Environment.NewLine}"
-                + $"END: {end}         {Environment.NewLine}"
-                + $"DEX: {dex}         {Environment.NewLine}"
+                + $"VIT: {vit}         {Environment.NewLine}"
+                + $"AGI: {agi}         {Environment.NewLine}"
                 + $"SPD: {spd}         {Environment.NewLine}"
                 + $"LCK: {lck}         {Environment.NewLine}"
                 + $"{Environment.NewLine}"
@@ -69,8 +69,8 @@ namespace Game.Behaviors
             elapsedTime += Time.deltaTime;
 
             //var hover = new Vector3(
-            //    initialPosition.x + horizontalCurve.Evaluate(elapsedTime / Dexterity.x) * range.x * gameSpeed,
-            //    initialPosition.y + verticalCurve.Evaluate(elapsedTime / Dexterity.y) * range.y * gameSpeed,
+            //    initialPosition.x + horizontalCurve.Evaluate(elapsedTime / Agility.x) * range.x * gameSpeed,
+            //    initialPosition.y + verticalCurve.Evaluate(elapsedTime / Agility.y) * range.y * gameSpeed,
             //    initialPosition.z);
 
             //var rot = Geometry.Rotation(new Vector3(0, 5 * verticalCurve.Evaluate(Time.time % verticalCurve.length), 0));

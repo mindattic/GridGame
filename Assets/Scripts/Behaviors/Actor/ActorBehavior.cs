@@ -22,16 +22,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public ActorStats stats;
 
-    //public float level;
-    //public float HP;
-    //public float MaxHP;
-    //public float Strength;
-    //public float Endurance;
-    //public float Dexterity;
-    //public float Speed;
-    //public float Dexterity;
-    //public float Luck;
-
     public float ap = 0;
     public float maxAp = 100;
     public float sp = 0;
@@ -93,17 +83,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     public float HP { get => stats.HP; set => stats.HP = value; }
     public float MaxHP { get => stats.MaxHP; set => stats.MaxHP = value; }
     public float Strength { get => stats.Strength; set => stats.Strength = value; }
-    public float Endurance { get => stats.Endurance; set => stats.Endurance = value; }
-    public float Dexterity { get => stats.Dexterity; set => stats.Dexterity = value; }
+    public float Vitality { get => stats.Vitality; set => stats.Vitality = value; }
+    public float Agility { get => stats.Agility; set => stats.Agility = value; }
     public float Speed { get => stats.Speed; set => stats.Speed = value; }
     public float Luck { get => stats.Luck; set => stats.Luck = value; }
-
-    //public float LevelModifier => stats.LevelModifier;
-    //public float StrengthModifier => stats.StrengthModifier;
-    //public float EnduranceModifier => stats.EnduranceModifier;
-    //public float AgilityModifier => stats.AgilityModifier;
-    //public float SpeedModifier => stats.SpeedModifier;
-    //public float LuckModifier => stats.LuckModifier;
 
 
     public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
@@ -993,43 +976,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public IEnumerator AttackMiss()
     {
-        //Before:
-        //float ticks = 0;
-        //float duration = Interval.QuarterSecond;
         damageTextManager.Spawn("Miss", position);
-
-        //yield return Spin360Y();
-
-        //During:
-        //while (ticks < duration)
-        //{
-        //    ticks += Interval.OneTick;
-        //    Shake(shakeIntensity.Low);
-        //    yield return Wait.OneTick();
-        //}
-
-        //After:
-        //Shake(shakeIntensity.Stop);
-
-        //Before:
-        //bool isDone = false;
-        //var rotY = 0f;
-        //var Dexterity = tileSize * 24f;
-
-        //rotation = Geometry.Rotation(0, rotY, 0);
-
-        ////During:
-        //while (!isDone)
-        //{
-        //    rotY += Dexterity;
-        //    rotation = Geometry.Rotation(0, rotY, 0);
-        //    isDone = rotY >= 360f;
-        //    yield return Wait.OneTick();
-        //}
-
-        ////After:
-        //rotation = Geometry.Rotation(0, 0, 0);
-
         yield return Dodge();
     }
 
@@ -1174,8 +1121,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             return;
 
         //TODO: Calculate based on stats....
-        float min = (Interval.OneSecond * 20) - stats.Dexterity * Formulas.LuckModifier(stats);
-        float max = (Interval.OneSecond * 40) - stats.Dexterity * Formulas.LuckModifier(stats);
+        float min = (Interval.OneSecond * 20) - stats.Agility * Formulas.LuckModifier(stats);
+        float max = (Interval.OneSecond * 40) - stats.Agility * Formulas.LuckModifier(stats);
 
         sp = 0;
         spMax = Random.Float(min, max);
