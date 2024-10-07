@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\Behaviors\VFXBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\PointerManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\TileBehavior.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\Actor\ActorVFX.cs" />
     <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Shared.cs" />
     <Compile Include="Assets\Scripts\Behaviors\FootstepBehavior.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Assets\Scripts\Models\ActorStats.cs" />
     <Compile Include="Assets\Scripts\Models\DamageDetails.cs" />
     <Compile Include="Assets\Scripts\Managers\LogManager.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\Actor\ActorFlags.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorRenderers.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorBehavior.cs" />

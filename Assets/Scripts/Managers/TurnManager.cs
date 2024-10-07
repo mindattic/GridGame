@@ -122,8 +122,8 @@ public class TurnManager : ExtendedMonoBehavior
             {
                 pair.actor1.sortingOrder = SortingOrder.Attacker;
                 pair.actor2.sortingOrder = SortingOrder.Attacker;
-                tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.position);
-                tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.position);
+                //tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.position);
+                //tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.position);
                 pair.alignment.enemies.ForEach(x => x.sortingOrder = SortingOrder.Defender);
                 attackLineManager.Spawn(pair);
             }
@@ -243,16 +243,17 @@ public class TurnManager : ExtendedMonoBehavior
         #region Player attack
 
 
+        //Attack each enemy between aligned players
         foreach (var enemy in pair.alignment.enemies)
         {
-            //TODO: Combine actor1 + actor2 + support actors stats somehow...
             var isHit = Formulas.IsHit(pair.actor1.stats, enemy.stats);
             if (isHit)
             {
                 pair.actor1.AddSpAsync(10);
                 pair.actor2.AddSpAsync(10);
 
-                //TODO: Generate adhoc ActorStats where you take highest or median stats between both actors in ActorPair
+                //TODO: Combine actor1 + actor2 + support actors stats somehow...
+                //TODO: Generate adhoc ActorStats where you take highest or median stats between both actors in ActorPair???
                 var damage = Formulas.CalculateDamage(pair.actor1.stats, enemy.stats);
                 var isCriticalHit = false;
                 yield return pair.actor1.Attack(enemy, damage, isCriticalHit);
@@ -263,23 +264,23 @@ public class TurnManager : ExtendedMonoBehavior
             }
         }
 
-
+        //Despawn attack and support lines
         foreach (var enemy in pair.alignment.enemies)
         {
             attackLineManager.DespawnAsync(pair);
             supportLineManager.DespawnAsync(pair);
         }
 
-        var deadEnemies = pair.alignment.enemies.Where(x => x.IsDying).ToList();
 
-        //Die dead enemies (one at a time)
+        //Kill dead enemies (one at a time)
+        var deadEnemies = pair.alignment.enemies.Where(x => x.IsDying).ToList();
         foreach (var enemy in deadEnemies)
         {
             yield return enemy.Die();
         }
 
-        pair.actor1.ShrinkAsync();
-        pair.actor2.ShrinkAsync();
+        //pair.actor1.ShrinkAsync();
+        //pair.actor2.ShrinkAsync();
 
         #endregion
 

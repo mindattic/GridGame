@@ -34,9 +34,6 @@ public class Geometry
         return new Vector3(x, y, 0);
     }
 
-  
-
-
     public static Vector3 GetPositionByLocation(Vector2Int location)
     {
         return board.locationPosition[location];

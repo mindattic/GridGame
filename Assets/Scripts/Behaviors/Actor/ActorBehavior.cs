@@ -1,3 +1,4 @@
+using Assets.Scripts.Behaviors.Actor;
 using Assets.Scripts.Utilities;
 using System;
 using System.Collections;
@@ -13,14 +14,16 @@ public class ActorBehavior : ExtendedMonoBehavior
     public Archetype archetype;
     public Vector2Int location;
     public Vector2Int previousLocation;
-    public bool isMoving = false;
+    //public bool isMoving = false;
 
 
     public Vector3 destination;
     public Team team = Team.Independant;
     public Quality quality = Qualities.Common;
 
-    public ActorStats stats;
+    public ActorStats stats = new ActorStats();
+    public ActorFlags flags = new ActorFlags();
+    public ActorVFX vfx = new ActorVFX();
 
     public float ap = 0;
     public float maxAp = 100;
@@ -35,14 +38,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     [SerializeField] public AnimationCurve glowCurve;
     [SerializeField] public AnimationCurve slideCurve;
 
-    public ActorHealthBar HealthBar;
-    public ActorThumbnail Thumbnail;
+    //public ActorHealthBar HealthBar;
+    //public ActorThumbnail Thumbnail;
     public ActorRenderers renderers = new ActorRenderers();
 
-    public bool IsAttacking => combatParticipants.attackingPairs.Any(x => x.actor1 == this || x.actor2 == this);
 
 
-    public VisualEffect attack;
+    //public VisualEffect attack;
 
     private void Awake()
     {
@@ -66,8 +68,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         renderers.selection = gameObject.transform.GetChild(ActorLayer.Selection).GetComponent<SpriteRenderer>();
         renderers.mask = gameObject.transform.GetChild(ActorLayer.Mask).GetComponent<SpriteMask>();
 
-        HealthBar = new ActorHealthBar(GetGameObjectByLayer(ActorLayer.HealthBarBack), GetGameObjectByLayer(ActorLayer.HealthBar));
-        Thumbnail = new ActorThumbnail(GetGameObjectByLayer(ActorLayer.Thumbnail));
+        //HealthBar = new ActorHealthBar(GetGameObjectByLayer(ActorLayer.HealthBarBack), GetGameObjectByLayer(ActorLayer.HealthBar));
+        //Thumbnail = new ActorThumbnail(GetGameObjectByLayer(ActorLayer.Thumbnail));
 
         initialHealthBarScale = renderers.healthBar.transform.localScale;
     }
@@ -94,6 +96,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsEnemy => team.Equals(Team.Enemy);
     public bool IsFocusedPlayer => HasFocusedActor && Equals(focusedActor);
     public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
+    public bool IsAttacking => combatParticipants.attackingPairs.Any(x => x.actor1 == this || x.actor2 == this);
     public bool HasLocation => location != board.location.Nowhere;
     public bool HasReachedDestination => position == destination;
     public bool IsNorthEdge => location.y == 1;
@@ -252,7 +255,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: false);
             renderers.SetSelectionActive(false);
-            attack = resourceManager.VisualEffect("Blue_Slash_01");
+            vfx.Attack = resourceManager.VisualEffect("Blue_Slash_01");
 
         }
         else if (IsEnemy)
@@ -266,7 +269,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: true);
             renderers.SetSelectionActive(false);
-            attack = resourceManager.VisualEffect("Double_Claw");
+            vfx.Attack = resourceManager.VisualEffect("Double_Claw");
         }
 
 
@@ -395,10 +398,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             vfxManager.SpawnAsync(crit, opponent.position);
         }
 
-        return vfxManager.Spawn(attack, opponent.position, opponent.TakeDamage(damage, isCriticalHit));
+        return vfxManager.Spawn(vfx.Attack, opponent.position, opponent.TakeDamage(damage, isCriticalHit));
     }
-
-
 
     public IEnumerator FadeIn()
     {
@@ -459,12 +460,10 @@ public class ActorBehavior : ExtendedMonoBehavior
                 destination = Geometry.GetPositionByLocation(location);
                 break;
         }
-
-
     }
 
 
-    public void CheckOverlap()
+    public void CheckLocationChanged()
     {
         //Check if current actor is closer to another tile (i.e.: it has moved)
         var closestTile = Geometry.GetClosestTile(position);
@@ -475,24 +474,29 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //audioManager.Play($"Move{Random.Int(1, 6)}");
 
-        var overlappingActor = FindOverlappingActor(closestTile);
-        if (overlappingActor != null)
-        {
-            overlappingActor.location = location;
-            overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.location);
-            overlappingActor.isMoving = true;
-            StartCoroutine(overlappingActor.MoveTowardDestination());
-        }
+        CheckActorOverlapping(closestTile);
 
         //Assign current actor's location to closest tile location
         location = closestTile.location;
+    }
 
+    public void CheckActorOverlapping(TileBehavior closestTile)
+    {
+        var overlappingActor = FindOverlappingActor(closestTile);
+        if (overlappingActor == null)
+            return;
+
+        overlappingActor.location = location;
+        overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.location);
+        overlappingActor.flags.IsMoving = true;
+        overlappingActor.flags.IsSwapping = true;
+        StartCoroutine(overlappingActor.MoveTowardDestination());
     }
 
     public IEnumerator MoveTowardCursor()
     {
         //Before:
-        isMoving = true;
+        flags.IsMoving = true;
         sortingOrder = SortingOrder.Max;
 
         //During:
@@ -505,13 +509,13 @@ public class ActorBehavior : ExtendedMonoBehavior
             cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bounds.Bottom, board.bounds.Top);
 
             //Move selected player towards cursor
-            position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
-
-            CheckOverlap();
-
+            //position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
 
             //Snap selected player to cursor
-            //position = cursorPosition;
+            position = cursorPosition;
+
+
+            CheckLocationChanged();
 
             destination = position;
 
@@ -519,7 +523,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
 
         //After:
-        isMoving = false;
+        flags.IsMoving = false;
         sortingOrder = SortingOrder.Default;
     }
 
@@ -527,7 +531,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator MoveTowardDestination()
     {
         //Before:
-        isMoving = true;
+        flags.IsMoving = true;
         Vector3 initialPosition = position;
         Vector3 initialScale = tileScale;
         scale = tileScale;
@@ -540,31 +544,30 @@ public class ActorBehavior : ExtendedMonoBehavior
             sortingOrder = SortingOrder.Moving;
 
             var delta = destination - position;
-            if (Mathf.Abs(delta.x) >= snapDistance)
+            if (Mathf.Abs(delta.x) > snapDistance)
             {
                 position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), moveSpeed);
+
+                //Snap horizontal position (if applicable)
+                if (Mathf.Abs(delta.x) <= snapDistance)
+                    position = new Vector3(destination.x, position.y, position.z);
             }
-            else if (Mathf.Abs(delta.y) >= snapDistance)
+            else if (Mathf.Abs(delta.y) > snapDistance)
             {
                 position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), moveSpeed);
+
+                //Snap vertical position (if applicable)
+                if (Mathf.Abs(delta.y) <= snapDistance)
+                    position = new Vector3(position.x, destination.y, position.z);
             }
 
-            float percentage = Geometry.GetPercentageBetween(initialPosition, destination, position);
-            scale = initialScale * slideCurve.Evaluate(percentage);
+            if (flags.IsSwapping)
+            {
+                float percentage = Geometry.GetPercentageBetween(initialPosition, destination, position);
+                scale = initialScale * slideCurve.Evaluate(percentage);
+            }
 
-            CheckOverlap();
-
-
-
-
-
-
-
-
-
-
-
-
+            CheckLocationChanged();
 
             //Determine whether to snap to destination
             bool isSnapDistance = Vector2.Distance(position, destination) <= snapDistance;
@@ -575,7 +578,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
 
         //After:
-        isMoving = false;
+        flags.IsMoving = false;
+        flags.IsSwapping = false;
         scale = tileScale;
         sortingOrder = SortingOrder.Default;
     }
