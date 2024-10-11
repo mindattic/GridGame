@@ -21,6 +21,7 @@ TagManager:
   - Footstep
   - Tooltip
   - VFX
+  - Powerup
   layers:
   - Default
   - TransparentFX

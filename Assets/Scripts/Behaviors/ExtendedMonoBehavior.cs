@@ -39,6 +39,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected FootstepManager footstepManager => GameManager.instance.footstepManager;
     protected TooltipManager tooltipManager => GameManager.instance.tooltipManager;
     protected VFXManager vfxManager => GameManager.instance.vfxManager;
+    protected CoinManager coinManager => GameManager.instance.coinManager;
+
 
     protected AudioManager audioManager => GameManager.instance.audioManager;
  

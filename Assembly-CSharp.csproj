@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\Managers\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Managers\SupportLineManager.cs" />
     <Compile Include="Assets\Scripts\Models\Quality.cs" />
+    <Compile Include="Assets\CoinManager.cs" />
     <Compile Include="Assets\Scripts\Models\ShakeIntensity.cs" />
     <Compile Include="Assets\Scripts\Managers\SelectedPlayerManager.cs" />
     <Compile Include="Assets\Scripts\Models\ActorDetails.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Models\ActorStats.cs" />
+    <Compile Include="Assets\Scripts\Models\PrefabResource.cs" />
     <Compile Include="Assets\Scripts\Models\DamageDetails.cs" />
     <Compile Include="Assets\Scripts\Managers\LogManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorFlags.cs" />

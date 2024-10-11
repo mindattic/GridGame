@@ -1240,6 +1240,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //After:
         rotation = Geometry.Rotation(0, 0, 0);
+
+        var vfx = resourceManager.VisualEffect("Gold_Buff");
+        vfxManager.SpawnAsync(vfx, position, coinManager.SpawnAsync(position));
+
     }
 
     public static IEnumerator FadeIn(

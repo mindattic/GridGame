@@ -62,6 +62,7 @@ public class DebugManager : ExtendedMonoBehavior
             case 38: DodgeTest(); break;
             case 39: SpinTest(); break;
             case 40: AlignTest(); break;
+            case 41: CoinTest(); break;
 
         }
     }
@@ -403,5 +404,11 @@ public class DebugManager : ExtendedMonoBehavior
         enemy5?.Relocate(new Vector2Int(3, 6));
         enemy6?.Relocate(new Vector2Int(3, 7));
         Barbarian.Relocate(new Vector2Int(3, 8));
+    }
+
+
+    public void CoinTest()
+    {
+        coinManager.Spawn(Paladin.position);
     }
 }

@@ -18,6 +18,7 @@ public class ResourceManager : ExtendedMonoBehavior
     [SerializeField] public List<SoundEffect> soundEffects = new List<SoundEffect>();
     [SerializeField] public List<MusicTrack> musicTracks = new List<MusicTrack>();
     [SerializeField] public List<VisualEffect> visualEffects = new List<VisualEffect>();
+    //[SerializeField] public List<PrefabResource> prefabs = new List<PrefabResource>();
 
 
     public Sprite ActorThumbnail(string id)
@@ -167,5 +168,19 @@ public class ResourceManager : ExtendedMonoBehavior
 
         return null;
     }
+
+    //public PrefabResource Prefab(string id)
+    //{
+    //    try
+    //    {
+    //        return prefabs.First(x => x.id.Equals(id));
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        logManager.error($"Failed to retrieve prefab `{id}` from resource manager. | Error: {ex.Message}");
+    //    }
+
+    //    return null;
+    //}
 
 }
