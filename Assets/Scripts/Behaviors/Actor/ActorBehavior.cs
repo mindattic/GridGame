@@ -531,12 +531,19 @@ public class ActorBehavior : ExtendedMonoBehavior
     public IEnumerator MoveTowardDestination()
     {
         //Before:
-        flags.IsMoving = true;
         Vector3 initialPosition = position;
         Vector3 initialScale = tileScale;
         scale = tileScale;
         audioManager.Play($"Slide");
         sortingOrder = SortingOrder.Moving;
+
+
+        if (flags.IsSwapping)
+        {
+            //TODO: Maybe do it less often or under certain conditions?...
+            if (Random.Int(1, 6) == 1)
+                StartCoroutine(Spin());
+        }
 
         //During:
         while (!HasReachedDestination)

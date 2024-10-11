@@ -1105,23 +1105,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   archetype: 0
   location: {x: 0, y: 0}
+  previousLocation: {x: 0, y: 0}
   destination: {x: 0, y: 0, z: 0}
   team: 2
-  level: 0
-  hp: 0
-  maxHp: 0
-  strength: 0
-  endurance: 0
-  accuracy: 0
-  agility: 0
-  speed: 0
-  luck: 0
   ap: 0
   maxAp: 100
   sp: 0
   spMax: -1
   spawnTurn: -1
   initialHealthBarScale: {x: 0, y: 0, z: 0}
+  turnDelay: 0
   glowCurve:
     serializedVersion: 2
     m_Curve:
@@ -1152,15 +1145,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: -0.5
-      outSlope: -0.5
+      inSlope: -0.39999998
+      outSlope: -0.39999998
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.5
-      value: 0.75
+      value: 0.8
       inSlope: 0
       outSlope: 0
       tangentMode: 34
@@ -1170,8 +1163,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0.5
-      outSlope: 0.5
+      inSlope: 0.39999998
+      outSlope: 0.39999998
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -1179,7 +1172,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  attack: {fileID: 0}
 --- !u!1 &4211350667117699209
 GameObject:
   m_ObjectHideFlags: 0

@@ -39,7 +39,8 @@ namespace Assets.Scripts.Utilities
 
         public static float Accuracy(ActorStats stats)
         {
-            var baseAccuracy = 50f + ((stats.Level - 1) / 99.0f) * 50f;
+            var baseHitRate = 66.6666f;
+            var baseAccuracy = baseHitRate + ((stats.Level - 1) / 99.0f) * 50f;
             var multiplier = 2.0f;
             var agi = (stats.Agility * multiplier / 100f * 100f);
             var lck = LuckModifier(stats);
