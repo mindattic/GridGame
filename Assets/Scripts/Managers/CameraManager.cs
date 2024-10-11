@@ -4,16 +4,52 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 namespace Game.Behaviors
 {
+    public class CameraWorldSpace
+    {
+        public Vector3 TopLeft;
+        public Vector3 TopRight;
+        public Vector3 BottomRight;
+        public Vector3 BottomLeft;
+
+        public CameraWorldSpace()
+        {
+            TopRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        }
+    }
+
+
+    public class CameraLocalSpace
+    {
+        public Vector3 TopLeft;
+        public Vector3 TopRight;
+        public Vector3 BottomRight;
+        public Vector3 BottomLeft;
+
+        public CameraLocalSpace()
+        {
+            TopRight = new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane);
+        }
+    }
+
     public class CameraManager : ExtendedMonoBehavior
     {
         public RectFloat viewBounds;
         public Game.Models.RectInt screenBounds;
 
+        public CameraWorldSpace world;
+        public CameraLocalSpace local;
 
 
+
+        private void Awake()
+        {
+            world = new CameraWorldSpace();
+            local = new CameraLocalSpace();
+        }
 
 
         void Start()
@@ -39,7 +75,7 @@ namespace Game.Behaviors
 
         void Update()
         {
-           
+
         }
 
 

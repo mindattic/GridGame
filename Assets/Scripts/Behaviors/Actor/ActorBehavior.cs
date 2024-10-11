@@ -738,7 +738,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case DodgeStage.TwistForward:
                     {
-                        // Update forward progress and sync rotation/scale
+                        // Update forward progress and sync rotation/scaleMultiplier
                         progress += rotationSpeed / targetRotation.y; // Normalize progress
                         progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
 
@@ -747,7 +747,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                         currentRotation.y = Mathf.Lerp(0f, targetRotation.y, progress) * randomDirection.y;
                         currentRotation.z = Mathf.Lerp(0f, targetRotation.z, progress) * randomDirection.z;
 
-                        // Calculate scale based on forward progress
+                        // Calculate scaleMultiplier based on forward progress
                         float scaleFactor = Mathf.Lerp(1f, minScale, progress);
                         scale = tileScale * scaleFactor;
 
@@ -765,7 +765,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case DodgeStage.TwistBackward:
                     {
-                        // Update backward progress and sync rotation/scale
+                        // Update backward progress and sync rotation/scaleMultiplier
                         progress += rotationSpeed / targetRotation.y; // Normalize progress
                         progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
 
@@ -774,7 +774,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                         currentRotation.y = Mathf.Lerp(targetRotation.y, 0f, progress) * randomDirection.y;
                         currentRotation.z = Mathf.Lerp(targetRotation.z, 0f, progress) * randomDirection.z;
 
-                        // Calculate scale based on backward progress
+                        // Calculate scaleMultiplier based on backward progress
                         float scaleFactor = Mathf.Lerp(minScale, 1f, progress);
                         scale = tileScale * scaleFactor;
 

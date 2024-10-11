@@ -117,3 +117,10 @@ public enum AttackOutcome
     Hit = 2,
     CriticalHit = 3
 }
+
+public enum CoinState
+{
+    Move,
+    Stop,
+    Wait
+}

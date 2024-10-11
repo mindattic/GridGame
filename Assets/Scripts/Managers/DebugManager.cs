@@ -5,6 +5,8 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 using Phase = TurnPhase;
 
 public class DebugManager : ExtendedMonoBehavior
@@ -17,7 +19,7 @@ public class DebugManager : ExtendedMonoBehavior
     public void Run()
     {
         int index = Dropdown.value;
-        if (index < 1) 
+        if (index < 1)
             return;
 
         switch (index)
@@ -152,7 +154,7 @@ public class DebugManager : ExtendedMonoBehavior
 
     public void VFXTest_Blue_Slash_01()
     {
-      
+
         int damage = 3;
         var isCriticalHit = Random.Int(1, 10) == 10;
         if (isCriticalHit)
@@ -182,7 +184,7 @@ public class DebugManager : ExtendedMonoBehavior
 
     public void VFXTest_Blue_Sword()
     {
-        var vfx = resourceManager.VisualEffect("Blue_Sword");  
+        var vfx = resourceManager.VisualEffect("Blue_Sword");
         vfxManager.SpawnAsync(vfx, Paladin.position);
         vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
@@ -409,6 +411,8 @@ public class DebugManager : ExtendedMonoBehavior
 
     public void CoinTest()
     {
-        coinManager.Spawn(Paladin.position);
+        var vfx = resourceManager.VisualEffect("Yellow_Hit");
+        vfxManager.SpawnAsync(vfx, Paladin.position, coinManager.SpawnAsync(Paladin.position));
+
     }
 }

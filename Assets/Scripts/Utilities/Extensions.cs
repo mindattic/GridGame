@@ -79,6 +79,10 @@ public static class Vector3Extensions
         return v.x == float.NaN || v.y == float.NaN || v.z == float.NaN;
     }
 
+    public static Vector3 RandomizeOffset(this Vector3 v, float amount)
+    {
+        return new Vector3(v.x + Random.Float(-amount, amount), v.y + Random.Float(-amount, amount), v.z);
+    }
 }
 
 public static class ColorExtensions
