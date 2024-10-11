@@ -33,7 +33,7 @@ public class CoinBehavior : ExtendedMonoBehavior
         // Set the end position as the upper right of the screen
         // Assuming 2D orthographic camera
         Vector3 screenTopRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width * 0.9f, Screen.height, 0));
-        end = new Vector3(screenTopRight.x, screenTopRight.y, transform.position.z);
+        end = new Vector3(screenTopRight.x, screenTopRight.y + tileSize, transform.position.z);
 
         transform.position = start;
         //spriteRenderer.enabled = true;
@@ -63,13 +63,17 @@ public class CoinBehavior : ExtendedMonoBehavior
         // Optional: Reset or loop after reaching the end
         if (t >= 1.0f)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
             //elapsedTime = 0f;
             //xPos = start.x;
             //yPos = start.y;
 
         }
 
+        if(elapsedTime > duration * 4f)
+        {
+            Destroy(gameObject);
+        }
 
     }
 }
