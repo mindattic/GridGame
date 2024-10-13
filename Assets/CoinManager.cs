@@ -29,9 +29,4 @@ public class CoinManager : ExtendedMonoBehavior
         coinBehavior.Spawn(position);
     }
 
-    public IEnumerator SpawnAsync(Vector3 position)
-    {
-        Spawn(position);
-        yield return null;
-    }
 }

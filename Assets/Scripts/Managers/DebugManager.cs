@@ -412,7 +412,24 @@ public class DebugManager : ExtendedMonoBehavior
     public void CoinTest()
     {
         var vfx = resourceManager.VisualEffect("Yellow_Hit");
-        vfxManager.SpawnAsync(vfx, Paladin.position, coinManager.SpawnAsync(Paladin.position));
+
+
+        IEnumerator spawnMany()
+        {
+            coinManager.Spawn(Paladin.position);
+            coinManager.Spawn(Paladin.position);
+            coinManager.Spawn(Paladin.position);
+            coinManager.Spawn(Paladin.position);
+            coinManager.Spawn(Paladin.position);
+            coinManager.Spawn(Paladin.position);
+            coinManager.Spawn(Paladin.position);
+            coinManager.Spawn(Paladin.position);
+            coinManager.Spawn(Paladin.position);
+            yield return true;
+        }
+
+
+        vfxManager.SpawnAsync(vfx, Paladin.position, spawnMany());
 
     }
 }

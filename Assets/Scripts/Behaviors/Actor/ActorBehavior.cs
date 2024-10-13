@@ -1241,8 +1241,15 @@ public class ActorBehavior : ExtendedMonoBehavior
         //After:
         rotation = Geometry.Rotation(0, 0, 0);
 
+
+
+        IEnumerator _()
+        {
+            coinManager.Spawn(position);
+            yield return true;
+        }
         var vfx = resourceManager.VisualEffect("Yellow_Hit");
-        vfxManager.SpawnAsync(vfx, position, coinManager.SpawnAsync(position));
+        vfxManager.SpawnAsync(vfx, position, _());
 
     }
 
