@@ -4,6 +4,7 @@ using Game.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class ExtendedMonoBehavior : MonoBehaviour
@@ -155,16 +156,14 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.selectedPlayer = value; }
     }
 
-
-
-
     protected int coinCount
     {
         get { return GameManager.instance.coinCount; }
         set { GameManager.instance.coinCount = value; }
     }
 
-
+    protected GameObject coinBarIcon => GameManager.instance.coinBarIcon;
+    protected TextMeshPro coinBarText => GameManager.instance.coinBarText;
 
 
 }

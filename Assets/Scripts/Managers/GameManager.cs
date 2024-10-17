@@ -2,6 +2,7 @@ using Game.Behaviors;
 using Game.Manager;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -87,8 +88,9 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public IQueryable<ActorBehavior> players => actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
     [HideInInspector] public IQueryable<ActorBehavior> enemies => actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
 
-    [HideInInspector] public int coinCount = 0;
-
+    [HideInInspector] public int coinCount;
+    [HideInInspector] public GameObject coinBarIcon;
+    [HideInInspector] public TextMeshPro coinBarText;
 
     private void Awake()
     {
@@ -112,7 +114,7 @@ public class GameManager : Singleton<GameManager>
 
         resourceManager = GameObject.Find(Constants.Resources).GetComponent<ResourceManager>() ?? throw new UnityException("ResourceManager is null");
         cameraManager = GameObject.Find(Constants.Game).GetComponent<CameraManager>() ?? throw new UnityException("CameraManager is null");
-        
+
         stageManager = GameObject.Find(Constants.Game).GetComponent<StageManager>() ?? throw new UnityException("StageManager is null");
         boardManager = GameObject.Find(Constants.Game).GetComponent<BoardManager>() ?? throw new UnityException("BoardManager is null");
         turnManager = GameObject.Find(Constants.Game).GetComponent<TurnManager>() ?? throw new UnityException("TurnManager is null");
@@ -145,7 +147,11 @@ public class GameManager : Singleton<GameManager>
 
         combatParticipants = new CombatParticipants();
 
-
+        //TODO: Retrieve coin count from "save game json"
+        coinCount = 0;
+        coinBarIcon = GameObject.Find(Constants.CoinBar).transform.GetChild(0).gameObject;
+        coinBarText = GameObject.Find(Constants.CoinBar).transform.GetChild(1).GetComponent<TextMeshPro>();
+        coinBarText.text = coinCount.ToString("D5");
 
         #region Platform Dependent Compilation
 

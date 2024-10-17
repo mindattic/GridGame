@@ -11,9 +11,8 @@ public class CoinBehavior : ExtendedMonoBehavior
 
     public float scaleMultiplier = 0.05f;
 
-    private float duration1 = 0.25f;
+    private float duration1 = 0.2f;
     private float duration2 = 0.8f;
-    private float duration3 = 1.0f;
 
     private float elapsedTime = 0.0f;
     private Vector3 start;
@@ -22,9 +21,6 @@ public class CoinBehavior : ExtendedMonoBehavior
 
     private SpriteRenderer spriteRenderer;
     private ParticleSystem particles;
-
-    private Vector3 coinIcon;
-    private TextMeshPro coinText;
 
     #region Components
 
@@ -73,11 +69,8 @@ public class CoinBehavior : ExtendedMonoBehavior
         spriteRenderer = GetComponent<SpriteRenderer>();
         particles = GetComponent<ParticleSystem>();
 
-        duration1 += Random.Float(0, 0.2f);
+        duration1 += Random.Float(0, 0.5f);
         duration2 += Random.Float(0, 0.2f);
-
-        coinIcon = GameObject.Find(Constants.CoinBar).transform.GetChild(0).transform.position;
-        coinText = GameObject.Find(Constants.CoinBar).transform.GetChild(1).GetComponent<TextMeshPro>();
     }
 
     public void Spawn(Vector3 position)
@@ -108,9 +101,9 @@ public class CoinBehavior : ExtendedMonoBehavior
                 transform.position = new Vector3(x, y, z);
                 if (elapsedTime >= duration1)
                 {
-                    elapsedTime = 0;              
+                    elapsedTime = 0;
                     start = position;
-                    end = coinIcon;
+                    end = coinBarIcon.transform.position;
                     state = CoinState.Move;
                 }
                 break;
@@ -132,13 +125,12 @@ public class CoinBehavior : ExtendedMonoBehavior
                 spriteRenderer.enabled = false;
                 particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                 coinCount++;
-                coinText.text = coinCount.ToString("D5");
+                coinBarText.text = coinCount.ToString("D5");
                 state = CoinState.Wait;
                 break;
 
             case CoinState.Wait:
-                if (elapsedTime >= duration3)
-                    Destroy(gameObject);
+                Destroy(gameObject);
                 break;
         }
 
