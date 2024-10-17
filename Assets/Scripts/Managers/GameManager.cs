@@ -87,8 +87,9 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public IQueryable<ActorBehavior> players => actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
     [HideInInspector] public IQueryable<ActorBehavior> enemies => actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
 
+    [HideInInspector] public int coinCount = 0;
 
-  
+
     private void Awake()
     {
 

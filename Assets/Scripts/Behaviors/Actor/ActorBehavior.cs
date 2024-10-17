@@ -1243,13 +1243,13 @@ public class ActorBehavior : ExtendedMonoBehavior
 
 
 
-        IEnumerator _()
-        {
-            coinManager.Spawn(position);
-            yield return true;
-        }
-        var vfx = resourceManager.VisualEffect("Yellow_Hit");
-        vfxManager.SpawnAsync(vfx, position, _());
+        //IEnumerator _()
+        //{
+        //    coinManager.Spawn(position);
+        //    yield return true;
+        //}
+        //var vfx = resourceManager.VisualEffect("Yellow_Hit");
+        //vfxManager.SpawnAsync(vfx, position, _());
 
     }
 

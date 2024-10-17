@@ -48,6 +48,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
     protected LogManager logManager => GameManager.instance.logManager;
 
+  
     //Audio
     protected AudioSource soundSource => GameManager.instance.soundSource;
     protected AudioSource musicSource => GameManager.instance.musicSource;
@@ -154,10 +155,15 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.selectedPlayer = value; }
     }
 
-   
 
 
-  
+
+    protected int coinCount
+    {
+        get { return GameManager.instance.coinCount; }
+        set { GameManager.instance.coinCount = value; }
+    }
+
 
 
 
