@@ -5029,6 +5029,9 @@ MonoBehaviour:
   board: {fileID: 0}
   tiles: []
   lines: []
+  coinCount: 0
+  coinBarIcon: {fileID: 0}
+  coinBarText: {fileID: 0}
 --- !u!114 &1751276278
 MonoBehaviour:
   m_ObjectHideFlags: 0
