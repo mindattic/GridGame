@@ -74,7 +74,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public ActorBehavior selectedPlayer;
 
     //Behaviors
-    [HideInInspector] public TimerBehavior timer;
+    [HideInInspector] public TimerBarBehavior timerBar;
     [HideInInspector] public List<ActorBehavior> actors;
     [HideInInspector] public BoardBehavior board;
     [HideInInspector] public List<TileBehavior> tiles;
@@ -89,8 +89,8 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public IQueryable<ActorBehavior> enemies => actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
 
     [HideInInspector] public int coinCount;
-    [HideInInspector] public GameObject coinBarIcon;
-    [HideInInspector] public TextMeshPro coinBarText;
+
+    [HideInInspector] public CoinBarBehavior coinBar;
 
     private void Awake()
     {
@@ -140,7 +140,8 @@ public class GameManager : Singleton<GameManager>
         vfxManager = GameObject.Find(Constants.Game).GetComponent<VFXManager>() ?? throw new UnityException("VFXManager is null");
         coinManager = GameObject.Find(Constants.Game).GetComponent<CoinManager>() ?? throw new UnityException("CoinManager is null");
 
-        timer = GameObject.Find(Constants.Game).GetComponent<TimerBehavior>() ?? throw new UnityException("TimerBehavior is null");
+        timerBar = GameObject.Find(Constants.TimerBar).GetComponent<TimerBarBehavior>() ?? throw new UnityException("TimerBarBehavior is null");
+        coinBar = GameObject.Find(Constants.CoinBar).GetComponent<CoinBarBehavior>() ?? throw new UnityException("CoinBarBehavior is null");
 
         soundSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");
         musicSource = GameObject.Find(Constants.Game).GetComponents<AudioSource>()[Constants.MusicSourceIndex] ?? throw new UnityException("MusicSource is null");
@@ -149,10 +150,9 @@ public class GameManager : Singleton<GameManager>
 
         //TODO: Retrieve coin count from "save game json"
         coinCount = 0;
-        coinBarIcon = GameObject.Find(Constants.CoinBar).transform.GetChild(0).gameObject;
-        coinBarText = GameObject.Find(Constants.CoinBar).transform.GetChild(1).GetComponent<TextMeshPro>();
-        coinBarText.text = coinCount.ToString("D5");
 
+       
+     
         #region Platform Dependent Compilation
 
         //https://docs.unity3d.com/520/Documentation/Manual/PlatformDependentCompilation.html

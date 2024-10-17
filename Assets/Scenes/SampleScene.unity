@@ -583,6 +583,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 252075013}
+  - component: {fileID: 252075014}
   m_Layer: 12
   m_Name: CoinBar
   m_TagString: Untagged
@@ -607,6 +608,20 @@ Transform:
   - {fileID: 1612043258}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &252075014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252075012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0da3ebea27a51f24ca5c9975f653971b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  textMesh: {fileID: 0}
 --- !u!1 &292220408
 GameObject:
   m_ObjectHideFlags: 0
@@ -4796,6 +4811,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1700541649}
+  - component: {fileID: 1700541650}
   m_Layer: 12
   m_Name: TimerBar
   m_TagString: Untagged
@@ -4821,6 +4837,18 @@ Transform:
   - {fileID: 292220409}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1700541650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700541645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7efb5228df1f64641be79d42c1aa3280, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1723687471
 GameObject:
   m_ObjectHideFlags: 0
@@ -4936,7 +4964,6 @@ GameObject:
   - component: {fileID: 1751276293}
   - component: {fileID: 1751276292}
   - component: {fileID: 1751276298}
-  - component: {fileID: 1751276299}
   - component: {fileID: 1751276300}
   - component: {fileID: 1751276302}
   - component: {fileID: 1751276303}
@@ -5024,14 +5051,13 @@ MonoBehaviour:
   bumpSpeed: 0
   focusedPlayer: {fileID: 0}
   selectedPlayer: {fileID: 0}
-  timer: {fileID: 0}
+  timerBar: {fileID: 0}
   actors: []
   board: {fileID: 0}
   tiles: []
   lines: []
   coinCount: 0
-  coinBarIcon: {fileID: 0}
-  coinBarText: {fileID: 0}
+  coinBar: {fileID: 0}
 --- !u!114 &1751276278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5420,18 +5446,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FootstepPrefab: {fileID: 1584721558700783665, guid: 0dc55c1e3bb517c4da449a8973b4f7fb, type: 3}
---- !u!114 &1751276299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1751276275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7efb5228df1f64641be79d42c1aa3280, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1751276300
 MonoBehaviour:
   m_ObjectHideFlags: 0

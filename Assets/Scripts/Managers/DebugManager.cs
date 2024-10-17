@@ -416,15 +416,13 @@ public class DebugManager : ExtendedMonoBehavior
 
         IEnumerator spawnMany()
         {
-            coinManager.Spawn(Paladin.position);
-            coinManager.Spawn(Paladin.position);
-            coinManager.Spawn(Paladin.position);
-            coinManager.Spawn(Paladin.position);
-            coinManager.Spawn(Paladin.position);
-            coinManager.Spawn(Paladin.position);
-            coinManager.Spawn(Paladin.position);
-            coinManager.Spawn(Paladin.position);
-            coinManager.Spawn(Paladin.position);
+            var i = 0;
+            do
+            {
+                coinManager.Spawn(Paladin.position);
+                i++;
+            } while (i < 10);
+
             yield return true;
         }
 

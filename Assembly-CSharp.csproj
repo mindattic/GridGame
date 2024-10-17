@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Models\ActorDetails.cs" />
     <Compile Include="Assets\Scripts\Utilities\Formulas.cs" />
     <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\TimerBarBehavior.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
     <Compile Include="Assets\Scripts\Models\Destination.cs" />
     <Compile Include="Assets\Scripts\Models\RectInt.cs" />
@@ -135,13 +136,13 @@
     <Compile Include="Assets\Scripts\Managers\InputManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorThumbnail.cs" />
     <Compile Include="Assets\Scripts\Behaviors\PortraitBehavior.cs" />
-    <Compile Include="Assets\Scripts\Behaviors\TimerBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\TooltipManager.cs" />
     <Compile Include="Assets\Scripts\Managers\BoardManager.cs" />
     <Compile Include="Assets\Scripts\Models\StageActor.cs" />
     <Compile Include="Assets\Scripts\Utilities\Extensions.cs" />
     <Compile Include="Assets\Scripts\Models\RectFloat.cs" />
     <Compile Include="Assets\Scripts\Managers\ConsoleManager.cs" />
+    <Compile Include="Assets\CoinBarBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\StageManager.cs" />
     <Compile Include="Assets\Scripts\Managers\TileManager.cs" />
     <Compile Include="Assets\Scripts\Managers\WallManager.cs" />
