@@ -67,6 +67,10 @@ public class ActorBehavior : ExtendedMonoBehavior
         renderers.skillRadialText = gameObject.transform.GetChild(ActorLayer.RadialText).GetComponent<TextMeshPro>();
         renderers.selection = gameObject.transform.GetChild(ActorLayer.Selection).GetComponent<SpriteRenderer>();
         renderers.mask = gameObject.transform.GetChild(ActorLayer.Mask).GetComponent<SpriteMask>();
+        renderers.turnDelayText = gameObject.transform.GetChild(ActorLayer.TurnDelay).GetComponent<TextMeshPro>();
+
+
+
 
         //HealthBar = new ActorHealthBar(GetGameObjectByLayer(ActorLayer.HealthBarBack), GetGameObjectByLayer(ActorLayer.HealthBar));
         //Thumbnail = new ActorThumbnail(GetGameObjectByLayer(ActorLayer.Thumbnail));
@@ -111,7 +115,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsInactive => this == null || !isActiveAndEnabled;
     public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
     public bool IsPlaying => IsActive && IsAlive;
-    public bool IsReady => ap == maxAp;
+    public bool IsReady => turnDelay == 0;
 
 
     #endregion
@@ -254,26 +258,27 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetFrameColor(quality.Color);
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: false);
-            renderers.SetSelectionActive(false);
+            renderers.SetSelectionEnabled(isEnabled: false);
+            renderers.SetTurnDelayTextEnabled(isEnabled: false);
             vfx.Attack = resourceManager.VisualEffect("Blue_Slash_01");
+
 
         }
         else if (IsEnemy)
         {
             renderers.SetQualityColor(Colors.Solid.Black);
             renderers.SetGlowColor(Colors.Solid.Red);
-            renderers.SetParallaxSprite(resourceManager.Seamless("BlackFire"));
+            renderers.SetParallaxSprite(resourceManager.Seamless("RedFire"));
             renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
             renderers.SetParallaxAlpha(0);
             renderers.SetFrameColor(Colors.Solid.Red);
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: true);
-            renderers.SetSelectionActive(false);
+            renderers.SetSelectionEnabled(isEnabled: false);
+            renderers.SetTurnDelayTextEnabled(isEnabled: true);
             vfx.Attack = resourceManager.VisualEffect("Double_Claw");
+            CalculateTurnDelay();
         }
-
-
-
 
         AssignSkillWait();
         UpdateHealthBar();
@@ -288,7 +293,12 @@ public class ActorBehavior : ExtendedMonoBehavior
 
 
 
-
+    public void CalculateTurnDelay()
+    {
+        ParallaxFadeOutAsync();
+        turnDelay = Formulas.CalculateTurnDelay(stats);
+        UpdateTurnDelayText();
+    }
 
     ActorBehavior FindOverlappingActor(TileBehavior closestTile)
     {
@@ -424,7 +434,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public void SetAttackStrategy()
+    public void CalculateAttackStrategy()
     {
         //Randomly select an Strength attackStrategy
         int[] ratios = { 50, 20, 15, 10, 5 };
@@ -998,6 +1008,16 @@ public class ActorBehavior : ExtendedMonoBehavior
         renderers.healthText.text = $@"{stats.HP}/{stats.MaxHP}";
     }
 
+    private void UpdateTurnDelayText()
+    {
+        renderers.turnDelayText.text = $@"{turnDelay}";
+        renderers.SetTurnDelayTextEnabled(turnDelay > 0);
+
+        if (turnDelay == 0)
+            ParallaxFadeInAsync();
+    }
+
+
     //public IEnumerator RadialBackFadeIn()
     //{
     //    //Before:
@@ -1318,6 +1338,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void ParallaxFadeOutAsync()
     {
+        if (!IsPlaying)
+            return;
         FadeOutAsync(renderers.parallax, Increment.FivePercent, Interval.OneTick, startAlpha: 0.5f, endAlpha: 0f);
     }
 
@@ -1329,5 +1351,47 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
+    public void CheckReady()
+    {
+        if (turnDelay < 1)
+            return;
 
+        IEnumerator _()
+        {
+            //Before:
+            bool isDone = false;
+            bool is90Degrees = false;
+            var rotY = 0f;
+            var speed = tileSize * 24f;
+            renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
+
+            //During:
+            while (!isDone)
+            {
+                rotY += !is90Degrees ? speed : -speed;
+
+                if (!is90Degrees && rotY >= 90f)
+                {
+                    rotY = 90f;
+                    is90Degrees = true;
+                    turnDelay--;
+                    UpdateTurnDelayText();
+                }
+
+                isDone = is90Degrees && rotY <= 0f;
+                if (isDone)
+                {
+                    rotY = 0f;
+                }
+
+                renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
+                yield return Wait.OneTick();
+            }
+
+            //After:
+            renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, 0, 0);
+        }
+
+        StartCoroutine(_());
+    }
 }

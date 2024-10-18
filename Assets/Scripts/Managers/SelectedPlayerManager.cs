@@ -41,10 +41,10 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //TODO: Update Card display...
-        actors.ForEach(x => x.renderers.SetSelectionActive(false));
+        actors.ForEach(x => x.renderers.SetSelectionEnabled(false));
         focusedActor = actor;
         focusedActor.sortingOrder = SortingOrder.Max;
-        focusedActor.renderers.SetSelectionActive(true);
+        focusedActor.renderers.SetSelectionEnabled(true);
 
         //Assign mouse relativeOffset (how off center was selection)
         mouseOffset = focusedActor.position - mousePosition3D;

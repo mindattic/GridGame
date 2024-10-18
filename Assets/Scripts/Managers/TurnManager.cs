@@ -64,6 +64,8 @@ public class TurnManager : ExtendedMonoBehavior
         //Reset actors sorting
         actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
 
+
+
         if (IsPlayerTurn)
         {
             currentTurn++;
@@ -72,9 +74,11 @@ public class TurnManager : ExtendedMonoBehavior
         }
         else if (IsEnemyTurn)
         {
-
+            var notReadyEnemies = enemies.Where(x => x.IsPlaying && !x.IsReady).ToList();
+            notReadyEnemies.ForEach(x => x.CheckReady());
 
             CheckEnemySpawn();
+            CheckEnemyActionPoints();
             CheckEnemyMove();
         }
 
@@ -117,7 +121,7 @@ public class TurnManager : ExtendedMonoBehavior
                 supportLineManager.Spawn(pair);
             }
 
-            int i = 1;
+            //int i = 1;
             foreach (var pair in combatParticipants.attackingPairs)
             {
                 pair.actor1.sortingOrder = SortingOrder.Attacker;
@@ -313,6 +317,23 @@ public class TurnManager : ExtendedMonoBehavior
         }
     }
 
+
+    public void CheckEnemyActionPoints()
+    {
+        //Check abort state
+        if (!IsEnemyTurn || !IsStartPhase)
+            return;
+
+        var playingEnemies = enemies.Where(x => x.IsPlaying).ToList();
+        foreach (var enemy in playingEnemies)
+        {
+            //TODO: Calculate based on attacker stats
+            int amount = Convert.ToInt32(enemy.stats.Agility * 3 * (1 + enemy.stats.Luck * 0.01f));
+            enemy.AddApAsync(amount);
+        }
+    }
+
+
     public void CheckEnemyMove()
     {
         //Check abort state
@@ -321,28 +342,28 @@ public class TurnManager : ExtendedMonoBehavior
 
         IEnumerator _()
         {
-            var notReadyEnemies = enemies.Where(x => x.IsPlaying && !x.IsReady).ToList();
-            foreach (var enemy in notReadyEnemies)
-            {
-                //TODO: Calculate based on attacker stats
-                int amount = Convert.ToInt32(enemy.stats.Agility * 3 * (1 + enemy.stats.Luck * 0.01f));
-                enemy.AddApAsync(amount);
-            }
-
             currentPhase = Phase.Move;
-            yield return Wait.For(Interval.OneSecond);
 
             var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
-            foreach (var enemy in readyEnemies)
+            if (readyEnemies.Count > 0)
             {
-                //enemy.sortingOrder = SortingOrder.Max;
-                enemy.SetAttackStrategy();
+                yield return Wait.For(Interval.OneSecond);
 
-                yield return enemy.MoveTowardDestination();
+                foreach (var enemy in readyEnemies)
+                {
+                    enemy.CalculateAttackStrategy();
+                    yield return enemy.MoveTowardDestination();
+                }
+
+                currentPhase = Phase.Attack;
+                CheckEnemyAttack();
+            }
+            else
+            {
+                NextTurn();
             }
 
-            currentPhase = TurnPhase.Attack;
-            CheckEnemyAttack();
+
         }
 
         StartCoroutine(_());
@@ -356,11 +377,11 @@ public class TurnManager : ExtendedMonoBehavior
 
         IEnumerator _()
         {
-            yield return Wait.For(Interval.HalfSecond);
-
             var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
             if (readyEnemies.Count > 0)
             {
+                yield return Wait.For(Interval.HalfSecond);
+
                 foreach (var enemy in readyEnemies)
                 {
                     var defendingPlayers = players.Where(x => x.IsPlaying && x.IsAdjacentTo(enemy.location)).ToList();
@@ -388,30 +409,35 @@ public class TurnManager : ExtendedMonoBehavior
                     }
                 }
 
-
                 foreach (var enemy in readyEnemies)
                 {
                     //enemy.AssignActionWait();
-                    enemy.ap = 0;
-                    enemy.UpdateActionBar();
+                    //enemy.ap = 0;
+                    //enemy.UpdateActionBar();
+                    enemy.CalculateTurnDelay();
                 }
-            }
 
-            var deadPlayers = actors.Where(x => x.IsDying).ToList();
-            if (deadPlayers != null && deadPlayers.Count > 0)
-            {
-                //Die dead enemies (one at a time)
-                foreach (var player in deadPlayers)
+                var deadPlayers = actors.Where(x => x.IsDying).ToList();
+                if (deadPlayers != null && deadPlayers.Count > 0)
                 {
-                    yield return player.Die();
+                    //Die dead enemies (one at a time)
+                    foreach (var player in deadPlayers)
+                    {
+                        yield return player.Die();
+                    }
+
+                    //Fade out (all at once)
+                    //foreach (var player in deadPlayers)
+                    //{
+                    //    player.Destroy();
+                    //}
                 }
 
-                //Fade out (all at once)
-                //foreach (var player in deadPlayers)
-                //{
-                //    player.Destroy();
-                //}
+
+
             }
+
+            
 
             NextTurn();
         }

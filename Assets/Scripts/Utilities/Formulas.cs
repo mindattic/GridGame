@@ -6,6 +6,8 @@ namespace Assets.Scripts.Utilities
 {
     public static class Formulas
     {
+        const float baseHitRate = 66.6666f;
+
         private static LogManager log => GameManager.instance.logManager;
 
         public static float StatGrowth(int level)
@@ -39,10 +41,9 @@ namespace Assets.Scripts.Utilities
 
         public static float Accuracy(ActorStats stats)
         {
-            var baseHitRate = 66.6666f;
-            var baseAccuracy = baseHitRate + ((stats.Level - 1) / 99.0f) * 50f;
+            var baseAccuracy = baseHitRate + ((stats.Level - 1) / 99.0f) * baseHitRate;
             var multiplier = 2.0f;
-            var agi = (stats.Agility * multiplier / 100f * 100f);
+            var agi = stats.Agility * multiplier;
             var lck = LuckModifier(stats);
             return Mathf.Round(baseAccuracy + agi + lck);
         }
@@ -50,10 +51,10 @@ namespace Assets.Scripts.Utilities
         public static float Evasion(ActorStats stats)
         {
             var multiplier = 1.0f;
-            var spd = (stats.Speed * multiplier / 100f * 100f);
+            var spd = stats.Speed * multiplier;
             var lck = LuckModifier(stats);
             var armor = 10;
-            var armorModifier = (armor * 0.1666f / 100f * 100f);
+            var armorModifier = armor * 0.1666f;
 
             return Mathf.Round(spd + lck - armorModifier);
         }
@@ -66,10 +67,10 @@ namespace Assets.Scripts.Utilities
             var isHit = accuracy - evasion >= d100;
 
             var msg
-                = $@"Accuracy(<color=""yellow"">{accuracy}</color>) - " 
+                = $@"Accuracy(<color=""yellow"">{accuracy}</color>) - "
                 + $@"Evasion(<color=""yellow"">{evasion}</color>) "
                 + $@"{(isHit ? ">" : "<")} "
-                + $@"1d100(<color=""yellow"">{d100}</color>) => " 
+                + $@"1d100(<color=""yellow"">{d100}</color>) => "
                 + $@"{(isHit ? "Hit" : "Miss")}";
             log.info(msg);
 
@@ -79,9 +80,9 @@ namespace Assets.Scripts.Utilities
         public static float Offense(ActorStats stats)
         {
             var multiplier = 2.0f;
-            var atk = stats.Strength * multiplier / 100f * 100f;
+            var atk = stats.Strength * multiplier;
             var weapon = 10;
-            var weaponModifier = (weapon * multiplier / 100f * 100f);
+            var weaponModifier = weapon * multiplier;
             var lck = LuckModifier(stats);
 
             return Mathf.Round(atk + weaponModifier + lck);
@@ -90,9 +91,9 @@ namespace Assets.Scripts.Utilities
         public static float Defense(ActorStats stats)
         {
             var multiplier = 1.0f;
-            var def = stats.Vitality * multiplier / 100f * 100f;
+            var def = stats.Vitality * multiplier;
             var armor = 10;
-            var armorModifier = (armor * 1.0f / 100f * 100f);
+            var armorModifier = armor * 1.0f;
             var lck = LuckModifier(stats);
 
             return Mathf.Round(def + armorModifier + lck);
@@ -103,14 +104,23 @@ namespace Assets.Scripts.Utilities
             var offense = Offense(attacker);
             var defense = Defense(defender);
             var damage = Math.Clamp((int)Math.Round(offense - defense), 1, 999);
-            var msg 
-                = $@"Offense(<color=""yellow"">{offense}</color>) " 
-                + $@"- Defense(<color=""yellow"">{defense}</color>) => " 
+            var msg
+                = $@"Offense(<color=""yellow"">{offense}</color>) "
+                + $@"- Defense(<color=""yellow"">{defense}</color>) => "
                 + $@"Damage(<color=""yellow"">{damage}</color>)";
             log.info(msg);
 
             return damage;
         }
+
+
+        public static int CalculateTurnDelay(ActorStats stats)
+        {
+            const float baseDelay = 33.3333f;
+            var spd = (int)Math.Round(baseDelay / Mathf.Max(stats.Speed, 1));
+            return Random.Int(1, Math.Max(spd, 9));
+        }
+
 
     }
 }

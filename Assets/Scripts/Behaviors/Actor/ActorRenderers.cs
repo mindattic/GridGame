@@ -45,6 +45,7 @@ public class ActorRenderers
 
     public SpriteMask mask;
 
+    public TextMeshPro turnDelayText;
 
     public void SetAlpha(float alpha)
     {
@@ -58,6 +59,7 @@ public class ActorRenderers
         SetHealthBarAlpha(alpha);
         SetActionBarAlpha(alpha);
         SetSkillRadialAlpha(alpha);
+        SetTurnDelayTextAlpha(alpha);
 
         selection.color = new Color(1, 1, 1, alpha);
     }
@@ -158,8 +160,6 @@ public class ActorRenderers
     }
 
 
-  
-
 
     //public void SetBloomColor(Color color)
     //{
@@ -190,13 +190,21 @@ public class ActorRenderers
     }
 
 
-    public void SetSelectionActive(bool isActive = true)
+    public void SetSelectionEnabled(bool isEnabled = true)
     {
-        selection.gameObject.SetActive(isActive);
+        selection.enabled = isEnabled;
     }
 
 
+    public void SetTurnDelayTextEnabled(bool isEnabled = true)
+    {
+        turnDelayText.enabled = isEnabled;
+    }
 
+    public void SetTurnDelayTextAlpha(float alpha)
+    {
+        turnDelayText.color = new Color(1, 1, 1, alpha);
+    }
 
     public void SetHealthBarColor(Color color)
     {

@@ -90,6 +90,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
         public const int RadialText = 16;
         public const int Selection = 17;
         public const int Mask = 18;
+        public const int TurnDelay = 19;
+
     }
 
     //Actor

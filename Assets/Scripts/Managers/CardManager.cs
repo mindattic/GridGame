@@ -87,7 +87,7 @@ namespace Game.Behaviors
             details.text = "";
 
             //DespawnAll selection from Actor
-            actors.ForEach(x => x.renderers.SetSelectionActive(false));
+            actors.ForEach(x => x.renderers.SetSelectionEnabled(false));
         }
     }
 }

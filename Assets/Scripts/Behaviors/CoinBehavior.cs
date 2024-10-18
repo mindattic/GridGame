@@ -40,13 +40,6 @@ public class CoinBehavior : ExtendedMonoBehavior
         set => gameObject.transform.position = value;
     }
 
-
-    public Vector3 thumbnailPosition
-    {
-        get => gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position;
-        set => gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position = value;
-    }
-
     public Quaternion rotation
     {
         get => gameObject.transform.rotation;
