@@ -120,8 +120,8 @@ public enum AttackOutcome
 
 public enum CoinState
 {
-    Explode,
+    Start,
     Move,
     Stop,
-    Wait
+    Destroy
 }

@@ -78,7 +78,7 @@ public class OverlayManager : ExtendedMonoBehavior
 
 
     //    image.color = new Color(0, 0, 0, 1);
-    //    yield return Wait.Ticks(20);
+    //    yield return Destroy.Ticks(20);
     //}
 
     public void FadeOutAsync()
@@ -114,7 +114,7 @@ public class OverlayManager : ExtendedMonoBehavior
     //    StopCoroutine(FadeOutAsync());
 
     //    yield return FadeIn();
-    //    yield return Wait.For(Interval.OneSecond);
+    //    yield return Destroy.For(Interval.OneSecond);
     //    yield return FadeOutAsync();
     //}
 }

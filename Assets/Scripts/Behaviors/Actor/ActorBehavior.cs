@@ -356,7 +356,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //CheckMovement();
         //CheckBobbing();
-        CheckThrobbing();
+        UpdateGlow();
         //CheckFlicker();
 
         //CheckActionBar();
@@ -678,7 +678,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    private void CheckThrobbing()
+    private void UpdateGlow()
     {
         //Check abort state
         if (!IsPlaying || !turnManager.IsStartPhase || (turnManager.IsPlayerTurn && !IsPlayer) || (turnManager.IsEnemyTurn && !IsEnemy))
@@ -1011,7 +1011,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     //        alpha += Increment.OnePercent;
     //        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
     //        renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
-    //        yield return global::Wait.OneTick();
+    //        yield return global::Destroy.OneTick();
     //    }
 
     //    //After:
@@ -1031,7 +1031,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     //        alpha -= Increment.OnePercent;
     //        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
     //        renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
-    //        yield return Wait.OneTick();
+    //        yield return Destroy.OneTick();
     //    }
 
     //    //After:

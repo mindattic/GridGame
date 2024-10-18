@@ -5,30 +5,28 @@ using UnityEngine.UIElements;
 
 public class CoinBehavior : ExtendedMonoBehavior
 {
-    public AnimationCurve curve1;
-    public AnimationCurve curve2;
-    public AnimationCurve curve3;
+    public AnimationCurve linearCurve;
+    public AnimationCurve slopeCurve;
+    public AnimationCurve sineCurve;
 
-    public float scaleMultiplier = 0.05f;
-
-    private float duration1 = 0.2f;
-    private float duration2 = 0.6f;
-
+    private SpriteRenderer spriteRenderer;
+    private ParticleSystem particles;
+    private float scaleMultiplier = 0.05f;
+    private float startDuration = 0.2f;
+    private float moveDuration = 0.6f;
     private float elapsedTime = 0.0f;
     private Vector3 start;
     private Vector3 end;
     private CoinState state;
+    private float t;
+    private float x;
+    private float y;
+    private float z;
+    AnimationCurve cX;
+    AnimationCurve cY;
 
-    private SpriteRenderer spriteRenderer;
-    private ParticleSystem particles;
 
     #region Components
-
-    public string Name
-    {
-        get => name;
-        set => Name = value;
-    }
 
     public Transform parent
     {
@@ -65,59 +63,65 @@ public class CoinBehavior : ExtendedMonoBehavior
 
     private void Awake()
     {
-        transform.localScale = tileScale * scaleMultiplier;
         spriteRenderer = GetComponent<SpriteRenderer>();
-        particles = GetComponent<ParticleSystem>();
+        particles = GetComponent<ParticleSystem>();             
+    }
 
-        duration1 += Random.Float(0, 0.2f);
-        duration2 += Random.Float(0, 0.2f);
+    private void Start()
+    {
+        transform.localScale = tileScale * scaleMultiplier;
     }
 
     public void Spawn(Vector3 position)
     {
         start = position.RandomizeOffset(tileSize * 0.25f);
         end = position.RandomizeOffset(tileSize * 1.5f);
-
+        elapsedTime = 0;
+        startDuration += Random.Float(0, 0.2f);
+        moveDuration += Random.Float(0, 0.2f);
+        cX = RandomCurve();
+        cY = RandomCurve(); 
         transform.position = start;
-        state = CoinState.Explode;
+        state = CoinState.Start;
     }
 
-    float t;
-    float x;
-    float y;
-    float z;
+    private AnimationCurve RandomCurve()
+    {
+        var r = Random.Int(1, 3);
+        if (r == 1) return linearCurve;
+        if (r == 2) return slopeCurve;
+        return sineCurve;
+    }
+
+  
 
     void Update()
     {
-        elapsedTime += Time.deltaTime;
-
+        
         switch (state)
         {
-            case CoinState.Explode:
-
-                var c = Random.Int(1, 6) == 1 ? curve2: curve1;
-
-                t = Mathf.Clamp01(elapsedTime / duration1);
-                x = Mathf.Lerp(start.x, end.x, c.Evaluate(t));
-                y = Mathf.Lerp(start.y, end.y, c.Evaluate(t));
+            case CoinState.Start:
+                t = Mathf.Clamp01(elapsedTime / startDuration);
+                x = Mathf.Lerp(start.x, end.x, cX.Evaluate(t));
+                y = Mathf.Lerp(start.y, end.y, cY.Evaluate(t));
                 z = transform.position.z;
                 transform.position = new Vector3(x, y, z);
-                if (elapsedTime >= duration1)
+                if (elapsedTime >= startDuration)
                 {
                     elapsedTime = 0;
-                    start = position;
+                    start = transform.position;
                     end = coinBar.icon.transform.position;
                     state = CoinState.Move;
                 }
                 break;
 
             case CoinState.Move:
-                t = Mathf.Clamp01(elapsedTime / duration2);
-                x = Mathf.Lerp(start.x, end.x, curve3.Evaluate(t));
-                y = Mathf.Lerp(start.y, end.y, curve3.Evaluate(t));
+                t = Mathf.Clamp01(elapsedTime / moveDuration);
+                x = Mathf.Lerp(start.x, end.x, sineCurve.Evaluate(t));
+                y = Mathf.Lerp(start.y, end.y, sineCurve.Evaluate(t));
                 z = transform.position.z;
                 transform.position = new Vector3(x, y, z);
-                if (elapsedTime >= duration2)
+                if (elapsedTime >= moveDuration)
                 {
                     elapsedTime = 0;
                     state = CoinState.Stop;
@@ -129,13 +133,17 @@ public class CoinBehavior : ExtendedMonoBehavior
                 particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                 coinCount++;
                 coinBar.textMesh.text = coinCount.ToString("D5");
-                state = CoinState.Wait;
+                audioManager.Play($"Move{Random.Int(1, 6)}");
+                state = CoinState.Destroy;
                 break;
 
-            case CoinState.Wait:
+            case CoinState.Destroy:
                 Destroy(gameObject);
                 break;
         }
+
+
+        elapsedTime += Time.deltaTime;
 
     }
 }

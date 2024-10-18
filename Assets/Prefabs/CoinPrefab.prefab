@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7386c3759bd682c428a5f717f3091e6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curve1:
+  linearCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -149,7 +149,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  curve2:
+  slopeCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -173,7 +173,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  curve3:
+  sineCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3

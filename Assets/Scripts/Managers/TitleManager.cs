@@ -93,7 +93,7 @@ public class TitleManager : ExtendedMonoBehavior
     //        alpha += Increment.TenPercent;
     //        alpha = Mathf.Clamp(alpha, 0, 1);
     //        label.color = new Color(1, 1, 1f, alpha);
-    //        yield return Wait.OneTick();
+    //        yield return Destroy.OneTick();
     //    }
     //}
 
@@ -128,7 +128,7 @@ public class TitleManager : ExtendedMonoBehavior
     //    StopCoroutine(FadeOutAsync());
 
     //    yield return FadeIn();
-    //    yield return Wait.For(Interval.OneSecond);
+    //    yield return Destroy.For(Interval.OneSecond);
     //    yield return FadeOutAsync();
     //}
 

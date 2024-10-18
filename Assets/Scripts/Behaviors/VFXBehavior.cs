@@ -88,7 +88,7 @@ public class VFXBehavior : ExtendedMonoBehavior
         if (!hasTriggeredEvent)
             yield break;
 
-        //Wait until time to trigger event
+        //Destroy until time to trigger event
         while (elapsed < triggerEventAt)
         {
             elapsed += Time.deltaTime;
@@ -98,7 +98,7 @@ public class VFXBehavior : ExtendedMonoBehavior
         //Trigger event and wait for it to finish
         yield return triggeredEvent;
 
-        //Wait until duration
+        //Destroy until duration
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
