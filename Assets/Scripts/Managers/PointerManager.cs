@@ -77,6 +77,9 @@ public class PointerManager : MonoBehaviour, IPointerMoveHandler, IPointerDownHa
 
     public void Update()
     {
+        if (Input.mousePosition == null)
+            return;
+
         GameManager.instance.mousePosition2D = Input.mousePosition;
         if (IsMouseOnScreen)
             GameManager.instance.mousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);

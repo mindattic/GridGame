@@ -40,7 +40,7 @@ public class StageManager : ExtendedMonoBehavior
         supportLineManager.Clear();
         attackLineManager.Clear();
         turnManager.Reset();
-        timer.Reset();
+        timerBar.Reset();
         actorManager.Clear();
         //overlayManager.Show();
         overlayManager.Show();

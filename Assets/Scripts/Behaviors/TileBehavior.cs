@@ -78,11 +78,11 @@ public class TileBehavior : ExtendedMonoBehavior
 
         //if (focusedActor.location.Equals(this.location))
         //{
-        //    spriteRenderer.Color = Colors.Solid.Gold;
+        //    bar.Color = Colors.Solid.Gold;
         //}
         //else
         //{
-        //    spriteRenderer.Color = Colors.Translucent.White;
+        //    bar.Color = Colors.Translucent.White;
         //}
     }
 

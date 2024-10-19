@@ -70,20 +70,19 @@ public class TurnManager : ExtendedMonoBehavior
         {
             currentTurn++;
             //audioManager.Play("NextTurn");
-            timer.Reset();
+            timerBar.Reset();
         }
         else if (IsEnemyTurn)
         {
-            var notReadyEnemies = enemies.Where(x => x.IsPlaying && !x.IsReady).ToList();
-            notReadyEnemies.ForEach(x => x.CheckReady());
+            timerBar.Hide();
 
             CheckEnemySpawn();
+            CheckEnemyReadiness();
             CheckEnemyActionPoints();
             CheckEnemyMove();
         }
 
-
-        titleManager.Print($"{(IsPlayerTurn ? "Player" : "Enemy")} Turn", IsPlayerTurn ? Colors.Solid.White : Colors.Solid.Red);
+        //titleManager.Print($"{(IsPlayerTurn ? "Player" : "Enemy")} Turn", IsPlayerTurn ? Colors.Solid.White : Colors.Solid.Red);
     }
 
 
@@ -223,7 +222,7 @@ public class TurnManager : ExtendedMonoBehavior
 
         pair.actor1.ParallaxFadeInAsync();
         pair.actor2.ParallaxFadeInAsync();
-        pair.alignment.enemies.ForEach(x => x.ParallaxFadeInAsync());
+        //pair.alignment.enemies.ForEach(x => x.ParallaxFadeInAsync());
 
         #endregion
 
@@ -292,7 +291,7 @@ public class TurnManager : ExtendedMonoBehavior
 
         pair.actor1.ParallaxFadeOutAsync();
         pair.actor2.ParallaxFadeOutAsync();
-        pair.alignment.enemies.ForEach(x => x.ParallaxFadeOutAsync());
+        //pair.alignment.enemies.ForEach(x => x.ParallaxFadeOutAsync());
 
         #endregion
     }
@@ -300,8 +299,6 @@ public class TurnManager : ExtendedMonoBehavior
     #endregion
 
     #region Enemy Attack Methods
-
-
 
 
     public void CheckEnemySpawn()
@@ -317,6 +314,12 @@ public class TurnManager : ExtendedMonoBehavior
         }
     }
 
+
+    public void CheckEnemyReadiness()
+    {
+        var notReadyEnemies = enemies.Where(x => x.IsPlaying && !x.IsReady).ToList();
+        notReadyEnemies.ForEach(x => x.CheckReady());
+    }
 
     public void CheckEnemyActionPoints()
     {

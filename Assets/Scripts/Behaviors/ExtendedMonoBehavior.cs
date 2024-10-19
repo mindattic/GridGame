@@ -55,7 +55,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected AudioSource musicSource => GameManager.instance.musicSource;
 
     //Behaviors
-    protected TimerBarBehavior timer => GameManager.instance.timerBar;
+    protected TimerBarBehavior timerBar => GameManager.instance.timerBar;
     protected BoardBehavior board => GameManager.instance.board;
     protected List<TileBehavior> tiles => GameManager.instance.tiles;
     protected List<ActorBehavior> actors

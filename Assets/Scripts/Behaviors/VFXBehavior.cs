@@ -95,7 +95,7 @@ public class VFXBehavior : ExtendedMonoBehavior
             yield return null;
         }
 
-        //Trigger event and wait for it to finish
+        //Trigger event and wait for it to finish (if applicable)
         yield return triggeredEvent;
 
         //Destroy until duration

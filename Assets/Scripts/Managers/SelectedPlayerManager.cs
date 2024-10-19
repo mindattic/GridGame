@@ -109,7 +109,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         ghostManager.Play(selectedPlayer);
         footstepManager.Play(selectedPlayer);
 
-        timer.Restart();
+        timerBar.Play();
 
 
         StartCoroutine(selectedPlayer.MoveTowardCursor());
@@ -143,7 +143,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         tileManager.Reset();
         cardManager.Clear();
-        timer.Empty();
+        timerBar.Pause();
         turnManager.currentPhase = TurnPhase.Attack;
 
         turnManager.CheckPlayerAttack();

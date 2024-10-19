@@ -123,12 +123,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     #region Components
 
-    public string Name
-    {
-        get => name;
-        set => Name = value;
-    }
-
     public Transform parent
     {
         get => gameObject.transform.parent;
@@ -548,12 +542,12 @@ public class ActorBehavior : ExtendedMonoBehavior
         sortingOrder = SortingOrder.Moving;
 
 
-        if (flags.IsSwapping)
-        {
-            //TODO: Maybe do it less often or under certain conditions?...
-            if (Random.Int(1, 6) == 1)
-                StartCoroutine(Spin());
-        }
+        //if (flags.IsSwapping)
+        //{
+        //    //TODO: Maybe do it less often or under certain conditions?...
+        //    if (Random.Int(1, 6) == 1)
+        //        StartCoroutine(Spin());
+        //}
 
         //During:
         while (!HasReachedDestination)
@@ -1012,9 +1006,6 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         renderers.turnDelayText.text = $@"{turnDelay}";
         renderers.SetTurnDelayTextEnabled(turnDelay > 0);
-
-        if (turnDelay == 0)
-            ParallaxFadeInAsync();
     }
 
 
@@ -1166,15 +1157,9 @@ public class ActorBehavior : ExtendedMonoBehavior
         if (!IsPlaying || !IsEnemy)
             return;
 
-        ap = maxAp;
-        UpdateActionBar();
+        turnDelay = 0;
+        UpdateTurnDelayText();
     }
-
-    private GameObject GetGameObjectByLayer(int layer)
-    {
-        return gameObject.transform.GetChild(layer).gameObject;
-    }
-
 
     public IEnumerator Grow(float maxSize = 0f)
     {
@@ -1206,8 +1191,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         StartCoroutine(Grow(maxSize));
     }
-
-
 
     public IEnumerator Shrink(float minSize = 0f)
     {
@@ -1241,7 +1224,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         StartCoroutine(Shrink(minSize));
     }
 
-    public IEnumerator Spin()
+    public IEnumerator Spin(IEnumerator triggeredEvent = null)
     {
         //Before:
         bool isDone = false;
@@ -1261,7 +1244,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         //After:
         rotation = Geometry.Rotation(0, 0, 0);
 
-
+        //Trigger event and wait for it to finish (if applicable)
+        yield return triggeredEvent;
 
         //IEnumerator _()
         //{
@@ -1273,7 +1257,12 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-    public static IEnumerator FadeIn(
+    public void SpinAsync(IEnumerator triggeredEvent = null)
+    {
+        StartCoroutine(Spin(triggeredEvent));
+    }
+
+    public IEnumerator FadeIn(
          SpriteRenderer spriteRenderer,
          float increment,
          float interval,
@@ -1309,7 +1298,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void ParallaxFadeInAsync()
     {
-        FadeInAsync(renderers.parallax, Increment.FivePercent, Interval.OneTick, startAlpha: 0f, endAlpha: 0.5f);
+        FadeInAsync(renderers.parallax, Increment.TwoPercent, Interval.OneTick);
     }
 
     public static IEnumerator FadeOut(SpriteRenderer spriteRenderer, float increment, float interval, float startAlpha, float endAlpha)
@@ -1347,7 +1336,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public void Relocate(Vector2Int location)
     {
         this.location = location;
-        this.position = Geometry.GetPositionByLocation(this.location);
+        transform.position = Geometry.GetPositionByLocation(this.location);
     }
 
 
@@ -1390,6 +1379,15 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             //After:
             renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, 0, 0);
+            if (turnDelay == 0)
+            {
+                IEnumerator _()
+                {
+                    ParallaxFadeInAsync();
+                    yield return null;
+                }
+                SpinAsync(_());
+            }
         }
 
         StartCoroutine(_());
