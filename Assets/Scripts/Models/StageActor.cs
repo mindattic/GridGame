@@ -32,7 +32,7 @@ public class StageActor
     }
 
 
-    //public StageActor(Archetype archetype, string name, ActorStats stats, Team team, Quality quality, int spawnTurn)
+    //public StageActor(Archetype archetype, string name, ActorStats stats, Team team, Quality quality, int spawnDelay)
     //{
     //    this.archetype = archetype;
     //    this.name = name;
@@ -41,7 +41,7 @@ public class StageActor
     //    this.team = team;
     //    this.quality = quality;
     //    this.location = location.Nowhere;
-    //    this.spawnTurn = spawnTurn;
+    //    this.spawnDelay = spawnDelay;
     //}
 
 

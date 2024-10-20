@@ -129,6 +129,11 @@ public class ActorRenderers
         thumbnail.color = thumbnailColor;
     }
 
+    public void SetThumbnailMaterial(Material material)
+    {
+        thumbnail.material = material;
+    }
+
     public void SetFrameAlpha(float alpha)
     {
         frameColor.a = Mathf.Clamp(alpha, 0, 1);

@@ -29,11 +29,14 @@ public class ActorBehavior : ExtendedMonoBehavior
     public float maxAp = 100;
     public float sp = 0;
     public float spMax = -1;
-    public int spawnTurn = -1;
+
+    public int spawnDelay = -1;
+    public int turnDelay = 0;
+
     public Vector3 initialHealthBarScale;
 
 
-    public int turnDelay = 0;
+   
 
     [SerializeField] public AnimationCurve glowCurve;
     [SerializeField] public AnimationCurve slideCurve;
@@ -113,7 +116,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public bool IsActive => this != null && isActiveAndEnabled;
     public bool IsInactive => this == null || !isActiveAndEnabled;
-    public bool IsSpawnable => !IsActive && IsAlive && spawnTurn <= turnManager.currentTurn;
+    public bool IsSpawnable => !IsActive && IsAlive && spawnDelay <= turnManager.currentTurn;
     public bool IsPlaying => IsActive && IsAlive;
     public bool IsReady => turnDelay == 0;
 
@@ -247,8 +250,9 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetQualityColor(quality.Color);
             renderers.SetGlowColor(quality.Color);
             renderers.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
-            renderers.SetParallaxMaterial(resourceManager.ActorMaterial("PlayerParallax"));
+            renderers.SetParallaxMaterial(resourceManager.Material("PlayerParallax", thumbnail.texture));
             renderers.SetParallaxAlpha(0);
+            renderers.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
             renderers.SetFrameColor(quality.Color);
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: false);
@@ -263,8 +267,9 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetQualityColor(Colors.Solid.Black);
             renderers.SetGlowColor(Colors.Solid.Red);
             renderers.SetParallaxSprite(resourceManager.Seamless("RedFire"));
-            renderers.SetParallaxMaterial(resourceManager.ActorMaterial("EnemyParallax"));
+            renderers.SetParallaxMaterial(resourceManager.Material("EnemyParallax", thumbnail.texture));
             renderers.SetParallaxAlpha(0);
+            renderers.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
             renderers.SetFrameColor(Colors.Solid.Red);
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: true);
@@ -289,7 +294,13 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void CalculateTurnDelay()
     {
-        ParallaxFadeOutAsync();
+        IEnumerator _()
+        {
+            renderers.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
+            yield return null;
+        }
+        SpinAsync(_());
+
         turnDelay = Formulas.CalculateTurnDelay(stats);
         UpdateTurnDelayText();
     }
@@ -1342,7 +1353,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void CheckReady()
     {
-        if (turnDelay < 1)
+        if (turnDelay == 0)
             return;
 
         IEnumerator _()
@@ -1364,6 +1375,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                     rotY = 90f;
                     is90Degrees = true;
                     turnDelay--;
+                    turnDelay = Math.Clamp(turnDelay, 0, 9);
                     UpdateTurnDelayText();
                 }
 
@@ -1383,7 +1395,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             {
                 IEnumerator _()
                 {
-                    ParallaxFadeInAsync();
+                    renderers.SetThumbnailMaterial(resourceManager.Material("Invert-Color", thumbnail.texture));
+                    //ParallaxFadeInAsync();
                     yield return null;
                 }
                 SpinAsync(_());

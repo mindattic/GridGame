@@ -236,7 +236,7 @@ public class StageManager : ExtendedMonoBehavior
         }
         else
         {
-            actor.spawnTurn = stageActor.spawnTurn;
+            actor.spawnDelay = stageActor.spawnTurn;
             actor.gameObject.SetActive(false);
         }
 

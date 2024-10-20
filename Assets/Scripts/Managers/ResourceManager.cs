@@ -10,7 +10,7 @@ public class ResourceManager : ExtendedMonoBehavior
 
     //Variables
     [SerializeField] public List<ActorSprite> actorSprites = new List<ActorSprite>();
-    [SerializeField] public List<ActorMaterial> actorMaterials = new List<ActorMaterial>();
+    [SerializeField] public List<MaterialResource> materials = new List<MaterialResource>();
     [SerializeField] public List<ActorDetails> actorDetails = new List<ActorDetails>();
     [SerializeField] public List<StatusSprite> statusSprites = new List<StatusSprite>();
     [SerializeField] public List<PropSprite> propSprites = new List<PropSprite>();
@@ -19,7 +19,7 @@ public class ResourceManager : ExtendedMonoBehavior
     [SerializeField] public List<MusicTrack> musicTracks = new List<MusicTrack>();
     [SerializeField] public List<VisualEffect> visualEffects = new List<VisualEffect>();
     //[SerializeField] public List<PrefabResource> prefabs = new List<PrefabResource>();
-
+    //[SerializeField] public List<ShaderResource> shaders = new List<ShaderResource>();
 
     public Sprite ActorThumbnail(string id)
     {
@@ -36,11 +36,14 @@ public class ResourceManager : ExtendedMonoBehavior
     }
 
 
-    public Material ActorMaterial(string id)
+    public Material Material(string id, Texture2D texture = null)
     {
         try
         {
-            return actorMaterials.First(x => x.id.Equals(id)).material;
+            var material = materials.First(x => x.id.Equals(id)).material;
+            if (texture != null)
+                material.mainTexture = texture;
+            return material;
         }
         catch (Exception ex)
         {
@@ -178,6 +181,21 @@ public class ResourceManager : ExtendedMonoBehavior
     //    catch (Exception ex)
     //    {
     //        logManager.error($"Failed to retrieve prefab `{id}` from resource manager. | Error: {ex.Message}");
+    //    }
+
+    //    return null;
+    //}
+
+
+    //public ShaderResource Shader(string id)
+    //{
+    //    try
+    //    {
+    //        return shaders.First(x => x.id.Equals(id));
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        logManager.error($"Failed to retrieve shader `{id}` from resource manager. | Error: {ex.Message}");
     //    }
 
     //    return null;
