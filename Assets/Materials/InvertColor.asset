@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 667293e1693442d449f3f3bf070ba539, type: 3}
   m_Name: InvertColor
   m_EditorClassIdentifier: 
-  id: InvertColor
+  id: Invert-Color
   material: {fileID: 2100000, guid: 19f4426c57b2c584c9b5611a39dc286e, type: 2}

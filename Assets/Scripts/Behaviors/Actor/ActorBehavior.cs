@@ -36,7 +36,8 @@ public class ActorBehavior : ExtendedMonoBehavior
     public Vector3 initialHealthBarScale;
 
 
-   
+    Sprite idle;
+    Sprite attack;
 
     [SerializeField] public AnimationCurve glowCurve;
     [SerializeField] public AnimationCurve slideCurve;
@@ -245,6 +246,10 @@ public class ActorBehavior : ExtendedMonoBehavior
         position = Geometry.GetPositionByLocation(location);
         destination = position;
 
+        var img = this.archetype.ToString();
+        idle = resourceManager.ActorThumbnail(img);
+        attack = resourceManager.ActorThumbnail($"{img}_Attack");
+
         if (IsPlayer)
         {
             renderers.SetQualityColor(quality.Color);
@@ -296,7 +301,10 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         IEnumerator _()
         {
-            renderers.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
+            if (idle != null)
+                renderers.SetThumbnailSprite(idle);
+
+            //renderers.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
             yield return null;
         }
         SpinAsync(_());
@@ -1239,6 +1247,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         //Before:
         bool isDone = false;
+        bool hasTriggered = false;
         var rotY = 0f;
         var speed = tileSize * 24f;
         rotation = Geometry.Rotation(0, rotY, 0);
@@ -1248,6 +1257,13 @@ public class ActorBehavior : ExtendedMonoBehavior
         {
             rotY += speed;
             rotation = Geometry.Rotation(0, rotY, 0);
+
+            //Trigger event and wait for it to finish (if applicable)
+            if (!hasTriggered && rotY >= 240f)
+            {
+                hasTriggered = true;
+                yield return triggeredEvent;
+            }
             isDone = rotY >= 360f;
             yield return Wait.OneTick();
         }
@@ -1255,8 +1271,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //After:
         rotation = Geometry.Rotation(0, 0, 0);
 
-        //Trigger event and wait for it to finish (if applicable)
-        yield return triggeredEvent;
+       
 
         //IEnumerator _()
         //{
@@ -1395,7 +1410,10 @@ public class ActorBehavior : ExtendedMonoBehavior
             {
                 IEnumerator _()
                 {
-                    renderers.SetThumbnailMaterial(resourceManager.Material("Invert-Color", thumbnail.texture));
+                    if (attack != null)
+                        renderers.SetThumbnailSprite(attack);
+
+                    //renderers.SetThumbnailMaterial(resourceManager.Material("Invert-Color", thumbnail.texture));
                     //ParallaxFadeInAsync();
                     yield return null;
                 }
