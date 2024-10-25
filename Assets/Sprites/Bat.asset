@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Bat
   idle: {fileID: 21300000, guid: 10a93c8b5a32a2c4a8fab06eba7f9d55, type: 3}
-  attack: {fileID: 21300000, guid: 10a93c8b5a32a2c4a8fab06eba7f9d55, type: 3}
+  attack: {fileID: 21300000, guid: 41ec0ece32cb7a941ba03346baae2682, type: 3}
   portrait: {fileID: 21300000, guid: 4dfa6d2b70446fc4cb7dadfbfd2df3f9, type: 3}

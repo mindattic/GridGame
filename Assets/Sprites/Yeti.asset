@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Yeti
   idle: {fileID: 21300000, guid: 1a8d20703eb5c6b448497eb5c15328c8, type: 3}
-  attack: {fileID: 21300000, guid: 1a8d20703eb5c6b448497eb5c15328c8, type: 3}
+  attack: {fileID: 21300000, guid: de91963b6f9afc04fa661c8f3087f616, type: 3}
   portrait: {fileID: 21300000, guid: 4527725eb3cbf3e4f9fa91f94f319055, type: 3}
