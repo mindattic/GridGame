@@ -21,11 +21,26 @@ public class ResourceManager : ExtendedMonoBehavior
     //[SerializeField] public List<PrefabResource> prefabs = new List<PrefabResource>();
     //[SerializeField] public List<ShaderResource> shaders = new List<ShaderResource>();
 
+
+    public ActorSprite ActorSprite(string id)
+    {
+        try
+        {
+            return actorSprites.First(x => x.id.Equals(id));
+        }
+        catch (Exception ex)
+        {
+            logManager.error($"Failed to retrieve actor sprite `{id}` from resource manager. | Error: {ex.Message}");
+        }
+
+        return null;
+    }
+
     public Sprite ActorThumbnail(string id)
     {
         try
         {
-            return actorSprites.First(x => x.id.Equals(id)).thumbnail;
+            return actorSprites.First(x => x.id.Equals(id)).idle;
         }
         catch (Exception ex)
         {
@@ -61,7 +76,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error($"Failed to retrieve actor sprite `{id}` from resource manager. | Error: {ex.Message}");
+            logManager.error($"Failed to retrieve actor portrait `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
@@ -121,7 +136,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error($"Failed to retrieve status thumbnail `{id}` from resource manager. | Error: {ex.Message}");
+            logManager.error($"Failed to retrieve status idle `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;

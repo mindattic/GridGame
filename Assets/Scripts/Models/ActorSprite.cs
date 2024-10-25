@@ -4,6 +4,7 @@
 public class ActorSprite : ScriptableObject
 {
     public string id;
-    public Sprite thumbnail;
+    public Sprite idle;
+    public Sprite attack;
     public Sprite portrait;
 }

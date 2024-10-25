@@ -35,9 +35,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public Vector3 initialHealthBarScale;
 
+    ActorSprite sprites;
 
-    Sprite idle;
-    Sprite attack;
+
+    //Sprite idle;
+    //Sprite attack;
 
     [SerializeField] public AnimationCurve glowCurve;
     [SerializeField] public AnimationCurve slideCurve;
@@ -246,9 +248,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         position = Geometry.GetPositionByLocation(location);
         destination = position;
 
-        var img = this.archetype.ToString();
-        idle = resourceManager.ActorThumbnail(img);
-        attack = resourceManager.ActorThumbnail($"{img}_Attack");
+
+        sprites = resourceManager.ActorSprite(this.archetype.ToString());
 
         if (IsPlayer)
         {
@@ -301,10 +302,9 @@ public class ActorBehavior : ExtendedMonoBehavior
     {
         IEnumerator _()
         {
-            if (idle != null)
-                renderers.SetThumbnailSprite(idle);
+            renderers.SetThumbnailSprite(sprites.idle);
 
-            //renderers.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
+            //renderers.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", idle.texture));
             yield return null;
         }
         SpinAsync(_());
@@ -387,9 +387,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
 
 
-        //if (isRising && renderers.thumbnail.transform.angularRotation.z < maxRot)
+        //if (isRising && renderers.idle.transform.angularRotation.z < maxRot)
         //{
-        //    renderers.thumbnail.transform.Rotate(new Vector3(0, 0, rotSpeed));
+        //    renderers.idle.transform.Rotate(new Vector3(0, 0, rotSpeed));
         //}
         //else
         //{
@@ -398,9 +398,9 @@ public class ActorBehavior : ExtendedMonoBehavior
         //    isRising = false;
         //}
 
-        //if (!isRising && renderers.thumbnail.transform.angularRotation.z > minRot)
+        //if (!isRising && renderers.idle.transform.angularRotation.z > minRot)
         //{
-        //    renderers.thumbnail.transform.Rotate(new Vector3(0, 0, -rotSpeed));
+        //    renderers.idle.transform.Rotate(new Vector3(0, 0, -rotSpeed));
 
         //}
         //else
@@ -691,13 +691,13 @@ public class ActorBehavior : ExtendedMonoBehavior
         //   transform.angularRotation.y ,
         //   transform.angularRotation.z + (glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 128)));
 
-        //renderers.thumbnail.transform.Rotate(Vector3.up * glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 3));
+        //renderers.idle.transform.Rotate(Vector3.up * glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 3));
 
         //renderers.glow.transform.position = pos;
-        //renderers.thumbnail.transform.position = pos;
+        //renderers.idle.transform.position = pos;
         //renderers.frame.transform.position = pos;
-        //renderers.thumbnail.transform.position = pos;
-        //renderers.thumbnail.transform.angularRotation = rot;
+        //renderers.idle.transform.position = pos;
+        //renderers.idle.transform.angularRotation = rot;
     }
 
 
@@ -1271,7 +1271,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //After:
         rotation = Geometry.Rotation(0, 0, 0);
 
-       
+
 
         //IEnumerator _()
         //{
@@ -1410,10 +1410,9 @@ public class ActorBehavior : ExtendedMonoBehavior
             {
                 IEnumerator _()
                 {
-                    if (attack != null)
-                        renderers.SetThumbnailSprite(attack);
+                    renderers.SetThumbnailSprite(sprites.attack);
 
-                    //renderers.SetThumbnailMaterial(resourceManager.Material("Invert-Color", thumbnail.texture));
+                    //renderers.SetThumbnailMaterial(resourceManager.Material("Invert-Color", idle.texture));
                     //ParallaxFadeInAsync();
                     yield return null;
                 }

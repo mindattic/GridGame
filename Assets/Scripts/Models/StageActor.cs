@@ -37,7 +37,7 @@ public class StageActor
     //    this.archetype = archetype;
     //    this.name = name;
     //    this.stats = stats;
-    //    this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
+    //    this.idle = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
     //    this.team = team;
     //    this.quality = quality;
     //    this.location = location.Nowhere;
