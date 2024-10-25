@@ -39,7 +39,7 @@ namespace Game.Behaviors
         public void Set(ActorBehavior actor)
         {
             backdrop.enabled = true;
-            portrait.sprite = resourceManager.ActorPortrait(actor.archetype.ToString());
+            portrait.sprite = resourceManager.ActorSprite(actor.archetype.ToString()).portrait;
             portrait.enabled = true;
            
             title.text = actor.name;

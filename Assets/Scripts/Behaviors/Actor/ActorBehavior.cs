@@ -307,7 +307,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             //renderers.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", idle.texture));
             yield return null;
         }
-        SpinAsync(_());
+        Spin90Async(_());
 
         turnDelay = Formulas.CalculateTurnDelay(stats);
         UpdateTurnDelayText();
@@ -565,7 +565,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //{
         //    //TODO: Maybe do it less often or under certain conditions?...
         //    if (Random.Int(1, 6) == 1)
-        //        StartCoroutine(Spin());
+        //        StartCoroutine(Spin360());
         //}
 
         //During:
@@ -1243,7 +1243,49 @@ public class ActorBehavior : ExtendedMonoBehavior
         StartCoroutine(Shrink(minSize));
     }
 
-    public IEnumerator Spin(IEnumerator triggeredEvent = null)
+
+    public void Spin90Async(IEnumerator triggeredEvent = null)
+    {
+        StartCoroutine(Spin90(triggeredEvent));
+    }
+
+    public IEnumerator Spin90(IEnumerator triggeredEvent = null)
+    {
+        //Before:
+        bool isDone = false;
+        bool is90Degrees = false;
+        var rotY = 0f;
+        var speed = tileSize * 24f;
+        rotation = Geometry.Rotation(0, rotY, 0);
+
+        //During:
+        while (!isDone)
+        {
+            rotY += !is90Degrees ? speed : -speed;
+
+            if (!is90Degrees && rotY >= 90f)
+            {
+                rotY = 90f;
+                is90Degrees = true;
+                yield return triggeredEvent;
+            }
+
+            isDone = is90Degrees && rotY <= 0f;
+            if (isDone)
+            {
+                rotY = 0f;
+            }
+
+            rotation = Geometry.Rotation(0, rotY, 0);
+            yield return Wait.OneTick();
+        }
+
+        //After:
+        rotation = Geometry.Rotation(0, 0, 0);
+
+    }
+
+    public IEnumerator Spin360(IEnumerator triggeredEvent = null)
     {
         //Before:
         bool isDone = false;
@@ -1264,6 +1306,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                 hasTriggered = true;
                 yield return triggeredEvent;
             }
+
             isDone = rotY >= 360f;
             yield return Wait.OneTick();
         }
@@ -1283,9 +1326,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-    public void SpinAsync(IEnumerator triggeredEvent = null)
+    public void Spin360Async(IEnumerator triggeredEvent = null)
     {
-        StartCoroutine(Spin(triggeredEvent));
+        StartCoroutine(Spin360(triggeredEvent));
     }
 
     public IEnumerator FadeIn(
@@ -1416,7 +1459,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                     //ParallaxFadeInAsync();
                     yield return null;
                 }
-                SpinAsync(_());
+                Spin90Async(_());
             }
         }
 

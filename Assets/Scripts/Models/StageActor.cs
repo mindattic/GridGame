@@ -24,7 +24,7 @@ public class StageActor
         this.archetype = archetype;
         this.name = name;
         this.stats = stats;
-        this.thumbnail = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
+        this.thumbnail = GameManager.instance.resourceManager.ActorSprite(this.archetype.ToString()).idle;
         this.team = team;
         this.quality = quality;
         this.location = location.HasValue ? location.Value : Random.UnoccupiedLocation;

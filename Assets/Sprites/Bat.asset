@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Bat
   m_EditorClassIdentifier: 
   id: Bat
-  thumbnail: {fileID: 21300000, guid: 10a93c8b5a32a2c4a8fab06eba7f9d55, type: 3}
+  idle: {fileID: 21300000, guid: 10a93c8b5a32a2c4a8fab06eba7f9d55, type: 3}
+  attack: {fileID: 21300000, guid: 10a93c8b5a32a2c4a8fab06eba7f9d55, type: 3}
   portrait: {fileID: 21300000, guid: 4dfa6d2b70446fc4cb7dadfbfd2df3f9, type: 3}

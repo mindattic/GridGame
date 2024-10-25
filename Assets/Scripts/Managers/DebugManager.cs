@@ -377,7 +377,7 @@ public class DebugManager : ExtendedMonoBehavior
 
     public void SpinTest()
     {
-        StartCoroutine(Paladin.Spin());
+        StartCoroutine(Paladin.Spin360());
     }
 
     public void AlignTest()

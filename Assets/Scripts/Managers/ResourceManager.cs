@@ -36,21 +36,6 @@ public class ResourceManager : ExtendedMonoBehavior
         return null;
     }
 
-    public Sprite ActorThumbnail(string id)
-    {
-        try
-        {
-            return actorSprites.First(x => x.id.Equals(id)).idle;
-        }
-        catch (Exception ex)
-        {
-            logManager.error($"Failed to retrieve actor thumbnail `{id}` from resource manager. | Error: {ex.Message}");
-        }
-
-        return null;
-    }
-
-
     public Material Material(string id, Texture2D texture = null)
     {
         try
