@@ -46,6 +46,7 @@ public class ActorRenderers
     public SpriteMask mask;
 
     public TextMeshPro turnDelayText;
+    public TextMeshPro nameTagText;
 
     public void SetAlpha(float alpha)
     {
@@ -60,6 +61,7 @@ public class ActorRenderers
         SetActionBarAlpha(alpha);
         SetSkillRadialAlpha(alpha);
         SetTurnDelayTextAlpha(alpha);
+        SetNameTagTextAlpha(alpha);
 
         selection.color = new Color(1, 1, 1, alpha);
     }
@@ -205,6 +207,10 @@ public class ActorRenderers
         selection.enabled = isEnabled;
     }
 
+    public void SetTurnDelayText(string text)
+    {
+        turnDelayText.text = text;
+    }
 
     public void SetTurnDelayTextEnabled(bool isEnabled = true)
     {
@@ -215,6 +221,17 @@ public class ActorRenderers
     {
         turnDelayText.color = new Color(1, 1, 1, alpha);
     }
+
+    public void SetNameTagText(string text)
+    {
+        nameTagText.text = text;
+    }
+
+    public void SetNameTagTextAlpha(float alpha)
+    {
+        nameTagText.color = new Color(1, 1, 1, alpha);
+    }
+    
 
     public void SetHealthBarColor(Color color)
     {

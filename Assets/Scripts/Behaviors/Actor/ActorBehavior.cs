@@ -7,6 +7,32 @@ using TMPro;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
+//Layers
+public static class ActorLayer
+{
+    public const int Opaque = 0;
+    public const int Quality = 1;
+    public const int Glow = 2;
+    public const int Parallax = 3;
+    public const int Thumbnail = 4;
+    public const int Frame = 5;
+    public const int StatusIcon = 6;
+    public const int HealthBarBack = 7;
+    public const int HealthBar = 8;
+    public const int HealthBarFront = 9;
+    public const int HealthText = 10;
+    public const int ActionBarBack = 11;
+    public const int ActionBar = 12;
+    public const int ActionText = 13;
+    public const int RadialBack = 14;
+    public const int RadialFill = 15;
+    public const int RadialText = 16;
+    public const int Selection = 17;
+    public const int Mask = 18;
+    public const int TurnDelayText = 19;
+    public const int NameTagText = 20;
+}
+
 public class ActorBehavior : ExtendedMonoBehavior
 {
 
@@ -73,7 +99,8 @@ public class ActorBehavior : ExtendedMonoBehavior
         renderers.skillRadialText = gameObject.transform.GetChild(ActorLayer.RadialText).GetComponent<TextMeshPro>();
         renderers.selection = gameObject.transform.GetChild(ActorLayer.Selection).GetComponent<SpriteRenderer>();
         renderers.mask = gameObject.transform.GetChild(ActorLayer.Mask).GetComponent<SpriteMask>();
-        renderers.turnDelayText = gameObject.transform.GetChild(ActorLayer.TurnDelay).GetComponent<TextMeshPro>();
+        renderers.turnDelayText = gameObject.transform.GetChild(ActorLayer.TurnDelayText).GetComponent<TextMeshPro>();
+        renderers.nameTagText = gameObject.transform.GetChild(ActorLayer.NameTagText).GetComponent<TextMeshPro>();
 
 
 
@@ -194,6 +221,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.skillRadialText.sortingOrder = value + ActorLayer.RadialText;
             renderers.selection.sortingOrder = value + ActorLayer.Selection;
             renderers.mask.sortingOrder = value + ActorLayer.Mask;
+            renderers.turnDelayText.sortingOrder = value + ActorLayer.TurnDelayText;
+            renderers.nameTagText.sortingOrder = value + ActorLayer.NameTagText;
         }
     }
 
@@ -251,6 +280,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         sprites = resourceManager.ActorSprite(this.archetype.ToString());
 
+        renderers.SetNameTagText(name);
+
+
         if (IsPlayer)
         {
             renderers.SetQualityColor(quality.Color);
@@ -283,6 +315,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetTurnDelayTextEnabled(isEnabled: true);
             vfx.Attack = resourceManager.VisualEffect("Double_Claw");
             CalculateTurnDelay();
+            StartCoroutine(TurnDelayWiggle());
         }
 
         AssignSkillWait();
@@ -291,10 +324,16 @@ public class ActorBehavior : ExtendedMonoBehavior
 
 
         if (turnManager.IsFirstTurn)
+        {
             renderers.SetAlpha(1);
+        }
         else
+        {
             StartCoroutine(FadeIn());
+        }
+
     }
+
 
 
 
@@ -333,6 +372,15 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     void Update()
     {
+
+
+        //if (!isTurnDelayWiggling)
+        //{
+        //    isTurnDelayWiggling = Random.Int(1, 20) == 1 ? true : false;
+        //    StartCoroutine(TurnDelayWiggle());
+        //}
+
+
         ////Check abort status
         //if (!IsPlaying || isMoving)
         //    return;
@@ -1023,7 +1071,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void UpdateTurnDelayText()
     {
-        renderers.turnDelayText.text = $@"{turnDelay}";
+        renderers.SetTurnDelayText($"{turnDelay}");
         renderers.SetTurnDelayTextEnabled(turnDelay > 0);
     }
 
@@ -1465,4 +1513,125 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         StartCoroutine(_());
     }
+
+
+    public IEnumerator TurnDelayWiggle()
+    {
+        bool isDone = false;
+        float timeElapsed = 0f;
+        float wait = 0f;    
+        float rotZ = 0f;
+        float speed = 0;
+        float range = 10f;
+        int i = 0;
+        float direction = 1f;
+        int amount = 0;
+        WiggleState state = WiggleState.Start;
+
+        renderers.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        while (!isDone)
+        {
+            timeElapsed += Time.deltaTime;
+
+            switch (state)
+            {
+                case WiggleState.Start:
+                    {
+                        //speed = tileSize * Random.Float(0.5f, 1f);
+                        speed = 3f;
+                        timeElapsed = 0;
+                        i = 0;
+                        wait = Random.Float(4f, 8f);
+                        amount = Random.Int(2, 6);
+                        state = WiggleState.Wait;
+                    }
+                    break;
+
+                case WiggleState.Wait:
+                    {
+                        if (timeElapsed >= wait)
+                            state = WiggleState.Wiggle;
+                    }
+                    break;
+
+                case WiggleState.Wiggle:
+                    {
+                        rotZ += speed * direction;
+
+                        if (direction > 0 && rotZ >= range)
+                        {
+                            rotZ = range;
+                            direction = -1f;
+                        }
+                        else if (direction < 0 && rotZ <= -range)
+                        {
+                            rotZ = -range;
+                            direction = 1f;
+                            i++; 
+                        }
+
+                        if (i == amount)
+                            state = WiggleState.Cooldown;
+
+                    }
+                    break;
+
+                case WiggleState.Cooldown:
+                    {
+                        if (rotZ < 0)
+                        {
+                            rotZ += speed;
+                        }
+                        else
+                        {
+                            rotZ = 0f;
+                            state = WiggleState.Start;
+                        }
+
+                    
+                    }
+                    break;
+            }
+
+            renderers.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, rotZ);
+            yield return Wait.OneTick();
+
+
+        }
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

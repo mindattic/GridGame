@@ -14,7 +14,7 @@ public class CoinBehavior : ExtendedMonoBehavior
     private float scaleMultiplier = 0.05f;
     private float startDuration = 0.2f;
     private float moveDuration = 0.6f;
-    private float elapsedTime = 0.0f;
+    private float timeElapsed = 0.0f;
     private Vector3 start;
     private Vector3 end;
     private CoinState state;
@@ -39,6 +39,7 @@ public class CoinBehavior : ExtendedMonoBehavior
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
     }
+
 
     public Quaternion rotation
     {
@@ -69,7 +70,7 @@ public class CoinBehavior : ExtendedMonoBehavior
     {
         start = position.RandomizeOffset(tileSize * 0.25f);
         end = position.RandomizeOffset(tileSize * 1.5f);
-        elapsedTime = 0;
+        timeElapsed = 0;
         startDuration += Random.Float(0, 0.2f);
         moveDuration += Random.Float(0, 0.2f);
         cX = RandomCurve();
@@ -90,18 +91,18 @@ public class CoinBehavior : ExtendedMonoBehavior
 
     void Update()
     {
-        
+       
         switch (state)
         {
             case CoinState.Start:
-                t = Mathf.Clamp01(elapsedTime / startDuration);
+                t = Mathf.Clamp01(timeElapsed / startDuration);
                 x = Mathf.Lerp(start.x, end.x, cX.Evaluate(t));
                 y = Mathf.Lerp(start.y, end.y, cY.Evaluate(t));
                 z = transform.position.z;
                 transform.position = new Vector3(x, y, z);
-                if (elapsedTime >= startDuration)
+                if (timeElapsed >= startDuration)
                 {
-                    elapsedTime = 0;
+                    timeElapsed = 0;
                     start = transform.position;
                     end = coinBar.icon.transform.position;
                     state = CoinState.Move;
@@ -109,14 +110,14 @@ public class CoinBehavior : ExtendedMonoBehavior
                 break;
 
             case CoinState.Move:
-                t = Mathf.Clamp01(elapsedTime / moveDuration);
+                t = Mathf.Clamp01(timeElapsed / moveDuration);
                 x = Mathf.Lerp(start.x, end.x, sineCurve.Evaluate(t));
                 y = Mathf.Lerp(start.y, end.y, sineCurve.Evaluate(t));
                 z = transform.position.z;
                 transform.position = new Vector3(x, y, z);
-                if (elapsedTime >= moveDuration)
+                if (timeElapsed >= moveDuration)
                 {
-                    elapsedTime = 0;
+                    timeElapsed = 0;
                     state = CoinState.Stop;
                 }
                 break;
@@ -136,7 +137,7 @@ public class CoinBehavior : ExtendedMonoBehavior
         }
 
 
-        elapsedTime += Time.deltaTime;
+        timeElapsed += Time.deltaTime;
 
     }
 }

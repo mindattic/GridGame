@@ -69,8 +69,8 @@ namespace Game.Behaviors
             elapsedTime += Time.deltaTime;
 
             //var hover = new Vector3(
-            //    initialPosition.x + horizontalCurve.Evaluate(elapsedTime / Agility.x) * range.x * gameSpeed,
-            //    initialPosition.y + verticalCurve.Evaluate(elapsedTime / Agility.y) * range.y * gameSpeed,
+            //    initialPosition.x + horizontalCurve.Evaluate(timeElapsed / Agility.x) * range.x * gameSpeed,
+            //    initialPosition.y + verticalCurve.Evaluate(timeElapsed / Agility.y) * range.y * gameSpeed,
             //    initialPosition.z);
 
             //var rot = Geometry.Rotation(new Vector3(0, 5 * verticalCurve.Evaluate(Time.time % verticalCurve.length), 0));

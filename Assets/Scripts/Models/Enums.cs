@@ -47,6 +47,16 @@ public enum Status
     Doom
 }
 
+
+public enum WiggleState
+{
+    Wait,
+    Start,
+    Wiggle,
+    Cooldown,
+    
+}
+
 //public enum GlowState
 //{
 //    Off,
