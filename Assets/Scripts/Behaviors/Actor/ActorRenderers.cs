@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -206,6 +207,24 @@ public class ActorRenderers
     {
         selection.enabled = isEnabled;
     }
+
+    public void SetTurnDelayFontSize(int key)
+    {
+        var fontSizeKeyValueMap = new Dictionary<int, float>() {
+            { 9, 1.0000f },
+            { 8, 1.3750f },
+            { 7, 1.7500f },
+            { 6, 2.1250f },
+            { 5, 2.5000f },
+            { 4, 2.8750f },
+            { 3, 3.2500f },
+            { 2, 3.6250f },
+            { 1, 4.0000f },
+        };
+
+        turnDelayText.fontSize = key > 9 ? 1f : fontSizeKeyValueMap[key];
+    }
+
 
     public void SetTurnDelayText(string text)
     {

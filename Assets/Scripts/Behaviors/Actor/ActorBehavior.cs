@@ -315,7 +315,6 @@ public class ActorBehavior : ExtendedMonoBehavior
             renderers.SetTurnDelayTextEnabled(isEnabled: true);
             vfx.Attack = resourceManager.VisualEffect("Double_Claw");
             CalculateTurnDelay();
-            StartCoroutine(TurnDelayWiggle());
         }
 
         AssignSkillWait();
@@ -1071,6 +1070,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void UpdateTurnDelayText()
     {
+        //renderers.SetTurnDelayFontSize(turnDelay);
         renderers.SetTurnDelayText($"{turnDelay}");
         renderers.SetTurnDelayTextEnabled(turnDelay > 0);
     }
@@ -1125,12 +1125,34 @@ public class ActorBehavior : ExtendedMonoBehavior
         audioManager.Play("Death");
         sortingOrder = SortingOrder.Max;
 
+        var hasSpawnedCoins = false;
+
+
         //During:
         while (alpha > 0f)
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, 0f, 1f);
             renderers.SetAlpha(alpha);
+
+            if(IsEnemy && !hasSpawnedCoins && alpha < 5f)
+            {
+                hasSpawnedCoins = true;
+
+                IEnumerator spawnCoins(int amount)
+                {
+                    var i = 0;
+                    do
+                    {
+                        coinManager.Spawn(position);
+                        i++;
+                    } while (i < amount);
+
+                    yield return true;
+                }
+                StartCoroutine(spawnCoins(10)); //TODO: Spawn coins based on enemy stats...
+            }
+
             yield return Interval.FiveTicks;
         }
 
@@ -1348,7 +1370,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             rotY += speed;
             rotation = Geometry.Rotation(0, rotY, 0);
 
-            //Trigger event and wait for it to finish (if applicable)
+            //Trigger event and startDelay for it to finish (if applicable)
             if (!hasTriggered && rotY >= 240f)
             {
                 hasTriggered = true;
@@ -1497,6 +1519,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
             //After:
             renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, 0, 0);
+            if (turnDelay > 0)
+            {
+                TurnDelayWiggleAsync();
+            }
+
             if (turnDelay == 0)
             {
                 IEnumerator _()
@@ -1515,11 +1542,17 @@ public class ActorBehavior : ExtendedMonoBehavior
     }
 
 
-    public IEnumerator TurnDelayWiggle()
+    public void TurnDelayWiggleAsync(bool isLooping = false)
     {
+        StartCoroutine(TurnDelayWiggle(isLooping));
+    }
+
+    public IEnumerator TurnDelayWiggle(bool isLooping = false)
+    {
+        //Before:
         bool isDone = false;
         float timeElapsed = 0f;
-        float wait = 0f;    
+        float startDelay = 0f;
         float rotZ = 0f;
         float speed = 0;
         float range = 10f;
@@ -1530,6 +1563,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         renderers.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, 0);
 
+        //During:
         while (!isDone)
         {
             timeElapsed += Time.deltaTime;
@@ -1542,7 +1576,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                         speed = 3f;
                         timeElapsed = 0;
                         i = 0;
-                        wait = Random.Float(4f, 8f);
+                        startDelay = isLooping ? Random.Float(4f, 8f) : 0f;
                         amount = Random.Int(2, 6);
                         state = WiggleState.Wait;
                     }
@@ -1550,7 +1584,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case WiggleState.Wait:
                     {
-                        if (timeElapsed >= wait)
+                        if (timeElapsed >= startDelay)
                             state = WiggleState.Wiggle;
                     }
                     break;
@@ -1568,7 +1602,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                         {
                             rotZ = -range;
                             direction = 1f;
-                            i++; 
+                            i++;
                         }
 
                         if (i == amount)
@@ -1586,22 +1620,25 @@ public class ActorBehavior : ExtendedMonoBehavior
                         else
                         {
                             rotZ = 0f;
-                            state = WiggleState.Start;
+
+                            //Loop or end coroutine
+                            if (isLooping)
+                                state = WiggleState.Start;
+                            else
+                                isDone = true;
                         }
 
-                    
+
                     }
                     break;
             }
 
             renderers.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, rotZ);
             yield return Wait.OneTick();
-
-
         }
 
-
-
+        //After:
+        renderers.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
 

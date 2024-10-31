@@ -64,19 +64,10 @@ public class TurnManager : ExtendedMonoBehavior
         //Reset actors sorting
         actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
 
-        
-
-
-
-
-
-
         if (IsPlayerTurn)
         {
             currentTurn++;
             CheckEnemyReadiness();
-
-
 
             //audioManager.Play("NextTurn");
             timerBar.Reset();
