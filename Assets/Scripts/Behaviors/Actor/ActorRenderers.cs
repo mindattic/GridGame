@@ -18,6 +18,7 @@ public class ActorRenderers
     public Color frameColor = Colors.Solid.White;
     public Color healthBarColor = Colors.HealthBar.Green;
     public Color actionBarColor = Colors.ActionBar.Blue;
+    public Color turnDelayColor = Colors.Solid.Red;
 
     public SpriteRenderer opaque;
     public SpriteRenderer quality;
@@ -238,7 +239,14 @@ public class ActorRenderers
 
     public void SetTurnDelayTextAlpha(float alpha)
     {
-        turnDelayText.color = new Color(1, 1, 1, alpha);
+        turnDelayColor.a = Mathf.Clamp(alpha, 0, 1);
+        turnDelayText.color = turnDelayColor;
+    }
+
+    public void SetTurnDelayTextColor(Color color)
+    {
+        turnDelayColor = color;
+        turnDelayText.color = turnDelayColor;
     }
 
     public void SetNameTagText(string text)

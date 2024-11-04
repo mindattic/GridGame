@@ -1070,9 +1070,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     private void UpdateTurnDelayText()
     {
-        //renderers.SetTurnDelayFontSize(turnDelay);
+        renderers.SetTurnDelayTextColor(turnDelay > 0 ? Colors.Solid.White : Colors.Solid.Red);
         renderers.SetTurnDelayText($"{turnDelay}");
-        renderers.SetTurnDelayTextEnabled(turnDelay > 0);
     }
 
 
@@ -1503,7 +1502,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                     rotY = 90f;
                     is90Degrees = true;
                     turnDelay--;
-                    turnDelay = Math.Clamp(turnDelay, 0, 9);
+                    turnDelay = Math.Clamp(turnDelay, 0, 9);               
                     UpdateTurnDelayText();
                 }
 
