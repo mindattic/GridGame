@@ -60,7 +60,7 @@ namespace Game.Behaviors
             //var bottomLeftt = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
 
             //var p = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, Camera.main.nearClipPlane));
-            //Gizmos.color = Color.yellow;
+            //Gizmos.color = color.yellow;
             //Gizmos.DrawSphere(p, 0.1F);
 
 

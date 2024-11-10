@@ -67,7 +67,7 @@ public class GhostBehavior : ExtendedMonoBehavior
         this.Renderers.thumbnail.size = new Vector2(tileSize, tileSize);
         //this.renderers.frame.size = new Vector2(tileSize, tileSize);
         this.Renderers.thumbnail.color = Colors.RGBA(255, 255, 255, 64);
-        //this.renderers.frame.Color = Shared.ColorRGBA(255, 255, 255, 100);
+        //this.renderers.frame.color = Shared.ColorRGBA(255, 255, 255, 100);
         this.Position = actor.position;
         StartCoroutine(FadeOut());
     }

@@ -16,59 +16,6 @@ public class DebugManager : ExtendedMonoBehavior
     ActorBehavior Paladin => players.First(x => x.name == "Paladin");
     ActorBehavior Barbarian => players.First(x => x.name == "Barbarian");
 
-    public void Run()
-    {
-        int index = Dropdown.value;
-        if (index < 1)
-            return;
-
-        switch (index)
-        {
-            case 1: PortraitTest(); break;
-            case 2: DamageTextTest(); break;
-            case 3: BumpTest(); break;
-            case 4: SupportLineTest(); break;
-            case 5: EnemyAttackTest(); break;
-            case 6: TitleTest(); break;
-            case 7: TooltipTest(); break;
-            case 8: VFXTest_Blue_Slash_01(); break;
-            case 9: VFXTest_Blue_Slash_02(); break;
-            case 10: VFXTest_Blue_Slash_03(); break;
-            case 11: VFXTest_Blue_Sword(); break;
-            case 12: VFXTest_Blue_Sword_4X(); break;
-            case 13: VFXTest_Blood_Claw(); break;
-            case 14: VFXTest_Level_Up(); break;
-            case 15: VFXTest_Yellow_Hit(); break;
-            case 16: VFXTest_Double_Claw(); break;
-            case 17: VFXTest_Lightning_Explosion(); break;
-            case 18: VFXTest_Buff_Life(); break;
-            case 19: VFXTest_Rotary_Knife(); break;
-            case 20: VFXTest_Air_Slash(); break;
-            case 21: VFXTest_Fire_Rain(); break;
-            case 22: VFXTest_Ray_Blast(); break;
-            case 23: VFXTest_Lightning_Strike(); break;
-            case 24: VFXTest_Puffy_Explosion(); break;
-            case 25: VFXTest_Red_Slash_2X(); break;
-            case 26: VFXTest_God_Rays(); break;
-            case 27: VFXTest_Acid_Splash(); break;
-            case 28: VFXTest_Green_Buff(); break;
-            case 29: VFXTest_Gold_Buff(); break;
-            case 30: VFXTest_Hex_Shield(); break;
-            case 31: VFXTest_Toxic_Cloud(); break;
-            case 32: VFXTest_Orange_Slash(); break;
-            case 33: VFXTest_Moon_Feather(); break;
-            case 34: VFXTest_Pink_Spark(); break;
-            case 35: VFXTest_BlueYellow_Sword(); break;
-            case 36: VFXTest_BlueYellow_Sword_3X(); break;
-            case 37: VFXTest_Red_Sword(); break;
-            case 38: DodgeTest(); break;
-            case 39: SpinTest(); break;
-            case 40: AlignTest(); break;
-            case 41: CoinTest(); break;
-
-        }
-    }
-
     public void PortraitTest()
     {
         var player = Random.Player;

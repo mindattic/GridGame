@@ -10,8 +10,6 @@ public static class Constants
     public const string Canvas2D = "Canvas2D";
     public const string Canvas3D = "Canvas3D";
     public const string Art = "Art";
-    public const string Console = "Console";
-    public const string Log = "Log";
     public const string Overlay = "Overlay";
     public const string Title = "Title";
     public const string Card = "Card";

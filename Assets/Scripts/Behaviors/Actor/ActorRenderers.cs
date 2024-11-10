@@ -58,7 +58,7 @@ public class ActorRenderers
         //SetParallaxAlpha(alpha);
         SetThumbnailAlpha(alpha);
         SetFrameAlpha(alpha);
-        //statusIcon.color = new Color(1, 1, 1, alpha);
+        //statusIcon.color = new color(1, 1, 1, alpha);
         SetHealthBarAlpha(alpha);
         SetActionBarAlpha(alpha);
         SetSkillRadialAlpha(alpha);
@@ -175,14 +175,14 @@ public class ActorRenderers
 
 
 
-    //public void SetBloomColor(Color color)
+    //public void SetBloomColor(color color)
     //{
     //    bloomColor = color;
     //    this.bloom.color = color;
 
     //    var intensity = (bloomColor.r + bloomColor.g + bloomColor.b) / 3f;
     //    var factor = 1f / intensity;
-    //    var emissionColor = new Color(bloomColor.r * factor, bloomColor.g * factor, bloomColor.b * factor, bloomColor.a);
+    //    var emissionColor = new color(bloomColor.r * factor, bloomColor.g * factor, bloomColor.b * factor, bloomColor.a);
     //    this.bloom.material.SetColor("_EmissionColor", emissionColor);
     //}
 
@@ -193,7 +193,7 @@ public class ActorRenderers
 
     //    var intensity = (bloomColor.r + bloomColor.g + bloomColor.b) / 3f;
     //    var factor = 1f / intensity;
-    //    var emissionColor = new Color(bloomColor.r * factor, bloomColor.g * factor, bloomColor.b * factor, alpha);
+    //    var emissionColor = new color(bloomColor.r * factor, bloomColor.g * factor, bloomColor.b * factor, alpha);
     //    this.bloom.material.SetColor("_EmissionColor", emissionColor);
     //}
 

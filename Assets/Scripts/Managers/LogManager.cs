@@ -8,64 +8,73 @@ namespace Game.Behaviors
 {
     public class LogManager : ExtendedMonoBehavior
     {
-        private TextMeshProUGUI log;
+        private TextMeshProUGUI textMesh;
         private List<string> messages = new List<string>();
 
         const int MaxMessages = 10;
 
+        #region Components
+
+        public string text
+        {
+            get => textMesh.text;
+            set => textMesh.text = value;
+        }
+
+
+        public Color color
+        {
+            get => textMesh.color;
+            set => textMesh.color = value;
+        }
+
+        #endregion
+
+
+
         private void Awake()
         {
-            log = GetComponent<TextMeshProUGUI>();
+            textMesh = GetComponent<TextMeshProUGUI>();
         }
-
-        void Start()
-        {
-
-        }
-
-        float delay = 0f;
-
-        void Update()
-        {
-            //const float duration = 3f;
-            //delay += Time.deltaTime / duration;
-            //if (delay >= 1f)
-            //{
-            //    delay = 0f;
-            //    info($"Ticks: {DateTime.Now.Ticks}");
-            //}
-        }
-
-        private void FixedUpdate()
-        {
-
-            log.text = string.Join(Environment.NewLine, messages.OrderByDescending(x => x.ToString()));
-        }
-
 
         public void info(string message)
         {
             messages.Add($@"<color=""white"">{message}</color>");
-            truncate();
+  
+            print();
         }
 
         public void success(string message)
         {
             messages.Add($@"<color=""green"">{message}</color>");
-            truncate();
+            print();
         }
+
+        public void warning(string message)
+        {
+            messages.Add($@"<color=""orange"">{message}</color>");
+            print();
+        }
+
 
         public void error(string message)
         {
             messages.Add($@"<color=""red"">{message}</color>");
-            truncate();
+            print();
         }
 
 
-        private void truncate()
+        private void print()
         {
+
+            //Truncate messages (if neccessary)
             if (messages.Count > MaxMessages)
                 messages.RemoveAt(0);
+
+            //Print in descending order
+            textMesh.text = string.Join(Environment.NewLine, messages.OrderByDescending(x => x.ToString()));
         }
+
+
     }
 }

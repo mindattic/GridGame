@@ -86,13 +86,13 @@ public class TitleManager : ExtendedMonoBehavior
     //public IEnumerator FadeIn()
     //{
     //    float alpha = 0f;
-    //    label.color = new Color(1f, 1f, 1f, alpha);
+    //    label.color = new color(1f, 1f, 1f, alpha);
 
     //    while (alpha < 1)
     //    {
     //        alpha += Increment.TenPercent;
     //        alpha = Mathf.Clamp(alpha, 0, 1);
-    //        label.color = new Color(1, 1, 1f, alpha);
+    //        label.color = new color(1, 1, 1f, alpha);
     //        yield return Destroy.OneTick();
     //    }
     //}

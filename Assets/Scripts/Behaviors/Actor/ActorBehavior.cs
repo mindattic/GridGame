@@ -2,6 +2,7 @@ using Assets.Scripts.Behaviors.Actor;
 using Assets.Scripts.Utilities;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -317,6 +318,9 @@ public class ActorBehavior : ExtendedMonoBehavior
             CalculateTurnDelay();
         }
 
+        //StartCoroutine(Flash());
+
+
         AssignSkillWait();
         UpdateHealthBar();
         UpdateActionBar();
@@ -380,7 +384,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //}
 
 
-        ////Check abort status
+        //Check abort status
         //if (!IsPlaying || isMoving)
         //    return;
 
@@ -431,7 +435,6 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //CheckActionBar();
         CheckSkillRadial();
-
 
 
         //if (isRising && renderers.idle.transform.angularRotation.z < maxRot)
@@ -692,7 +695,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         renderers.actionText.text = ap < maxAp ? $@"{Math.Round(ap / maxAp * 100)}" : "";
 
         //Seconds remaining
-        //renderers.skillRadialText.Text = ap < maxAp ? $"{Math.Round(maxAp - ap)}" : "";
+        //renderers.skillRadialText.text = ap < maxAp ? $"{Math.Round(maxAp - ap)}" : "";
 
 
 
@@ -1080,19 +1083,19 @@ public class ActorBehavior : ExtendedMonoBehavior
     //    //Before:
     //    var maxAlpha = 0.5f;
     //    var alpha = 0f;
-    //    renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
+    //    renderers.skillRadialBack.color = new color(0, 0, 0, alpha);
 
     //    //During:
     //    while (alpha < maxAlpha)
     //    {
     //        alpha += Increment.OnePercent;
     //        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
-    //        renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
+    //        renderers.skillRadialBack.color = new color(0, 0, 0, alpha);
     //        yield return global::Destroy.OneTick();
     //    }
 
     //    //After:
-    //    renderers.skillRadialBack.color = new Color(0, 0, 0, maxAlpha);
+    //    renderers.skillRadialBack.color = new color(0, 0, 0, maxAlpha);
     //}
 
     //public IEnumerator RadialBackFadeOut()
@@ -1100,19 +1103,19 @@ public class ActorBehavior : ExtendedMonoBehavior
     //    //Before:
     //    var maxAlpha = 0.5f;
     //    var alpha = maxAlpha;
-    //    renderers.skillRadialBack.color = new Color(0, 0, 0, maxAlpha);
+    //    renderers.skillRadialBack.color = new color(0, 0, 0, maxAlpha);
 
     //    //During:
     //    while (alpha > 0)
     //    {
     //        alpha -= Increment.OnePercent;
     //        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
-    //        renderers.skillRadialBack.color = new Color(0, 0, 0, alpha);
+    //        renderers.skillRadialBack.color = new color(0, 0, 0, alpha);
     //        yield return Destroy.OneTick();
     //    }
 
     //    //After:
-    //    renderers.skillRadialBack.color = new Color(0, 0, 0, 0);
+    //    renderers.skillRadialBack.color = new color(0, 0, 0, 0);
     //}
 
     public IEnumerator Die()
@@ -1134,7 +1137,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             alpha = Mathf.Clamp(alpha, 0f, 1f);
             renderers.SetAlpha(alpha);
 
-            if(IsEnemy && !hasSpawnedCoins && alpha < 5f)
+            if (IsEnemy && !hasSpawnedCoins && alpha < 5f)
             {
                 hasSpawnedCoins = true;
 
@@ -1502,7 +1505,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                     rotY = 90f;
                     is90Degrees = true;
                     turnDelay--;
-                    turnDelay = Math.Clamp(turnDelay, 0, 9);               
+                    turnDelay = Math.Clamp(turnDelay, 0, 9);
                     UpdateTurnDelayText();
                 }
 
@@ -1529,7 +1532,7 @@ public class ActorBehavior : ExtendedMonoBehavior
                 {
                     renderers.SetThumbnailSprite(sprites.attack);
 
-                    //renderers.SetThumbnailMaterial(resourceManager.Material("Invert-Color", idle.texture));
+                    //renderers.SetThumbnailMaterial(resourceManager.Material("Invert-color", idle.texture));
                     //ParallaxFadeInAsync();
                     yield return null;
                 }
@@ -1646,19 +1649,40 @@ public class ActorBehavior : ExtendedMonoBehavior
 
 
 
+    //public List<color> flashColors;       // List of colors to flash
+    //public float flashDuration = 0.05f;    // Duration of each flash
+    //public float flashInterval = 0.05f;    // Interval between flashes
+
+    //private bool isFlashing = false;
+    //private int currentColorIndex = 0;
+
+    //IEnumerator Flash()
+    //{
+    //    isFlashing = true;
+    //    flashColors = new List<color>() {
+    //        Colors.Solid.White,
+    //        Colors.Solid.Black,
+    //        Colors.Solid.Green,
+    //        Colors.Solid.Red,
+    //        Colors.Solid.Gold
+    //    };
+
+    //    while (isFlashing)
+    //    {
+
+    //        // Cycle through the colors
+    //        renderers.SetQualityColor(flashColors[currentColorIndex]);
+    //        yield return new WaitForSeconds(flashDuration);
+
+    //        // Revert back to the original color
+    //        // renderers.quality.color = originalColor;
+
+    //        // Move to the next color, looping back to the start if needed
+    //        currentColorIndex = (currentColorIndex + 1) % flashColors.Count;
+    //    }
 
 
-
-
-
-
-
-
-
-
-
-
-
+    //}
 
 
 

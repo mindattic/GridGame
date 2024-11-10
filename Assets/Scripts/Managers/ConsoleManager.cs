@@ -6,30 +6,30 @@ namespace Game.Behaviors
 {
     public class ConsoleManager : ExtendedMonoBehavior
     {
-        private TextMeshProUGUI console;
-        private FpsMonitor fpsMonitor = new FpsMonitor();
+        public TextMeshProUGUI textMesh;
+        public FpsMonitor fpsMonitor = new FpsMonitor();
 
         #region Components
 
-        public string Text
+        public string text
         {
-            get => console.text;
-            set => console.text = value;
+            get => textMesh.text;
+            set => textMesh.text = value;
         }
 
 
-        public Color Color
+        public Color color
         {
-            get => console.color;
-            set => console.color = value;
+            get => textMesh.color;
+            set => textMesh.color = value;
         }
 
         #endregion
 
         private void Awake()
         {
-            console = GetComponent<TextMeshProUGUI>();
-            //log.font = new Font("Consolas");
+            textMesh = GetComponent<TextMeshProUGUI>();
+            //textMesh.font = new Font("Consolas");
         }
 
         void Start()
@@ -46,16 +46,16 @@ namespace Game.Behaviors
 
         private void FixedUpdate()
         {
-            string fps = $@"{fpsMonitor.Current}";
-            string turn = turnManager.IsPlayerTurn ? "Player" : "Enemy";
-            string phase = turnManager.currentPhase.ToString();
+            //string fps = $@"{fpsMonitor.Current}";
+            //string turn = turnManager.IsPlayerTurn ? "Player" : "Enemy";
+            //string phase = turnManager.currentPhase.ToString();
 
-            console.text = ""
-                + $"{fps} FPS" + Environment.NewLine 
-                + $"Runtime: {Time.time}" + Environment.NewLine
-                + $"   Turn: {turn}" + Environment.NewLine
-                + $"  Phase: {phase}" + Environment.NewLine
-                + "";
+            //textMesh.text = ""
+            //    + $"{fps} FPS" + Environment.NewLine 
+            //    + $"Runtime: {Time.time}" + Environment.NewLine
+            //    + $"   Turn: {turn}" + Environment.NewLine
+            //    + $"  Phase: {phase}" + Environment.NewLine
+            //    + "";
 
 
             //string archetype = HasSelectedPlayer ? focusedActor.archetype : "-";
@@ -86,7 +86,7 @@ namespace Game.Behaviors
             //string a13 = actors[13] != null ? $"{actors[13].name}: {actors[13].HP}{Environment.NewLine}" : $"{Environment.NewLine}";
 
 
-            //log.Text = a0 + a1+ a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10 + a11 + a12 + a13;
+            //textMesh.text = a0 + a1+ a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10 + a11 + a12 + a13;
 
         }
     }

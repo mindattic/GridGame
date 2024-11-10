@@ -42,6 +42,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public CoinManager coinManager;
 
     //UI Managers
+    [HideInInspector] public DebugManager debugManager;
     [HideInInspector] public ConsoleManager consoleManager;
     [HideInInspector] public LogManager logManager;
 
@@ -135,8 +136,9 @@ public class GameManager : Singleton<GameManager>
         footstepManager = GameObject.Find(Constants.Game).GetComponent<FootstepManager>() ?? throw new UnityException("FootstepManager is null");
         tooltipManager = GameObject.Find(Constants.Game).GetComponent<TooltipManager>() ?? throw new UnityException("TooltipManager is null");
         audioManager = GameObject.Find(Constants.Game).GetComponent<AudioManager>() ?? throw new UnityException("AudioManager is null");
-        consoleManager = GameObject.Find(Constants.Console).GetComponent<ConsoleManager>() ?? throw new UnityException("ConsoleManager is null");
-        logManager = GameObject.Find(Constants.Log).GetComponent<LogManager>() ?? throw new UnityException("LogManager is null");
+        debugManager = GameObject.Find(Constants.Game).GetComponent<DebugManager>() ?? throw new UnityException("DebugManager is null");
+        consoleManager = GameObject.Find(Constants.Game).GetComponent<ConsoleManager>() ?? throw new UnityException("ConsoleManager is null");
+        logManager = GameObject.Find(Constants.Game).GetComponent<LogManager>() ?? throw new UnityException("LogManager is null");
         vfxManager = GameObject.Find(Constants.Game).GetComponent<VFXManager>() ?? throw new UnityException("VFXManager is null");
         coinManager = GameObject.Find(Constants.Game).GetComponent<CoinManager>() ?? throw new UnityException("CoinManager is null");
 
