@@ -187,9 +187,18 @@ public class DebugWindow : EditorWindow
 
 
         // 5. Display the logs (scrollable)
-        //scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUILayout.Height(position.height - 200)); // Ensure scrollable area takes up the remaining space
-        //GUILayout.Label(logManager.text, new GUIStyle { richText = true });
-        //EditorGUILayout.EndScrollView();
+        //var backgroundColor = new Color(0.15f, 0.15f, 0.15f); // Darker background color
+        var style = new GUIStyle { richText = true };
+        var y = position.height - 200;
+        //EditorGUI.DrawRect(new Rect(0, y, position.width, position.height), backgroundColor);
+
+        scrollPosition = EditorGUILayout.BeginScrollView(
+            scrollPosition,
+            GUILayout.Height(y), 
+            GUILayout.ExpandHeight(true));
+
+        GUILayout.Label(logManager.text, style);
+        EditorGUILayout.EndScrollView();
 
 
         GUILayout.EndVertical();

@@ -8,7 +8,7 @@ namespace Game.Behaviors
 {
     public class LogManager : ExtendedMonoBehavior
     {
-        private TextMeshProUGUI textMesh;
+        private string log;
         private List<string> messages = new List<string>();
 
         const int MaxMessages = 10;
@@ -17,24 +17,15 @@ namespace Game.Behaviors
 
         public string text
         {
-            get => textMesh.text;
-            set => textMesh.text = value;
-        }
-
-
-        public Color color
-        {
-            get => textMesh.color;
-            set => textMesh.color = value;
+            get => log;
+            set => log = value;
         }
 
         #endregion
 
-
-
         private void Awake()
         {
-            textMesh = GetComponent<TextMeshProUGUI>();
+     
         }
 
         public void info(string message)
@@ -72,7 +63,7 @@ namespace Game.Behaviors
                 messages.RemoveAt(0);
 
             //Print in descending order
-            textMesh.text = string.Join(Environment.NewLine, messages.OrderByDescending(x => x.ToString()));
+            log = string.Join(Environment.NewLine, messages.OrderByDescending(x => x.ToString()));
         }
 
 
