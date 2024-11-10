@@ -59,15 +59,16 @@ namespace Assets.Scripts.Utilities
             return Mathf.Round(spd + lck - armorModifier);
         }
 
-        public static bool IsHit(ActorStats attacker, ActorStats defender)
+        public static bool IsHit(ActorBehavior attacker, ActorBehavior defender)
         {
-            var accuracy = Accuracy(attacker);
-            var evasion = Evasion(defender);
+            var accuracy = Accuracy(attacker.stats);
+            var evasion = Evasion(defender.stats);
             var d100 = Random.Int(1, 100);
             var isHit = accuracy - evasion >= d100;
 
             var msg
-                = $@"Accuracy(<color=""yellow"">{accuracy}</color>) - "
+                = $"{attacker.name} vs {defender.name}: "
+                + $@"Accuracy(<color=""yellow"">{accuracy}</color>) - "
                 + $@"Evasion(<color=""yellow"">{evasion}</color>) "
                 + $@"{(isHit ? ">" : "<")} "
                 + $@"1d100(<color=""yellow"">{d100}</color>) => "
@@ -99,13 +100,14 @@ namespace Assets.Scripts.Utilities
             return Mathf.Round(def + armorModifier + lck);
         }
 
-        public static int CalculateDamage(ActorStats attacker, ActorStats defender)
+        public static int CalculateDamage(ActorBehavior attacker, ActorBehavior defender)
         {
-            var offense = Offense(attacker);
-            var defense = Defense(defender);
+            var offense = Offense(attacker.stats);
+            var defense = Defense(defender.stats);
             var damage = Math.Clamp((int)Math.Round(offense - defense), 1, 999);
             var msg
-                = $@"Offense(<color=""yellow"">{offense}</color>) "
+                = $"{attacker.name} vs {defender.name}: "
+                + $@"Offense(<color=""yellow"">{offense}</color>) "
                 + $@"- Defense(<color=""yellow"">{defense}</color>) => "
                 + $@"Damage(<color=""yellow"">{damage}</color>)";
             log.info(msg);

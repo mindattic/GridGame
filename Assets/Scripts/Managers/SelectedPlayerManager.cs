@@ -22,7 +22,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!turnManager.IsPlayerTurn)
             return;
 
-        //Verify Current phase is "start"...
+        //Verify currentFps phase is "start"...
         if (!turnManager.IsStartPhase)
             return;
 
@@ -77,7 +77,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!turnManager.IsPlayerTurn)
             return;
 
-        //Verify Current phase is "start"...
+        //Verify currentFps phase is "start"...
         if (!turnManager.IsStartPhase)
             return;
 
@@ -121,7 +121,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!turnManager.IsPlayerTurn)
             return;
 
-        //Verify Current phase is "move"...
+        //Verify currentFps phase is "move"...
         if (!turnManager.IsMovePhase)
             return;
 

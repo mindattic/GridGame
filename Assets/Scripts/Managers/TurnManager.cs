@@ -249,7 +249,7 @@ public class TurnManager : ExtendedMonoBehavior
         //Attack each enemy between aligned players
         foreach (var enemy in pair.alignment.enemies)
         {
-            var isHit = Formulas.IsHit(pair.actor1.stats, enemy.stats);
+            var isHit = Formulas.IsHit(pair.actor1, enemy);
             if (isHit)
             {
                 pair.actor1.AddSpAsync(10);
@@ -257,7 +257,7 @@ public class TurnManager : ExtendedMonoBehavior
 
                 //TODO: Combine actor1 + actor2 + support actors stats somehow...
                 //TODO: Generate adhoc ActorStats where you take highest or median stats between both actors in ActorPair???
-                var damage = Formulas.CalculateDamage(pair.actor1.stats, enemy.stats);
+                var damage = Formulas.CalculateDamage(pair.actor1, enemy);
                 var isCriticalHit = false;
                 yield return pair.actor1.Attack(enemy, damage, isCriticalHit);
             }
@@ -397,10 +397,10 @@ public class TurnManager : ExtendedMonoBehavior
                             //TODO: Add triggeredEvent at moment bump reaches zenith
                             yield return enemy.Bump(direction);
 
-                            var isHit = Formulas.IsHit(enemy.stats, player.stats);
+                            var isHit = Formulas.IsHit(enemy, player);
                             if (isHit)
                             {
-                                var damage = Formulas.CalculateDamage(enemy.stats, player.stats);
+                                var damage = Formulas.CalculateDamage(enemy, player);
                                 var isCriticalHit = false;
                                 yield return enemy.Attack(player, damage, isCriticalHit);
                             }

@@ -232,7 +232,7 @@ public class ActorRenderers
         turnDelayText.text = text;
     }
 
-    public void SetTurnDelayTextEnabled(bool isEnabled = true)
+    public void SetTurnDelayTextEnabled(bool isEnabled)
     {
         turnDelayText.enabled = isEnabled;
     }
@@ -258,7 +258,11 @@ public class ActorRenderers
     {
         nameTagText.color = new Color(1, 1, 1, alpha);
     }
-    
+
+    public void SetNameTagEnabled(bool isEnabled)
+    {
+        nameTagText.enabled = isEnabled;
+    }
 
     public void SetHealthBarColor(Color color)
     {

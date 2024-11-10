@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public int targetFramerate = 60;
     [HideInInspector] public int vSyncCount = 0;
     [HideInInspector] public float gameSpeed = 1.0f;
+    [HideInInspector] public bool showActorNameTag = false;
 
     //Managers
     [HideInInspector] public ResourceManager resourceManager;

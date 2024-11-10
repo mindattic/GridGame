@@ -46,7 +46,7 @@ namespace Game.Behaviors
 
         private void FixedUpdate()
         {
-            //string fps = $@"{fpsMonitor.Current}";
+            //string fps = $@"{fpsMonitor.currentFps}";
             //string turn = turnManager.IsPlayerTurn ? "Player" : "Enemy";
             //string phase = turnManager.currentPhase.ToString();
 

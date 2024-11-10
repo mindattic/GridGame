@@ -281,8 +281,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         sprites = resourceManager.ActorSprite(this.archetype.ToString());
 
-        renderers.SetNameTagText(name);
-
+       
 
         if (IsPlayer)
         {
@@ -318,8 +317,8 @@ public class ActorBehavior : ExtendedMonoBehavior
             CalculateTurnDelay();
         }
 
-        //StartCoroutine(Flash());
-
+        renderers.SetNameTagText(name);
+        renderers.SetNameTagEnabled(isEnabled: showActorNameTag);
 
         AssignSkillWait();
         UpdateHealthBar();
@@ -336,9 +335,6 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
 
     }
-
-
-
 
     public void CalculateTurnDelay()
     {
@@ -398,7 +394,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //    var overlappingActor = FindOverlappingActor(closestTile);
 
-        //    //Assign overlapping actors location to current actor's location
+        //    //Assign overlapping actors location to currentFps actor's location
         //    if (overlappingActor != null)
         //    {
         //        overlappingActor.location = location;
@@ -407,7 +403,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         //        StartCoroutine(overlappingActor.MoveTowardDestination());
         //    }
 
-        //    //Assign current actor's location to closest tile location
+        //    //Assign currentFps actor's location to closest tile location
         //    location = closestTile.location;
         //    StartCoroutine(MoveTowardDestination());
         //}
@@ -538,7 +534,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public void CheckLocationChanged()
     {
-        //Check if current actor is closer to another tile (i.e.: it has moved)
+        //Check if currentFps actor is closer to another tile (i.e.: it has moved)
         var closestTile = Geometry.GetClosestTile(position);
         if (location == closestTile.location)
             return;
@@ -549,7 +545,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         CheckActorOverlapping(closestTile);
 
-        //Assign current actor's location to closest tile location
+        //Assign currentFps actor's location to closest tile location
         location = closestTile.location;
     }
 

@@ -188,7 +188,7 @@ public class Geometry
 
     /// <summary>
     /// Methods which calculate values relative to another unit
-    /// (which is calculated based on current device aspect ratio, screen size, etc)
+    /// (which is calculated based on currentFps device aspect ratio, screen size, etc)
     /// </summary>
     public static class Tile
     {

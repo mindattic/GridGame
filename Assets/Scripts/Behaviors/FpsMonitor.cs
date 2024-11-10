@@ -7,7 +7,7 @@ public class FpsMonitor
     const float MeasurePeriod = 0.5f;
     private int i = 0;
     private float NextPeriod = 0;
-    public int Current;
+    public int currentFps;
 
     public void Start()
     {
@@ -21,7 +21,7 @@ public class FpsMonitor
         if (Time.realtimeSinceStartup < NextPeriod)
             return;
 
-        Current = (int)(i / MeasurePeriod);
+        currentFps = (int)(i / MeasurePeriod);
         NextPeriod += MeasurePeriod;
         i = 0;
     }

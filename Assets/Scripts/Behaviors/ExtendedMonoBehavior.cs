@@ -12,6 +12,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
 
     //Variables
     protected float gameSpeed => GameManager.instance.gameSpeed;
+    protected bool showActorNameTag => GameManager.instance.showActorNameTag;
 
     //Canvases
     protected Canvas canvas2D => GameManager.instance.canvas2D;

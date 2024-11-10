@@ -9,7 +9,17 @@ public class DebugWindow : EditorWindow
     private Vector2 scrollPosition;
     private string logText = "";
     private DateTime lastUpdateTime;
-    private float updateInterval = 1.0f; // Update interval in seconds
+    private float updateInterval = 1.0f; // Startup interval in seconds
+
+    
+
+    //Properties
+
+    private bool showActorNameTag
+    {
+        get { return GameManager.instance.showActorNameTag; }
+        set { GameManager.instance.showActorNameTag = value; }
+    }
 
 
     // Static constructor to open the Debug Window when Unity loads
@@ -20,11 +30,20 @@ public class DebugWindow : EditorWindow
 
     private static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
-        // Open the Debug Window when entering play mode
-        if (state == PlayModeStateChange.EnteredPlayMode)
+        if (state != PlayModeStateChange.EnteredPlayMode)
+            return;
+
+        EditorApplication.update += startup;
+
+        void startup()
         {
+            float startupDelay = 3f;
+            if (EditorApplication.timeSinceStartup < startupDelay)
+                return;
+
             ShowWindow();
-        }
+            EditorApplication.update -= startup;
+        }     
     }
 
     private enum VFXOptions
@@ -103,7 +122,6 @@ public class DebugWindow : EditorWindow
         stageManager = GameManager.instance.stageManager;
         logManager = GameManager.instance.logManager;
 
-
         // Register the update method
         EditorApplication.update += OnEditorUpdate;
         lastUpdateTime = DateTime.Now;
@@ -117,62 +135,95 @@ public class DebugWindow : EditorWindow
 
     private void OnEditorUpdate()
     {
-        // Check if the update interval has passed
+
         if ((DateTime.Now - lastUpdateTime).TotalSeconds >= updateInterval)
         {
             lastUpdateTime = DateTime.Now;
             Repaint(); // Repaint the window
         }
-    }
 
+
+
+    }
 
     private void OnGUI()
     {
         //Check abort state
-        if (debugManager == null 
-            || consoleManager == null 
-            || turnManager == null 
-            || stageManager == null 
+        if (debugManager == null
+            || consoleManager == null
+            || turnManager == null
+            || stageManager == null
             || logManager == null)
             return;
 
         GUILayout.BeginVertical();
 
-        // Display labels at the top using ConsoleManager values
-        GUILayout.Label($"FPS: {consoleManager.fpsMonitor.Current}");
-        GUILayout.Label($"Runtime: {Time.time:F2} seconds");
+        GUILayout.BeginHorizontal();
+        RenderLabels();
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
+        RenderCheckboxes();
+        GUILayout.Space(10);
+        GUILayout.BeginHorizontal();
+        RenderVFXDropdown();
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        RenderOptionDropdown();
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Level", GUILayout.Width(Screen.width));
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        RenderLevelControls();
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
+        RenderCombatLog();
+
+        GUILayout.EndVertical();
+    }
+
+
+    private void RenderLabels()
+    {
+        GUILayout.Label($"FPS: {consoleManager.fpsMonitor.currentFps}");
         GUILayout.Label($"Turn: {(turnManager.IsPlayerTurn ? "Player" : "Enemy")}");
         GUILayout.Label($"Phase: {turnManager.currentPhase}");
+        GUILayout.Label($"Runtime: {Time.time:F2}");
+    }
 
-        GUILayout.Space(10);
 
-        // Dropdown and Play VFX button on the same line with custom widths
-        GUILayout.BeginHorizontal();
+    private void RenderCheckboxes()
+    {
+        var previousFlag = showActorNameTag;
+        showActorNameTag = EditorGUILayout.Toggle("Show Actor Name Tag", showActorNameTag);
+        if (showActorNameTag != previousFlag)
+        {
+            GameManager.instance.actors.ForEach(x => x.renderers.SetNameTagEnabled(showActorNameTag));
+        }
+    }
+
+
+
+    private void RenderVFXDropdown()
+    {
         GUILayout.Label("VFX", GUILayout.Width(Screen.width * 0.25f));
         selectedVfx = (VFXOptions)EditorGUILayout.EnumPopup(selectedVfx, GUILayout.Width(Screen.width * 0.5f));
         if (GUILayout.Button("Play", GUILayout.Width(Screen.width * 0.15f)))
             OnPlayVFXClick();
+    }
 
-        GUILayout.EndHorizontal();
-
-        // Dropdown and Run Options button on the same line with custom widths
-        GUILayout.BeginHorizontal();
+    private void RenderOptionDropdown()
+    {
         GUILayout.Label("Options", GUILayout.Width(Screen.width * 0.25f));
         selectedOption = (Options)EditorGUILayout.EnumPopup(selectedOption, GUILayout.Width(Screen.width * 0.5f));
         if (GUILayout.Button("Run", GUILayout.Width(Screen.width * 0.15f)))
             OnRunClick();
+    }
 
-        GUILayout.EndHorizontal();
+    private void RenderLevelControls()
+    {
 
-        // Add space before the three buttons
-        GUILayout.Space(10);
-
-        // Buttons for Reset, Previous, and Next
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Level", GUILayout.Width(Screen.width));
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
         if (GUILayout.Button("Reset", GUILayout.Width(Screen.width * 0.3f)))
             OnResetClick();
 
@@ -181,10 +232,11 @@ public class DebugWindow : EditorWindow
 
         if (GUILayout.Button("Next >", GUILayout.Width(Screen.width * 0.3f)))
             OnNextClick();
-        GUILayout.EndHorizontal();
+    }
 
-        GUILayout.Space(10);
 
+    private void RenderCombatLog()
+    {
 
         // 5. Display the logs (scrollable)
         //var backgroundColor = new Color(0.15f, 0.15f, 0.15f); // Darker background color
@@ -194,15 +246,14 @@ public class DebugWindow : EditorWindow
 
         scrollPosition = EditorGUILayout.BeginScrollView(
             scrollPosition,
-            GUILayout.Height(y), 
+            GUILayout.Height(y),
             GUILayout.ExpandHeight(true));
 
         GUILayout.Label(logManager.text, style);
         EditorGUILayout.EndScrollView();
 
-
-        GUILayout.EndVertical();
     }
+
 
     private void OnPlayVFXClick()
     {
