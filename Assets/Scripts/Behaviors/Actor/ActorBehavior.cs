@@ -807,7 +807,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case DodgeStage.TwistForward:
                     {
-                        // Update forward progress and sync rotation/scaleMultiplier
+                        // Save forward progress and sync rotation/scaleMultiplier
                         progress += rotationSpeed / targetRotation.y; // Normalize progress
                         progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
 
@@ -834,7 +834,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
                 case DodgeStage.TwistBackward:
                     {
-                        // Update backward progress and sync rotation/scaleMultiplier
+                        // Save backward progress and sync rotation/scaleMultiplier
                         progress += rotationSpeed / targetRotation.y; // Normalize progress
                         progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
 

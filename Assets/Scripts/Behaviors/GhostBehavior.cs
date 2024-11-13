@@ -87,7 +87,7 @@ public class GhostBehavior : ExtendedMonoBehavior
     }
 
 
-    // Update is called once per frame
+    // Save is called once per frame
     void Update()
     {
 

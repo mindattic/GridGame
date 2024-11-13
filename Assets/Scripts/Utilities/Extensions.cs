@@ -5,6 +5,20 @@ using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
+public static class StringExtensions
+{
+    public static string SanitizeFileName(this string src)
+    {
+        //Trim and replace spaces
+        src = src.Trim().Replace(" ", "-");
+
+        //Remove illegal characters for Windows, iOS, and Android
+        System.IO.Path.GetInvalidFileNameChars().ToList().ForEach(c => src = src.Replace(c.ToString(), ""));
+
+        return src;
+    }
+}
+
 public static class EnumExtensions
 {
     public static T Next<T>(this T src) where T : struct
@@ -153,9 +167,9 @@ static class StopwatchExtensions
     /// <summary>
     /// Gets estimated time on compleation. 
     /// </summary>
-    /// <param name="sw"></param>
-    /// <param name="counter"></param>
-    /// <param name="counterGoal"></param>
+    /// <param src="sw"></param>
+    /// <param src="counter"></param>
+    /// <param src="counterGoal"></param>
     /// <returns></returns>
     public static TimeSpan GetEta(this Stopwatch sw, int counter, int counterGoal)
     {

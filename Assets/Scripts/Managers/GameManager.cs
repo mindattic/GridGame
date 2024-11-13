@@ -2,9 +2,7 @@ using Game.Behaviors;
 using Game.Manager;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -14,7 +12,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public int targetFramerate = 60;
     [HideInInspector] public int vSyncCount = 0;
     [HideInInspector] public float gameSpeed = 1.0f;
-    
+
     //Flags
     [HideInInspector] public bool showActorNameTag = false;
     [HideInInspector] public bool showActorFrame = false;
@@ -23,6 +21,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public ResourceManager resourceManager;
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public CameraManager cameraManager;
+    [HideInInspector] public SaveFileManager saveFileManager;
     [HideInInspector] public StageManager stageManager;
     [HideInInspector] public BoardManager boardManager;
     [HideInInspector] public TurnManager turnManager;
@@ -122,7 +121,10 @@ public class GameManager : Singleton<GameManager>
         coinBar = GameObject.Find(Constants.CoinBar).GetComponent<CoinBarBehavior>() ?? throw new UnityException("CoinBarBehavior is null");
 
         var game = GameObject.Find(Constants.Game);
+        soundSource = game.GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");
+        musicSource = game.GetComponents<AudioSource>()[Constants.MusicSourceIndex] ?? throw new UnityException("MusicSource is null");
         cameraManager = game.GetComponent<CameraManager>() ?? throw new UnityException("CameraManager is null");
+        saveFileManager = game.GetComponent<SaveFileManager>() ?? throw new UnityException("SaveFileManager is null");
         stageManager = game.GetComponent<StageManager>() ?? throw new UnityException("StageManager is null");
         boardManager = game.GetComponent<BoardManager>() ?? throw new UnityException("BoardManager is null");
         turnManager = game.GetComponent<TurnManager>() ?? throw new UnityException("TurnManager is null");
@@ -147,16 +149,12 @@ public class GameManager : Singleton<GameManager>
         logManager = game.GetComponent<LogManager>() ?? throw new UnityException("LogManager is null");
         vfxManager = game.GetComponent<VFXManager>() ?? throw new UnityException("VFXManager is null");
         coinManager = game.GetComponent<CoinManager>() ?? throw new UnityException("CoinManager is null");
-        soundSource = game.GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");
-        musicSource = game.GetComponents<AudioSource>()[Constants.MusicSourceIndex] ?? throw new UnityException("MusicSource is null");
 
         combatParticipants = new CombatParticipants();
 
         //TODO: Retrieve coin count from "save game json"
         coinCount = 0;
 
-       
-     
         #region Platform Dependent Compilation
 
         //https://docs.unity3d.com/520/Documentation/Manual/PlatformDependentCompilation.html

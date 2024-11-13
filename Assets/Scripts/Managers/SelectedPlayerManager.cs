@@ -9,7 +9,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
     }
 
-    // Update is called once per frame
+    // Save is called once per frame
     void Update()
     {
 
@@ -40,7 +40,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (actor == null || !actor.IsPlaying)
             return;
 
-        //TODO: Update Card display...
+        //TODO: Save Card display...
         actors.ForEach(x => x.renderers.SetSelectionEnabled(false));
         focusedActor = actor;
         focusedActor.sortingOrder = SortingOrder.Max;

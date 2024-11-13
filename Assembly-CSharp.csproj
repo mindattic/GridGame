@@ -66,7 +66,6 @@
     <Compile Include="Assets\Scripts\Utilities\LogWindow.cs" />
     <Compile Include="Assets\Scripts\Managers\SupportLineManager.cs" />
     <Compile Include="Assets\Scripts\Models\Quality.cs" />
-    <Compile Include="Assets\CoinManager.cs" />
     <Compile Include="Assets\Scripts\Models\MaterialResource.cs" />
     <Compile Include="Assets\Scripts\Models\ShakeIntensity.cs" />
     <Compile Include="Assets\Scripts\Managers\SelectedPlayerManager.cs" />
@@ -77,7 +76,7 @@
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
     <Compile Include="Assets\Scripts\Models\Destination.cs" />
     <Compile Include="Assets\Scripts\Models\RectInt.cs" />
-    <Compile Include="Assets\TooltipBehavior.cs" />
+    <Compile Include="Assets\Scripts\Managers\CoinManager.cs" />
     <Compile Include="Assets\Scripts\Behaviors\GhostBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\SoundEffect.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
@@ -119,10 +118,12 @@
     <Compile Include="Assets\Scripts\Behaviors\BoardBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\PortraitManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Wait.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\CoinBarBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\Singleton.cs" />
     <Compile Include="Assets\Scripts\Utilities\Constants.cs" />
     <Compile Include="Assets\Scripts\Behaviors\SupportLineBehavior.cs" />
     <Compile Include="Assets\Scripts\Models\ActorSprite.cs" />
+    <Compile Include="Assets\Scripts\Behaviors\TooltipBehavior.cs" />
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorAttributes.cs" />
     <Compile Include="Assets\Scripts\Behaviors\DamageTextBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\CardManager.cs" />
@@ -139,12 +140,13 @@
     <Compile Include="Assets\Scripts\Behaviors\Actor\ActorThumbnail.cs" />
     <Compile Include="Assets\Scripts\Behaviors\PortraitBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\TooltipManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\SaveFileManager.cs" />
     <Compile Include="Assets\Scripts\Managers\BoardManager.cs" />
     <Compile Include="Assets\Scripts\Models\StageActor.cs" />
     <Compile Include="Assets\Scripts\Utilities\Extensions.cs" />
     <Compile Include="Assets\Scripts\Models\RectFloat.cs" />
     <Compile Include="Assets\Scripts\Managers\ConsoleManager.cs" />
-    <Compile Include="Assets\CoinBarBehavior.cs" />
+    <Compile Include="Assets\Scripts\Models\SaveFile.cs" />
     <Compile Include="Assets\Scripts\Managers\StageManager.cs" />
     <Compile Include="Assets\Scripts\Managers\TileManager.cs" />
     <Compile Include="Assets\Scripts\Managers\WallManager.cs" />
