@@ -130,6 +130,24 @@ public static class FloatExtensions
     }
 }
 
+//public static class BooleanExtensions
+//{
+//    public static bool IsNot(this bool b, bool value)
+//    {
+//        return b != value;
+//    }
+
+//    public static bool Toggle(this bool b, bool value)
+//    {
+//        if (b == value)
+//            return false;
+
+//        b = value;
+//        return true;
+//    }
+
+//}
+
 static class StopwatchExtensions
 {
     /// <summary>

@@ -1,50 +1,33 @@
-﻿using UnityEngine;
-using UnityEditor;
-using Game.Behaviors;
+﻿using Game.Behaviors;
 using System;
+using UnityEditor;
+using UnityEngine;
 
 [InitializeOnLoad] // This attribute ensures that the static constructor is called on load
 public class DebugWindow : EditorWindow
 {
     private Vector2 scrollPosition;
-    private string logText = "";
     private DateTime lastUpdateTime;
     private float updateInterval = 1.0f; // Startup interval in seconds
+    //private bool previousFlag = false;
 
-    
+    //private static void OnPlayModeStateChanged(PlayModeStateChange state)
+    //{
+    //    if (state != PlayModeStateChange.EnteredPlayMode)
+    //        return;
 
-    //Properties
+    //    EditorApplication.update += Init;
+    //}
 
-    private bool showActorNameTag
-    {
-        get { return GameManager.instance.showActorNameTag; }
-        set { GameManager.instance.showActorNameTag = value; }
-    }
+    //private static void Init()
+    //{
+    //    float startupDelay = 3f;
+    //    if (EditorApplication.timeSinceStartup < startupDelay)
+    //        return;
 
-
-    // Static constructor to open the Debug Window when Unity loads
-    static DebugWindow()
-    {
-        EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-    }
-
-    private static void OnPlayModeStateChanged(PlayModeStateChange state)
-    {
-        if (state != PlayModeStateChange.EnteredPlayMode)
-            return;
-
-        EditorApplication.update += startup;
-
-        void startup()
-        {
-            float startupDelay = 3f;
-            if (EditorApplication.timeSinceStartup < startupDelay)
-                return;
-
-            ShowWindow();
-            EditorApplication.update -= startup;
-        }     
-    }
+    //    ShowWindow();
+    //    EditorApplication.update -= Init;
+    //}
 
     private enum VFXOptions
     {
@@ -100,7 +83,7 @@ public class DebugWindow : EditorWindow
     private VFXOptions selectedVfx = VFXOptions.None;
     private Options selectedOption = Options.None;
 
-
+    private GameManager gameManager;
     private DebugManager debugManager;
     private ConsoleManager consoleManager;
     private TurnManager turnManager;
@@ -115,12 +98,17 @@ public class DebugWindow : EditorWindow
 
     private void OnEnable()
     {
-        // Find the DebugManager, ConsoleManager, and TurnManager in the scene
+        gameManager = GameManager.instance;
         debugManager = GameManager.instance.debugManager;
         consoleManager = GameManager.instance.consoleManager;
         turnManager = GameManager.instance.turnManager;
         stageManager = GameManager.instance.stageManager;
         logManager = GameManager.instance.logManager;
+
+        //Set initial flags
+        gameManager.showActorNameTag = false;
+        gameManager.showActorFrame = false;
+
 
         // Register the update method
         EditorApplication.update += OnEditorUpdate;
@@ -193,17 +181,26 @@ public class DebugWindow : EditorWindow
     }
 
 
+
     private void RenderCheckboxes()
     {
-        var previousFlag = showActorNameTag;
-        showActorNameTag = EditorGUILayout.Toggle("Show Actor Name Tag", showActorNameTag);
-        if (showActorNameTag != previousFlag)
+        //Show Actor Name Tag checkbox
+        var isEnabled = EditorGUILayout.Toggle("Show Actor Name Tag", gameManager.showActorNameTag);
+        if (gameManager.showActorNameTag != isEnabled)
         {
-            GameManager.instance.actors.ForEach(x => x.renderers.SetNameTagEnabled(showActorNameTag));
+            gameManager.showActorNameTag = isEnabled;
+            gameManager.actors.ForEach(x => x.renderers.SetNameTagEnabled(isEnabled));
         }
+
+        //Show Actor Frame checkbox
+        isEnabled = EditorGUILayout.Toggle("Show Actor Frame", gameManager.showActorFrame);
+        if (gameManager.showActorFrame != isEnabled)
+        {
+            gameManager.showActorFrame = isEnabled;
+            gameManager.actors.ForEach(x => x.renderers.SetFrameEnabled(isEnabled));
+        }
+
     }
-
-
 
     private void RenderVFXDropdown()
     {

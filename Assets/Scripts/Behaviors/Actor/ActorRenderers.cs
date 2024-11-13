@@ -149,6 +149,11 @@ public class ActorRenderers
         frame.color = frameColor;
     }
 
+    public void SetFrameEnabled(bool isEnabled)
+    {
+        frame.enabled = isEnabled;
+    }
+
     public void SetHealthBarAlpha(float alpha)
     {
         healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
