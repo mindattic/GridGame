@@ -42,7 +42,7 @@ public class SaveFileManager : ExtendedMonoBehavior
 #elif UNITY_IOS || UNITY_ANDROID
             name = PlayerPrefs.GetString("Username", SystemInfo.deviceUniqueIdentifier);
 #endif
-        }
+        }1
 
         name = name.SanitizeFileName();
         Save(new SaveFile(name));

@@ -7570,6 +7570,7 @@ GameObject:
   - component: {fileID: 1751276276}
   - component: {fileID: 1751276293}
   - component: {fileID: 1751276292}
+  - component: {fileID: 1751276308}
   - component: {fileID: 1751276301}
   - component: {fileID: 1751276282}
   - component: {fileID: 1751276277}
@@ -7633,9 +7634,12 @@ MonoBehaviour:
   targetFramerate: 60
   vSyncCount: 0
   gameSpeed: 1
+  showActorNameTag: 0
+  showActorFrame: 0
   resourceManager: {fileID: 0}
   inputManager: {fileID: 0}
   cameraManager: {fileID: 0}
+  saveFileManager: {fileID: 0}
   stageManager: {fileID: 0}
   boardManager: {fileID: 0}
   turnManager: {fileID: 0}
@@ -8171,6 +8175,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b11568e8681428e46a654aa296894e0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1751276308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751276275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90dd63d40e76f2948b234e5b2121b82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1830783914
