@@ -89,6 +89,7 @@ public class DebugWindow : EditorWindow
     private TurnManager turnManager;
     private StageManager stageManager;
     private LogManager logManager;
+    private SaveFileManager saveFileManager;
 
     [MenuItem("Window/Debug Window")]
     public static void ShowWindow()
@@ -98,19 +99,20 @@ public class DebugWindow : EditorWindow
 
     private void OnEnable()
     {
+        //Create references to manager instances
         gameManager = GameManager.instance;
         debugManager = GameManager.instance.debugManager;
         consoleManager = GameManager.instance.consoleManager;
         turnManager = GameManager.instance.turnManager;
         stageManager = GameManager.instance.stageManager;
         logManager = GameManager.instance.logManager;
+        saveFileManager = GameManager.instance.saveFileManager;
 
         //Set initial flags
         gameManager.showActorNameTag = false;
         gameManager.showActorFrame = false;
 
-
-        // Register the update method
+        //Register the update method
         EditorApplication.update += OnEditorUpdate;
         lastUpdateTime = DateTime.Now;
     }
@@ -141,7 +143,8 @@ public class DebugWindow : EditorWindow
             || consoleManager == null
             || turnManager == null
             || stageManager == null
-            || logManager == null)
+            || logManager == null 
+            || saveFileManager == null)
             return;
 
         GUILayout.BeginVertical();
@@ -166,8 +169,14 @@ public class DebugWindow : EditorWindow
         RenderLevelControls();
         GUILayout.EndHorizontal();
         GUILayout.Space(10);
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Save File", GUILayout.Width(Screen.width));
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        RenderSaveControls();
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
         RenderCombatLog();
-
         GUILayout.EndVertical();
     }
 
@@ -206,7 +215,7 @@ public class DebugWindow : EditorWindow
     {
         GUILayout.Label("VFX", GUILayout.Width(Screen.width * 0.25f));
         selectedVfx = (VFXOptions)EditorGUILayout.EnumPopup(selectedVfx, GUILayout.Width(Screen.width * 0.5f));
-        if (GUILayout.Button("Play", GUILayout.Width(Screen.width * 0.15f)))
+        if (GUILayout.Button("Play", GUILayout.Width(Screen.width * 0.25f)))
             OnPlayVFXClick();
     }
 
@@ -214,23 +223,31 @@ public class DebugWindow : EditorWindow
     {
         GUILayout.Label("Options", GUILayout.Width(Screen.width * 0.25f));
         selectedOption = (Options)EditorGUILayout.EnumPopup(selectedOption, GUILayout.Width(Screen.width * 0.5f));
-        if (GUILayout.Button("Run", GUILayout.Width(Screen.width * 0.15f)))
+        if (GUILayout.Button("Run", GUILayout.Width(Screen.width * 0.25f)))
             OnRunClick();
     }
 
     private void RenderLevelControls()
     {
 
-        if (GUILayout.Button("Reset", GUILayout.Width(Screen.width * 0.3f)))
+        if (GUILayout.Button("Reset", GUILayout.Width(Screen.width * 0.3333f)))
             OnResetClick();
 
-        if (GUILayout.Button("< Previous", GUILayout.Width(Screen.width * 0.3f)))
-            OnPreviousClick();
+        if (GUILayout.Button("< Previous", GUILayout.Width(Screen.width * 0.3333f)))
+            OnPreviousLevelClick();
 
-        if (GUILayout.Button("Next >", GUILayout.Width(Screen.width * 0.3f)))
-            OnNextClick();
+        if (GUILayout.Button("Next >", GUILayout.Width(Screen.width * 0.3333f)))
+            OnNextLevelClick();
     }
 
+    private void RenderSaveControls()
+    {
+        if (GUILayout.Button("Save", GUILayout.Width(Screen.width * 0.5f)))
+            OnSaveClick();
+
+        if (GUILayout.Button("Load", GUILayout.Width(Screen.width * 0.5f)))
+            OnReloadClick();
+    }
 
     private void RenderCombatLog()
     {
@@ -315,13 +332,23 @@ public class DebugWindow : EditorWindow
         stageManager.Load();
     }
 
-    private void OnPreviousClick()
+    private void OnPreviousLevelClick()
     {
         stageManager.PreviousStage();
     }
 
-    private void OnNextClick()
+    private void OnNextLevelClick()
     {
         stageManager.NextStage();
+    }
+
+    private void OnSaveClick()
+    {
+        saveFileManager.QuickSave();
+    }
+
+    private void OnReloadClick()
+    {
+        saveFileManager.Reload();
     }
 }

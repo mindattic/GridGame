@@ -140,7 +140,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.selectedPlayer = value; }
     }
 
-    protected int coinCount
+    protected int totalCoins
     {
         get { return GameManager.instance.coinCount; }
         set { GameManager.instance.coinCount = value; }

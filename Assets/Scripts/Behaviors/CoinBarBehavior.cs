@@ -35,6 +35,11 @@ public class CoinBarBehavior : ExtendedMonoBehavior
         UpdateGlow();
     }
 
+    public void Refresh()
+    {
+        textMesh.text = totalCoins.ToString("D5");
+    }
+
     private void UpdateGlow()
     {
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/

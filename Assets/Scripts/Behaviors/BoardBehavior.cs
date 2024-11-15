@@ -399,10 +399,9 @@ public class BoardBehavior : ExtendedMonoBehavior
 
         GenerateTiles();
 
-        //TODO: Goto save game selection screen, for now just auto load first save file...
-        //saveFileManager.Load();
-
-
+        //Order of Operations:
+        //saveFileManager.Load() => stageManager.Load() 
+        saveFileManager.Load();
         stageManager.Load();
     }
 

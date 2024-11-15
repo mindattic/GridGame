@@ -87,9 +87,8 @@ public class CoinBehavior : ExtendedMonoBehavior
         return sineCurve;
     }
 
-  
-
-    void Update()
+ 
+    public void Update()
     {
        
         switch (state)
@@ -125,8 +124,8 @@ public class CoinBehavior : ExtendedMonoBehavior
             case CoinState.Stop:
                 spriteRenderer.enabled = false;
                 particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-                coinCount++;
-                coinBar.textMesh.text = coinCount.ToString("D5");
+                totalCoins++;
+                coinBar.textMesh.text = totalCoins.ToString("D5");
                 audioManager.Play($"Move{Random.Int(1, 6)}");
                 state = CoinState.Destroy;
                 break;

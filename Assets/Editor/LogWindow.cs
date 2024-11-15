@@ -14,11 +14,11 @@ public class LogWindow : EditorWindow
     private int selectedRadioOption = 0; // 0 = Show Timestamps, 1 = Hide Timestamps
     private string[] radioOptions = new string[] { "Show Timestamps", "Hide Timestamps" };
 
-    [MenuItem("Window/Custom Log Window 2")]
+    [MenuItem("Window/Custom Log")]
     public static void ShowWindow()
     {
         // This will show the custom window from the Window menu with the new name
-        GetWindow<LogWindow>("Custom Log Window 2");
+        GetWindow<LogWindow>("Log Window");
     }
 
     private void OnEnable()

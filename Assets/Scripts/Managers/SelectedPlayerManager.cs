@@ -35,7 +35,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (collider == null)
             return;
 
-        //Retrieve Actor from collider
+        //Get Actor from collider
         var actor = collider.gameObject.GetComponent<ActorBehavior>();
         if (actor == null || !actor.IsPlaying)
             return;

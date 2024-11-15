@@ -190,6 +190,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\Shader\StencilMasked.shader" />
     <None Include="Assets\Shader\uvnoise.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Shader\henshuuv.shader" />
@@ -216,6 +217,7 @@
     <None Include="Assets\VFX\GameVFX Collection(URP)\Shaders\Alpha Blended.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Shader\ModelDouble.shader" />
+    <None Include="Assets\Shader\StencilMask.shader" />
     <None Include="Assets\VFX\GameVFX Collection(URP)\Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\Shader\MobileParticleAddMultiColor.shader" />

@@ -33,16 +33,17 @@ public class StageManager : ExtendedMonoBehavior
 
     public void Load()
     {
-
-        //DespawnAll and clear variables
+        currentStage = saveFileManager.currentSaveFile.CurrentStage;
+        totalCoins = saveFileManager.currentSaveFile.TotalCoins;
+ 
         focusedActor = null;
         selectedPlayer = null;
+        coinBar.Refresh();
         supportLineManager.Clear();
         attackLineManager.Clear();
         turnManager.Reset();
         timerBar.Reset();
         actorManager.Clear();
-        //overlayManager.Show();
         overlayManager.Show();
         titleManager.Print($"Stage {currentStage}");
 

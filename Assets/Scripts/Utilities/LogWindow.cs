@@ -12,7 +12,7 @@ namespace Assets.Scripts.Utilities
     {
         private Vector2 scrollPosition;
         private string logText = "";
-        private int logLevelFilter = 0; // SquadIndex of selected textMesh level
+        private int logLevelFilter = 0; // PartyIndex of selected textMesh level
         private string[] logLevels = new string[] { "All", "Log", "Warning", "Error", "Exception" };
 
         [MenuItem("Window/Custom Log Window")]

@@ -59,9 +59,6 @@ public class TimerBarBehavior : ExtendedMonoBehavior
             bar.transform.localScale = new Vector3(1f, scale.y, scale.z);
             timeRemaining = maxDuration;
             isRunning = false;
-            float x;
-            float y;
-            float z;
           
             //During:
             while (transform.position != initialPosition)

@@ -152,7 +152,7 @@ public class GameManager : Singleton<GameManager>
 
         combatParticipants = new CombatParticipants();
 
-        //TODO: Retrieve coin count from "save game json"
+        //TODO: Get coin count from "save game json"
         coinCount = 0;
 
         #region Platform Dependent Compilation
