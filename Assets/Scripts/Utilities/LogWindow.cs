@@ -1,14 +1,8 @@
-﻿using UnityEngine;
-using UnityEditor;
-using UnityEditor.PackageManager;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace Assets.Scripts.Utilities
 {
-    //Test
-
-    using UnityEngine;
-    using UnityEditor;
-
     public class LogWindow : EditorWindow
     {
         private Vector2 scrollPosition;
