@@ -403,6 +403,9 @@ public class BoardBehavior : ExtendedMonoBehavior
         //saveFileManager.Load() => stageManager.Load() 
         saveFileManager.Load();
         stageManager.Load();
+
+
+
     }
 
     void GenerateTiles()
