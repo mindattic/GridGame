@@ -11,10 +11,10 @@ public class DamageTextManager : ExtendedMonoBehavior
     public void Spawn(string text, Vector3 position)
     {
         var prefab = Instantiate(DamageTextPrefab, Vector2.zero, Quaternion.identity);
-        var damageText = prefab.GetComponent<DamageTextInstance>();
-        damageText.name = $"DamageText_{Guid.NewGuid()}";
-        damageText.parent = canvas3D.transform;
-        damageText.Spawn(text, position);
+        var instance = prefab.GetComponent<DamageTextInstance>();
+        instance.name = $"DamageText_{Guid.NewGuid()}";
+        instance.parent = canvas3D.transform;
+        instance.Spawn(text, position);
     }
 
     public void Clear()

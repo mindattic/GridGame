@@ -217,31 +217,31 @@ public class StageManager : ExtendedMonoBehavior
     public void Add(StageActor stageActor)
     {
         var prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
-        var actor = prefab.GetComponent<ActorBehavior>();
-        actor.parent = board.transform;
-        actor.archetype = stageActor.archetype;
-        actor.name = stageActor.name;
-        actor.thumbnail = stageActor.thumbnail;
-        actor.team = stageActor.team;
-        actor.quality = stageActor.quality;
-        actor.renderers.SetQualityColor(actor.IsPlayer ? Color.white : Color.red);
-        actor.sortingOrder = SortingOrder.Min;
+        var instance = prefab.GetComponent<ActorBehavior>();
+        instance.parent = board.transform;
+        instance.archetype = stageActor.archetype;
+        instance.name = stageActor.name;
+        instance.thumbnail = stageActor.thumbnail;
+        instance.team = stageActor.team;
+        instance.quality = stageActor.quality;
+        instance.renderers.SetQualityColor(instance.IsPlayer ? Color.white : Color.red);
+        instance.sortingOrder = SortingOrder.Min;
 
         //Assign stats
-        actor.stats = stageActor.stats;
-        actor.transform.localScale = tileScale;
+        instance.stats = stageActor.stats;
+        instance.transform.localScale = tileScale;
 
         if (stageActor.IsSpawning)
         {
-            actor.Spawn(stageActor.location);
+            instance.Spawn(stageActor.location);
         }
         else
         {
-            actor.spawnDelay = stageActor.spawnTurn;
-            actor.gameObject.SetActive(false);
+            instance.spawnDelay = stageActor.spawnTurn;
+            instance.gameObject.SetActive(false);
         }
 
-        actors.Add(actor);
+        actors.Add(instance);
     }
 
 

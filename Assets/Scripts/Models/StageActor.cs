@@ -40,7 +40,7 @@ public class StageActor
     //    this.idle = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
     //    this.team = team;
     //    this.quality = quality;
-    //    this.boardLocation = boardLocation.Nowhere;
+    //    this.boardLocation = boardLocation.NowhereLocation;
     //    this.spawnDelay = spawnDelay;
     //}
 

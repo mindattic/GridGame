@@ -36,7 +36,7 @@ public class Geometry
 
     public static Vector3 GetPositionByLocation(Vector2Int location)
     {
-        return board.locationPosition[location];
+        return board.locationToPosition[location];
     }
 
     //public static Vector2Int GetLocation(int col, int row)
@@ -164,10 +164,10 @@ public class Geometry
 
     public static bool IsInCorner(Vector2Int location)
     {
-        return location == board.boardLocation.A1 
-            || location == board.boardLocation.A6 
-            || location == board.boardLocation.H1 
-            || location == board.boardLocation.H6;
+        return location == board.A1 
+            || location == board.A6 
+            || location == board.H1 
+            || location == board.H6;
     }
 
 

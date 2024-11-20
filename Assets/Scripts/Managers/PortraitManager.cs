@@ -25,18 +25,18 @@ public class PortraitManager : ExtendedMonoBehavior
     public void SlideIn(ActorBehavior actor, Direction direction)
     {
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
-        var portrait = prefab.GetComponent<PortraitInstance>();
-        portrait.name = $"Portrait_{Guid.NewGuid()}";
-        portrait.parent = board.transform;
-        portrait.sortingOrder = sortingOrder++;
-        portrait.sprite = resourceManager.ActorSprite(actor.archetype.ToString()).portrait;
-        portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
-        portrait.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
-        portrait.actor = actor;
-        portrait.direction = direction;
-        portrait.startTime = Time.time;
+        var instance = prefab.GetComponent<PortraitInstance>();
+        instance.name = $"Portrait_{Guid.NewGuid()}";
+        instance.parent = board.transform;
+        instance.sortingOrder = sortingOrder++;
+        instance.sprite = resourceManager.ActorSprite(actor.archetype.ToString()).portrait;
+        instance.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+        instance.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
+        instance.actor = actor;
+        instance.direction = direction;
+        instance.startTime = Time.time;
 
-        StartCoroutine(portrait.SlideIn());
+        StartCoroutine(instance.SlideIn());
     }
 
 
@@ -49,19 +49,19 @@ public class PortraitManager : ExtendedMonoBehavior
     public void Dissolve(ActorBehavior actor)
     {
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
-        var portrait = prefab.GetComponent<PortraitInstance>();
-        portrait.name = $"Portrait_{Guid.NewGuid()}";
-        portrait.parent = board.transform;
-        portrait.sortingOrder = 100;
-        portrait.sprite = resourceManager.ActorSprite(actor.archetype.ToString()).portrait;
-        portrait.transform.localScale = new Vector3(0.5f, 0.5f, 1);
-        portrait.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
-        portrait.actor = actor;
-        portrait.position = actor.position;
-        portrait.startPosition = actor.position;
-        portrait.transform.localScale = new Vector3(0.25f, 0.25f, 1);
+        var instance = prefab.GetComponent<PortraitInstance>();
+        instance.name = $"Portrait_{Guid.NewGuid()}";
+        instance.parent = board.transform;
+        instance.sortingOrder = 100;
+        instance.sprite = resourceManager.ActorSprite(actor.archetype.ToString()).portrait;
+        instance.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+        instance.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
+        instance.actor = actor;
+        instance.position = actor.position;
+        instance.startPosition = actor.position;
+        instance.transform.localScale = new Vector3(0.25f, 0.25f, 1);
 
-        StartCoroutine(portrait.Dissolve());
+        StartCoroutine(instance.Dissolve());
     }
 
 }

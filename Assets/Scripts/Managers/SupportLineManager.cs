@@ -22,9 +22,9 @@ public class SupportLineManager : ExtendedMonoBehavior
             return;
 
         var prefab = Instantiate(supportLinePrefab, Vector2.zero, Quaternion.identity);
-        SupportLineInstance supportLine = prefab.GetComponent<SupportLineInstance>();
-        supportLines.Add(supportLine);
-        supportLine.Spawn(pair);
+        var instance = prefab.GetComponent<SupportLineInstance>();
+        supportLines.Add(instance);
+        instance.Spawn(pair);
     }
 
 

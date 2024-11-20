@@ -61,11 +61,11 @@ public class FootstepManager : ExtendedMonoBehavior
     private void Spawn()
     {
         GameObject prefab = Instantiate(FootstepPrefab, Vector2.zero, Quaternion.identity);
-        FootstepInstance footstep = prefab.GetComponent<FootstepInstance>();
-        footstep.sprite = resourceManager.Prop("Footstep");
-        footstep.name = $"Footstep_{Guid.NewGuid()}";
-        footstep.Parent = board.transform;
-        footstep.Spawn(Actor.position, Shared.RotationByDirection(Actor.position, PreviousPosition), IsRightFoot);
+        var instance = prefab.GetComponent<FootstepInstance>();
+        instance.sprite = resourceManager.Prop("Footstep");
+        instance.name = $"Footstep_{Guid.NewGuid()}";
+        instance.Parent = board.transform;
+        instance.Spawn(Actor.position, Shared.RotationByDirection(Actor.position, PreviousPosition), IsRightFoot);
         PreviousPosition = Actor.position;
         IsRightFoot = !IsRightFoot;
     }

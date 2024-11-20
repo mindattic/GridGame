@@ -55,12 +55,12 @@ public class GhostManager : ExtendedMonoBehavior
 
     private void Spawn()
     {
-        GameObject prefab = Instantiate(ghostPrefab, Vector2.zero, Quaternion.identity);
-        GhostInstance ghost = prefab.GetComponent<GhostInstance>();
-        ghost.thumbnail = actor.thumbnail;
-        ghost.name = $"Ghost_{Guid.NewGuid()}";
-        ghost.parent = board.transform;
-        ghost.Spawn(actor);
+        var prefab = Instantiate(ghostPrefab, Vector2.zero, Quaternion.identity);
+        var instance = prefab.GetComponent<GhostInstance>();
+        instance.thumbnail = actor.thumbnail;
+        instance.name = $"Ghost_{Guid.NewGuid()}";
+        instance.parent = board.transform;
+        instance.Spawn(actor);
     }
 
     public void Clear()

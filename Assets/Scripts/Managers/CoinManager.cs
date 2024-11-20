@@ -24,9 +24,9 @@ public class CoinManager : ExtendedMonoBehavior
     public void Spawn(Vector3 position)
     {
         var prefab = Instantiate(CoinPrefab, Vector2.zero, Quaternion.identity);
-        CoinInstance coinBehavior = prefab.GetComponent<CoinInstance>();
-        coinBehavior.name = $"Coin_{Guid.NewGuid()}";
-        coinBehavior.Spawn(position);
+        var instance = prefab.GetComponent<CoinInstance>();
+        instance.name = $"Coin_{Guid.NewGuid()}";
+        instance.Spawn(position);
     }
 
 }

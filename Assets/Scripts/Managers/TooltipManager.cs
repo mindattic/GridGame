@@ -13,10 +13,10 @@ namespace Game.Manager
 
         public void Spawn(string text, Vector3 position)
         {
-            GameObject prefab = Instantiate(tooltipPrefab, Vector2.zero, Quaternion.identity);
-            var tooltip = prefab.GetComponent<TooltipInstance>();
-            tooltip.name = $"Tooltip_{Guid.NewGuid()}";
-            tooltip.Spawn(text, position);
+            var prefab = Instantiate(tooltipPrefab, Vector2.zero, Quaternion.identity);
+            var instance = prefab.GetComponent<TooltipInstance>();
+            instance.name = $"Tooltip_{Guid.NewGuid()}";
+            instance.Spawn(text, position);
         }
 
         public void Clear()

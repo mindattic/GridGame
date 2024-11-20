@@ -13,10 +13,10 @@ public class VFXManager : ExtendedMonoBehavior
     public void SpawnAsync(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
-        var visualEffect = prefab.GetComponent<VFXInstance>();
-        visualEffect.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
-        visualEffects.Add(visualEffect.name, visualEffect);
-        visualEffect.SpawnAsync(vfx, position, triggeredEvent);
+        var instance = prefab.GetComponent<VFXInstance>();
+        instance.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
+        visualEffects.Add(instance.name, instance);
+        instance.SpawnAsync(vfx, position, triggeredEvent);
     }
 
 

@@ -1,3 +1,4 @@
+using Game.Instances;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,9 +25,9 @@ namespace Game.Behaviors
                 return;
 
             var prefab = Instantiate(AttackLinePrefab, Vector2.zero, Quaternion.identity);
-            AttackLineInstance attackLine = prefab.GetComponent<AttackLineInstance>();
-            attackLines.Add(attackLine);
-            attackLine.Spawn(pair);
+            var instance = prefab.GetComponent<AttackLineInstance>();
+            attackLines.Add(instance);
+            instance.Spawn(pair);
 
         }
 
