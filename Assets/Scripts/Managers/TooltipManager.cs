@@ -14,7 +14,7 @@ namespace Game.Manager
         public void Spawn(string text, Vector3 position)
         {
             GameObject prefab = Instantiate(tooltipPrefab, Vector2.zero, Quaternion.identity);
-            var tooltip = prefab.GetComponent<TooltipBehavior>();
+            var tooltip = prefab.GetComponent<TooltipInstance>();
             tooltip.name = $"Tooltip_{Guid.NewGuid()}";
             tooltip.Spawn(text, position);
         }

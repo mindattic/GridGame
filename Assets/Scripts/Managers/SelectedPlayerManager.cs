@@ -99,7 +99,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         audioManager.Play("Select");
 
-        //DespawnAll glowCurve position
+        //DespawnAll glowCurve boardPosition
         //ResetBobbing();
 
 
@@ -129,7 +129,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!HasSelectedPlayer)
             return;
 
-        //Assign location and position
+        //Assign boardLocation and boardPosition
         var closestTile = Geometry.GetClosestTile(selectedPlayer.position);
         closestTile.spriteRenderer.color = Colors.Translucent.White;
         selectedPlayer.location = closestTile.location;

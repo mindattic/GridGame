@@ -12,7 +12,7 @@ static class Random
     private static IQueryable<ActorBehavior> players => GameManager.instance.players;
     private static IQueryable<ActorBehavior> enemies => GameManager.instance.enemies;
     private static List<ActorBehavior> actors => GameManager.instance.actors;
-    private static List<TileBehavior> tiles => GameManager.instance.tiles;
+    private static List<TileInstance> tiles => GameManager.instance.tiles;
     private static int columnCount => GameManager.instance.board.columnCount;
     private static int rowCount => GameManager.instance.board.rowCount;
 
@@ -131,9 +131,9 @@ static class Random
 
     public static ActorBehavior Enemy => enemies.Where(x => x.IsPlaying).OrderBy(x => Guid.NewGuid()).First();
 
-    public static TileBehavior Tile => tiles.OrderBy(x => Guid.NewGuid()).First();
+    public static TileInstance Tile => tiles.OrderBy(x => Guid.NewGuid()).First();
 
-    public static TileBehavior UnoccupiedTile => tiles.Where(x => !x.IsOccupied).OrderBy(x => Guid.NewGuid()).First();
+    public static TileInstance UnoccupiedTile => tiles.Where(x => !x.IsOccupied).OrderBy(x => Guid.NewGuid()).First();
 
     public static Vector2Int Location => new Vector2Int(Int(1, columnCount), Int(1, rowCount));
 

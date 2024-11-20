@@ -10,7 +10,7 @@ namespace Game.Behaviors
     {
         //Variables
         [SerializeField] public GameObject AttackLinePrefab;
-        public List<AttackLineBehavior> attackLines = new List<AttackLineBehavior>();
+        public List<AttackLineInstance> attackLines = new List<AttackLineInstance>();
 
         public bool Exists(ActorPair pair)
         {
@@ -24,7 +24,7 @@ namespace Game.Behaviors
                 return;
 
             var prefab = Instantiate(AttackLinePrefab, Vector2.zero, Quaternion.identity);
-            AttackLineBehavior attackLine = prefab.GetComponent<AttackLineBehavior>();
+            AttackLineInstance attackLine = prefab.GetComponent<AttackLineInstance>();
             attackLines.Add(attackLine);
             attackLine.Spawn(pair);
 

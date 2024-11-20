@@ -8,12 +8,12 @@ using UnityEngine.VFX;
 public class VFXManager : ExtendedMonoBehavior
 {
     //Variables
-    Dictionary<string, VFXBehavior> visualEffects = new Dictionary<string, VFXBehavior>();
+    Dictionary<string, VFXInstance> visualEffects = new Dictionary<string, VFXInstance>();
 
     public void SpawnAsync(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
-        var visualEffect = prefab.GetComponent<VFXBehavior>();
+        var visualEffect = prefab.GetComponent<VFXInstance>();
         visualEffect.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
         visualEffects.Add(visualEffect.name, visualEffect);
         visualEffect.SpawnAsync(vfx, position, triggeredEvent);
@@ -23,7 +23,7 @@ public class VFXManager : ExtendedMonoBehavior
     public IEnumerator Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
-        var visualEffect = prefab.GetComponent<VFXBehavior>();
+        var visualEffect = prefab.GetComponent<VFXInstance>();
         visualEffect.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
         visualEffects.Add(visualEffect.name, visualEffect);
 

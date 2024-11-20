@@ -125,8 +125,8 @@ public class TurnManager : ExtendedMonoBehavior
             {
                 pair.actor1.sortingOrder = SortingOrder.Attacker;
                 pair.actor2.sortingOrder = SortingOrder.Attacker;
-                //tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.position);
-                //tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.position);
+                //tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.boardPosition);
+                //tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.boardPosition);
                 pair.alignment.enemies.ForEach(x => x.sortingOrder = SortingOrder.Defender);
                 attackLineManager.Spawn(pair);
             }

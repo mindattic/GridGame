@@ -256,7 +256,7 @@ public class DebugWindow : EditorWindow
         //var backgroundColor = new Color(0.15f, 0.15f, 0.15f); // Darker background color
         var style = new GUIStyle { richText = true };
         var y = position.height - 200;
-        //EditorGUI.DrawRect(new Rect(0, y, position.width, position.height), backgroundColor);
+        //EditorGUI.DrawRect(new Rect(0, y, boardPosition.width, boardPosition.height), backgroundColor);
 
         scrollPosition = EditorGUILayout.BeginScrollView(
             scrollPosition,
@@ -349,7 +349,11 @@ public class DebugWindow : EditorWindow
 
     private void OnReloadClick()
     {
-        saveFileManager.Reload();
+        var success = saveFileManager.Reload();
+        if (!success)
+            return;
+
+
     }
 
 

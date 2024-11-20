@@ -25,7 +25,7 @@ public class PortraitManager : ExtendedMonoBehavior
     public void SlideIn(ActorBehavior actor, Direction direction)
     {
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
-        var portrait = prefab.GetComponent<PortraitBehavior>();
+        var portrait = prefab.GetComponent<PortraitInstance>();
         portrait.name = $"Portrait_{Guid.NewGuid()}";
         portrait.parent = board.transform;
         portrait.sortingOrder = sortingOrder++;
@@ -49,7 +49,7 @@ public class PortraitManager : ExtendedMonoBehavior
     public void Dissolve(ActorBehavior actor)
     {
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
-        var portrait = prefab.GetComponent<PortraitBehavior>();
+        var portrait = prefab.GetComponent<PortraitInstance>();
         portrait.name = $"Portrait_{Guid.NewGuid()}";
         portrait.parent = board.transform;
         portrait.sortingOrder = 100;

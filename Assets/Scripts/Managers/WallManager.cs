@@ -26,9 +26,9 @@ public class WallManager : MonoBehaviour
         //{
         //    var player = other.collider.prefab;
 
-        //    player.transform.position = new Vector3(transform.position.x - tileSize,
-        //                                            player.transform.position.y,
-        //                                            player.transform.position.z);
+        //    player.transform.boardPosition = new Vector3(transform.boardPosition.x - tileSize,
+        //                                            player.transform.boardPosition.y,
+        //                                            player.transform.boardPosition.z);
 
 
         //}

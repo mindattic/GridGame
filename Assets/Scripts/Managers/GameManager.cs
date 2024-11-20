@@ -78,11 +78,11 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public ActorBehavior selectedPlayer;
 
     //Behaviors
-    [HideInInspector] public TimerBarBehavior timerBar;
+    [HideInInspector] public TimerBarInstance timerBar;
     [HideInInspector] public List<ActorBehavior> actors;
-    [HideInInspector] public BoardBehavior board;
-    [HideInInspector] public List<TileBehavior> tiles;
-    [HideInInspector] public List<SupportLineBehavior> lines;
+    [HideInInspector] public BoardInstance board;
+    [HideInInspector] public List<TileInstance> tiles;
+    [HideInInspector] public List<SupportLineInstance> lines;
 
     [HideInInspector] public CombatParticipants combatParticipants;
 
@@ -94,7 +94,7 @@ public class GameManager : Singleton<GameManager>
 
     [HideInInspector] public int coinCount;
 
-    [HideInInspector] public CoinBarBehavior coinBar;
+    [HideInInspector] public CoinBarInstance coinBar;
 
     private void Awake()
     {
@@ -111,14 +111,14 @@ public class GameManager : Singleton<GameManager>
         snapDistance = tileSize * 0.125f;
         shakeIntensity = new ShakeIntensity(tileSize);
 
-        board = GameObject.Find(Constants.Board).GetComponent<BoardBehavior>() ?? throw new UnityException("BoardBehavior is null");
+        board = GameObject.Find(Constants.Board).GetComponent<BoardInstance>() ?? throw new UnityException("BoardInstance is null");
         canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>() ?? throw new UnityException("Canvas2D is null");
         canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>() ?? throw new UnityException("Canvas3D is null");
         cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>() ?? throw new UnityException("CardManager is null");
         titleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>() ?? throw new UnityException("TitleManager is null");
         resourceManager = GameObject.Find(Constants.Resources).GetComponent<ResourceManager>() ?? throw new UnityException("ResourceManager is null");
-        timerBar = GameObject.Find(Constants.TimerBar).GetComponent<TimerBarBehavior>() ?? throw new UnityException("TimerBarBehavior is null");
-        coinBar = GameObject.Find(Constants.CoinBar).GetComponent<CoinBarBehavior>() ?? throw new UnityException("CoinBarBehavior is null");
+        timerBar = GameObject.Find(Constants.TimerBar).GetComponent<TimerBarInstance>() ?? throw new UnityException("TimerBarInstance is null");
+        coinBar = GameObject.Find(Constants.CoinBar).GetComponent<CoinBarInstance>() ?? throw new UnityException("CoinBarInstance is null");
 
         var game = GameObject.Find(Constants.Game);
         soundSource = game.GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");

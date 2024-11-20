@@ -61,9 +61,9 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected AudioSource musicSource => GameManager.instance.musicSource;
 
     //Behaviors
-    protected TimerBarBehavior timerBar => GameManager.instance.timerBar;
-    protected BoardBehavior board => GameManager.instance.board;
-    protected List<TileBehavior> tiles => GameManager.instance.tiles;
+    protected TimerBarInstance timerBar => GameManager.instance.timerBar;
+    protected BoardInstance board => GameManager.instance.board;
+    protected List<TileInstance> tiles => GameManager.instance.tiles;
     protected List<ActorBehavior> actors
     {
         get => GameManager.instance.actors;
@@ -146,7 +146,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.coinCount = value; }
     }
 
-    protected CoinBarBehavior coinBar => GameManager.instance.coinBar;
+    protected CoinBarInstance coinBar => GameManager.instance.coinBar;
 
 }
 

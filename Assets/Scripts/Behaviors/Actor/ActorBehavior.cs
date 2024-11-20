@@ -129,13 +129,13 @@ public class ActorBehavior : ExtendedMonoBehavior
     public float Luck { get => stats.Luck; set => stats.Luck = value; }
 
 
-    public TileBehavior currentTile => tiles.First(x => x.location.Equals(location));
+    public TileInstance currentTile => tiles.First(x => x.location.Equals(location));
     public bool IsPlayer => team.Equals(Team.Player);
     public bool IsEnemy => team.Equals(Team.Enemy);
     public bool IsFocusedPlayer => HasFocusedActor && Equals(focusedActor);
     public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
     public bool IsAttacking => combatParticipants.attackingPairs.Any(x => x.actor1 == this || x.actor2 == this);
-    public bool HasLocation => location != board.location.Nowhere;
+    public bool HasLocation => location != board.boardLocation.Nowhere;
     public bool HasReachedDestination => position == destination;
     public bool IsNorthEdge => location.y == 1;
     public bool IsEastEdge => location.x == board.columnCount;
@@ -351,9 +351,9 @@ public class ActorBehavior : ExtendedMonoBehavior
         UpdateTurnDelayText();
     }
 
-    ActorBehavior FindOverlappingActor(TileBehavior closestTile)
+    ActorBehavior FindOverlappingActor(TileInstance closestTile)
     {
-        //Determine if two actors are overlapping the same location
+        //Determine if two actors are overlapping the same boardLocation
         var overlappingActor = actors.FirstOrDefault(x => x != null
                                             && !x.Equals(this)
                                             && x.IsPlaying
@@ -384,27 +384,27 @@ public class ActorBehavior : ExtendedMonoBehavior
         //if (!IsPlaying || isMoving)
         //    return;
 
-        //var closestTile = Geometry.GetClosestTile(position);
-        //if (location != closestTile.location)
+        //var closestTile = Geometry.GetClosestTile(boardPosition);
+        //if (boardLocation != closestTile.boardLocation)
         //{
-        //    previousLocation = location;
+        //    previousLocation = boardLocation;
 
 
         //    audioManager.Play($"Move{Random.Int(1, 6)}");
 
         //    var overlappingActor = FindOverlappingActor(closestTile);
 
-        //    //Assign overlapping actors location to currentFps actor's location
+        //    //Assign overlapping actors boardLocation to currentFps actor's boardLocation
         //    if (overlappingActor != null)
         //    {
-        //        overlappingActor.location = location;
-        //        overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.location);
+        //        overlappingActor.boardLocation = boardLocation;
+        //        overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.boardLocation);
         //        overlappingActor.isMoving = true;
         //        StartCoroutine(overlappingActor.MoveTowardDestination());
         //    }
 
-        //    //Assign currentFps actor's location to closest tile location
-        //    location = closestTile.location;
+        //    //Assign currentFps actor's boardLocation to closest tile boardLocation
+        //    boardLocation = closestTile.boardLocation;
         //    StartCoroutine(MoveTowardDestination());
         //}
     }
@@ -412,8 +412,8 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     //private void Swap(Vector2Int newLocation)
     //{
-    //    location = newLocation;
-    //    destination = Geometry.GetPositionByLocation(location);
+    //    boardLocation = newLocation;
+    //    destination = Geometry.GetPositionByLocation(boardLocation);
     //    isMoving = true;
     //    StartCoroutine(MoveTowardDestination());
     //}
@@ -545,11 +545,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         CheckActorOverlapping(closestTile);
 
-        //Assign currentFps actor's location to closest tile location
+        //Assign currentFps actor's boardLocation to closest tile boardLocation
         location = closestTile.location;
     }
 
-    public void CheckActorOverlapping(TileBehavior closestTile)
+    public void CheckActorOverlapping(TileInstance closestTile)
     {
         var overlappingActor = FindOverlappingActor(closestTile);
         if (overlappingActor == null)
@@ -578,7 +578,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bounds.Bottom, board.bounds.Top);
 
             //Move selected player towards cursor
-            //position = Vector2.MoveTowards(position, cursorPosition, cursorSpeed);
+            //boardPosition = Vector2.MoveTowards(boardPosition, cursorPosition, cursorSpeed);
 
             //Snap selected player to cursor
             position = cursorPosition;
@@ -624,7 +624,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             {
                 position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), moveSpeed);
 
-                //Snap horizontal position (if applicable)
+                //Snap horizontal boardPosition (if applicable)
                 if (Mathf.Abs(delta.x) <= snapDistance)
                     position = new Vector3(destination.x, position.y, position.z);
             }
@@ -632,7 +632,7 @@ public class ActorBehavior : ExtendedMonoBehavior
             {
                 position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), moveSpeed);
 
-                //Snap vertical position (if applicable)
+                //Snap vertical boardPosition (if applicable)
                 if (Mathf.Abs(delta.y) <= snapDistance)
                     position = new Vector3(position.x, destination.y, position.z);
             }
@@ -728,9 +728,9 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         //var pos = new Vector3(
-        //    transform.position.x,
-        //    transform.position.y + (glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 64)),
-        //    transform.position.z);
+        //    transform.boardPosition.x,
+        //    transform.boardPosition.y + (glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 64)),
+        //    transform.boardPosition.z);
 
         //var rot = new Vector3(
         //   transform.angularRotation.x,
@@ -739,10 +739,10 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //renderers.idle.transform.Rotate(Vector3.up * glowCurve.Evaluate(Time.time % glowCurve.length) * (tileSize / 3));
 
-        //renderers.glow.transform.position = pos;
-        //renderers.idle.transform.position = pos;
-        //renderers.frame.transform.position = pos;
-        //renderers.idle.transform.position = pos;
+        //renderers.glow.transform.boardPosition = pos;
+        //renderers.idle.transform.boardPosition = pos;
+        //renderers.frame.transform.boardPosition = pos;
+        //renderers.idle.transform.boardPosition = pos;
         //renderers.idle.transform.angularRotation = rot;
     }
 
@@ -1155,7 +1155,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         }
 
         //After:       
-        location = board.location.Nowhere;
+        location = board.boardLocation.Nowhere;
         destination = new Vector3(-100, -100, 0);
         position = destination;
         gameObject.SetActive(false);
@@ -1386,11 +1386,11 @@ public class ActorBehavior : ExtendedMonoBehavior
 
         //IEnumerator _()
         //{
-        //    coinManager.Spawn(position);
+        //    coinManager.Spawn(boardPosition);
         //    yield return true;
         //}
         //var vfx = resourceManager.VisualEffect("Yellow_Hit");
-        //vfxManager.SpawnAsync(vfx, position, _());
+        //vfxManager.SpawnAsync(vfx, boardPosition, _());
 
     }
 

@@ -7,11 +7,11 @@ using UnityEngine;
 
 public class Geometry
 {
-    private static BoardBehavior board => GameManager.instance.board;
+    private static BoardInstance board => GameManager.instance.board;
     private static float tileSize => GameManager.instance.tileSize;
     private static Vector3 tileScale => GameManager.instance.tileScale;
     private static List<ActorBehavior> actors => GameManager.instance.actors;
-    private static List<TileBehavior> tiles => GameManager.instance.tiles;
+    private static List<TileInstance> tiles => GameManager.instance.tiles;
 
     //private static Dictionary<Vector2Int, Vector3> boardPositions = new Dictionary<Vector2Int, Vector3>();
     //private static Dictionary<Vector3, Vector2Int> boardLocations = new Dictionary<Vector3, Vector2Int>();
@@ -21,14 +21,14 @@ public class Geometry
     {
 
         //Assign lookup dictionaries
-        //tiles.ForEach(x => boardPositions.Add(x.location, x.position));
-        //tiles.ForEach(x => boardLocations.Add(x.position, x.location));
+        //tiles.ForEach(x => boardPositions.Add(x.boardLocation, x.boardPosition));
+        //tiles.ForEach(x => boardLocations.Add(x.boardPosition, x.boardLocation));
     }
 
 
     public static Vector3 CalculatePositionByLocation(Vector2Int location)
     {
-        //return boardPositions[location];
+        //return boardPositions[boardLocation];
         float x = board.offset.x + (tileSize * location.x);
         float y = board.offset.y + -(tileSize * location.y);
         return new Vector3(x, y, 0);
@@ -46,28 +46,28 @@ public class Geometry
     //    return new Vector2Int(col, row);
     //}
 
-    //public static Vector2Int LocationFromPosition(Vector3 location)
+    //public static Vector2Int LocationFromPosition(Vector3 boardLocation)
     //{
-    //    int x = Mathf.FloorToInt(location.x / tileSize - board.relativeOffset.x);
-    //    int y = Mathf.FloorToInt(location.y / tileSize - board.relativeOffset.y);
+    //    int x = Mathf.FloorToInt(boardLocation.x / tileSize - board.relativeOffset.x);
+    //    int y = Mathf.FloorToInt(boardLocation.y / tileSize - board.relativeOffset.y);
     //    return new Vector2Int(x, y);
     //}
 
-    public static TileBehavior GetClosestTile(Vector3 position)
+    public static TileInstance GetClosestTile(Vector3 position)
     {
         return tiles.OrderBy(x => Vector3.Distance(x.transform.position, position)).First();
     }
 
-    public static TileBehavior GetClosestTile(Vector2Int location)
+    public static TileInstance GetClosestTile(Vector2Int location)
     {
         return tiles.First(x => x.location == location);
-        //return tiles.OrderBy(x => Vector2Int.Distance(x.location, location)).First();
+        //return tiles.OrderBy(x => Vector2Int.Distance(x.boardLocation, boardLocation)).First();
     }
 
 
-    //public static Vector3 ClosestTilePosition(Vector2Int location)
+    //public static Vector3 ClosestTilePosition(Vector2Int boardLocation)
     //{
-    //    return tiles.OrderBy(x => Vector2Int.Distance(x.location, location)).First().position;
+    //    return tiles.OrderBy(x => Vector2Int.Distance(x.boardLocation, boardLocation)).First().boardPosition;
     //}
 
 
@@ -103,7 +103,7 @@ public class Geometry
         if (IsAdjacentTo(attacker, other))
             return attacker.currentTile.position;
 
-        //Swap position with target
+        //Swap boardPosition with target
         return other.currentTile.position;
 
 
@@ -112,40 +112,40 @@ public class Geometry
 
 
         //...Otherwise, Find closest unoccupied tile adjacent to player...
-        var closestUnoccupiedAdjacentTile = GetClosestUnoccupiedAdjacentTileByLocation(position.location);
+        var closestUnoccupiedAdjacentTile = GetClosestUnoccupiedAdjacentTileByLocation(boardPosition.boardLocation);
         if (closestUnoccupiedAdjacentTile != null)
-            return closestUnoccupiedAdjacentTile.position;
+            return closestUnoccupiedAdjacentTile.boardPosition;
 
         //...Otherwise, Find closest tile adjacent to player...
-        var closestAdjacentTile = GetClosestAdjacentTileByLocation(position.location);
+        var closestAdjacentTile = GetClosestAdjacentTileByLocation(boardPosition.boardLocation);
         if (closestAdjacentTile != null)
-            return closestAdjacentTile.position;
+            return closestAdjacentTile.boardPosition;
 
         //...Otherwise, find closest unoccupied tile to player...
-        var closestUnoccupiedTile = GetClosestUnoccupiedTileByLocation(position.location);
+        var closestUnoccupiedTile = GetClosestUnoccupiedTileByLocation(boardPosition.boardLocation);
         if (closestUnoccupiedTile != null)
-            return closestUnoccupiedTile.position;
+            return closestUnoccupiedTile.boardPosition;
 
         //...Otherwise, find closest tile to player
-        var closestTile = GetClosestTile(position.location);
+        var closestTile = GetClosestTile(boardPosition.boardLocation);
         if (closestTile != null)
-            return closestTile.position;
+            return closestTile.boardPosition;
 
-        return attacker.position;
+        return attacker.boardPosition;
         */
     }
 
-    public static TileBehavior GetClosestUnoccupiedTileByLocation(Vector2Int other)
+    public static TileInstance GetClosestUnoccupiedTileByLocation(Vector2Int other)
     {
         return tiles.FirstOrDefault(x => !x.IsOccupied && Vector2Int.Distance(x.location, other) == 1);
     }
 
-    public static TileBehavior GetClosestUnoccupiedAdjacentTileByLocation(Vector2Int other)
+    public static TileInstance GetClosestUnoccupiedAdjacentTileByLocation(Vector2Int other)
     {
         return tiles.FirstOrDefault(x => !x.IsOccupied && x.IsAdjacentTo(other));
     }
 
-    public static TileBehavior GetClosestAdjacentTileByLocation(Vector2Int other)
+    public static TileInstance GetClosestAdjacentTileByLocation(Vector2Int other)
     {
         return tiles.FirstOrDefault(x => x.IsAdjacentTo(other));
     }
@@ -164,10 +164,10 @@ public class Geometry
 
     public static bool IsInCorner(Vector2Int location)
     {
-        return location == board.location.A1 
-            || location == board.location.A6 
-            || location == board.location.H1 
-            || location == board.location.H6;
+        return location == board.boardLocation.A1 
+            || location == board.boardLocation.A6 
+            || location == board.boardLocation.H1 
+            || location == board.boardLocation.H6;
     }
 
 

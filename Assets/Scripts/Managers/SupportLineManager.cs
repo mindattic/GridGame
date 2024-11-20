@@ -8,7 +8,7 @@ public class SupportLineManager : ExtendedMonoBehavior
 {
     //Variables
     [SerializeField] public GameObject supportLinePrefab;
-    public List<SupportLineBehavior> supportLines = new List<SupportLineBehavior>();
+    public List<SupportLineInstance> supportLines = new List<SupportLineInstance>();
 
     public bool Exists(ActorPair pair)
     {
@@ -22,7 +22,7 @@ public class SupportLineManager : ExtendedMonoBehavior
             return;
 
         var prefab = Instantiate(supportLinePrefab, Vector2.zero, Quaternion.identity);
-        SupportLineBehavior supportLine = prefab.GetComponent<SupportLineBehavior>();
+        SupportLineInstance supportLine = prefab.GetComponent<SupportLineInstance>();
         supportLines.Add(supportLine);
         supportLine.Spawn(pair);
     }

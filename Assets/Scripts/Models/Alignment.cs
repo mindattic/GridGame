@@ -2,7 +2,7 @@
 
 public class Alignment
 {
-    public List<TileBehavior> gaps;
+    public List<TileInstance> gaps;
     public List<ActorBehavior> enemies;
     public List<ActorBehavior> players;
 

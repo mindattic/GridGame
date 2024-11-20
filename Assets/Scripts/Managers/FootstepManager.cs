@@ -61,7 +61,7 @@ public class FootstepManager : ExtendedMonoBehavior
     private void Spawn()
     {
         GameObject prefab = Instantiate(FootstepPrefab, Vector2.zero, Quaternion.identity);
-        FootstepBehavior footstep = prefab.GetComponent<FootstepBehavior>();
+        FootstepInstance footstep = prefab.GetComponent<FootstepInstance>();
         footstep.sprite = resourceManager.Prop("Footstep");
         footstep.name = $"Footstep_{Guid.NewGuid()}";
         footstep.Parent = board.transform;
