@@ -94,8 +94,8 @@ public class BoardInstance : ExtendedMonoBehavior
         GenerateTiles();
 
         //Order of Operations:
-        //saveFileManager.Load() => stageManager.Load() 
-        saveFileManager.Load();
+        //saveFileManager.LoadSaveFiles() => stageManager.LoadSaveFiles() 
+        saveFileManager.LoadSaveFiles();
         stageManager.Load();
 
     }

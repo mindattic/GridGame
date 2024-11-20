@@ -245,7 +245,7 @@ public class DebugWindow : EditorWindow
         if (GUILayout.Button("Save", GUILayout.Width(Screen.width * 0.5f)))
             OnSaveClick();
 
-        if (GUILayout.Button("Load", GUILayout.Width(Screen.width * 0.5f)))
+        if (GUILayout.Button("LoadSaveFiles", GUILayout.Width(Screen.width * 0.5f)))
             OnReloadClick();
     }
 

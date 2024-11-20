@@ -152,7 +152,6 @@ public class GameManager : Singleton<GameManager>
 
         combatParticipants = new CombatParticipants();
 
-        //TODO: Get coin count from "save game json"
         coinCount = 0;
 
         #region Platform Dependent Compilation
@@ -171,7 +170,7 @@ public class GameManager : Singleton<GameManager>
         //#elif UNITY_WEBGL
         //  deviceType = "UNITY_WEBGL";
         //#else
-        //    deviceType = "Unknown";;
+        //    deviceType = "Unknown";
         //#endif
         //        Debug.Log($"Running on {deviceType}");
 

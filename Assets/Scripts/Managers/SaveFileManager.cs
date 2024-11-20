@@ -4,12 +4,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 public class SaveFileManager : ExtendedMonoBehavior
 {
+
+    public const bool PRETTY_PRINT = true;
+
     //Variables
     public List<SaveFile> saveFiles = new List<SaveFile>();
     public SaveFile currentSaveFile = null;
@@ -38,19 +42,19 @@ public class SaveFileManager : ExtendedMonoBehavior
             return false;
         }
 
-        //Retrieve file path
+        //Retrieve file directoryPath
         if (!saveFile.HasFilePath)
-            saveFile.FilePath = GetFilePath(saveFile.Guid);
+            saveFile.FilePath = GetFilePathFromGuid(saveFile.Guid);
 
-        //Verify file path
+        //Verify file directoryPath
         if (string.IsNullOrWhiteSpace(saveFile.FilePath))
         {
-            Debug.LogError($"An invalid file path: {saveFile.FilePath} was specified.");
+            Debug.LogError($"An invalid file directoryPath: {saveFile.FilePath} was specified.");
             return false;
         }
 
         //Parse save file into json
-        string json = JsonUtility.ToJson(saveFile, prettyPrint: true);
+        string json = JsonUtility.ToJson(saveFile, PRETTY_PRINT);
         if (string.IsNullOrWhiteSpace(json) || json == "{}")
         {
             Debug.LogError($"Failed to serialize save file: save-{saveFile.Guid}.json.");
@@ -92,7 +96,7 @@ public class SaveFileManager : ExtendedMonoBehavior
             return false;
         }
 
-        currentSaveFile = Get(currentSaveFile.Guid);
+        currentSaveFile = GetSaveFile(currentSaveFile.Guid);
         if (currentSaveFile == null || !currentSaveFile.IsValid())
         {
             Debug.LogError($"Current save file is not valid.");
@@ -105,31 +109,31 @@ public class SaveFileManager : ExtendedMonoBehavior
     /// <summary>
     /// Method which is used to load all save files into List<>
     /// </summary>
-    public void Load(int index = 0)
+    public void LoadSaveFiles(int index = 0)
     {
         var sw = Stopwatch.StartNew();
 
-        //Retrieve existing save-*.json files
-        var jsonFilePaths = GetJsonFilePaths();
+        //Retrieve existing {GUID}\save.json file paths
+        var saveJsonFilePaths = GetSaveJsonFilePaths();
 
         //Create new save file if none are detected
-        if (jsonFilePaths == null || jsonFilePaths.Count < 1)
+        if (saveJsonFilePaths == null || saveJsonFilePaths.Count < 1)
         {
             if (Create())
-                jsonFilePaths = GetJsonFilePaths();
+                saveJsonFilePaths = GetSaveJsonFilePaths();
             else
                 Debug.LogError($"Failed to create a new save file.");
         }
 
         //Iterate accross all save json files
-        foreach (var x in jsonFilePaths)
+        foreach (var filePath in saveJsonFilePaths)
         {
-            //Get guid out of filename
-            string guid = Path.GetFileNameWithoutExtension(x).Substring("save-".Length);
+            //GetSaveFile guid out of filename
+            string guid = GetGuidFromFilePath(filePath);
             if (string.IsNullOrWhiteSpace(guid))
                 continue;
 
-            var saveFile = Get(guid);
+            var saveFile = GetSaveFile(guid);
             if (saveFile == null || !saveFile.IsValid())
                 continue;
 
@@ -138,11 +142,11 @@ public class SaveFileManager : ExtendedMonoBehavior
 
         if (saveFiles == null || saveFiles.Count < 1)
         {
-            Debug.LogError($"Failed to load any valid save file from: {string.Join(",", jsonFilePaths)}.");
+            Debug.LogError($"Failed to load any valid save file from: {string.Join(",", saveJsonFilePaths)}.");
             return;
         }
 
-        //Load selected save file
+        //LoadSaveFiles selected save file
         currentSaveFile = saveFiles[index];
 
 
@@ -150,16 +154,21 @@ public class SaveFileManager : ExtendedMonoBehavior
         Debug.LogWarning($"Loaded current save file in {sw.ElapsedMilliseconds} ms.");
     }
 
+    public void Delete()
+    {
+
+    }
+
     /// <summary>
     /// Method which is used to retrieve an existing save file 
     /// by deserializing JSON and creating SaveFile object
     /// </summary>
-    private SaveFile Get(string guid)
+    private SaveFile GetSaveFile(string guid)
     {
         if (string.IsNullOrWhiteSpace(guid))
             return null;
 
-        var filePath = GetFilePath(guid);
+        var filePath = GetFilePathFromGuid(guid);
         if (!File.Exists(filePath))
         {
             Debug.LogError($"Save file: {guid} does not exist.");
@@ -181,26 +190,53 @@ public class SaveFileManager : ExtendedMonoBehavior
     /// Method which is used to retrieve list of all .json 
     /// file paths from persistentDataPath
     /// </summary>
-    private List<string> GetJsonFilePaths()
+    private List<string> GetSaveJsonFilePaths()
     {
-        return Directory.GetFiles(Application.persistentDataPath, "save-*.json").ToList();
+        List<string> jsonFilePaths = new List<string>();
+
+        //Retrieve all save file folders under persistent data directoryPath
+        var saveFileFolders = Directory.GetDirectories(Application.persistentDataPath).ToList();
+
+        //Retrieve each save.json full directoryPath and filename in each folder
+        foreach (string folder in saveFileFolders)
+        {
+            var files = Directory.GetFiles(folder, "save.json", SearchOption.TopDirectoryOnly).ToList();
+            jsonFilePaths.AddRange(files);
+        }
+
+        return jsonFilePaths;
     }
 
-    private string GetFilePath(string guid)
+    /// <summary>
+    /// Method which is used to extract guid from json file directoryPath
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
+    private string GetGuidFromFilePath(string filePath)
+    {
+        return new DirectoryInfo(Path.GetDirectoryName(filePath)).Name;
+    }
+
+
+    private string GetFilePathFromGuid(string guid)
     {
         if (string.IsNullOrWhiteSpace(guid))
             return null;
 
-        var path = Path.Combine(Application.persistentDataPath, $"save-{guid}.json");
+        var directoryPath = Path.Combine(Application.persistentDataPath, guid);
+        if (!Directory.Exists(directoryPath))
+            Directory.CreateDirectory(directoryPath);
 
-        //Adjust folder path slashes based on environment
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-        path = path.Replace("/", @"\");
-#else
-        path = path.Replace("\\", "/");
-#endif
+        var filePath = Path.Combine(directoryPath, "save.json");
 
-        return path;
+//        //Adjust folder directoryPath slashes based on environment
+//#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+//        directoryPath = directoryPath.Replace("//", "/").Replace("/", @"\");
+//#else
+//        path = path.Replace("\\", "\");
+//#endif
+
+        return filePath;
     }
 
 }

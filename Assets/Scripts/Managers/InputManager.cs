@@ -115,7 +115,7 @@ public class InputManager : ExtendedMonoBehavior
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Pressed R");
-            stageManager.Get();
+            stageManager.GetSaveFile();
         }
 
     }
