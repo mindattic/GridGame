@@ -13,8 +13,8 @@ public class DebugManager : ExtendedMonoBehavior
 {
     [SerializeField] private TMP_Dropdown Dropdown;
 
-    ActorBehavior Paladin => players.First(x => x.name == "Paladin");
-    ActorBehavior Barbarian => players.First(x => x.name == "Barbarian");
+    ActorInstance Paladin => players.First(x => x.name == "Paladin");
+    ActorInstance Barbarian => players.First(x => x.name == "Barbarian");
 
     public void PortraitTest()
     {

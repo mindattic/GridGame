@@ -59,7 +59,7 @@ public class GhostInstance : ExtendedMonoBehavior
 
     #endregion
 
-    public void Spawn(ActorBehavior actor)
+    public void Spawn(ActorInstance actor)
     {
         //TODO: Fix later...
         this.Renderers.frame.enabled = false;

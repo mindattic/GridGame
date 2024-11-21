@@ -4,13 +4,13 @@ using System.Linq;
 public class ActorPair
 {
     //Variables
-    public ActorBehavior actor1;
-    public ActorBehavior actor2;
+    public ActorInstance actor1;
+    public ActorInstance actor2;
     public Axis axis;
     public Alignment alignment = new Alignment();
  
     //Properties
-    public ActorBehavior highestActor
+    public ActorInstance highestActor
     {
         get
         {
@@ -20,7 +20,7 @@ public class ActorPair
         }
     }
 
-    public ActorBehavior lowestActor
+    public ActorInstance lowestActor
     {
         get
         {
@@ -49,7 +49,7 @@ public class ActorPair
 
 
 
-    public ActorPair(ActorBehavior actor1, ActorBehavior actor2, Axis axis)
+    public ActorPair(ActorInstance actor1, ActorInstance actor2, Axis axis)
     {
         this.actor1 = actor1;
         this.actor2 = actor2;
@@ -57,7 +57,7 @@ public class ActorPair
         this.alignment = Shared.AssignAlignment(actor1, actor2, axis);
     }
 
-    public bool HasPair(ActorBehavior actor1, ActorBehavior actor2)
+    public bool HasPair(ActorInstance actor1, ActorInstance actor2)
     {
         return (this.actor1 == actor1 && this.actor2 == actor2) || (this.actor1 == actor2 && this.actor2 == actor1);
     }

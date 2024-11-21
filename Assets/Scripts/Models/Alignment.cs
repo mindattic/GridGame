@@ -3,8 +3,8 @@
 public class Alignment
 {
     public List<TileInstance> gaps;
-    public List<ActorBehavior> enemies;
-    public List<ActorBehavior> players;
+    public List<ActorInstance> enemies;
+    public List<ActorInstance> players;
 
     public bool hasEnemiesBetween => enemies.Count > 0;
     public bool hasPlayersBetween => players.Count > 0;

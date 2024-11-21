@@ -64,15 +64,15 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected TimerBarInstance timerBar => GameManager.instance.timerBar;
     protected BoardInstance board => GameManager.instance.board;
     protected List<TileInstance> tiles => GameManager.instance.tiles;
-    protected List<ActorBehavior> actors
+    protected List<ActorInstance> actors
     {
         get => GameManager.instance.actors;
         set => GameManager.instance.actors = value;
     }
 
 
-    protected IQueryable<ActorBehavior> players => GameManager.instance.players;
-    protected IQueryable<ActorBehavior> enemies => GameManager.instance.enemies;
+    protected IQueryable<ActorInstance> players => GameManager.instance.players;
+    protected IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
 
 
 
@@ -128,13 +128,13 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.combatParticipants = value; }
     }
 
-    protected ActorBehavior focusedActor
+    protected ActorInstance focusedActor
     {
         get { return GameManager.instance.focusedPlayer; }
         set { GameManager.instance.focusedPlayer = value; }
     }
 
-    protected ActorBehavior selectedPlayer
+    protected ActorInstance selectedPlayer
     {
         get { return GameManager.instance.selectedPlayer; }
         set { GameManager.instance.selectedPlayer = value; }

@@ -7,7 +7,7 @@ public class PortraitInstance : ExtendedMonoBehavior
 {
     //Variables
 
-    [SerializeField] public ActorBehavior actor;
+    [SerializeField] public ActorInstance actor;
     [SerializeField] public Direction direction;
     [SerializeField] public float startTime;
     [SerializeField] public Vector2 startPosition;

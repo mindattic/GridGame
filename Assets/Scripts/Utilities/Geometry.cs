@@ -10,7 +10,7 @@ public class Geometry
     private static BoardInstance board => GameManager.instance.board;
     private static float tileSize => GameManager.instance.tileSize;
     private static Vector3 tileScale => GameManager.instance.tileScale;
-    private static List<ActorBehavior> actors => GameManager.instance.actors;
+    private static List<ActorInstance> actors => GameManager.instance.actors;
     private static List<TileInstance> tiles => GameManager.instance.tiles;
 
     //private static Dictionary<Vector2Int, Vector3> boardPositions = new Dictionary<Vector2Int, Vector3>();
@@ -74,19 +74,19 @@ public class Geometry
 
 
 
-    public static bool IsSameColumn(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x;
-    public static bool IsSameRow(ActorBehavior a, ActorBehavior b) => a.location.y == b.location.y;
-    public static bool IsNorthOf(ActorBehavior a, ActorBehavior b) => IsSameColumn(a, b) && a.location.y == b.location.y - 1;
-    public static bool IsEastOf(ActorBehavior a, ActorBehavior b) => IsSameRow(a, b) && a.location.x == b.location.x + 1;
-    public static bool IsSouthOf(ActorBehavior a, ActorBehavior b) => IsSameColumn(a, b) && a.location.y == b.location.y + 1;
-    public static bool IsWestOf(ActorBehavior a, ActorBehavior b) => IsSameRow(a, b) && a.location.x == b.location.x - 1;
-    public static bool IsNorthWestOf(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x - 1 && a.location.y == b.location.y - 1;
-    public static bool IsNorthEastOf(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x + 1 && a.location.y == b.location.y - 1;
-    public static bool IsSouthWestOf(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x - 1 && a.location.y == b.location.y + 1;
-    public static bool IsSouthEastOf(ActorBehavior a, ActorBehavior b) => a.location.x == b.location.x + 1 && a.location.y == b.location.y + 1;
-    public static bool IsAdjacentTo(ActorBehavior a, ActorBehavior b) => (IsSameColumn(a, b) || IsSameRow(a, b)) && Vector2Int.Distance(a.location, a.location).Equals(1);
+    public static bool IsSameColumn(ActorInstance a, ActorInstance b) => a.location.x == b.location.x;
+    public static bool IsSameRow(ActorInstance a, ActorInstance b) => a.location.y == b.location.y;
+    public static bool IsNorthOf(ActorInstance a, ActorInstance b) => IsSameColumn(a, b) && a.location.y == b.location.y - 1;
+    public static bool IsEastOf(ActorInstance a, ActorInstance b) => IsSameRow(a, b) && a.location.x == b.location.x + 1;
+    public static bool IsSouthOf(ActorInstance a, ActorInstance b) => IsSameColumn(a, b) && a.location.y == b.location.y + 1;
+    public static bool IsWestOf(ActorInstance a, ActorInstance b) => IsSameRow(a, b) && a.location.x == b.location.x - 1;
+    public static bool IsNorthWestOf(ActorInstance a, ActorInstance b) => a.location.x == b.location.x - 1 && a.location.y == b.location.y - 1;
+    public static bool IsNorthEastOf(ActorInstance a, ActorInstance b) => a.location.x == b.location.x + 1 && a.location.y == b.location.y - 1;
+    public static bool IsSouthWestOf(ActorInstance a, ActorInstance b) => a.location.x == b.location.x - 1 && a.location.y == b.location.y + 1;
+    public static bool IsSouthEastOf(ActorInstance a, ActorInstance b) => a.location.x == b.location.x + 1 && a.location.y == b.location.y + 1;
+    public static bool IsAdjacentTo(ActorInstance a, ActorInstance b) => (IsSameColumn(a, b) || IsSameRow(a, b)) && Vector2Int.Distance(a.location, a.location).Equals(1);
 
-    public static Direction AdjacentDirectionTo(ActorBehavior a, ActorBehavior b)
+    public static Direction AdjacentDirectionTo(ActorInstance a, ActorInstance b)
     {
         if (!IsAdjacentTo(a, b)) return Direction.None;
         if (IsNorthOf(a, b)) return Direction.South;
@@ -97,7 +97,7 @@ public class Geometry
         return Direction.None;
     }
 
-    public static Vector3 GetClosestAttackPosition(ActorBehavior attacker, ActorBehavior other)
+    public static Vector3 GetClosestAttackPosition(ActorInstance attacker, ActorInstance other)
     {
         //Determine if already adjacent to player...
         if (IsAdjacentTo(attacker, other))

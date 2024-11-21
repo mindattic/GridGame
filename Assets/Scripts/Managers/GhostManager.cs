@@ -7,7 +7,7 @@ public class GhostManager : ExtendedMonoBehavior
 {
     //Variables
     [SerializeField] public GameObject ghostPrefab;
-    ActorBehavior actor;
+    ActorInstance actor;
     float threshold;
     Vector3 previousPosition;
 
@@ -24,7 +24,7 @@ public class GhostManager : ExtendedMonoBehavior
     void FixedUpdate() { }
 
 
-    public void Play(ActorBehavior actor)
+    public void Play(ActorInstance actor)
     {
         if (actor == null || actor.IsDying || actor.IsInactive)
             return;

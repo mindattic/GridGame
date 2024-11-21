@@ -74,12 +74,12 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public float bumpSpeed;
 
     //selection
-    [HideInInspector] public ActorBehavior focusedPlayer;
-    [HideInInspector] public ActorBehavior selectedPlayer;
+    [HideInInspector] public ActorInstance focusedPlayer;
+    [HideInInspector] public ActorInstance selectedPlayer;
 
     //Behaviors
     [HideInInspector] public TimerBarInstance timerBar;
-    [HideInInspector] public List<ActorBehavior> actors;
+    [HideInInspector] public List<ActorInstance> actors;
     [HideInInspector] public BoardInstance board;
     [HideInInspector] public List<TileInstance> tiles;
     [HideInInspector] public List<SupportLineInstance> lines;
@@ -89,8 +89,8 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public ShakeIntensity shakeIntensity;
 
 
-    [HideInInspector] public IQueryable<ActorBehavior> players => actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
-    [HideInInspector] public IQueryable<ActorBehavior> enemies => actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
+    [HideInInspector] public IQueryable<ActorInstance> players => actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
+    [HideInInspector] public IQueryable<ActorInstance> enemies => actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
 
     [HideInInspector] public int coinCount;
 

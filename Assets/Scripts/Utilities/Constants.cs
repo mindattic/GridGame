@@ -118,7 +118,7 @@ public static class Colors
 
 }
 
-public static class Qualities
+public static class Rarity
 {
     public static Quality Junk = new Quality("Junk", Shared.RGB(128, 128, 128));
     public static Quality Common = new Quality("Common", Shared.RGB(255, 255, 255));

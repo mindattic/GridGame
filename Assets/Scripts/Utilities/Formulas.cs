@@ -59,7 +59,7 @@ namespace Assets.Scripts.Utilities
             return Mathf.Round(spd + lck - armorModifier);
         }
 
-        public static bool IsHit(ActorBehavior attacker, ActorBehavior defender)
+        public static bool IsHit(ActorInstance attacker, ActorInstance defender)
         {
             var accuracy = Accuracy(attacker.stats);
             var evasion = Evasion(defender.stats);
@@ -100,7 +100,7 @@ namespace Assets.Scripts.Utilities
             return Mathf.Round(def + armorModifier + lck);
         }
 
-        public static int CalculateDamage(ActorBehavior attacker, ActorBehavior defender)
+        public static int CalculateDamage(ActorInstance attacker, ActorInstance defender)
         {
             var offense = Offense(attacker.stats);
             var defense = Defense(defender.stats);

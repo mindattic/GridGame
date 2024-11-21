@@ -62,11 +62,11 @@ public class Shared
 
 
 
-    public static Alignment AssignAlignment(ActorBehavior actor1, ActorBehavior actor2, Axis axis)
+    public static Alignment AssignAlignment(ActorInstance actor1, ActorInstance actor2, Axis axis)
     {
 
-        ActorBehavior highestActor = axis == Axis.Vertical ? actor1.location.y > actor2.location.y ? actor1 : actor2 : actor1.location.x > actor2.location.x ? actor1 : actor2;
-        ActorBehavior lowestActor = (axis == Axis.Vertical) ? actor1.location.y < actor2.location.y ? actor1 : actor2 : actor1.location.x < actor2.location.x ? actor1 : actor2;
+        ActorInstance highestActor = axis == Axis.Vertical ? actor1.location.y > actor2.location.y ? actor1 : actor2 : actor1.location.x > actor2.location.x ? actor1 : actor2;
+        ActorInstance lowestActor = (axis == Axis.Vertical) ? actor1.location.y < actor2.location.y ? actor1 : actor2 : actor1.location.x < actor2.location.x ? actor1 : actor2;
         float ceiling = axis == Axis.Vertical ? highestActor.location.y : highestActor.location.x;
         float floor = axis == Axis.Vertical ? lowestActor.location.y : lowestActor.location.x;
 

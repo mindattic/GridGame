@@ -36,7 +36,7 @@ namespace Game.Behaviors
             initialPosition = portrait.rectTransform.localPosition;
         }
 
-        public void Set(ActorBehavior actor)
+        public void Set(ActorInstance actor)
         {
             backdrop.enabled = true;
             portrait.sprite = resourceManager.ActorSprite(actor.archetype.ToString()).portrait;

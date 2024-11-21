@@ -8,7 +8,7 @@ public class FootstepManager : ExtendedMonoBehavior
 
     //Variables
     [SerializeField] public GameObject FootstepPrefab;
-    ActorBehavior Actor;
+    ActorInstance Actor;
     Vector3 PreviousPosition;
     bool IsRightFoot = false;
     float Threshold;
@@ -29,7 +29,7 @@ public class FootstepManager : ExtendedMonoBehavior
     void FixedUpdate() { }
 
 
-    public void Play(ActorBehavior actor)
+    public void Play(ActorInstance actor)
     {
         if (actor == null || actor.IsDying || actor.IsInactive)
             return;

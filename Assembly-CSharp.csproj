@@ -109,8 +109,8 @@
     <Compile Include="Assets\Scripts\Instances\TimerBarInstance.cs" />
     <Compile Include="Assets\Scripts\Managers\LogManager.cs" />
     <Compile Include="Assets\Scripts\Instances\AttackLineInstance.cs" />
-    <Compile Include="Assets\Scripts\Instances\Actor\ActorBehavior.cs" />
     <Compile Include="Assets\Scripts\Instances\BoardInstance.cs" />
+    <Compile Include="Assets\Scripts\Instances\Actor\ActorInstance.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
     <Compile Include="Assets\Scripts\Models\ShaderResource.cs" />
     <Compile Include="Assets\Scripts\Instances\TooltipInstance.cs" />

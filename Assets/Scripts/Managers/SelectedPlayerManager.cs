@@ -36,7 +36,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //GetSaveFile Actor from collider
-        var actor = collider.gameObject.GetComponent<ActorBehavior>();
+        var actor = collider.gameObject.GetComponent<ActorInstance>();
         if (actor == null || !actor.IsPlaying)
             return;
 

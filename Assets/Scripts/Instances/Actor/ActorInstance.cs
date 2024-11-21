@@ -34,7 +34,7 @@ public static class ActorLayer
     public const int NameTagText = 20;
 }
 
-public class ActorBehavior : ExtendedMonoBehavior
+public class ActorInstance : ExtendedMonoBehavior
 {
 
     //Variables
@@ -46,7 +46,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     public Vector3 destination;
     public Team team = Team.Independant;
-    public Quality quality = Qualities.Common;
+    public Quality quality = Rarity.Common;
 
     public ActorStats stats = new ActorStats();
     public ActorFlags flags = new ActorFlags();
@@ -245,7 +245,7 @@ public class ActorBehavior : ExtendedMonoBehavior
     public bool IsSouthEastOf(Vector2Int other) => location.x == other.x + 1 && location.y == other.y + 1;
     public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(location, other).Equals(1);
 
-    public Direction GetAdjacentDirectionTo(ActorBehavior other)
+    public Direction GetAdjacentDirectionTo(ActorInstance other)
     {
         if (!IsAdjacentTo(other.location)) return Direction.None;
         if (IsNorthOf(other.location)) return Direction.South;
@@ -351,7 +351,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         UpdateTurnDelayText();
     }
 
-    ActorBehavior FindOverlappingActor(TileInstance closestTile)
+    ActorInstance FindOverlappingActor(TileInstance closestTile)
     {
         //Determine if two actors are overlapping the same boardLocation
         var overlappingActor = actors.FirstOrDefault(x => x != null
@@ -459,7 +459,7 @@ public class ActorBehavior : ExtendedMonoBehavior
 
     }
 
-    public IEnumerator Attack(ActorBehavior opponent, int damage, bool isCriticalHit = false)
+    public IEnumerator Attack(ActorInstance opponent, int damage, bool isCriticalHit = false)
     {
         if (isCriticalHit)
         {
@@ -499,7 +499,7 @@ public class ActorBehavior : ExtendedMonoBehavior
         int[] ratios = { 50, 20, 15, 10, 5 };
         var attackStrategy = Random.Strategy(ratios);
 
-        ActorBehavior targetPlayer = null;
+        ActorInstance targetPlayer = null;
 
         switch (attackStrategy)
         {

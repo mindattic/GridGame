@@ -9,9 +9,9 @@ static class Random
     [ThreadStatic] public static System.Random rng = new System.Random();
 
     //Properties
-    private static IQueryable<ActorBehavior> players => GameManager.instance.players;
-    private static IQueryable<ActorBehavior> enemies => GameManager.instance.enemies;
-    private static List<ActorBehavior> actors => GameManager.instance.actors;
+    private static IQueryable<ActorInstance> players => GameManager.instance.players;
+    private static IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
+    private static List<ActorInstance> actors => GameManager.instance.actors;
     private static List<TileInstance> tiles => GameManager.instance.tiles;
     private static int columnCount => GameManager.instance.board.columnCount;
     private static int rowCount => GameManager.instance.board.rowCount;
@@ -127,9 +127,9 @@ static class Random
 
 
 
-    public static ActorBehavior Player => players.Where(x => x.IsPlaying).OrderBy(x => Guid.NewGuid()).First();
+    public static ActorInstance Player => players.Where(x => x.IsPlaying).OrderBy(x => Guid.NewGuid()).First();
 
-    public static ActorBehavior Enemy => enemies.Where(x => x.IsPlaying).OrderBy(x => Guid.NewGuid()).First();
+    public static ActorInstance Enemy => enemies.Where(x => x.IsPlaying).OrderBy(x => Guid.NewGuid()).First();
 
     public static TileInstance Tile => tiles.OrderBy(x => Guid.NewGuid()).First();
 

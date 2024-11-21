@@ -22,7 +22,7 @@ public class PortraitManager : ExtendedMonoBehavior
     }
 
 
-    public void SlideIn(ActorBehavior actor, Direction direction)
+    public void SlideIn(ActorInstance actor, Direction direction)
     {
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<PortraitInstance>();
@@ -46,7 +46,7 @@ public class PortraitManager : ExtendedMonoBehavior
         Dissolve(actor);
     }
 
-    public void Dissolve(ActorBehavior actor)
+    public void Dissolve(ActorInstance actor)
     {
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<PortraitInstance>();

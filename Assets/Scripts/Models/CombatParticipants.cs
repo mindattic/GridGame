@@ -21,7 +21,7 @@ public class CombatParticipants
 
 
 
-    public bool HasAlignedPair(ActorBehavior actor1, ActorBehavior actor2)
+    public bool HasAlignedPair(ActorInstance actor1, ActorInstance actor2)
     {
         return alignedPairs.Count > 0 && alignedPairs.Any(x => x.HasPair(actor1, actor2));
     }
