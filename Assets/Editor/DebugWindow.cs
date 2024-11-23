@@ -75,6 +75,7 @@ public class DebugWindow : EditorWindow
         DamageTextTest,
         BumpTest,
         SupportLineTest,
+        AttackLineTest,
         EnemyAttackTest,
         TitleTest,
         TooltipTest
@@ -319,6 +320,8 @@ public class DebugWindow : EditorWindow
             case Options.DamageTextTest: debugManager.DamageTextTest(); break;
             case Options.BumpTest: debugManager.BumpTest(); break;
             case Options.SupportLineTest: debugManager.SupportLineTest(); break;
+            case Options.AttackLineTest: debugManager.AttackLineTest(); break;
+
             case Options.EnemyAttackTest: debugManager.EnemyAttackTest(); break;
             case Options.TitleTest: debugManager.TitleTest(); break;
             case Options.TooltipTest: debugManager.TooltipTest(); break;

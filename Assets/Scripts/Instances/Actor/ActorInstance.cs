@@ -1619,7 +1619,7 @@ public class ActorInstance : ExtendedMonoBehavior
                         {
                             rotZ = 0f;
 
-                            //Loop or end coroutine
+                            //Loop or lowestActor coroutine
                             if (isLooping)
                                 state = WiggleState.Start;
                             else
@@ -1673,7 +1673,7 @@ public class ActorInstance : ExtendedMonoBehavior
     //        // Revert back to the original color
     //        // renderers.quality.color = originalColor;
 
-    //        // Move to the next color, looping back to the start if needed
+    //        // Move to the next color, looping back to the highestActor if needed
     //        currentColorIndex = (currentColorIndex + 1) % flashColors.Count;
     //    }
 

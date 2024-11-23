@@ -8,12 +8,12 @@ namespace Game.Instances
         private const string NameFormat = "AttackLine_{0}+{1}";
 
         //Variables
-        public float alpha = 0;
-        private Vector3 start;
-        private Vector3 end;
-        private float thickness = 1.2f;
-        private float maxAlpha = 0.5f;
-        private Color baseColor = Shared.RGBA(100, 195, 200, 0);
+        public float alpha;
+        private Vector3 highestActor;
+        private Vector3 lowestActor;
+        private float thickness;
+        private float maxAlpha;
+        private Color baseColor;
         private Color color;
         private LineRenderer lineRenderer;
 
@@ -42,15 +42,21 @@ namespace Game.Instances
 
         private void Awake()
         {
+
+            thickness = tileSize * 0.1f;
+            alpha = 0f;
+            maxAlpha = 1f;
+            baseColor = Shared.RGBA(100, 195, 200, 0);
+
+
             lineRenderer = gameObject.GetComponent<LineRenderer>();
-            lineRenderer.positionCount = 2;
-            lineRenderer.sortingOrder = SortingOrder.Min;
+            lineRenderer.sortingOrder = SortingOrder.AttackLine;
         }
 
         void Start()
         {
-            lineRenderer.startWidth = tileSize * thickness;
-            lineRenderer.endWidth = tileSize * thickness;
+            lineRenderer.startWidth = thickness;
+            lineRenderer.endWidth = thickness;
         }
 
         public void Spawn(ActorPair pair)
@@ -58,23 +64,52 @@ namespace Game.Instances
             parent = board.transform;
             name = NameFormat.Replace("{0}", pair.highestActor.name).Replace("{1}", pair.lowestActor.name);
 
-            start = pair.highestActor.position;
-            end = pair.lowestActor.position;
+            highestActor = pair.highestActor.position;
+            lowestActor = pair.lowestActor.position;
+
+            lineRenderer.sortingOrder = SortingOrder.AttackLine;
+            Vector3[] points = { };
+
+            Vector3 upperLeft;
+            Vector3 upperRight;
+            Vector3 lowerRight;
+            Vector3 lowerLeft;
+            float offset = tileSize / 2;
 
             if (pair.axis == Axis.Vertical)
             {
-                start += new Vector3(0, -(tileSize / 2) + -(tileSize * 0.1f), 0);
-                end += new Vector3(0, tileSize / 2 + tileSize * 0.1f, 0);
+                upperLeft = new Vector3(highestActor.x - offset, highestActor.y - offset, 0);
+                upperRight = new Vector3(highestActor.x + offset, highestActor.y - offset, 0);
+                lowerRight = new Vector3(lowestActor.x + offset, lowestActor.y + offset, 0);
+                lowerLeft = new Vector3(lowestActor.x - offset, lowestActor.y + offset, 0);
+
+                points = new Vector3[] {
+                    upperLeft,
+                    upperRight,
+                    lowerRight,
+                    lowerLeft,
+                    upperLeft // Close the loop
+                };
             }
             else if (pair.axis == Axis.Horizontal)
             {
-                start += new Vector3(tileSize / 2 + tileSize * 0.1f, 0, 0);
-                end += new Vector3(-(tileSize / 2) + -(tileSize * 0.1f), 0, 0);
+
+                upperLeft = new Vector3(lowestActor.x - offset, lowestActor.y - offset, 0);
+                upperRight = new Vector3(highestActor.x + offset, highestActor.y - offset, 0);
+                lowerRight = new Vector3(highestActor.x + offset, highestActor.y + offset, 0);
+                lowerLeft = new Vector3(lowestActor.x - offset, lowestActor.y + offset, 0);
+
+                points = new Vector3[] {
+                    upperLeft,
+                    upperRight,
+                    lowerRight,
+                    lowerLeft,
+                    upperLeft // Close the loop
+                };
             }
 
-            lineRenderer.sortingOrder = SortingOrder.AttackLine;
-            lineRenderer.SetPosition(0, start);
-            lineRenderer.SetPosition(1, end);
+            lineRenderer.positionCount = points.Length;
+            lineRenderer.SetPositions(points);
 
             IEnumerator _()
             {
