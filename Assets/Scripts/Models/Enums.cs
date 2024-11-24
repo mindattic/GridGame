@@ -135,3 +135,57 @@ public enum CoinState
     Stop,
     Destroy
 }
+
+
+public enum DebugOptions
+{
+    None,
+    DodgeTest,
+    SpinTest,
+    AlignTest,
+    CoinTest,
+    PortraitTest,
+    DamageTextTest,
+    BumpTest,
+    SupportLineTest,
+    AttackLineTest,
+    EnemyAttackTest,
+    TitleTest,
+    TooltipTest
+}
+
+public enum VFXOptions
+{
+    None,
+    VFXTest_Blue_Slash_01,
+    VFXTest_Blue_Slash_02,
+    VFXTest_Blue_Slash_03,
+    VFXTest_Blue_Sword,
+    VFXTest_Blue_Sword_4X,
+    VFXTest_Blood_Claw,
+    VFXTest_Level_Up,
+    VFXTest_Yellow_Hit,
+    VFXTest_Double_Claw,
+    VFXTest_Lightning_Explosion,
+    VFXTest_Buff_Life,
+    VFXTest_Rotary_Knife,
+    VFXTest_Air_Slash,
+    VFXTest_Fire_Rain,
+    VFXTest_Ray_Blast,
+    VFXTest_Lightning_Strike,
+    VFXTest_Puffy_Explosion,
+    VFXTest_Red_Slash_2X,
+    VFXTest_God_Rays,
+    VFXTest_Acid_Splash,
+    VFXTest_Green_Buff,
+    VFXTest_Gold_Buff,
+    VFXTest_Hex_Shield,
+    VFXTest_Toxic_Cloud,
+    VFXTest_Orange_Slash,
+    VFXTest_Moon_Feather,
+    VFXTest_Pink_Spark,
+    VFXTest_BlueYellow_Sword,
+    VFXTest_BlueYellow_Sword_3X,
+    VFXTest_Red_Sword
+}
+

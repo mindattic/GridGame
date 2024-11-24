@@ -11,8 +11,8 @@ public class SupportLineInstance : ExtendedMonoBehavior
 
     //Variables
     public float alpha = 0;
-    private Vector3 start;
-    private Vector3 end;
+    private Vector3 originActor;
+    private Vector3 terminalActor;
     private float maxAlpha = 0.5f;
     private Color baseColor = Shared.RGBA(48, 161, 49, 0);
     private Color color;
@@ -59,14 +59,14 @@ public class SupportLineInstance : ExtendedMonoBehavior
     public void Spawn(ActorPair pair)
     {
         parent = board.transform;
-        name = NameFormat.Replace("{0}", pair.highestActor.name).Replace("{1}", pair.lowestActor.name);
+        name = NameFormat.Replace("{0}", pair.originActor.name).Replace("{1}", pair.terminalActor.name);
 
-        start = pair.highestActor.position;
-        end = pair.lowestActor.position;
+        originActor = pair.originActor.position;
+        terminalActor = pair.terminalActor.position;
 
         lineRenderer.sortingOrder = SortingOrder.SupportLine;
-        lineRenderer.SetPosition(0, start);
-        lineRenderer.SetPosition(1, end);
+        lineRenderer.SetPosition(0, originActor);
+        lineRenderer.SetPosition(1, terminalActor);
 
         IEnumerator _()
         {

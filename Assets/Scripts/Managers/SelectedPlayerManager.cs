@@ -22,7 +22,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!turnManager.IsPlayerTurn)
             return;
 
-        //Verify currentFps phase is "highestActor"...
+        //Verify currentFps phase is "originActor"...
         if (!turnManager.IsStartPhase)
             return;
 
@@ -77,7 +77,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!turnManager.IsPlayerTurn)
             return;
 
-        //Verify currentFps phase is "highestActor"...
+        //Verify currentFps phase is "originActor"...
         if (!turnManager.IsStartPhase)
             return;
 
@@ -136,6 +136,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         selectedPlayer.position = closestTile.position;
         selectedPlayer.sortingOrder = SortingOrder.Default;
         selectedPlayer.SetStatus(Status.None);
+        previousSelectedPlayer = selectedPlayer;
         selectedPlayer = null;
 
         ghostManager.Stop();

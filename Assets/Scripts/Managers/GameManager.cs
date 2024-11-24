@@ -76,6 +76,7 @@ public class GameManager : Singleton<GameManager>
     //selection
     [HideInInspector] public ActorInstance focusedPlayer;
     [HideInInspector] public ActorInstance selectedPlayer;
+    [HideInInspector] public ActorInstance previousSelectedPlayer;
 
     //Behaviors
     [HideInInspector] public TimerBarInstance timerBar;
@@ -99,7 +100,13 @@ public class GameManager : Singleton<GameManager>
     private void Awake()
     {
 
-        tileSize = Shared.ScreenInWorldUnits.Width / 6;
+        //DEBUG: Need to add buffer so tile doesn't align to left-most and right-most edge,
+        //however this causes actors to not align properly after moving for some reason
+        var oneSixth = Shared.ScreenInWorldUnits.Width / 6;
+        //var tenPercentOfOneSixth = oneSixth * 0.1f;
+        //var fivePercentOfOneSixth = oneSixth * 0.05f;
+
+        tileSize = oneSixth; 
         tileScale = new Vector3(tileSize, tileSize, 1f);
 
         cardPortraitSize = Shared.ScreenInPixels.Width / 2;

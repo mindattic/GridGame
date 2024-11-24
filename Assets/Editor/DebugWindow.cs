@@ -6,83 +6,12 @@ using UnityEngine;
 [InitializeOnLoad] // This attribute ensures that the static constructor is called on load
 public class DebugWindow : EditorWindow
 {
+    private static DebugWindow instance;
+    private static bool isWindowOpen = false;
+
     private Vector2 scrollPosition;
     private DateTime lastUpdateTime;
-    private float updateInterval = 1.0f; // Startup interval in seconds
-    //private bool previousFlag = false;
-
-    //private static void OnPlayModeStateChanged(PlayModeStateChange state)
-    //{
-    //    if (state != PlayModeStateChange.EnteredPlayMode)
-    //        return;
-
-    //    EditorApplication.update += Init;
-    //}
-
-    //private static void Init()
-    //{
-    //    float startupDelay = 3f;
-    //    if (EditorApplication.timeSinceStartup < startupDelay)
-    //        return;
-
-    //    ShowWindow();
-    //    EditorApplication.update -= Init;
-    //}
-
-    private enum VFXOptions
-    {
-        None,
-        VFXTest_Blue_Slash_01,
-        VFXTest_Blue_Slash_02,
-        VFXTest_Blue_Slash_03,
-        VFXTest_Blue_Sword,
-        VFXTest_Blue_Sword_4X,
-        VFXTest_Blood_Claw,
-        VFXTest_Level_Up,
-        VFXTest_Yellow_Hit,
-        VFXTest_Double_Claw,
-        VFXTest_Lightning_Explosion,
-        VFXTest_Buff_Life,
-        VFXTest_Rotary_Knife,
-        VFXTest_Air_Slash,
-        VFXTest_Fire_Rain,
-        VFXTest_Ray_Blast,
-        VFXTest_Lightning_Strike,
-        VFXTest_Puffy_Explosion,
-        VFXTest_Red_Slash_2X,
-        VFXTest_God_Rays,
-        VFXTest_Acid_Splash,
-        VFXTest_Green_Buff,
-        VFXTest_Gold_Buff,
-        VFXTest_Hex_Shield,
-        VFXTest_Toxic_Cloud,
-        VFXTest_Orange_Slash,
-        VFXTest_Moon_Feather,
-        VFXTest_Pink_Spark,
-        VFXTest_BlueYellow_Sword,
-        VFXTest_BlueYellow_Sword_3X,
-        VFXTest_Red_Sword
-    }
-
-    private enum Options
-    {
-        None,
-        DodgeTest,
-        SpinTest,
-        AlignTest,
-        CoinTest,
-        PortraitTest,
-        DamageTextTest,
-        BumpTest,
-        SupportLineTest,
-        AttackLineTest,
-        EnemyAttackTest,
-        TitleTest,
-        TooltipTest
-    }
-
-    private VFXOptions selectedVfx = VFXOptions.None;
-    private Options selectedOption = Options.None;
+    private float updateInterval = 1.0f;
 
     private GameManager gameManager;
     private DebugManager debugManager;
@@ -92,14 +21,62 @@ public class DebugWindow : EditorWindow
     private LogManager logManager;
     private SaveFileManager saveFileManager;
 
+    private DebugOptions selectedOption = DebugOptions.None;
+    private VFXOptions selectedVfx = VFXOptions.None;
+
+    static DebugWindow()
+    {
+        //Subscribe to the play mode state change event
+        EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+    }
+
     [MenuItem("Window/Debug Window")]
     public static void ShowWindow()
     {
-        GetWindow<DebugWindow>("Debug Window");
+        instance = GetWindow<DebugWindow>("Debug Window");
+        isWindowOpen = true;
+    }
+
+    public static void CloseWindow()
+    {
+        if (instance != null)
+        {
+            instance.Close();
+            instance = null;
+            isWindowOpen = false;
+        }
+    }
+
+
+    private static void OnPlayModeStateChanged(PlayModeStateChange state)
+    {
+        if (state == PlayModeStateChange.EnteredPlayMode)
+        {
+            // Close the window when entering play mode
+            if (isWindowOpen)
+            {
+                CloseWindow();
+            }
+
+            // Reopen after 3 seconds
+            EditorApplication.delayCall += () =>
+            {
+                EditorApplication.delayCall += () =>
+                {
+                    if (EditorApplication.isPlaying) // Ensure still in play mode
+                    {
+                        ShowWindow();
+                    }
+                };
+            };
+        }
     }
 
     private void OnEnable()
     {
+        instance = this;
+        isWindowOpen = true;
+
         //Create references to manager instances
         gameManager = GameManager.instance;
         debugManager = GameManager.instance.debugManager;
@@ -120,8 +97,12 @@ public class DebugWindow : EditorWindow
 
     private void OnDisable()
     {
+        isWindowOpen = false;
+        instance = null;
+
         // Unregister the update method
         EditorApplication.update -= OnEditorUpdate;
+        EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
     }
 
     private void OnEditorUpdate()
@@ -151,16 +132,16 @@ public class DebugWindow : EditorWindow
         GUILayout.BeginVertical();
 
         GUILayout.BeginHorizontal();
-        RenderLabels();
+        RenderStats();
         GUILayout.EndHorizontal();
         GUILayout.Space(10);
         RenderCheckboxes();
         GUILayout.Space(10);
         GUILayout.BeginHorizontal();
-        RenderVFXDropdown();
+        RenderDebugOptionsDropdown();
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
-        RenderOptionDropdown();
+        RenderVFXDropdown();
         GUILayout.EndHorizontal();
         GUILayout.Space(10);
         GUILayout.BeginHorizontal();
@@ -182,15 +163,13 @@ public class DebugWindow : EditorWindow
     }
 
 
-    private void RenderLabels()
+    private void RenderStats()
     {
         GUILayout.Label($"FPS: {consoleManager.fpsMonitor.currentFps}");
         GUILayout.Label($"Turn: {(turnManager.IsPlayerTurn ? "Player" : "Enemy")}");
         GUILayout.Label($"Phase: {turnManager.currentPhase}");
         GUILayout.Label($"Runtime: {Time.time:F2}");
     }
-
-
 
     private void RenderCheckboxes()
     {
@@ -212,20 +191,20 @@ public class DebugWindow : EditorWindow
 
     }
 
+    private void RenderDebugOptionsDropdown()
+    {
+        GUILayout.Label("Debug Options", GUILayout.Width(Screen.width * 0.25f));
+        selectedOption = (DebugOptions)EditorGUILayout.EnumPopup(selectedOption, GUILayout.Width(Screen.width * 0.5f));
+        if (GUILayout.Button("Execute", GUILayout.Width(Screen.width * 0.25f)))
+            OnRunClick();
+    }
+
     private void RenderVFXDropdown()
     {
         GUILayout.Label("VFX", GUILayout.Width(Screen.width * 0.25f));
         selectedVfx = (VFXOptions)EditorGUILayout.EnumPopup(selectedVfx, GUILayout.Width(Screen.width * 0.5f));
         if (GUILayout.Button("Play", GUILayout.Width(Screen.width * 0.25f)))
             OnPlayVFXClick();
-    }
-
-    private void RenderOptionDropdown()
-    {
-        GUILayout.Label("Options", GUILayout.Width(Screen.width * 0.25f));
-        selectedOption = (Options)EditorGUILayout.EnumPopup(selectedOption, GUILayout.Width(Screen.width * 0.5f));
-        if (GUILayout.Button("Run", GUILayout.Width(Screen.width * 0.25f)))
-            OnRunClick();
     }
 
     private void RenderLevelControls()
@@ -312,19 +291,19 @@ public class DebugWindow : EditorWindow
     {
         switch (selectedOption)
         {
-            case Options.DodgeTest: debugManager.DodgeTest(); break;
-            case Options.SpinTest: debugManager.SpinTest(); break;
-            case Options.AlignTest: debugManager.AlignTest(); break;
-            case Options.CoinTest: debugManager.CoinTest(); break;
-            case Options.PortraitTest: debugManager.PortraitTest(); break;
-            case Options.DamageTextTest: debugManager.DamageTextTest(); break;
-            case Options.BumpTest: debugManager.BumpTest(); break;
-            case Options.SupportLineTest: debugManager.SupportLineTest(); break;
-            case Options.AttackLineTest: debugManager.AttackLineTest(); break;
+            case DebugOptions.DodgeTest: debugManager.DodgeTest(); break;
+            case DebugOptions.SpinTest: debugManager.SpinTest(); break;
+            case DebugOptions.AlignTest: debugManager.AlignTest(); break;
+            case DebugOptions.CoinTest: debugManager.CoinTest(); break;
+            case DebugOptions.PortraitTest: debugManager.PortraitTest(); break;
+            case DebugOptions.DamageTextTest: debugManager.DamageTextTest(); break;
+            case DebugOptions.BumpTest: debugManager.BumpTest(); break;
+            case DebugOptions.SupportLineTest: debugManager.SupportLineTest(); break;
+            case DebugOptions.AttackLineTest: debugManager.AttackLineTest(); break;
 
-            case Options.EnemyAttackTest: debugManager.EnemyAttackTest(); break;
-            case Options.TitleTest: debugManager.TitleTest(); break;
-            case Options.TooltipTest: debugManager.TooltipTest(); break;
+            case DebugOptions.EnemyAttackTest: debugManager.EnemyAttackTest(); break;
+            case DebugOptions.TitleTest: debugManager.TitleTest(); break;
+            case DebugOptions.TooltipTest: debugManager.TooltipTest(); break;
             default: Debug.LogWarning("OnRunClick failed."); break;
         }
     }

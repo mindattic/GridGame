@@ -182,11 +182,11 @@ public static class SortingOrder
 {
     public const int Min = 0;
     public const int Default = 100;
-    public const int SupportLine = 110;
-    public const int AttackLine = 110;
+    public const int SupportLine = 110;  
     public const int Defender = 120;
     public const int Supporter = 140;
     public const int Attacker = 150;
+    public const int AttackLine = 200;
     public const int Moving = 900;
     public const int Max = 999;
 }

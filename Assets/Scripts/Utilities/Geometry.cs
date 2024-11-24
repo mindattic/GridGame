@@ -177,7 +177,7 @@ public class Geometry
         Vector3 AB = end - start;
         Vector3 AC = current - start;
 
-        //Check for division by zero; Handle the case where highestActor and lowestActor are the same point
+        //Check for division by zero; Handle the case where originActor and terminalActor are the same point
         if (AB.magnitude == 0)
             return 0;
 

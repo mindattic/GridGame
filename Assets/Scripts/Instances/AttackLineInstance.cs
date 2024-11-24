@@ -9,8 +9,8 @@ namespace Game.Instances
 
         //Variables
         public float alpha;
-        private Vector3 highestActor;
-        private Vector3 lowestActor;
+        private Vector3 originActor;
+        private Vector3 terminalActor;
         private float thickness;
         private float maxAlpha;
         private Color baseColor;
@@ -48,7 +48,6 @@ namespace Game.Instances
             maxAlpha = 1f;
             baseColor = Shared.RGBA(100, 195, 200, 0);
 
-
             lineRenderer = gameObject.GetComponent<LineRenderer>();
             lineRenderer.sortingOrder = SortingOrder.AttackLine;
         }
@@ -62,12 +61,12 @@ namespace Game.Instances
         public void Spawn(ActorPair pair)
         {
             parent = board.transform;
-            name = NameFormat.Replace("{0}", pair.highestActor.name).Replace("{1}", pair.lowestActor.name);
+            name = NameFormat.Replace("{0}", pair.originActor.name).Replace("{1}", pair.terminalActor.name);
 
-            highestActor = pair.highestActor.position;
-            lowestActor = pair.lowestActor.position;
+            originActor = pair.originActor.position;
+            terminalActor = pair.terminalActor.position;
 
-            lineRenderer.sortingOrder = SortingOrder.AttackLine;
+            
             Vector3[] points = { };
 
             Vector3 upperLeft;
@@ -78,10 +77,10 @@ namespace Game.Instances
 
             if (pair.axis == Axis.Vertical)
             {
-                upperLeft = new Vector3(highestActor.x - offset, highestActor.y - offset, 0);
-                upperRight = new Vector3(highestActor.x + offset, highestActor.y - offset, 0);
-                lowerRight = new Vector3(lowestActor.x + offset, lowestActor.y + offset, 0);
-                lowerLeft = new Vector3(lowestActor.x - offset, lowestActor.y + offset, 0);
+                upperLeft = new Vector3(originActor.x - offset, originActor.y - offset, 0);
+                upperRight = new Vector3(originActor.x + offset, originActor.y - offset, 0);
+                lowerRight = new Vector3(terminalActor.x + offset, terminalActor.y + offset, 0);
+                lowerLeft = new Vector3(terminalActor.x - offset, terminalActor.y + offset, 0);
 
                 points = new Vector3[] {
                     upperLeft,
@@ -94,10 +93,10 @@ namespace Game.Instances
             else if (pair.axis == Axis.Horizontal)
             {
 
-                upperLeft = new Vector3(lowestActor.x - offset, lowestActor.y - offset, 0);
-                upperRight = new Vector3(highestActor.x + offset, highestActor.y - offset, 0);
-                lowerRight = new Vector3(highestActor.x + offset, highestActor.y + offset, 0);
-                lowerLeft = new Vector3(lowestActor.x - offset, lowestActor.y + offset, 0);
+                upperLeft = new Vector3(terminalActor.x - offset, terminalActor.y - offset, 0);
+                upperRight = new Vector3(originActor.x + offset, originActor.y - offset, 0);
+                lowerRight = new Vector3(originActor.x + offset, originActor.y + offset, 0);
+                lowerLeft = new Vector3(terminalActor.x - offset, terminalActor.y + offset, 0);
 
                 points = new Vector3[] {
                     upperLeft,
@@ -108,6 +107,7 @@ namespace Game.Instances
                 };
             }
 
+            lineRenderer.sortingOrder = SortingOrder.AttackLine;
             lineRenderer.positionCount = points.Length;
             lineRenderer.SetPositions(points);
 

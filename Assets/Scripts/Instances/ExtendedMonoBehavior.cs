@@ -134,6 +134,12 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.focusedPlayer = value; }
     }
 
+    protected ActorInstance previousSelectedPlayer
+    {
+        get { return GameManager.instance.previousSelectedPlayer; }
+        set { GameManager.instance.previousSelectedPlayer = value; }
+    }
+
     protected ActorInstance selectedPlayer
     {
         get { return GameManager.instance.selectedPlayer; }

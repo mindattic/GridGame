@@ -8,9 +8,14 @@ public class ActorPair
     public ActorInstance actor2;
     public Axis axis;
     public Alignment alignment = new Alignment();
- 
+
     //Properties
-    public ActorInstance highestActor
+
+
+    /// <summary>
+    /// Property that retrieves either the top-most or right-most actor depending upon axial alignment
+    /// </summary>
+    public ActorInstance originActor
     {
         get
         {
@@ -20,7 +25,10 @@ public class ActorPair
         }
     }
 
-    public ActorInstance lowestActor
+    /// <summary>
+    /// Property that retrieves either the bottom-most or left-most actor depending upon axial alignment
+    /// </summary>
+    public ActorInstance terminalActor
     {
         get
         {
@@ -44,8 +52,8 @@ public class ActorPair
         }
     }
 
-    public float ceiling => axis == Axis.Vertical ? highestActor.location.y : highestActor.location.x;
-    public float floor => axis == Axis.Vertical ? lowestActor.location.y : lowestActor.location.x;
+    public float ceiling => axis == Axis.Vertical ? originActor.location.y : originActor.location.x;
+    public float floor => axis == Axis.Vertical ? terminalActor.location.y : terminalActor.location.x;
 
 
 
