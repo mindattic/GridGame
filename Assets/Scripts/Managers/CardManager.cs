@@ -39,7 +39,7 @@ namespace Game.Behaviors
         public void Set(ActorInstance actor)
         {
             backdrop.enabled = true;
-            portrait.sprite = resourceManager.ActorSprite(actor.archetype.ToString()).portrait;
+            portrait.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
             portrait.enabled = true;
            
             title.text = actor.name;
@@ -60,7 +60,7 @@ namespace Game.Behaviors
                 + $"SPD: {spd}         {Environment.NewLine}"
                 + $"LCK: {lck}         {Environment.NewLine}"
                 + $"{Environment.NewLine}"
-                + resourceManager.ActorDetails(actor.archetype.ToString());
+                + resourceManager.ActorDetails(actor.character.ToString());
             details.text = stats;
         }
 

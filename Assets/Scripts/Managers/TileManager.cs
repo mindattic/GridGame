@@ -10,7 +10,7 @@ public class TileManager : ExtendedMonoBehavior
 
     }
 
-    // Save is called once per frame
+    // SaveProfile is called once per frame
     void Update()
     {
 

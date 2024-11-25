@@ -84,7 +84,7 @@ public class InputManager : ExtendedMonoBehavior
     public Vector3? dragStart = null;
     [SerializeField] public float dragThreshold = 5f;
 
-    void Save()
+    void SaveProfile()
     {
 
 
@@ -115,7 +115,7 @@ public class InputManager : ExtendedMonoBehavior
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Pressed R");
-            stageManager.GetSaveFile();
+            stageManager.GetProfile();
         }
 
     }

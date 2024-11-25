@@ -38,7 +38,7 @@ public class ActorInstance : ExtendedMonoBehavior
 {
 
     //Variables
-    public Archetype archetype;
+    public Character character;
     public Vector2Int location;
     public Vector2Int previousLocation;
     //public bool isMoving = false;
@@ -279,7 +279,7 @@ public class ActorInstance : ExtendedMonoBehavior
         destination = position;
 
 
-        sprites = resourceManager.ActorSprite(this.archetype.ToString());
+        sprites = resourceManager.ActorSprite(this.character.ToString());
 
        
 
@@ -807,7 +807,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
                 case DodgeStage.TwistForward:
                     {
-                        // Save forward progress and sync rotation/scaleMultiplier
+                        // SaveProfile forward progress and sync rotation/scaleMultiplier
                         progress += rotationSpeed / targetRotation.y; // Normalize progress
                         progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
 
@@ -834,7 +834,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
                 case DodgeStage.TwistBackward:
                     {
-                        // Save backward progress and sync rotation/scaleMultiplier
+                        // SaveProfile backward progress and sync rotation/scaleMultiplier
                         progress += rotationSpeed / targetRotation.y; // Normalize progress
                         progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
 

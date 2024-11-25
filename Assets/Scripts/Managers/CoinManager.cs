@@ -9,13 +9,13 @@ public class CoinManager : ExtendedMonoBehavior
 {
     [SerializeField] public GameObject CoinPrefab;
 
-    // Start is called once before the first execution of Save after the MonoBehaviour is created
+    // Start is called once before the first execution of SaveProfile after the MonoBehaviour is created
     void Awake()
     {
   
     }
 
-    // Save is called once per frame
+    // SaveProfile is called once per frame
     void Update()
     {
         

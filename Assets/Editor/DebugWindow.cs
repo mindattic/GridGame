@@ -19,7 +19,7 @@ public class DebugWindow : EditorWindow
     private TurnManager turnManager;
     private StageManager stageManager;
     private LogManager logManager;
-    private SaveFileManager saveFileManager;
+    private ProfileManager profileManager;
 
     private DebugOptions selectedOption = DebugOptions.None;
     private VFXOptions selectedVfx = VFXOptions.None;
@@ -84,7 +84,7 @@ public class DebugWindow : EditorWindow
         turnManager = GameManager.instance.turnManager;
         stageManager = GameManager.instance.stageManager;
         logManager = GameManager.instance.logManager;
-        saveFileManager = GameManager.instance.saveFileManager;
+        profileManager = GameManager.instance.profileManager;
 
         //Set initial flags
         gameManager.showActorNameTag = false;
@@ -126,7 +126,7 @@ public class DebugWindow : EditorWindow
             || turnManager == null
             || stageManager == null
             || logManager == null 
-            || saveFileManager == null)
+            || profileManager == null)
             return;
 
         GUILayout.BeginVertical();
@@ -225,7 +225,7 @@ public class DebugWindow : EditorWindow
         if (GUILayout.Button("Save", GUILayout.Width(Screen.width * 0.5f)))
             OnSaveClick();
 
-        if (GUILayout.Button("LoadSaveFiles", GUILayout.Width(Screen.width * 0.5f)))
+        if (GUILayout.Button("LoadProfiles", GUILayout.Width(Screen.width * 0.5f)))
             OnReloadClick();
     }
 
@@ -326,16 +326,12 @@ public class DebugWindow : EditorWindow
 
     private void OnSaveClick()
     {
-        saveFileManager.QuickSave();
+        profileManager.QuickSave();
     }
 
     private void OnReloadClick()
     {
-        var success = saveFileManager.Reload();
-        if (!success)
-            return;
-
-
+        stageManager.Load();
     }
 
 

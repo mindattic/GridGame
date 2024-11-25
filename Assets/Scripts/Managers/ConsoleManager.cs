@@ -58,14 +58,14 @@ namespace Game.Behaviors
             //    + "";
 
 
-            //string archetype = HasSelectedPlayer ? focusedActor.archetype : "-";
+            //string character = HasSelectedPlayer ? focusedActor.character : "-";
             //string boardLocation = HasSelectedPlayer ? $@"({focusedActor.boardLocation.x},{focusedActor.boardLocation.y})" : "-";
             //string boardPosition = HasSelectedPlayer ? $@"({focusedActor.transform.boardPosition.x},{focusedActor.transform.boardPosition.y})" : "-";
             //string mouse2D = mousePosition2D.x >= 0 ? $@"({mousePosition2D.x.ToString("N0").Replace(",", ""):N0},{mousePosition2D.y.ToString("N0").Replace(",", ""):N0})" : "-";
             //string mouse3D = mousePosition3D.x >= -4 ? $@"({mousePosition3D.x.ToString("N0").Replace(",", ""):N0},{mousePosition3D.y.ToString("N0").Replace(",", ""):N0},{mousePosition3D.z.ToString("N0").Replace(", ", ""):N0})" : "-";
-            //string attackers = battle.attackers.Any() ? $"[{string.Join(",", battle.attackers.Select(x => x.archetype))}]" : "-";
-            //string supports = battle.supporters.Any() ? $"[{string.Join(",", battle.supporters.Select(x => x.archetype))}]" : "-";
-            //string defenders = battle.defenders.Any() ? $"[{string.Join(",", battle.defenders.Select(x => x.archetype))}]" : "-";
+            //string attackers = battle.attackers.Any() ? $"[{string.Join(",", battle.attackers.Select(x => x.character))}]" : "-";
+            //string supports = battle.supporters.Any() ? $"[{string.Join(",", battle.supporters.Select(x => x.character))}]" : "-";
+            //string defenders = battle.defenders.Any() ? $"[{string.Join(",", battle.defenders.Select(x => x.character))}]" : "-";
             //string currentTeam = turnManager != null ? turnManager.currentTeam.ToString() : "-";
             //string currentPhase = turnManager != null ? turnManager.currentPhase.ToString() : "-";
 

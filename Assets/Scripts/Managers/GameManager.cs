@@ -21,7 +21,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public ResourceManager resourceManager;
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public CameraManager cameraManager;
-    [HideInInspector] public SaveFileManager saveFileManager;
+    [HideInInspector] public ProfileManager profileManager;
     [HideInInspector] public StageManager stageManager;
     [HideInInspector] public BoardManager boardManager;
     [HideInInspector] public TurnManager turnManager;
@@ -131,7 +131,7 @@ public class GameManager : Singleton<GameManager>
         soundSource = game.GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");
         musicSource = game.GetComponents<AudioSource>()[Constants.MusicSourceIndex] ?? throw new UnityException("MusicSource is null");
         cameraManager = game.GetComponent<CameraManager>() ?? throw new UnityException("CameraManager is null");
-        saveFileManager = game.GetComponent<SaveFileManager>() ?? throw new UnityException("SaveFileManager is null");
+        profileManager = game.GetComponent<ProfileManager>() ?? throw new UnityException("ProfileManager is null");
         stageManager = game.GetComponent<StageManager>() ?? throw new UnityException("StageManager is null");
         boardManager = game.GetComponent<BoardManager>() ?? throw new UnityException("BoardManager is null");
         turnManager = game.GetComponent<TurnManager>() ?? throw new UnityException("TurnManager is null");

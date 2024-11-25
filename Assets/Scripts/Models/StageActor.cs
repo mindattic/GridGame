@@ -2,7 +2,7 @@
 
 public class StageActor
 {
-    public Archetype archetype;
+    public Character character;
     public string name;
     public ActorStats stats;
     public Sprite thumbnail;
@@ -19,12 +19,12 @@ public class StageActor
 
     public StageActor() { }
 
-    public StageActor(Archetype archetype, string name, ActorStats stats, Team team, Quality quality, Vector2Int? location = null, int spawnTurn = -1)
+    public StageActor(Character character, string name, ActorStats stats, Team team, Quality quality, Vector2Int? location = null, int spawnTurn = -1)
     {
-        this.archetype = archetype;
+        this.character = character;
         this.name = name;
         this.stats = stats;
-        this.thumbnail = GameManager.instance.resourceManager.ActorSprite(this.archetype.ToString()).idle;
+        this.thumbnail = GameManager.instance.resourceManager.ActorSprite(this.character.ToString()).idle;
         this.team = team;
         this.quality = quality;
         this.location = location.HasValue ? location.Value : Random.UnoccupiedLocation;
@@ -32,12 +32,12 @@ public class StageActor
     }
 
 
-    //public StageActor(Archetype archetype, string name, ActorStats stats, Team team, Quality quality, int spawnDelay)
+    //public StageActor(Character character, string name, ActorStats stats, Team team, Quality quality, int spawnDelay)
     //{
-    //    this.archetype = archetype;
+    //    this.character = character;
     //    this.name = name;
     //    this.stats = stats;
-    //    this.idle = GameManager.instance.resourceManager.ActorThumbnail(this.archetype.ToString());
+    //    this.idle = GameManager.instance.resourceManager.ActorThumbnail(this.character.ToString());
     //    this.team = team;
     //    this.quality = quality;
     //    this.boardLocation = boardLocation.NowhereLocation;

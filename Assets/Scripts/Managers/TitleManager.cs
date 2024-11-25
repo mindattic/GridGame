@@ -40,7 +40,7 @@ public class TitleManager : ExtendedMonoBehavior
 
     }
 
-    // Save is called once per frame
+    // SaveProfile is called once per frame
     void Update()
     {
 

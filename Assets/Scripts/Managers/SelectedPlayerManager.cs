@@ -9,7 +9,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
     }
 
-    // Save is called once per frame
+    // SaveProfile is called once per frame
     void Update()
     {
 
@@ -35,12 +35,12 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (collider == null)
             return;
 
-        //GetSaveFile Actor from collider
+        //GetProfile Actor from collider
         var actor = collider.gameObject.GetComponent<ActorInstance>();
         if (actor == null || !actor.IsPlaying)
             return;
 
-        //TODO: Save Card display...
+        //TODO: SaveProfile Card display...
         actors.ForEach(x => x.renderers.SetSelectionEnabled(false));
         focusedActor = actor;
         focusedActor.sortingOrder = SortingOrder.Max;

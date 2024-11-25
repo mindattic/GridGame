@@ -1,5 +1,6 @@
 using Assets.Scripts.Models;
 using Game.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -94,10 +95,10 @@ public class BoardInstance : ExtendedMonoBehavior
         GenerateTiles();
 
         //Order of Operations:
-        //saveFileManager.LoadSaveFiles() => stageManager.LoadSaveFiles() 
-        saveFileManager.LoadSaveFiles();
+        //profileManager.LoadProfiles() => stageManager.LoadProfiles() 
+        profileManager.LoadProfiles();
+        profileManager.Select(0); //TODO: Have user select profile, for now just use index 0   
         stageManager.Load();
-
     }
 
     private void InitializeBoard()

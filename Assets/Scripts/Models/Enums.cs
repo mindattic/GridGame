@@ -63,7 +63,7 @@ public enum WiggleState
 //    On
 //}
 
-public enum Archetype
+public enum Character
 {
     Paladin,
     Barbarian,

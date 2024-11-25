@@ -25,7 +25,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //Managers
     protected CameraManager cameraManager => GameManager.instance.cameraManager;
     protected InputManager inputManager => GameManager.instance.inputManager;
-    protected SaveFileManager saveFileManager => GameManager.instance.saveFileManager;
+    protected ProfileManager profileManager => GameManager.instance.profileManager;
     protected StageManager stageManager => GameManager.instance.stageManager;
     protected BoardManager boardManager => GameManager.instance.boardManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;

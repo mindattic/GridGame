@@ -29,7 +29,7 @@ public class PortraitManager : ExtendedMonoBehavior
         instance.name = $"Portrait_{Guid.NewGuid()}";
         instance.parent = board.transform;
         instance.sortingOrder = sortingOrder++;
-        instance.sprite = resourceManager.ActorSprite(actor.archetype.ToString()).portrait;
+        instance.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
         instance.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         instance.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
         instance.actor = actor;
@@ -53,7 +53,7 @@ public class PortraitManager : ExtendedMonoBehavior
         instance.name = $"Portrait_{Guid.NewGuid()}";
         instance.parent = board.transform;
         instance.sortingOrder = 100;
-        instance.sprite = resourceManager.ActorSprite(actor.archetype.ToString()).portrait;
+        instance.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
         instance.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         instance.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
         instance.actor = actor;
