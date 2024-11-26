@@ -1,5 +1,6 @@
 using Game.Behaviors;
 using Game.Manager;
+using Game.Models;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -78,12 +79,13 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public ActorInstance selectedPlayer;
     [HideInInspector] public ActorInstance previousSelectedPlayer;
 
-    //Behaviors
+    //Instances
     [HideInInspector] public TimerBarInstance timerBar;
     [HideInInspector] public List<ActorInstance> actors;
     [HideInInspector] public BoardInstance board;
     [HideInInspector] public List<TileInstance> tiles;
     [HideInInspector] public List<SupportLineInstance> lines;
+    [HideInInspector] public CoinBarInstance coinBar;
 
     [HideInInspector] public CombatParticipants combatParticipants;
 
@@ -93,9 +95,8 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public IQueryable<ActorInstance> players => actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
     [HideInInspector] public IQueryable<ActorInstance> enemies => actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
 
-    [HideInInspector] public int coinCount;
+    [HideInInspector] public int totalCoins;
 
-    [HideInInspector] public CoinBarInstance coinBar;
 
     private void Awake()
     {
@@ -159,7 +160,7 @@ public class GameManager : Singleton<GameManager>
 
         combatParticipants = new CombatParticipants();
 
-        coinCount = 0;
+        totalCoins = 0;
 
         #region Platform Dependent Compilation
 

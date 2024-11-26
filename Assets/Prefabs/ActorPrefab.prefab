@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6613482336046023288}
   - component: {fileID: 563216796185986347}
   m_Layer: 8
-  m_Name: Weapon
+  m_Name: WeaponIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1193,7 +1193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1156cd1b5d0a4f488184b10c40c081c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  archetype: 0
+  character: 0
   location: {x: 0, y: 0}
   previousLocation: {x: 0, y: 0}
   destination: {x: 0, y: 0, z: 0}
@@ -1258,6 +1258,30 @@ MonoBehaviour:
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rockingCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

@@ -50,6 +50,8 @@ public class ActorRenderers
     public TextMeshPro turnDelayText;
     public TextMeshPro nameTagText;
 
+    public SpriteRenderer weaponIcon;
+
     public void SetAlpha(float alpha)
     {
         SetOpaqueAlpha(alpha);
@@ -262,6 +264,12 @@ public class ActorRenderers
     public void SetNameTagTextAlpha(float alpha)
     {
         nameTagText.color = new Color(1, 1, 1, alpha);
+    }
+
+
+    public void SetWeaponIconAlpha(float alpha)
+    {
+        weaponIcon.color = new Color(1, 1, 1, alpha);
     }
 
     public void SetNameTagEnabled(bool isEnabled)

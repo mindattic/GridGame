@@ -48,14 +48,6 @@ public enum Status
 }
 
 
-public enum WiggleState
-{
-    Wait,
-    Start,
-    Wiggle,
-    Cooldown,
-    
-}
 
 //public enum GlowState
 //{

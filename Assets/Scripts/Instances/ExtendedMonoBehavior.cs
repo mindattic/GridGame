@@ -1,6 +1,7 @@
 ﻿using Game.Behaviors;
 using Game.Behaviors.Actor;
 using Game.Manager;
+using Game.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -148,9 +149,17 @@ public class ExtendedMonoBehavior : MonoBehaviour
 
     protected int totalCoins
     {
-        get { return GameManager.instance.coinCount; }
-        set { GameManager.instance.coinCount = value; }
+        get { return GameManager.instance.totalCoins; }
+        set { GameManager.instance.totalCoins = value; }
     }
+
+
+    protected Profile currentProfile
+    {
+        get { return profileManager.currentProfile; }
+        set { profileManager.currentProfile = value; }
+    }
+
 
     protected CoinBarInstance coinBar => GameManager.instance.coinBar;
 

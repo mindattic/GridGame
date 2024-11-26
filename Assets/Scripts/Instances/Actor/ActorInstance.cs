@@ -32,6 +32,7 @@ public static class ActorLayer
     public const int Mask = 18;
     public const int TurnDelayText = 19;
     public const int NameTagText = 20;
+    public const int WeaponIcon = 21;
 }
 
 public class ActorInstance : ExtendedMonoBehavior
@@ -60,13 +61,14 @@ public class ActorInstance : ExtendedMonoBehavior
     public int spawnDelay = -1;
     public int turnDelay = 0;
 
+
+    public float wiggleSpeed; 
+    public float wiggleAmplitude = 15f; // Amplitude (difference from -45 degrees)
+
     public Vector3 initialHealthBarScale;
 
     ActorSprite sprites;
 
-
-    //Sprite idle;
-    //Sprite attack;
 
     [SerializeField] public AnimationCurve glowCurve;
     [SerializeField] public AnimationCurve slideCurve;
@@ -74,8 +76,6 @@ public class ActorInstance : ExtendedMonoBehavior
     //public ActorHealthBar HealthBar;
     //public ActorThumbnail Thumbnail;
     public ActorRenderers renderers = new ActorRenderers();
-
-
 
     //public VisualEffect attack;
 
@@ -102,14 +102,13 @@ public class ActorInstance : ExtendedMonoBehavior
         renderers.mask = gameObject.transform.GetChild(ActorLayer.Mask).GetComponent<SpriteMask>();
         renderers.turnDelayText = gameObject.transform.GetChild(ActorLayer.TurnDelayText).GetComponent<TextMeshPro>();
         renderers.nameTagText = gameObject.transform.GetChild(ActorLayer.NameTagText).GetComponent<TextMeshPro>();
-
-
-
+        renderers.weaponIcon = gameObject.transform.GetChild(ActorLayer.WeaponIcon).GetComponent<SpriteRenderer>();
 
         //HealthBar = new ActorHealthBar(GetGameObjectByLayer(ActorLayer.HealthBarBack), GetGameObjectByLayer(ActorLayer.HealthBar));
         //Thumbnail = new ActorThumbnail(GetGameObjectByLayer(ActorLayer.Thumbnail));
 
         initialHealthBarScale = renderers.healthBar.transform.localScale;
+        wiggleSpeed = tileSize * 24f;
     }
 
     private void Start()
@@ -224,6 +223,7 @@ public class ActorInstance : ExtendedMonoBehavior
             renderers.mask.sortingOrder = value + ActorLayer.Mask;
             renderers.turnDelayText.sortingOrder = value + ActorLayer.TurnDelayText;
             renderers.nameTagText.sortingOrder = value + ActorLayer.NameTagText;
+            renderers.weaponIcon.sortingOrder = value + ActorLayer.WeaponIcon;
         }
     }
 
@@ -281,7 +281,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
         sprites = resourceManager.ActorSprite(this.character.ToString());
 
-       
+
 
         if (IsPlayer)
         {
@@ -745,7 +745,6 @@ public class ActorInstance : ExtendedMonoBehavior
         //renderers.idle.transform.boardPosition = pos;
         //renderers.idle.transform.angularRotation = rot;
     }
-
 
     private void UpdateGlow()
     {
@@ -1214,8 +1213,8 @@ public class ActorInstance : ExtendedMonoBehavior
     //        return;
 
     //    //TODO: Calculate based on stats....
-    //    float min = (Interval.OneSecond * 10) - range * LuckModifier;
-    //    float max = (Interval.OneSecond * 20) - range * LuckModifier;
+    //    float min = (Interval.OneSecond * 10) - amplitude * LuckModifier;
+    //    float max = (Interval.OneSecond * 20) - amplitude * LuckModifier;
 
     //    ap = 0;
     //    maxAp = Random.Float(min, max);
@@ -1245,6 +1244,7 @@ public class ActorInstance : ExtendedMonoBehavior
             return;
 
         turnDelay = 0;
+        CheckWeaponWiggle();
         UpdateTurnDelayText();
     }
 
@@ -1502,6 +1502,8 @@ public class ActorInstance : ExtendedMonoBehavior
                     is90Degrees = true;
                     turnDelay--;
                     turnDelay = Math.Clamp(turnDelay, 0, 9);
+
+                    CheckWeaponWiggle();
                     UpdateTurnDelayText();
                 }
 
@@ -1539,6 +1541,37 @@ public class ActorInstance : ExtendedMonoBehavior
         StartCoroutine(_());
     }
 
+    public void CheckWeaponWiggle()
+    {
+        if (turnDelay > 0)
+            return;
+
+        IEnumerator _()
+        {
+            //Before:
+            float start = -45f;
+            float rotZ = start;
+            renderers.weaponIcon.transform.rotation = Quaternion.Euler(0, 0, rotZ);
+
+            //During:
+            while (turnDelay == 0)
+            {
+                // Calculate rotation angle using sine wave
+                rotZ = start + Mathf.Sin(Time.time * wiggleSpeed) * wiggleAmplitude;
+
+                // Apply the rotation
+                renderers.weaponIcon.transform.rotation = Quaternion.Euler(0, 0, rotZ);
+
+                yield return Wait.OneTick();
+            }
+
+            //After:
+            rotZ = start;
+            renderers.weaponIcon.transform.rotation = Quaternion.Euler(0, 0, rotZ);
+        }
+
+        StartCoroutine(_());
+    }
 
     public void TurnDelayWiggleAsync(bool isLooping = false)
     {
@@ -1547,147 +1580,37 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public IEnumerator TurnDelayWiggle(bool isLooping = false)
     {
-        //Before:
-        bool isDone = false;
         float timeElapsed = 0f;
-        float startDelay = 0f;
-        float rotZ = 0f;
-        float speed = 0;
-        float range = 10f;
-        int i = 0;
-        float direction = 1f;
-        int amount = 0;
-        WiggleState state = WiggleState.Start;
+        float amplitude = 10f;
+        float speed = wiggleSpeed; // Wiggle speed
+        float dampingRate = 0.99f; // Factor to reduce amplitude each cycle (closer to 1 = slower decay)
+        float cutoff = 0.1f;
 
         renderers.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, 0);
 
-        //During:
-        while (!isDone)
+        while (amplitude > cutoff)
         {
             timeElapsed += Time.deltaTime;
-
-            switch (state)
-            {
-                case WiggleState.Start:
-                    {
-                        //speed = tileSize * Random.Float(0.5f, 1f);
-                        speed = 3f;
-                        timeElapsed = 0;
-                        i = 0;
-                        startDelay = isLooping ? Random.Float(4f, 8f) : 0f;
-                        amount = Random.Int(2, 6);
-                        state = WiggleState.Wait;
-                    }
-                    break;
-
-                case WiggleState.Wait:
-                    {
-                        if (timeElapsed >= startDelay)
-                            state = WiggleState.Wiggle;
-                    }
-                    break;
-
-                case WiggleState.Wiggle:
-                    {
-                        rotZ += speed * direction;
-
-                        if (direction > 0 && rotZ >= range)
-                        {
-                            rotZ = range;
-                            direction = -1f;
-                        }
-                        else if (direction < 0 && rotZ <= -range)
-                        {
-                            rotZ = -range;
-                            direction = 1f;
-                            i++;
-                        }
-
-                        if (i == amount)
-                            state = WiggleState.Cooldown;
-
-                    }
-                    break;
-
-                case WiggleState.Cooldown:
-                    {
-                        if (rotZ < 0)
-                        {
-                            rotZ += speed;
-                        }
-                        else
-                        {
-                            rotZ = 0f;
-
-                            //Loop or terminalActor coroutine
-                            if (isLooping)
-                                state = WiggleState.Start;
-                            else
-                                isDone = true;
-                        }
-
-
-                    }
-                    break;
-            }
-
+            float rotZ = Mathf.Sin(timeElapsed * speed) * amplitude;
             renderers.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, rotZ);
+            amplitude *= dampingRate;
+
             yield return Wait.OneTick();
         }
 
-        //After:
+        // Smoothly return to zero rotation after finishing
+        float currentZ = renderers.turnDelayText.transform.rotation.eulerAngles.z;
+        while (Mathf.Abs(Mathf.DeltaAngle(currentZ, 0f)) > cutoff)
+        {
+            timeElapsed += Time.deltaTime * speed;
+            currentZ = Mathf.LerpAngle(currentZ, 0f, timeElapsed);
+            renderers.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, currentZ);
+            yield return Wait.OneTick();
+        }
+
+        // Ensure rotation is exactly zero at the end
         renderers.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, 0);
+
     }
-
-
-
-
-
-
-
-    //public List<color> flashColors;       // List of colors to flash
-    //public float flashDuration = 0.05f;    // Duration of each flash
-    //public float flashInterval = 0.05f;    // Interval between flashes
-
-    //private bool isFlashing = false;
-    //private int currentColorIndex = 0;
-
-    //IEnumerator Flash()
-    //{
-    //    isFlashing = true;
-    //    flashColors = new List<color>() {
-    //        Colors.Solid.White,
-    //        Colors.Solid.Black,
-    //        Colors.Solid.Green,
-    //        Colors.Solid.Red,
-    //        Colors.Solid.Gold
-    //    };
-
-    //    while (isFlashing)
-    //    {
-
-    //        // Cycle through the colors
-    //        renderers.SetQualityColor(flashColors[currentColorIndex]);
-    //        yield return new WaitForSeconds(flashDuration);
-
-    //        // Revert back to the original color
-    //        // renderers.quality.color = originalColor;
-
-    //        // Move to the next color, looping back to the originActor if needed
-    //        currentColorIndex = (currentColorIndex + 1) % flashColors.Count;
-    //    }
-
-
-    //}
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -90,12 +90,9 @@ public class BoardInstance : ExtendedMonoBehavior
         bounds.Left = offset.x + tileSize / 2;
 
         InitializeBoard();
-
-
         GenerateTiles();
 
         //Order of Operations:
-        //profileManager.LoadProfiles() => stageManager.LoadProfiles() 
         profileManager.LoadProfiles();
         profileManager.Select(0); //TODO: Have user select profile, for now just use index 0   
         stageManager.Load();
@@ -195,7 +192,7 @@ public class BoardInstance : ExtendedMonoBehavior
     }
 
 
-    void GenerateTiles()
+    private void GenerateTiles()
     {
         for (int col = 1; col <= columnCount; col++)
         {
