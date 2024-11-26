@@ -6,6 +6,10 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using Global = Game.Models.ProfileGlobalSection;
+using Party = Game.Models.ProfilePartySection;
+using Section = Game.Models.ProfileSection;
+using Stage = Game.Models.ProfileStageSection;
 
 public class ProfileManager : ExtendedMonoBehavior
 {
@@ -14,13 +18,12 @@ public class ProfileManager : ExtendedMonoBehavior
     public List<Profile> profiles = new List<Profile>();
     public Profile currentProfile = null;
 
-
-    public void LoadProfiles(int index = 0)
+    public void LoadProfiles()
     {
         var sw = Stopwatch.StartNew();
 
         //Validate folder structure
-        if (!IsValidFolders())
+        if (!HasValidFolders())
         {
             Debug.LogError($"Folder structure is invalid.");
             return;
@@ -87,42 +90,43 @@ public class ProfileManager : ExtendedMonoBehavior
 
         //TODO: Verify guid is unique in folders (extremely unlikely)
 
-        //Instantiate a new Profile object with the generated GUID; create folder
-        var profile = new Profile(guid);
+        //Instantiate current profile with the generated GUID; create folder
+        currentProfile = new Profile(guid);
 
         //Save the individual JSON files
-        bool globalSaved = SaveComponent(profile.Global, profile);
-        bool stageSaved = SaveComponent(profile.Stage, profile);
-        bool partySaved = SaveComponent(profile.Party, profile);
+        bool globalSaved = Save<Global>();
+        bool stageSaved = Save<Stage>();
+        bool partySaved = Save<Party>();
 
-        // Check if all files were saved successfully
-        if (globalSaved && stageSaved && partySaved)
-        {
-            Debug.Log($"Created new profile with GUID: {guid}");
-            return true;
-        }
-        else
+        if (!globalSaved || !stageSaved || !partySaved)
         {
             Debug.LogError($"Failed to create new profile with GUID: {guid}");
             return false;
         }
+
+        Debug.Log($"Created new profile with GUID: {guid}");
+        return true;
     }
 
     /// <summary>
-    /// SaveProfile individual components to separate JSON files
+    /// Method which is used to save individual section to separate JSON file
     /// </summary>
-    private bool SaveComponent(ProfileComponent component, Profile profile)
+    private bool Save<T>() where T : class
     {
         var sw = Stopwatch.StartNew();
 
-        var filePath = Path.Combine(profile.Folder, component.FileName);
+        // Determine the file name and section based on the generic type
+        string fileName = GetFileName<T>();
+        Section section = GetSection<T>();
+
+        var filePath = Path.Combine(currentProfile.Folder, fileName);
         if (string.IsNullOrWhiteSpace(filePath))
         {
             Debug.LogError($"Invalid file path for: {filePath}");
             return false;
         }
 
-        string json = JsonUtility.ToJson(component, PRETTY_PRINT);
+        string json = JsonUtility.ToJson(section, PRETTY_PRINT);
         if (string.IsNullOrWhiteSpace(json) || json == "{}")
         {
             Debug.LogError($"Failed to serialize {json}.");
@@ -138,17 +142,31 @@ public class ProfileManager : ExtendedMonoBehavior
         }
 
         sw.Stop();
-        Debug.Log($"Saved {component.FileName} successfully in {sw.ElapsedMilliseconds} ms.");
+        Debug.Log($"Saved {fileName} successfully in {sw.ElapsedMilliseconds} ms.");
 
         return true;
     }
 
-    private T LoadComponent<T>(string guid, string fileName) where T : class
+
+
+    /// <summary>
+    /// Method which is used to load individual json file in a seperate profile section
+    /// </summary>
+    private T Load<T>(string guid) where T : class
     {
         var sw = Stopwatch.StartNew();
 
         if (string.IsNullOrWhiteSpace(guid))
             return null;
+
+        // Determine the file name based on the generic type
+        string fileName = null;
+        if (typeof(T) == typeof(Global))
+            fileName = "global.json";
+        else if (typeof(T) == typeof(Stage))
+            fileName = "stage.json";
+        else if (typeof(T) == typeof(Party))
+            fileName = "party.json";
 
         var folder = Path.Combine(FileIO.Folders.Profiles, guid);
         var filePath = Path.Combine(folder, fileName);
@@ -159,8 +177,8 @@ public class ProfileManager : ExtendedMonoBehavior
         }
 
         string json = File.ReadAllText(filePath);
-        T component = JsonUtility.FromJson<T>(json);
-        if (component == null)
+        T section = JsonUtility.FromJson<T>(json);
+        if (section == null)
         {
             Debug.LogError($"Failed to deserialize {fileName}.");
         }
@@ -168,22 +186,22 @@ public class ProfileManager : ExtendedMonoBehavior
         sw.Stop();
         Debug.Log($"Loaded {fileName} successfully in {sw.ElapsedMilliseconds} ms.");
 
-        return component;
+        return section;
     }
 
-    private bool SaveProfile(Profile profile)
+    private bool SaveProfile()
     {
         var sw = Stopwatch.StartNew();
 
-        if (profile == null || !profile.IsValid())
+        if (currentProfile == null || !currentProfile.IsValid())
         {
             Debug.LogError($"An invalid save file was specified.");
             return false;
         }
 
-        bool globalSaved = SaveComponent(profile.Global, profile);
-        bool stageSaved = SaveComponent(profile.Stage, profile);
-        bool partySaved = SaveComponent(profile.Party, profile);
+        bool globalSaved = Save<Global>();
+        bool stageSaved = Save<Stage>();
+        bool partySaved = Save<Party>();
 
         sw.Stop();
 
@@ -199,15 +217,8 @@ public class ProfileManager : ExtendedMonoBehavior
 
     public bool QuickSave()
     {
-        if (currentProfile == null || !currentProfile.IsValid())
-        {
-            Debug.LogError($"Current save file is not valid.");
-            return false;
-        }
-
-        return SaveProfile(currentProfile);
+        return SaveProfile();
     }
-
 
     private Profile GetProfile(string guid)
     {
@@ -219,9 +230,9 @@ public class ProfileManager : ExtendedMonoBehavior
 
         var profile = new Profile(guid);
 
-        var global = LoadComponent<Global>(guid, "global.json");
-        var stage = LoadComponent<Stage>(guid, "stage.json");
-        var party = LoadComponent<Party>(guid, "party.json");
+        var global = Load<Global>(guid);
+        var stage = Load<Stage>(guid);
+        var party = Load<Party>(guid);
 
         profile.Global = global;
         profile.Stage = stage;
@@ -240,20 +251,9 @@ public class ProfileManager : ExtendedMonoBehavior
     public void Select(int index)
     {
         if (!HasProfiles())
-        {
-            Debug.LogError($"Failed to select any profile from: {FileIO.Folders.Profiles}");
             return;
-        }
 
-        var profile = profiles[index];
-        if (profile == null || !profile.IsValid())
-        {
-            Debug.LogError($"Failed to select profile by index: {index}");
-            return;
-        }
-
-        currentProfile = null;
-        currentProfile = profile;
+        currentProfile = profiles[index];
     }
 
     public bool HasProfiles()
@@ -261,7 +261,7 @@ public class ProfileManager : ExtendedMonoBehavior
         return profiles != null && profiles.Count > 0;
     }
 
-    private bool IsValidFolders()
+    private bool HasValidFolders()
     {
         //Verify profiles folder can be created
         if (string.IsNullOrWhiteSpace(FileIO.Folders.Profiles))
@@ -276,5 +276,35 @@ public class ProfileManager : ExtendedMonoBehavior
 
         return Directory.Exists(FileIO.Folders.Profiles);
     }
+
+
+    private string GetFileName<T>() where T : class
+    {
+        if (typeof(T) == typeof(Global))
+            return "global.json";
+
+        if (typeof(T) == typeof(Stage))
+            return "stage.json";
+
+        if (typeof(T) == typeof(Party))
+            return "party.json";
+
+        return null;
+    }
+
+    private Section GetSection<T>() where T : class
+    {
+        if (typeof(T) == typeof(Global))
+            return currentProfile.Global;
+
+        if (typeof(T) == typeof(Stage))
+            return currentProfile.Stage;
+
+        if (typeof(T) == typeof(Party))
+            return currentProfile.Party;
+
+        return null;
+    }
+
 
 }

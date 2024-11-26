@@ -153,14 +153,6 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set { GameManager.instance.totalCoins = value; }
     }
 
-
-    protected Profile currentProfile
-    {
-        get { return profileManager.currentProfile; }
-        set { profileManager.currentProfile = value; }
-    }
-
-
     protected CoinBarInstance coinBar => GameManager.instance.coinBar;
 
 }

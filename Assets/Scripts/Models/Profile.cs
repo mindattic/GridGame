@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using Unity.VisualScripting;
-using UnityEngine;
 using static FileIO;
+using Global = Game.Models.ProfileGlobalSection;
+using Party = Game.Models.ProfilePartySection;
+using Stage = Game.Models.ProfileStageSection;
 
 namespace Game.Models
 {
@@ -43,9 +43,7 @@ namespace Game.Models
             if (string.IsNullOrWhiteSpace(Guid) || string.IsNullOrWhiteSpace(Folder))
                 return false;
 
-            if (Global == null || !Global.IsValid() 
-                || Stage == null || !Stage.IsValid()
-                || Party == null || !Party.IsValid())
+            if (Global == null || Stage == null || Party == null)
                 return false;
 
             return true;
@@ -55,74 +53,38 @@ namespace Game.Models
 
 
     [Serializable]
-    public class ProfileComponent
-    {
-        public string FileName;
-    }
+    public class ProfileSection { }
 
     [Serializable]
-    public class Global: ProfileComponent
+    public class ProfileGlobalSection : ProfileSection
     {
         public int TotalCoins;
 
-        public Global()
+        public ProfileGlobalSection()
         {
-            FileName = "global.json";
             TotalCoins = 0;
-        }
-
-        public bool IsValid()
-        {
-            if (string.IsNullOrWhiteSpace(FileName))
-                return false;
-
-            return true;
         }
     }
 
     [Serializable]
-    public class Stage: ProfileComponent
+    public class ProfileStageSection : ProfileSection
     {
         public int CurrentStage;
 
-        public Stage()
+        public ProfileStageSection()
         {
-            FileName = "stage.json";
             CurrentStage = 5; //DEBUG: Default to 5
-        }
-
-        public bool IsValid()
-        {
-            if (string.IsNullOrWhiteSpace(FileName))
-                return false;
-
-            return true;
         }
     }
 
     [Serializable]
-    public class Party: ProfileComponent
+    public class ProfilePartySection : ProfileSection
     {
         public List<Member> Members = new List<Member>();
 
-        public Party()
-        {
-            FileName = "party.json";
-        }
+        public ProfilePartySection() { }
 
-        public bool IsValid()
-        {
-            if (string.IsNullOrWhiteSpace(FileName))
-                return false;
-
-            return true;
-        }
     }
-
-
-   
-
-
 
     [Serializable]
     public class Member

@@ -180,4 +180,3 @@ public enum VFXOptions
     VFXTest_BlueYellow_Sword_3X,
     VFXTest_Red_Sword
 }
-
