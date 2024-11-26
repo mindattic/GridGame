@@ -313,6 +313,7 @@ public class ActorInstance : ExtendedMonoBehavior
             renderers.SetActionBarEnabled(isEnabled: true);
             renderers.SetSelectionEnabled(isEnabled: false);
             renderers.SetTurnDelayTextEnabled(isEnabled: true);
+            renderers.SetTurnDelayTextColor(Colors.Solid.White);
             vfx.Attack = resourceManager.VisualEffect("Double_Claw");
             CalculateTurnDelay();
         }
@@ -1068,7 +1069,8 @@ public class ActorInstance : ExtendedMonoBehavior
 
     private void UpdateTurnDelayText()
     {
-        renderers.SetTurnDelayTextColor(turnDelay > 0 ? Colors.Solid.White : Colors.Solid.Red);
+        renderers.SetTurnDelayTextEnabled(turnDelay > 0);
+        //renderers.SetTurnDelayTextColor(turnDelay > 0 ? Colors.Solid.White : Colors.Solid.Red);
         renderers.SetTurnDelayText($"{turnDelay}");
     }
 

@@ -23,7 +23,7 @@ public class ProfileManager : ExtendedMonoBehavior
         var sw = Stopwatch.StartNew();
 
         //Validate folder structure
-        if (!HasValidFolders())
+        if (!HasValidFolderStructure())
         {
             Debug.LogError($"Folder structure is invalid.");
             return;
@@ -230,13 +230,9 @@ public class ProfileManager : ExtendedMonoBehavior
 
         var profile = new Profile(guid);
 
-        var global = Load<Global>(guid);
-        var stage = Load<Stage>(guid);
-        var party = Load<Party>(guid);
-
-        profile.Global = global;
-        profile.Stage = stage;
-        profile.Party = party;
+        profile.Global = Load<Global>(guid);
+        profile.Stage = Load<Stage>(guid);
+        profile.Party = Load<Party>(guid);
 
         if (!profile.IsValid())
         {
@@ -261,7 +257,7 @@ public class ProfileManager : ExtendedMonoBehavior
         return profiles != null && profiles.Count > 0;
     }
 
-    private bool HasValidFolders()
+    private bool HasValidFolderStructure()
     {
         //Verify profiles folder can be created
         if (string.IsNullOrWhiteSpace(FileIO.Folders.Profiles))
