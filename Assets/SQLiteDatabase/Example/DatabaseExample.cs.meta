@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 584d736bce0bbba4e9d8f2660aabd719
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 40375
+  packageName: SQLite Database
+  packageVersion: 1.7
+  assetPath: Assets/SQLiteDatabase/Example/DatabaseExample.cs
+  uploadId: 329475

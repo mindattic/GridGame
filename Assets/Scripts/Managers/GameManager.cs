@@ -19,6 +19,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public bool showActorFrame = false;
 
     //Managers
+    [HideInInspector] public DatabaseManager databaseManager;
     [HideInInspector] public ResourceManager resourceManager;
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public CameraManager cameraManager;
@@ -131,6 +132,9 @@ public class GameManager : Singleton<GameManager>
         var game = GameObject.Find(Constants.Game);
         soundSource = game.GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");
         musicSource = game.GetComponents<AudioSource>()[Constants.MusicSourceIndex] ?? throw new UnityException("MusicSource is null");
+
+
+        databaseManager = game.GetComponent<DatabaseManager>() ?? throw new UnityException("DatabaseManager is null");
         cameraManager = game.GetComponent<CameraManager>() ?? throw new UnityException("CameraManager is null");
         profileManager = game.GetComponent<ProfileManager>() ?? throw new UnityException("ProfileManager is null");
         stageManager = game.GetComponent<StageManager>() ?? throw new UnityException("StageManager is null");

@@ -24,6 +24,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected Canvas canvas3D => GameManager.instance.canvas3D;
 
     //Managers
+    protected DatabaseManager databaseManager => GameManager.instance.databaseManager;
     protected CameraManager cameraManager => GameManager.instance.cameraManager;
     protected InputManager inputManager => GameManager.instance.inputManager;
     protected ProfileManager profileManager => GameManager.instance.profileManager;
