@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Spear
   m_EditorClassIdentifier: 
   id: Spear
-  Type: 8
+  Type: 4
   sprite: {fileID: 21300000, guid: 45d5c22f312d95647a8604e62545c7dd, type: 3}

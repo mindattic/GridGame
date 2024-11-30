@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Mace
   m_EditorClassIdentifier: 
   id: Mace
-  Type: 6
+  Type: 3
   sprite: {fileID: 21300000, guid: 34729b7e21ff66d45a9adf0a586795f3, type: 3}
