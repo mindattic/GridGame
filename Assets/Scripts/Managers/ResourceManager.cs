@@ -18,6 +18,8 @@ public class ResourceManager : ExtendedMonoBehavior
     [SerializeField] public List<SoundEffect> soundEffects = new List<SoundEffect>();
     [SerializeField] public List<MusicTrack> musicTracks = new List<MusicTrack>();
     [SerializeField] public List<VisualEffect> visualEffects = new List<VisualEffect>();
+    [SerializeField] public List<WeaponTypeResource> weaponTypes = new List<WeaponTypeResource>();
+
     //[SerializeField] public List<PrefabResource> prefabs = new List<PrefabResource>();
     //[SerializeField] public List<ShaderResource> shaders = new List<ShaderResource>();
 
@@ -121,7 +123,7 @@ public class ResourceManager : ExtendedMonoBehavior
         }
         catch (Exception ex)
         {
-            logManager.error($"Failed to retrieve status idle `{id}` from resource manager. | Error: {ex.Message}");
+            logManager.error($"Failed to retrieve status thumbnail `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;
@@ -171,6 +173,21 @@ public class ResourceManager : ExtendedMonoBehavior
 
         return null;
     }
+
+    public WeaponTypeResource WeaponType(WeaponType type)
+    {
+        try
+        {
+            return weaponTypes.First(x => x.Type.Equals(type));
+        }
+        catch (Exception ex)
+        {
+            logManager.error($"Failed to retrieve weapon type resource `{type}` from resource manager. | Error: {ex.Message}");
+        }
+
+        return null;
+    }
+
 
     //public PrefabResource Prefab(string id)
     //{

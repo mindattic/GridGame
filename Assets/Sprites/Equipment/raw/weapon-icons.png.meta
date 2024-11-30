@@ -106,9 +106,9 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -703,7 +703,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -712,7 +712,28 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      weapon-icons_0: 850424379004142139
+      weapon-icons_1: 5126225299195022041
+      weapon-icons_10: -3899875377707904218
+      weapon-icons_11: -874763035391663144
+      weapon-icons_12: 6855526300999019803
+      weapon-icons_13: -1135110910902208863
+      weapon-icons_14: 4093543907319564316
+      weapon-icons_15: 5538570246318844413
+      weapon-icons_16: -2644093162266880131
+      weapon-icons_17: -2921778796615072438
+      weapon-icons_18: 3034079482703374447
+      weapon-icons_19: 2273566286281604316
+      weapon-icons_2: 8221533847314337064
+      weapon-icons_20: -5299308805021349041
+      weapon-icons_3: 8071631830761300456
+      weapon-icons_4: 3736647547084990722
+      weapon-icons_5: 4721282241309984998
+      weapon-icons_6: 2404830630734049548
+      weapon-icons_7: -5752562134643910269
+      weapon-icons_8: -6519035708806382147
+      weapon-icons_9: -2965063254481715886
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

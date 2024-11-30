@@ -1339,6 +1339,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0a5ec8365bfadb34698b1848d512c946, type: 2}
   - {fileID: 11400000, guid: c4b60c9e9bb27b841b39b7eeb14b2a9f, type: 2}
   - {fileID: 11400000, guid: 09a2459015bd1eb4093bc384f4118293, type: 2}
+  weaponTypes:
+  - {fileID: 11400000, guid: d6d0fa4a3c7f5e745ba9ff4c5a1dac63, type: 2}
+  - {fileID: 11400000, guid: f64e5290e91b2de409a8725b0b131240, type: 2}
+  - {fileID: 11400000, guid: 68d0e2999b2a46f4c87c8971cd158551, type: 2}
+  - {fileID: 11400000, guid: 2ff1645ff024d3547a2c82103ebeba98, type: 2}
+  - {fileID: 11400000, guid: 6d8cadf8519e84340a4aabc687766faa, type: 2}
+  - {fileID: 11400000, guid: da8ef85cbbc01c3408b41ceeaa1e9f85, type: 2}
+  - {fileID: 11400000, guid: 49be8d719449d78498f7336dbe50c9be, type: 2}
 --- !u!4 &988052023
 Transform:
   m_ObjectHideFlags: 0
@@ -7639,7 +7647,7 @@ MonoBehaviour:
   resourceManager: {fileID: 0}
   inputManager: {fileID: 0}
   cameraManager: {fileID: 0}
-  saveFileManager: {fileID: 0}
+  profileManager: {fileID: 0}
   stageManager: {fileID: 0}
   boardManager: {fileID: 0}
   turnManager: {fileID: 0}
@@ -7682,13 +7690,14 @@ MonoBehaviour:
   bumpSpeed: 0
   focusedPlayer: {fileID: 0}
   selectedPlayer: {fileID: 0}
+  previousSelectedPlayer: {fileID: 0}
   timerBar: {fileID: 0}
   actors: []
   board: {fileID: 0}
   tiles: []
   lines: []
-  coinCount: 0
   coinBar: {fileID: 0}
+  totalCoins: 0
 --- !u!114 &1751276278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8189,6 +8198,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90dd63d40e76f2948b234e5b2121b82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  profiles: []
+  currentProfile:
+    Guid: 
+    Folder: 
 --- !u!1 &1830783914
 GameObject:
   m_ObjectHideFlags: 0

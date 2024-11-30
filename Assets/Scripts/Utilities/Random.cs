@@ -139,4 +139,16 @@ static class Random
 
     public static Vector2Int UnoccupiedLocation => UnoccupiedTile.location;
 
+
+    public static T EnumValue<T>() where T : Enum
+    {
+        Array values = Enum.GetValues(typeof(T));  
+        return (T)values.GetValue(Int(0, values.Length - 1));
+    }
+
+    public static WeaponType WeaponType()
+    {
+        return EnumValue<WeaponType>();
+    }
+
 }

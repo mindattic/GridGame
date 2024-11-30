@@ -1,12 +1,11 @@
 using Assets.Scripts.Behaviors.Actor;
+using Assets.Scripts.Instances.Actor;
 using Assets.Scripts.Utilities;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 //Layers
 public static class ActorLayer
@@ -52,6 +51,9 @@ public class ActorInstance : ExtendedMonoBehavior
     public ActorStats stats = new ActorStats();
     public ActorFlags flags = new ActorFlags();
     public ActorVFX vfx = new ActorVFX();
+    public ActorWeapon weapon = new ActorWeapon();
+
+
 
     public float ap = 0;
     public float maxAp = 100;
@@ -62,7 +64,7 @@ public class ActorInstance : ExtendedMonoBehavior
     public int turnDelay = 0;
 
 
-    public float wiggleSpeed; 
+    public float wiggleSpeed;
     public float wiggleAmplitude = 15f; // Amplitude (difference from -45 degrees)
 
     public Vector3 initialHealthBarScale;
@@ -277,11 +279,14 @@ public class ActorInstance : ExtendedMonoBehavior
         location = startLocation;
         position = Geometry.GetPositionByLocation(location);
         destination = position;
-
-
         sprites = resourceManager.ActorSprite(this.character.ToString());
 
-
+        //TODO: Equip actor at stagemaanger load based on save file: party.json
+        weapon.Type = Random.WeaponType();
+        weapon.Attack = Random.Float(10, 15);
+        weapon.Defense = Random.Float(0, 5);
+        weapon.Name = $"{weapon.Type}";
+        renderers.weaponIcon.sprite = resourceManager.WeaponType(weapon.Type).sprite;
 
         if (IsPlayer)
         {
@@ -1488,7 +1493,7 @@ public class ActorInstance : ExtendedMonoBehavior
         {
             //Before:
             bool isDone = false;
-            bool is90Degrees = false;
+            bool hasFlipped = false;
             var rotY = 0f;
             var speed = tileSize * 24f;
             renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
@@ -1496,12 +1501,12 @@ public class ActorInstance : ExtendedMonoBehavior
             //During:
             while (!isDone)
             {
-                rotY += !is90Degrees ? speed : -speed;
+                rotY += !hasFlipped ? speed : -speed;
 
-                if (!is90Degrees && rotY >= 90f)
+                if (!hasFlipped && rotY >= 90f)
                 {
                     rotY = 90f;
-                    is90Degrees = true;
+                    hasFlipped = true;
                     turnDelay--;
                     turnDelay = Math.Clamp(turnDelay, 0, 9);
 
@@ -1509,7 +1514,7 @@ public class ActorInstance : ExtendedMonoBehavior
                     UpdateTurnDelayText();
                 }
 
-                isDone = is90Degrees && rotY <= 0f;
+                isDone = hasFlipped && rotY <= 0f;
                 if (isDone)
                 {
                     rotY = 0f;

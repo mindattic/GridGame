@@ -39,37 +39,34 @@ public class DebugWindow : EditorWindow
 
     public static void CloseWindow()
     {
-        if (instance != null)
-        {
-            instance.Close();
-            instance = null;
-            isWindowOpen = false;
-        }
-    }
+        if (instance == null)
+            return;
 
+        instance.Close();
+        instance = null;
+        isWindowOpen = false;
+    }
 
     private static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
-        if (state == PlayModeStateChange.EnteredPlayMode)
-        {
-            // Close the window when entering play mode
-            if (isWindowOpen)
-            {
-                CloseWindow();
-            }
+        if (state != PlayModeStateChange.EnteredPlayMode)
+            return;
 
-            // Reopen after 3 seconds
+        //Close the window when entering play mode
+        if (isWindowOpen)
+            CloseWindow();
+
+        EditorApplication.delayCall += () =>
+        {
             EditorApplication.delayCall += () =>
             {
-                EditorApplication.delayCall += () =>
+                if (EditorApplication.isPlaying) // Ensure still in play mode
                 {
-                    if (EditorApplication.isPlaying) // Ensure still in play mode
-                    {
-                        ShowWindow();
-                    }
-                };
+                    ShowWindow();
+                }
             };
-        }
+        };
+
     }
 
     private void OnEnable()
@@ -125,7 +122,7 @@ public class DebugWindow : EditorWindow
             || consoleManager == null
             || turnManager == null
             || stageManager == null
-            || logManager == null 
+            || logManager == null
             || profileManager == null)
             return;
 

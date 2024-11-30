@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Models\ActorDetails.cs" />
     <Compile Include="Assets\Scripts\Instances\DamageTextInstance.cs" />
     <Compile Include="Assets\Scripts\Utilities\Formulas.cs" />
+    <Compile Include="Assets\Scripts\Instances\Actor\ActorWeapon.cs" />
     <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
     <Compile Include="Assets\Scripts\Models\Destination.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Assets\Scripts\Models\StatusSprite.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorVFX.cs" />
     <Compile Include="Assets\Scripts\Managers\PointerManager.cs" />
+    <Compile Include="Assets\Scripts\Models\WeaponTypeResource.cs" />
     <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Shared.cs" />
     <Compile Include="Assets\Scripts\Models\PropSprite.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="Assets\Scripts\Managers\StageManager.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorThumbnail.cs" />
     <Compile Include="Assets\Scripts\Instances\GhostInstance.cs" />
+    <Compile Include="Assets\Scripts\Models\ActorEquipment.cs" />
     <Compile Include="Assets\Scripts\Managers\TileManager.cs" />
     <Compile Include="Assets\Scripts\Managers\WallManager.cs" />
   </ItemGroup>

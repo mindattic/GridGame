@@ -128,6 +128,16 @@ public enum CoinState
     Destroy
 }
 
+public enum WeaponType
+{
+    Dagger,
+    Hammer,
+    Katana,
+    Mace,
+    Spear, 
+    Sword,
+    Wand
+}
 
 public enum DebugOptions
 {
