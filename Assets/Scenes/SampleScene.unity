@@ -7578,6 +7578,7 @@ GameObject:
   - component: {fileID: 1751276276}
   - component: {fileID: 1751276293}
   - component: {fileID: 1751276292}
+  - component: {fileID: 1751276309}
   - component: {fileID: 1751276308}
   - component: {fileID: 1751276301}
   - component: {fileID: 1751276282}
@@ -7644,6 +7645,7 @@ MonoBehaviour:
   gameSpeed: 1
   showActorNameTag: 0
   showActorFrame: 0
+  databaseManager: {fileID: 0}
   resourceManager: {fileID: 0}
   inputManager: {fileID: 0}
   cameraManager: {fileID: 0}
@@ -8202,6 +8204,18 @@ MonoBehaviour:
   currentProfile:
     Guid: 
     Folder: 
+--- !u!114 &1751276309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751276275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26471179de44c2840a2a8d7b23aa1d0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1830783914
 GameObject:
   m_ObjectHideFlags: 0
