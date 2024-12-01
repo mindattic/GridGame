@@ -1,5 +1,6 @@
 ﻿using Game.Behaviors;
 using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -96,7 +97,7 @@ public class DebugWindow : EditorWindow
     {
         isWindowOpen = false;
         instance = null;
-
+       
         // Unregister the update method
         EditorApplication.update -= OnEditorUpdate;
         EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
@@ -128,84 +129,92 @@ public class DebugWindow : EditorWindow
 
         GUILayout.BeginVertical();
 
-        GUILayout.BeginHorizontal();
         RenderStats();
-        GUILayout.EndHorizontal();
-        GUILayout.Space(10);
         RenderCheckboxes();
-        GUILayout.Space(10);
-        GUILayout.BeginHorizontal();
         RenderDebugOptionsDropdown();
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
         RenderVFXDropdown();
-        GUILayout.EndHorizontal();
-        GUILayout.Space(10);
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Level", GUILayout.Width(Screen.width));
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
         RenderLevelControls();
-        GUILayout.EndHorizontal();
-        GUILayout.Space(10);
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Save File", GUILayout.Width(Screen.width));
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-        RenderSaveControls();
-        GUILayout.EndHorizontal();
-        GUILayout.Space(10);
-        RenderCombatLog();
+        RenderDataControls();
+        RenderLog();
+
         GUILayout.EndVertical();
     }
 
 
     private void RenderStats()
     {
-        GUILayout.Label($"FPS: {consoleManager.fpsMonitor.currentFps}");
-        GUILayout.Label($"Turn: {(turnManager.IsPlayerTurn ? "Player" : "Enemy")}");
-        GUILayout.Label($"Phase: {turnManager.currentPhase}");
-        GUILayout.Label($"Runtime: {Time.time:F2}");
+        GUILayout.BeginHorizontal();
+
+        GUILayout.Label($"FPS: {consoleManager.fpsMonitor.currentFps}", GUILayout.Width(Screen.width * 0.25f));
+        GUILayout.Label($"Turn: {(turnManager.IsPlayerTurn ? "Player" : "Enemy")}", GUILayout.Width(Screen.width * 0.25f));
+        GUILayout.Label($"Phase: {turnManager.currentPhase}", GUILayout.Width(Screen.width * 0.25f));
+        GUILayout.Label($"Runtime: {Time.time:F2}", GUILayout.Width(Screen.width * 0.25f));
+
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
     }
 
     private void RenderCheckboxes()
     {
+        bool isChecked;
+
+        GUILayout.BeginHorizontal();
+
         //Show Actor Name Tag checkbox
-        var isEnabled = EditorGUILayout.Toggle("Show Actor Name Tag", gameManager.showActorNameTag);
-        if (gameManager.showActorNameTag != isEnabled)
+        isChecked = EditorGUILayout.Toggle("Show Actor Name Tag", gameManager.showActorNameTag);
+        if (gameManager.showActorNameTag != isChecked)
         {
-            gameManager.showActorNameTag = isEnabled;
-            gameManager.actors.ForEach(x => x.renderers.SetNameTagEnabled(isEnabled));
+            gameManager.showActorNameTag = isChecked;
+            gameManager.actors.ForEach(x => x.renderers.SetNameTagEnabled(isChecked));
         }
+
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
 
         //Show Actor Frame checkbox
-        isEnabled = EditorGUILayout.Toggle("Show Actor Frame", gameManager.showActorFrame);
-        if (gameManager.showActorFrame != isEnabled)
+        isChecked = EditorGUILayout.Toggle("Show Actor Frame", gameManager.showActorFrame);
+        if (gameManager.showActorFrame != isChecked)
         {
-            gameManager.showActorFrame = isEnabled;
-            gameManager.actors.ForEach(x => x.renderers.SetFrameEnabled(isEnabled));
+            gameManager.showActorFrame = isChecked;
+            gameManager.actors.ForEach(x => x.renderers.SetFrameEnabled(isChecked));
         }
 
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
     }
 
     private void RenderDebugOptionsDropdown()
     {
+        GUILayout.BeginHorizontal();
+
         GUILayout.Label("Debug Options", GUILayout.Width(Screen.width * 0.25f));
         selectedOption = (DebugOptions)EditorGUILayout.EnumPopup(selectedOption, GUILayout.Width(Screen.width * 0.5f));
         if (GUILayout.Button("Execute", GUILayout.Width(Screen.width * 0.25f)))
             OnRunClick();
+
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
     }
 
     private void RenderVFXDropdown()
     {
+        GUILayout.BeginHorizontal();
+
         GUILayout.Label("VFX", GUILayout.Width(Screen.width * 0.25f));
         selectedVfx = (VFXOptions)EditorGUILayout.EnumPopup(selectedVfx, GUILayout.Width(Screen.width * 0.5f));
         if (GUILayout.Button("Play", GUILayout.Width(Screen.width * 0.25f)))
             OnPlayVFXClick();
+
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
     }
 
     private void RenderLevelControls()
     {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Level", GUILayout.Width(Screen.width));
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
 
         if (GUILayout.Button("Reset", GUILayout.Width(Screen.width * 0.3333f)))
             OnResetClick();
@@ -215,34 +224,67 @@ public class DebugWindow : EditorWindow
 
         if (GUILayout.Button("Next >", GUILayout.Width(Screen.width * 0.3333f)))
             OnNextLevelClick();
+
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
     }
 
-    private void RenderSaveControls()
+    private void RenderDataControls()
     {
-        if (GUILayout.Button("Save", GUILayout.Width(Screen.width * 0.5f)))
-            OnSaveClick();
+        bool isClicked;
 
-        if (GUILayout.Button("LoadProfiles", GUILayout.Width(Screen.width * 0.5f)))
-            OnReloadClick();
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Data", GUILayout.Width(Screen.width));
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+
+        isClicked = GUILayout.Button("Erase Database", GUILayout.Width(Screen.width * 0.5f));
+        if (isClicked)
+            OnEraseDatabaseClick();
+
+        isClicked = GUILayout.Button("Erase Profiles", GUILayout.Width(Screen.width * 0.5f));
+
+        if (isClicked)
+            OnEraseProfilesClick();
+
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
     }
 
-    private void RenderCombatLog()
+
+    private void RenderLog()
     {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Log", GUILayout.Width(Screen.width));
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
 
-        // 5. Display the logs (scrollable)
-        //var backgroundColor = new Color(0.15f, 0.15f, 0.15f); // Darker background color
-        var style = new GUIStyle { richText = true };
-        var y = position.height - 200;
-        //EditorGUI.DrawRect(new Rect(0, y, boardPosition.width, boardPosition.height), backgroundColor);
+        // Background color setup
+        var backgroundColor = new Color(0.5f, 0.15f, 0.15f);
+        var style = new GUIStyle { richText = true, padding = new RectOffset(10, 10, 10, 10) };
 
-        scrollPosition = EditorGUILayout.BeginScrollView(
+        // Calculate the background area
+        float logHeight = position.height - 170;
+        Rect backgroundRect = new Rect(0, GUILayoutUtility.GetLastRect().yMax, Screen.width, logHeight);
+
+        // Draw the background
+        Color originalColor = GUI.color;
+        GUI.color = backgroundColor;
+        GUI.Box(backgroundRect, GUIContent.none); // Draw the background box
+        GUI.color = originalColor;
+
+        // Make the log scrollable
+        scrollPosition = GUILayout.BeginScrollView(
             scrollPosition,
-            GUILayout.Height(y),
+            GUILayout.Height(logHeight),
             GUILayout.ExpandHeight(true));
 
+        // Display the logs
         GUILayout.Label(logManager.text, style);
-        EditorGUILayout.EndScrollView();
 
+        GUILayout.EndScrollView();
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
     }
 
 
@@ -321,16 +363,23 @@ public class DebugWindow : EditorWindow
         stageManager.NextStage();
     }
 
-    private void OnSaveClick()
+    private void OnEraseDatabaseClick()
     {
-        profileManager.QuickSave();
+        string filePath = Path.Combine(Application.persistentDataPath, "MyDatabase.db");
+
+        if (!File.Exists(filePath))
+        {
+            logManager.error("MyDatabase.db does not exist at the specified path.");
+            return;
+        }
+
+        File.Delete(filePath);
+        logManager.info("MyDatabase.db has been deleted.");
     }
 
-    private void OnReloadClick()
+    private void OnEraseProfilesClick()
     {
-        stageManager.Load();
+        logManager.info("Not yet implemented.");
     }
-
-
 
 }
