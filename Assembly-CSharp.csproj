@@ -87,6 +87,7 @@
     <Compile Include="Assets\Scripts\Instances\Actor\ActorFlags.cs" />
     <Compile Include="Assets\Scripts\Models\CombatParticipants.cs" />
     <Compile Include="Assets\Scripts\Models\StatusSprite.cs" />
+    <Compile Include="Assets\Scripts\Managers\DatabaseManager.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorVFX.cs" />
     <Compile Include="Assets\Scripts\Managers\PointerManager.cs" />
     <Compile Include="Assets\Scripts\Models\WeaponTypeResource.cs" />
@@ -124,7 +125,6 @@
     <Compile Include="Assets\Scripts\Models\Singleton.cs" />
     <Compile Include="Assets\Scripts\Models\ActorSprite.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorHealthBar.cs" />
-    <Compile Include="Assets\Scripts\Entities\Enemy.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorRenderers.cs" />
     <Compile Include="Assets\Scripts\Managers\CardManager.cs" />
     <Compile Include="Assets\Scripts\Managers\OverlayManager.cs" />
@@ -140,7 +140,6 @@
     <Compile Include="Assets\Scripts\Models\Alignment.cs" />
     <Compile Include="Assets\Scripts\Managers\InputManager.cs" />
     <Compile Include="Assets\Scripts\Instances\PortraitInstance.cs" />
-    <Compile Include="Assets\DatabaseManager.cs" />
     <Compile Include="Assets\Scripts\Managers\TooltipManager.cs" />
     <Compile Include="Assets\Scripts\Managers\BoardManager.cs" />
     <Compile Include="Assets\Scripts\Models\StageActor.cs" />

@@ -1,5 +1,10 @@
 ﻿public class ActorStats
 {
+    public ActorStats() { }
+    public int Id;
+    public string Name;
+    public string Variant;
+    public string Description;
     public float Level;
     public float HP;
     public float MaxHP;

@@ -257,8 +257,7 @@ public class DebugWindow : EditorWindow
         GUILayout.BeginHorizontal();
         GUILayout.Label("Log", GUILayout.Width(Screen.width));
         GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-
+  
         // Background color setup
         var backgroundColor = new Color(0.5f, 0.15f, 0.15f);
         var style = new GUIStyle { richText = true, padding = new RectOffset(10, 10, 10, 10) };
@@ -283,7 +282,6 @@ public class DebugWindow : EditorWindow
         GUILayout.Label(logManager.text, style);
 
         GUILayout.EndScrollView();
-        GUILayout.EndHorizontal();
         GUILayout.Space(10);
     }
 

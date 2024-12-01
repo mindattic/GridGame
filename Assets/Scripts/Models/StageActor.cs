@@ -1,5 +1,10 @@
 ﻿using UnityEngine;
 
+
+
+
+
+
 public class StageActor
 {
     public Character character;
