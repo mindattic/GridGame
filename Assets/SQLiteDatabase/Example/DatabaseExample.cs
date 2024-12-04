@@ -32,7 +32,7 @@ public class DatabaseExample : MonoBehaviour
     {
         // set database location (directory)
         db.DBLocation = Application.persistentDataPath;
-        db.DBName = "MyDatabase.instance";
+        db.DBName = "MyDatabase.db";
         Debug.Log("Database Directory : " + db.DBLocation);
 
         if (db.Exists)
@@ -187,14 +187,14 @@ public class DatabaseExample : MonoBehaviour
         db.CreateDatabase(db.DBName, true);
 
         // use default database from StreamingAssets folder
-        //instance.ConnectToDefaultDatabase (instance.DBName,true);
+        //db.ConnectToDefaultDatabase (db.DBName,true);
 
         Refresh();
     }
 
     void ConnectToDB()
     {
-        //instance.CreateDatabase (instance.DBName,false);
+        //db.CreateDatabase (db.DBName,false);
 
         db.ConnectToDefaultDatabase(db.DBName, false);
         Refresh();
@@ -210,7 +210,7 @@ public class DatabaseExample : MonoBehaviour
 			DBSchema schema = new DBSchema ("Users");
 			schema.AddField ("Id", SQLiteDB.DB_DataType.DB_INT, 0, false, true, true);
 			schema.AddField ("Name", SQLiteDB.DB_DataType.DB_VARCHAR, 100, false, false, false);
-			return instance.CreateTable (schema);*/
+			return db.CreateTable (schema);*/
 
             DBSchema schema = new DBSchema("Receiver");
             schema.AddField("ID", SQLiteDB.DB_DataType.DB_INT, 0, false, true, true);

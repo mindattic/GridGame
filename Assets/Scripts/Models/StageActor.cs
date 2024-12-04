@@ -42,7 +42,7 @@ public class StageActor
     //    this.character = character;
     //    this.name = name;
     //    this.stats = stats;
-    //    this.idle = GameManager.instance.resourceManager.ActorThumbnail(this.character.ToString());
+    //    this.idle = GameManager.db.resourceManager.ActorThumbnail(this.character.ToString());
     //    this.team = team;
     //    this.quality = quality;
     //    this.boardLocation = boardLocation.NowhereLocation;

@@ -106,6 +106,7 @@
     <Compile Include="Assets\SQLiteDatabase\Example\DatabaseExample.cs" />
     <Compile Include="Assets\Scripts\Models\VisualEffect.cs" />
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
+    <Compile Include="Assets\Scripts\Models\ExtendedSQLiteDatabase.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Models\ActorStats.cs" />
     <Compile Include="Assets\Scripts\Models\PrefabResource.cs" />

@@ -8,9 +8,21 @@ using UnityEngine;
 
 namespace Game.Manager
 {
+
+    public static class Database
+    {
+        public const string Name = "MyDatabase.db";
+
+        public static class Table
+        {
+
+            public static string Actor = "Actor";
+        }
+    }
+
     public class DatabaseManager : ExtendedMonoBehavior
     {
-        private const string DATABASE_NAME = "MyDatabase.db";
+        //private const string DATABASE_NAME = "MyDatabase.db";
         private SQLiteDB instance = SQLiteDB.Instance;
 
         public List<ActorStats> actorStats = new List<ActorStats>();
@@ -39,8 +51,9 @@ namespace Game.Manager
         private void Awake()
         {
             instance.DBLocation = Application.persistentDataPath;
-            instance.DBName = DATABASE_NAME;
+            instance.DBName = Database.Name;
 
+            //Check if this is the first load of the application
             if (!instance.Exists)
                 instance.CreateDatabase(instance.DBName, isOverWrite: true);
 
@@ -49,8 +62,16 @@ namespace Game.Manager
             if (!isConnected)
                 throw new UnityException($"Failed to connect to database: {instance.DBName}");
 
-            Load();
+            Load(); //TODO: Load data based on current stage???...
         }
+
+
+        //TODO:
+        //Come up with a way to retrieve records piecemeal so
+        //that entire database tables don't have to be
+        //downloaded for a small subset of data, e.g:
+        //Stage 05: ["Slime", "Scorpion", "Bat", "Yeti"]
+
 
         void Load()
         {
@@ -60,7 +81,7 @@ namespace Game.Manager
             #region Load ActorStats
 
             actorStats.Clear();
-            reader = instance.GetAllData("ActorStats");
+            reader = instance.GetAllData(Database.Table.Actor);
             while (reader != null && reader.Read())
             {
                 var x = new ActorStats()
