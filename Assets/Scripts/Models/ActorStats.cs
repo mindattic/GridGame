@@ -1,6 +1,26 @@
 ﻿public class ActorStats
 {
     public ActorStats() { }
+
+    // Copy Constructor
+    public ActorStats(ActorStats other)
+    {
+        Id = other.Id;
+        Name = other.Name;
+        Variant = other.Variant;
+        Description = other.Description;
+        Level = other.Level;
+        HP = other.HP;
+        MaxHP = other.MaxHP;
+        Strength = other.Strength;
+        Vitality = other.Vitality;
+        Agility = other.Agility;
+        Speed = other.Speed;
+        Luck = other.Luck;
+        // If you have resistances, you'll need to copy those too.
+    }
+
+
     public int Id;
     public string Name;
     public string Variant;

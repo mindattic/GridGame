@@ -992,8 +992,8 @@ public class ActorInstance : ExtendedMonoBehavior
         ShrinkAsync();
         Shake(shakeIntensity.Stop);
 
-        if (IsDying)
-            DieAsync();
+        //if (IsDying)
+        //    DieAsync();
     }
 
 

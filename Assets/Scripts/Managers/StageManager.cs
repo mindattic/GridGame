@@ -105,6 +105,20 @@ public class StageManager : ExtendedMonoBehavior
                 Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
                 Add(new StageActor(Character.Slime, "Slime B", ActorStats("Slime"), Team.Enemy, Rarity.Common));
                 Add(new StageActor(Character.Slime, "Slime C", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+
+                break;
+
+            case 6:
+
+                //Players
+                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Cleric, "Cleric", RandomStats, Team.Player, Rarity.Common));
+
+                //Enemies
+                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Slime, "Slime B", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Slime, "Slime C", ActorStats("Slime"), Team.Enemy, Rarity.Common));
                 Add(new StageActor(Character.Slime, "Slime D", ActorStats("Slime"), Team.Enemy, Rarity.Common));
                 Add(new StageActor(Character.Slime, "Slime E", ActorStats("Slime"), Team.Enemy, Rarity.Common));
                 Add(new StageActor(Character.Slime, "Slime F", ActorStats("Slime"), Team.Enemy, Rarity.Common));
@@ -130,46 +144,6 @@ public class StageManager : ExtendedMonoBehavior
                 Add(new StageActor(Character.Bat, "Bat D", ActorStats("Bat"), Team.Enemy, Rarity.Common, spawnTurn: 8));
                 Add(new StageActor(Character.Bat, "Bat E", ActorStats("Bat"), Team.Enemy, Rarity.Common, spawnTurn: 9));
                 Add(new StageActor(Character.Yeti, "Yeti B", ActorStats("Yeti"), Team.Enemy, Rarity.Common, spawnTurn: 10));
-
-                break;
-
-            case 6:
-
-                //Players
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Cleric, "Cleric", RandomStats, Team.Player, Rarity.Common));
-                Add(new StageActor(Character.Ninja, "Ninja", RandomStats, Team.Player, Rarity.Common));
-                Add(new StageActor(Character.Sentinel, "Sentinel", RandomStats, Team.Player, Rarity.Common));
-                Add(new StageActor(Character.PandaGirl, "Panda Girl", RandomStats, Team.Player, Rarity.Common));
-
-                //enemies
-                Add(new StageActor(Character.Slime, "Slime", ActorStats("Slime"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Scorpion, "Scorpion", ActorStats("Scorpion"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Bat, "Bat", ActorStats("Bat"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Yeti, "Yeti", ActorStats("Yeti"), Team.Enemy, Rarity.Common));
-
-                //Dynamic enemies
-                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 1));
-                Add(new StageActor(Character.Slime, "Slime B", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 2));
-                Add(new StageActor(Character.Slime, "Slime C", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 3));
-                Add(new StageActor(Character.Slime, "Slime D", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 4));
-                Add(new StageActor(Character.Slime, "Slime E", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 5));
-                Add(new StageActor(Character.Scorpion, "Scorpion A", ActorStats("Scorpion"), Team.Enemy, Rarity.Common, spawnTurn: 1));
-                Add(new StageActor(Character.Scorpion, "Scorpion B", ActorStats("Scorpion"), Team.Enemy, Rarity.Common, spawnTurn: 2));
-                Add(new StageActor(Character.Scorpion, "Scorpion C", ActorStats("Scorpion"), Team.Enemy, Rarity.Common, spawnTurn: 3));
-                Add(new StageActor(Character.Scorpion, "Scorpion D", ActorStats("Scorpion"), Team.Enemy, Rarity.Common, spawnTurn: 4));
-                Add(new StageActor(Character.Scorpion, "Scorpion E", ActorStats("Scorpion"), Team.Enemy, Rarity.Common, spawnTurn: 5));
-                Add(new StageActor(Character.Bat, "Bat A", ActorStats("Bat"), Team.Enemy, Rarity.Common, spawnTurn: 1));
-                Add(new StageActor(Character.Bat, "Bat B", ActorStats("Bat"), Team.Enemy, Rarity.Common, spawnTurn: 2));
-                Add(new StageActor(Character.Bat, "Bat C", ActorStats("Bat"), Team.Enemy, Rarity.Common, spawnTurn: 3));
-                Add(new StageActor(Character.Bat, "Bat D", ActorStats("Bat"), Team.Enemy, Rarity.Common, spawnTurn: 4));
-                Add(new StageActor(Character.Bat, "Bat E", ActorStats("Bat"), Team.Enemy, Rarity.Common, spawnTurn: 5));
-                Add(new StageActor(Character.Yeti, "Yeti A", ActorStats("Yeti"), Team.Enemy, Rarity.Common, spawnTurn: 1));
-                Add(new StageActor(Character.Yeti, "Yeti B", ActorStats("Yeti"), Team.Enemy, Rarity.Common, spawnTurn: 2));
-                Add(new StageActor(Character.Yeti, "Yeti C", ActorStats("Yeti"), Team.Enemy, Rarity.Common, spawnTurn: 3));
-                Add(new StageActor(Character.Yeti, "Yeti D", ActorStats("Yeti"), Team.Enemy, Rarity.Common, spawnTurn: 4));
-                Add(new StageActor(Character.Yeti, "Yeti E", ActorStats("Yeti"), Team.Enemy, Rarity.Common, spawnTurn: 5));
 
                 break;
 
@@ -231,7 +205,7 @@ public class StageManager : ExtendedMonoBehavior
         instance.sortingOrder = SortingOrder.Min;
 
         //Assign stats
-        instance.stats = stageActor.stats;
+        instance.stats = new ActorStats(stageActor.stats);
         instance.transform.localScale = tileScale;
 
         if (stageActor.IsSpawning)

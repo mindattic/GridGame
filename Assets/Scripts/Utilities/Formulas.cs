@@ -120,7 +120,7 @@ namespace Assets.Scripts.Utilities
         {
             const float baseDelay = 33.3333f;
             var spd = (int)Math.Round(baseDelay / Mathf.Max(stats.Speed, 1));
-            return Random.Int(2, Math.Max(spd, 9));
+            return Random.Int(2, Math.Min(spd, 9));
         }
 
 

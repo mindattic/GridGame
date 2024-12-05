@@ -1,6 +1,7 @@
 ﻿using Game.Behaviors;
 using System;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -135,6 +136,7 @@ public class DebugWindow : EditorWindow
         RenderVFXDropdown();
         RenderLevelControls();
         RenderDataControls();
+        RenderActorStats();
         RenderLog();
 
         GUILayout.EndVertical();
@@ -248,6 +250,35 @@ public class DebugWindow : EditorWindow
             OnEraseProfilesClick();
 
         GUILayout.EndHorizontal();
+        GUILayout.Space(10);
+    }
+
+
+
+    private void RenderActorStats()
+    {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Actors", GUILayout.Width(Screen.width));
+        GUILayout.EndHorizontal();
+
+        foreach(var x in gameManager.players.OrderBy(x => x.name))
+        {
+            GUILayout.BeginHorizontal();
+            string stats = $"{x.name}: HP: {x.HP}, IsActive: {x.isActiveAndEnabled}, IsAlive: {x.IsAlive}, IsDying: {x.IsDying}";
+            GUILayout.Label(stats, GUILayout.Width(Screen.width));
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.Space(10);
+
+        foreach (var x in gameManager.enemies.OrderBy(x => x.name))
+        {
+            GUILayout.BeginHorizontal();
+            string stats = $"{x.name}: HP: {x.HP}, IsActive: {x.isActiveAndEnabled}, IsAlive: {x.IsAlive}, IsDying: {x.IsDying}";
+            GUILayout.Label(stats, GUILayout.Width(Screen.width));
+            GUILayout.EndHorizontal();
+        }
+
         GUILayout.Space(10);
     }
 
