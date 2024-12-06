@@ -136,7 +136,7 @@ public class DebugWindow : EditorWindow
         RenderVFXDropdown();
         RenderLevelControls();
         RenderDataControls();
-        RenderActorStats();
+        //RenderActorStats();
         RenderLog();
 
         GUILayout.EndVertical();

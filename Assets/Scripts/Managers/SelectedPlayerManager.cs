@@ -41,12 +41,12 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
             return;
 
         //TODO: SaveProfile Card display...
-        actors.ForEach(x => x.renderers.SetSelectionEnabled(false));
+        actors.ForEach(x => x.renderers.SetSelectionBoxEnabled(isEnabled: false));
         focusedActor = actor;
         focusedActor.sortingOrder = SortingOrder.Max;
-        focusedActor.renderers.SetSelectionEnabled(true);
+        focusedActor.renderers.SetSelectionBoxEnabled(isEnabled: true);
 
-        //Assign mouse relativeOffset (how off center was selection)
+        //Assign mouse relativeOffset (how off center was selectionBox)
         mouseOffset = focusedActor.position - mousePosition3D;
 
         cardManager.Set(focusedActor);

@@ -1,6 +1,7 @@
 using Assets.Scripts.Behaviors.Actor;
 using Assets.Scripts.Instances.Actor;
 using Assets.Scripts.Utilities;
+using Game.Instances.Actor;
 using System;
 using System.Collections;
 using System.Linq;
@@ -8,31 +9,6 @@ using TMPro;
 using UnityEngine;
 
 //Layers
-public static class ActorLayer
-{
-    public const int Opaque = 0;
-    public const int Quality = 1;
-    public const int Glow = 2;
-    public const int Parallax = 3;
-    public const int Thumbnail = 4;
-    public const int Frame = 5;
-    public const int StatusIcon = 6;
-    public const int HealthBarBack = 7;
-    public const int HealthBar = 8;
-    public const int HealthBarFront = 9;
-    public const int HealthText = 10;
-    public const int ActionBarBack = 11;
-    public const int ActionBar = 12;
-    public const int ActionText = 13;
-    public const int RadialBack = 14;
-    public const int RadialFill = 15;
-    public const int RadialText = 16;
-    public const int Selection = 17;
-    public const int Mask = 18;
-    public const int TurnDelayText = 19;
-    public const int NameTagText = 20;
-    public const int WeaponIcon = 21;
-}
 
 public class ActorInstance : ExtendedMonoBehavior
 {
@@ -48,12 +24,11 @@ public class ActorInstance : ExtendedMonoBehavior
     public Team team = Team.Independant;
     public Quality quality = Rarity.Common;
 
+    public ActorRenderers renderers = new ActorRenderers();
     public ActorStats stats = new ActorStats();
     public ActorFlags flags = new ActorFlags();
     public ActorVFX vfx = new ActorVFX();
     public ActorWeapon weapon = new ActorWeapon();
-
-
 
     public float ap = 0;
     public float maxAp = 100;
@@ -71,14 +46,12 @@ public class ActorInstance : ExtendedMonoBehavior
 
     ActorSprite sprites;
 
-
     [SerializeField] public AnimationCurve glowCurve;
     [SerializeField] public AnimationCurve slideCurve;
 
     //public ActorHealthBar HealthBar;
     //public ActorThumbnail Thumbnail;
-    public ActorRenderers renderers = new ActorRenderers();
-
+    
     //public VisualEffect attack;
 
     private void Awake()
@@ -99,12 +72,12 @@ public class ActorInstance : ExtendedMonoBehavior
         renderers.actionText = gameObject.transform.GetChild(ActorLayer.ActionText).GetComponent<TextMeshPro>();
         renderers.skillRadialBack = gameObject.transform.GetChild(ActorLayer.RadialBack).GetComponent<SpriteRenderer>();
         renderers.skillRadial = gameObject.transform.GetChild(ActorLayer.RadialFill).GetComponent<SpriteRenderer>();
-        renderers.skillRadialText = gameObject.transform.GetChild(ActorLayer.RadialText).GetComponent<TextMeshPro>();
-        renderers.selection = gameObject.transform.GetChild(ActorLayer.Selection).GetComponent<SpriteRenderer>();
+        renderers.skillRadialText = gameObject.transform.GetChild(ActorLayer.RadialText).GetComponent<TextMeshPro>();    
         renderers.mask = gameObject.transform.GetChild(ActorLayer.Mask).GetComponent<SpriteMask>();
         renderers.turnDelayText = gameObject.transform.GetChild(ActorLayer.TurnDelayText).GetComponent<TextMeshPro>();
         renderers.nameTagText = gameObject.transform.GetChild(ActorLayer.NameTagText).GetComponent<TextMeshPro>();
         renderers.weaponIcon = gameObject.transform.GetChild(ActorLayer.WeaponIcon).GetComponent<SpriteRenderer>();
+        renderers.selectionBox = gameObject.transform.GetChild(ActorLayer.SelectionBox).GetComponent<SpriteRenderer>();
 
         //HealthBar = new ActorHealthBar(GetGameObjectByLayer(ActorLayer.HealthBarBack), GetGameObjectByLayer(ActorLayer.HealthBar));
         //Thumbnail = new ActorThumbnail(GetGameObjectByLayer(ActorLayer.Thumbnail));
@@ -221,7 +194,7 @@ public class ActorInstance : ExtendedMonoBehavior
             renderers.skillRadialBack.sortingOrder = value + ActorLayer.RadialBack;
             renderers.skillRadial.sortingOrder = value + ActorLayer.RadialFill;
             renderers.skillRadialText.sortingOrder = value + ActorLayer.RadialText;
-            renderers.selection.sortingOrder = value + ActorLayer.Selection;
+            renderers.selectionBox.sortingOrder = value + ActorLayer.SelectionBox;
             renderers.mask.sortingOrder = value + ActorLayer.Mask;
             renderers.turnDelayText.sortingOrder = value + ActorLayer.TurnDelayText;
             renderers.nameTagText.sortingOrder = value + ActorLayer.NameTagText;
@@ -299,7 +272,7 @@ public class ActorInstance : ExtendedMonoBehavior
             renderers.SetFrameColor(quality.Color);
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: false);
-            renderers.SetSelectionEnabled(isEnabled: false);
+            renderers.SetSelectionBoxEnabled(isEnabled: false);
             renderers.SetTurnDelayTextEnabled(isEnabled: false);
             vfx.Attack = resourceManager.VisualEffect("Blue_Slash_01");
 
@@ -316,7 +289,7 @@ public class ActorInstance : ExtendedMonoBehavior
             renderers.SetFrameColor(Colors.Solid.Red);
             renderers.SetHealthBarColor(Colors.HealthBar.Green);
             renderers.SetActionBarEnabled(isEnabled: true);
-            renderers.SetSelectionEnabled(isEnabled: false);
+            renderers.SetSelectionBoxEnabled(isEnabled: false);
             renderers.SetTurnDelayTextEnabled(isEnabled: true);
             renderers.SetTurnDelayTextColor(Colors.Solid.White);
             vfx.Attack = resourceManager.VisualEffect("Double_Claw");
@@ -991,11 +964,7 @@ public class ActorInstance : ExtendedMonoBehavior
         //After:
         ShrinkAsync();
         Shake(shakeIntensity.Stop);
-
-        //if (IsDying)
-        //    DieAsync();
     }
-
 
     public void TakeDamageAsync(int damage, bool isCriticalHit = false)
     {
@@ -1005,7 +974,6 @@ public class ActorInstance : ExtendedMonoBehavior
 
         StartCoroutine(TakeDamage(damage, isCriticalHit));
     }
-
 
     public IEnumerator AddAp(float amount)
     {

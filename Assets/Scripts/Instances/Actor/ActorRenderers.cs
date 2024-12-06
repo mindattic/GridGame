@@ -19,38 +19,31 @@ public class ActorRenderers
     public Color healthBarColor = Colors.HealthBar.Green;
     public Color actionBarColor = Colors.ActionBar.Blue;
     public Color turnDelayColor = Colors.Solid.Red;
+    public Color weaponIconColor = Colors.Solid.White;
+    public Color selectionColor = Colors.Solid.White;
 
     public SpriteRenderer opaque;
     public SpriteRenderer quality;
     public SpriteRenderer glow;
     public SpriteRenderer parallax;
-
     public SpriteRenderer thumbnail;
     public SpriteRenderer frame;
-
     public SpriteRenderer statusIcon;
-
     public SpriteRenderer healthBarBack;
     public SpriteRenderer healthBar;
     public SpriteRenderer healthBarFront;
     public TextMeshPro healthText;
-
     public SpriteRenderer actionBarBack;
     public SpriteRenderer actionBar;
     public TextMeshPro actionText;
-
     public SpriteRenderer skillRadialBack;
     public SpriteRenderer skillRadial;
     public TextMeshPro skillRadialText;
-
-    public SpriteRenderer selection;
-
     public SpriteMask mask;
-
     public TextMeshPro turnDelayText;
     public TextMeshPro nameTagText;
-
     public SpriteRenderer weaponIcon;
+    public SpriteRenderer selectionBox;
 
     public void SetAlpha(float alpha)
     {
@@ -66,8 +59,8 @@ public class ActorRenderers
         SetSkillRadialAlpha(alpha);
         SetTurnDelayTextAlpha(alpha);
         SetNameTagTextAlpha(alpha);
-
-        selection.color = new Color(1, 1, 1, alpha);
+        SetWeaponIconAlpha(alpha);
+        SetSelectionAlpha(alpha);
     }
 
     public void SetOpaqueAlpha(float alpha)
@@ -180,8 +173,6 @@ public class ActorRenderers
         skillRadialText.color = new Color(1, 1, 1, alpha);
     }
 
-
-
     //public void SetBloomColor(color color)
     //{
     //    bloomColor = color;
@@ -211,9 +202,9 @@ public class ActorRenderers
     }
 
 
-    public void SetSelectionEnabled(bool isEnabled = true)
+    public void SetSelectionBoxEnabled(bool isEnabled = true)
     {
-        selection.enabled = isEnabled;
+        selectionBox.enabled = isEnabled;
     }
 
     public void SetTurnDelayFontSize(int key)
@@ -232,7 +223,6 @@ public class ActorRenderers
 
         turnDelayText.fontSize = key > 9 ? 1f : fontSizeKeyValueMap[key];
     }
-
 
     public void SetTurnDelayText(string text)
     {
@@ -266,12 +256,6 @@ public class ActorRenderers
         nameTagText.color = new Color(1, 1, 1, alpha);
     }
 
-
-    public void SetWeaponIconAlpha(float alpha)
-    {
-        weaponIcon.color = new Color(1, 1, 1, alpha);
-    }
-
     public void SetNameTagEnabled(bool isEnabled)
     {
         nameTagText.enabled = isEnabled;
@@ -296,6 +280,19 @@ public class ActorRenderers
         actionBar.color = actionBarColor;
     }
 
+
+    public void SetSelectionAlpha(float alpha)
+    {
+        selectionColor = new Color(1, 1, 1, alpha);
+        selectionBox.color = new Color(1, 1, 1, alpha);
+    }
+
+
+    public void SetWeaponIconAlpha(float alpha)
+    {
+        weaponIconColor = new Color(1, 1, 1, alpha);
+        weaponIcon.color = weaponIconColor;
+    }
 
     float timer = 0.0f;
     ActionBarColorCycle cycle = ActionBarColorCycle.Phase1;
