@@ -102,9 +102,10 @@ public class StageManager : ExtendedMonoBehavior
                 Add(new StageActor(Character.Cleric, "Cleric", RandomStats, Team.Player, Rarity.Common));
 
                 //Enemies
-                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Slime, "Slime B", ActorStats("Slime"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Slime, "Slime C", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                //Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                //Add(new StageActor(Character.Slime, "Slime B", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                //Add(new StageActor(Character.Slime, "Slime C", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Yeti, "Yeti A", ActorStats("Scorpion"), Team.Enemy, Rarity.Common));
 
                 break;
 

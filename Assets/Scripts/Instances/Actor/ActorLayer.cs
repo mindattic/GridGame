@@ -16,8 +16,8 @@ namespace Game.Instances.Actor
         public const int Frame = 5;
         public const int StatusIcon = 6;
         public const int HealthBarBack = 7;
-        public const int HealthBar = 8;
-        public const int HealthBarFront = 9;
+        public const int HealthBarDrain = 8;
+        public const int HealthBar = 9;     
         public const int HealthText = 10;
         public const int ActionBarBack = 11;
         public const int ActionBar = 12;

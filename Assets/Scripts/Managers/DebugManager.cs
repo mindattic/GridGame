@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -458,5 +459,34 @@ public class DebugManager : ExtendedMonoBehavior
 
         vfxManager.SpawnAsync(vfx, Paladin.position, spawnMany());
 
+    }
+
+
+    public void SpawnSlime()
+    {
+        var location = Random.UnoccupiedLocation;
+        var stats = databaseManager.GetActorStats("Slime");
+        stageManager.Add(new StageActor(Character.Slime, $"Slime {Guid.NewGuid()}", stats, Team.Enemy, Rarity.Common, location));
+    }
+
+    public void SpawnBat()
+    {
+        var location = Random.UnoccupiedLocation;
+        var stats = databaseManager.GetActorStats("Bat");
+        stageManager.Add(new StageActor(Character.Bat, $"Bat {Guid.NewGuid()}", stats, Team.Enemy, Rarity.Common, location));
+    }
+
+    public void SpawnScorpion()
+    {
+        var location = Random.UnoccupiedLocation;
+        var stats = databaseManager.GetActorStats("Scorpion");
+        stageManager.Add(new StageActor(Character.Scorpion, $"Scorpion {Guid.NewGuid()}", stats, Team.Enemy, Rarity.Common, location));
+    }
+
+    public void SpawnYeti()
+    {
+        var location = Random.UnoccupiedLocation;
+        var stats = databaseManager.GetActorStats("Yeti");
+        stageManager.Add(new StageActor(Character.Yeti, $"Yeti {Guid.NewGuid()}", stats, Team.Enemy, Rarity.Common, location));
     }
 }

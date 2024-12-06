@@ -41,7 +41,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public float wiggleSpeed;
     public float wiggleAmplitude = 15f; // Amplitude (difference from -45 degrees)
-
+    public float healthDrainAmount = 0.2f;
     public Vector3 initialHealthBarScale;
 
     ActorSprite sprites;
@@ -51,7 +51,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
     //public ActorHealthBar HealthBar;
     //public ActorThumbnail Thumbnail;
-    
+
     //public VisualEffect attack;
 
     private void Awake()
@@ -64,15 +64,15 @@ public class ActorInstance : ExtendedMonoBehavior
         renderers.frame = gameObject.transform.GetChild(ActorLayer.Frame).GetComponent<SpriteRenderer>();
         renderers.statusIcon = gameObject.transform.GetChild(ActorLayer.StatusIcon).GetComponent<SpriteRenderer>();
         renderers.healthBarBack = gameObject.transform.GetChild(ActorLayer.HealthBarBack).GetComponent<SpriteRenderer>();
+        renderers.healthBarDrain = gameObject.transform.GetChild(ActorLayer.HealthBarDrain).GetComponent<SpriteRenderer>();
         renderers.healthBar = gameObject.transform.GetChild(ActorLayer.HealthBar).GetComponent<SpriteRenderer>();
-        renderers.healthBarFront = gameObject.transform.GetChild(ActorLayer.HealthBarFront).GetComponent<SpriteRenderer>();
         renderers.healthText = gameObject.transform.GetChild(ActorLayer.HealthText).GetComponent<TextMeshPro>();
         renderers.actionBarBack = gameObject.transform.GetChild(ActorLayer.ActionBarBack).GetComponent<SpriteRenderer>();
         renderers.actionBar = gameObject.transform.GetChild(ActorLayer.ActionBar).GetComponent<SpriteRenderer>();
         renderers.actionText = gameObject.transform.GetChild(ActorLayer.ActionText).GetComponent<TextMeshPro>();
         renderers.skillRadialBack = gameObject.transform.GetChild(ActorLayer.RadialBack).GetComponent<SpriteRenderer>();
         renderers.skillRadial = gameObject.transform.GetChild(ActorLayer.RadialFill).GetComponent<SpriteRenderer>();
-        renderers.skillRadialText = gameObject.transform.GetChild(ActorLayer.RadialText).GetComponent<TextMeshPro>();    
+        renderers.skillRadialText = gameObject.transform.GetChild(ActorLayer.RadialText).GetComponent<TextMeshPro>();
         renderers.mask = gameObject.transform.GetChild(ActorLayer.Mask).GetComponent<SpriteMask>();
         renderers.turnDelayText = gameObject.transform.GetChild(ActorLayer.TurnDelayText).GetComponent<TextMeshPro>();
         renderers.nameTagText = gameObject.transform.GetChild(ActorLayer.NameTagText).GetComponent<TextMeshPro>();
@@ -185,8 +185,8 @@ public class ActorInstance : ExtendedMonoBehavior
             renderers.frame.sortingOrder = value + ActorLayer.Frame;
             renderers.statusIcon.sortingOrder = value + ActorLayer.StatusIcon;
             renderers.healthBarBack.sortingOrder = value + ActorLayer.HealthBarBack;
+            renderers.healthBarDrain.sortingOrder = value + ActorLayer.HealthBarDrain;
             renderers.healthBar.sortingOrder = value + ActorLayer.HealthBar;
-            renderers.healthBarFront.sortingOrder = value + ActorLayer.HealthBarFront;
             renderers.healthText.sortingOrder = value + ActorLayer.HealthText;
             renderers.actionBarBack.sortingOrder = value + ActorLayer.ActionBarBack;
             renderers.actionBar.sortingOrder = value + ActorLayer.ActionBar;
@@ -201,8 +201,6 @@ public class ActorInstance : ExtendedMonoBehavior
             renderers.weaponIcon.sortingOrder = value + ActorLayer.WeaponIcon;
         }
     }
-
-
 
     #endregion
 
@@ -942,6 +940,8 @@ public class ActorInstance : ExtendedMonoBehavior
         float ticks = 0f;
         float duration = Interval.TenTicks;
 
+
+        stats.PreviousHP = stats.HP;
         stats.HP -= damage;
         stats.HP = Mathf.Clamp(stats.HP, 0, stats.MaxHP);
         UpdateHealthBar();
@@ -1035,9 +1035,33 @@ public class ActorInstance : ExtendedMonoBehavior
 
     private void UpdateHealthBar()
     {
-        var x = Mathf.Clamp(initialHealthBarScale.x * (stats.HP / stats.MaxHP), 0, initialHealthBarScale.x);
+        var x = CalculateHealthBarScale(stats.HP);
         renderers.healthBar.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
         renderers.healthText.text = $@"{stats.HP}/{stats.MaxHP}";
+
+        StartCoroutine(DrainHealthBar());
+    }
+
+    private float CalculateHealthBarScale(float x)
+    {
+        return Mathf.Clamp(initialHealthBarScale.x * (x / stats.MaxHP), 0, initialHealthBarScale.x);
+    }
+
+    public IEnumerator DrainHealthBar()
+    {
+        float x;
+
+        while (stats.HP < stats.PreviousHP)
+        {
+            stats.PreviousHP -= healthDrainAmount;
+            x = CalculateHealthBarScale(stats.PreviousHP);
+            renderers.healthBarDrain.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
+            yield return Wait.OneTick();
+        }
+
+        stats.PreviousHP = stats.HP;
+        x = CalculateHealthBarScale(stats.PreviousHP);
+        renderers.healthBarDrain.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
     }
 
     private void UpdateTurnDelayText()

@@ -137,6 +137,7 @@ public class DebugWindow : EditorWindow
         RenderLevelControls();
         RenderDataControls();
         //RenderActorStats();
+        RenderSpawnControls();
         RenderLog();
 
         GUILayout.EndVertical();
@@ -281,6 +282,46 @@ public class DebugWindow : EditorWindow
 
         GUILayout.Space(10);
     }
+
+
+
+
+
+    private void RenderSpawnControls()
+    {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Spawn", GUILayout.Width(Screen.width));
+        GUILayout.EndHorizontal();
+
+        bool isClicked;
+
+        GUILayout.BeginHorizontal();
+
+        isClicked = GUILayout.Button("Slime", GUILayout.Width(Screen.width * 0.25f));
+        if (isClicked)
+            debugManager.SpawnSlime();
+
+
+        isClicked = GUILayout.Button("Bat", GUILayout.Width(Screen.width * 0.25f));
+        if (isClicked)
+            debugManager.SpawnBat();
+
+        isClicked = GUILayout.Button("Scorpion", GUILayout.Width(Screen.width * 0.25f));
+        if (isClicked)
+            debugManager.SpawnScorpion();
+
+
+        isClicked = GUILayout.Button("Yeti", GUILayout.Width(Screen.width * 0.25f));
+        if (isClicked)
+            debugManager.SpawnYeti();
+
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
+    }
+
+
+
+
 
 
     private void RenderLog()

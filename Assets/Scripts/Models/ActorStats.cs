@@ -26,6 +26,7 @@
     public string Variant;
     public string Description;
     public float Level;
+    public float PreviousHP;
     public float HP;
     public float MaxHP;
     public float Strength;

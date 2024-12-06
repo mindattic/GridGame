@@ -30,8 +30,8 @@ public class ActorRenderers
     public SpriteRenderer frame;
     public SpriteRenderer statusIcon;
     public SpriteRenderer healthBarBack;
-    public SpriteRenderer healthBar;
-    public SpriteRenderer healthBarFront;
+    public SpriteRenderer healthBarDrain;
+    public SpriteRenderer healthBar;    
     public TextMeshPro healthText;
     public SpriteRenderer actionBarBack;
     public SpriteRenderer actionBar;
@@ -152,9 +152,9 @@ public class ActorRenderers
     public void SetHealthBarAlpha(float alpha)
     {
         healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        healthBarDrain.color = new Color(1, 0, 0, alpha);
         healthBarColor.a = alpha;
-        healthBar.color = healthBarColor;
-        healthBarFront.color = new Color(1, 1, 1, alpha);
+        healthBar.color = healthBarColor;   
         healthText.color = new Color(1, 1, 1, alpha);
     }
 

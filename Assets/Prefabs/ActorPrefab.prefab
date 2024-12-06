@@ -249,7 +249,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1438895807
   m_SortingLayer: 2
-  m_SortingOrder: 6
+  m_SortingOrder: 7
   m_Sprite: {fileID: 21300000, guid: 6e1efe0b263d9c24aab1fb7a38e3d541, type: 3}
   m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_FlipX: 0
@@ -889,12 +889,12 @@ GameObject:
   - component: {fileID: 1187526637071599515}
   - component: {fileID: 877601067661877506}
   m_Layer: 8
-  m_Name: HealthBarFront
+  m_Name: HealthBarDrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1187526637071599515
 Transform:
   m_ObjectHideFlags: 0
@@ -904,8 +904,8 @@ Transform:
   m_GameObject: {fileID: 3237102041834732807}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.42, y: -0.4, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.2, z: 1}
+  m_LocalPosition: {x: -0.415, y: -0.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3730061202814564275}
@@ -953,13 +953,13 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1438895807
   m_SortingLayer: 2
-  m_SortingOrder: 7
-  m_Sprite: {fileID: 21300000, guid: 0ae98cacf766c874d83b58c5b57d0873, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_SortingOrder: 6
+  m_Sprite: {fileID: 21300000, guid: 6e1efe0b263d9c24aab1fb7a38e3d541, type: 3}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_DrawMode: 1
+  m_Size: {x: 0.43, y: 0.05}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1092,8 +1092,8 @@ Transform:
   - {fileID: 6614507915285986201}
   - {fileID: 6095386227113081049}
   - {fileID: 3949784475064755953}
-  - {fileID: 3796932674301630095}
   - {fileID: 1187526637071599515}
+  - {fileID: 3796932674301630095}
   - {fileID: 136280427170726215}
   - {fileID: 658582063595684049}
   - {fileID: 5395001445011887090}
