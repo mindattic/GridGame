@@ -542,6 +542,45 @@ public class ActorInstance : ExtendedMonoBehavior
         StartCoroutine(overlappingActor.MoveTowardDestination());
     }
 
+    private void ApplyTilt(Vector3 velocity, float tiltFactor, float rotationSpeed, float resetSpeed, Vector3 baseRotation)
+    {
+        if (velocity.magnitude > 0.01f) // Apply tilt if there is noticeable movement
+        {
+            // Determine if the movement is primarily vertical or horizontal
+            bool isMovingVertical = Mathf.Abs(velocity.y) > Mathf.Abs(velocity.x);
+
+            if (isMovingVertical)
+            {
+                // Tilt for vertical movement
+                float tiltX = -velocity.y * tiltFactor; // Tilt on X-axis based on Y movement
+                transform.localRotation = Quaternion.Slerp(
+                    transform.localRotation,
+                    Quaternion.Euler(tiltX, 0, 0),
+                    Time.deltaTime * rotationSpeed
+                );
+            }
+            else
+            {
+                // Tilt for horizontal movement
+                float tiltZ = velocity.x * tiltFactor; // Tilt on Z-axis based on X movement
+                transform.localRotation = Quaternion.Slerp(
+                    transform.localRotation,
+                    Quaternion.Euler(0, 0, tiltZ),
+                    Time.deltaTime * rotationSpeed
+                );
+            }
+        }
+        else
+        {
+            // Reset rotation smoothly when velocity is minimal
+            transform.localRotation = Quaternion.Slerp(
+                transform.localRotation,
+                Quaternion.Euler(baseRotation),
+                Time.deltaTime * resetSpeed
+            );
+        }
+    }
+
     public IEnumerator MoveTowardCursor()
     {
         // Before:
@@ -569,41 +608,8 @@ public class ActorInstance : ExtendedMonoBehavior
             // Calculate velocity
             Vector3 velocity = position - prevPosition;
 
-            // Determine if the movement is primarily vertical or horizontal
-            bool isMovingVertical = Mathf.Abs(velocity.y) > Mathf.Abs(velocity.x);
-
-            if (velocity.magnitude > 0.01f) // Apply tilt if there is noticeable movement
-            {
-                if (isMovingVertical)
-                {
-                    // Tilt for vertical movement
-                    float tiltX = -velocity.y * tiltFactor; // Tilt on X-axis based on Y movement
-                    transform.localRotation = Quaternion.Slerp(
-                        transform.localRotation,
-                        Quaternion.Euler(tiltX, 0, 0),
-                        Time.deltaTime * rotationSpeed
-                    );
-                }
-                else
-                {
-                    // Tilt for horizontal movement
-                    float tiltZ = velocity.x * tiltFactor; // Tilt on Z-axis based on X movement
-                    transform.localRotation = Quaternion.Slerp(
-                        transform.localRotation,
-                        Quaternion.Euler(0, 0, tiltZ),
-                        Time.deltaTime * rotationSpeed
-                    );
-                }
-            }
-            else
-            {
-                // Reset rotation smoothly when velocity is minimal
-                transform.localRotation = Quaternion.Slerp(
-                    transform.localRotation,
-                    Quaternion.Euler(baseRotation),
-                    Time.deltaTime * resetSpeed
-                );
-            }
+            // Apply tilt effect
+            ApplyTilt(velocity, tiltFactor, rotationSpeed, resetSpeed, baseRotation);
 
             // Update previous position for next frame
             prevPosition = position;
@@ -657,37 +663,11 @@ public class ActorInstance : ExtendedMonoBehavior
 
             if (flags.IsSwapping)
             {
-                // Tilting logic during swapping
+                // Calculate velocity
                 Vector3 velocity = destination - position;
-                float tiltFactor = 25f; // How much tilt to apply based on movement
-                float rotationSpeed = 10f; // Speed at which the tilt adjusts
 
-                if (velocity.magnitude > 0.01f)
-                {
-                    // Determine if the movement is primarily vertical or horizontal
-                    bool isMovingVertical = Mathf.Abs(velocity.y) > Mathf.Abs(velocity.x);
-
-                    if (isMovingVertical)
-                    {
-                        // Vertical tilting
-                        float tiltX = -velocity.y * tiltFactor; // Tilt on X-axis
-                        transform.localRotation = Quaternion.Slerp(
-                            transform.localRotation,
-                            Quaternion.Euler(tiltX, 0, 0),
-                            Time.deltaTime * rotationSpeed
-                        );
-                    }
-                    else
-                    {
-                        // Horizontal tilting
-                        float tiltZ = velocity.x * tiltFactor; // Tilt on Z-axis
-                        transform.localRotation = Quaternion.Slerp(
-                            transform.localRotation,
-                            Quaternion.Euler(0, 0, tiltZ),
-                            Time.deltaTime * rotationSpeed
-                        );
-                    }
-                }
+                // Apply tilt effect
+                ApplyTilt(velocity, 25f, 10f, 5f, Vector3.zero);
             }
 
             CheckLocationChanged();
@@ -707,7 +687,6 @@ public class ActorInstance : ExtendedMonoBehavior
         transform.rotation = Quaternion.identity; // Reset rotation to default
         sortingOrder = SortingOrder.Default;
     }
-
     public void CheckActionBar()
     {
         //Check abort state
