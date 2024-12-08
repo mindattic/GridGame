@@ -544,11 +544,17 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public IEnumerator MoveTowardCursor()
     {
-        //Before:
+        // Before:
         flags.IsMoving = true;
         sortingOrder = SortingOrder.Max;
 
-        //During:
+        Vector3 prevPosition = position; // Store the initial position
+        float tiltFactor = 25f; // How much tilt to apply based on movement
+        float rotationSpeed = 10f; // Speed at which the tilt adjusts
+        float resetSpeed = 5f; // Speed at which the rotation resets
+        Vector3 baseRotation = Vector3.zero; // Base rotation for resetting
+
+        // During:
         while (IsFocusedPlayer || IsSelectedPlayer)
         {
             sortingOrder = SortingOrder.Max;
@@ -557,12 +563,50 @@ public class ActorInstance : ExtendedMonoBehavior
             cursorPosition.x = Mathf.Clamp(cursorPosition.x, board.bounds.Left, board.bounds.Right);
             cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bounds.Bottom, board.bounds.Top);
 
-            //Move selected player towards cursor
-            //boardPosition = Vector2.MoveTowards(boardPosition, cursorPosition, cursorSpeed);
-
-            //Snap selected player to cursor
+            // Snap selected player to cursor
             position = cursorPosition;
 
+            // Calculate velocity
+            Vector3 velocity = position - prevPosition;
+
+            // Determine if the movement is primarily vertical or horizontal
+            bool isMovingVertical = Mathf.Abs(velocity.y) > Mathf.Abs(velocity.x);
+
+            if (velocity.magnitude > 0.01f) // Apply tilt if there is noticeable movement
+            {
+                if (isMovingVertical)
+                {
+                    // Tilt for vertical movement
+                    float tiltX = -velocity.y * tiltFactor; // Tilt on X-axis based on Y movement
+                    transform.localRotation = Quaternion.Slerp(
+                        transform.localRotation,
+                        Quaternion.Euler(tiltX, 0, 0),
+                        Time.deltaTime * rotationSpeed
+                    );
+                }
+                else
+                {
+                    // Tilt for horizontal movement
+                    float tiltZ = velocity.x * tiltFactor; // Tilt on Z-axis based on X movement
+                    transform.localRotation = Quaternion.Slerp(
+                        transform.localRotation,
+                        Quaternion.Euler(0, 0, tiltZ),
+                        Time.deltaTime * rotationSpeed
+                    );
+                }
+            }
+            else
+            {
+                // Reset rotation smoothly when velocity is minimal
+                transform.localRotation = Quaternion.Slerp(
+                    transform.localRotation,
+                    Quaternion.Euler(baseRotation),
+                    Time.deltaTime * resetSpeed
+                );
+            }
+
+            // Update previous position for next frame
+            prevPosition = position;
 
             CheckLocationChanged();
 
@@ -571,11 +615,13 @@ public class ActorInstance : ExtendedMonoBehavior
             yield return Wait.OneTick();
         }
 
-        //After:
+        // After:
         flags.IsMoving = false;
         sortingOrder = SortingOrder.Default;
-    }
 
+        // Reset rotation at the end
+        transform.localRotation = Quaternion.Euler(baseRotation);
+    }
 
     public IEnumerator MoveTowardDestination()
     {
@@ -585,13 +631,6 @@ public class ActorInstance : ExtendedMonoBehavior
         scale = tileScale;
         audioManager.Play($"Slide");
         sortingOrder = SortingOrder.Moving;
-
-        // if (flags.IsSwapping)
-        // {
-        //     //TODO: Maybe do it less often or under certain conditions?...
-        //     if (Random.Int(1, 6) == 1)
-        //         StartCoroutine(Spin360());
-        // }
 
         // During:
         while (!HasReachedDestination)
@@ -616,41 +655,40 @@ public class ActorInstance : ExtendedMonoBehavior
                     position = new Vector3(position.x, destination.y, position.z);
             }
 
-            //if (flags.IsSwapping)
-            //{
-            //    float percentage = Geometry.GetPercentageBetween(initialPosition, destination, position);
+            if (flags.IsSwapping)
+            {
+                // Tilting logic during swapping
+                Vector3 velocity = destination - position;
+                float tiltFactor = 25f; // How much tilt to apply based on movement
+                float rotationSpeed = 10f; // Speed at which the tilt adjusts
 
-            //    // Determine horizontal and vertical directions
-            //    float horizontalDirection = destination.x > initialPosition.x ? 1f : -1f;
-            //    float verticalDirection = destination.y > initialPosition.y ? 1f : -1f;
+                if (velocity.magnitude > 0.01f)
+                {
+                    // Determine if the movement is primarily vertical or horizontal
+                    bool isMovingVertical = Mathf.Abs(velocity.y) > Mathf.Abs(velocity.x);
 
-            //    // Check if movement is primarily vertical
-            //    bool isVertical = Mathf.Abs(destination.y - initialPosition.y) > Mathf.Abs(destination.x - initialPosition.x);
-
-            //    if (isVertical)
-            //    {
-            //        scale = initialScale * slideScaleCurve.Evaluate(percentage);
-            //    }
-            //    else
-            //    {
-            //        // Define rotation targets
-            //        float targetXRotation = -25f; // Tilt back for horizontal movement
-            //        float targetYRotation = horizontalDirection * 25f; // ±25 degrees for horizontal movement
-
-            //        // Adjust horizontal tilt if moving downward
-            //        if (verticalDirection < 0)
-            //        {
-            //            targetYRotation *= -1f; // Flip the Y rotation for downward movement
-            //        }
-
-            //        // Calculate smoothed rotation based on the slide curve
-            //        float xRotationAngle = targetXRotation * slideRotationCurve.Evaluate(percentage);
-            //        float yRotationAngle = targetYRotation * slideRotationCurve.Evaluate(percentage);
-
-            //        // Apply rotation
-            //        rotation = Geometry.Rotation(xRotationAngle, yRotationAngle, 0);
-            //    }
-            //}
+                    if (isMovingVertical)
+                    {
+                        // Vertical tilting
+                        float tiltX = -velocity.y * tiltFactor; // Tilt on X-axis
+                        transform.localRotation = Quaternion.Slerp(
+                            transform.localRotation,
+                            Quaternion.Euler(tiltX, 0, 0),
+                            Time.deltaTime * rotationSpeed
+                        );
+                    }
+                    else
+                    {
+                        // Horizontal tilting
+                        float tiltZ = velocity.x * tiltFactor; // Tilt on Z-axis
+                        transform.localRotation = Quaternion.Slerp(
+                            transform.localRotation,
+                            Quaternion.Euler(0, 0, tiltZ),
+                            Time.deltaTime * rotationSpeed
+                        );
+                    }
+                }
+            }
 
             CheckLocationChanged();
 

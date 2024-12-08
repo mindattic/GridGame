@@ -106,8 +106,8 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
 
 
-        ghostManager.Play(selectedPlayer);
-        footstepManager.Play(selectedPlayer);
+        //ghostManager.Play(selectedPlayer);
+        //footstepManager.Play(selectedPlayer);
 
         timerBar.Play();
 
@@ -139,8 +139,8 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         previousSelectedPlayer = selectedPlayer;
         selectedPlayer = null;
 
-        ghostManager.Stop();
-        footstepManager.Stop();
+        //ghostManager.Stop();
+        //footstepManager.Stop();
 
         tileManager.Reset();
         cardManager.Clear();
