@@ -47,7 +47,10 @@ public class ActorInstance : ExtendedMonoBehavior
     ActorSprite sprites;
 
     [SerializeField] public AnimationCurve glowCurve;
-    [SerializeField] public AnimationCurve slideCurve;
+
+
+    [SerializeField] public AnimationCurve slideRotationCurve;
+    [SerializeField] public AnimationCurve slideScaleCurve;
 
     //public ActorHealthBar HealthBar;
     //public ActorThumbnail Thumbnail;
@@ -576,22 +579,21 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public IEnumerator MoveTowardDestination()
     {
-        //Before:
+        // Before:
         Vector3 initialPosition = position;
         Vector3 initialScale = tileScale;
         scale = tileScale;
         audioManager.Play($"Slide");
         sortingOrder = SortingOrder.Moving;
 
+        // if (flags.IsSwapping)
+        // {
+        //     //TODO: Maybe do it less often or under certain conditions?...
+        //     if (Random.Int(1, 6) == 1)
+        //         StartCoroutine(Spin360());
+        // }
 
-        //if (flags.IsSwapping)
-        //{
-        //    //TODO: Maybe do it less often or under certain conditions?...
-        //    if (Random.Int(1, 6) == 1)
-        //        StartCoroutine(Spin360());
-        //}
-
-        //During:
+        // During:
         while (!HasReachedDestination)
         {
             sortingOrder = SortingOrder.Moving;
@@ -601,7 +603,7 @@ public class ActorInstance : ExtendedMonoBehavior
             {
                 position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), moveSpeed);
 
-                //Snap horizontal boardPosition (if applicable)
+                // Snap horizontal boardPosition (if applicable)
                 if (Mathf.Abs(delta.x) <= snapDistance)
                     position = new Vector3(destination.x, position.y, position.z);
             }
@@ -609,7 +611,7 @@ public class ActorInstance : ExtendedMonoBehavior
             {
                 position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), moveSpeed);
 
-                //Snap vertical boardPosition (if applicable)
+                // Snap vertical boardPosition (if applicable)
                 if (Mathf.Abs(delta.y) <= snapDistance)
                     position = new Vector3(position.x, destination.y, position.z);
             }
@@ -617,12 +619,42 @@ public class ActorInstance : ExtendedMonoBehavior
             if (flags.IsSwapping)
             {
                 float percentage = Geometry.GetPercentageBetween(initialPosition, destination, position);
-                scale = initialScale * slideCurve.Evaluate(percentage);
+
+                // Determine horizontal and vertical directions
+                float horizontalDirection = destination.x > initialPosition.x ? 1f : -1f;
+                float verticalDirection = destination.y > initialPosition.y ? 1f : -1f;
+
+                // Check if movement is primarily vertical
+                bool isVertical = Mathf.Abs(destination.y - initialPosition.y) > Mathf.Abs(destination.x - initialPosition.x);
+
+                if (isVertical)
+                {
+                    scale = initialScale * slideScaleCurve.Evaluate(percentage);
+                }
+                else
+                {
+                    // Define rotation targets
+                    float targetXRotation = -25f; // Tilt back for horizontal movement
+                    float targetYRotation = horizontalDirection * 25f; // ±25 degrees for horizontal movement
+
+                    // Adjust horizontal tilt if moving downward
+                    if (verticalDirection < 0)
+                    {
+                        targetYRotation *= -1f; // Flip the Y rotation for downward movement
+                    }
+
+                    // Calculate smoothed rotation based on the slide curve
+                    float xRotationAngle = targetXRotation * slideRotationCurve.Evaluate(percentage);
+                    float yRotationAngle = targetYRotation * slideRotationCurve.Evaluate(percentage);
+
+                    // Apply rotation
+                    rotation = Geometry.Rotation(xRotationAngle, yRotationAngle, 0);
+                }
             }
 
             CheckLocationChanged();
 
-            //Determine whether to snap to destination
+            // Determine whether to snap to destination
             bool isSnapDistance = Vector2.Distance(position, destination) <= snapDistance;
             if (isSnapDistance)
                 position = destination;
@@ -630,10 +662,11 @@ public class ActorInstance : ExtendedMonoBehavior
             yield return Wait.OneTick();
         }
 
-        //After:
+        // After:
         flags.IsMoving = false;
         flags.IsSwapping = false;
         scale = tileScale;
+        transform.rotation = Quaternion.identity; // Reset rotation to default
         sortingOrder = SortingOrder.Default;
     }
 

@@ -7,20 +7,13 @@ using UnityEngine;
 
 public class ActorHealthBar
 {
+    private ActorRenderers renderers;
+    private ActorStats stats;
 
-    GameObject healthBarBackGameObject;
-    GameObject healthBarGameObject;
-
-    SpriteRenderer healthbarBack;
-    SpriteRenderer healthbar;
-
-    public ActorHealthBar(GameObject healthBarBackGameObject, GameObject healthBarGameObject)
+    public ActorHealthBar(ActorRenderers renderers, ActorStats stats)
     {
-        this.healthBarBackGameObject = healthBarBackGameObject;
-        this.healthBarGameObject = healthBarGameObject;
-
-        healthbarBack = healthBarBackGameObject.GetComponent<SpriteRenderer>();
-        healthbar = healthBarGameObject.GetComponent<SpriteRenderer>();
+        this.renderers = renderers;
+        this.stats = stats;
 
 
 
