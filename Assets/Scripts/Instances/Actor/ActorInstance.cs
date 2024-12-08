@@ -609,6 +609,10 @@ public class ActorInstance : ExtendedMonoBehavior
             Vector3 velocity = position - prevPosition;
 
             // Apply tilt effect
+
+
+
+
             ApplyTilt(velocity, tiltFactor, rotationSpeed, resetSpeed, baseRotation);
 
             // Update previous position for next frame
