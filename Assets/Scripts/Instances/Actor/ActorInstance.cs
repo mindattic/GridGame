@@ -616,41 +616,41 @@ public class ActorInstance : ExtendedMonoBehavior
                     position = new Vector3(position.x, destination.y, position.z);
             }
 
-            if (flags.IsSwapping)
-            {
-                float percentage = Geometry.GetPercentageBetween(initialPosition, destination, position);
+            //if (flags.IsSwapping)
+            //{
+            //    float percentage = Geometry.GetPercentageBetween(initialPosition, destination, position);
 
-                // Determine horizontal and vertical directions
-                float horizontalDirection = destination.x > initialPosition.x ? 1f : -1f;
-                float verticalDirection = destination.y > initialPosition.y ? 1f : -1f;
+            //    // Determine horizontal and vertical directions
+            //    float horizontalDirection = destination.x > initialPosition.x ? 1f : -1f;
+            //    float verticalDirection = destination.y > initialPosition.y ? 1f : -1f;
 
-                // Check if movement is primarily vertical
-                bool isVertical = Mathf.Abs(destination.y - initialPosition.y) > Mathf.Abs(destination.x - initialPosition.x);
+            //    // Check if movement is primarily vertical
+            //    bool isVertical = Mathf.Abs(destination.y - initialPosition.y) > Mathf.Abs(destination.x - initialPosition.x);
 
-                if (isVertical)
-                {
-                    scale = initialScale * slideScaleCurve.Evaluate(percentage);
-                }
-                else
-                {
-                    // Define rotation targets
-                    float targetXRotation = -25f; // Tilt back for horizontal movement
-                    float targetYRotation = horizontalDirection * 25f; // ±25 degrees for horizontal movement
+            //    if (isVertical)
+            //    {
+            //        scale = initialScale * slideScaleCurve.Evaluate(percentage);
+            //    }
+            //    else
+            //    {
+            //        // Define rotation targets
+            //        float targetXRotation = -25f; // Tilt back for horizontal movement
+            //        float targetYRotation = horizontalDirection * 25f; // ±25 degrees for horizontal movement
 
-                    // Adjust horizontal tilt if moving downward
-                    if (verticalDirection < 0)
-                    {
-                        targetYRotation *= -1f; // Flip the Y rotation for downward movement
-                    }
+            //        // Adjust horizontal tilt if moving downward
+            //        if (verticalDirection < 0)
+            //        {
+            //            targetYRotation *= -1f; // Flip the Y rotation for downward movement
+            //        }
 
-                    // Calculate smoothed rotation based on the slide curve
-                    float xRotationAngle = targetXRotation * slideRotationCurve.Evaluate(percentage);
-                    float yRotationAngle = targetYRotation * slideRotationCurve.Evaluate(percentage);
+            //        // Calculate smoothed rotation based on the slide curve
+            //        float xRotationAngle = targetXRotation * slideRotationCurve.Evaluate(percentage);
+            //        float yRotationAngle = targetYRotation * slideRotationCurve.Evaluate(percentage);
 
-                    // Apply rotation
-                    rotation = Geometry.Rotation(xRotationAngle, yRotationAngle, 0);
-                }
-            }
+            //        // Apply rotation
+            //        rotation = Geometry.Rotation(xRotationAngle, yRotationAngle, 0);
+            //    }
+            //}
 
             CheckLocationChanged();
 
