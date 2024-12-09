@@ -40,7 +40,7 @@ namespace Game.Manager
 
         void OnError(string err)
         {
-            logManager.error(err);
+            logManager.Error(err);
         }
 
         void OnApplicationQuit()
@@ -100,7 +100,7 @@ namespace Game.Manager
                     Luck = reader.GetFloatValue("Luck")
                 };
                 actorStats.Add(x);
-                logManager.info(JsonUtility.ToJson(x));
+                logManager.Info(JsonUtility.ToJson(x));
 
                 #endregion
 

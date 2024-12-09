@@ -25,48 +25,54 @@ namespace Game.Behaviors
 
         private void Awake()
         {
-     
+
         }
 
-        public void info(string message)
+        public void Info(string message)
         {
             Debug.Log(message);
             messages.Add($@"<color=""white"">{message}</color>");
-            print();
         }
 
-        public void success(string message)
+        public void Success(string message)
         {
             Debug.Log(message);
             messages.Add($@"<color=""green"">{message}</color>");
-            print();
         }
 
-        public void warning(string message)
+        public void Warning(string message)
         {
             Debug.LogWarning(message);
             messages.Add($@"<color=""orange"">{message}</color>");
-            print();
         }
 
 
-        public void error(string message)
+        public void Error(string message)
         {
             Debug.LogError(message);
             messages.Add($@"<color=""red"">{message}</color>");
-            print();
         }
 
 
-        private void print()
+        public void Exception(UnityException ex)
         {
-            //Truncate messages (if neccessary)
-            if (messages.Count > MaxMessages)
-                messages.RemoveAt(0);
+            Debug.LogError(ex.Message.ToString());
+            messages.Add($@"<color=""red"">{ex.Message.ToString()}</color>");
+        }
+
+        private void Update()
+        {
+            if (messages.Count < MaxMessages)
+                return;
+
+            //Truncate messages
+            messages.RemoveAt(0);
 
             //Print in descending order
             log = string.Join(Environment.NewLine, messages.OrderByDescending(x => x.ToString()));
         }
+
+
 
     }
 }

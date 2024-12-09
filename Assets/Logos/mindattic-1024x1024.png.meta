@@ -212,7 +212,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      mindattic-1024x1024_0: -1217761136285893861
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

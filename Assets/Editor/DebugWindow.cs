@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-[InitializeOnLoad] // This attribute ensures that the static constructor is called on load
+[InitializeOnLoad] //This attribute ensures that the static constructor is called on load
 public class DebugWindow : EditorWindow
 {
     private static DebugWindow instance;
@@ -110,7 +110,7 @@ public class DebugWindow : EditorWindow
         if ((DateTime.Now - lastUpdateTime).TotalSeconds >= updateInterval)
         {
             lastUpdateTime = DateTime.Now;
-            Repaint(); // Repaint the window
+            Repaint(); //Repaint the window
         }
 
 
@@ -330,27 +330,27 @@ public class DebugWindow : EditorWindow
         GUILayout.Label("Log", GUILayout.Width(Screen.width));
         GUILayout.EndHorizontal();
   
-        // Background color setup
+        //Background color setup
         var backgroundColor = new Color(0.5f, 0.15f, 0.15f);
         var style = new GUIStyle { richText = true, padding = new RectOffset(10, 10, 10, 10) };
 
-        // Calculate the background area
+        //Calculate the background area
         float logHeight = position.height - 170;
         Rect backgroundRect = new Rect(0, GUILayoutUtility.GetLastRect().yMax, Screen.width, logHeight);
 
-        // Draw the background
+        //Draw the background
         Color originalColor = GUI.color;
         GUI.color = backgroundColor;
-        GUI.Box(backgroundRect, GUIContent.none); // Draw the background box
+        GUI.Box(backgroundRect, GUIContent.none); //Draw the background box
         GUI.color = originalColor;
 
-        // Make the log scrollable
+        //Make the log scrollable
         scrollPosition = GUILayout.BeginScrollView(
             scrollPosition,
             GUILayout.Height(logHeight),
             GUILayout.ExpandHeight(true));
 
-        // Display the logs
+        //Display the logs
         GUILayout.Label(logManager.text, style);
 
         GUILayout.EndScrollView();
@@ -417,7 +417,7 @@ public class DebugWindow : EditorWindow
         }
     }
 
-    // Blank click events for the buttons
+    //Blank click events for the buttons
     private void OnResetClick()
     {
         stageManager.Load();
@@ -439,17 +439,17 @@ public class DebugWindow : EditorWindow
 
         if (!File.Exists(filePath))
         {
-            logManager.error("MyDatabase.db does not exist at the specified path.");
+            logManager.Error("MyDatabase.db does not exist at the specified path.");
             return;
         }
 
         File.Delete(filePath);
-        logManager.info("MyDatabase.db has been deleted.");
+        logManager.Info("MyDatabase.db has been deleted.");
     }
 
     private void OnEraseProfilesClick()
     {
-        logManager.info("Not yet implemented.");
+        logManager.Info("Not yet implemented.");
     }
 
 }

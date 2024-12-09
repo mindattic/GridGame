@@ -6,7 +6,7 @@ public class AudioManager : ExtendedMonoBehavior
         var soundEffect = resourceManager.SoundEffect(sfx);
         if (soundEffect == null)
         {
-            logManager.error($@"Sound Effect ""{sfx}"" was not found.");
+            logManager.Error($@"Sound Effect ""{sfx}"" was not found.");
             return;
         }
 

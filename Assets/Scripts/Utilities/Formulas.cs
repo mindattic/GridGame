@@ -73,7 +73,7 @@ namespace Assets.Scripts.Utilities
                 + $@"{(isHit ? ">" : "<")} "
                 + $@"1d100(<color=""yellow"">{d100}</color>) => "
                 + $@"{(isHit ? "Hit" : "Miss")}";
-            log.info(msg);
+            log.Info(msg);
 
             return isHit;
         }
@@ -110,7 +110,7 @@ namespace Assets.Scripts.Utilities
                 + $@"Offense(<color=""yellow"">{offense}</color>) "
                 + $@"- Defense(<color=""yellow"">{defense}</color>) => "
                 + $@"Damage(<color=""yellow"">{damage}</color>)";
-            log.info(msg);
+            log.Info(msg);
 
             return damage;
         }

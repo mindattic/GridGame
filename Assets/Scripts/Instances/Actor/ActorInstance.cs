@@ -41,7 +41,8 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public float wiggleSpeed;
     public float wiggleAmplitude = 15f; // Amplitude (difference from -45 degrees)
-    public float healthDrainAmount = 0.2f;
+    public float healthDrainDelay = 2f;
+    public float healthDrainAmount = 0.5f;
     public Vector3 initialHealthBarScale;
 
     ActorSprite sprites;
@@ -544,35 +545,43 @@ public class ActorInstance : ExtendedMonoBehavior
 
     private void ApplyTilt(Vector3 velocity, float tiltFactor, float rotationSpeed, float resetSpeed, Vector3 baseRotation)
     {
-        if (velocity.magnitude > 0.01f) // Apply tilt if there is noticeable movement
+        if (velocity.magnitude > 0.01f) //Apply tilt if there is noticeable movement
         {
             // Determine if the movement is primarily vertical or horizontal
-            bool isMovingVertical = Mathf.Abs(velocity.y) > Mathf.Abs(velocity.x);
 
-            if (isMovingVertical)
-            {
-                // Tilt for vertical movement
-                float tiltX = -velocity.y * tiltFactor; // Tilt on X-axis based on Y movement
-                transform.localRotation = Quaternion.Slerp(
-                    transform.localRotation,
-                    Quaternion.Euler(tiltX, 0, 0),
-                    Time.deltaTime * rotationSpeed
-                );
-            }
-            else
-            {
-                // Tilt for horizontal movement
-                float tiltZ = velocity.x * tiltFactor; // Tilt on Z-axis based on X movement
-                transform.localRotation = Quaternion.Slerp(
-                    transform.localRotation,
-                    Quaternion.Euler(0, 0, tiltZ),
-                    Time.deltaTime * rotationSpeed
-                );
-            }
+            bool isMovingVertical = Mathf.Abs(velocity.y) > Mathf.Abs(velocity.x);
+            float velocityFactor = isMovingVertical ? velocity.y : velocity.x;
+            float tiltZ = velocityFactor * tiltFactor; // Tilt on Z-axis based on velocity
+            transform.localRotation = Quaternion.Slerp(
+                transform.localRotation,
+                Quaternion.Euler(0, 0, tiltZ),
+                Time.deltaTime * rotationSpeed * gameSpeed
+            );
+
+            //if (isMovingVertical)
+            //{
+            //    //Tilt for vertical movement
+            //    float tiltZ = velocity.y * tiltFactor; // Tilt on Z-axis based on X movement
+            //    transform.localRotation = Quaternion.Slerp(
+            //        transform.localRotation,
+            //        Quaternion.Euler(0, 0, tiltZ),
+            //        Time.deltaTime * rotationSpeed * gameSpeed
+            //    );
+            //}
+            //else
+            //{
+            //    //Tilt for horizontal movement
+            //    float tiltZ = velocity.x * tiltFactor; // Tilt on Z-axis based on X movement
+            //    transform.localRotation = Quaternion.Slerp(
+            //        transform.localRotation,
+            //        Quaternion.Euler(0, 0, tiltZ),
+            //        Time.deltaTime * rotationSpeed * gameSpeed
+            //    );
+            //}
         }
         else
         {
-            // Reset rotation smoothly when velocity is minimal
+            //Reset rotation smoothly when velocity is minimal
             transform.localRotation = Quaternion.Slerp(
                 transform.localRotation,
                 Quaternion.Euler(baseRotation),
@@ -591,7 +600,7 @@ public class ActorInstance : ExtendedMonoBehavior
         float tiltFactor = 25f; // How much tilt to apply based on movement
         float rotationSpeed = 10f; // Speed at which the tilt adjusts
         float resetSpeed = 5f; // Speed at which the rotation resets
-        Vector3 baseRotation = Vector3.zero; // Base rotation for resetting
+        var baseRotation = Vector3.zero;
 
         // During:
         while (IsFocusedPlayer || IsSelectedPlayer)
@@ -602,17 +611,13 @@ public class ActorInstance : ExtendedMonoBehavior
             cursorPosition.x = Mathf.Clamp(cursorPosition.x, board.bounds.Left, board.bounds.Right);
             cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bounds.Bottom, board.bounds.Top);
 
-            // Snap selected player to cursor
+            //Snap selected player to cursor
             position = cursorPosition;
 
-            // Calculate velocity
+            //Calculate velocity
             Vector3 velocity = position - prevPosition;
 
-            // Apply tilt effect
-
-
-
-
+            //Apply tilt effect
             ApplyTilt(velocity, tiltFactor, rotationSpeed, resetSpeed, baseRotation);
 
             // Update previous position for next frame
@@ -622,7 +627,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
             destination = position;
 
-            yield return Wait.OneTick();
+            yield return Wait.None();
         }
 
         // After:
@@ -667,16 +672,16 @@ public class ActorInstance : ExtendedMonoBehavior
 
             if (flags.IsSwapping)
             {
-                // Calculate velocity
+                //Calculate velocity
                 Vector3 velocity = destination - position;
 
-                // Apply tilt effect
+                //Apply tilt effect
                 ApplyTilt(velocity, 25f, 10f, 5f, Vector3.zero);
             }
 
             CheckLocationChanged();
 
-            // Determine whether to snap to destination
+            //Determine whether to snap to destination
             bool isSnapDistance = Vector2.Distance(position, destination) <= snapDistance;
             if (isSnapDistance)
                 position = destination;
@@ -684,11 +689,11 @@ public class ActorInstance : ExtendedMonoBehavior
             yield return Wait.OneTick();
         }
 
-        // After:
+        //After:
         flags.IsMoving = false;
         flags.IsSwapping = false;
         scale = tileScale;
-        transform.rotation = Quaternion.identity; // Reset rotation to default
+        transform.rotation = Quaternion.identity; //Reset rotation to default
         sortingOrder = SortingOrder.Default;
     }
     public void CheckActionBar()
@@ -804,7 +809,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public IEnumerator Dodge()
     {
-        // Before:
+        //Before:
         DodgeStage stage = DodgeStage.Start;
         var targetRotation = new Vector3(
             15f,
@@ -837,26 +842,26 @@ public class ActorInstance : ExtendedMonoBehavior
 
                 case DodgeStage.TwistForward:
                     {
-                        // SaveProfile forward progress and sync rotation/scaleMultiplier
-                        progress += rotationSpeed / targetRotation.y; // Normalize progress
-                        progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
+                        //SaveProfile forward progress and sync rotation/scaleMultiplier
+                        progress += rotationSpeed / targetRotation.y; //Normalize progress
+                        progress = Mathf.Clamp01(progress); //Clamp between 0 and 1
 
-                        // Random twist direction on X, Y, and Z axes
+                        //Random twist direction on X, Y, and Z axes
                         currentRotation.x = Mathf.Lerp(0f, targetRotation.x, progress) * randomDirection.x;
                         currentRotation.y = Mathf.Lerp(0f, targetRotation.y, progress) * randomDirection.y;
                         currentRotation.z = Mathf.Lerp(0f, targetRotation.z, progress) * randomDirection.z;
 
-                        // Calculate scaleMultiplier based on forward progress
+                        //Calculate scaleMultiplier based on forward progress
                         float scaleFactor = Mathf.Lerp(1f, minScale, progress);
                         scale = tileScale * scaleFactor;
 
-                        // Apply rotation (random X, Y, and Z axis twisting) and scaling
+                        //Apply rotation (random X, Y, and Z axis twisting) and scaling
                         rotation = Geometry.Rotation(currentRotation.x, currentRotation.y, currentRotation.z);
 
-                        // If fully twisted forward, move to TwistBackward
+                        //If fully twisted forward, move to TwistBackward
                         if (progress >= 1f)
                         {
-                            progress = 0f; // Reset backward progress
+                            progress = 0f; //Reset backward progress
                             stage = DodgeStage.TwistBackward;
                         }
                     }
@@ -864,23 +869,23 @@ public class ActorInstance : ExtendedMonoBehavior
 
                 case DodgeStage.TwistBackward:
                     {
-                        // SaveProfile backward progress and sync rotation/scaleMultiplier
-                        progress += rotationSpeed / targetRotation.y; // Normalize progress
-                        progress = Mathf.Clamp01(progress); // Clamp between 0 and 1
+                        //SaveProfile backward progress and sync rotation/scaleMultiplier
+                        progress += rotationSpeed / targetRotation.y; //Normalize progress
+                        progress = Mathf.Clamp01(progress); //Clamp between 0 and 1
 
-                        // Reverse random twist direction on X, Y, and Z axes
+                        //Reverse random twist direction on X, Y, and Z axes
                         currentRotation.x = Mathf.Lerp(targetRotation.x, 0f, progress) * randomDirection.x;
                         currentRotation.y = Mathf.Lerp(targetRotation.y, 0f, progress) * randomDirection.y;
                         currentRotation.z = Mathf.Lerp(targetRotation.z, 0f, progress) * randomDirection.z;
 
-                        // Calculate scaleMultiplier based on backward progress
+                        //Calculate scaleMultiplier based on backward progress
                         float scaleFactor = Mathf.Lerp(minScale, 1f, progress);
                         scale = tileScale * scaleFactor;
 
-                        // Apply reverse rotation (random X, Y, and Z axis twisting) and scaling
+                        //Apply reverse rotation (random X, Y, and Z axis twisting) and scaling
                         rotation = Geometry.Rotation(currentRotation);
 
-                        // If fully twisted back, move to End
+                        //If fully twisted back, move to End
                         if (progress >= 1f)
                         {
                             stage = DodgeStage.End;
@@ -900,7 +905,7 @@ public class ActorInstance : ExtendedMonoBehavior
             yield return Wait.OneTick();
         }
 
-        // After:
+        //After:
         currentRotation = Vector3.zero;
         scale = tileScale;
         rotation = Geometry.Rotation(currentRotation);
@@ -1103,7 +1108,11 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public IEnumerator DrainHealthBar()
     {
-        float x;
+        //Before:
+        float x = 0;
+
+        //During:
+        yield return new WaitForSeconds(healthDrainDelay);
 
         while (stats.HP < stats.PreviousHP)
         {
@@ -1113,6 +1122,7 @@ public class ActorInstance : ExtendedMonoBehavior
             yield return Wait.OneTick();
         }
 
+        //After:
         stats.PreviousHP = stats.HP;
         x = CalculateHealthBarScale(stats.PreviousHP);
         renderers.healthBarDrain.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);

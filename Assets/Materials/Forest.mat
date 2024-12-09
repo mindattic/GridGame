@@ -144,11 +144,12 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.20981665, g: 0.21698111, b: 0.21247894, a: 0.5372549}
     - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
-    - _Color: {r: 0.20981665, g: 0.21698111, b: 0.21247894, a: 0.5372549}
+    - _Color: {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 0.5372549}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &4444685570132560013
