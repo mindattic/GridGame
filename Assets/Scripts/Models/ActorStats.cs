@@ -12,6 +12,8 @@
         Level = other.Level;
         HP = other.HP;
         MaxHP = other.MaxHP;
+        AP = 0;
+        MaxAP = 100;
         Strength = other.Strength;
         Vitality = other.Vitality;
         Agility = other.Agility;
@@ -29,6 +31,9 @@
     public float PreviousHP;
     public float HP;
     public float MaxHP;
+    public float PreviousAP;
+    public float AP;
+    public float MaxAP;
     public float Strength;
     public float Vitality;
     public float Agility;

@@ -95,7 +95,7 @@ public static class Colors
 
     public static class ActionBar
     {
-        public static Color Blue = new Color(0, 0.35f, 0.75f);
+        public static Color Blue = RGB(0, 196, 255);
         public static Color Yellow = Color.yellow;
         public static Color Pink = RGB(100, 75, 80);
         public static Color White = Color.white;

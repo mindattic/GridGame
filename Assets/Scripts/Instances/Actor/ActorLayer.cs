@@ -18,17 +18,18 @@ namespace Game.Instances.Actor
         public const int HealthBarBack = 7;
         public const int HealthBarDrain = 8;
         public const int HealthBar = 9;     
-        public const int HealthText = 10;
+        public const int HealthBarText = 10;
         public const int ActionBarBack = 11;
-        public const int ActionBar = 12;
-        public const int ActionText = 13;
-        public const int RadialBack = 14;
-        public const int RadialFill = 15;
-        public const int RadialText = 16;     
-        public const int Mask = 17;
-        public const int TurnDelayText = 18;
-        public const int NameTagText = 19;
-        public const int WeaponIcon = 20;
-        public const int SelectionBox = 21;
+        public const int ActionBarDrain = 12;
+        public const int ActionBar = 13;  
+        public const int ActionBarText = 14;
+        public const int Mask = 15;
+        public const int RadialBack = 16;
+        public const int RadialFill = 17;
+        public const int RadialText = 18;       
+        public const int TurnDelayText = 19;
+        public const int NameTagText = 20;
+        public const int WeaponIcon = 21;
+        public const int SelectionBox = 22;
     }
 }

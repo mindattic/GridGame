@@ -32,14 +32,15 @@ public class ActorRenderers
     public SpriteRenderer healthBarBack;
     public SpriteRenderer healthBarDrain;
     public SpriteRenderer healthBar;    
-    public TextMeshPro healthText;
+    public TextMeshPro healthBarText;
     public SpriteRenderer actionBarBack;
+    public SpriteRenderer actionBarDrain;
     public SpriteRenderer actionBar;
-    public TextMeshPro actionText;
-    public SpriteRenderer skillRadialBack;
-    public SpriteRenderer skillRadial;
-    public TextMeshPro skillRadialText;
+    public TextMeshPro actionBarText;
     public SpriteMask mask;
+    public SpriteRenderer radialBack;
+    public SpriteRenderer radial;
+    public TextMeshPro radialText;
     public TextMeshPro turnDelayText;
     public TextMeshPro nameTagText;
     public SpriteRenderer weaponIcon;
@@ -56,7 +57,7 @@ public class ActorRenderers
         //statusIcon.color = new color(1, 1, 1, alpha);
         SetHealthBarAlpha(alpha);
         SetActionBarAlpha(alpha);
-        SetSkillRadialAlpha(alpha);
+        SetRadialAlpha(alpha);
         SetTurnDelayTextAlpha(alpha);
         SetNameTagTextAlpha(alpha);
         SetWeaponIconAlpha(alpha);
@@ -155,22 +156,30 @@ public class ActorRenderers
         healthBarDrain.color = new Color(1, 0, 0, alpha);
         healthBarColor.a = alpha;
         healthBar.color = healthBarColor;   
-        healthText.color = new Color(1, 1, 1, alpha);
+        healthBarText.color = new Color(1, 1, 1, alpha);
     }
 
     public void SetActionBarAlpha(float alpha)
     {
         actionBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        actionBarDrain.color = new Color(1, 0, 0, alpha);
         actionBarColor.a = alpha;
         actionBar.color = actionBarColor;
-        actionText.color = new Color(1, 1, 1, alpha);
+        actionBarText.color = new Color(1, 1, 1, alpha);
     }
 
-    public void SetSkillRadialAlpha(float alpha)
+    public void SetRadialEnabled(bool isEnabled)
     {
-        skillRadialBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
-        skillRadial.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.5f));
-        skillRadialText.color = new Color(1, 1, 1, alpha);
+        radialBack.enabled = isEnabled;
+        radial.enabled = isEnabled;
+        radialText.enabled = isEnabled;
+    }
+
+    public void SetRadialAlpha(float alpha)
+    {
+        radialBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        radial.color = new Color(1, 1, 1, alpha);
+        radialText.color = new Color(1, 1, 1, alpha);
     }
 
     //public void SetBloomColor(color color)

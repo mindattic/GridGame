@@ -253,8 +253,8 @@ public class TurnManager : ExtendedMonoBehavior
             var isHit = Formulas.IsHit(pair.actor1, enemy);
             if (isHit)
             {
-                pair.actor1.AddSpAsync(10);
-                pair.actor2.AddSpAsync(10);
+                //pair.actor1.AddSpAsync(10);
+                //pair.actor2.AddSpAsync(10);
 
                 //TODO: Combine actor1 + actor2 + support actors stats somehow...
                 //TODO: Generate adhoc ActorStats where you take highest or median stats between both actors in ActorPair???
@@ -277,11 +277,11 @@ public class TurnManager : ExtendedMonoBehavior
 
 
         //Kill dead enemies (one at a time)
-        var deadEnemies = pair.alignment.enemies.Where(x => x.IsDying).ToList();
-        foreach (var enemy in deadEnemies)
-        {
-            yield return enemy.Die();
-        }
+        //var deadEnemies = pair.alignment.enemies.Where(x => x.IsDying).ToList();
+        //foreach (var enemy in deadEnemies)
+        //{
+        //    yield return enemy.Die();
+        //}
 
         //pair.actor1.ShrinkAsync();
         //pair.actor2.ShrinkAsync();
@@ -332,8 +332,8 @@ public class TurnManager : ExtendedMonoBehavior
         foreach (var enemy in playingEnemies)
         {
             //TODO: Calculate based on attacker stats
-            int amount = Convert.ToInt32(enemy.stats.Agility * 3 * (1 + enemy.stats.Luck * 0.01f));
-            enemy.AddApAsync(amount);
+            //int amount = Convert.ToInt32(enemy.stats.Agility * 3 * (1 + enemy.stats.Luck * 0.01f));
+            //enemy.AddApAsync(amount);
         }
     }
 
@@ -418,24 +418,25 @@ public class TurnManager : ExtendedMonoBehavior
                     //enemy.AssignActionWait();
                     //enemy.ap = 0;
                     //enemy.UpdateActionBar();
-                    enemy.CalculateTurnDelay();
+                   
+                    enemy.ResetActionBar();
                 }
 
-                var deadPlayers = actors.Where(x => x.IsDying).ToList();
-                if (deadPlayers != null && deadPlayers.Count > 0)
-                {
-                    //Die dead enemies (one at a time)
-                    foreach (var player in deadPlayers)
-                    {
-                        yield return player.Die();
-                    }
+                //var deadPlayers = actors.Where(x => x.IsDying).ToList();
+                //if (deadPlayers != null && deadPlayers.Count > 0)
+                //{
+                //    //Die dead enemies (one at a time)
+                //    foreach (var player in deadPlayers)
+                //    {
+                //        yield return player.Die();
+                //    }
 
-                    //Fade out (all at once)
-                    //foreach (var player in deadPlayers)
-                    //{
-                    //    player.Destroy();
-                    //}
-                }
+                //    //Fade out (all at once)
+                //    //foreach (var player in deadPlayers)
+                //    //{
+                //    //    player.Destroy();
+                //    //}
+                //}
 
 
 

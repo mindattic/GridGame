@@ -111,8 +111,9 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         timerBar.Play();
 
-
+        actorManager.GainAP();
         StartCoroutine(selectedPlayer.MoveTowardCursor());
+
     }
 
     public void Unselect()
@@ -135,7 +136,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = closestTile.position;
         selectedPlayer.sortingOrder = SortingOrder.Default;
-        selectedPlayer.SetStatus(Status.None);
+        //selectedPlayer.SetStatus(Status.None);
         previousSelectedPlayer = selectedPlayer;
         selectedPlayer = null;
 
