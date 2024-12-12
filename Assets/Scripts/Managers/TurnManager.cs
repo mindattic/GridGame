@@ -77,8 +77,6 @@ public class TurnManager : ExtendedMonoBehavior
             timerBar.Hide();
 
             CheckEnemySpawn();
-           
-            CheckEnemyActionPoints();
             CheckEnemyMove();
         }
 
@@ -321,22 +319,6 @@ public class TurnManager : ExtendedMonoBehavior
         var notReadyEnemies = enemies.Where(x => x.IsPlaying && !x.IsReady).ToList();
         notReadyEnemies.ForEach(x => x.CheckReady());
     }
-
-    public void CheckEnemyActionPoints()
-    {
-        //Check abort state
-        if (!IsEnemyTurn || !IsStartPhase)
-            return;
-
-        var playingEnemies = enemies.Where(x => x.IsPlaying).ToList();
-        foreach (var enemy in playingEnemies)
-        {
-            //TODO: Calculate based on attacker stats
-            //int amount = Convert.ToInt32(enemy.stats.Agility * 3 * (1 + enemy.stats.Luck * 0.01f));
-            //enemy.AddApAsync(amount);
-        }
-    }
-
 
     public void CheckEnemyMove()
     {

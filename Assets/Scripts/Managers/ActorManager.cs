@@ -6,17 +6,14 @@ namespace Game.Manager
     public class ActorManager : ExtendedMonoBehavior
     {
 
-        public void GainAP()
+        public void AccumulateAP()
         {
             var waitingEnemies = enemies.Where(x => x.IsPlaying && !x.IsReady).ToList();
-            //foreach (var enemy in enemies)
-            //{
-            //    StartCoroutine(enemy.GainAP());
-            //}
-
+            foreach (var enemy in enemies)
+            {
+                enemy.GainAPAsync();
+            }
         }
-
-
 
         public void Clear()
         {

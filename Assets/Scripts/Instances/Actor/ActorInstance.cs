@@ -1,12 +1,10 @@
 using Assets.Scripts.Behaviors.Actor;
 using Assets.Scripts.Instances.Actor;
-using Assets.Scripts.Utilities;
 using Game.Instances.Actor;
 using System;
 using System.Collections;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 //Layers
@@ -28,6 +26,7 @@ public class ActorInstance : ExtendedMonoBehavior
     public ActorRenderers renderers = new ActorRenderers();
     public ActorStats stats = new ActorStats();
     public ActorFlags flags = new ActorFlags();
+    public ActorAbilities abilities = new ActorAbilities();
     public ActorVFX vfx = new ActorVFX();
     public ActorWeapon weapon = new ActorWeapon();
 
@@ -37,10 +36,6 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public float wiggleSpeed;
     public float wiggleAmplitude = 15f; // Amplitude (difference from -45 degrees)
-    public float healthDrainDelay = 0.5f;
-    public float healthDrainAmount = 0.7f;
-    public float actionDrainDelay = 0.5f;
-    public float actionDrainAmount = 0.7f;
 
     public Vector3 initialHealthBarScale;
     public Vector3 initialActionBarScale;
@@ -122,14 +117,14 @@ public class ActorInstance : ExtendedMonoBehavior
     public bool IsEastEdge => location.x == board.columnCount;
     public bool IsSouthEdge => location.y == board.rowCount;
     public bool IsWestEdge => location.x == 1;
-    public bool IsAlive => IsActive && stats.PreviousHP > 0;
-    public bool IsDying => IsActive && stats.PreviousHP < 1;
-    public bool IsDead => !IsActive && stats.PreviousHP < 1;
+    public bool IsAlive => IsActive && stats.HP > 0;
+    public bool IsDying => IsActive && stats.HP < 1;
+    public bool IsDead => !IsActive && stats.HP < 1;
     public bool IsActive => this != null && isActiveAndEnabled;
     public bool IsInactive => this == null || !isActiveAndEnabled;
     public bool IsSpawnable => !IsActive && IsAlive && spawnDelay <= turnManager.currentTurn;
     public bool IsPlaying => IsActive && IsAlive;
-    public bool IsReady => stats.PreviousAP == stats.MaxAP; //turnDelay == 0;
+    public bool IsReady => IsPlaying && stats.AP == stats.MaxAP; //turnDelay == 0;
 
 
     #endregion
@@ -292,15 +287,15 @@ public class ActorInstance : ExtendedMonoBehavior
             renderers.SetActionBarColor(Colors.ActionBar.Blue);
             renderers.SetSelectionBoxEnabled(isEnabled: false);
             vfx.Attack = resourceManager.VisualEffect("Double_Claw");
-            //CalculateTurnDelay();
         }
 
         renderers.SetNameTagText(name);
         renderers.SetNameTagEnabled(isEnabled: showActorNameTag);
 
-        //AssignSkillWait();
+
         UpdateHealthBar();
         ResetActionBar();
+
 
         if (turnManager.IsFirstTurn)
         {
@@ -347,9 +342,38 @@ public class ActorInstance : ExtendedMonoBehavior
     }
 
 
-    private void GainAPAsync()
+    public void GainAPAsync()
     {
         StartCoroutine(GainAP());
+    }
+
+
+
+    public IEnumerator GainAP()
+    {
+        //Check abort state
+        if (!HasSelectedPlayer || !IsEnemy || !IsPlaying || IsReady)
+            yield break;
+
+        //Before:
+        float amount = stats.Speed * 0.001f;
+
+        //During:
+        while (HasSelectedPlayer && IsEnemy && IsPlaying && !IsReady)
+        {
+            stats.AP += amount;
+            stats.AP = Mathf.Clamp(stats.AP, 0, stats.MaxAP);
+            stats.PreviousAP = stats.AP;
+            UpdateActionBar();
+            yield return Wait.OneTick();
+        }
+
+        //After:
+        stats.PreviousAP = stats.AP;
+        UpdateActionBar();
+
+        if (IsReady)
+            CheckWeaponWiggle();
     }
 
     public void ResetActionBar()
@@ -369,29 +393,6 @@ public class ActorInstance : ExtendedMonoBehavior
         UpdateActionBar();
     }
 
-
-    public IEnumerator GainAP()
-    { 
-        //Before:
-        float amount = stats.Speed * 0.001f;
-
-        //During:
-        while (HasSelectedPlayer && IsEnemy && IsPlaying && !IsReady)
-        {
-            stats.AP += amount;
-            stats.AP = Mathf.Clamp(stats.AP, 0, stats.MaxAP);
-            stats.PreviousAP = stats.AP;
-            UpdateActionBar();
-            yield return Wait.OneTick();
-        }
-
-        //After:
-        stats.PreviousAP = stats.AP;
-        UpdateActionBar();
-
-        if(IsReady)
-            CheckWeaponWiggle();
-    }
 
     public IEnumerator Attack(ActorInstance opponent, int damage, bool isCriticalHit = false)
     {
@@ -854,7 +855,7 @@ public class ActorInstance : ExtendedMonoBehavior
         position = targetPosition;
     }
 
- 
+
     public IEnumerator TakeDamage(int damage, bool isCriticalHit = false)
     {
         //Check abort state
@@ -907,85 +908,87 @@ public class ActorInstance : ExtendedMonoBehavior
 
     private void UpdateActionBar()
     {
-        var x = CalculateActionBarScale(stats.AP);
+        float GetScaleX(float x) => Mathf.Clamp(initialActionBarScale.x * (x / stats.MaxAP), 0, initialActionBarScale.x);
+
+        float x = GetScaleX(stats.AP);
         renderers.actionBar.transform.localScale = new Vector3(x, initialActionBarScale.y, initialActionBarScale.z);
-        //renderers.actionBarText.text = $@"{stats.AP}/{stats.MaxAP}";
+        renderers.actionBarText.text = $@"{stats.AP}/{stats.MaxAP}";
 
-        //StartCoroutine(DrainActionBar());
-    }
+        x = GetScaleX(stats.PreviousAP);
+        renderers.actionBarDrain.transform.localScale = new Vector3(x, initialActionBarScale.y, initialActionBarScale.z);
 
-    //public IEnumerator DrainActionBar()
-    //{
-    //    //Before:
-    //    float x = 0;
+        IEnumerator _()
+        {
+            //Check abort state
+            if (stats.PreviousHP == stats.HP)
+                yield break;
 
-    //    //During:
-    //    yield return new WaitForSeconds(actionDrainDelay);
+            //Before:
+            float x;
 
-    //    while (stats.HP < stats.PreviousHP)
-    //    {
-    //        stats.PreviousHP -= actionDrainAmount;
-    //        x = CalculateActionBarScale(stats.PreviousAP);
-    //        renderers.actionBarDrain.transform.localScale = new Vector3(x, initialActionBarScale.y, initialActionBarScale.z);
-    //        yield return Wait.OneTick();
-    //    }
+            //During:
+            yield return Wait.For(Interval.ActionBarDrainDelay);
 
-    //    //After:
-    //    stats.PreviousAP = stats.AP;
-    //    x = CalculateActionBarScale(stats.PreviousAP);
-    //    renderers.healthBarDrain.transform.localScale = new Vector3(x, initialActionBarScale.y, initialActionBarScale.z);
-    //}
+            while (stats.HP < stats.PreviousHP)
+            {
+                stats.PreviousHP -= Increment.ActionBarDrainAmount;
+                x = GetScaleX(stats.PreviousAP);
+                renderers.actionBarDrain.transform.localScale = new Vector3(x, initialActionBarScale.y, initialActionBarScale.z);
+                yield return Wait.OneTick();
+            }
 
-    private float CalculateActionBarScale(float x)
-    {
-        return Mathf.Clamp(initialActionBarScale.x * (x / stats.MaxAP), 0, initialActionBarScale.x);
+            //After:
+            stats.PreviousAP = stats.AP;
+            x = GetScaleX(stats.PreviousAP);
+            renderers.healthBarDrain.transform.localScale = new Vector3(x, initialActionBarScale.y, initialActionBarScale.z);
+        }
+
+        StartCoroutine(_());
     }
 
     private void UpdateHealthBar()
     {
-        var x = CalculateHealthBarScale(stats.HP);
+        float GetScaleX(float x) => Mathf.Clamp(initialHealthBarScale.x * (x / stats.MaxHP), 0, initialHealthBarScale.x);
+
+        var x = GetScaleX(stats.HP);
         renderers.healthBar.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
-        //renderers.healthBarText.text = $@"{stats.HP}/{stats.MaxHP}";
+        renderers.healthBarText.text = $@"{stats.HP}/{stats.MaxHP}";
 
-        x = CalculateHealthBarScale(stats.PreviousHP);
+        x = GetScaleX(stats.PreviousHP);
         renderers.healthBarDrain.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
- 
-        StartCoroutine(DrainHealthBar());
-    }
 
-    public IEnumerator DrainHealthBar()
-    {
-        if (stats.PreviousHP == stats.HP)
-            yield break;
-
-        //Before:
-        float x = 0;
-
-        //During:
-        //yield return new WaitForSeconds(healthDrainDelay);
-        yield return Wait.For(healthDrainDelay);
-
-        while (stats.HP < stats.PreviousHP)
+        IEnumerator _()
         {
-            stats.PreviousHP -= healthDrainAmount;
-            x = CalculateHealthBarScale(stats.PreviousHP);
+            //Check abort state
+            if (stats.PreviousHP == stats.HP)
+                yield break;
+
+            //Before:
+            float x;
+
+            //During:
+            yield return Wait.For(Interval.HealthBarDrainDelay);
+
+            while (stats.HP < stats.PreviousHP)
+            {
+                stats.PreviousHP -= Increment.HealthBarDrainAmount;
+                x = GetScaleX(stats.PreviousHP);
+                renderers.healthBarDrain.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
+                yield return Wait.OneTick();
+            }
+
+            //After:
+            stats.PreviousHP = stats.HP;
+            x = GetScaleX(stats.PreviousHP);
             renderers.healthBarDrain.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
-            yield return Wait.OneTick();
+
+            if (IsDying)
+                DieAsync();
         }
 
-        //After:
-        stats.PreviousHP = stats.HP;
-        x = CalculateHealthBarScale(stats.PreviousHP);
-        renderers.healthBarDrain.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
-
-        if (IsDying)
-            DieAsync();
+        StartCoroutine(_());
     }
 
-    private float CalculateHealthBarScale(float x)
-    {
-        return Mathf.Clamp(initialHealthBarScale.x * (x / stats.MaxHP), 0, initialHealthBarScale.x);
-    }
 
     public IEnumerator Die()
     {
@@ -1038,8 +1041,6 @@ public class ActorInstance : ExtendedMonoBehavior
     {
         StartCoroutine(Die());
     }
-
-
 
     public void SetReady()
     {

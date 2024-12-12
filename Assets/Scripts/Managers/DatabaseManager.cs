@@ -8,11 +8,12 @@ using UnityEngine;
 
 namespace Game.Manager
 {
+  
 
     public static class Database
     {
         public const string Name = "MyDatabase.db";
-
+        
         public static class Table
         {
 
@@ -22,7 +23,7 @@ namespace Game.Manager
 
     public class DatabaseManager : ExtendedMonoBehavior
     {
-        //private const string DATABASE_NAME = "MyDatabase.db";
+        public const bool autoOverwrite = true; //Used to reinstall app every load...
         private SQLiteDB instance = SQLiteDB.Instance;
 
         public List<ActorStats> actorStats = new List<ActorStats>();
@@ -54,7 +55,7 @@ namespace Game.Manager
             instance.DBName = Database.Name;
 
             //Check if this is the first load of the application
-            if (!instance.Exists)
+            if (autoOverwrite || !instance.Exists)
                 instance.CreateDatabase(instance.DBName, isOverWrite: true);
 
             var isConnected = instance.ConnectToDefaultDatabase(instance.DBName, loadFresh: true);
@@ -78,7 +79,7 @@ namespace Game.Manager
             DBReader reader;
 
             //TODO: Should only load enemy types that are in current level...
-            #region Load ActorStats
+#region Load ActorStats
 
             actorStats.Clear();
             reader = instance.GetAllData(Database.Table.Actor);
@@ -102,7 +103,7 @@ namespace Game.Manager
                 actorStats.Add(x);
                 logManager.Info(JsonUtility.ToJson(x));
 
-                #endregion
+#endregion
 
 
             }

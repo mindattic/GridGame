@@ -10,8 +10,10 @@
         Variant = other.Variant;
         Description = other.Description;
         Level = other.Level;
+        PreviousHP = other.HP;
         HP = other.HP;
         MaxHP = other.MaxHP;
+        PreviousAP = 0;
         AP = 0;
         MaxAP = 100;
         Strength = other.Strength;

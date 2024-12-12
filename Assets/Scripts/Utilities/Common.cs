@@ -142,6 +142,9 @@ public static class Interval
     public static float ThreeSeconds = 3.0f;
     public static float FourSeconds = 4.0f;
     public static float FiveSeconds = 5.0f;
+
+    public static float HealthBarDrainDelay = 0.5f;
+    public static float ActionBarDrainDelay = 0.5f;
 }
 
 public static class Increment
@@ -152,6 +155,9 @@ public static class Increment
     public static float TenPercent = 0.1f;
     public static float FiftyPercent = 0.5f;
     public static float HundredPercent = 1.0f;
+
+    public static float HealthBarDrainAmount = 1f;
+    public static float ActionBarDrainAmount = 1f;
 }
 
 

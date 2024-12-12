@@ -153,6 +153,7 @@
     <Compile Include="Assets\Scripts\Instances\CoinInstance.cs" />
     <Compile Include="Assets\Scripts\Managers\StageManager.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorThumbnail.cs" />
+    <Compile Include="Assets\Scripts\Instances\Actor\ActorAbilities.cs" />
     <Compile Include="Assets\Scripts\Instances\GhostInstance.cs" />
     <Compile Include="Assets\Scripts\Models\ActorEquipment.cs" />
     <Compile Include="Assets\Scripts\Managers\TileManager.cs" />
