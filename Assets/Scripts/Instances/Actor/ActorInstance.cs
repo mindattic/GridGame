@@ -388,6 +388,9 @@ public class ActorInstance : ExtendedMonoBehavior
         //After:
         stats.PreviousAP = stats.AP;
         UpdateActionBar();
+
+        if(IsReady)
+            CheckWeaponWiggle();
     }
 
     public IEnumerator Attack(ActorInstance opponent, int damage, bool isCriticalHit = false)
