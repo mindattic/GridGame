@@ -67,7 +67,7 @@ public class TurnManager : ExtendedMonoBehavior
         if (IsPlayerTurn)
         {
             currentTurn++;
-            CheckEnemyReadiness();
+            actorManager.CheckEnemyReadiness();
 
             //audioManager.Play("NextTurn");
             timerBar.Reset();
@@ -217,13 +217,7 @@ public class TurnManager : ExtendedMonoBehavior
     private IEnumerator PlayerAttack(ActorPair pair)
     {
 
-        #region Parallax Fade In
-
-        pair.actor1.ParallaxFadeInAsync();
-        pair.actor2.ParallaxFadeInAsync();
-        //pair.alignment.enemies.ForEach(x => x.ParallaxFadeInAsync());
-
-        #endregion
+  
 
         #region Player portraits 
 
@@ -314,11 +308,6 @@ public class TurnManager : ExtendedMonoBehavior
     }
 
 
-    public void CheckEnemyReadiness()
-    {
-        var notReadyEnemies = enemies.Where(x => x.IsPlaying && !x.IsReady).ToList();
-        notReadyEnemies.ForEach(x => x.CheckReady());
-    }
 
     public void CheckEnemyMove()
     {

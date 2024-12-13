@@ -126,7 +126,6 @@ public class ActorInstance : ExtendedMonoBehavior
     public bool IsPlaying => IsActive && IsAlive;
     public bool IsReady => IsPlaying && stats.AP == stats.MaxAP; //turnDelay == 0;
 
-
     #endregion
 
 
@@ -296,15 +295,20 @@ public class ActorInstance : ExtendedMonoBehavior
         UpdateHealthBar();
         ResetActionBar();
 
+        //renderers.SetAlpha(1);
+        FadeInAsync();
+        Spin360Async();
 
-        if (turnManager.IsFirstTurn)
-        {
-            renderers.SetAlpha(1);
-        }
-        else
-        {
-            StartCoroutine(FadeIn());
-        }
+        //if (turnManager.IsFirstTurn)
+        //{
+        //    renderers.SetAlpha(1);
+        //}
+        //else
+        //{
+        //    //StartCoroutine(FadeIn());
+        //    renderers.SetAlpha(1);
+        //    Spin360Async();
+        //}
 
     }
 
@@ -405,27 +409,6 @@ public class ActorInstance : ExtendedMonoBehavior
         return vfxManager.Spawn(vfx.Attack, opponent.position, opponent.TakeDamage(damage, isCriticalHit));
     }
 
-    public IEnumerator FadeIn()
-    {
-        //Before:
-        float alpha = 0;
-        renderers.SetAlpha(alpha);
-        float delay = Random.Float(0f, 2f);
-        yield return Wait.For(delay);
-
-        //During:
-        while (alpha < 1)
-        {
-            alpha += Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, 1);
-            renderers.SetAlpha(alpha);
-            yield return Wait.OneTick();
-        }
-
-        //After:
-        alpha = 1;
-        renderers.SetAlpha(alpha);
-    }
 
     public void CalculateAttackStrategy()
     {
@@ -1129,13 +1112,13 @@ public class ActorInstance : ExtendedMonoBehavior
         bool isDone = false;
         bool is90Degrees = false;
         var rotY = 0f;
-        var speed = tileSize * 24f;
+        var spinSpeed = tileSize * 24f;
         rotation = Geometry.Rotation(0, rotY, 0);
 
         //During:
         while (!isDone)
         {
-            rotY += !is90Degrees ? speed : -speed;
+            rotY += !is90Degrees ? spinSpeed : -spinSpeed;
 
             if (!is90Degrees && rotY >= 90f)
             {
@@ -1205,44 +1188,36 @@ public class ActorInstance : ExtendedMonoBehavior
         StartCoroutine(Spin360(triggeredEvent));
     }
 
-    public IEnumerator FadeIn(
-         SpriteRenderer spriteRenderer,
-         float increment,
-         float interval,
-         float startAlpha = 0f,
-         float endAlpha = 1f)
+
+    public void FadeInAsync(float delay = 0f, float increment = 0.05f)
+    {
+        StartCoroutine(FadeIn(delay, increment));
+    }
+
+    public IEnumerator FadeIn(float delay = 0f, float increment = 0.05f)
     {
         //Before:
-        var alpha = startAlpha;
-        spriteRenderer.color = new Color(1, 1, 1, alpha);
+        float alpha = 0;
+        renderers.SetAlpha(alpha);
+        yield return Wait.For(delay);
 
         //During:
-        while (alpha < endAlpha)
+        while (alpha < 1)
         {
             alpha += increment;
-            alpha = Mathf.Clamp(alpha, 0, endAlpha);
-            spriteRenderer.color = new Color(1, 1, 1, alpha);
-            yield return interval;
+            alpha = Mathf.Clamp(alpha, 0, 1);
+            renderers.SetAlpha(alpha);
+            yield return Wait.OneTick();
         }
 
         //After:
-        spriteRenderer.color = new Color(1, 1, 1, endAlpha);
+        alpha = 1;
+        renderers.SetAlpha(alpha);
     }
 
-    public void FadeInAsync(
-       SpriteRenderer spriteRenderer,
-       float increment,
-       float interval,
-       float startAlpha = 0f,
-       float endAlpha = 1f)
-    {
-        StartCoroutine(FadeIn(spriteRenderer, increment, interval, startAlpha, endAlpha));
-    }
 
-    public void ParallaxFadeInAsync()
-    {
-        FadeInAsync(renderers.parallax, Increment.TwoPercent, Interval.OneTick);
-    }
+
+
 
     public static IEnumerator FadeOut(SpriteRenderer spriteRenderer, float increment, float interval, float startAlpha, float endAlpha)
     {
@@ -1386,7 +1361,7 @@ public class ActorInstance : ExtendedMonoBehavior
     {
         float timeElapsed = 0f;
         float amplitude = 10f;
-        float speed = wiggleSpeed; // Wiggle speed
+        float speed = wiggleSpeed; // Wiggle spinSpeed
         float dampingRate = 0.99f; // Factor to reduce amplitude each cycle (closer to 1 = slower decay)
         float cutoff = 0.1f;
 
@@ -1447,6 +1422,41 @@ public class ActorInstance : ExtendedMonoBehavior
 
 
 
+
+
+    //public IEnumerator FadeIn(
+    //     SpriteRenderer spriteRenderer,
+    //     float increment,
+    //     float interval,
+    //     float startAlpha = 0f,
+    //     float endAlpha = 1f)
+    //{
+    //    //Before:
+    //    var alpha = startAlpha;
+    //    spriteRenderer.color = new Color(1, 1, 1, alpha);
+
+    //    //During:
+    //    while (alpha < endAlpha)
+    //    {
+    //        alpha += increment;
+    //        alpha = Mathf.Clamp(alpha, 0, endAlpha);
+    //        spriteRenderer.color = new Color(1, 1, 1, alpha);
+    //        yield return interval;
+    //    }
+
+    //    //After:
+    //    spriteRenderer.color = new Color(1, 1, 1, endAlpha);
+    //}
+
+    //public void FadeInAsync(
+    //   SpriteRenderer spriteRenderer,
+    //   float increment,
+    //   float interval,
+    //   float startAlpha = 0f,
+    //   float endAlpha = 1f)
+    //{
+    //    StartCoroutine(FadeIn(spriteRenderer, increment, interval, startAlpha, endAlpha));
+    //}
 
 
     //public IEnumerator FillRadial()

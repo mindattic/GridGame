@@ -111,7 +111,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         timerBar.Play();
 
-        actorManager.AccumulateAP();
+        actorManager.CheckAccumulateAP();
         StartCoroutine(selectedPlayer.MoveTowardCursor());
 
     }
