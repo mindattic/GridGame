@@ -149,7 +149,7 @@ public class PortraitInstance : ExtendedMonoBehavior
           
             //Shake
             position = startPosition;
-            position += new Vector3(Random.Range(shakeIntensity.Medium), Random.Range(shakeIntensity.Medium), 1);
+            position += new Vector3(Random.Range(ShakeIntensity.Medium), Random.Range(ShakeIntensity.Medium), 1);
 
             //Shrink
             transform.localScale *= 0.99f;

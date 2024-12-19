@@ -19,6 +19,7 @@ public static class Constants
     public const string CoinBar = "CoinBar";
 
     //Percent
+    public const float percent16 = 0.166666f;
     public const float percent25 = 0.25f;
     public const float percent33 = 0.333333f;
     public const float percent50 = 0.5f;

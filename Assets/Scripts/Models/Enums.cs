@@ -96,13 +96,13 @@ public enum AttackStrategy
     MoveAnywhere
 }
 
-public enum BumpStage
-{
-    Start,
-    MoveToward,
-    MoveAway,
-    End
-}
+//public enum BumpStage
+//{
+//    Start,
+//    MoveToward,
+//    MoveAway,
+//    End
+//}
 
 public enum DodgeStage
 {
@@ -144,11 +144,12 @@ public enum DebugOptions
     None,
     DodgeTest,
     SpinTest,
+    ShakeTest,
+    BumpTest,
     AlignTest,
     CoinTest,
     PortraitTest,
-    DamageTextTest,
-    BumpTest,
+    DamageTextTest,  
     SupportLineTest,
     AttackLineTest,
     EnemyAttackTest,

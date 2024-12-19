@@ -630,6 +630,10 @@ public class ActorInstance : ExtendedMonoBehavior
         scale = tileScale;
         transform.rotation = Quaternion.identity; //Reset rotation to default
         sortingOrder = SortingOrder.Default;
+
+        //TODO: Add enemy attacking here so that enemy attacks once they reach their intended destination...
+
+
     }
 
 
@@ -648,195 +652,337 @@ public class ActorInstance : ExtendedMonoBehavior
         renderers.SetGlowScale(scale);
     }
 
-    private void Shake(float intensity)
+
+
+
+
+    //private void Shake(float intensity)
+    //{
+    //    thumbnailPosition = currentTile.position;
+
+    //    if (intensity <= 0)
+    //        return;
+
+    //    var amount = new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
+    //    thumbnailPosition += amount;
+    //}
+
+    public void ShakeAsync(float intensity, float duration = 0)
     {
-        thumbnailPosition = currentTile.position;
+        StartCoroutine(Shake(intensity, duration));
+    }
 
+    public IEnumerator Shake(float intensity, float duration = 0)
+    {
+        // Ensure initial intensity is valid
         if (intensity <= 0)
-            return;
+            yield break;
 
-        var amount = new Vector3(Random.Range(-intensity), Random.Range(intensity), 1);
-        thumbnailPosition += amount;
+        // Store the original thumbnail position
+        var originalPosition = currentTile.position;
+        var elapsedTime = 0f;
+
+        while (intensity > 0 && (duration <= 0 || elapsedTime < duration))
+        {
+            // Calculate a random offset based on intensity
+            var shakeOffset = new Vector3(
+                Random.Float(-intensity, intensity),
+                Random.Float(-intensity, intensity),
+                0 // Keep the z-axis stable
+            );
+
+            // Apply the offset to the thumbnail position
+            thumbnailPosition = originalPosition + shakeOffset;
+
+            // Wait for the next frame
+            yield return Wait.OneTick();
+
+            // Increment elapsed time if duration is specified
+            if (duration > 0)
+                elapsedTime += Interval.OneTick;
+        }
+
+        // Reset to the original position after shaking is stopped
+        thumbnailPosition = originalPosition;
+    }
+
+
+
+
+    //public IEnumerator Dodge()
+    //{
+    //    //Before:
+    //    DodgeStage stage = DodgeStage.Start;
+    //    var targetRotation = new Vector3(
+    //        15f,
+    //        70f,
+    //        15f);
+    //    var currentRotation = Vector3.zero;
+    //    var rotationSpeed = 12f;
+    //    var minScale = 0.9f;
+    //    float progress = 0f;
+    //    var randomDirection = new Vector3Int(
+    //        Random.Boolean ? -1 : 1,
+    //        Random.Boolean ? -1 : 1,
+    //        Random.Boolean ? -1 : 1);
+
+    //    // During:
+    //    while (stage != DodgeStage.End)
+    //    {
+    //        switch (stage)
+    //        {
+    //            case DodgeStage.Start:
+    //                {
+    //                    currentRotation = Vector3.zero;
+    //                    progress = 0f;
+    //                    scale = tileScale;
+    //                    rotation = Geometry.Rotation(currentRotation);
+
+    //                    stage = DodgeStage.TwistForward;
+    //                }
+    //                break;
+
+    //            case DodgeStage.TwistForward:
+    //                {
+    //                    //SaveProfile forward progress and sync rotation/scaleMultiplier
+    //                    progress += rotationSpeed / targetRotation.y; //Normalize progress
+    //                    progress = Mathf.Clamp01(progress); //Clamp between 0 and 1
+
+    //                    //Random twist direction on X, Y, and Z axes
+    //                    currentRotation.x = Mathf.Lerp(0f, targetRotation.x, progress) * randomDirection.x;
+    //                    currentRotation.y = Mathf.Lerp(0f, targetRotation.y, progress) * randomDirection.y;
+    //                    currentRotation.z = Mathf.Lerp(0f, targetRotation.z, progress) * randomDirection.z;
+
+    //                    //Calculate scaleMultiplier based on forward progress
+    //                    float scaleFactor = Mathf.Lerp(1f, minScale, progress);
+    //                    scale = tileScale * scaleFactor;
+
+    //                    //Apply rotation (random X, Y, and Z axis twisting) and scaling
+    //                    rotation = Geometry.Rotation(currentRotation.x, currentRotation.y, currentRotation.z);
+
+    //                    //If fully twisted forward, move to TwistBackward
+    //                    if (progress >= 1f)
+    //                    {
+    //                        progress = 0f; //Reset backward progress
+    //                        stage = DodgeStage.TwistBackward;
+    //                    }
+    //                }
+    //                break;
+
+    //            case DodgeStage.TwistBackward:
+    //                {
+    //                    //SaveProfile backward progress and sync rotation/scaleMultiplier
+    //                    progress += rotationSpeed / targetRotation.y; //Normalize progress
+    //                    progress = Mathf.Clamp01(progress); //Clamp between 0 and 1
+
+    //                    //Reverse random twist direction on X, Y, and Z axes
+    //                    currentRotation.x = Mathf.Lerp(targetRotation.x, 0f, progress) * randomDirection.x;
+    //                    currentRotation.y = Mathf.Lerp(targetRotation.y, 0f, progress) * randomDirection.y;
+    //                    currentRotation.z = Mathf.Lerp(targetRotation.z, 0f, progress) * randomDirection.z;
+
+    //                    //Calculate scaleMultiplier based on backward progress
+    //                    float scaleFactor = Mathf.Lerp(minScale, 1f, progress);
+    //                    scale = tileScale * scaleFactor;
+
+    //                    //Apply reverse rotation (random X, Y, and Z axis twisting) and scaling
+    //                    rotation = Geometry.Rotation(currentRotation);
+
+    //                    //If fully twisted back, move to End
+    //                    if (progress >= 1f)
+    //                    {
+    //                        stage = DodgeStage.End;
+    //                    }
+    //                }
+    //                break;
+
+    //            case DodgeStage.End:
+    //                {
+    //                    currentRotation = Vector3.zero;
+    //                    scale = tileScale;
+    //                    rotation = Geometry.Rotation(currentRotation);
+    //                }
+    //                break;
+    //        }
+
+    //        yield return Wait.OneTick();
+    //    }
+
+    //    //After:
+    //    currentRotation = Vector3.zero;
+    //    scale = tileScale;
+    //    rotation = Geometry.Rotation(currentRotation);
+    //}
+
+    public void DodgeAsync()
+    {
+        StartCoroutine(Dodge());
     }
 
     public IEnumerator Dodge()
     {
-        //Before:
-        DodgeStage stage = DodgeStage.Start;
-        var targetRotation = new Vector3(
-            15f,
-            70f,
-            15f);
-        var currentRotation = Vector3.zero;
-        var rotationSpeed = 12f;
-        var minScale = 0.9f;
-        float progress = 0f;
-        var randomDirection = new Vector3Int(
-            Random.Boolean ? -1 : 1,
-            Random.Boolean ? -1 : 1,
-            Random.Boolean ? -1 : 1);
+        // Initial setup
+        var rotationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        var scaleCurve = AnimationCurve.EaseInOut(0, 1, 1, 0.9f);
+        float duration = 0.125f; // Total duration for the forward twist
+        float returnDuration = 0.125f; // Duration for the return to starting state
+        var startRotation = Vector3.zero;
+        var targetRotation = new Vector3(15f, 70f, 15f);
+        var randomDirection = new Vector3(
+           Random.Boolean ? -1f : 1f,
+           Random.Boolean ? -1f : 1f,
+           Random.Boolean ? -1f : 1f);
 
-        // During:
-        while (stage != DodgeStage.End)
+        float elapsedTime = 0f;
+
+        // Twist forward
+        while (elapsedTime < duration)
         {
-            switch (stage)
-            {
-                case DodgeStage.Start:
-                    {
-                        currentRotation = Vector3.zero;
-                        progress = 0f;
-                        scale = tileScale;
-                        rotation = Geometry.Rotation(currentRotation);
+            // Normalize time
+            elapsedTime += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsedTime / duration);
 
-                        stage = DodgeStage.TwistForward;
-                    }
-                    break;
+            // Evaluate rotation and scale using AnimationCurves
+            float curveValue = rotationCurve.Evaluate(progress);
+            Vector3 currentRotation = Vector3.LerpUnclamped(startRotation, targetRotation, curveValue);
+            currentRotation.Scale(randomDirection); // Apply random twist direction
 
-                case DodgeStage.TwistForward:
-                    {
-                        //SaveProfile forward progress and sync rotation/scaleMultiplier
-                        progress += rotationSpeed / targetRotation.y; //Normalize progress
-                        progress = Mathf.Clamp01(progress); //Clamp between 0 and 1
+            float scaleFactor = scaleCurve.Evaluate(progress);
+            scale = tileScale * scaleFactor;
 
-                        //Random twist direction on X, Y, and Z axes
-                        currentRotation.x = Mathf.Lerp(0f, targetRotation.x, progress) * randomDirection.x;
-                        currentRotation.y = Mathf.Lerp(0f, targetRotation.y, progress) * randomDirection.y;
-                        currentRotation.z = Mathf.Lerp(0f, targetRotation.z, progress) * randomDirection.z;
-
-                        //Calculate scaleMultiplier based on forward progress
-                        float scaleFactor = Mathf.Lerp(1f, minScale, progress);
-                        scale = tileScale * scaleFactor;
-
-                        //Apply rotation (random X, Y, and Z axis twisting) and scaling
-                        rotation = Geometry.Rotation(currentRotation.x, currentRotation.y, currentRotation.z);
-
-                        //If fully twisted forward, move to TwistBackward
-                        if (progress >= 1f)
-                        {
-                            progress = 0f; //Reset backward progress
-                            stage = DodgeStage.TwistBackward;
-                        }
-                    }
-                    break;
-
-                case DodgeStage.TwistBackward:
-                    {
-                        //SaveProfile backward progress and sync rotation/scaleMultiplier
-                        progress += rotationSpeed / targetRotation.y; //Normalize progress
-                        progress = Mathf.Clamp01(progress); //Clamp between 0 and 1
-
-                        //Reverse random twist direction on X, Y, and Z axes
-                        currentRotation.x = Mathf.Lerp(targetRotation.x, 0f, progress) * randomDirection.x;
-                        currentRotation.y = Mathf.Lerp(targetRotation.y, 0f, progress) * randomDirection.y;
-                        currentRotation.z = Mathf.Lerp(targetRotation.z, 0f, progress) * randomDirection.z;
-
-                        //Calculate scaleMultiplier based on backward progress
-                        float scaleFactor = Mathf.Lerp(minScale, 1f, progress);
-                        scale = tileScale * scaleFactor;
-
-                        //Apply reverse rotation (random X, Y, and Z axis twisting) and scaling
-                        rotation = Geometry.Rotation(currentRotation);
-
-                        //If fully twisted back, move to End
-                        if (progress >= 1f)
-                        {
-                            stage = DodgeStage.End;
-                        }
-                    }
-                    break;
-
-                case DodgeStage.End:
-                    {
-                        currentRotation = Vector3.zero;
-                        scale = tileScale;
-                        rotation = Geometry.Rotation(currentRotation);
-                    }
-                    break;
-            }
+            // Apply calculated transformations
+            rotation = Geometry.Rotation(currentRotation);
 
             yield return Wait.OneTick();
         }
 
-        //After:
-        currentRotation = Vector3.zero;
+        // Reset transition
+        elapsedTime = 0f; // Reset time
+        while (elapsedTime < returnDuration)
+        {
+            // Normalize time
+            elapsedTime += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsedTime / returnDuration);
+
+            // Reverse evaluate rotation and scale using AnimationCurves
+            float curveValue = rotationCurve.Evaluate(progress);
+            Vector3 currentRotation = Vector3.LerpUnclamped(targetRotation, startRotation, curveValue);
+            currentRotation.Scale(randomDirection); // Apply reverse direction
+
+            float scaleFactor = Mathf.LerpUnclamped(0.9f, 1f, progress);
+            scale = tileScale * scaleFactor;
+
+            // Apply calculated transformations
+            rotation = Geometry.Rotation(currentRotation);
+
+            yield return Wait.OneTick();
+        }
+
+        // Ensure exact reset
         scale = tileScale;
-        rotation = Geometry.Rotation(currentRotation);
+        rotation = Geometry.Rotation(Vector3.zero);
+    }
+
+
+    //public IEnumerator Bump(Direction direction)
+    //{
+    //    // Initial setup
+    //    var bumpCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    //    var duration = 0.1f;
+    //    var startPosition = currentTile.position;
+    //    var endPosition = Geometry.GetDirectionalPosition(startPosition, direction, tileSize * percent33);
+    //    var elapsedTime = 0f;
+
+    //    // Increase sorting order to ensure this tile is on top
+    //    sortingOrder = SortingOrder.Max;
+
+    //    // Main loop for smooth interpolation
+    //    while (elapsedTime < duration)
+    //    {
+    //        elapsedTime += Time.deltaTime;
+
+    //        // Evaluate the curve and determine the position
+    //        float curveValue = bumpCurve.Evaluate(elapsedTime / duration);
+    //        position = Vector3.Lerp(startPosition, endPosition, curveValue);
+
+    //        yield return null; // Wait for the next frame
+    //    }
+
+    //    // Return to the starting position with the same curve
+    //    elapsedTime = 0f;
+    //    while (elapsedTime < duration)
+    //    {
+    //        elapsedTime += Time.deltaTime;
+
+    //        // Evaluate the curve and determine the position
+    //        float curveValue = bumpCurve.Evaluate(elapsedTime / duration);
+    //        position = Vector3.Lerp(endPosition, startPosition, curveValue);
+
+    //        yield return null; // Wait for the next frame
+    //    }
+
+    //    // Reset sorting order and position
+    //    sortingOrder = SortingOrder.Default;
+    //    position = startPosition;
+    //}
+
+
+    public void BumpAsync(Direction direction)
+    {
+        StartCoroutine(Bump(direction));
     }
 
     public IEnumerator Bump(Direction direction)
     {
+        // Animation curves for each phase
+        var approachCurve = AnimationCurve.EaseInOut(0, 0, 0.5f, 1); // Fast initial movement
+        var returnCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);      // Smooth return
 
-        //Before:
-        BumpStage stage = BumpStage.Start;
-        var targetPosition = position;
-        var range = tileSize * percent33;
-        sortingOrder = SortingOrder.Default;
+        // Durations for each phase
+        var approachDuration = 0.1f;
+        var returnDuration = 0.15f;
+        var pauseDuration = 0.05f;
 
-        //During:
-        while (stage != BumpStage.End)
+        // Positions
+        var startPosition = currentTile.position;
+        var apexPosition = Geometry.GetDirectionalPosition(startPosition, direction, tileSize * percent33);
+
+        // Increase sorting order to ensure this tile is on top
+        sortingOrder = SortingOrder.Max;
+
+        // Phase 1: Quick Approach (fast movement to the apex)
+        float elapsedTime = 0f;
+        while (elapsedTime < approachDuration)
         {
-            switch (stage)
-            {
-                case BumpStage.Start:
-                    {
-                        sortingOrder = SortingOrder.Max;
-                        position = currentTile.position;
-                        targetPosition = Geometry.GetDirectionalPosition(position, direction, range);
-                        stage = BumpStage.MoveToward;
-                    }
-                    break;
+            elapsedTime += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsedTime / approachDuration);
+            float curveValue = approachCurve.Evaluate(progress);
 
-                case BumpStage.MoveToward:
-                    {
-                        var delta = targetPosition - position;
-                        if (Mathf.Abs(delta.x) > bumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(targetPosition.x, position.y, position.z), bumpSpeed);
-                        else if (Mathf.Abs(delta.y) > bumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(position.x, targetPosition.y, position.z), bumpSpeed);
-
-                        var isSnapDistance = Vector2.Distance(position, targetPosition) <= bumpSpeed;
-                        if (isSnapDistance)
-                        {
-                            position = targetPosition;
-                            targetPosition = currentTile.position;
-                            stage = BumpStage.MoveAway;
-                        }
-                    }
-                    break;
-
-                case BumpStage.MoveAway:
-                    {
-                        var delta = targetPosition - position;
-                        if (Mathf.Abs(delta.x) > bumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(targetPosition.x, position.y, position.z), bumpSpeed);
-                        else if (Mathf.Abs(delta.y) > bumpSpeed)
-                            position = Vector2.MoveTowards(position, new Vector3(position.x, targetPosition.y, position.z), bumpSpeed);
-
-                        var isSnapDistance = Vector2.Distance(position, targetPosition) <= bumpSpeed;
-                        if (isSnapDistance)
-                        {
-                            position = targetPosition;
-                            targetPosition = currentTile.position;
-                            stage = BumpStage.End;
-                        }
-                    }
-                    break;
-
-                case BumpStage.End:
-                    {
-                        sortingOrder = SortingOrder.Default;
-                        position = targetPosition;
-                    }
-                    break;
-            }
+            position = Vector3.Lerp(startPosition, apexPosition, curveValue);
 
             yield return Wait.OneTick();
         }
 
-        //After:
+        // Phase 2: Pause at apex
+        yield return new WaitForSeconds(pauseDuration);
+
+        // Phase 3: Slow Return to Starting Position
+        elapsedTime = 0f;
+        while (elapsedTime < returnDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsedTime / returnDuration);
+            float curveValue = returnCurve.Evaluate(progress);
+
+            position = Vector3.Lerp(apexPosition, startPosition, curveValue);
+
+            yield return Wait.OneTick();
+        }
+
+        // Reset sorting order and position
         sortingOrder = SortingOrder.Default;
-        position = targetPosition;
+        position = startPosition;
     }
+
 
 
     public IEnumerator TakeDamage(int damage, bool isCriticalHit = false)
@@ -863,7 +1009,7 @@ public class ActorInstance : ExtendedMonoBehavior
         {
             GrowAsync();
             if (isCriticalHit)
-                Shake(shakeIntensity.Medium);
+                Shake(ShakeIntensity.Medium);
 
             ticks += Interval.OneTick;
             yield return Wait.For(Interval.OneTick);
@@ -871,7 +1017,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
         //After:
         ShrinkAsync();
-        Shake(shakeIntensity.Stop);
+        Shake(ShakeIntensity.Stop);
     }
 
     public void TakeDamageAsync(int damage, bool isCriticalHit = false)
@@ -1142,6 +1288,8 @@ public class ActorInstance : ExtendedMonoBehavior
 
     }
 
+
+
     public IEnumerator Spin360(IEnumerator triggeredEvent = null)
     {
         //Before:
@@ -1243,15 +1391,10 @@ public class ActorInstance : ExtendedMonoBehavior
         StartCoroutine(FadeOut(spriteRenderer, increment, interval, startAlpha, endAlpha));
     }
 
-    public void ParallaxFadeOutAsync()
-    {
-        if (!IsPlaying)
-            return;
-        FadeOutAsync(renderers.parallax, Increment.FivePercent, Interval.OneTick, startAlpha: 0.5f, endAlpha: 0f);
-    }
 
-    public void Relocate(Vector2Int location)
+    public void Teleport(Vector2Int location)
     {
+
         this.location = location;
         transform.position = Geometry.GetPositionByLocation(this.location);
     }
@@ -1421,7 +1564,87 @@ public class ActorInstance : ExtendedMonoBehavior
 
 
 
+    //public IEnumerator Bump(Direction direction)
+    //{
 
+    //    //Before:
+    //    BumpStage stage = BumpStage.Start;
+    //    var targetPosition = position;
+    //    var range = tileSize * percent33;
+    //    sortingOrder = SortingOrder.Default;
+
+    //    //During:
+    //    while (stage != BumpStage.End)
+    //    {
+    //        switch (stage)
+    //        {
+    //            case BumpStage.Start:
+    //                {
+    //                    sortingOrder = SortingOrder.Max;
+    //                    position = currentTile.position;
+    //                    targetPosition = Geometry.GetDirectionalPosition(position, direction, range);
+    //                    stage = BumpStage.MoveToward;
+    //                }
+    //                break;
+
+    //            case BumpStage.MoveToward:
+    //                {
+    //                    var delta = targetPosition - position;
+    //                    if (Mathf.Abs(delta.x) > bumpSpeed)
+    //                        position = Vector2.MoveTowards(position, new Vector3(targetPosition.x, position.y, position.z), bumpSpeed);
+    //                    else if (Mathf.Abs(delta.y) > bumpSpeed)
+    //                        position = Vector2.MoveTowards(position, new Vector3(position.x, targetPosition.y, position.z), bumpSpeed);
+
+    //                    var isSnapDistance = Vector2.Distance(position, targetPosition) <= bumpSpeed;
+    //                    if (isSnapDistance)
+    //                    {
+    //                        position = targetPosition;
+    //                        targetPosition = currentTile.position;
+    //                        stage = BumpStage.MoveAway;
+    //                    }
+    //                }
+    //                break;
+
+    //            case BumpStage.MoveAway:
+    //                {
+    //                    var delta = targetPosition - position;
+    //                    if (Mathf.Abs(delta.x) > bumpSpeed)
+    //                        position = Vector2.MoveTowards(position, new Vector3(targetPosition.x, position.y, position.z), bumpSpeed);
+    //                    else if (Mathf.Abs(delta.y) > bumpSpeed)
+    //                        position = Vector2.MoveTowards(position, new Vector3(position.x, targetPosition.y, position.z), bumpSpeed);
+
+    //                    var isSnapDistance = Vector2.Distance(position, targetPosition) <= bumpSpeed;
+    //                    if (isSnapDistance)
+    //                    {
+    //                        position = targetPosition;
+    //                        targetPosition = currentTile.position;
+    //                        stage = BumpStage.End;
+    //                    }
+    //                }
+    //                break;
+
+    //            case BumpStage.End:
+    //                {
+    //                    sortingOrder = SortingOrder.Default;
+    //                    position = targetPosition;
+    //                }
+    //                break;
+    //        }
+
+    //        yield return Wait.OneTick();
+    //    }
+
+    //    //After:
+    //    sortingOrder = SortingOrder.Default;
+    //    position = targetPosition;
+    //}
+
+    //public void ParallaxFadeOutAsync()
+    //{
+    //    if (!IsPlaying)
+    //        return;
+    //    FadeOutAsync(renderers.parallax, Increment.FivePercent, Interval.OneTick, startAlpha: 0.5f, endAlpha: 0f);
+    //}
 
 
     //public IEnumerator FadeIn(

@@ -90,8 +90,6 @@ public class GameManager : Singleton<GameManager>
 
     [HideInInspector] public CombatParticipants combatParticipants;
 
-    [HideInInspector] public ShakeIntensity shakeIntensity;
-
 
     [HideInInspector] public IQueryable<ActorInstance> players => actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
     [HideInInspector] public IQueryable<ActorInstance> enemies => actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
@@ -118,7 +116,7 @@ public class GameManager : Singleton<GameManager>
         moveSpeed = tileSize * 0.125f;
         bumpSpeed = tileSize * 0.08f;
         snapDistance = tileSize * 0.125f;
-        shakeIntensity = new ShakeIntensity(tileSize);
+        ShakeIntensity.Initialize(tileSize);
 
         board = GameObject.Find(Constants.Board).GetComponent<BoardInstance>() ?? throw new UnityException("BoardInstance is null");
         canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>() ?? throw new UnityException("Canvas2D is null");

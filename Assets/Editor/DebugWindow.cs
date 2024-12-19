@@ -402,6 +402,7 @@ public class DebugWindow : EditorWindow
         {
             case DebugOptions.DodgeTest: debugManager.DodgeTest(); break;
             case DebugOptions.SpinTest: debugManager.SpinTest(); break;
+            case DebugOptions.ShakeTest: debugManager.ShakeTest(); break;
             case DebugOptions.AlignTest: debugManager.AlignTest(); break;
             case DebugOptions.CoinTest: debugManager.CoinTest(); break;
             case DebugOptions.PortraitTest: debugManager.PortraitTest(); break;

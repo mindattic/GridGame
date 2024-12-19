@@ -238,7 +238,6 @@ public class TurnManager : ExtendedMonoBehavior
 
         #region Player attack
 
-
         //Attack each enemy between aligned players
         foreach (var enemy in pair.alignment.enemies)
         {
@@ -267,26 +266,9 @@ public class TurnManager : ExtendedMonoBehavior
             supportLineManager.DespawnAsync(pair);
         }
 
-
-        //Kill dead enemies (one at a time)
-        //var deadEnemies = pair.alignment.enemies.Where(x => x.IsDying).ToList();
-        //foreach (var enemy in deadEnemies)
-        //{
-        //    yield return enemy.Die();
-        //}
-
-        //pair.actor1.ShrinkAsync();
-        //pair.actor2.ShrinkAsync();
-
         #endregion
 
-        #region Parallax Fade Out
-
-        pair.actor1.ParallaxFadeOutAsync();
-        pair.actor2.ParallaxFadeOutAsync();
-        //pair.alignment.enemies.ForEach(x => x.ParallaxFadeOutAsync());
-
-        #endregion
+    
     }
 
     #endregion

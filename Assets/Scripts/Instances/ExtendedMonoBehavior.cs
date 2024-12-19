@@ -88,9 +88,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
     
     protected float cardPortraitSize => GameManager.instance.cardPortraitSize;
 
-    protected ShakeIntensity shakeIntensity => GameManager.instance.shakeIntensity;
-
     //Percent
+    protected float percent16 => Constants.percent16;
     protected float percent25 => Constants.percent25;
     protected float percent33 => Constants.percent33;
     protected float percent50 => Constants.percent50;

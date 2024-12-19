@@ -63,6 +63,10 @@ public class GhostManager : ExtendedMonoBehavior
         instance.Spawn(actor);
     }
 
+    
+
+
+
     public void Clear()
     {
         GameObject.FindGameObjectsWithTag(Tag.Ghost).ToList().ForEach(x => Destroy(x));

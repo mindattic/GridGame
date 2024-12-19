@@ -151,4 +151,17 @@ static class Random
         return EnumValue<WeaponType>();
     }
 
+    public static float ShakeIntensityLevel()
+    {
+        // Randomly pick between High, Medium, and Low
+        int choice = Int(1, 3); // Generate a random number between 1 and 3
+        return choice switch
+        {
+            1 => ShakeIntensity.High,
+            2 => ShakeIntensity.Medium,
+            3 => ShakeIntensity.Low,
+            _ => ShakeIntensity.Low // Default to Low as a fallback
+        };
+    }
+
 }

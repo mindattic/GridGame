@@ -1,19 +1,17 @@
-﻿public class ShakeIntensity
+﻿public static class ShakeIntensity
 {
- 
-    public float High;
-    public float Medium;
-    public float Low;
-    public float Stop;
+    private static float TileSize = 1f;
 
+    public static float High { get; private set; }
+    public static float Medium { get; private set; }
+    public static float Low { get; private set; }
+    public static float Stop { get; private set; } = 0f;
 
-    public ShakeIntensity(float maxSize)
+    public static void Initialize(float tileSize)
     {
-        High = maxSize / 6f;
-        Medium = maxSize / 12f;
-        Low = maxSize / 24f;
-        Stop = 0f;
+        TileSize = tileSize;
+        High = TileSize / 6f;
+        Medium = TileSize / 12f;
+        Low = TileSize / 24f;
     }
-
 }
-

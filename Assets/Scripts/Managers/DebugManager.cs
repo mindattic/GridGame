@@ -33,7 +33,24 @@ public class DebugManager : ExtendedMonoBehavior
     public void BumpTest()
     {
         var direction = Random.Direction;
-        StartCoroutine(Paladin.Bump(direction));
+        Paladin.BumpAsync(direction);
+    }
+
+    public void ShakeTest()
+    {
+        var intensity = Random.ShakeIntensityLevel();
+        var duration = Random.Float(Interval.HalfSecond, Interval.TwoSeconds);
+        Paladin.ShakeAsync(intensity, duration);
+    }
+
+    public void DodgeTest()
+    {
+        Paladin.DodgeAsync();
+    }
+
+    public void SpinTest()
+    {
+        Paladin.Spin360Async();
     }
 
     public void SupportLineTest()
@@ -78,18 +95,6 @@ public class DebugManager : ExtendedMonoBehavior
         StartCoroutine(_());
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     public void AttackLineTest()
     {
         var enemy1 = enemies.Skip(0).Take(1).FirstOrDefault();
@@ -99,23 +104,23 @@ public class DebugManager : ExtendedMonoBehavior
         var enemy5 = enemies.Skip(4).Take(1).FirstOrDefault();
         var enemy6 = enemies.Skip(5).Take(1).FirstOrDefault();
 
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 1))?.Relocate(new Vector2Int(1, 1));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 2))?.Relocate(new Vector2Int(1, 2));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 3))?.Relocate(new Vector2Int(1, 3));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 4))?.Relocate(new Vector2Int(1, 4));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 5))?.Relocate(new Vector2Int(1, 5));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 6))?.Relocate(new Vector2Int(1, 6));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 7))?.Relocate(new Vector2Int(1, 7));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 8))?.Relocate(new Vector2Int(1, 8));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 1))?.Teleport(new Vector2Int(1, 1));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 2))?.Teleport(new Vector2Int(1, 2));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 3))?.Teleport(new Vector2Int(1, 3));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 4))?.Teleport(new Vector2Int(1, 4));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 5))?.Teleport(new Vector2Int(1, 5));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 6))?.Teleport(new Vector2Int(1, 6));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 7))?.Teleport(new Vector2Int(1, 7));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 8))?.Teleport(new Vector2Int(1, 8));
 
-        Paladin.Relocate(new Vector2Int(3, 1));
-        enemy1?.Relocate(new Vector2Int(3, 2));
-        enemy2?.Relocate(new Vector2Int(3, 3));
-        enemy3?.Relocate(new Vector2Int(3, 4));
-        enemy4?.Relocate(new Vector2Int(3, 5));
-        enemy5?.Relocate(new Vector2Int(3, 6));
-        enemy6?.Relocate(new Vector2Int(3, 7));
-        Barbarian.Relocate(new Vector2Int(3, 8));
+        Paladin.Teleport(new Vector2Int(3, 1));
+        enemy1?.Teleport(new Vector2Int(3, 2));
+        enemy2?.Teleport(new Vector2Int(3, 3));
+        enemy3?.Teleport(new Vector2Int(3, 4));
+        enemy4?.Teleport(new Vector2Int(3, 5));
+        enemy5?.Teleport(new Vector2Int(3, 6));
+        enemy6?.Teleport(new Vector2Int(3, 7));
+        Barbarian.Teleport(new Vector2Int(3, 8));
 
 
 
@@ -400,15 +405,7 @@ public class DebugManager : ExtendedMonoBehavior
         vfxManager.SpawnAsync(vfx, Barbarian.position);
     }
 
-    public void DodgeTest()
-    {
-        StartCoroutine(Paladin.Dodge());
-    }
 
-    public void SpinTest()
-    {
-        StartCoroutine(Paladin.Spin360());
-    }
 
     public void AlignTest()
     {
@@ -419,23 +416,23 @@ public class DebugManager : ExtendedMonoBehavior
         var enemy5 = enemies.Skip(4).Take(1).FirstOrDefault();
         var enemy6 = enemies.Skip(5).Take(1).FirstOrDefault();
 
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 1))?.Relocate(new Vector2Int(1, 1));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 2))?.Relocate(new Vector2Int(1, 2));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 3))?.Relocate(new Vector2Int(1, 3));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 4))?.Relocate(new Vector2Int(1, 4));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 5))?.Relocate(new Vector2Int(1, 5));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 6))?.Relocate(new Vector2Int(1, 6));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 7))?.Relocate(new Vector2Int(1, 7));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 8))?.Relocate(new Vector2Int(1, 8));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 1))?.Teleport(new Vector2Int(1, 1));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 2))?.Teleport(new Vector2Int(1, 2));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 3))?.Teleport(new Vector2Int(1, 3));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 4))?.Teleport(new Vector2Int(1, 4));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 5))?.Teleport(new Vector2Int(1, 5));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 6))?.Teleport(new Vector2Int(1, 6));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 7))?.Teleport(new Vector2Int(1, 7));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 8))?.Teleport(new Vector2Int(1, 8));
 
-        Paladin.Relocate(new Vector2Int(3, 1));
-        enemy1?.Relocate(new Vector2Int(3, 2));
-        enemy2?.Relocate(new Vector2Int(3, 3));
-        enemy3?.Relocate(new Vector2Int(3, 4));
-        enemy4?.Relocate(new Vector2Int(3, 5));
-        enemy5?.Relocate(new Vector2Int(3, 6));
-        enemy6?.Relocate(new Vector2Int(3, 7));
-        Barbarian.Relocate(new Vector2Int(3, 8));
+        Paladin.Teleport(new Vector2Int(3, 1));
+        enemy1?.Teleport(new Vector2Int(3, 2));
+        enemy2?.Teleport(new Vector2Int(3, 3));
+        enemy3?.Teleport(new Vector2Int(3, 4));
+        enemy4?.Teleport(new Vector2Int(3, 5));
+        enemy5?.Teleport(new Vector2Int(3, 6));
+        enemy6?.Teleport(new Vector2Int(3, 7));
+        Barbarian.Teleport(new Vector2Int(3, 8));
     }
 
 
