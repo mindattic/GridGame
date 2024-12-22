@@ -10,10 +10,10 @@ public class ActorRenderers
 
     public Color opaqueColor = Colors.Solid.White;
     public Color qualityColor = Colors.Solid.White;
-    public float qualityAlphaMax = 1.0f;
+    public float qualityAlphaMax = Opacity.Opaque;
     public Color glowColor = Colors.Solid.White;
     public Color parallaxColor = Colors.Solid.White;
-    public float parallaxAlphaMax = 0.5f;
+    public float parallaxAlphaMax = Opacity.Percent50;
     public Color thumbnailColor = Colors.Solid.White;
     public Color frameColor = Colors.Solid.White;
     public Color healthBarColor = Colors.HealthBar.Green;
@@ -72,14 +72,14 @@ public class ActorRenderers
 
     public void SetQualityColor(Color color)
     {
-        qualityColor = new Color(color.r, color.g, color.b, Mathf.Clamp(color.a, 0, qualityAlphaMax));
+        qualityColor = new Color(color.r, color.g, color.b, Mathf.Clamp(color.a, Opacity.Transparent, qualityAlphaMax));
         quality.color = qualityColor;
     }
 
 
     public void SetQualityAlpha(float alpha)
     {
-        qualityColor.a = Mathf.Clamp(alpha, 0, qualityAlphaMax);
+        qualityColor.a = Mathf.Clamp(alpha, Opacity.Transparent, qualityAlphaMax);
         this.quality.color = qualityColor;
     }
 
@@ -91,7 +91,7 @@ public class ActorRenderers
 
     public void SetGlowAlpha(float alpha)
     {
-        glowColor.a = Mathf.Clamp(alpha, 0, 0.5f);
+        glowColor.a = Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Percent50);
         this.glow.color = qualityColor;
     }
 
@@ -112,7 +112,7 @@ public class ActorRenderers
 
     public void SetParallaxAlpha(float alpha)
     {
-        parallaxColor.a = Mathf.Clamp(alpha, 0, parallaxAlphaMax);
+        parallaxColor.a = Mathf.Clamp(alpha, Opacity.Transparent, parallaxAlphaMax);
         this.parallax.color = parallaxColor;
     }
 
@@ -125,7 +125,7 @@ public class ActorRenderers
 
     public void SetThumbnailAlpha(float alpha)
     {
-        thumbnailColor.a = Mathf.Clamp(alpha, 0, 1);
+        thumbnailColor.a = Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Opaque);
         thumbnail.color = thumbnailColor;
     }
 
@@ -141,7 +141,7 @@ public class ActorRenderers
 
     public void SetFrameAlpha(float alpha)
     {
-        frameColor.a = Mathf.Clamp(alpha, 0, 1);
+        frameColor.a = Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Opaque);
         frame.color = frameColor;
     }
 
@@ -152,7 +152,7 @@ public class ActorRenderers
 
     public void SetHealthBarAlpha(float alpha)
     {
-        healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Percent70));
         healthBarDrain.color = new Color(1, 0, 0, alpha);
         healthBarColor.a = alpha;
         healthBar.color = healthBarColor;   
@@ -161,7 +161,7 @@ public class ActorRenderers
 
     public void SetActionBarAlpha(float alpha)
     {
-        actionBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        actionBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Percent70));
         actionBarDrain.color = new Color(1, 0, 0, alpha);
         actionBarColor.a = alpha;
         actionBar.color = actionBarColor;
@@ -177,7 +177,7 @@ public class ActorRenderers
 
     public void SetRadialAlpha(float alpha)
     {
-        radialBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, 0, 0.7f));
+        radialBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Percent70));
         radial.color = new Color(1, 1, 1, alpha);
         radialText.color = new Color(1, 1, 1, alpha);
     }
@@ -245,7 +245,7 @@ public class ActorRenderers
 
     public void SetTurnDelayTextAlpha(float alpha)
     {
-        turnDelayColor.a = Mathf.Clamp(alpha, 0, 1);
+        turnDelayColor.a = Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Opaque);
         turnDelayText.color = turnDelayColor;
     }
 

@@ -31,8 +31,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public AttackLineManager attackLineManager;
     [HideInInspector] public DamageTextManager damageTextManager;
     [HideInInspector] public GhostManager ghostManager;
-    [HideInInspector] public PortraitManager portraitManager;
-    [HideInInspector] public OverlayManager overlayManager;
+    [HideInInspector] public PortraitManager portraitManager;  
     [HideInInspector] public TitleManager titleManager;
     [HideInInspector] public CardManager cardManager;
     [HideInInspector] public ActorManager actorManager;
@@ -45,6 +44,12 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public AudioManager audioManager;
     [HideInInspector] public VFXManager vfxManager;
     [HideInInspector] public CoinManager coinManager;
+
+    //Board
+    [HideInInspector] public BoardOverlayInstance boardOverlay;
+
+    //Canvas
+    [HideInInspector] public CanvasOverlayInstance canvasOverlay;
 
     //UI Managers
     [HideInInspector] public DebugManager debugManager;
@@ -131,7 +136,7 @@ public class GameManager : Singleton<GameManager>
         soundSource = game.GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");
         musicSource = game.GetComponents<AudioSource>()[Constants.MusicSourceIndex] ?? throw new UnityException("MusicSource is null");
 
-
+        //Game components
         databaseManager = game.GetComponent<DatabaseManager>() ?? throw new UnityException("DatabaseManager is null");
         cameraManager = game.GetComponent<CameraManager>() ?? throw new UnityException("CameraManager is null");
         profileManager = game.GetComponent<ProfileManager>() ?? throw new UnityException("ProfileManager is null");
@@ -145,7 +150,7 @@ public class GameManager : Singleton<GameManager>
         damageTextManager = game.GetComponent<DamageTextManager>() ?? throw new UnityException("DamageTextManager is null");
         ghostManager = game.GetComponent<GhostManager>() ?? throw new UnityException("GhostManager is null");
         portraitManager = game.GetComponent<PortraitManager>() ?? throw new UnityException("PortraitManager is null");
-        overlayManager = GameObject.Find(Constants.Overlay).GetComponent<OverlayManager>() ?? throw new UnityException("OverlayManager is null");
+        
         actorManager = game.GetComponent<ActorManager>() ?? throw new UnityException("ActorManager is null");
         selectedPlayerManager = game.GetComponent<SelectedPlayerManager>() ?? throw new UnityException("SelectedPlayerManager is null");
         playerManager = game.GetComponent<PlayerManager>() ?? throw new UnityException("PlayerManager is null");
@@ -159,6 +164,13 @@ public class GameManager : Singleton<GameManager>
         logManager = game.GetComponent<LogManager>() ?? throw new UnityException("LogManager is null");
         vfxManager = game.GetComponent<VFXManager>() ?? throw new UnityException("VFXManager is null");
         coinManager = game.GetComponent<CoinManager>() ?? throw new UnityException("CoinManager is null");
+
+        //Board components
+        boardOverlay = GameObject.Find(Constants.BoardOverlay).GetComponent<BoardOverlayInstance>() ?? throw new UnityException("BoardOverlayInstance is null");
+
+        //Canvas2D componenets
+        canvasOverlay = GameObject.Find(Constants.CanvasOverlay).GetComponent<CanvasOverlayInstance>() ?? throw new UnityException("CanvasOverlayInstance is null");
+
 
         combatParticipants = new CombatParticipants();
 

@@ -23,7 +23,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected Canvas canvas2D => GameManager.instance.canvas2D;
     protected Canvas canvas3D => GameManager.instance.canvas3D;
 
-    //Managers
+    //Game Managers
     protected DatabaseManager databaseManager => GameManager.instance.databaseManager;
     protected CameraManager cameraManager => GameManager.instance.cameraManager;
     protected InputManager inputManager => GameManager.instance.inputManager;
@@ -38,7 +38,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
     protected GhostManager ghostManager => GameManager.instance.ghostManager;
     protected PortraitManager portraitManager => GameManager.instance.portraitManager;
-    protected OverlayManager overlayManager => GameManager.instance.overlayManager;
+   
     protected TitleManager titleManager => GameManager.instance.titleManager;
     protected CardManager cardManager => GameManager.instance.cardManager;
     protected SelectedPlayerManager selectedPlayerManager => GameManager.instance.selectedPlayerManager;
@@ -49,6 +49,12 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected TooltipManager tooltipManager => GameManager.instance.tooltipManager;
     protected VFXManager vfxManager => GameManager.instance.vfxManager;
     protected CoinManager coinManager => GameManager.instance.coinManager;
+
+    //Board Components
+    protected BoardOverlayInstance boardOverlay => GameManager.instance.boardOverlay;
+
+    //Canvas Componenets
+    protected CanvasOverlayInstance canvasOverlay => GameManager.instance.canvasOverlay;
 
 
     protected AudioManager audioManager => GameManager.instance.audioManager;

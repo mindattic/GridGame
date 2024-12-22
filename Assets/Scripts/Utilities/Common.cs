@@ -9,10 +9,11 @@ public static class Constants
     public const string Game = "Game";
     public const string Resources = "Resources";
     public const string Board = "Board";
+    public const string BoardOverlay = "BoardOverlay";
     public const string Canvas2D = "Canvas2D";
     public const string Canvas3D = "Canvas3D";
     public const string Art = "Art";
-    public const string Overlay = "Overlay";
+    public const string CanvasOverlay = "CanvasOverlay";
     public const string Title = "Title";
     public const string Card = "Card";
     public const string TimerBar = "TimerBar";
@@ -30,6 +31,7 @@ public static class Constants
     public const float percent666 = 6.666666f;
 
     //Size
+    public static readonly Vector2 size16 = new Vector2(percent16, percent16);
     public static readonly Vector2 size25 = new Vector2(percent25, percent25);
     public static readonly Vector2 size33 = new Vector2(percent33, percent33);
     public static readonly Vector2 size50 = new Vector2(percent50, percent50);
@@ -107,6 +109,7 @@ public static class Colors
         public static Color Gold = RGBA(255, 215, 0, 128);
         public static Color White = RGBA(255, 255, 255, 128);
         public static Color Black = RGBA(0, 0, 0, 128);
+        public static Color DarkBlack = RGBA(0, 0, 0, 196);
         public static Color LightBlue = RGBA(128, 128, 255, 128);
         public static Color LightRed = RGBA(255, 128, 128, 128);
         public static Color Red = RGBA(255, 0, 0, 128);
@@ -119,6 +122,21 @@ public static class Colors
         public static Color Red = RGBA(255, 0, 0, 0);
     }
 
+}
+
+public static class Opacity
+{
+    public static float Opaque = 1f;
+    public static float Percent95 = 0.90f;
+    public static float Percent80 = 0.80f;
+    public static float Percent70 = 0.70f;
+    public static float Percent60 = 0.60f;
+    public static float Percent50 = 0.50f;
+    public static float Percent40 = 0.40f;
+    public static float Percent30 = 0.30f;
+    public static float Percent20 = 0.20f;
+    public static float Percent10 = 0.10f;
+    public static float Transparent = 0f;
 }
 
 public static class Rarity
@@ -190,7 +208,8 @@ public static class Wait
 public static class SortingOrder
 {
     public const int Min = 0;
-    public const int Default = 100;
+    public const int Default = 50;
+    public const int BoardOverlay = 100;
     public const int SupportLine = 110;
     public const int Defender = 120;
     public const int Supporter = 140;

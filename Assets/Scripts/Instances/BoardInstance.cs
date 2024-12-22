@@ -78,6 +78,10 @@ public class BoardInstance : ExtendedMonoBehavior
     [HideInInspector] public Vector2Int H5;
     [HideInInspector] public Vector2Int H6;
 
+
+    //public GameObject BoardOverlay => Shared.GetChildGameObjectByName(GameObject.Find(Constants.Board), Constants.BoardOverlay);
+
+
     private void Start()
     {
         offset = new Vector2(-(tileSize * 3) - tileSize / 2, (tileSize * columnCount));

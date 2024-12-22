@@ -19,7 +19,32 @@ public class CombatParticipants
         supportingPairs.Clear();
     }
 
+    /// <summary>
+    /// Method which is used to select all actor instances participating in combat,
+    /// if a pair is specified it selects all actors participating in an attack 
+    /// between a pair of attackers
+    /// </summary>
+    /// <param name="pair">A pair of attackers</param>
+    /// <returns></returns>
+    public List<ActorInstance> SelectAll(ActorPair pair = null)
+    {
+        if (pair != null)
+        {
+            // If a specific pair is provided, include actor1, actor2, and alignment enemies
+            return new[] { pair.actor1, pair.actor2 }
+                .Concat(pair.alignment.enemies)
+                .Distinct()
+                .ToList();
+        }
 
+        // If no pair is specified, gather actors and alignment enemies from all collections
+        return alignedPairs
+            .SelectMany(x => new[] { x.actor1, x.actor2 }.Concat(x.alignment.enemies)) // Include alignment enemies
+            .Concat(attackingPairs.SelectMany(x => new[] { x.actor1, x.actor2 }.Concat(x.alignment.enemies)))
+            .Concat(supportingPairs.SelectMany(x => new[] { x.actor1, x.actor2 }.Concat(x.alignment.enemies)))
+            .Distinct()
+            .ToList();
+    }
 
     public bool HasAlignedPair(ActorInstance actor1, ActorInstance actor2)
     {

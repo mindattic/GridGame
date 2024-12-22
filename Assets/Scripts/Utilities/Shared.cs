@@ -44,6 +44,14 @@ public class Shared
         return a > b && a < c;
     }
 
+    public static GameObject GetChildGameObjectByName(GameObject parent, string childName)
+    {
+        // Find the child Transform by name
+        Transform childTransform = parent.transform.Find(childName);
+
+        // Return the child GameObject if found, otherwise null
+        return childTransform != null ? childTransform.gameObject : null;
+    }
 
     /// <summary>
     /// Assumes sprite is facing right, if facing up subtract 90 from angle (or fix sprite)

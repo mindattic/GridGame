@@ -68,7 +68,6 @@ public class DebugWindow : EditorWindow
                 }
             };
         };
-
     }
 
     private void OnEnable()
@@ -98,7 +97,7 @@ public class DebugWindow : EditorWindow
     {
         isWindowOpen = false;
         instance = null;
-       
+
         // Unregister the update method
         EditorApplication.update -= OnEditorUpdate;
         EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
@@ -262,7 +261,7 @@ public class DebugWindow : EditorWindow
         GUILayout.Label("Actors", GUILayout.Width(Screen.width));
         GUILayout.EndHorizontal();
 
-        foreach(var x in gameManager.players.OrderBy(x => x.name))
+        foreach (var x in gameManager.players.OrderBy(x => x.name))
         {
             GUILayout.BeginHorizontal();
             string stats = $"{x.name}: HP: {x.HP}, IsActive: {x.isActiveAndEnabled}, IsAlive: {x.IsAlive}, IsDying: {x.IsDying}";
@@ -329,7 +328,7 @@ public class DebugWindow : EditorWindow
         GUILayout.BeginHorizontal();
         GUILayout.Label("Log", GUILayout.Width(Screen.width));
         GUILayout.EndHorizontal();
-  
+
         //Background color setup
         var backgroundColor = new Color(0.5f, 0.15f, 0.15f);
         var style = new GUIStyle { richText = true, padding = new RectOffset(10, 10, 10, 10) };

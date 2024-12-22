@@ -50,7 +50,7 @@ public class StageManager : ExtendedMonoBehavior
         timerBar.Reset();
         actorManager.Clear();
         actorManager.Clear();
-        overlayManager.Show();
+        canvasOverlay.Show();
         titleManager.Print($"Stage {currentStage}");
 
         List<StageActor> stageActors = new List<StageActor>();

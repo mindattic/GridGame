@@ -1,0 +1,124 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class CanvasOverlayInstance : ExtendedMonoBehavior
+{
+
+    //Variables
+    private RectTransform rectTransform;
+    private Image image;
+    float alpha = 0;
+    float maxAlpha = Opacity.Opaque;
+    Color color = new Color(0f, 0f, 0f, Opacity.Opaque);
+
+    #region Components
+
+    public string Name
+    {
+        get => name;
+        set => Name = value;
+    }
+
+    public Transform Parent
+    {
+        get => gameObject.transform.parent;
+        set => gameObject.transform.SetParent(value, true);
+    }
+
+    public Color Color
+    {
+        get => image.color;
+        set => image.color = value;
+    }
+
+    #endregion
+
+    void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+        var canvas = this.GetComponentInParent<Canvas>();
+        var sizeDeltaY = Screen.height / canvas.scaleFactor;
+        rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sizeDeltaY);
+ 
+        image = this.gameObject.GetComponent<Image>();
+        image.color = new Color(0f, 0f, 0f, Opacity.Opaque);     
+    }
+
+    void Start()
+    {
+
+    }
+
+    void Update()
+    {
+
+    }
+
+    public void Show()
+    {
+        FadeOutAsync();
+        titleManager.FadeOutAsync();
+    }
+
+
+    public void FadeInAsync()
+    {
+        StartCoroutine(FadeIn());
+    }
+
+    public IEnumerator FadeIn()
+    {
+        //Before:
+        alpha = 0;
+        color.a = alpha;
+        image.color = color;
+
+        //During:
+        while (alpha < maxAlpha)
+        {
+            alpha += Increment.OnePercent;
+            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+            color.a = alpha;
+            image.color = color;
+            yield return Wait.OneTick();
+        }
+
+        //After:
+        alpha = maxAlpha;
+        color.a = alpha;
+        image.color = color;
+    }
+
+
+    public void FadeOutAsync()
+    {
+        StartCoroutine(FadeOut());
+    }
+
+    public IEnumerator FadeOut()
+    {
+        // Before:
+        alpha = maxAlpha;
+        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+        color.a = alpha;
+        image.color = color;
+
+        // During:
+        while (alpha > 0)
+        {
+            alpha -= Increment.OnePercent;
+            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+            color.a = alpha;
+            image.color = color;
+            yield return Wait.OneTick();
+        }
+
+        // After:
+        alpha = Opacity.Transparent;
+        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+        color.a = alpha;
+        image.color = color;
+    }
+
+}

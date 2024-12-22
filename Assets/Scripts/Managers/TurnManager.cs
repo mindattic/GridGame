@@ -110,6 +110,12 @@ public class TurnManager : ExtendedMonoBehavior
             //Sort all actors to default
             actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
 
+                 
+            var allParticipants = combatParticipants.SelectAll();
+            allParticipants.ForEach(x => x.sortingOrder = SortingOrder.BoardOverlay);
+
+            boardOverlay.Show();
+
             //SpawnAsync supporting lines
             foreach (var pair in combatParticipants.supportingPairs)
             {
@@ -118,7 +124,6 @@ public class TurnManager : ExtendedMonoBehavior
                 supportLineManager.Spawn(pair);
             }
 
-            //int i = 1;
             foreach (var pair in combatParticipants.attackingPairs)
             {
                 pair.actor1.sortingOrder = SortingOrder.Attacker;
@@ -133,7 +138,12 @@ public class TurnManager : ExtendedMonoBehavior
             foreach (var pair in combatParticipants.attackingPairs)
             {
                 yield return PlayerAttack(pair);
+                var pairParticipants = combatParticipants.SelectAll(pair);
+                pairParticipants.ForEach(x => x.sortingOrder = SortingOrder.Default);
             }
+
+
+            boardOverlay.Hide();
 
             NextTurn();
         }
@@ -265,6 +275,8 @@ public class TurnManager : ExtendedMonoBehavior
             attackLineManager.DespawnAsync(pair);
             supportLineManager.DespawnAsync(pair);
         }
+
+
 
         #endregion
 
