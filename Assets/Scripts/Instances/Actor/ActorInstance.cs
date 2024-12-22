@@ -567,6 +567,8 @@ public class ActorInstance : ExtendedMonoBehavior
 
         // After:
         flags.IsMoving = false;
+
+        //TODO: Reset to above overlay if is attacking...
         //sortingOrder = SortingOrder.Default;
 
         // Reset rotation at the end
