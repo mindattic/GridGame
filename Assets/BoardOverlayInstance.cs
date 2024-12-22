@@ -6,6 +6,7 @@ public class BoardOverlayInstance : ExtendedMonoBehavior
     SpriteRenderer spriteRenderer;
 
     float alpha = 0;
+    float minAlpha = Opacity.Transparent;
     float maxAlpha = Opacity.Percent70;
     Color color = Colors.Translucent.DarkBlack;
     float increment = Increment.TwoPercent;
@@ -36,7 +37,7 @@ public class BoardOverlayInstance : ExtendedMonoBehavior
     public IEnumerator FadeIn()
     {
         //Before:
-        alpha = 0;
+        alpha = minAlpha;
         color.a = alpha;
         spriteRenderer.color = color;
         spriteRenderer.enabled = true;
@@ -45,7 +46,7 @@ public class BoardOverlayInstance : ExtendedMonoBehavior
         while (alpha < maxAlpha)
         {
             alpha += increment;
-            alpha = Mathf.Clamp(alpha, Opacity.Transparent, maxAlpha);
+            alpha = Mathf.Clamp(alpha, minAlpha, maxAlpha);
             color.a = alpha;
             spriteRenderer.color = color;
             yield return Wait.OneTick();
@@ -71,17 +72,17 @@ public class BoardOverlayInstance : ExtendedMonoBehavior
         spriteRenderer.color = color;
 
         // During:
-        while (alpha > Opacity.Transparent)
+        while (alpha > minAlpha)
         {
             alpha -= increment;
-            alpha = Mathf.Clamp(alpha, Opacity.Transparent, maxAlpha);
+            alpha = Mathf.Clamp(alpha, minAlpha, maxAlpha);
             color.a = alpha;
             spriteRenderer.color = color;
             yield return Wait.OneTick();
         }
 
         // After:
-        alpha = Opacity.Transparent;
+        alpha = minAlpha;
         color.a = alpha;
         spriteRenderer.color = color;
         spriteRenderer.enabled = false;

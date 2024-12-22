@@ -567,7 +567,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
         // After:
         flags.IsMoving = false;
-        sortingOrder = SortingOrder.Default;
+        //sortingOrder = SortingOrder.Default;
 
         // Reset rotation at the end
         transform.localRotation = Quaternion.Euler(baseRotation);
@@ -995,10 +995,15 @@ public class ActorInstance : ExtendedMonoBehavior
         float ticks = 0f;
         float duration = Interval.TenTicks;
 
-        stats.PreviousHP = stats.HP;
-        stats.HP -= damage;
-        stats.HP = Mathf.Clamp(stats.HP, 0, stats.MaxHP);
-        UpdateHealthBar();
+        bool isInvincible = (IsEnemy && isEnemyInvincible) || (IsPlayer && isPlayerInvincible);
+        if (!isInvincible)
+        {
+            stats.PreviousHP = stats.HP;
+            stats.HP -= damage;
+            stats.HP = Mathf.Clamp(stats.HP, 0, stats.MaxHP);
+            UpdateHealthBar();
+        }
+        
 
         var text = Math.Abs(damage).ToString();
         damageTextManager.Spawn(text, position);

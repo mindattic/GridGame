@@ -13,6 +13,9 @@ public class SupportLineInstance : ExtendedMonoBehavior
     public float alpha = 0;
     private Vector3 originActor;
     private Vector3 terminalActor;
+
+
+    private float minAlpha = Opacity.Transparent;
     private float maxAlpha = Opacity.Percent50;
     private Color baseColor = Shared.RGBA(48, 161, 49, 0);
     private Color color;
@@ -78,7 +81,7 @@ public class SupportLineInstance : ExtendedMonoBehavior
             while (alpha < maxAlpha)
             {
                 alpha += Increment.OnePercent;
-                alpha = Mathf.Clamp(alpha, Opacity.Transparent, maxAlpha);
+                alpha = Mathf.Clamp(alpha, minAlpha, maxAlpha);
                 color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
                 lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
                 lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
@@ -92,10 +95,10 @@ public class SupportLineInstance : ExtendedMonoBehavior
 
     public IEnumerator Despawn()
     {
-        while (alpha > 0)
+        while (alpha > minAlpha)
         {
             alpha -= Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, Opacity.Transparent, maxAlpha);
+            alpha = Mathf.Clamp(alpha, minAlpha, maxAlpha);
             color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;

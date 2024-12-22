@@ -17,6 +17,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //Flags
     protected bool showActorNameTag => GameManager.instance.showActorNameTag;
     protected bool showActorFrame => GameManager.instance.showActorFrame;
+    protected bool isPlayerInvincible => GameManager.instance.isPlayerInvincible;
+    protected bool isEnemyInvincible => GameManager.instance.isEnemyInvincible;
 
 
     //Canvases

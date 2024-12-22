@@ -43,7 +43,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         //TODO: SaveProfile Card display...
         actors.ForEach(x => x.renderers.SetSelectionBoxEnabled(isEnabled: false));
         focusedActor = actor;
-        focusedActor.sortingOrder = SortingOrder.Max;
+        //focusedActor.sortingOrder = SortingOrder.Max;
         focusedActor.renderers.SetSelectionBoxEnabled(isEnabled: true);
 
         //Assign mouse relativeOffset (how off center was selectionBox)
@@ -64,7 +64,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         if (!HasSelectedPlayer)
         {
             focusedActor.position = focusedActor.currentTile.position;
-            focusedActor.sortingOrder = SortingOrder.Default;
+            //focusedActor.sortingOrder = SortingOrder.Default;
             //cardManager.DespawnAll();
         }
 
@@ -94,8 +94,8 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         Unfocus();
         turnManager.currentPhase = TurnPhase.Move;
-        actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
-        selectedPlayer.sortingOrder = SortingOrder.Max;
+        //actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
+        //selectedPlayer.sortingOrder = SortingOrder.Max;
 
         audioManager.Play("Select");
 

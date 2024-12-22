@@ -7,19 +7,16 @@ public class PortraitInstance : ExtendedMonoBehavior
 {
     //Variables
 
-    [SerializeField] public ActorInstance actor;
+    //[SerializeField] public ActorInstance actor;
     [SerializeField] public Direction direction;
     [SerializeField] public float startTime;
     [SerializeField] public Vector2 startPosition;
     [SerializeField] public AnimationCurve slide;
 
-    #region Components
+    float minAlpha = Opacity.Transparent;
+    float maxAlpha = Opacity.Opaque;
 
-    public string Name
-    {
-        get => name;
-        set => Name = value;
-    }
+    #region Components
 
     public Transform parent
     {
@@ -141,27 +138,27 @@ public class PortraitInstance : ExtendedMonoBehavior
 
     public IEnumerator Dissolve()
     {
-        var alpha = 1.0f;
+        var alpha = maxAlpha;
         spriteRenderer.color = new Color(1, 1, 1, alpha);
 
-        while (alpha > 0)
+        while (alpha > minAlpha)
         {
           
             //Shake
             position = startPosition;
-            position += new Vector3(Random.Range(ShakeIntensity.Medium), Random.Range(ShakeIntensity.Medium), 1);
+            position += new Vector3(Random.Range(ShakeIntensity.Medium), Random.Range(ShakeIntensity.Medium), 1); //TODO: Use Shake Coroutine
 
             //Shrink
             transform.localScale *= 0.99f;
 
             //Fade
             alpha -= Increment.OnePercent;
+            alpha = Mathf.Clamp(alpha, minAlpha, maxAlpha);
             spriteRenderer.color = new Color(1, 1, 1, alpha);
             yield return Wait.OneTick();
         }
 
         Destroy(this.gameObject);
-
     }
 
 

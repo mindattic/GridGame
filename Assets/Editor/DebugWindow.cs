@@ -87,6 +87,8 @@ public class DebugWindow : EditorWindow
         //Set initial flags
         gameManager.showActorNameTag = false;
         gameManager.showActorFrame = false;
+        gameManager.isPlayerInvincible = false;
+        gameManager.isEnemyInvincible = false;
 
         //Register the update method
         EditorApplication.update += OnEditorUpdate;
@@ -162,24 +164,34 @@ public class DebugWindow : EditorWindow
 
         GUILayout.BeginHorizontal();
 
-        //Show Actor Name Tag checkbox
-        isChecked = EditorGUILayout.Toggle("Show Actor Name Tag", gameManager.showActorNameTag);
+        //Show Actor Name Tags checkbox
+        isChecked = EditorGUILayout.Toggle("Show Actor Name Tags?", gameManager.showActorNameTag, GUILayout.Width(Screen.width * 0.25f));
         if (gameManager.showActorNameTag != isChecked)
         {
             gameManager.showActorNameTag = isChecked;
             gameManager.actors.ForEach(x => x.renderers.SetNameTagEnabled(isChecked));
         }
 
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-
-        //Show Actor Frame checkbox
-        isChecked = EditorGUILayout.Toggle("Show Actor Frame", gameManager.showActorFrame);
+        //Show Actor Frames checkbox
+        isChecked = EditorGUILayout.Toggle("Show Actor Frames?", gameManager.showActorFrame, GUILayout.Width(Screen.width * 0.25f));
         if (gameManager.showActorFrame != isChecked)
         {
             gameManager.showActorFrame = isChecked;
             gameManager.actors.ForEach(x => x.renderers.SetFrameEnabled(isChecked));
         }
+
+        //GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+
+        //Are Players Invinciple? checkbox
+        isChecked = EditorGUILayout.Toggle("Are Players Invincible?", gameManager.isPlayerInvincible, GUILayout.Width(Screen.width * 0.25f));
+        if (gameManager.isPlayerInvincible != isChecked)
+            gameManager.isPlayerInvincible = isChecked;
+
+        //Are Enemies Invinciple? checkbox
+        isChecked = EditorGUILayout.Toggle("Are Enemies Invincible?", gameManager.isEnemyInvincible, GUILayout.Width(Screen.width * 0.25f));
+        if (gameManager.isEnemyInvincible != isChecked)
+            gameManager.isEnemyInvincible = isChecked;
 
         GUILayout.EndHorizontal();
         GUILayout.Space(10);

@@ -31,19 +31,19 @@ public class GhostInstance : ExtendedMonoBehavior
     }
 
 
-    public GhostRenderers Renderers = new GhostRenderers();
+    public GhostRenderers renderers = new GhostRenderers();
 
 
     public Sprite thumbnail
     {
-        get => Renderers.thumbnail.sprite;
-        set => Renderers.thumbnail.sprite = value;
+        get => renderers.thumbnail.sprite;
+        set => renderers.thumbnail.sprite = value;
     }
 
     public Sprite frame
     {
-        get => Renderers.frame.sprite;
-        set => Renderers.frame.sprite = value;
+        get => renderers.frame.sprite;
+        set => renderers.frame.sprite = value;
     }
 
 
@@ -51,8 +51,8 @@ public class GhostInstance : ExtendedMonoBehavior
     {
         set
         {
-            Renderers.thumbnail.sortingOrder = value;
-            Renderers.frame.sortingOrder = value + 1;
+            renderers.thumbnail.sortingOrder = value;
+            renderers.frame.sortingOrder = value + 1;
         }
     }
 
@@ -62,11 +62,11 @@ public class GhostInstance : ExtendedMonoBehavior
     public void Spawn(ActorInstance actor)
     {
         //TODO: Fix later...
-        this.Renderers.frame.enabled = false;
+        this.renderers.frame.enabled = false;
 
-        this.Renderers.thumbnail.size = new Vector2(tileSize, tileSize);
+        this.renderers.thumbnail.size = new Vector2(tileSize, tileSize);
         //this.renderers.frame.size = new Vector2(tileSize, tileSize);
-        this.Renderers.thumbnail.color = Colors.RGBA(255, 255, 255, 64);
+        this.renderers.thumbnail.color = Colors.RGBA(255, 255, 255, 64);
         //this.renderers.frame.color = Shared.ColorRGBA(255, 255, 255, 100);
         this.Position = actor.position;
         StartCoroutine(FadeOut());
@@ -76,8 +76,8 @@ public class GhostInstance : ExtendedMonoBehavior
 
     private void Awake()
     {
-        Renderers.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
-        Renderers.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
+        renderers.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();
+        renderers.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
     }
 
     // Play is called before the first frame update
@@ -99,16 +99,16 @@ public class GhostInstance : ExtendedMonoBehavior
 
     private IEnumerator FadeOut()
     {
-        float alpha = Renderers.thumbnail.color.a;
-        Color color = Renderers.thumbnail.color;
+        float alpha = renderers.thumbnail.color.a;
+        Color color = renderers.thumbnail.color;
 
         while (alpha > 0)
         {
             alpha -= Increment.FivePercent;
             alpha = Mathf.Max(alpha, 0f);
             color.a = alpha;
-            Renderers.thumbnail.color = color;
-            Renderers.frame.color = color;
+            renderers.thumbnail.color = color;
+            renderers.frame.color = color;
 
             yield return Wait.For(Interval.FiveTicks);
         }

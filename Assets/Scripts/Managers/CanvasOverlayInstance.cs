@@ -9,6 +9,7 @@ public class CanvasOverlayInstance : ExtendedMonoBehavior
     private RectTransform rectTransform;
     private Image image;
     float alpha = 0;
+    float minAlpha = Opacity.Transparent;
     float maxAlpha = Opacity.Opaque;
     Color color = new Color(0f, 0f, 0f, Opacity.Opaque);
 
@@ -70,7 +71,7 @@ public class CanvasOverlayInstance : ExtendedMonoBehavior
     public IEnumerator FadeIn()
     {
         //Before:
-        alpha = 0;
+        alpha = minAlpha;
         color.a = alpha;
         image.color = color;
 
@@ -78,7 +79,7 @@ public class CanvasOverlayInstance : ExtendedMonoBehavior
         while (alpha < maxAlpha)
         {
             alpha += Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, Opacity.Transparent, maxAlpha);
+            alpha = Mathf.Clamp(alpha, minAlpha, maxAlpha);
             color.a = alpha;
             image.color = color;
             yield return Wait.OneTick();
@@ -107,14 +108,14 @@ public class CanvasOverlayInstance : ExtendedMonoBehavior
         while (alpha > 0)
         {
             alpha -= Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, Opacity.Transparent, maxAlpha);
+            alpha = Mathf.Clamp(alpha, minAlpha, maxAlpha);
             color.a = alpha;
             image.color = color;
             yield return Wait.OneTick();
         }
 
         // After:
-        alpha = Opacity.Transparent;
+        alpha = minAlpha;
         color.a = alpha;
         image.color = color;
     }
