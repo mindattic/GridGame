@@ -7674,7 +7674,6 @@ MonoBehaviour:
   damageTextManager: {fileID: 0}
   ghostManager: {fileID: 0}
   portraitManager: {fileID: 0}
-  overlayManager: {fileID: 0}
   titleManager: {fileID: 0}
   cardManager: {fileID: 0}
   actorManager: {fileID: 0}
@@ -7687,7 +7686,8 @@ MonoBehaviour:
   audioManager: {fileID: 0}
   vfxManager: {fileID: 0}
   coinManager: {fileID: 0}
-  boardOverlayManager: {fileID: 0}
+  boardOverlay: {fileID: 0}
+  canvasOverlay: {fileID: 0}
   debugManager: {fileID: 0}
   consoleManager: {fileID: 0}
   logManager: {fileID: 0}
@@ -8273,7 +8273,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1754065672}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
