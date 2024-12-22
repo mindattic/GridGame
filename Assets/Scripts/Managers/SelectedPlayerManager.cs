@@ -111,7 +111,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         timerBar.Play();
 
-        actorManager.CheckAccumulateAP();
+        actorManager.AccumulateAP();
         StartCoroutine(selectedPlayer.MoveTowardCursor());
 
     }
@@ -135,7 +135,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         closestTile.spriteRenderer.color = Colors.Translucent.White;
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = closestTile.position;
-        selectedPlayer.sortingOrder = SortingOrder.Default;
+        //selectedPlayer.sortingOrder = SortingOrder.Default;
         //selectedPlayer.SetStatus(Status.None);
         previousSelectedPlayer = selectedPlayer;
         selectedPlayer = null;

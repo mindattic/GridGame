@@ -1286,17 +1286,11 @@ MonoBehaviour:
   previousLocation: {x: 0, y: 0}
   destination: {x: 0, y: 0, z: 0}
   team: 2
-  ap: 0
-  maxAp: 100
-  sp: 0
-  apMax: -1
   spawnDelay: -1
-  turnDelay: 0
   wiggleSpeed: 0
   wiggleAmplitude: 15
-  healthDrainDelay: 2
-  healthDrainAmount: 0.2
   initialHealthBarScale: {x: 0, y: 0, z: 0}
+  initialActionBarScale: {x: 0, y: 0, z: 0}
   glowCurve:
     serializedVersion: 2
     m_Curve:
@@ -1486,7 +1480,7 @@ GameObject:
   - component: {fileID: 2431816385811217007}
   - component: {fileID: 3529825922162758375}
   m_Layer: 8
-  m_Name: AttackRadialText
+  m_Name: RadialText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1663,7 +1657,7 @@ GameObject:
   - component: {fileID: 2030446323126041855}
   - component: {fileID: 1575524956348287626}
   m_Layer: 8
-  m_Name: AttackRadialBack
+  m_Name: RadialBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1751,7 +1745,7 @@ GameObject:
   - component: {fileID: 2237794249722743513}
   - component: {fileID: 6221499127480695323}
   m_Layer: 8
-  m_Name: NameTag
+  m_Name: NameTagText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2275,7 +2269,7 @@ GameObject:
   - component: {fileID: 4387771652226431711}
   - component: {fileID: 8167028270065546572}
   m_Layer: 8
-  m_Name: TurnDelay
+  m_Name: TurnDelayText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2537,7 +2531,7 @@ GameObject:
   - component: {fileID: 399400551369190834}
   - component: {fileID: 1885660289781437484}
   m_Layer: 8
-  m_Name: AttackRadialFill
+  m_Name: RadialFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

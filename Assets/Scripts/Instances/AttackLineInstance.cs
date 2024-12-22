@@ -123,7 +123,7 @@ namespace Game.Instances
                 while (alpha < maxAlpha)
                 {
                     alpha += Increment.OnePercent;
-                    alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+                    alpha = Mathf.Clamp(alpha, Opacity.Transparent, maxAlpha);
                     color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
                     lineRenderer.startColor = color;
                     lineRenderer.endColor = color;
@@ -154,7 +154,7 @@ namespace Game.Instances
             while (alpha > 0)
             {
                 alpha -= Increment.OnePercent;
-                alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+                alpha = Mathf.Clamp(alpha, Opacity.Transparent, maxAlpha);
                 color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
                 lineRenderer.startColor = color;
                 lineRenderer.endColor = color;

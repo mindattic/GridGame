@@ -31,7 +31,7 @@ public class PortraitManager : ExtendedMonoBehavior
         instance.sortingOrder = sortingOrder++;
         instance.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
         instance.transform.localScale = new Vector3(0.5f, 0.5f, 1);
-        instance.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
+        instance.spriteRenderer.color = new Color(1, 1, 1, Opacity.Percent90);
         instance.actor = actor;
         instance.direction = direction;
         instance.startTime = Time.time;
@@ -52,10 +52,10 @@ public class PortraitManager : ExtendedMonoBehavior
         var instance = prefab.GetComponent<PortraitInstance>();
         instance.name = $"Portrait_{Guid.NewGuid()}";
         instance.parent = board.transform;
-        instance.sortingOrder = 100;
+        instance.sortingOrder = SortingOrder.Max;
         instance.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
         instance.transform.localScale = new Vector3(0.5f, 0.5f, 1);
-        instance.spriteRenderer.color = new Color(1, 1, 1, 0.9f);
+        instance.spriteRenderer.color = new Color(1, 1, 1, Opacity.Percent90);
         instance.actor = actor;
         instance.position = actor.position;
         instance.startPosition = actor.position;

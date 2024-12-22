@@ -55,29 +55,29 @@ public class ActorInstance : ExtendedMonoBehavior
 
     private void Awake()
     {
-        renderers.opaque = gameObject.transform.GetChild(ActorLayer.Opaque).GetComponent<SpriteRenderer>();
-        renderers.quality = gameObject.transform.GetChild(ActorLayer.Quality).GetComponent<SpriteRenderer>();
-        renderers.glow = gameObject.transform.GetChild(ActorLayer.Glow).GetComponent<SpriteRenderer>();
-        renderers.parallax = gameObject.transform.GetChild(ActorLayer.Parallax).GetComponent<SpriteRenderer>();
-        renderers.thumbnail = gameObject.transform.GetChild(ActorLayer.Thumbnail).GetComponent<SpriteRenderer>();
-        renderers.frame = gameObject.transform.GetChild(ActorLayer.Frame).GetComponent<SpriteRenderer>();
-        renderers.statusIcon = gameObject.transform.GetChild(ActorLayer.StatusIcon).GetComponent<SpriteRenderer>();
-        renderers.healthBarBack = gameObject.transform.GetChild(ActorLayer.HealthBarBack).GetComponent<SpriteRenderer>();
-        renderers.healthBarDrain = gameObject.transform.GetChild(ActorLayer.HealthBarDrain).GetComponent<SpriteRenderer>();
-        renderers.healthBar = gameObject.transform.GetChild(ActorLayer.HealthBar).GetComponent<SpriteRenderer>();
-        renderers.healthBarText = gameObject.transform.GetChild(ActorLayer.HealthBarText).GetComponent<TextMeshPro>();
-        renderers.actionBarBack = gameObject.transform.GetChild(ActorLayer.ActionBarBack).GetComponent<SpriteRenderer>();
-        renderers.actionBar = gameObject.transform.GetChild(ActorLayer.ActionBar).GetComponent<SpriteRenderer>();
-        renderers.actionBarDrain = gameObject.transform.GetChild(ActorLayer.ActionBarDrain).GetComponent<SpriteRenderer>();
-        renderers.actionBarText = gameObject.transform.GetChild(ActorLayer.ActionBarText).GetComponent<TextMeshPro>();
-        renderers.mask = gameObject.transform.GetChild(ActorLayer.Mask).GetComponent<SpriteMask>();
-        renderers.radialBack = gameObject.transform.GetChild(ActorLayer.RadialBack).GetComponent<SpriteRenderer>();
-        renderers.radial = gameObject.transform.GetChild(ActorLayer.RadialFill).GetComponent<SpriteRenderer>();
-        renderers.radialText = gameObject.transform.GetChild(ActorLayer.RadialText).GetComponent<TextMeshPro>();
-        renderers.turnDelayText = gameObject.transform.GetChild(ActorLayer.TurnDelayText).GetComponent<TextMeshPro>();
-        renderers.nameTagText = gameObject.transform.GetChild(ActorLayer.NameTagText).GetComponent<TextMeshPro>();
-        renderers.weaponIcon = gameObject.transform.GetChild(ActorLayer.WeaponIcon).GetComponent<SpriteRenderer>();
-        renderers.selectionBox = gameObject.transform.GetChild(ActorLayer.SelectionBox).GetComponent<SpriteRenderer>();
+        renderers.opaque = gameObject.transform.GetChildByName(ActorLayer.Name.Opaque).GetComponent<SpriteRenderer>();
+        renderers.quality = gameObject.transform.GetChildByName(ActorLayer.Name.Quality).GetComponent<SpriteRenderer>();
+        renderers.glow = gameObject.transform.GetChildByName(ActorLayer.Name.Glow).GetComponent<SpriteRenderer>();
+        renderers.parallax = gameObject.transform.GetChildByName(ActorLayer.Name.Parallax).GetComponent<SpriteRenderer>();
+        renderers.thumbnail = gameObject.transform.GetChildByName(ActorLayer.Name.Thumbnail).GetComponent<SpriteRenderer>();
+        renderers.frame = gameObject.transform.GetChildByName(ActorLayer.Name.Frame).GetComponent<SpriteRenderer>();
+        renderers.statusIcon = gameObject.transform.GetChildByName(ActorLayer.Name.StatusIcon).GetComponent<SpriteRenderer>();
+        renderers.healthBarBack = gameObject.transform.GetChildByName(ActorLayer.Name.HealthBarBack).GetComponent<SpriteRenderer>();
+        renderers.healthBarDrain = gameObject.transform.GetChildByName(ActorLayer.Name.HealthBarDrain).GetComponent<SpriteRenderer>();
+        renderers.healthBar = gameObject.transform.GetChildByName(ActorLayer.Name.HealthBar).GetComponent<SpriteRenderer>();
+        renderers.healthBarText = gameObject.transform.GetChildByName(ActorLayer.Name.HealthBarText).GetComponent<TextMeshPro>();
+        renderers.actionBarBack = gameObject.transform.GetChildByName(ActorLayer.Name.ActionBarBack).GetComponent<SpriteRenderer>();
+        renderers.actionBar = gameObject.transform.GetChildByName(ActorLayer.Name.ActionBar).GetComponent<SpriteRenderer>();
+        renderers.actionBarDrain = gameObject.transform.GetChildByName(ActorLayer.Name.ActionBarDrain).GetComponent<SpriteRenderer>();
+        renderers.actionBarText = gameObject.transform.GetChildByName(ActorLayer.Name.ActionBarText).GetComponent<TextMeshPro>();
+        renderers.mask = gameObject.transform.GetChildByName(ActorLayer.Name.Mask).GetComponent<SpriteMask>();
+        renderers.radialBack = gameObject.transform.GetChildByName(ActorLayer.Name.RadialBack).GetComponent<SpriteRenderer>();
+        renderers.radial = gameObject.transform.GetChildByName(ActorLayer.Name.RadialFill).GetComponent<SpriteRenderer>();
+        renderers.radialText = gameObject.transform.GetChildByName(ActorLayer.Name.RadialText).GetComponent<TextMeshPro>();
+        renderers.turnDelayText = gameObject.transform.GetChildByName(ActorLayer.Name.TurnDelayText).GetComponent<TextMeshPro>();
+        renderers.nameTagText = gameObject.transform.GetChildByName(ActorLayer.Name.NameTagText).GetComponent<TextMeshPro>();
+        renderers.weaponIcon = gameObject.transform.GetChildByName(ActorLayer.Name.WeaponIcon).GetComponent<SpriteRenderer>();
+        renderers.selectionBox = gameObject.transform.GetChildByName(ActorLayer.Name.SelectionBox).GetComponent<SpriteRenderer>();
 
         //HealthBar = new ActorHealthBar(GetGameObjectByLayer(ActorLayer.HealthBarBack), GetGameObjectByLayer(ActorLayer.HealthBar));
         //Thumbnail = new ActorThumbnail(GetGameObjectByLayer(ActorLayer.Thumbnail));
@@ -146,8 +146,8 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public Vector3 thumbnailPosition
     {
-        get => gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position;
-        set => gameObject.transform.GetChild(ActorLayer.Thumbnail).gameObject.transform.position = value;
+        get => gameObject.transform.GetChildByName("Thumbnail").gameObject.transform.position;
+        set => gameObject.transform.GetChildByName("Thumbnail").gameObject.transform.position = value;
     }
 
     public Quaternion rotation
@@ -177,28 +177,28 @@ public class ActorInstance : ExtendedMonoBehavior
         }
         set
         {
-            renderers.opaque.sortingOrder = value + ActorLayer.Opaque;
-            renderers.quality.sortingOrder = value + ActorLayer.Quality;
-            renderers.parallax.sortingOrder = value + ActorLayer.Parallax;
-            renderers.glow.sortingOrder = value + ActorLayer.Glow;
-            renderers.thumbnail.sortingOrder = value + ActorLayer.Thumbnail;
-            renderers.frame.sortingOrder = value + ActorLayer.Frame;
-            renderers.statusIcon.sortingOrder = value + ActorLayer.StatusIcon;
-            renderers.healthBarBack.sortingOrder = value + ActorLayer.HealthBarBack;
-            renderers.healthBarDrain.sortingOrder = value + ActorLayer.HealthBarDrain;
-            renderers.healthBar.sortingOrder = value + ActorLayer.HealthBar;
-            renderers.healthBarText.sortingOrder = value + ActorLayer.HealthBarText;
-            renderers.actionBarBack.sortingOrder = value + ActorLayer.ActionBarBack;
-            renderers.actionBar.sortingOrder = value + ActorLayer.ActionBar;
-            renderers.actionBarText.sortingOrder = value + ActorLayer.ActionBarText;
-            renderers.mask.sortingOrder = value + ActorLayer.Mask;
-            renderers.radialBack.sortingOrder = value + ActorLayer.RadialBack;
-            renderers.radial.sortingOrder = value + ActorLayer.RadialFill;
-            renderers.radialText.sortingOrder = value + ActorLayer.RadialText;
-            renderers.selectionBox.sortingOrder = value + ActorLayer.SelectionBox;
-            renderers.turnDelayText.sortingOrder = value + ActorLayer.TurnDelayText;
-            renderers.nameTagText.sortingOrder = value + ActorLayer.NameTagText;
-            renderers.weaponIcon.sortingOrder = value + ActorLayer.WeaponIcon;
+            renderers.opaque.sortingOrder = value + ActorLayer.Value.Opaque;
+            renderers.quality.sortingOrder = value + ActorLayer.Value.Quality;
+            renderers.parallax.sortingOrder = value + ActorLayer.Value.Parallax;
+            renderers.glow.sortingOrder = value + ActorLayer.Value.Glow;
+            renderers.thumbnail.sortingOrder = value + ActorLayer.Value.Thumbnail;
+            renderers.frame.sortingOrder = value + ActorLayer.Value.Frame;
+            renderers.statusIcon.sortingOrder = value + ActorLayer.Value.StatusIcon;
+            renderers.healthBarBack.sortingOrder = value + ActorLayer.Value.HealthBarBack;
+            renderers.healthBarDrain.sortingOrder = value + ActorLayer.Value.HealthBarDrain;
+            renderers.healthBar.sortingOrder = value + ActorLayer.Value.HealthBar;
+            renderers.healthBarText.sortingOrder = value + ActorLayer.Value.HealthBarText;
+            renderers.actionBarBack.sortingOrder = value + ActorLayer.Value.ActionBarBack;
+            renderers.actionBar.sortingOrder = value + ActorLayer.Value.ActionBar;
+            renderers.actionBarText.sortingOrder = value + ActorLayer.Value.ActionBarText;
+            renderers.mask.sortingOrder = value + ActorLayer.Value.Mask;
+            renderers.radialBack.sortingOrder = value + ActorLayer.Value.RadialBack;
+            renderers.radial.sortingOrder = value + ActorLayer.Value.RadialFill;
+            renderers.radialText.sortingOrder = value + ActorLayer.Value.RadialText;           
+            renderers.turnDelayText.sortingOrder = value + ActorLayer.Value.TurnDelayText;
+            renderers.nameTagText.sortingOrder = value + ActorLayer.Value.NameTagText;
+            renderers.weaponIcon.sortingOrder = value + ActorLayer.Value.WeaponIcon;
+            renderers.selectionBox.sortingOrder = value + ActorLayer.Value.SelectionBox;
         }
     }
 
@@ -1135,10 +1135,10 @@ public class ActorInstance : ExtendedMonoBehavior
         while (alpha > 0f)
         {
             alpha -= Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0f, 1f);
+            alpha = Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Opaque);
             renderers.SetAlpha(alpha);
 
-            if (IsEnemy && !hasSpawnedCoins && alpha < 5f)
+            if (IsEnemy && !hasSpawnedCoins && alpha < Opacity.Percent10)
             {
                 hasSpawnedCoins = true;
 

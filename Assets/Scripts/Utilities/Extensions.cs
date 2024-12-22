@@ -19,6 +19,24 @@ public static class StringExtensions
     }
 }
 
+public static class TransformExtensions
+{
+    public static Transform GetChildByName(this Transform parent, string childName)
+    {
+        foreach (Transform child in parent)
+        {
+            if (child.name == childName)
+                return child;
+
+            // Recursively search in the child hierarchy
+            Transform found = child.GetChildByName(childName);
+            if (found != null)
+                return found;
+        }
+        return null; // Return null if no matching child is found
+    }
+}
+
 public static class EnumExtensions
 {
     public static T Next<T>(this T src) where T : struct

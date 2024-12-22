@@ -78,7 +78,7 @@ public class CanvasOverlayInstance : ExtendedMonoBehavior
         while (alpha < maxAlpha)
         {
             alpha += Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+            alpha = Mathf.Clamp(alpha, Opacity.Transparent, maxAlpha);
             color.a = alpha;
             image.color = color;
             yield return Wait.OneTick();
@@ -100,7 +100,6 @@ public class CanvasOverlayInstance : ExtendedMonoBehavior
     {
         // Before:
         alpha = maxAlpha;
-        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
         color.a = alpha;
         image.color = color;
 
@@ -108,7 +107,7 @@ public class CanvasOverlayInstance : ExtendedMonoBehavior
         while (alpha > 0)
         {
             alpha -= Increment.OnePercent;
-            alpha = Mathf.Clamp(alpha, 0, maxAlpha);
+            alpha = Mathf.Clamp(alpha, Opacity.Transparent, maxAlpha);
             color.a = alpha;
             image.color = color;
             yield return Wait.OneTick();
@@ -116,7 +115,6 @@ public class CanvasOverlayInstance : ExtendedMonoBehavior
 
         // After:
         alpha = Opacity.Transparent;
-        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
         color.a = alpha;
         image.color = color;
     }

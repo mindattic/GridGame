@@ -55,7 +55,7 @@ public static class Constants
 
 public static class Tag
 {
-    public static string Board = "board";
+    public static string Board = "Board";
     public static string Tile = "Tile";
     public static string Actor = "Actor";
     public static string SupportLine = "SupportLine";
@@ -127,7 +127,7 @@ public static class Colors
 public static class Opacity
 {
     public static float Opaque = 1f;
-    public static float Percent95 = 0.90f;
+    public static float Percent90 = 0.90f;
     public static float Percent80 = 0.80f;
     public static float Percent70 = 0.70f;
     public static float Percent60 = 0.60f;
