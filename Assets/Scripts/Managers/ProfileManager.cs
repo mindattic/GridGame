@@ -77,7 +77,7 @@ public class ProfileManager : ExtendedMonoBehavior
         }
 
         sw.Stop();
-        Debug.LogWarning($"Loaded current save file in {sw.ElapsedMilliseconds} ms.");
+        //Debug.LogWarning($"Loaded current save file in {sw.ElapsedMilliseconds} ms.");
     }
 
     /// <summary>

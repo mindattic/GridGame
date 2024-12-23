@@ -1485,7 +1485,8 @@ public class ActorInstance : ExtendedMonoBehavior
             }
         }
 
-        StartCoroutine(_());
+        if (gameObject.activeInHierarchy)
+            StartCoroutine(_());
     }
 
     public void CheckWeaponWiggle()
