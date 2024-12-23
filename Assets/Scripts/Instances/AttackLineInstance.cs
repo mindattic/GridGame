@@ -46,7 +46,7 @@ namespace Game.Instances
             thickness = tileSize * 0.02f;
             alpha = 0f;
             maxAlpha = 1f;
-            baseColor = Shared.RGBA(100, 195, 200, 0);
+            baseColor = ColorHelper.RGBA(100, 195, 200, 0);
 
             lineRenderer = gameObject.GetComponent<LineRenderer>();
             lineRenderer.sortingOrder = SortingOrder.AttackLine;

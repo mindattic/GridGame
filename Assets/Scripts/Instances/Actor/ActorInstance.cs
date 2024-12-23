@@ -280,22 +280,22 @@ public class ActorInstance : ExtendedMonoBehavior
             renderers.SetParallaxAlpha(0);
             renderers.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
             renderers.SetFrameColor(quality.Color);
-            renderers.SetHealthBarColor(Colors.HealthBar.Green);
-            renderers.SetActionBarColor(Colors.ActionBar.Blue);
+            renderers.SetHealthBarColor(ColorHelper.HealthBar.Green);
+            renderers.SetActionBarColor(ColorHelper.ActionBar.Blue);
             renderers.SetSelectionBoxEnabled(isEnabled: false);
             vfx.Attack = resourceManager.VisualEffect("Blue_Slash_01");
         }
         else if (IsEnemy)
         {
-            renderers.SetQualityColor(Colors.Solid.Black);
-            renderers.SetGlowColor(Colors.Solid.Red);
+            renderers.SetQualityColor(ColorHelper.Solid.Black);
+            renderers.SetGlowColor(ColorHelper.Solid.Red);
             renderers.SetParallaxSprite(resourceManager.Seamless("RedFire"));
             renderers.SetParallaxMaterial(resourceManager.Material("EnemyParallax", thumbnail.texture));
             renderers.SetParallaxAlpha(0);
             renderers.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
-            renderers.SetFrameColor(Colors.Solid.Red);
-            renderers.SetHealthBarColor(Colors.HealthBar.Green);
-            renderers.SetActionBarColor(Colors.ActionBar.Blue);
+            renderers.SetFrameColor(ColorHelper.Solid.Red);
+            renderers.SetHealthBarColor(ColorHelper.HealthBar.Green);
+            renderers.SetActionBarColor(ColorHelper.ActionBar.Blue);
             renderers.SetSelectionBoxEnabled(isEnabled: false);
             vfx.Attack = resourceManager.VisualEffect("Double_Claw");
         }

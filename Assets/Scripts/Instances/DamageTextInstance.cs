@@ -48,7 +48,7 @@ public class DamageTextInstance : ExtendedMonoBehavior
 
         //Before:
         float alpha = 1;
-        Color color = Colors.Solid.White;
+        Color color = ColorHelper.Solid.White;
         Vector3 initialPosition = transform.position;
         float timer = 0f;
         float duration = 0.25f; // Time for one complete back-and-forth loop

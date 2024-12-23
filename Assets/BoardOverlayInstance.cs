@@ -8,7 +8,7 @@ public class BoardOverlayInstance : ExtendedMonoBehavior
     float alpha = 0;
     float minAlpha = Opacity.Transparent;
     float maxAlpha = Opacity.Percent70;
-    Color color = Colors.Translucent.DarkBlack;
+    Color color = ColorHelper.Translucent.DarkBlack;
     float increment = Increment.TwoPercent;
 
     private void Awake()

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Game.Models;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,8 +56,6 @@ public static class Constants
     public const int MusicSourceIndex = 1;
 }
 
-
-
 public static class Tag
 {
     public static string Board = "Board";
@@ -76,11 +75,129 @@ public static class Tag
     public static string VFX = "VFX";
 }
 
-public static class Colors
+public static class ScreenHelper
 {
-    public static Color RGB(float r, float g, float b) => Shared.RGB(r, g, b);
-    public static Color RGBA(float r, float g, float b, float a) => Shared.RGBA(r, g, b, a);
+    public static RectFloat ScreenInWorldUnits
+    {
+        get
+        {
+            Vector2 topRightCorner = new Vector2(1f, 1f);
+            Vector2 edgeVector = Camera.main.ViewportToWorldPoint(topRightCorner);
+            var width = edgeVector.x * 2f;
+            var height = edgeVector.y * 2f;
+            return new RectFloat(0, width, height, 0);
+        }
+    }
 
+    public static RectFloat ScreenInPixels
+    {
+        get
+        {
+            return new RectFloat(0, Screen.width, Screen.height, 0);
+        }
+    }
+
+    public static Vector3 ConvertWorldToScreenPosition(Vector3 position)
+    {
+        return Camera.main.WorldToScreenPoint(position);
+    }
+
+    public static Vector3 ConvertScreenToWorldPosition(Vector3 position)
+    {
+        return Camera.main.ScreenToWorldPoint(position);
+    }
+}
+
+public static class GameObjectHelper
+{
+    public static GameObject GetChildGameObjectByName(GameObject parent, string childName)
+    {
+        // Find the child Transform by name
+        Transform childTransform = parent.transform.Find(childName);
+
+        // Return the child GameObject if found, otherwise null
+        return childTransform != null ? childTransform.gameObject : null;
+    }
+}
+
+
+public static class RotationHelper
+{
+    /// <summary>
+    /// Assumes sprite is facing right, if facing up subtract 90 from angle (or fix sprite)
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static Quaternion ByDirection(Vector3 target, Vector3 source)
+    {
+        var direction = target - source;
+        var angle = Vector2.SignedAngle(Vector2.right, direction);
+        var targetRotation = new Vector3(0, 0, angle);
+        var rotation = Quaternion.Euler(targetRotation);
+        return rotation;
+    }
+}
+
+public static class AlignmentHelper
+{
+    public static bool IsInRange(float a, float b, float range)
+    {
+        return a <= b + range && a >= b - range;
+    }
+
+    public static bool IsBetween(float a, float b, float c)
+    {
+        return a > b && a < c;
+    }
+
+    public static Alignment Assign(ActorInstance actor1, ActorInstance actor2, Axis axis)
+    {
+
+        ActorInstance highestActor = axis == Axis.Vertical ? actor1.location.y > actor2.location.y ? actor1 : actor2 : actor1.location.x > actor2.location.x ? actor1 : actor2;
+        ActorInstance lowestActor = (axis == Axis.Vertical) ? actor1.location.y < actor2.location.y ? actor1 : actor2 : actor1.location.x < actor2.location.x ? actor1 : actor2;
+        float ceiling = axis == Axis.Vertical ? highestActor.location.y : highestActor.location.x;
+        float floor = axis == Axis.Vertical ? lowestActor.location.y : lowestActor.location.x;
+
+        var alignment = new Alignment();
+
+        if (axis == Axis.Vertical)
+        {
+            alignment.enemies = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsEnemy && x.IsSameColumn(actor1.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
+            alignment.players = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsPlayer && x.IsSameColumn(actor1.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
+            alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && actor1.IsSameColumn(x.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
+        }
+        else if (axis == Axis.Horizontal)
+        {
+            alignment.enemies = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsEnemy && x.IsSameRow(actor1.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
+            alignment.players = GameManager.instance.actors.Where(x => x.IsPlaying && x.IsPlayer && x.IsSameRow(actor1.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
+            alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && actor1.IsSameRow(x.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
+        }
+
+        return alignment;
+    }
+
+}
+
+public static class ColorHelper
+{
+    public static Color RGB(float r, float g, float b)
+    {
+        return new Color(
+            Mathf.Clamp(r, 0, 255) / 255,
+            Mathf.Clamp(g, 0, 255) / 255,
+            Mathf.Clamp(b, 0, 255) / 255,
+            255 / 255);
+    }
+
+    public static Color RGBA(float r, float g, float b, float a)
+    {
+        return new Color(
+            Mathf.Clamp(r, 0, 255) / 255,
+            Mathf.Clamp(g, 0, 255) / 255,
+            Mathf.Clamp(b, 0, 255) / 255,
+            Mathf.Clamp(a, 0, 255) / 255);
+    }
 
     public static class Solid
     {
@@ -125,8 +242,9 @@ public static class Colors
         public static Color White = RGBA(255, 255, 255, 0);
         public static Color Red = RGBA(255, 0, 0, 0);
     }
-
 }
+
+
 
 public static class Opacity
 {
@@ -145,12 +263,12 @@ public static class Opacity
 
 public static class Rarity
 {
-    public static Quality Junk = new Quality("Junk", Shared.RGB(128, 128, 128));
-    public static Quality Common = new Quality("Constants", Shared.RGB(255, 255, 255));
-    public static Quality Uncommon = new Quality("Uncommon", Shared.RGB(30, 255, 0));
-    public static Quality Rare = new Quality("Rare", Shared.RGB(0, 112, 221));
-    public static Quality Epic = new Quality("Epic", Shared.RGB(163, 53, 238));
-    public static Quality Legendary = new Quality("Legendary", Shared.RGB(255, 128, 0));
+    public static Quality Junk = new Quality("Junk", ColorHelper.RGB(128, 128, 128));
+    public static Quality Common = new Quality("Constants", ColorHelper.RGB(255, 255, 255));
+    public static Quality Uncommon = new Quality("Uncommon", ColorHelper.RGB(30, 255, 0));
+    public static Quality Rare = new Quality("Rare", ColorHelper.RGB(0, 112, 221));
+    public static Quality Epic = new Quality("Epic", ColorHelper.RGB(163, 53, 238));
+    public static Quality Legendary = new Quality("Legendary", ColorHelper.RGB(255, 128, 0));
 }
 
 public static class Interval
@@ -235,7 +353,7 @@ public static class NameFormat
 
 }
 
-public static class FileIO
+public static class FileHelper
 {
     public static class Folders
     {

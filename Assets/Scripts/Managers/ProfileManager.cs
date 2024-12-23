@@ -30,7 +30,7 @@ public class ProfileManager : ExtendedMonoBehavior
         }
 
         //Retrieve existing profile folders
-        var folders = Directory.GetDirectories(FileIO.Folders.Profiles).ToList();
+        var folders = Directory.GetDirectories(FileHelper.Folders.Profiles).ToList();
 
         //If no profile folders found...
         if (folders == null || folders.Count < 1)
@@ -44,13 +44,13 @@ public class ProfileManager : ExtendedMonoBehavior
             }
 
             //Retrieve newly created profile folders
-            folders = Directory.GetDirectories(FileIO.Folders.Profiles).ToList();
+            folders = Directory.GetDirectories(FileHelper.Folders.Profiles).ToList();
         }
 
         //Validate profile folders exist
         if (folders == null || folders.Count < 1)
         {
-            Debug.LogError($"Failed to retrieve any profile folders from: {FileIO.Folders.Profiles}");
+            Debug.LogError($"Failed to retrieve any profile folders from: {FileHelper.Folders.Profiles}");
             return;
         }
 
@@ -168,7 +168,7 @@ public class ProfileManager : ExtendedMonoBehavior
         else if (typeof(T) == typeof(Party))
             fileName = "party.json";
 
-        var folder = Path.Combine(FileIO.Folders.Profiles, guid);
+        var folder = Path.Combine(FileHelper.Folders.Profiles, guid);
         var filePath = Path.Combine(folder, fileName);
         if (!File.Exists(filePath))
         {
@@ -260,17 +260,17 @@ public class ProfileManager : ExtendedMonoBehavior
     private bool HasValidFolderStructure()
     {
         //Verify profiles folder can be created
-        if (string.IsNullOrWhiteSpace(FileIO.Folders.Profiles))
+        if (string.IsNullOrWhiteSpace(FileHelper.Folders.Profiles))
         {
-            Debug.LogError($"FileIO.Folders.Profiles is null or whitespace.");
+            Debug.LogError($"FileHelper.Folders.Profiles is null or whitespace.");
             return false;
         }
 
         //Create profiles folder (if applicable)
-        if (!Directory.Exists(FileIO.Folders.Profiles))
-            Directory.CreateDirectory(FileIO.Folders.Profiles);
+        if (!Directory.Exists(FileHelper.Folders.Profiles))
+            Directory.CreateDirectory(FileHelper.Folders.Profiles);
 
-        return Directory.Exists(FileIO.Folders.Profiles);
+        return Directory.Exists(FileHelper.Folders.Profiles);
     }
 
 

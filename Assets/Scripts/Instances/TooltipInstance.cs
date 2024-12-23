@@ -58,7 +58,7 @@ public class TooltipInstance : ExtendedMonoBehavior
         {
             //Before:
             float alpha = 1f;
-            Color color = Colors.Solid.White;
+            Color color = ColorHelper.Solid.White;
             textMesh.color = color;
             spriteRenderer.color = color;
 
@@ -75,8 +75,8 @@ public class TooltipInstance : ExtendedMonoBehavior
             }
 
             //After:
-            textMesh.color = Colors.Transparent.White;
-            spriteRenderer.color = Colors.Transparent.White;
+            textMesh.color = ColorHelper.Transparent.White;
+            spriteRenderer.color = ColorHelper.Transparent.White;
         }
 
         StartCoroutine(_());

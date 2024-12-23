@@ -66,7 +66,7 @@ public class TitleManager : ExtendedMonoBehavior
 
     public void Print(string text)
     {
-        Print(text, Colors.Solid.White);
+        Print(text, ColorHelper.Solid.White);
     }
 
     //public IEnumerator FadeIn()

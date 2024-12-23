@@ -103,14 +103,14 @@ public class GameManager : Singleton<GameManager>
 
         //DEBUG: Need to add buffer so tile doesn't align to left-most and right-most edge,
         //however this causes actors to not align properly after moving for some reason
-        var oneSixth = Shared.ScreenInWorldUnits.Width / 6;
+        var oneSixth = ScreenHelper.ScreenInWorldUnits.Width / 6;
         //var tenPercentOfOneSixth = oneSixth * 0.1f;
         //var fivePercentOfOneSixth = oneSixth * 0.05f;
 
         tileSize = oneSixth; 
         tileScale = new Vector3(tileSize, tileSize, 1f);
 
-        cardPortraitSize = Shared.ScreenInPixels.Width / 2;
+        cardPortraitSize = ScreenHelper.ScreenInPixels.Width / 2;
 
         cursorSpeed = tileSize * 0.5f;
         swapSpeed = tileSize * 0.1666f;

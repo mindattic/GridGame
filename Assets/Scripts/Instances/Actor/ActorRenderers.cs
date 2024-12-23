@@ -8,19 +8,19 @@ public class ActorRenderers
 {
     public ActorRenderers() { }
 
-    public Color opaqueColor = Colors.Solid.White;
-    public Color qualityColor = Colors.Solid.White;
+    public Color opaqueColor = ColorHelper.Solid.White;
+    public Color qualityColor = ColorHelper.Solid.White;
     public float qualityAlphaMax = Opacity.Opaque;
-    public Color glowColor = Colors.Solid.White;
-    public Color parallaxColor = Colors.Solid.White;
+    public Color glowColor = ColorHelper.Solid.White;
+    public Color parallaxColor = ColorHelper.Solid.White;
     public float parallaxAlphaMax = Opacity.Percent50;
-    public Color thumbnailColor = Colors.Solid.White;
-    public Color frameColor = Colors.Solid.White;
-    public Color healthBarColor = Colors.HealthBar.Green;
-    public Color actionBarColor = Colors.ActionBar.Blue;
-    public Color turnDelayColor = Colors.Solid.Red;
-    public Color weaponIconColor = Colors.Solid.White;
-    public Color selectionColor = Colors.Solid.White;
+    public Color thumbnailColor = ColorHelper.Solid.White;
+    public Color frameColor = ColorHelper.Solid.White;
+    public Color healthBarColor = ColorHelper.HealthBar.Green;
+    public Color actionBarColor = ColorHelper.ActionBar.Blue;
+    public Color turnDelayColor = ColorHelper.Solid.Red;
+    public Color weaponIconColor = ColorHelper.Solid.White;
+    public Color selectionColor = ColorHelper.Solid.White;
 
     public SpriteRenderer opaque;
     public SpriteRenderer quality;
@@ -313,10 +313,10 @@ public class ActorRenderers
 
         switch (cycle)
         {
-            case ActionBarColorCycle.Phase1: actionBarColor = Colors.ActionBar.Yellow; break;
-            case ActionBarColorCycle.Phase2: actionBarColor = Colors.ActionBar.Pink; break;
-            case ActionBarColorCycle.Phase3: actionBarColor = Colors.ActionBar.White; break;
-            case ActionBarColorCycle.Phase4: actionBarColor = Colors.ActionBar.Blue; break;
+            case ActionBarColorCycle.Phase1: actionBarColor = ColorHelper.ActionBar.Yellow; break;
+            case ActionBarColorCycle.Phase2: actionBarColor = ColorHelper.ActionBar.Pink; break;
+            case ActionBarColorCycle.Phase3: actionBarColor = ColorHelper.ActionBar.White; break;
+            case ActionBarColorCycle.Phase4: actionBarColor = ColorHelper.ActionBar.Blue; break;
         }
 
         if (timer >= 1f)

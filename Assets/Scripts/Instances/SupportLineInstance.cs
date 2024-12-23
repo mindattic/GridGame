@@ -15,7 +15,7 @@ public class SupportLineInstance : ExtendedMonoBehavior
     private Vector3 terminalActor;
     private float minAlpha = Opacity.Transparent;
     private float maxAlpha = Opacity.Percent50;
-    private Color color = Shared.RGBA(48, 161, 49, 0);
+    private Color color = ColorHelper.RGBA(48, 161, 49, 0);
     private LineRenderer lineRenderer;
 
 

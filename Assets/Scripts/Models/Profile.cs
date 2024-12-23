@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using static FileIO;
+using static FileHelper;
 using Global = Game.Models.ProfileGlobalSection;
 using Party = Game.Models.ProfilePartySection;
 using Stage = Game.Models.ProfileStageSection;

@@ -104,7 +104,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         //Assign boardLocation and boardPosition
         var closestTile = Geometry.GetClosestTile(selectedPlayer.position);
-        closestTile.spriteRenderer.color = Colors.Translucent.White;
+        closestTile.spriteRenderer.color = ColorHelper.Translucent.White;
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = closestTile.position;
         //selectedPlayer.sortingOrder = SortingOrder.Default;

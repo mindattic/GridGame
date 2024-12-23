@@ -79,7 +79,7 @@ public class BoardInstance : ExtendedMonoBehavior
     [HideInInspector] public Vector2Int H6;
 
 
-    //public GameObject BoardOverlay => Shared.GetChildGameObjectByName(GameObject.Find(Constants.Board), Constants.BoardOverlay);
+    //public GameObject BoardOverlay => ScreenHelper.GetChildGameObjectByName(GameObject.Find(Constants.Board), Constants.BoardOverlay);
 
 
     private void Start()

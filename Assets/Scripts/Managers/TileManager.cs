@@ -9,7 +9,7 @@ public class TileManager : ExtendedMonoBehavior
     {
         foreach (var tile in tiles)
         {
-            tile.spriteRenderer.color = Colors.Translucent.White;
+            tile.spriteRenderer.color = ColorHelper.Translucent.White;
         }
     }
 }
