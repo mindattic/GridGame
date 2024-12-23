@@ -301,6 +301,15 @@ public static class Increment
     public static float ActionBarDrainAmount = 1f;
 }
 
+public static class Intermission
+{
+    public static class After
+    {
+        public static float LastEnemyDeath = 1f;
+    }
+  
+}
+
 
 public static class Wait
 {

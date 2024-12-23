@@ -1041,8 +1041,8 @@ public class ActorInstance : ExtendedMonoBehavior
         ShrinkAsync();
         Shake(ShakeIntensity.Stop);
 
-        if (IsPlayer && IsDying)
-            yield return Die();
+        //if (IsPlayer && IsDying)
+        //    yield return Die();
     }
 
     public void TakeDamageAsync(AttackResult attack)

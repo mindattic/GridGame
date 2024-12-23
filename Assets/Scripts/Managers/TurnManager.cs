@@ -473,33 +473,14 @@ public class TurnManager : ExtendedMonoBehavior
                     }
                 }
 
-                foreach (var enemy in readyEnemies)
+                //TODO: Put player.Die here so that it resolves after attacks...
+                var dyingPlayers = actors.Where(x => x.IsDying).ToList();
+                foreach(var player in dyingPlayers)
                 {
-                    //enemy.AssignActionWait();
-                    //enemy.ap = 0;
-                    //enemy.UpdateActionBar();
-
-                    enemy.ResetActionBar();
+                    yield return player.Die();
                 }
 
-                //var deadPlayers = actors.Where(x => x.IsDying).ToList();
-                //if (deadPlayers != null && deadPlayers.Count > 0)
-                //{
-                //    //Die dead enemies (one at a time)
-                //    foreach (var player in deadPlayers)
-                //    {
-                //        yield return player.Die();
-                //    }
-
-                //    //Fade out (all at once)
-                //    //foreach (var player in deadPlayers)
-                //    //{
-                //    //    player.Destroy();
-                //    //}
-                //}
-
-
-
+                readyEnemies.ForEach(x => x.ResetActionBar());
             }
 
 
