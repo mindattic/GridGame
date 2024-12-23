@@ -48,43 +48,55 @@ public class DebugWindow : EditorWindow
         instance = null;
         isWindowOpen = false;
     }
-
     private static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
         if (state != PlayModeStateChange.EnteredPlayMode)
             return;
 
-        //Close the window when entering play mode
+        // Close the window when entering play mode
         if (isWindowOpen)
             CloseWindow();
 
-        EditorApplication.delayCall += () =>
+        DelayCall(() =>
         {
-            EditorApplication.delayCall += () =>
-            {
-                if (EditorApplication.isPlaying) // Ensure still in play mode
-                {
-                    ShowWindow();
-                }
-            };
-        };
+            ShowWindow();
+        });
     }
 
     private void OnEnable()
     {
+        DelayCall(() =>
+        {
+            Initialize();
+        });
+    }
+
+    private static void DelayCall(Action action)
+    {
+        EditorApplication.delayCall += () =>
+        {
+            if (EditorApplication.isPlaying)
+            {
+                action();
+            }
+        };
+    }
+
+    private void Initialize()
+    {
         instance = this;
         isWindowOpen = true;
+        lastUpdateTime = DateTime.Now;
 
-        //Create references to manager instances
         gameManager = GameManager.instance;
-        debugManager = GameManager.instance.debugManager;
-        consoleManager = GameManager.instance.consoleManager;
-        turnManager = GameManager.instance.turnManager;
-        stageManager = GameManager.instance.stageManager;
-        logManager = GameManager.instance.logManager;
-        profileManager = GameManager.instance.profileManager;
+        debugManager = gameManager.debugManager;
+        consoleManager = gameManager.consoleManager;
+        turnManager = gameManager.turnManager;
+        stageManager = gameManager.stageManager;
+        logManager = gameManager.logManager;
+        profileManager = gameManager.profileManager;
 
-        //Set initial flags
+        // Set initial flags
         debugManager.showActorNameTag = false;
         debugManager.showActorFrame = false;
         debugManager.isPlayerInvincible = false;
@@ -92,9 +104,9 @@ public class DebugWindow : EditorWindow
         debugManager.isTimerInfinite = false;
         debugManager.isEnemyStunned = false;
 
-        //Register the update method
+        //Register update method
         EditorApplication.update += OnEditorUpdate;
-        lastUpdateTime = DateTime.Now;
+       
     }
 
     private void OnDisable()
@@ -102,9 +114,10 @@ public class DebugWindow : EditorWindow
         isWindowOpen = false;
         instance = null;
 
-        // Unregister the update method
+        //Unregister events
         EditorApplication.update -= OnEditorUpdate;
         EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+        EditorApplication.delayCall = null;
     }
 
     private void OnEditorUpdate()
@@ -123,7 +136,9 @@ public class DebugWindow : EditorWindow
     private void OnGUI()
     {
         //Check abort state
-        if (debugManager == null
+        if (!EditorApplication.isPlaying
+            || gameManager == null
+            || debugManager == null
             || consoleManager == null
             || turnManager == null
             || stageManager == null
@@ -181,7 +196,7 @@ public class DebugWindow : EditorWindow
             debugManager.showActorFrame = onCheckChanged;
             gameManager.actors.ForEach(x => x.renderers.SetFrameEnabled(onCheckChanged));
         }
-   
+
         //Are Players Invinciple? checkbox
         onCheckChanged = EditorGUILayout.Toggle("Are Players Invincible?", debugManager.isPlayerInvincible, GUILayout.Width(Screen.width * 0.25f));
         if (debugManager.isPlayerInvincible != onCheckChanged)
