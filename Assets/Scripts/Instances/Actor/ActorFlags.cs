@@ -10,5 +10,12 @@ namespace Assets.Scripts.Behaviors.Actor
     {
         public bool IsMoving;
         public bool IsSwapping;
+        public bool IsAttacking;
+        public bool IsDefending;
+        public bool IsSupporting;
+
+
+
+
     }
 }

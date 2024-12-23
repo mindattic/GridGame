@@ -33,6 +33,8 @@ public class ActorInstance : ExtendedMonoBehavior
     public int spawnDelay = -1;
     //public int turnDelay = 0;
 
+    public int attackingPairCount = 0;
+    public int supportingPairCount = 0;
 
     public float wiggleSpeed;
     public float wiggleAmplitude = 15f; // Amplitude (difference from -45 degrees)
@@ -110,7 +112,7 @@ public class ActorInstance : ExtendedMonoBehavior
     public bool IsEnemy => team.Equals(Team.Enemy);
     public bool IsFocusedPlayer => HasFocusedActor && Equals(focusedActor);
     public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
-    public bool IsAttacking => combatParticipants.attackingPairs.Any(x => x.actor1 == this || x.actor2 == this);
+    //public bool SetAttacking => combatParticipants.attackingPairs.Any(x => x.actor1 == this || x.actor2 == this);
     public bool HasLocation => location != board.NowhereLocation;
     public bool HasReachedDestination => position == destination;
     public bool IsNorthEdge => location.y == 1;
@@ -194,7 +196,7 @@ public class ActorInstance : ExtendedMonoBehavior
             renderers.mask.sortingOrder = value + ActorLayer.Value.Mask;
             renderers.radialBack.sortingOrder = value + ActorLayer.Value.RadialBack;
             renderers.radial.sortingOrder = value + ActorLayer.Value.RadialFill;
-            renderers.radialText.sortingOrder = value + ActorLayer.Value.RadialText;           
+            renderers.radialText.sortingOrder = value + ActorLayer.Value.RadialText;
             renderers.turnDelayText.sortingOrder = value + ActorLayer.Value.TurnDelayText;
             renderers.nameTagText.sortingOrder = value + ActorLayer.Value.NameTagText;
             renderers.weaponIcon.sortingOrder = value + ActorLayer.Value.WeaponIcon;
@@ -289,7 +291,7 @@ public class ActorInstance : ExtendedMonoBehavior
         }
 
         renderers.SetNameTagText(name);
-        renderers.SetNameTagEnabled(isEnabled: showActorNameTag);
+        renderers.SetNameTagEnabled(isEnabled: debugManager.showActorNameTag);
 
 
         UpdateHealthBar();
@@ -356,7 +358,7 @@ public class ActorInstance : ExtendedMonoBehavior
     public IEnumerator GainAP()
     {
         //Check abort state
-        if (!HasSelectedPlayer || !IsEnemy || !IsPlaying || IsReady)
+        if (debugManager.isEnemyStunned || !HasSelectedPlayer || !IsEnemy || !IsPlaying || IsReady)
             yield break;
 
         //Before:
@@ -631,7 +633,9 @@ public class ActorInstance : ExtendedMonoBehavior
         flags.IsSwapping = false;
         scale = tileScale;
         transform.rotation = Quaternion.identity; //Reset rotation to default
-        sortingOrder = SortingOrder.Default;
+
+        //TODO: Reset to above overlay if is attacking or defending...
+        //sortingOrder = SortingOrder.Default;
 
         //TODO: Add enemy attacking here so that enemy attacks once they reach their intended destination...
 
@@ -997,7 +1001,7 @@ public class ActorInstance : ExtendedMonoBehavior
         float ticks = 0f;
         float duration = Interval.TenTicks;
 
-        bool isInvincible = (IsEnemy && isEnemyInvincible) || (IsPlayer && isPlayerInvincible);
+        bool isInvincible = (IsEnemy && debugManager.isEnemyInvincible) || (IsPlayer && debugManager.isPlayerInvincible);
         if (!isInvincible)
         {
             stats.PreviousHP = stats.HP;
@@ -1005,7 +1009,7 @@ public class ActorInstance : ExtendedMonoBehavior
             stats.HP = Mathf.Clamp(stats.HP, 0, stats.MaxHP);
             UpdateHealthBar();
         }
-        
+
 
         var text = Math.Abs(damage).ToString();
         damageTextManager.Spawn(text, position);
@@ -1067,7 +1071,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
             while (stats.HP < stats.PreviousHP)
             {
-                stats.PreviousHP -= Increment.ActionBarDrainAmount;
+                stats.PreviousAP -= Increment.ActionBarDrainAmount;
                 x = GetScaleX(stats.PreviousAP);
                 renderers.actionBarDrain.transform.localScale = new Vector3(x, initialActionBarScale.y, initialActionBarScale.z);
                 yield return Wait.OneTick();
@@ -1118,8 +1122,8 @@ public class ActorInstance : ExtendedMonoBehavior
             x = GetScaleX(stats.PreviousHP);
             renderers.healthBarDrain.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
 
-            if (IsDying)
-                DieAsync();
+            //if (IsDying)
+            //DieAsync();
         }
 
         StartCoroutine(_());
@@ -1408,7 +1412,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public void CheckReady()
     {
-        if (IsReady)
+        if (IsReady || IsDying)
             return;
 
         IEnumerator _()
@@ -1544,8 +1548,34 @@ public class ActorInstance : ExtendedMonoBehavior
 
 
 
+    public void SetAttacking()
+    {
+        flags.IsAttacking = true;
+        attackingPairCount++;
+        sortingOrder = SortingOrder.Attacker;
+    }
+
+    public void SetDefending()
+    {
+        flags.IsDefending = true;
+        sortingOrder = SortingOrder.Defender;
+    }
+
+    public void SetSupporting()
+    {
+        flags.IsSupporting = true;
+        supportingPairCount++;
+        sortingOrder = SortingOrder.Supporter;
+    }
 
 
+    public void SetDefault()
+    {
+        flags.IsAttacking = false;
+        flags.IsDefending = false;
+        flags.IsSupporting = false;
+        sortingOrder = SortingOrder.Default;
+    }
 
 
 
@@ -2020,9 +2050,6 @@ public class ActorInstance : ExtendedMonoBehavior
     //    renderers.idle.transform.boardPosition = pos;
     //    renderers.idle.transform.angularRotation = rot;
     //}
-
-
-
 
 
 

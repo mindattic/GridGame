@@ -85,10 +85,12 @@ public class DebugWindow : EditorWindow
         profileManager = GameManager.instance.profileManager;
 
         //Set initial flags
-        gameManager.showActorNameTag = false;
-        gameManager.showActorFrame = false;
-        gameManager.isPlayerInvincible = false;
-        gameManager.isEnemyInvincible = false;
+        debugManager.showActorNameTag = false;
+        debugManager.showActorFrame = false;
+        debugManager.isPlayerInvincible = false;
+        debugManager.isEnemyInvincible = false;
+        debugManager.isTimerInfinite = false;
+        debugManager.isEnemyStunned = false;
 
         //Register the update method
         EditorApplication.update += OnEditorUpdate;
@@ -160,38 +162,48 @@ public class DebugWindow : EditorWindow
 
     private void RenderCheckboxes()
     {
-        bool isChecked;
+        bool onCheckChanged;
 
         GUILayout.BeginHorizontal();
 
         //Show Actor Name Tags checkbox
-        isChecked = EditorGUILayout.Toggle("Show Actor Name Tags?", gameManager.showActorNameTag, GUILayout.Width(Screen.width * 0.25f));
-        if (gameManager.showActorNameTag != isChecked)
+        onCheckChanged = EditorGUILayout.Toggle("Show Actor Name Tags?", debugManager.showActorNameTag, GUILayout.Width(Screen.width * 0.25f));
+        if (debugManager.showActorNameTag != onCheckChanged)
         {
-            gameManager.showActorNameTag = isChecked;
-            gameManager.actors.ForEach(x => x.renderers.SetNameTagEnabled(isChecked));
+            debugManager.showActorNameTag = onCheckChanged;
+            gameManager.actors.ForEach(x => x.renderers.SetNameTagEnabled(onCheckChanged));
         }
 
         //Show Actor Frames checkbox
-        isChecked = EditorGUILayout.Toggle("Show Actor Frames?", gameManager.showActorFrame, GUILayout.Width(Screen.width * 0.25f));
-        if (gameManager.showActorFrame != isChecked)
+        onCheckChanged = EditorGUILayout.Toggle("Show Actor Frames?", debugManager.showActorFrame, GUILayout.Width(Screen.width * 0.25f));
+        if (debugManager.showActorFrame != onCheckChanged)
         {
-            gameManager.showActorFrame = isChecked;
-            gameManager.actors.ForEach(x => x.renderers.SetFrameEnabled(isChecked));
+            debugManager.showActorFrame = onCheckChanged;
+            gameManager.actors.ForEach(x => x.renderers.SetFrameEnabled(onCheckChanged));
         }
-
-        //GUILayout.EndHorizontal();
-        //GUILayout.BeginHorizontal();
-
+   
         //Are Players Invinciple? checkbox
-        isChecked = EditorGUILayout.Toggle("Are Players Invincible?", gameManager.isPlayerInvincible, GUILayout.Width(Screen.width * 0.25f));
-        if (gameManager.isPlayerInvincible != isChecked)
-            gameManager.isPlayerInvincible = isChecked;
+        onCheckChanged = EditorGUILayout.Toggle("Are Players Invincible?", debugManager.isPlayerInvincible, GUILayout.Width(Screen.width * 0.25f));
+        if (debugManager.isPlayerInvincible != onCheckChanged)
+            debugManager.isPlayerInvincible = onCheckChanged;
 
         //Are Enemies Invinciple? checkbox
-        isChecked = EditorGUILayout.Toggle("Are Enemies Invincible?", gameManager.isEnemyInvincible, GUILayout.Width(Screen.width * 0.25f));
-        if (gameManager.isEnemyInvincible != isChecked)
-            gameManager.isEnemyInvincible = isChecked;
+        onCheckChanged = EditorGUILayout.Toggle("Are Enemies Invincible?", debugManager.isEnemyInvincible, GUILayout.Width(Screen.width * 0.25f));
+        if (debugManager.isEnemyInvincible != onCheckChanged)
+            debugManager.isEnemyInvincible = onCheckChanged;
+
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+
+        //Is Infinite Timer? checkbox
+        onCheckChanged = EditorGUILayout.Toggle("Is Timer Infinite?", debugManager.isTimerInfinite, GUILayout.Width(Screen.width * 0.25f));
+        if (debugManager.isTimerInfinite != onCheckChanged)
+            debugManager.isTimerInfinite = onCheckChanged;
+
+        //Is Enemy Stunned? checkbox
+        onCheckChanged = EditorGUILayout.Toggle("Is Enemy Stunned?", debugManager.isEnemyStunned, GUILayout.Width(Screen.width * 0.25f));
+        if (debugManager.isEnemyStunned != onCheckChanged)
+            debugManager.isEnemyStunned = onCheckChanged;
 
         GUILayout.EndHorizontal();
         GUILayout.Space(10);

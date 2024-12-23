@@ -1,3 +1,4 @@
+using Assets.Scripts.Models;
 using Assets.Scripts.Utilities;
 using System;
 using System.Collections;
@@ -86,75 +87,6 @@ public class TurnManager : ExtendedMonoBehavior
 
     #region Player Attack Methods
 
-    public void CheckPlayerAttack()
-    {
-        combatParticipants.Clear();
-
-        bool hasAlignedPlayers = AssignAlignedPlayers();
-        if (!hasAlignedPlayers)
-        {
-            NextTurn();
-            return;
-        }
-
-        bool hasCombatParticipants = AssignCombatParticipants();
-        if (!hasCombatParticipants)
-        {
-            NextTurn();
-            return;
-        }
-
-        IEnumerator _()
-        {
-
-            //Sort all actors to default
-            actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
-
-                 
-            var allParticipants = combatParticipants.SelectAll();
-            allParticipants.ForEach(x => x.sortingOrder = SortingOrder.BoardOverlay);
-
-            boardOverlay.Show();
-
-            //SpawnAsync supporting lines
-            foreach (var pair in combatParticipants.supportingPairs)
-            {
-                pair.actor1.sortingOrder = SortingOrder.Supporter;
-                pair.actor2.sortingOrder = SortingOrder.Supporter;
-                supportLineManager.Spawn(pair);
-            }
-
-            foreach (var pair in combatParticipants.attackingPairs)
-            {
-                pair.actor1.sortingOrder = SortingOrder.Attacker;
-                pair.actor2.sortingOrder = SortingOrder.Attacker;
-                //tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.boardPosition);
-                //tooltipManager.Spawn($"Strength {i++}", pair.actor1.currentTile.boardPosition);
-                pair.alignment.enemies.ForEach(x => x.sortingOrder = SortingOrder.Defender);
-                attackLineManager.Spawn(pair);
-            }
-
-            //Iterate through player attacks
-            foreach (var pair in combatParticipants.attackingPairs)
-            {
-                yield return PlayerAttack(pair);
-                var pairParticipants = combatParticipants.SelectAll(pair);
-                pairParticipants.ForEach(x => x.sortingOrder = SortingOrder.Default);
-            }
-
-
-            boardOverlay.Hide();
-
-            NextTurn();
-        }
-
-        StartCoroutine(_());
-    }
-
-
-    /// <summary>
-    /// Method which is used to find actors that share first column or row
-    /// </summary>
     private bool AssignAlignedPlayers()
     {
         foreach (var actor1 in players)
@@ -179,57 +111,328 @@ public class TurnManager : ExtendedMonoBehavior
             }
         }
 
-       
-        if (combatParticipants.alignedPairs.Count < 1)
-            return false;
-
-        return true;
+        return combatParticipants.alignedPairs.Count > 0;
     }
 
-    /// <summary>
-    /// Method which is used to find actors surrounding enemies without gaps between
-    /// </summary>
+    private void AssignAttackingPairs()
+    {
+        foreach (var pair in combatParticipants.alignedPairs)
+        {
+            if (pair.alignment.hasEnemiesBetween &&
+                !pair.alignment.hasPlayersBetween &&
+                !pair.alignment.hasGapsBetween &&
+                !combatParticipants.HasAttackingPair(pair))
+            {
+                // Add the pair to attacking pairs
+                combatParticipants.attackingPairs.Add(pair);
+
+                // Mark the actors as attacking
+                pair.actor1.SetAttacking();
+                pair.actor2.SetAttacking();
+
+                // Set all enemies in alignment as defending
+                pair.alignment.enemies.ForEach(enemy => enemy.SetDefending());
+            }
+        }
+
+        // Reorder attacking pairs after assignment
+        combatParticipants.attackingPairs = GetOrderedAttackingPairs().ToHashSet();
+    }
+
+
+    private void AssignSupportingPairs()
+    {
+        foreach (var pair in combatParticipants.alignedPairs)
+        {
+            if (!pair.alignment.hasEnemiesBetween &&
+                !pair.alignment.hasPlayersBetween &&
+                (pair.actor1.flags.IsAttacking || pair.actor2.flags.IsAttacking) &&
+                !combatParticipants.HasSupportingPair(pair))
+            {
+                // Add the pair to supporting pairs
+                combatParticipants.supportingPairs.Add(pair);
+
+                // Mark the actors as supporting
+                pair.actor1.SetSupporting();
+                pair.actor2.SetSupporting();
+            }
+        }
+    }
+
     private bool AssignCombatParticipants()
     {
-        if (combatParticipants.alignedPairs.Count < 1)
+        if (combatParticipants.alignedPairs.Count == 0)
             return false;
 
-        //Assign attacking pairs
-        foreach (var pair in combatParticipants.alignedPairs)
-        {
-            if (pair.alignment.hasEnemiesBetween
-                && !pair.alignment.hasPlayersBetween
-                && !pair.alignment.hasGapsBetween
-                && !combatParticipants.HasAttackingPair(pair))
-            {
-                combatParticipants.attackingPairs.Add(pair);
-            }
-        }
+        // Assign attacking pairs and set flags
+        AssignAttackingPairs();
 
-        if (combatParticipants.attackingPairs.Count < 1)
+        if (combatParticipants.attackingPairs.Count == 0)
             return false;
 
-        //Assign supporting pairs
-        foreach (var pair in combatParticipants.alignedPairs)
-        {
-            if (!pair.alignment.hasEnemiesBetween
-                && !pair.alignment.hasPlayersBetween
-                && (pair.actor1.IsAttacking || pair.actor2.IsAttacking)
-                && !combatParticipants.HasSupportingPair(pair))
-            {
-                combatParticipants.supportingPairs.Add(pair);
-            }
-        }
+        // Assign supporting pairs based on updated flags
+        AssignSupportingPairs();
 
         return true;
     }
+
+
+    public void CheckPlayerAttack()
+    {
+        combatParticipants.Clear();
+
+        bool hasAlignedPlayers = AssignAlignedPlayers();
+        if (!hasAlignedPlayers)
+        {
+            NextTurn();
+            return;
+        }
+
+        bool hasCombatParticipants = AssignCombatParticipants();
+        if (!hasCombatParticipants)
+        {
+            NextTurn();
+            return;
+        }
+
+        IEnumerator ExecuteCombat()
+        {
+            // Sort all actors to default
+            var playingActors = actors.Where(x => x.IsPlaying).ToList();
+            playingActors.ForEach(x => x.sortingOrder = SortingOrder.Default);
+
+            // Sort all combat participants to above board overlay
+            var allParticipants = combatParticipants.SelectAll();
+            allParticipants.ForEach(x => x.sortingOrder = SortingOrder.BoardOverlay);
+
+            boardOverlay.Show();
+
+            // Spawn support lines
+            foreach (var pair in combatParticipants.supportingPairs)
+            {
+                supportLineManager.Spawn(pair);
+            }
+
+            // Iterate through player attacks
+            foreach (var pair in combatParticipants.attackingPairs)
+            {
+                attackLineManager.Spawn(pair);
+                yield return PlayerAttack(pair);
+
+                // Reset participants after each attack
+                ResetRolesAfterAttack(new[] { pair.actor1, pair.actor2 }); // Attackers
+                ResetRolesAfterAttack(pair.alignment.enemies);             // Defenders
+            }
+
+            boardOverlay.Hide();
+            NextTurn();
+            ClearCombatState(); // Reset all roles and counts
+        }
+
+        StartCoroutine(ExecuteCombat());
+    }
+
+
+    private List<ActorPair> GetOrderedAttackingPairs()
+    {
+        return combatParticipants.attackingPairs
+            .OrderBy(pair => pair.axis == Axis.Vertical
+                ? Mathf.Min(pair.actor1.location.y, pair.actor2.location.y) // Top-to-bottom for vertical
+                : Mathf.Min(pair.actor1.location.x, pair.actor2.location.x)) // Left-to-right for horizontal
+            .ToList();
+    }
+
+
+
+    private void ResetRolesAfterAttack(IEnumerable<ActorInstance> actors)
+    {
+        var playingActors = actors.Where(x => x.IsPlaying).ToList();
+        foreach (var actor in playingActors)
+        {
+            if (actor.attackingPairCount > 0)
+            {
+                actor.attackingPairCount--;
+                if (actor.attackingPairCount == 0)
+                {
+                    actor.SetDefault(); // Reset attackers
+                }
+            }
+
+            if (actor.supportingPairCount > 0)
+            {
+                actor.supportingPairCount--;
+                if (actor.supportingPairCount == 0)
+                {
+                    actor.SetDefault(); // Reset supporters
+                }
+            }
+
+            // Always reset defenders
+            if (actor.flags.IsDefending)
+            {
+                actor.SetDefault();
+            }
+        }
+    }
+
+
+
+
+    private void ClearCombatState()
+    {
+        foreach (var actor in combatParticipants.SelectAll())
+        {
+            actor.attackingPairCount = 0;
+            actor.supportingPairCount = 0;
+            actor.SetDefault();
+        }
+    }
+
+
+
+
+    //public void CheckPlayerAttack()
+    //{
+    //    combatParticipants.Clear();
+
+    //    bool hasAlignedPlayers = AssignAlignedPlayers();
+    //    if (!hasAlignedPlayers)
+    //    {
+    //        NextTurn();
+    //        return;
+    //    }
+
+    //    bool hasCombatParticipants = AssignCombatParticipants();
+    //    if (!hasCombatParticipants)
+    //    {
+    //        NextTurn();
+    //        return;
+    //    }
+
+    //    IEnumerator _()
+    //    {
+
+    //        //Sort all actors to default
+    //        var playingActors = actors.Where(x => x.IsPlaying).ToList();
+    //        playingActors.ForEach(x => x.sortingOrder = SortingOrder.Default);
+
+    //        //Sort all combat participants to above board overlay
+    //        var allParticipants = combatParticipants.SelectAll();
+    //        allParticipants.ForEach(x => x.sortingOrder = SortingOrder.BoardOverlay);
+
+    //        boardOverlay.Show();
+
+    //        //Spawn support lines
+    //        foreach (var pair in combatParticipants.supportingPairs)
+    //        {
+    //            supportLineManager.Spawn(pair);
+    //        }
+
+    //        //Spawn attack line
+    //        //foreach (var pair in combatParticipants.attackingPairs)
+    //        //{
+    //        //    attackLineManager.Spawn(pair);
+    //        //}
+
+    //        //Iterate through player attacks
+    //        foreach (var pair in combatParticipants.attackingPairs)
+    //        {
+    //            attackLineManager.Spawn(pair);
+    //            yield return PlayerAttack(pair);
+    //            var pairParticipants = combatParticipants.SelectAll(pair);
+    //            pairParticipants.ForEach(x => x.SetDefault());
+    //        }
+
+
+    //        boardOverlay.Hide();
+
+    //        NextTurn();
+    //    }
+
+    //    StartCoroutine(_());
+    //}
+
+
+    ///// <summary>
+    ///// Method which is used to find actors that share first column or row
+    ///// </summary>
+    //private bool AssignAlignedPlayers()
+    //{
+    //    foreach (var actor1 in players)
+    //    {
+    //        foreach (var actor2 in players)
+    //        {
+    //            if (actor1 == null || actor2 == null || actor1.Equals(actor2)
+    //                || !actor1.IsPlaying || !actor2.IsPlaying
+    //                || combatParticipants.HasAlignedPair(actor1, actor2))
+    //                continue;
+
+    //            if (actor1.IsSameColumn(actor2.location))
+    //            {
+    //                var pair = new ActorPair(actor1, actor2, Axis.Vertical);
+    //                combatParticipants.alignedPairs.Add(pair);
+    //            }
+    //            else if (actor1.IsSameRow(actor2.location))
+    //            {
+    //                var pair = new ActorPair(actor1, actor2, Axis.Horizontal);
+    //                combatParticipants.alignedPairs.Add(pair);
+    //            }
+    //        }
+    //    }
+
+
+    //    if (combatParticipants.alignedPairs.Count < 1)
+    //        return false;
+
+    //    return true;
+    //}
+
+    ///// <summary>
+    ///// Method which is used to find actors surrounding enemies without gaps between
+    ///// </summary>
+    //private bool AssignCombatParticipants()
+    //{
+    //    if (combatParticipants.alignedPairs.Count < 1)
+    //        return false;
+
+    //    //Assign attacking pairs
+    //    foreach (var pair in combatParticipants.alignedPairs)
+    //    {
+    //        if (pair.alignment.hasEnemiesBetween
+    //            && !pair.alignment.hasPlayersBetween
+    //            && !pair.alignment.hasGapsBetween
+    //            && !combatParticipants.HasAttackingPair(pair))
+    //        {
+    //            //pair.actor1.SetAttacking();
+    //            //pair.actor2.SetAttacking();
+    //            //pair.alignment.enemies.ForEach(x => x.SetDefending());
+    //            combatParticipants.attackingPairs.Add(pair);
+    //        }
+    //    }
+
+    //    if (combatParticipants.attackingPairs.Count < 1)
+    //        return false;
+
+    //    //Assign supporting pairs
+    //    foreach (var pair in combatParticipants.alignedPairs)
+    //    {
+    //        if (!pair.alignment.hasEnemiesBetween
+    //            && !pair.alignment.hasPlayersBetween
+    //            && (pair.actor1.flags.IsAttacking || pair.actor2.flags.IsAttacking)
+    //            && !combatParticipants.HasSupportingPair(pair))
+    //        {
+    //            //pair.actor1.SetSupporting();
+    //            //pair.actor2.SetSupporting();
+    //            combatParticipants.supportingPairs.Add(pair);
+    //        }
+    //    }
+
+    //    return true;
+    //}
 
     private IEnumerator PlayerAttack(ActorPair pair)
     {
-
-  
-
-        #region Player portraits 
+        #region Player portraits
 
         yield return Wait.For(Interval.QuarterSecond);
 
@@ -243,45 +446,86 @@ public class TurnManager : ExtendedMonoBehavior
 
         yield return Wait.For(Interval.TwoSeconds);
 
-
         #endregion
 
         #region Player attack
 
-        //Attack each enemy between aligned players
-        foreach (var enemy in pair.alignment.enemies)
+        // Precalculate damages and determine dying enemies
+        var damageResults = pair.alignment.enemies
+        .Select(enemy =>
         {
             var isHit = Formulas.IsHit(pair.actor1, enemy);
-            if (isHit)
+            var damage = isHit ? Formulas.CalculateDamage(pair.actor1, enemy) : 0;
+            return new DamageResult
             {
-                //pair.actor1.AddSpAsync(10);
-                //pair.actor2.AddSpAsync(10);
+                Enemy = enemy,
+                IsHit = isHit,
+                Damage = damage,
+                WillDie = isHit && (enemy.HP - damage) <= 0
+            };
+        })
+        .ToList();
 
-                //TODO: Combine actor1 + actor2 + support actors stats somehow...
-                //TODO: Generate adhoc ActorStats where you take highest or median stats between both actors in ActorPair???
-                var damage = Formulas.CalculateDamage(pair.actor1, enemy);
-                var isCriticalHit = false;
-                yield return pair.actor1.Attack(enemy, damage, isCriticalHit);
+
+        // Extract dying enemies
+        var dyingEnemies = damageResults
+            .Where(result => result.WillDie)
+            .Select(result => result.Enemy)
+            .ToList();
+
+        // Attack each enemy and handle deaths
+        foreach (var result in damageResults)
+        {
+            if (result.IsHit)
+            {
+                yield return pair.actor1.Attack(result.Enemy, result.Damage, isCriticalHit: false);
+
+                // Trigger DieAsync for all dying enemies except the last
+                if (result.WillDie && dyingEnemies.Count > 1 && dyingEnemies.IndexOf(result.Enemy) != dyingEnemies.Count - 1)
+                {
+                    result.Enemy.DieAsync();
+                }
             }
             else
             {
-                yield return enemy.AttackMiss();
+                yield return result.Enemy.AttackMiss();
             }
         }
 
-        //Despawn attack and support lines
+        // Despawn attack and support lines
         foreach (var enemy in pair.alignment.enemies)
         {
             attackLineManager.DespawnAsync(pair);
             supportLineManager.DespawnAsync(pair);
         }
 
-
+        // Trigger synchronous death for the last dying enemy
+        if (dyingEnemies.Count > 0)
+        {
+            yield return dyingEnemies.Last().Die();
+        }
 
         #endregion
-
-    
     }
+
+
+
+
+    private IEnumerator HandleDyingEnemies(Axis axis, List<ActorInstance> dyingEnemies)
+    {
+        // Order dying enemies by position
+        dyingEnemies = axis == Axis.Vertical
+            ? dyingEnemies.OrderBy(e => e.location.y).ToList()
+            : dyingEnemies.OrderBy(e => e.location.x).ToList();
+
+        // Asynchronously execute all but the last death animations
+        dyingEnemies.Take(dyingEnemies.Count - 1).ToList().ForEach(enemy => enemy.DieAsync());
+
+        // Wait for the last enemy's death animation synchronously
+        if (dyingEnemies.Any())
+            yield return dyingEnemies.Last().Die();
+    }
+
 
     #endregion
 
@@ -383,7 +627,7 @@ public class TurnManager : ExtendedMonoBehavior
                     //enemy.AssignActionWait();
                     //enemy.ap = 0;
                     //enemy.UpdateActionBar();
-                   
+
                     enemy.ResetActionBar();
                 }
 
@@ -407,7 +651,7 @@ public class TurnManager : ExtendedMonoBehavior
 
             }
 
-            
+
 
             NextTurn();
         }

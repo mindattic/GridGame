@@ -10,17 +10,9 @@ using UnityEngine;
 
 public class ExtendedMonoBehavior : MonoBehaviour
 {
-
     //Variables
     protected float gameSpeed => GameManager.instance.gameSpeed;
-
-    //Flags
-    protected bool showActorNameTag => GameManager.instance.showActorNameTag;
-    protected bool showActorFrame => GameManager.instance.showActorFrame;
-    protected bool isPlayerInvincible => GameManager.instance.isPlayerInvincible;
-    protected bool isEnemyInvincible => GameManager.instance.isEnemyInvincible;
-
-
+   
     //Canvases
     protected Canvas canvas2D => GameManager.instance.canvas2D;
     protected Canvas canvas3D => GameManager.instance.canvas3D;
@@ -40,7 +32,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
     protected GhostManager ghostManager => GameManager.instance.ghostManager;
     protected PortraitManager portraitManager => GameManager.instance.portraitManager;
-   
+    protected DebugManager debugManager => GameManager.instance.debugManager;
     protected TitleManager titleManager => GameManager.instance.titleManager;
     protected CardManager cardManager => GameManager.instance.cardManager;
     protected SelectedPlayerManager selectedPlayerManager => GameManager.instance.selectedPlayerManager;
@@ -58,19 +50,18 @@ public class ExtendedMonoBehavior : MonoBehaviour
     //Canvas Componenets
     protected CanvasOverlayInstance canvasOverlay => GameManager.instance.canvasOverlay;
 
-
-    protected AudioManager audioManager => GameManager.instance.audioManager;
- 
     //UI
     protected ConsoleManager consoleManager => GameManager.instance.consoleManager;
     protected LogManager logManager => GameManager.instance.logManager;
 
-  
     //Audio
+    protected AudioManager audioManager => GameManager.instance.audioManager;
     protected AudioSource soundSource => GameManager.instance.soundSource;
     protected AudioSource musicSource => GameManager.instance.musicSource;
 
-    //Behaviors
+
+
+    //Instances
     protected TimerBarInstance timerBar => GameManager.instance.timerBar;
     protected BoardInstance board => GameManager.instance.board;
     protected List<TileInstance> tiles => GameManager.instance.tiles;
@@ -79,6 +70,13 @@ public class ExtendedMonoBehavior : MonoBehaviour
         get => GameManager.instance.actors;
         set => GameManager.instance.actors = value;
     }
+
+    public bool showActorNameTag => debugManager.showActorNameTag;
+    public bool showActorFrame => debugManager.showActorFrame;
+    public bool isPlayerInvincible => debugManager.isPlayerInvincible;
+    public bool isEnemyInvincible => debugManager.isEnemyInvincible;
+    public bool isTimerInfinite => debugManager.isTimerInfinite;
+    public bool isEnemyStunned => debugManager.isEnemyStunned;
 
 
     protected IQueryable<ActorInstance> players => GameManager.instance.players;

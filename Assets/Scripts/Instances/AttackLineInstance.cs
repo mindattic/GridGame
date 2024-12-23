@@ -43,7 +43,7 @@ namespace Game.Instances
         private void Awake()
         {
 
-            thickness = tileSize * 0.1f;
+            thickness = tileSize * 0.02f;
             alpha = 0f;
             maxAlpha = 1f;
             baseColor = Shared.RGBA(100, 195, 200, 0);

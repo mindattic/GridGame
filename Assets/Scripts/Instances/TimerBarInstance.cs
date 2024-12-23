@@ -37,6 +37,9 @@ public class TimerBarInstance : ExtendedMonoBehavior
 
     void FixedUpdate()
     {
+        if (debugManager.isTimerInfinite)
+            return;
+
         if (isRunning && timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;

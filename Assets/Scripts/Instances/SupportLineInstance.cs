@@ -13,12 +13,9 @@ public class SupportLineInstance : ExtendedMonoBehavior
     public float alpha = 0;
     private Vector3 originActor;
     private Vector3 terminalActor;
-
-
     private float minAlpha = Opacity.Transparent;
     private float maxAlpha = Opacity.Percent50;
-    private Color baseColor = Shared.RGBA(48, 161, 49, 0);
-    private Color color;
+    private Color color = Shared.RGBA(48, 161, 49, 0);
     private LineRenderer lineRenderer;
 
 
@@ -30,17 +27,6 @@ public class SupportLineInstance : ExtendedMonoBehavior
         set => gameObject.transform.SetParent(value, true);
     }
 
-    public Vector3 position
-    {
-        get => gameObject.transform.position;
-        set => gameObject.transform.position = value;
-    }
-
-    public int sortingOrder
-    {
-        get => lineRenderer.sortingOrder;
-        set => lineRenderer.sortingOrder = value;
-    }
 
     #endregion
 
@@ -67,14 +53,14 @@ public class SupportLineInstance : ExtendedMonoBehavior
         originActor = pair.originActor.position;
         terminalActor = pair.terminalActor.position;
 
-        lineRenderer.sortingOrder = SortingOrder.SupportLine;
+        //lineRenderer.sortingOrder = SortingOrder.SupportLine;
         lineRenderer.SetPosition(0, originActor);
         lineRenderer.SetPosition(1, terminalActor);
 
         IEnumerator _()
         {
-            alpha = 0f;
-            color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            alpha = Opacity.Transparent;
+            color = new Color(color.r, color.g, color.b, alpha);
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
 
@@ -82,7 +68,7 @@ public class SupportLineInstance : ExtendedMonoBehavior
             {
                 alpha += Increment.OnePercent;
                 alpha = Mathf.Clamp(alpha, minAlpha, maxAlpha);
-                color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+                color = new Color(color.r, color.g, color.b, alpha);
                 lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
                 lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
 
@@ -99,7 +85,7 @@ public class SupportLineInstance : ExtendedMonoBehavior
         {
             alpha -= Increment.OnePercent;
             alpha = Mathf.Clamp(alpha, minAlpha, maxAlpha);
-            color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            color = new Color(color.r, color.g, color.b, alpha);
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class ActorPair
@@ -9,8 +10,12 @@ public class ActorPair
     public Axis axis;
     public Alignment alignment = new Alignment();
 
-    //Properties
 
+
+    public List<ActorInstance> ToList()
+    {
+        return new List<ActorInstance>() { actor1, actor2 };
+    }
 
     /// <summary>
     /// Property that retrieves either the top-most or right-most actor depending upon axial alignment

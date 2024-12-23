@@ -14,8 +14,18 @@ public class DebugManager : ExtendedMonoBehavior
 {
     [SerializeField] private TMP_Dropdown Dropdown;
 
+    //Flags
+    [HideInInspector] public bool showActorNameTag = false;
+    [HideInInspector] public bool showActorFrame = false;
+    [HideInInspector] public bool isPlayerInvincible = false;
+    [HideInInspector] public bool isEnemyInvincible = false;
+    [HideInInspector] public bool isTimerInfinite = false;
+    [HideInInspector] public bool isEnemyStunned = false;
+
+
     ActorInstance Paladin => players.First(x => x.name == "Paladin");
     ActorInstance Barbarian => players.First(x => x.name == "Barbarian");
+    ActorInstance Cleric => players.First(x => x.name == "Cleric");
 
     public void PortraitTest()
     {
@@ -409,6 +419,14 @@ public class DebugManager : ExtendedMonoBehavior
 
     public void AlignTest()
     {
+
+        SpawnSlime();
+        SpawnSlime();
+        SpawnSlime();
+        SpawnSlime();
+        SpawnSlime();
+        SpawnSlime();
+
         var enemy1 = enemies.Skip(0).Take(1).FirstOrDefault();
         var enemy2 = enemies.Skip(1).Take(1).FirstOrDefault();
         var enemy3 = enemies.Skip(2).Take(1).FirstOrDefault();
@@ -428,11 +446,11 @@ public class DebugManager : ExtendedMonoBehavior
         Paladin.Teleport(new Vector2Int(3, 1));
         enemy1?.Teleport(new Vector2Int(3, 2));
         enemy2?.Teleport(new Vector2Int(3, 3));
-        enemy3?.Teleport(new Vector2Int(3, 4));
-        enemy4?.Teleport(new Vector2Int(3, 5));
-        enemy5?.Teleport(new Vector2Int(3, 6));
-        enemy6?.Teleport(new Vector2Int(3, 7));
-        Barbarian.Teleport(new Vector2Int(3, 8));
+        Barbarian.Teleport(new Vector2Int(3, 4));
+        enemy3?.Teleport(new Vector2Int(3, 5));
+        enemy4?.Teleport(new Vector2Int(3, 6));
+        enemy5?.Teleport(new Vector2Int(3, 7));
+        Cleric.Teleport(new Vector2Int(3, 8));
     }
 
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -18,6 +19,22 @@ namespace Game.Manager
             var notReadyEnemies = enemies.Where(x => !x.IsReady).ToList();
             notReadyEnemies.ForEach(x => x.CheckReady());
         }
+
+        //public void SetAttacking(List<ActorInstance> x, bool state)
+        //{
+        //    x.ForEach(x => x.SetAttacking(state));
+        //}
+
+        //public void SetDefending(List<ActorInstance> x, bool state)
+        //{
+        //    x.ForEach(x => x.SetDefending(state));
+        //}
+
+        //public void SetSupporting(List<ActorInstance> x, bool state)
+        //{
+        //    x.ForEach(x => x.SetSupporting(state));
+        //}
+
 
 
 

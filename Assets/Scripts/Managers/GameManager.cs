@@ -14,12 +14,6 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public int vSyncCount = 0;
     [HideInInspector] public float gameSpeed = 1.0f;
 
-    //Flags
-    [HideInInspector] public bool showActorNameTag = false;
-    [HideInInspector] public bool showActorFrame = false;
-    [HideInInspector] public bool isPlayerInvincible = false;
-    [HideInInspector] public bool isEnemyInvincible = false;
-
     //Managers
     [HideInInspector] public DatabaseManager databaseManager;
     [HideInInspector] public ResourceManager resourceManager;

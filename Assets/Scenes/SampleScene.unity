@@ -7661,6 +7661,8 @@ MonoBehaviour:
   gameSpeed: 1
   showActorNameTag: 0
   showActorFrame: 0
+  isPlayerInvincible: 0
+  isEnemyInvincible: 0
   databaseManager: {fileID: 0}
   resourceManager: {fileID: 0}
   inputManager: {fileID: 0}
@@ -8244,7 +8246,7 @@ GameObject:
   - component: {fileID: 1754065673}
   - component: {fileID: 1754065674}
   - component: {fileID: 1754065675}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: BoardOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}

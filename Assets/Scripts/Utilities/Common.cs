@@ -210,7 +210,7 @@ public static class SortingOrder
     public const int Min = 0;
     public const int Default = 50;
     public const int BoardOverlay = 100;
-    public const int SupportLine = 110;
+    public const int SupportLine = 100;
     public const int Defender = 120;
     public const int Supporter = 140;
     public const int Attacker = 150;
