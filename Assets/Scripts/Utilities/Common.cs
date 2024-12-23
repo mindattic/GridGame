@@ -20,6 +20,7 @@ public static class Constants
     public const string CoinBar = "CoinBar";
 
     //Percent
+    public const float percent10 = 0.1f;
     public const float percent16 = 0.166666f;
     public const float percent25 = 0.25f;
     public const float percent33 = 0.333333f;
@@ -31,6 +32,7 @@ public static class Constants
     public const float percent666 = 6.666666f;
 
     //Size
+    public static readonly Vector2 size10 = new Vector2(percent10, percent10);
     public static readonly Vector2 size16 = new Vector2(percent16, percent16);
     public static readonly Vector2 size25 = new Vector2(percent25, percent25);
     public static readonly Vector2 size33 = new Vector2(percent33, percent33);
@@ -38,6 +40,8 @@ public static class Constants
     public static readonly Vector2 size66 = new Vector2(percent66, percent66);
     public static readonly Vector2 size75 = new Vector2(percent75, percent75);
     public static readonly Vector2 size100 = new Vector2(percent100, percent100);
+    public static readonly Vector2 size333 = new Vector2(percent333, percent333);
+    public static readonly Vector2 size666 = new Vector2(percent666, percent666);
 
 
     //Card

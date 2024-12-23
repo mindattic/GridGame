@@ -15,12 +15,12 @@ public class DebugManager : ExtendedMonoBehavior
     [SerializeField] private TMP_Dropdown Dropdown;
 
     //Flags
-    [HideInInspector] public bool showActorNameTag = false;
-    [HideInInspector] public bool showActorFrame = false;
-    [HideInInspector] public bool isPlayerInvincible = false;
-    [HideInInspector] public bool isEnemyInvincible = false;
-    [HideInInspector] public bool isTimerInfinite = false;
-    [HideInInspector] public bool isEnemyStunned = false;
+    public bool showActorNameTag = false;
+    public bool showActorFrame = false;
+    public bool isPlayerInvincible = false;
+    public bool isEnemyInvincible = false;
+    public bool isTimerInfinite = false;
+    public bool isEnemyStunned = false;
 
 
     ActorInstance Paladin => players.First(x => x.name == "Paladin");

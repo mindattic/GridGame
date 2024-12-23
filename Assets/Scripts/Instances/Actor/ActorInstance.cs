@@ -937,41 +937,57 @@ public class ActorInstance : ExtendedMonoBehavior
         StartCoroutine(Bump(direction));
     }
 
-    public IEnumerator Bump(Direction direction)
+    public IEnumerator Bump(Direction direction, IEnumerator triggeredEvent = null)
     {
         // Animation curves for each phase
-        var approachCurve = AnimationCurve.EaseInOut(0, 0, 0.5f, 1); // Fast initial movement
-        var returnCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);      // Smooth return
+        var windupCurve = AnimationCurve.EaseInOut(0, 0, 0.5f, 1); // Windup easing
+        var bumpCurve = AnimationCurve.EaseInOut(0, 0, 0.5f, 1); // Fast movement
+        var returnCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);   // Smooth return
 
         // Durations for each phase
-        var approachDuration = 0.1f;
-        var returnDuration = 0.15f;
-        var pauseDuration = 0.05f;
+        var windupDuration = 0.15f;
+        var bumpDuration = 0.1f;
+        var returnDuration = 0.3f;
 
         // Positions
         var startPosition = currentTile.position;
-        var apexPosition = Geometry.GetDirectionalPosition(startPosition, direction, tileSize * percent33);
+        var windupPosition = Geometry.GetDirectionalPosition(startPosition, direction.Opposite(), tileSize * percent33);
+        var bumpPosition = Geometry.GetDirectionalPosition(startPosition, direction, tileSize * percent33);
 
         // Increase sorting order to ensure this tile is on top
         sortingOrder = SortingOrder.Max;
 
-        // Phase 1: Quick Approach (fast movement to the apex)
+        // Phase 1: Windup (move slightly in the opposite direction)
         float elapsedTime = 0f;
-        while (elapsedTime < approachDuration)
+        while (elapsedTime < windupDuration)
         {
             elapsedTime += Time.deltaTime;
-            float progress = Mathf.Clamp01(elapsedTime / approachDuration);
-            float curveValue = approachCurve.Evaluate(progress);
+            float progress = Mathf.Clamp01(elapsedTime / windupDuration);
+            float curveValue = windupCurve.Evaluate(progress);
 
-            position = Vector3.Lerp(startPosition, apexPosition, curveValue);
-
+            position = Vector3.Lerp(startPosition, windupPosition, curveValue);
             yield return Wait.OneTick();
         }
 
-        // Phase 2: Pause at apex
-        yield return new WaitForSeconds(pauseDuration);
+        // Phase 2: Bump (quickly move in the direction and rotate slightly)
+        elapsedTime = 0f;
+        float targetRotationZ = (direction == Direction.East) ? -15f : 15f; // Opposite rotation for East
+        while (elapsedTime < bumpDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsedTime / bumpDuration);
+            float curveValue = bumpCurve.Evaluate(progress);
 
-        // Phase 3: Slow Return to Starting Position
+            position = Vector3.Lerp(windupPosition, bumpPosition, curveValue);
+            rotation = Quaternion.Euler(0, 0, Mathf.Lerp(0, targetRotationZ, progress));
+            yield return Wait.OneTick();
+        }
+
+        //Trigger Asynchronously
+        if (triggeredEvent != null)
+            StartCoroutine(triggeredEvent);
+
+        // Phase 3: Return to Starting Position (rotate back to zero and move back slowly)
         elapsedTime = 0f;
         while (elapsedTime < returnDuration)
         {
@@ -979,17 +995,16 @@ public class ActorInstance : ExtendedMonoBehavior
             float progress = Mathf.Clamp01(elapsedTime / returnDuration);
             float curveValue = returnCurve.Evaluate(progress);
 
-            position = Vector3.Lerp(apexPosition, startPosition, curveValue);
-
+            position = Vector3.Lerp(bumpPosition, startPosition, curveValue);
+            rotation = Quaternion.Euler(0, 0, Mathf.Lerp(targetRotationZ, 0, progress));
             yield return Wait.OneTick();
         }
 
         // Reset sorting order and position
         sortingOrder = SortingOrder.Default;
         position = startPosition;
+        rotation = Quaternion.identity;
     }
-
-
 
     public IEnumerator TakeDamage(int damage, bool isCriticalHit = false)
     {
@@ -1029,6 +1044,9 @@ public class ActorInstance : ExtendedMonoBehavior
         //After:
         ShrinkAsync();
         Shake(ShakeIntensity.Stop);
+
+        if (IsPlayer && IsDying)
+            yield return Die();
     }
 
     public void TakeDamageAsync(int damage, bool isCriticalHit = false)

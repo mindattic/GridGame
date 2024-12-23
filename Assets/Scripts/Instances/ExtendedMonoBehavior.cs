@@ -71,12 +71,12 @@ public class ExtendedMonoBehavior : MonoBehaviour
         set => GameManager.instance.actors = value;
     }
 
-    public bool showActorNameTag => debugManager.showActorNameTag;
-    public bool showActorFrame => debugManager.showActorFrame;
-    public bool isPlayerInvincible => debugManager.isPlayerInvincible;
-    public bool isEnemyInvincible => debugManager.isEnemyInvincible;
-    public bool isTimerInfinite => debugManager.isTimerInfinite;
-    public bool isEnemyStunned => debugManager.isEnemyStunned;
+    //public bool showActorNameTag => debugManager.showActorNameTag;
+    //public bool showActorFrame => debugManager.showActorFrame;
+    //public bool isPlayerInvincible => debugManager.isPlayerInvincible;
+    //public bool isEnemyInvincible => debugManager.isEnemyInvincible;
+    //public bool isTimerInfinite => debugManager.isTimerInfinite;
+    //public bool isEnemyStunned => debugManager.isEnemyStunned;
 
 
     protected IQueryable<ActorInstance> players => GameManager.instance.players;
@@ -95,6 +95,7 @@ public class ExtendedMonoBehavior : MonoBehaviour
     protected float cardPortraitSize => GameManager.instance.cardPortraitSize;
 
     //Percent
+    protected float percent10 => Constants.percent10;
     protected float percent16 => Constants.percent16;
     protected float percent25 => Constants.percent25;
     protected float percent33 => Constants.percent33;

@@ -291,145 +291,6 @@ public class TurnManager : ExtendedMonoBehavior
 
 
 
-    //public void CheckPlayerAttack()
-    //{
-    //    combatParticipants.Clear();
-
-    //    bool hasAlignedPlayers = AssignAlignedPlayers();
-    //    if (!hasAlignedPlayers)
-    //    {
-    //        NextTurn();
-    //        return;
-    //    }
-
-    //    bool hasCombatParticipants = AssignCombatParticipants();
-    //    if (!hasCombatParticipants)
-    //    {
-    //        NextTurn();
-    //        return;
-    //    }
-
-    //    IEnumerator _()
-    //    {
-
-    //        //Sort all actors to default
-    //        var playingActors = actors.Where(x => x.IsPlaying).ToList();
-    //        playingActors.ForEach(x => x.sortingOrder = SortingOrder.Default);
-
-    //        //Sort all combat participants to above board overlay
-    //        var allParticipants = combatParticipants.SelectAll();
-    //        allParticipants.ForEach(x => x.sortingOrder = SortingOrder.BoardOverlay);
-
-    //        boardOverlay.Show();
-
-    //        //Spawn support lines
-    //        foreach (var pair in combatParticipants.supportingPairs)
-    //        {
-    //            supportLineManager.Spawn(pair);
-    //        }
-
-    //        //Spawn attack line
-    //        //foreach (var pair in combatParticipants.attackingPairs)
-    //        //{
-    //        //    attackLineManager.Spawn(pair);
-    //        //}
-
-    //        //Iterate through player attacks
-    //        foreach (var pair in combatParticipants.attackingPairs)
-    //        {
-    //            attackLineManager.Spawn(pair);
-    //            yield return PlayerAttack(pair);
-    //            var pairParticipants = combatParticipants.SelectAll(pair);
-    //            pairParticipants.ForEach(x => x.SetDefault());
-    //        }
-
-
-    //        boardOverlay.Hide();
-
-    //        NextTurn();
-    //    }
-
-    //    StartCoroutine(_());
-    //}
-
-
-    ///// <summary>
-    ///// Method which is used to find actors that share first column or row
-    ///// </summary>
-    //private bool AssignAlignedPlayers()
-    //{
-    //    foreach (var actor1 in players)
-    //    {
-    //        foreach (var actor2 in players)
-    //        {
-    //            if (actor1 == null || actor2 == null || actor1.Equals(actor2)
-    //                || !actor1.IsPlaying || !actor2.IsPlaying
-    //                || combatParticipants.HasAlignedPair(actor1, actor2))
-    //                continue;
-
-    //            if (actor1.IsSameColumn(actor2.location))
-    //            {
-    //                var pair = new ActorPair(actor1, actor2, Axis.Vertical);
-    //                combatParticipants.alignedPairs.Add(pair);
-    //            }
-    //            else if (actor1.IsSameRow(actor2.location))
-    //            {
-    //                var pair = new ActorPair(actor1, actor2, Axis.Horizontal);
-    //                combatParticipants.alignedPairs.Add(pair);
-    //            }
-    //        }
-    //    }
-
-
-    //    if (combatParticipants.alignedPairs.Count < 1)
-    //        return false;
-
-    //    return true;
-    //}
-
-    ///// <summary>
-    ///// Method which is used to find actors surrounding enemies without gaps between
-    ///// </summary>
-    //private bool AssignCombatParticipants()
-    //{
-    //    if (combatParticipants.alignedPairs.Count < 1)
-    //        return false;
-
-    //    //Assign attacking pairs
-    //    foreach (var pair in combatParticipants.alignedPairs)
-    //    {
-    //        if (pair.alignment.hasEnemiesBetween
-    //            && !pair.alignment.hasPlayersBetween
-    //            && !pair.alignment.hasGapsBetween
-    //            && !combatParticipants.HasAttackingPair(pair))
-    //        {
-    //            //pair.actor1.SetAttacking();
-    //            //pair.actor2.SetAttacking();
-    //            //pair.alignment.enemies.ForEach(x => x.SetDefending());
-    //            combatParticipants.attackingPairs.Add(pair);
-    //        }
-    //    }
-
-    //    if (combatParticipants.attackingPairs.Count < 1)
-    //        return false;
-
-    //    //Assign supporting pairs
-    //    foreach (var pair in combatParticipants.alignedPairs)
-    //    {
-    //        if (!pair.alignment.hasEnemiesBetween
-    //            && !pair.alignment.hasPlayersBetween
-    //            && (pair.actor1.flags.IsAttacking || pair.actor2.flags.IsAttacking)
-    //            && !combatParticipants.HasSupportingPair(pair))
-    //        {
-    //            //pair.actor1.SetSupporting();
-    //            //pair.actor2.SetSupporting();
-    //            combatParticipants.supportingPairs.Add(pair);
-    //        }
-    //    }
-
-    //    return true;
-    //}
-
     private IEnumerator PlayerAttack(ActorPair pair)
     {
         #region Player portraits
@@ -605,19 +466,26 @@ public class TurnManager : ExtendedMonoBehavior
                             var direction = enemy.GetAdjacentDirectionTo(player);
 
                             //TODO: Add triggeredEvent at moment bump reaches zenith
-                            yield return enemy.Bump(direction);
 
-                            var isHit = Formulas.IsHit(enemy, player);
-                            if (isHit)
+                            IEnumerator _()
                             {
-                                var damage = Formulas.CalculateDamage(enemy, player);
-                                var isCriticalHit = false;
-                                yield return enemy.Attack(player, damage, isCriticalHit);
+                                var isHit = Formulas.IsHit(enemy, player);
+                                if (isHit)
+                                {
+                                    var damage = Formulas.CalculateDamage(enemy, player);
+                                    var isCriticalHit = false;
+                                    yield return enemy.Attack(player, damage, isCriticalHit);
+                                }
+                                else
+                                {
+                                    yield return player.AttackMiss();
+                                }
                             }
-                            else
-                            {
-                                yield return player.AttackMiss();
-                            }
+
+
+                            yield return enemy.Bump(direction, _());
+
+
                         }
                     }
                 }
@@ -668,5 +536,144 @@ public class TurnManager : ExtendedMonoBehavior
 
 
 
+
+    //public void CheckPlayerAttack()
+    //{
+    //    combatParticipants.Clear();
+
+    //    bool hasAlignedPlayers = AssignAlignedPlayers();
+    //    if (!hasAlignedPlayers)
+    //    {
+    //        NextTurn();
+    //        return;
+    //    }
+
+    //    bool hasCombatParticipants = AssignCombatParticipants();
+    //    if (!hasCombatParticipants)
+    //    {
+    //        NextTurn();
+    //        return;
+    //    }
+
+    //    IEnumerator _()
+    //    {
+
+    //        //Sort all actors to default
+    //        var playingActors = actors.Where(x => x.IsPlaying).ToList();
+    //        playingActors.ForEach(x => x.sortingOrder = SortingOrder.Default);
+
+    //        //Sort all combat participants to above board overlay
+    //        var allParticipants = combatParticipants.SelectAll();
+    //        allParticipants.ForEach(x => x.sortingOrder = SortingOrder.BoardOverlay);
+
+    //        boardOverlay.Show();
+
+    //        //Spawn support lines
+    //        foreach (var pair in combatParticipants.supportingPairs)
+    //        {
+    //            supportLineManager.Spawn(pair);
+    //        }
+
+    //        //Spawn attack line
+    //        //foreach (var pair in combatParticipants.attackingPairs)
+    //        //{
+    //        //    attackLineManager.Spawn(pair);
+    //        //}
+
+    //        //Iterate through player attacks
+    //        foreach (var pair in combatParticipants.attackingPairs)
+    //        {
+    //            attackLineManager.Spawn(pair);
+    //            yield return PlayerAttack(pair);
+    //            var pairParticipants = combatParticipants.SelectAll(pair);
+    //            pairParticipants.ForEach(x => x.SetDefault());
+    //        }
+
+
+    //        boardOverlay.Hide();
+
+    //        NextTurn();
+    //    }
+
+    //    StartCoroutine(_());
+    //}
+
+
+    ///// <summary>
+    ///// Method which is used to find actors that share first column or row
+    ///// </summary>
+    //private bool AssignAlignedPlayers()
+    //{
+    //    foreach (var actor1 in players)
+    //    {
+    //        foreach (var actor2 in players)
+    //        {
+    //            if (actor1 == null || actor2 == null || actor1.Equals(actor2)
+    //                || !actor1.IsPlaying || !actor2.IsPlaying
+    //                || combatParticipants.HasAlignedPair(actor1, actor2))
+    //                continue;
+
+    //            if (actor1.IsSameColumn(actor2.location))
+    //            {
+    //                var pair = new ActorPair(actor1, actor2, Axis.Vertical);
+    //                combatParticipants.alignedPairs.Add(pair);
+    //            }
+    //            else if (actor1.IsSameRow(actor2.location))
+    //            {
+    //                var pair = new ActorPair(actor1, actor2, Axis.Horizontal);
+    //                combatParticipants.alignedPairs.Add(pair);
+    //            }
+    //        }
+    //    }
+
+
+    //    if (combatParticipants.alignedPairs.Count < 1)
+    //        return false;
+
+    //    return true;
+    //}
+
+    ///// <summary>
+    ///// Method which is used to find actors surrounding enemies without gaps between
+    ///// </summary>
+    //private bool AssignCombatParticipants()
+    //{
+    //    if (combatParticipants.alignedPairs.Count < 1)
+    //        return false;
+
+    //    //Assign attacking pairs
+    //    foreach (var pair in combatParticipants.alignedPairs)
+    //    {
+    //        if (pair.alignment.hasEnemiesBetween
+    //            && !pair.alignment.hasPlayersBetween
+    //            && !pair.alignment.hasGapsBetween
+    //            && !combatParticipants.HasAttackingPair(pair))
+    //        {
+    //            //pair.actor1.SetAttacking();
+    //            //pair.actor2.SetAttacking();
+    //            //pair.alignment.enemies.ForEach(x => x.SetDefending());
+    //            combatParticipants.attackingPairs.Add(pair);
+    //        }
+    //    }
+
+    //    if (combatParticipants.attackingPairs.Count < 1)
+    //        return false;
+
+    //    //Assign supporting pairs
+    //    foreach (var pair in combatParticipants.alignedPairs)
+    //    {
+    //        if (!pair.alignment.hasEnemiesBetween
+    //            && !pair.alignment.hasPlayersBetween
+    //            && (pair.actor1.flags.IsAttacking || pair.actor2.flags.IsAttacking)
+    //            && !combatParticipants.HasSupportingPair(pair))
+    //        {
+    //            //pair.actor1.SetSupporting();
+    //            //pair.actor2.SetSupporting();
+    //            combatParticipants.supportingPairs.Add(pair);
+    //        }
+    //    }
+
+    //    return true;
+    //}
 
 }
