@@ -4,18 +4,6 @@ using UnityEngine;
 
 public class TileManager : ExtendedMonoBehavior
 {
-    // Play is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // SaveProfile is called once per frame
-    void Update()
-    {
-
-    }
-
 
     public void Reset()
     {

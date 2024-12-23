@@ -93,7 +93,6 @@
     <Compile Include="Assets\Scripts\Models\WeaponTypeResource.cs" />
     <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Shared.cs" />
-    <Compile Include="Assets\Scripts\Models\DamageResult.cs" />
     <Compile Include="Assets\Scripts\Models\PropSprite.cs" />
     <Compile Include="Assets\Scripts\Managers\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Managers\FootstepManager.cs" />
@@ -149,6 +148,7 @@
     <Compile Include="Assets\Scripts\Managers\BoardManager.cs" />
     <Compile Include="Assets\Scripts\Models\StageActor.cs" />
     <Compile Include="Assets\Scripts\Utilities\Extensions.cs" />
+    <Compile Include="Assets\Scripts\Models\AttackResult.cs" />
     <Compile Include="Assets\Scripts\Models\RectFloat.cs" />
     <Compile Include="Assets\Scripts\Managers\ProfileManager.cs" />
     <Compile Include="Assets\Scripts\Managers\ConsoleManager.cs" />

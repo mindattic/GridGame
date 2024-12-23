@@ -6,20 +6,6 @@ public class WallManager : MonoBehaviour
 {
 
 
-    private float cellSize => GameManager.instance.tileSize;
-
-    // Play is called before the first frame update
-    void Start()
-    {
-    }
-
-    // SaveProfile is called once per frame
-    void Update()
-    {
-
-    }
-
-
     private void OnCollisionEnter2D(Collision2D other)
     {
         //if (other.collider.prefab.CompareTag(Tag.Actor))

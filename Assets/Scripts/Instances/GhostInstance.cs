@@ -80,22 +80,6 @@ public class GhostInstance : ExtendedMonoBehavior
         renderers.frame = gameObject.transform.GetChild(Frame).GetComponent<SpriteRenderer>();
     }
 
-    // Play is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-
-    // SaveProfile is called once per frame
-    void Update()
-    {
-
-    }
-
-    void FixedUpdate()
-    {
-    }
 
     private IEnumerator FadeOut()
     {

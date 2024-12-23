@@ -69,8 +69,6 @@ public class TurnManager : ExtendedMonoBehavior
         {
             currentTurn++;
             actorManager.CheckEnemyReadiness();
-
-            //audioManager.Play("NextTurn");
             timerBar.Reset();
         }
         else if (IsEnemyTurn)
@@ -80,8 +78,6 @@ public class TurnManager : ExtendedMonoBehavior
             CheckEnemySpawn();
             CheckEnemyMove();
         }
-
-        //titleManager.Print($"{(IsPlayerTurn ? "Player" : "Enemy")} Turn", IsPlayerTurn ? Colors.Solid.White : Colors.Solid.Red);
     }
 
 
@@ -130,7 +126,7 @@ public class TurnManager : ExtendedMonoBehavior
                 pair.actor1.SetAttacking();
                 pair.actor2.SetAttacking();
 
-                // Set all enemies in alignment as defending
+                // Assign all enemies in alignment as defending
                 pair.alignment.enemies.ForEach(enemy => enemy.SetDefending());
             }
         }
@@ -311,45 +307,45 @@ public class TurnManager : ExtendedMonoBehavior
 
         #region Player attack
 
-        // Precalculate damages and determine dying enemies
-        var damageResults = pair.alignment.enemies
+        //Precalculate attack results and determine dying enemies
+        var attacks = pair.alignment.enemies
         .Select(enemy =>
         {
             var isHit = Formulas.IsHit(pair.actor1, enemy);
             var damage = isHit ? Formulas.CalculateDamage(pair.actor1, enemy) : 0;
-            return new DamageResult
+            return new AttackResult
             {
-                Enemy = enemy,
+                Opponent = enemy,
                 IsHit = isHit,
-                Damage = damage,
-                WillDie = isHit && (enemy.HP - damage) <= 0
+                IsCriticalHit = false,
+                Damage = damage
             };
         })
         .ToList();
 
 
         // Extract dying enemies
-        var dyingEnemies = damageResults
-            .Where(result => result.WillDie)
-            .Select(result => result.Enemy)
+        var dyingEnemies = attacks
+            .Where(result => result.IsFatal)
+            .Select(result => result.Opponent)
             .ToList();
 
         // Attack each enemy and handle deaths
-        foreach (var result in damageResults)
+        foreach (var attack in attacks)
         {
-            if (result.IsHit)
+            if (attack.IsHit)
             {
-                yield return pair.actor1.Attack(result.Enemy, result.Damage, isCriticalHit: false);
+                yield return pair.actor1.Attack(attack);
 
                 // Trigger DieAsync for all dying enemies except the last
-                if (result.WillDie && dyingEnemies.Count > 1 && dyingEnemies.IndexOf(result.Enemy) != dyingEnemies.Count - 1)
+                if (attack.IsFatal && dyingEnemies.Count > 1 && attack.Opponent != dyingEnemies.Last())
                 {
-                    result.Enemy.DieAsync();
+                    attack.Opponent.DieAsync();
                 }
             }
             else
             {
-                yield return result.Enemy.AttackMiss();
+                yield return attack.Opponent.AttackMiss();
             }
         }
 
@@ -364,29 +360,11 @@ public class TurnManager : ExtendedMonoBehavior
         if (dyingEnemies.Count > 0)
         {
             yield return dyingEnemies.Last().Die();
+            yield return Wait.For(Interval.HalfSecond);
         }
 
         #endregion
     }
-
-
-
-
-    private IEnumerator HandleDyingEnemies(Axis axis, List<ActorInstance> dyingEnemies)
-    {
-        // Order dying enemies by position
-        dyingEnemies = axis == Axis.Vertical
-            ? dyingEnemies.OrderBy(e => e.location.y).ToList()
-            : dyingEnemies.OrderBy(e => e.location.x).ToList();
-
-        // Asynchronously execute all but the last death animations
-        dyingEnemies.Take(dyingEnemies.Count - 1).ToList().ForEach(enemy => enemy.DieAsync());
-
-        // Wait for the last enemy's death animation synchronously
-        if (dyingEnemies.Any())
-            yield return dyingEnemies.Last().Die();
-    }
-
 
     #endregion
 
@@ -465,16 +443,21 @@ public class TurnManager : ExtendedMonoBehavior
                         {
                             var direction = enemy.GetAdjacentDirectionTo(player);
 
-                            //TODO: Add triggeredEvent at moment bump reaches zenith
-
                             IEnumerator _()
                             {
                                 var isHit = Formulas.IsHit(enemy, player);
                                 if (isHit)
                                 {
                                     var damage = Formulas.CalculateDamage(enemy, player);
-                                    var isCriticalHit = false;
-                                    yield return enemy.Attack(player, damage, isCriticalHit);
+                                    var attack = new AttackResult()
+                                    {
+                                        Opponent = player,
+                                        IsHit = isHit,
+                                        IsCriticalHit = false,
+                                        Damage = damage
+                                    };
+
+                                    yield return enemy.Attack(attack);
                                 }
                                 else
                                 {
@@ -539,7 +522,7 @@ public class TurnManager : ExtendedMonoBehavior
 
     //public void CheckPlayerAttack()
     //{
-    //    combatParticipants.Clear();
+    //    combatParticipants.Reset();
 
     //    bool hasAlignedPlayers = AssignAlignedPlayers();
     //    if (!hasAlignedPlayers)

@@ -1,5 +1,6 @@
 using Assets.Scripts.Behaviors.Actor;
 using Assets.Scripts.Instances.Actor;
+using Assets.Scripts.Models;
 using Game.Instances.Actor;
 using System;
 using System.Collections;
@@ -11,13 +12,10 @@ using UnityEngine;
 
 public class ActorInstance : ExtendedMonoBehavior
 {
-
     //Variables
     public Character character;
     public Vector2Int location;
     public Vector2Int previousLocation;
-    //public bool isMoving = false;
-
 
     public Vector3 destination;
     public Team team = Team.Independant;
@@ -36,19 +34,18 @@ public class ActorInstance : ExtendedMonoBehavior
     public int attackingPairCount = 0;
     public int supportingPairCount = 0;
 
-    public float wiggleSpeed;
-    public float wiggleAmplitude = 15f; // Amplitude (difference from -45 degrees)
+    private float wiggleSpeed;
+    private float wiggleAmplitude;
 
-    public Vector3 initialHealthBarScale;
-    public Vector3 initialActionBarScale;
+    private float glowIntensity;
+
+    private Vector3 initialHealthBarScale;
+    private Vector3 initialActionBarScale;
 
     ActorSprite sprites;
 
     [SerializeField] public AnimationCurve glowCurve;
 
-
-    [SerializeField] public AnimationCurve slideRotationCurve;
-    [SerializeField] public AnimationCurve slideScaleCurve;
 
     //public ActorHealthBar HealthBar;
     //public ActorThumbnail Thumbnail;
@@ -88,6 +85,19 @@ public class ActorInstance : ExtendedMonoBehavior
         initialActionBarScale = renderers.actionBar.transform.localScale;
 
         wiggleSpeed = tileSize * 24f;
+        wiggleAmplitude = 15f;  // Amplitude (difference from -45 degrees)
+
+        glowIntensity = 1.3333f;
+
+        //glowCurve = new AnimationCurve(
+        //    new Keyframe(0f, 0f, 0f, 0f),      // First keyframe at time 0, value 0
+        //    new Keyframe(1f, 0.25f, 0f, 0f)    // Second keyframe at time 1, value 0.25
+        //);
+        //glowCurve.preWrapMode = WrapMode.Loop;
+        //glowCurve.postWrapMode = WrapMode.Loop;
+
+
+
     }
 
     private void Start()
@@ -293,25 +303,10 @@ public class ActorInstance : ExtendedMonoBehavior
         renderers.SetNameTagText(name);
         renderers.SetNameTagEnabled(isEnabled: debugManager.showActorNameTag);
 
-
         UpdateHealthBar();
         ResetActionBar();
-
-        //renderers.SetAlpha(1);
         FadeInAsync();
         Spin360Async();
-
-        //if (turnManager.IsFirstTurn)
-        //{
-        //    renderers.SetAlpha(1);
-        //}
-        //else
-        //{
-        //    //StartCoroutine(FadeIn());
-        //    renderers.SetAlpha(1);
-        //    Spin360Async();
-        //}
-
     }
 
     ActorInstance FindOverlappingActor(TileInstance closestTile)
@@ -352,8 +347,6 @@ public class ActorInstance : ExtendedMonoBehavior
     {
         StartCoroutine(GainAP());
     }
-
-
 
     public IEnumerator GainAP()
     {
@@ -400,15 +393,20 @@ public class ActorInstance : ExtendedMonoBehavior
     }
 
 
-    public IEnumerator Attack(ActorInstance opponent, int damage, bool isCriticalHit = false)
+    public IEnumerator Attack(AttackResult attack)
     {
-        if (isCriticalHit)
+        if (attack.IsCriticalHit)
         {
-            var crit = resourceManager.VisualEffect("Yellow_Hit");
-            vfxManager.SpawnAsync(crit, opponent.position);
+            var critVFX = resourceManager.VisualEffect("Yellow_Hit");
+            vfxManager.SpawnAsync(
+                critVFX,
+                attack.Opponent.position);
         }
 
-        return vfxManager.Spawn(vfx.Attack, opponent.position, opponent.TakeDamage(damage, isCriticalHit));
+        return vfxManager.Spawn(
+            vfx.Attack,
+            attack.Opponent.position,
+            attack.Opponent.TakeDamage(attack));
     }
 
 
@@ -652,8 +650,8 @@ public class ActorInstance : ExtendedMonoBehavior
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
         var scale = new Vector3(
-            1.5f + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
-            1.5f + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
+            glowIntensity + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
+            glowIntensity + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
             1.0f);
         renderers.SetGlowScale(scale);
     }
@@ -1006,7 +1004,7 @@ public class ActorInstance : ExtendedMonoBehavior
         rotation = Quaternion.identity;
     }
 
-    public IEnumerator TakeDamage(int damage, bool isCriticalHit = false)
+    public IEnumerator TakeDamage(AttackResult attack)
     {
         //Check abort state
         if (!IsPlaying)
@@ -1020,21 +1018,19 @@ public class ActorInstance : ExtendedMonoBehavior
         if (!isInvincible)
         {
             stats.PreviousHP = stats.HP;
-            stats.HP -= damage;
+            stats.HP -= attack.Damage;
             stats.HP = Mathf.Clamp(stats.HP, 0, stats.MaxHP);
             UpdateHealthBar();
         }
 
-
-        var text = Math.Abs(damage).ToString();
-        damageTextManager.Spawn(text, position);
+        damageTextManager.Spawn(attack.Damage.ToString(), position);
         audioManager.Play($"Slash{Random.Int(1, 7)}");
 
         //During:
         while (ticks < duration)
         {
             GrowAsync();
-            if (isCriticalHit)
+            if (attack.IsCriticalHit)
                 Shake(ShakeIntensity.Medium);
 
             ticks += Interval.OneTick;
@@ -1049,13 +1045,13 @@ public class ActorInstance : ExtendedMonoBehavior
             yield return Die();
     }
 
-    public void TakeDamageAsync(int damage, bool isCriticalHit = false)
+    public void TakeDamageAsync(AttackResult attack)
     {
         //Check abort state
         if (!IsPlaying)
             return;
 
-        StartCoroutine(TakeDamage(damage, isCriticalHit));
+        StartCoroutine(TakeDamage(attack));
     }
 
     public IEnumerator AttackMiss()

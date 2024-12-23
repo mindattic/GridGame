@@ -91,8 +91,6 @@ public class SupportLineInstance : ExtendedMonoBehavior
 
             yield return Wait.OneTick();
         }
-
-        //Clear(this.prefab);
     }
 
     public void DespawnAsync()

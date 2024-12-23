@@ -135,7 +135,7 @@ public class LogWindow : EditorWindow
 
     private void ExportLogToFile()
     {
-        // Set the file path for exporting the log
+        // Assign the file path for exporting the log
         string filePath = EditorUtility.SaveFilePanel("Export Log", "", "log.txt", "txt");
 
         if (!string.IsNullOrEmpty(filePath))

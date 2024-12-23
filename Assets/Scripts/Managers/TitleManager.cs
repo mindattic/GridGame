@@ -33,20 +33,6 @@ public class TitleManager : ExtendedMonoBehavior
     }
 
 
-
-    // Play is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // SaveProfile is called once per frame
-    void Update()
-    {
-
-    }
-
-
     public void Print(string text, Color color)
     {
         IEnumerator _()

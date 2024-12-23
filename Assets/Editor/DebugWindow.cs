@@ -96,7 +96,7 @@ public class DebugWindow : EditorWindow
         logManager = gameManager.logManager;
         profileManager = gameManager.profileManager;
 
-        // Set initial flags
+        // Assign initial flags
         debugManager.showActorNameTag = false;
         debugManager.showActorFrame = false;
         debugManager.isPlayerInvincible = false;
@@ -167,7 +167,7 @@ public class DebugWindow : EditorWindow
         GUILayout.BeginHorizontal();
 
         GUILayout.Label($"FPS: {consoleManager.fpsMonitor.currentFps}", GUILayout.Width(Screen.width * 0.25f));
-        GUILayout.Label($"Turn: {(turnManager.IsPlayerTurn ? "Player" : "Enemy")}", GUILayout.Width(Screen.width * 0.25f));
+        GUILayout.Label($"Turn: {(turnManager.IsPlayerTurn ? "Player" : "Opponent")}", GUILayout.Width(Screen.width * 0.25f));
         GUILayout.Label($"Phase: {turnManager.currentPhase}", GUILayout.Width(Screen.width * 0.25f));
         GUILayout.Label($"Runtime: {Time.time:F2}", GUILayout.Width(Screen.width * 0.25f));
 
@@ -215,8 +215,8 @@ public class DebugWindow : EditorWindow
         if (debugManager.isTimerInfinite != onCheckChanged)
             debugManager.isTimerInfinite = onCheckChanged;
 
-        //Is Enemy Stunned? checkbox
-        onCheckChanged = EditorGUILayout.Toggle("Is Enemy Stunned?", debugManager.isEnemyStunned, GUILayout.Width(Screen.width * 0.25f));
+        //Is Opponent Stunned? checkbox
+        onCheckChanged = EditorGUILayout.Toggle("Is Opponent Stunned?", debugManager.isEnemyStunned, GUILayout.Width(Screen.width * 0.25f));
         if (debugManager.isEnemyStunned != onCheckChanged)
             debugManager.isEnemyStunned = onCheckChanged;
 

@@ -1,5 +1,6 @@
 using Game.Behaviors.Actor;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,35 +14,41 @@ namespace Game.Behaviors
         Image portrait;
         TextMeshProUGUI title;
         TextMeshProUGUI details;
-        Vector3 initialPosition;
-        [SerializeField] AnimationCurve verticalCurve;
-        [SerializeField] AnimationCurve horizontalCurve;
-        [SerializeField] Vector2 range;
-        [SerializeField] Vector2 speed;
-        private float elapsedTime = 0f;
+        Vector3 destination;
+        Vector3 offscreenPosition;
+        AnimationCurve slideInCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        float slideDuration = 0.5f;
+
 
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
             backdrop = GameObject.Find(Constants.CardBackdrop).GetComponent<Image>();
-            portrait = GameObject.Find(Constants.CardPortrait).GetComponent<Image>();     
+            portrait = GameObject.Find(Constants.CardPortrait).GetComponent<Image>();
             title = GameObject.Find(Constants.CardTitle).GetComponent<TextMeshProUGUI>();
             details = GameObject.Find(Constants.CardDetails).GetComponent<TextMeshProUGUI>();
-            Clear();
+            Reset();
         }
 
         private void Start()
         {
             portrait.rectTransform.sizeDelta = new Vector2(cardPortraitSize, cardPortraitSize);
-            initialPosition = portrait.rectTransform.localPosition;
+
+            var position = portrait.rectTransform.localPosition;
+            float width = portrait.rectTransform.rect.width;
+            float height = portrait.rectTransform.rect.height;
+            destination = new Vector3(position.x + width / 2, position.y + height / 4, position.z);
+
+            offscreenPosition = new Vector3(Screen.width + width, destination.y, destination.z);
+            portrait.rectTransform.localPosition = offscreenPosition;
         }
 
-        public void Set(ActorInstance actor)
+        public void Assign(ActorInstance actor)
         {
             backdrop.enabled = true;
             portrait.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
             portrait.enabled = true;
-           
+
             title.text = actor.name;
 
             var hp = actor.HP;
@@ -62,32 +69,47 @@ namespace Game.Behaviors
                 + $"{Environment.NewLine}"
                 + resourceManager.ActorDetails(actor.character.ToString());
             details.text = stats;
+
+            SlideInAsync();
         }
 
-        public void FixedUpdate()
+        private void SlideInAsync()
         {
-            elapsedTime += Time.deltaTime;
-
-            //var hover = new Vector3(
-            //    initialPosition.x + horizontalCurve.Evaluate(timeElapsed / Agility.x) * range.x * gameSpeed,
-            //    initialPosition.y + verticalCurve.Evaluate(timeElapsed / Agility.y) * range.y * gameSpeed,
-            //    initialPosition.z);
-
-            //var rot = Geometry.Rotation(new Vector3(0, 5 * verticalCurve.Evaluate(Time.time % verticalCurve.length), 0));
-            //portrait.rectTransform.localPosition = hover;
-            //portrait.rectTransform.localRotation = rot;
-
+            StartCoroutine(SlideIn());
         }
 
-        public void Clear()
+        private IEnumerator SlideIn()
+        {
+            float elapsedTime = 0f;
+
+            while (elapsedTime < slideDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float progress = Mathf.Clamp01(elapsedTime / slideDuration);
+                float curveValue = slideInCurve.Evaluate(progress);
+
+                // Interpolate between offscreen and initial position
+                portrait.rectTransform.localPosition = Vector3.Lerp(offscreenPosition, destination, curveValue);
+
+                yield return Wait.OneTick();
+            }
+
+            // Ensure the portrait reaches the final position
+            portrait.rectTransform.localPosition = destination;
+        }
+
+        public void Reset()
         {
             backdrop.enabled = false;
             portrait.enabled = false;
             title.text = "";
             details.text = "";
 
-            //DespawnAll selectionBox from Actor
+            // Despawn all selection boxes from actors
             actors.ForEach(x => x.renderers.SetSelectionBoxEnabled(false));
+
+            // Reset portrait position
+            portrait.rectTransform.localPosition = offscreenPosition;
         }
     }
 }

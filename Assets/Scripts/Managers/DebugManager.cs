@@ -1,3 +1,4 @@
+using Assets.Scripts.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -199,18 +200,23 @@ public class DebugManager : ExtendedMonoBehavior
 
     public void VFXTest_Blue_Slash_01()
     {
+        var attack = new AttackResult()
+        {
+            Opponent = Paladin,
+            IsHit = true,
+            IsCriticalHit = Random.Int(1, 10) == 10,
+            Damage = 3
+        };
 
-        int damage = 3;
-        var isCriticalHit = Random.Int(1, 10) == 10;
-        if (isCriticalHit)
+        if (attack.IsCriticalHit)
         {
             var crit = resourceManager.VisualEffect("Yellow_Hit");
             vfxManager.SpawnAsync(crit, Paladin.position);
-            damage = (int)Math.Round(damage * 1.5f);
+            attack.Damage = (int)Math.Round(attack.Damage * 1.5f);
         }
 
         var vfx = resourceManager.VisualEffect("Blue_Slash_01");
-        vfxManager.SpawnAsync(vfx, Paladin.position, Paladin.TakeDamage(damage, isCriticalHit));
+        vfxManager.SpawnAsync(vfx, Paladin.position, Paladin.TakeDamage(attack));
     }
 
     public void VFXTest_Blue_Slash_02()

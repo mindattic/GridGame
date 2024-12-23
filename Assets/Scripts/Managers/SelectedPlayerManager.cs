@@ -3,18 +3,6 @@ using UnityEngine;
 
 public class SelectedPlayerManager : ExtendedMonoBehavior
 {
-    // Play is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // SaveProfile is called once per frame
-    void Update()
-    {
-
-    }
-
 
     public void Focus()
     {
@@ -49,7 +37,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         //Assign mouse relativeOffset (how off center was selectionBox)
         mouseOffset = focusedActor.position - mousePosition3D;
 
-        cardManager.Set(focusedActor);
+        cardManager.Assign(focusedActor);
 
         if (focusedActor.IsPlayer)
             StartCoroutine(focusedActor.MoveTowardCursor());
@@ -94,26 +82,10 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         Unfocus();
         turnManager.currentPhase = TurnPhase.Move;
-        //actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
-        //selectedPlayer.sortingOrder = SortingOrder.Max;
-
         audioManager.Play("Select");
-
-        //DespawnAll glowCurve boardPosition
-        //ResetBobbing();
-
-
-
-
-
-        //ghostManager.Play(selectedPlayer);
-        //footstepManager.Play(selectedPlayer);
-
         timerBar.Play();
-
         actorManager.AccumulateAP();
         StartCoroutine(selectedPlayer.MoveTowardCursor());
-
     }
 
     public void Unselect()
@@ -144,23 +116,12 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         //footstepManager.Stop();
 
         tileManager.Reset();
-        cardManager.Clear();
+        cardManager.Reset();
         timerBar.Pause();
         turnManager.currentPhase = TurnPhase.Attack;
 
         turnManager.CheckPlayerAttack();
     }
 
-
-    private void ResetBobbing()
-    {
-        foreach (var actor in actors)
-        {
-            if (actor == null || !actor.IsAlive || !actor.IsActive) continue;
-            actor.renderers.glow.transform.position = actor.position;
-            actor.renderers.thumbnail.transform.position = actor.position;
-            actor.renderers.frame.transform.position = actor.position;
-        }
-    }
 
 }
