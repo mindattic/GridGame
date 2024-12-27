@@ -664,74 +664,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05858ca814fb23e4e8d6feeed263d55d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  verticalCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: -1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.5155364
-      value: 0.5232971
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: -1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 0
-    m_PostInfinity: 0
-    m_RotationOrder: 4
-  horizontalCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: -1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: -1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 0
-    m_PostInfinity: 0
-    m_RotationOrder: 4
-  range: {x: 50, y: 50}
-  speed: {x: 5, y: 5}
 --- !u!1 &608292893
 GameObject:
   m_ObjectHideFlags: 0
@@ -7659,10 +7591,6 @@ MonoBehaviour:
   targetFramerate: 60
   vSyncCount: 0
   gameSpeed: 1
-  showActorNameTag: 0
-  showActorFrame: 0
-  isPlayerInvincible: 0
-  isEnemyInvincible: 0
   databaseManager: {fileID: 0}
   resourceManager: {fileID: 0}
   inputManager: {fileID: 0}
@@ -8182,6 +8110,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Dropdown: {fileID: 0}
+  showActorNameTag: 0
+  showActorFrame: 0
+  isPlayerInvincible: 0
+  isEnemyInvincible: 0
+  isTimerInfinite: 0
+  isEnemyStunned: 0
 --- !u!114 &1751276306
 MonoBehaviour:
   m_ObjectHideFlags: 0

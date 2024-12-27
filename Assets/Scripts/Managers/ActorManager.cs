@@ -7,17 +7,17 @@ namespace Game.Manager
     public class ActorManager : ExtendedMonoBehavior
     {
 
-        public void AccumulateAP()
+        public void CheckEnemyAP()
         {
-            var notReadyEnemies = enemies.Where(x => !x.IsReady).ToList();
-            notReadyEnemies.ForEach(x => x.GainAPAsync());
+            var notReadyEnemies = enemies.Where(x => !x.HasMaxAP).ToList();
+            notReadyEnemies.ForEach(x => x.CheckAP());
         }
 
 
-        public void CheckEnemyReadiness()
+        public void CheckEnemyAngry()
         {
-            var notReadyEnemies = enemies.Where(x => !x.IsReady).ToList();
-            notReadyEnemies.ForEach(x => x.CheckReady());
+            var notAngryEnemies = enemies.Where(x => !x.flags.isAngry).ToList();
+            notAngryEnemies.ForEach(x => x.CheckAngry());
         }
 
         //public void SetAttacking(List<ActorInstance> x, bool state)

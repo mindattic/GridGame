@@ -1,26 +1,66 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 using UnityEngine;
 
-public class ActorHealthBar
+public class ActorHealthBar : MonoBehaviour
 {
-    private ActorRenderers renderers;
-    private ActorStats stats;
+    //Variables
+    private ActorInstance instance;
+    private Vector3 initialScale;
 
-    public ActorHealthBar(ActorRenderers renderers, ActorStats stats)
+    //Properties
+    private ActorRenderers renderers => this.instance.renderers;
+    private ActorStats stats => this.instance.stats;
+
+    public void Initialize(ActorInstance parentInstance)
     {
-        this.renderers = renderers;
-        this.stats = stats;
-
-
-
+        this.instance = parentInstance;
+        initialScale = renderers.healthBarBack.transform.localScale;
     }
 
+    private Vector3 GetScale(float value)
+    {
+        return new Vector3(
+            Mathf.Clamp(initialScale.x * (value / stats.MaxHP), 0, initialScale.x),
+            initialScale.y,
+            initialScale.z);
+    }
 
+    public void Refresh()
+    {
+        renderers.healthBarDrain.transform.localScale = GetScale(stats.PreviousHP);
+        renderers.healthBarFill.transform.localScale = GetScale(stats.HP);
+        renderers.healthBarText.text = $@"{stats.HP}/{stats.MaxHP}";
+        StartCoroutine(Drain());
+    }
 
+    private IEnumerator Drain()
+    {
+        //Check abort conditions
+        if (stats.PreviousHP == stats.HP)
+            yield break;
+
+        //Before:
+        Vector3 scale;
+
+        //During:
+        yield return Wait.For(Intermission.Before.HealthBar.Drain);
+
+        while (stats.HP < stats.PreviousHP)
+        {
+            stats.PreviousHP -= Increment.HealthBarDrainAmount;
+            scale = GetScale(stats.PreviousHP);
+            renderers.healthBarDrain.transform.localScale = scale;
+            yield return Wait.OneTick();
+        }
+
+        //After:
+        stats.PreviousHP = stats.HP;
+        scale = GetScale(stats.PreviousHP);
+        renderers.healthBarDrain.transform.localScale = scale;
+
+        //if (IsDying)
+        //DieAsync();
+    }
 
 
 }

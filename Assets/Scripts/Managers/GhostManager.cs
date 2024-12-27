@@ -1,5 +1,6 @@
 using Game.Behaviors.Actor;
 using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -26,11 +27,9 @@ public class GhostManager : ExtendedMonoBehavior
 
     public void Play(ActorInstance actor)
     {
-        if (actor == null || actor.IsDying || actor.IsInactive)
-            return;
-
         this.actor = actor;
         previousPosition = this.actor.position;
+        StartCoroutine(CheckSpawn());
     }
 
     public void Stop()
@@ -39,18 +38,19 @@ public class GhostManager : ExtendedMonoBehavior
     }
 
 
-    void Update()
+    private IEnumerator CheckSpawn()
     {
-        if (actor == null || actor.IsDying || actor.IsInactive)
-            return;
+        while (actor.IsPlaying)
+        {
+            var distance = Vector3.Distance(actor.position, previousPosition);
+            if (distance >= threshold)
+            {
+                previousPosition = actor.position;
+                Spawn();
+            }
 
-        var distance = Vector3.Distance(actor.position, previousPosition);
-        if (distance < threshold)
-            return;
-
-        previousPosition = actor.position;
-
-        Spawn();
+            yield return new WaitForFixedUpdate();
+        }
     }
 
     private void Spawn()
@@ -62,10 +62,6 @@ public class GhostManager : ExtendedMonoBehavior
         instance.parent = board.transform;
         instance.Spawn(actor);
     }
-
-    
-
-
 
     public void Clear()
     {

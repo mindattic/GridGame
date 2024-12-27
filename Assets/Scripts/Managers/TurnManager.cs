@@ -68,7 +68,6 @@ public class TurnManager : ExtendedMonoBehavior
         if (IsPlayerTurn)
         {
             currentTurn++;
-            actorManager.CheckEnemyReadiness();
             timerBar.Reset();
         }
         else if (IsEnemyTurn)
@@ -371,9 +370,9 @@ public class TurnManager : ExtendedMonoBehavior
     #region Enemy Attack Methods
 
 
-    public void CheckEnemySpawn()
+    private void CheckEnemySpawn()
     {
-        //Check abort state
+        //Check abort conditions
         if (!IsEnemyTurn || !IsStartPhase)
             return;
 
@@ -384,113 +383,117 @@ public class TurnManager : ExtendedMonoBehavior
         }
     }
 
-
-
-    public void CheckEnemyMove()
+    private void CheckEnemyMove()
     {
-        //Check abort state
-        if (!IsEnemyTurn || !IsStartPhase)
-            return;
-
-        IEnumerator _()
-        {
-            currentPhase = Phase.Move;
-
-            var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
-            if (readyEnemies.Count > 0)
-            {
-                yield return Wait.For(Interval.OneSecond);
-
-                foreach (var enemy in readyEnemies)
-                {
-                    enemy.CalculateAttackStrategy();
-                    yield return enemy.MoveTowardDestination();
-                }
-
-                currentPhase = Phase.Attack;
-                CheckEnemyAttack();
-            }
-            else
-            {
-                NextTurn();
-            }
-
-
-        }
-
-        StartCoroutine(_());
+        StartCoroutine(EnemyMove());
     }
 
-    private void CheckEnemyAttack()
+    private IEnumerator EnemyMove()
     {
-        //Check abort state
-        if (!IsEnemyTurn || !IsAttackPhase)
-            return;
+        //Check abort conditions
+        if (!IsEnemyTurn || !IsStartPhase)
+            yield break;
 
-        IEnumerator _()
+        currentPhase = Phase.Move;
+
+        var readyEnemies = enemies.Where(x => x.IsPlaying && x.HasMaxAP).ToList();
+        if (readyEnemies.Count > 0)
         {
-            var readyEnemies = enemies.Where(x => x.IsPlaying && x.IsReady).ToList();
-            if (readyEnemies.Count > 0)
+            yield return Wait.For(Intermission.Before.Enemy.Moves);
+
+            foreach (var enemy in readyEnemies)
             {
-                yield return Wait.For(Interval.HalfSecond);
-
-                foreach (var enemy in readyEnemies)
-                {
-                    var defendingPlayers = players.Where(x => x.IsPlaying && x.IsAdjacentTo(enemy.location)).ToList();
-                    if (defendingPlayers.Count > 0)
-                    {
-                        foreach (var player in defendingPlayers)
-                        {
-                            var direction = enemy.GetAdjacentDirectionTo(player);
-
-                            IEnumerator _()
-                            {
-                                var isHit = Formulas.IsHit(enemy, player);
-                                if (isHit)
-                                {
-                                    var damage = Formulas.CalculateDamage(enemy, player);
-                                    var attack = new AttackResult()
-                                    {
-                                        Opponent = player,
-                                        IsHit = isHit,
-                                        IsCriticalHit = false,
-                                        Damage = damage
-                                    };
-
-                                    yield return enemy.Attack(attack);
-                                }
-                                else
-                                {
-                                    yield return player.AttackMiss();
-                                }
-                            }
-
-
-                            yield return enemy.Bump(direction, _());
-
-
-                        }
-                    }
-                }
-
-                //TODO: Put player.Die here so that it resolves after attacks...
-                var dyingPlayers = actors.Where(x => x.IsDying).ToList();
-                foreach(var player in dyingPlayers)
-                {
-                    yield return player.Die();
-                }
-
-                readyEnemies.ForEach(x => x.ResetActionBar());
+                enemy.CalculateAttackStrategy();
+                yield return enemy.MoveTowardDestination();
             }
 
-
-
+            currentPhase = Phase.Attack;
+            CheckEnemyAttack();
+        }
+        else
+        {
             NextTurn();
         }
 
 
-        StartCoroutine(_());
     }
+
+
+
+
+
+    private void CheckEnemyAttack()
+    {
+        StartCoroutine(EnemyAttack());
+    }
+
+    private IEnumerator EnemyAttack()
+    {
+        //Check abort conditions
+        if (!IsEnemyTurn || !IsAttackPhase)
+            yield break;
+
+        var readyEnemies = enemies.Where(x => x.IsPlaying && x.HasMaxAP).ToList();
+        if (readyEnemies.Count > 0)
+        {
+            yield return Wait.For(Intermission.Before.Enemy.Attacks);
+
+            foreach (var enemy in readyEnemies)
+            {
+                var defendingPlayers = players.Where(x => x.IsPlaying && x.IsAdjacentTo(enemy.location)).ToList();
+                if (defendingPlayers.Count > 0)
+                {
+                    foreach (var player in defendingPlayers)
+                    {
+                        var direction = enemy.GetAdjacentDirectionTo(player);
+
+                        IEnumerator _()
+                        {
+                            var isHit = Formulas.IsHit(enemy, player);
+                            if (isHit)
+                            {
+                                var damage = Formulas.CalculateDamage(enemy, player);
+                                var attack = new AttackResult()
+                                {
+                                    Opponent = player,
+                                    IsHit = isHit,
+                                    IsCriticalHit = false,
+                                    Damage = damage
+                                };
+
+                                yield return enemy.Attack(attack);
+                            }
+                            else
+                            {
+                                yield return player.AttackMiss();
+                            }
+                        }
+
+
+                        yield return enemy.Bump(direction, _());
+
+
+                    }
+                }
+            }
+
+            //TODO: Put player.Die here so that it resolves after attacks...
+            var dyingPlayers = actors.Where(x => x.IsDying).ToList();
+            foreach (var player in dyingPlayers)
+            {
+                yield return player.Die();
+            }
+
+            readyEnemies.ForEach(x => x.ResetActionBar());
+        }
+
+
+
+        NextTurn();
+    }
+
+
+
 
 
     #endregion

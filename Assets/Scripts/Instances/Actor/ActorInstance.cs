@@ -2,13 +2,10 @@ using Assets.Scripts.Behaviors.Actor;
 using Assets.Scripts.Instances.Actor;
 using Assets.Scripts.Models;
 using Game.Instances.Actor;
-using System;
 using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-
-//Layers
 
 public class ActorInstance : ExtendedMonoBehavior
 {
@@ -28,6 +25,9 @@ public class ActorInstance : ExtendedMonoBehavior
     public ActorVFX vfx = new ActorVFX();
     public ActorWeapon weapon = new ActorWeapon();
 
+    public ActorHealthBar healthBar;
+    public ActorActionBar actionBar;
+
     public int spawnDelay = -1;
     //public int turnDelay = 0;
 
@@ -39,50 +39,53 @@ public class ActorInstance : ExtendedMonoBehavior
 
     private float glowIntensity;
 
-    private Vector3 initialHealthBarScale;
-    private Vector3 initialActionBarScale;
-
     ActorSprite sprites;
 
     [SerializeField] public AnimationCurve glowCurve;
-
-
-    //public ActorHealthBar HealthBar;
-    //public ActorThumbnail Thumbnail;
 
     //public VisualEffect attack;
 
     private void Awake()
     {
-        renderers.opaque = gameObject.transform.GetChildByName(ActorLayer.Name.Opaque).GetComponent<SpriteRenderer>();
-        renderers.quality = gameObject.transform.GetChildByName(ActorLayer.Name.Quality).GetComponent<SpriteRenderer>();
-        renderers.glow = gameObject.transform.GetChildByName(ActorLayer.Name.Glow).GetComponent<SpriteRenderer>();
-        renderers.parallax = gameObject.transform.GetChildByName(ActorLayer.Name.Parallax).GetComponent<SpriteRenderer>();
-        renderers.thumbnail = gameObject.transform.GetChildByName(ActorLayer.Name.Thumbnail).GetComponent<SpriteRenderer>();
-        renderers.frame = gameObject.transform.GetChildByName(ActorLayer.Name.Frame).GetComponent<SpriteRenderer>();
-        renderers.statusIcon = gameObject.transform.GetChildByName(ActorLayer.Name.StatusIcon).GetComponent<SpriteRenderer>();
-        renderers.healthBarBack = gameObject.transform.GetChildByName(ActorLayer.Name.HealthBarBack).GetComponent<SpriteRenderer>();
-        renderers.healthBarDrain = gameObject.transform.GetChildByName(ActorLayer.Name.HealthBarDrain).GetComponent<SpriteRenderer>();
-        renderers.healthBar = gameObject.transform.GetChildByName(ActorLayer.Name.HealthBar).GetComponent<SpriteRenderer>();
-        renderers.healthBarText = gameObject.transform.GetChildByName(ActorLayer.Name.HealthBarText).GetComponent<TextMeshPro>();
-        renderers.actionBarBack = gameObject.transform.GetChildByName(ActorLayer.Name.ActionBarBack).GetComponent<SpriteRenderer>();
-        renderers.actionBar = gameObject.transform.GetChildByName(ActorLayer.Name.ActionBar).GetComponent<SpriteRenderer>();
-        renderers.actionBarDrain = gameObject.transform.GetChildByName(ActorLayer.Name.ActionBarDrain).GetComponent<SpriteRenderer>();
-        renderers.actionBarText = gameObject.transform.GetChildByName(ActorLayer.Name.ActionBarText).GetComponent<TextMeshPro>();
-        renderers.mask = gameObject.transform.GetChildByName(ActorLayer.Name.Mask).GetComponent<SpriteMask>();
-        renderers.radialBack = gameObject.transform.GetChildByName(ActorLayer.Name.RadialBack).GetComponent<SpriteRenderer>();
-        renderers.radial = gameObject.transform.GetChildByName(ActorLayer.Name.RadialFill).GetComponent<SpriteRenderer>();
-        renderers.radialText = gameObject.transform.GetChildByName(ActorLayer.Name.RadialText).GetComponent<TextMeshPro>();
-        renderers.turnDelayText = gameObject.transform.GetChildByName(ActorLayer.Name.TurnDelayText).GetComponent<TextMeshPro>();
-        renderers.nameTagText = gameObject.transform.GetChildByName(ActorLayer.Name.NameTagText).GetComponent<TextMeshPro>();
-        renderers.weaponIcon = gameObject.transform.GetChildByName(ActorLayer.Name.WeaponIcon).GetComponent<SpriteRenderer>();
-        renderers.selectionBox = gameObject.transform.GetChildByName(ActorLayer.Name.SelectionBox).GetComponent<SpriteRenderer>();
 
-        //HealthBar = new ActorHealthBar(GetGameObjectByLayer(ActorLayer.HealthBarBack), GetGameObjectByLayer(ActorLayer.HealthBar));
+        renderers.opaque = gameObject.transform.GetChild(ActorLayer.Name.Opaque).GetComponent<SpriteRenderer>();
+        renderers.quality = gameObject.transform.GetChild(ActorLayer.Name.Quality).GetComponent<SpriteRenderer>();
+        renderers.glow = gameObject.transform.GetChild(ActorLayer.Name.Glow).GetComponent<SpriteRenderer>();
+        renderers.parallax = gameObject.transform.GetChild(ActorLayer.Name.Parallax).GetComponent<SpriteRenderer>();
+        renderers.thumbnail = gameObject.transform.GetChild(ActorLayer.Name.Thumbnail).GetComponent<SpriteRenderer>();
+        renderers.frame = gameObject.transform.GetChild(ActorLayer.Name.Frame).GetComponent<SpriteRenderer>();
+        renderers.statusIcon = gameObject.transform.GetChild(ActorLayer.Name.StatusIcon).GetComponent<SpriteRenderer>();
+
+        //Health Bar
+        renderers.healthBarBack = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Back).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Back} is null");
+        renderers.healthBarDrain = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Drain).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Drain} is null");
+        renderers.healthBarFill = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Fill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Fill} is null");
+        renderers.healthBarText = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Text).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Text} is null");
+
+        //Action Bar
+        renderers.actionBarBack = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Back).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Back} is null");
+        renderers.actionBarDrain = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Drain).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Drain} is null");
+        renderers.actionBarFill = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Fill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Fill} is null");
+        renderers.actionBarText = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Text).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Text} is null");
+
+        renderers.mask = gameObject.transform.GetChild(ActorLayer.Name.Mask).GetComponent<SpriteMask>();
+        renderers.radialBack = gameObject.transform.GetChild(ActorLayer.Name.RadialBack).GetComponent<SpriteRenderer>();
+        renderers.radial = gameObject.transform.GetChild(ActorLayer.Name.RadialFill).GetComponent<SpriteRenderer>();
+        renderers.radialText = gameObject.transform.GetChild(ActorLayer.Name.RadialText).GetComponent<TextMeshPro>();
+        renderers.turnDelayText = gameObject.transform.GetChild(ActorLayer.Name.TurnDelayText).GetComponent<TextMeshPro>();
+        renderers.nameTagText = gameObject.transform.GetChild(ActorLayer.Name.NameTagText).GetComponent<TextMeshPro>();
+        renderers.weaponIcon = gameObject.transform.GetChild(ActorLayer.Name.WeaponIcon).GetComponent<SpriteRenderer>();
+        renderers.selectionBox = gameObject.transform.GetChild(ActorLayer.Name.SelectionBox).GetComponent<SpriteRenderer>();
+
+
+        healthBar = GetComponentInChildren<ActorHealthBar>();
+        healthBar.Initialize(this);
+
+        actionBar = GetComponentInChildren<ActorActionBar>();
+        actionBar.Initialize(this);
+
         //Thumbnail = new ActorThumbnail(GetGameObjectByLayer(ActorLayer.Thumbnail));
 
-        initialHealthBarScale = renderers.healthBar.transform.localScale;
-        initialActionBarScale = renderers.actionBar.transform.localScale;
 
         wiggleSpeed = tileSize * 24f;
         wiggleAmplitude = 15f;  // Amplitude (difference from -45 degrees)
@@ -129,14 +132,12 @@ public class ActorInstance : ExtendedMonoBehavior
     public bool IsEastEdge => location.x == board.columnCount;
     public bool IsSouthEdge => location.y == board.rowCount;
     public bool IsWestEdge => location.x == 1;
-    public bool IsAlive => IsActive && stats.HP > 0;
-    public bool IsDying => IsActive && stats.HP < 1;
-    public bool IsDead => !IsActive && stats.HP < 1;
-    public bool IsActive => this != null && isActiveAndEnabled;
-    public bool IsInactive => this == null || !isActiveAndEnabled;
-    public bool IsSpawnable => !IsActive && IsAlive && spawnDelay <= turnManager.currentTurn;
-    public bool IsPlaying => IsActive && IsAlive;
-    public bool IsReady => IsPlaying && stats.AP == stats.MaxAP; //turnDelay == 0;
+    public bool IsAlive => isActiveAndEnabled && stats.HP > 0;
+    public bool IsDying => isActiveAndEnabled && stats.HP < 1;
+    public bool IsDead => !isActiveAndEnabled && stats.HP < 1;
+    public bool IsSpawnable => !isActiveAndEnabled && IsAlive && spawnDelay <= turnManager.currentTurn;
+    public bool IsPlaying => isActiveAndEnabled && IsAlive;
+    public bool HasMaxAP => IsPlaying && stats.AP == stats.MaxAP; //turnDelay == 0;
 
     #endregion
 
@@ -158,8 +159,8 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public Vector3 thumbnailPosition
     {
-        get => gameObject.transform.GetChildByName("Thumbnail").gameObject.transform.position;
-        set => gameObject.transform.GetChildByName("Thumbnail").gameObject.transform.position = value;
+        get => gameObject.transform.GetChild("Thumbnail").gameObject.transform.position;
+        set => gameObject.transform.GetChild("Thumbnail").gameObject.transform.position = value;
     }
 
     public Quaternion rotation
@@ -196,13 +197,13 @@ public class ActorInstance : ExtendedMonoBehavior
             renderers.thumbnail.sortingOrder = value + ActorLayer.Value.Thumbnail;
             renderers.frame.sortingOrder = value + ActorLayer.Value.Frame;
             renderers.statusIcon.sortingOrder = value + ActorLayer.Value.StatusIcon;
-            renderers.healthBarBack.sortingOrder = value + ActorLayer.Value.HealthBarBack;
-            renderers.healthBarDrain.sortingOrder = value + ActorLayer.Value.HealthBarDrain;
-            renderers.healthBar.sortingOrder = value + ActorLayer.Value.HealthBar;
-            renderers.healthBarText.sortingOrder = value + ActorLayer.Value.HealthBarText;
-            renderers.actionBarBack.sortingOrder = value + ActorLayer.Value.ActionBarBack;
-            renderers.actionBar.sortingOrder = value + ActorLayer.Value.ActionBar;
-            renderers.actionBarText.sortingOrder = value + ActorLayer.Value.ActionBarText;
+            renderers.healthBarBack.sortingOrder = value + ActorLayer.Value.HealthBar.Back;
+            renderers.healthBarDrain.sortingOrder = value + ActorLayer.Value.HealthBar.Drain;
+            renderers.healthBarFill.sortingOrder = value + ActorLayer.Value.HealthBar.Fill;
+            renderers.healthBarText.sortingOrder = value + ActorLayer.Value.HealthBar.Text;
+            renderers.actionBarBack.sortingOrder = value + ActorLayer.Value.ActionBar.Back;
+            renderers.actionBarFill.sortingOrder = value + ActorLayer.Value.ActionBar.Fill;
+            renderers.actionBarText.sortingOrder = value + ActorLayer.Value.ActionBar.Text;
             renderers.mask.sortingOrder = value + ActorLayer.Value.Mask;
             renderers.radialBack.sortingOrder = value + ActorLayer.Value.RadialBack;
             renderers.radial.sortingOrder = value + ActorLayer.Value.RadialFill;
@@ -303,7 +304,7 @@ public class ActorInstance : ExtendedMonoBehavior
         renderers.SetNameTagText(name);
         renderers.SetNameTagEnabled(isEnabled: debugManager.showActorNameTag);
 
-        UpdateHealthBar();
+        healthBar.Refresh();
         ResetActionBar();
         FadeInAsync();
         Spin360Async();
@@ -324,62 +325,52 @@ public class ActorInstance : ExtendedMonoBehavior
 
     void FixedUpdate()
     {
-        //Check abort state
+        //Check abort conditions
         if (!IsPlaying || IsFocusedPlayer || IsSelectedPlayer)
             return;
 
         UpdateGlow();
-        CheckEnemyAP();
     }
 
-
-    void CheckEnemyAP()
+    public void CheckAP()
     {
-        //Check abort state
-        if (!HasSelectedPlayer || !IsEnemy || !IsPlaying || IsReady)
-            return;
-
-        GainAPAsync();
+        if (IsPlaying)
+            StartCoroutine(GainAP());
     }
 
-
-    public void GainAPAsync()
+    private IEnumerator GainAP()
     {
-        StartCoroutine(GainAP());
-    }
-
-    public IEnumerator GainAP()
-    {
-        //Check abort state
-        if (debugManager.isEnemyStunned || !HasSelectedPlayer || !IsEnemy || !IsPlaying || IsReady)
+        //Check abort conditions
+        if (debugManager.isEnemyStunned || !HasSelectedPlayer || !IsEnemy || !IsPlaying || HasMaxAP || flags.isGainingAP)
             yield break;
 
         //Before:
-        float amount = stats.Speed * 0.001f;
+        flags.isGainingAP = true;
+        float amount = stats.Speed * 0.1f;
 
         //During:
-        while (HasSelectedPlayer && IsEnemy && IsPlaying && !IsReady)
+        while (HasSelectedPlayer && IsEnemy && IsPlaying && !HasMaxAP)
         {
             stats.AP += amount;
             stats.AP = Mathf.Clamp(stats.AP, 0, stats.MaxAP);
             stats.PreviousAP = stats.AP;
-            UpdateActionBar();
+            CheckWeaponWiggle();
+            actionBar.Refresh();
             yield return Wait.OneTick();
         }
 
         //After:
         stats.PreviousAP = stats.AP;
-        UpdateActionBar();
-
-        if (IsReady)
-            CheckWeaponWiggle();
+        actionBar.Refresh();
+        flags.isGainingAP = false;
     }
 
     public void ResetActionBar()
     {
         stats.AP = 0;
         stats.PreviousAP = 0;
-        UpdateActionBar();
+        StopCoroutine(WeaponWiggle());
+        actionBar.Refresh();
     }
 
 
@@ -389,7 +380,8 @@ public class ActorInstance : ExtendedMonoBehavior
         float amount = stats.Speed * 0.01f;
         stats.AP = amount;
         stats.PreviousAP = amount;
-        UpdateActionBar();
+        CheckWeaponWiggle();
+        actionBar.Refresh();
     }
 
 
@@ -457,11 +449,10 @@ public class ActorInstance : ExtendedMonoBehavior
 
         previousLocation = location;
 
-        //audioManager.Play($"Move{Random.Int(1, 6)}");
 
         CheckActorOverlapping(closestTile);
 
-        //Assign currentFps actor's boardLocation to closest tile boardLocation
+        //Assign actor's location to closest tile location
         location = closestTile.location;
     }
 
@@ -475,7 +466,9 @@ public class ActorInstance : ExtendedMonoBehavior
         overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.location);
         overlappingActor.flags.IsMoving = true;
         overlappingActor.flags.IsSwapping = true;
-        StartCoroutine(overlappingActor.MoveTowardDestination());
+
+        if (IsPlaying)
+            StartCoroutine(overlappingActor.MoveTowardDestination());
     }
 
     private void ApplyTilt(Vector3 velocity, float tiltFactor, float rotationSpeed, float resetSpeed, Vector3 baseRotation)
@@ -492,27 +485,6 @@ public class ActorInstance : ExtendedMonoBehavior
                 Quaternion.Euler(0, 0, tiltZ),
                 Time.deltaTime * rotationSpeed * gameSpeed
             );
-
-            //if (isMovingVertical)
-            //{
-            //    //Tilt for vertical movement
-            //    float tiltZ = velocity.y * tiltFactor; // Tilt on Z-axis based on X movement
-            //    transform.localRotation = Quaternion.Slerp(
-            //        transform.localRotation,
-            //        Quaternion.Euler(0, 0, tiltZ),
-            //        Time.deltaTime * rotationSpeed * gameSpeed
-            //    );
-            //}
-            //else
-            //{
-            //    //Tilt for horizontal movement
-            //    float tiltZ = velocity.x * tiltFactor; // Tilt on Z-axis based on X movement
-            //    transform.localRotation = Quaternion.Slerp(
-            //        transform.localRotation,
-            //        Quaternion.Euler(0, 0, tiltZ),
-            //        Time.deltaTime * rotationSpeed * gameSpeed
-            //    );
-            //}
         }
         else
         {
@@ -644,7 +616,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
     private void UpdateGlow()
     {
-        //Check abort state
+        //Check abort conditions
         if (!IsPlaying || !turnManager.IsStartPhase || (turnManager.IsPlayerTurn && !IsPlayer) || (turnManager.IsEnemyTurn && !IsEnemy))
             return;
 
@@ -673,7 +645,8 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public void ShakeAsync(float intensity, float duration = 0)
     {
-        StartCoroutine(Shake(intensity, duration));
+        if (IsPlaying)
+            StartCoroutine(Shake(intensity, duration));
     }
 
     public IEnumerator Shake(float intensity, float duration = 0)
@@ -710,116 +683,10 @@ public class ActorInstance : ExtendedMonoBehavior
         thumbnailPosition = originalPosition;
     }
 
-
-
-
-    //public IEnumerator Dodge()
-    //{
-    //    //Before:
-    //    DodgeStage stage = DodgeStage.Start;
-    //    var targetRotation = new Vector3(
-    //        15f,
-    //        70f,
-    //        15f);
-    //    var currentRotation = Vector3.zero;
-    //    var rotationSpeed = 12f;
-    //    var minScale = 0.9f;
-    //    float progress = 0f;
-    //    var randomDirection = new Vector3Int(
-    //        Random.Boolean ? -1 : 1,
-    //        Random.Boolean ? -1 : 1,
-    //        Random.Boolean ? -1 : 1);
-
-    //    // During:
-    //    while (stage != DodgeStage.End)
-    //    {
-    //        switch (stage)
-    //        {
-    //            case DodgeStage.Start:
-    //                {
-    //                    currentRotation = Vector3.zero;
-    //                    progress = 0f;
-    //                    scale = tileScale;
-    //                    rotation = Geometry.Rotation(currentRotation);
-
-    //                    stage = DodgeStage.TwistForward;
-    //                }
-    //                break;
-
-    //            case DodgeStage.TwistForward:
-    //                {
-    //                    //SaveProfile forward progress and sync rotation/scaleMultiplier
-    //                    progress += rotationSpeed / targetRotation.y; //Normalize progress
-    //                    progress = Mathf.Clamp01(progress); //Clamp between 0 and 1
-
-    //                    //Random twist direction on X, Y, and Z axes
-    //                    currentRotation.x = Mathf.Lerp(0f, targetRotation.x, progress) * randomDirection.x;
-    //                    currentRotation.y = Mathf.Lerp(0f, targetRotation.y, progress) * randomDirection.y;
-    //                    currentRotation.z = Mathf.Lerp(0f, targetRotation.z, progress) * randomDirection.z;
-
-    //                    //Calculate scaleMultiplier based on forward progress
-    //                    float scaleFactor = Mathf.Lerp(1f, minScale, progress);
-    //                    scale = tileScale * scaleFactor;
-
-    //                    //Apply rotation (random X, Y, and Z axis twisting) and scaling
-    //                    rotation = Geometry.Rotation(currentRotation.x, currentRotation.y, currentRotation.z);
-
-    //                    //If fully twisted forward, move to TwistBackward
-    //                    if (progress >= 1f)
-    //                    {
-    //                        progress = 0f; //Reset backward progress
-    //                        stage = DodgeStage.TwistBackward;
-    //                    }
-    //                }
-    //                break;
-
-    //            case DodgeStage.TwistBackward:
-    //                {
-    //                    //SaveProfile backward progress and sync rotation/scaleMultiplier
-    //                    progress += rotationSpeed / targetRotation.y; //Normalize progress
-    //                    progress = Mathf.Clamp01(progress); //Clamp between 0 and 1
-
-    //                    //Reverse random twist direction on X, Y, and Z axes
-    //                    currentRotation.x = Mathf.Lerp(targetRotation.x, 0f, progress) * randomDirection.x;
-    //                    currentRotation.y = Mathf.Lerp(targetRotation.y, 0f, progress) * randomDirection.y;
-    //                    currentRotation.z = Mathf.Lerp(targetRotation.z, 0f, progress) * randomDirection.z;
-
-    //                    //Calculate scaleMultiplier based on backward progress
-    //                    float scaleFactor = Mathf.Lerp(minScale, 1f, progress);
-    //                    scale = tileScale * scaleFactor;
-
-    //                    //Apply reverse rotation (random X, Y, and Z axis twisting) and scaling
-    //                    rotation = Geometry.Rotation(currentRotation);
-
-    //                    //If fully twisted back, move to End
-    //                    if (progress >= 1f)
-    //                    {
-    //                        stage = DodgeStage.End;
-    //                    }
-    //                }
-    //                break;
-
-    //            case DodgeStage.End:
-    //                {
-    //                    currentRotation = Vector3.zero;
-    //                    scale = tileScale;
-    //                    rotation = Geometry.Rotation(currentRotation);
-    //                }
-    //                break;
-    //        }
-
-    //        yield return Wait.OneTick();
-    //    }
-
-    //    //After:
-    //    currentRotation = Vector3.zero;
-    //    scale = tileScale;
-    //    rotation = Geometry.Rotation(currentRotation);
-    //}
-
     public void DodgeAsync()
     {
-        StartCoroutine(Dodge());
+        if (IsPlaying)
+            StartCoroutine(Dodge());
     }
 
     public IEnumerator Dodge()
@@ -886,53 +753,10 @@ public class ActorInstance : ExtendedMonoBehavior
         rotation = Geometry.Rotation(Vector3.zero);
     }
 
-
-    //public IEnumerator Bump(Direction direction)
-    //{
-    //    // Initial setup
-    //    var bumpCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-    //    var duration = 0.1f;
-    //    var startPosition = currentTile.position;
-    //    var endPosition = Geometry.GetDirectionalPosition(startPosition, direction, tileSize * percent33);
-    //    var elapsedTime = 0f;
-
-    //    // Increase sorting order to ensure this tile is on top
-    //    sortingOrder = SortingOrder.Max;
-
-    //    // Main loop for smooth interpolation
-    //    while (elapsedTime < duration)
-    //    {
-    //        elapsedTime += Time.deltaTime;
-
-    //        // Evaluate the curve and determine the position
-    //        float curveValue = bumpCurve.Evaluate(elapsedTime / duration);
-    //        position = Vector3.Lerp(startPosition, endPosition, curveValue);
-
-    //        yield return null; // Wait for the next frame
-    //    }
-
-    //    // Return to the starting position with the same curve
-    //    elapsedTime = 0f;
-    //    while (elapsedTime < duration)
-    //    {
-    //        elapsedTime += Time.deltaTime;
-
-    //        // Evaluate the curve and determine the position
-    //        float curveValue = bumpCurve.Evaluate(elapsedTime / duration);
-    //        position = Vector3.Lerp(endPosition, startPosition, curveValue);
-
-    //        yield return null; // Wait for the next frame
-    //    }
-
-    //    // Reset sorting order and position
-    //    sortingOrder = SortingOrder.Default;
-    //    position = startPosition;
-    //}
-
-
     public void BumpAsync(Direction direction)
     {
-        StartCoroutine(Bump(direction));
+        if (IsPlaying)
+            StartCoroutine(Bump(direction));
     }
 
     public IEnumerator Bump(Direction direction, IEnumerator triggeredEvent = null)
@@ -982,7 +806,7 @@ public class ActorInstance : ExtendedMonoBehavior
         }
 
         //Trigger Asynchronously
-        if (triggeredEvent != null)
+        if (triggeredEvent != null && IsPlaying)
             StartCoroutine(triggeredEvent);
 
         // Phase 3: Return to Starting Position (rotate back to zero and move back slowly)
@@ -1006,7 +830,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public IEnumerator TakeDamage(AttackResult attack)
     {
-        //Check abort state
+        //Check abort conditions
         if (!IsPlaying)
             yield break;
 
@@ -1020,7 +844,7 @@ public class ActorInstance : ExtendedMonoBehavior
             stats.PreviousHP = stats.HP;
             stats.HP -= attack.Damage;
             stats.HP = Mathf.Clamp(stats.HP, 0, stats.MaxHP);
-            UpdateHealthBar();
+            healthBar.Refresh();
         }
 
         damageTextManager.Spawn(attack.Damage.ToString(), position);
@@ -1040,14 +864,11 @@ public class ActorInstance : ExtendedMonoBehavior
         //After:
         ShrinkAsync();
         Shake(ShakeIntensity.Stop);
-
-        //if (IsPlayer && IsDying)
-        //    yield return Die();
     }
 
     public void TakeDamageAsync(AttackResult attack)
     {
-        //Check abort state
+        //Check abort conditions
         if (!IsPlaying)
             return;
 
@@ -1058,89 +879,6 @@ public class ActorInstance : ExtendedMonoBehavior
     {
         damageTextManager.Spawn("Miss", position);
         yield return Dodge();
-    }
-
-    private void UpdateActionBar()
-    {
-        float GetScaleX(float x) => Mathf.Clamp(initialActionBarScale.x * (x / stats.MaxAP), 0, initialActionBarScale.x);
-
-        float x = GetScaleX(stats.AP);
-        renderers.actionBar.transform.localScale = new Vector3(x, initialActionBarScale.y, initialActionBarScale.z);
-        renderers.actionBarText.text = $@"{stats.AP}/{stats.MaxAP}";
-
-        x = GetScaleX(stats.PreviousAP);
-        renderers.actionBarDrain.transform.localScale = new Vector3(x, initialActionBarScale.y, initialActionBarScale.z);
-
-        IEnumerator _()
-        {
-            //Check abort state
-            if (stats.PreviousHP == stats.HP)
-                yield break;
-
-            //Before:
-            float x;
-
-            //During:
-            yield return Wait.For(Interval.ActionBarDrainDelay);
-
-            while (stats.HP < stats.PreviousHP)
-            {
-                stats.PreviousAP -= Increment.ActionBarDrainAmount;
-                x = GetScaleX(stats.PreviousAP);
-                renderers.actionBarDrain.transform.localScale = new Vector3(x, initialActionBarScale.y, initialActionBarScale.z);
-                yield return Wait.OneTick();
-            }
-
-            //After:
-            stats.PreviousAP = stats.AP;
-            x = GetScaleX(stats.PreviousAP);
-            renderers.healthBarDrain.transform.localScale = new Vector3(x, initialActionBarScale.y, initialActionBarScale.z);
-        }
-
-        StartCoroutine(_());
-    }
-
-    private void UpdateHealthBar()
-    {
-        float GetScaleX(float x) => Mathf.Clamp(initialHealthBarScale.x * (x / stats.MaxHP), 0, initialHealthBarScale.x);
-
-        var x = GetScaleX(stats.HP);
-        renderers.healthBar.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
-        renderers.healthBarText.text = $@"{stats.HP}/{stats.MaxHP}";
-
-        x = GetScaleX(stats.PreviousHP);
-        renderers.healthBarDrain.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
-
-        IEnumerator _()
-        {
-            //Check abort state
-            if (stats.PreviousHP == stats.HP)
-                yield break;
-
-            //Before:
-            float x;
-
-            //During:
-            yield return Wait.For(Interval.HealthBarDrainDelay);
-
-            while (stats.HP < stats.PreviousHP)
-            {
-                stats.PreviousHP -= Increment.HealthBarDrainAmount;
-                x = GetScaleX(stats.PreviousHP);
-                renderers.healthBarDrain.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
-                yield return Wait.OneTick();
-            }
-
-            //After:
-            stats.PreviousHP = stats.HP;
-            x = GetScaleX(stats.PreviousHP);
-            renderers.healthBarDrain.transform.localScale = new Vector3(x, initialHealthBarScale.y, initialHealthBarScale.z);
-
-            //if (IsDying)
-            //DieAsync();
-        }
-
-        StartCoroutine(_());
     }
 
 
@@ -1198,14 +936,14 @@ public class ActorInstance : ExtendedMonoBehavior
 
     public void SetReady()
     {
-        //Check abort state
+        //Check abort conditions
         if (!IsPlaying || !IsEnemy)
             return;
 
         stats.AP = stats.MaxAP;
         stats.PreviousAP = stats.MaxAP;
-        UpdateActionBar();
         CheckWeaponWiggle();
+        actionBar.Refresh();
     }
 
     public IEnumerator Grow(float maxSize = 0f)
@@ -1343,17 +1081,6 @@ public class ActorInstance : ExtendedMonoBehavior
 
         //After:
         rotation = Geometry.Rotation(0, 0, 0);
-
-
-
-        //IEnumerator _()
-        //{
-        //    coinManager.Spawn(boardPosition);
-        //    yield return true;
-        //}
-        //var vfx = resourceManager.VisualEffect("Yellow_Hit");
-        //vfxManager.SpawnAsync(vfx, boardPosition, _());
-
     }
 
     public void Spin360Async(IEnumerator triggeredEvent = null)
@@ -1388,10 +1115,6 @@ public class ActorInstance : ExtendedMonoBehavior
         renderers.SetAlpha(alpha);
     }
 
-
-
-
-
     public static IEnumerator FadeOut(SpriteRenderer spriteRenderer, float increment, float interval, float startAlpha, float endAlpha)
     {
         //Before:
@@ -1411,12 +1134,6 @@ public class ActorInstance : ExtendedMonoBehavior
         spriteRenderer.color = new Color(1, 1, 1, endAlpha);
     }
 
-    public void FadeOutAsync(SpriteRenderer spriteRenderer, float increment, float interval, float startAlpha, float endAlpha)
-    {
-        StartCoroutine(FadeOut(spriteRenderer, increment, interval, startAlpha, endAlpha));
-    }
-
-
     public void Teleport(Vector2Int location)
     {
 
@@ -1424,104 +1141,110 @@ public class ActorInstance : ExtendedMonoBehavior
         transform.position = Geometry.GetPositionByLocation(this.location);
     }
 
-    public void CheckReady()
+    public void CheckAngry()
     {
-        if (IsReady || IsDying)
-            return;
+        if (IsPlaying)
+            StartCoroutine(AngryEnemy());
+    }
+
+
+    private IEnumerator AngryEnemy()
+    {
+        //Check abort conditions
+        if (!HasMaxAP || flags.isAngry)
+            yield break;
+
+        //Before:
+        flags.isAngry = true;
+        bool isDone = false;
+        bool hasFlipped = false;
+        var rotY = 0f;
+        var speed = tileSize * 24f;
+        renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
+
+        //During:
+        while (!isDone)
+        {
+            rotY += !hasFlipped ? speed : -speed;
+
+            if (!hasFlipped && rotY >= 90f)
+            {
+                rotY = 90f;
+                hasFlipped = true;
+                //turnDelay--;
+                //turnDelay = Math.Clamp(turnDelay, 0, 9);
+
+                //actionBar.Refresh();
+                //UpdateTurnDelayText();
+            }
+
+            isDone = hasFlipped && rotY <= 0f;
+            if (isDone)
+            {
+                rotY = 0f;
+            }
+
+            //renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
+            yield return Wait.OneTick();
+        }
+
+        //After:
+        //renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, 0, 0);
+        //if (turnDelay > 0)
+        //{
+        //    CheckTurnDelayWiggle();
+        //}
+
 
         IEnumerator _()
         {
-            //Before:
-            bool isDone = false;
-            bool hasFlipped = false;
-            var rotY = 0f;
-            var speed = tileSize * 24f;
-            renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
+            renderers.SetThumbnailSprite(sprites.attack);
 
-            //During:
-            while (!isDone)
-            {
-                rotY += !hasFlipped ? speed : -speed;
-
-                if (!hasFlipped && rotY >= 90f)
-                {
-                    rotY = 90f;
-                    hasFlipped = true;
-                    //turnDelay--;
-                    //turnDelay = Math.Clamp(turnDelay, 0, 9);
-
-                    CheckWeaponWiggle();
-                    //UpdateTurnDelayText();
-                }
-
-                isDone = hasFlipped && rotY <= 0f;
-                if (isDone)
-                {
-                    rotY = 0f;
-                }
-
-                //renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
-                yield return Wait.OneTick();
-            }
-
-            //After:
-            //renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, 0, 0);
-            //if (turnDelay > 0)
-            //{
-            //    TurnDelayWiggleAsync();
-            //}
-
-            if (IsReady)
-            {
-                IEnumerator _()
-                {
-                    renderers.SetThumbnailSprite(sprites.attack);
-
-                    //renderers.SetThumbnailMaterial(resourceManager.Material("Invert-color", idle.texture));
-                    //ParallaxFadeInAsync();
-                    yield return null;
-                }
-                Spin90Async(_());
-            }
+            //renderers.SetThumbnailMaterial(resourceManager.Material("Invert-color", idle.texture));
+            //ParallaxFadeInAsync();
+            yield return null;
         }
+        Spin90Async(_());
 
-        if (gameObject.activeInHierarchy)
-            StartCoroutine(_());
     }
+
+
 
     public void CheckWeaponWiggle()
     {
-        if (!IsReady)
-            return;
-
-        IEnumerator _()
-        {
-            //Before:
-            float start = -45f;
-            float rotZ = start;
-            renderers.weaponIcon.transform.rotation = Quaternion.Euler(0, 0, rotZ);
-
-            //During:
-            while (IsReady)
-            {
-                // Calculate rotation angle using sine wave
-                rotZ = start + Mathf.Sin(Time.time * wiggleSpeed) * wiggleAmplitude;
-
-                // Apply the rotation
-                renderers.weaponIcon.transform.rotation = Quaternion.Euler(0, 0, rotZ);
-
-                yield return Wait.OneTick();
-            }
-
-            //After:
-            rotZ = start;
-            renderers.weaponIcon.transform.rotation = Quaternion.Euler(0, 0, rotZ);
-        }
-
-        StartCoroutine(_());
+        StartCoroutine(WeaponWiggle());
     }
 
-    public void TurnDelayWiggleAsync(bool isLooping = false)
+    IEnumerator WeaponWiggle()
+    {
+        if (stats.AP < stats.MaxAP)
+            yield break;
+
+        //Before:
+        float start = -45f;
+        float rotZ = start;
+        renderers.weaponIcon.transform.rotation = Quaternion.Euler(0, 0, rotZ);
+
+        // During:
+        while (stats.AP == stats.MaxAP)
+        {
+            // Calculate rotation angle using sine wave
+            rotZ = start + Mathf.Sin(Time.time * wiggleSpeed) * wiggleAmplitude;
+
+            // Apply the rotation
+            renderers.weaponIcon.transform.rotation = Quaternion.Euler(0, 0, rotZ);
+
+            yield return Wait.OneTick();
+        }
+
+        // After:
+        rotZ = start;
+        renderers.weaponIcon.transform.rotation = Quaternion.Euler(0, 0, rotZ);
+    }
+
+
+
+    public void CheckTurnDelayWiggle(bool isLooping = false)
     {
         StartCoroutine(TurnDelayWiggle(isLooping));
     }
@@ -1809,7 +1532,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
     //public void AssignSkillWait()
     //{
-    //    //Check abort state
+    //    //Check abort conditions
     //    if (!IsPlaying)
     //        return;
 
@@ -1898,7 +1621,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
     //public void AssignActionWait()
     //{
-    //    //Check abort state
+    //    //Check abort conditions
     //    if (!IsPlaying)
     //        return;
 
@@ -1909,12 +1632,12 @@ public class ActorInstance : ExtendedMonoBehavior
     //    ap = 0;
     //    maxAp = Random.Float(min, max);
 
-    //    renderers.SetActionBarColor(Colors.ActionBar.Blue);
+    //    renderers.SetActionBarColor(Colors.ActionBarFill.Blue);
     //}
 
     //public void CheckActionBar()
     //{
-    //Check abort state
+    //Check abort conditions
     //if (!IsPlaying || turnManager.IsEnemyTurn || (!turnManager.IsStartPhase && !turnManager.IsMovePhase))
     //    return;
 
@@ -1937,7 +1660,7 @@ public class ActorInstance : ExtendedMonoBehavior
     //{
     //    var scale = renderers.actionBarBack.transform.localScale;
     //    var x = Mathf.Clamp(scale.x * (ap / maxAp), 0, scale.x);
-    //    renderers.actionBar.transform.localScale = new Vector3(x, scale.y, scale.z);
+    //    renderers.actionBarFill.transform.localScale = new Vector3(x, scale.y, scale.z);
 
     //    Percent complete
     //    renderers.actionBarText.text = ap < maxAp ? $@"{Math.Round(ap / maxAp * 100)}" : "";
@@ -2000,7 +1723,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
     //public void SetStatus(Status icon)
     //{
-    //    //Check abort state
+    //    //Check abort conditions
     //    if (!IsActive)
     //        return;
 
@@ -2041,7 +1764,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
     //private void CheckBobbing()
     //{
-    //    //Check abort state
+    //    //Check abort conditions
     //    if (!IsPlaying || !turnManager.IsStartPhase)
     //        return;
 

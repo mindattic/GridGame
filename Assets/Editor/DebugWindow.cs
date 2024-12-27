@@ -135,7 +135,7 @@ public class DebugWindow : EditorWindow
 
     private void OnGUI()
     {
-        //Check abort state
+        //Check abort conditions
         if (!EditorApplication.isPlaying
             || gameManager == null
             || debugManager == null
@@ -154,8 +154,8 @@ public class DebugWindow : EditorWindow
         RenderVFXDropdown();
         RenderLevelControls();
         RenderDataControls();
-        //RenderActorStats();
         RenderSpawnControls();
+        RenderActorStats();    
         RenderLog();
 
         GUILayout.EndVertical();
@@ -294,37 +294,6 @@ public class DebugWindow : EditorWindow
 
 
 
-    private void RenderActorStats()
-    {
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Actors", GUILayout.Width(Screen.width));
-        GUILayout.EndHorizontal();
-
-        foreach (var x in gameManager.players.OrderBy(x => x.name))
-        {
-            GUILayout.BeginHorizontal();
-            string stats = $"{x.name}: HP: {x.HP}, IsActive: {x.isActiveAndEnabled}, IsAlive: {x.IsAlive}, IsDying: {x.IsDying}";
-            GUILayout.Label(stats, GUILayout.Width(Screen.width));
-            GUILayout.EndHorizontal();
-        }
-
-        GUILayout.Space(10);
-
-        foreach (var x in gameManager.enemies.OrderBy(x => x.name))
-        {
-            GUILayout.BeginHorizontal();
-            string stats = $"{x.name}: HP: {x.HP}, IsActive: {x.isActiveAndEnabled}, IsAlive: {x.IsAlive}, IsDying: {x.IsDying}";
-            GUILayout.Label(stats, GUILayout.Width(Screen.width));
-            GUILayout.EndHorizontal();
-        }
-
-        GUILayout.Space(10);
-    }
-
-
-
-
-
     private void RenderSpawnControls()
     {
         GUILayout.BeginHorizontal();
@@ -356,6 +325,37 @@ public class DebugWindow : EditorWindow
         GUILayout.EndHorizontal();
         GUILayout.Space(10);
     }
+
+
+    private void RenderActorStats()
+    {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Actors", GUILayout.Width(Screen.width));
+        GUILayout.EndHorizontal();
+
+        foreach (var x in gameManager.players.OrderBy(x => x.name))
+        {
+            GUILayout.BeginHorizontal();
+            string stats = $"{x.name}: HP: {x.stats.HP}/{x.stats.MaxHP}, AP: {x.stats.AP}/{x.stats.MaxAP}, IsAngry? {x.flags.isAngry}";
+            GUILayout.Label(stats, GUILayout.Width(Screen.width));
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.Space(10);
+
+        foreach (var x in gameManager.enemies.OrderBy(x => x.name))
+        {
+            GUILayout.BeginHorizontal();
+            string stats = $"{x.name}: HP: {x.stats.HP}/{x.stats.MaxHP}, AP: {x.stats.AP}/{x.stats.MaxAP}, IsAngry? {x.flags.isAngry}";
+            GUILayout.Label(stats, GUILayout.Width(Screen.width));
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.Space(10);
+    }
+
+
+
 
 
 

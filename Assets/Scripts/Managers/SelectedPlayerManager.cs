@@ -84,7 +84,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         turnManager.currentPhase = TurnPhase.Move;
         audioManager.Play("Select");
         timerBar.Play();
-        actorManager.AccumulateAP();
+        actorManager.CheckEnemyAP();
         StartCoroutine(selectedPlayer.MoveTowardCursor());
     }
 

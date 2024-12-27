@@ -21,7 +21,7 @@ public static class StringExtensions
 
 public static class TransformExtensions
 {
-    public static Transform GetChildByName(this Transform parent, string childName)
+    public static Transform GetChild(this Transform parent, string childName)
     {
         foreach (Transform child in parent)
         {
@@ -29,7 +29,7 @@ public static class TransformExtensions
                 return child;
 
             // Recursively search in the child hierarchy
-            Transform found = child.GetChildByName(childName);
+            Transform found = child.GetChild(childName);
             if (found != null)
                 return found;
         }

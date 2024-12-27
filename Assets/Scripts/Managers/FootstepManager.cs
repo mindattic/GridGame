@@ -1,5 +1,6 @@
 using Game.Behaviors.Actor;
 using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -8,10 +9,10 @@ public class FootstepManager : ExtendedMonoBehavior
 
     //Variables
     [SerializeField] public GameObject FootstepPrefab;
-    ActorInstance Actor;
-    Vector3 PreviousPosition;
-    bool IsRightFoot = false;
-    float Threshold;
+    ActorInstance actor;
+    Vector3 previousPosition;
+    bool isRightFoot = false;
+    float threshold;
 
     void Awake()
     {
@@ -22,41 +23,40 @@ public class FootstepManager : ExtendedMonoBehavior
 
     void Start()
     {
-        Threshold = tileSize / 4;
+        threshold = tileSize / 4;
     }
 
-
-    void FixedUpdate() { }
 
 
     public void Play(ActorInstance actor)
     {
-        if (actor == null || actor.IsDying || actor.IsInactive)
+        if (!actor.IsPlaying)
             return;
 
-        this.Actor = actor;
-        PreviousPosition = this.Actor.position;
+        this.actor = actor;
+        previousPosition = this.actor.position;
+        StartCoroutine(CheckSpawn());
     }
 
     public void Stop()
     {
-        Actor = null;
-        IsRightFoot = false;
+        actor = null;
+        isRightFoot = false;
     }
 
-
-    void Update()
+    private IEnumerator CheckSpawn()
     {
-        if (Actor == null || Actor.IsDying || Actor.IsInactive)
-            return;
+        while (actor != null && actor.IsPlaying)
+        {
+            var distance = Vector3.Distance(actor.position, previousPosition);
+            if (distance >= threshold)
+            {
+                Spawn();
+            }
 
-        var distance = Vector3.Distance(Actor.position, PreviousPosition);
-        if (distance < Threshold)
-            return;
-
-        Spawn();
+            yield return new WaitForFixedUpdate();
+        }
     }
-
 
     private void Spawn()
     {
@@ -65,9 +65,9 @@ public class FootstepManager : ExtendedMonoBehavior
         instance.sprite = resourceManager.Prop("Footstep");
         instance.name = $"Footstep_{Guid.NewGuid()}";
         instance.Parent = board.transform;
-        instance.Spawn(Actor.position, RotationHelper.ByDirection(Actor.position, PreviousPosition), IsRightFoot);
-        PreviousPosition = Actor.position;
-        IsRightFoot = !IsRightFoot;
+        instance.Spawn(actor.position, RotationHelper.ByDirection(actor.position, previousPosition), isRightFoot);
+        previousPosition = actor.position;
+        isRightFoot = !isRightFoot;
     }
 
 

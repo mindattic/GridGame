@@ -13,9 +13,9 @@ namespace Assets.Scripts.Behaviors.Actor
         public bool IsAttacking;
         public bool IsDefending;
         public bool IsSupporting;
+        public bool isGainingAP;
+        public bool isAngry;
 
-
-
-
+        //public bool HasMaxAP;
     }
 }

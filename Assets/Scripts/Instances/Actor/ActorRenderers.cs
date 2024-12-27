@@ -29,13 +29,15 @@ public class ActorRenderers
     public SpriteRenderer thumbnail;
     public SpriteRenderer frame;
     public SpriteRenderer statusIcon;
+    public GameObject healthBar;
     public SpriteRenderer healthBarBack;
     public SpriteRenderer healthBarDrain;
-    public SpriteRenderer healthBar;    
+    public SpriteRenderer healthBarFill;    
     public TextMeshPro healthBarText;
+    public GameObject actionBar;
     public SpriteRenderer actionBarBack;
     public SpriteRenderer actionBarDrain;
-    public SpriteRenderer actionBar;
+    public SpriteRenderer actionBarFill;
     public TextMeshPro actionBarText;
     public SpriteMask mask;
     public SpriteRenderer radialBack;
@@ -155,7 +157,7 @@ public class ActorRenderers
         healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Percent70));
         healthBarDrain.color = new Color(1, 0, 0, alpha);
         healthBarColor.a = alpha;
-        healthBar.color = healthBarColor;   
+        healthBarFill.color = healthBarColor;   
         healthBarText.color = new Color(1, 1, 1, alpha);
     }
 
@@ -164,7 +166,7 @@ public class ActorRenderers
         actionBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Percent70));
         actionBarDrain.color = new Color(1, 0, 0, alpha);
         actionBarColor.a = alpha;
-        actionBar.color = actionBarColor;
+        actionBarFill.color = actionBarColor;
         actionBarText.color = new Color(1, 1, 1, alpha);
     }
 
@@ -274,19 +276,19 @@ public class ActorRenderers
     {
 
         healthBarColor = color;
-        healthBar.color = actionBarColor;
+        healthBarFill.color = actionBarColor;
     }
 
     public void SetActionBarEnabled(bool isEnabled)
     {
         actionBarBack.enabled = isEnabled;
-        actionBar.enabled = isEnabled;
+        actionBarFill.enabled = isEnabled;
     }
 
     public void SetActionBarColor(Color color)
     {
         actionBarColor = color;
-        actionBar.color = actionBarColor;
+        actionBarFill.color = actionBarColor;
     }
 
 
@@ -325,7 +327,7 @@ public class ActorRenderers
             cycle = cycle.Next();
         }
 
-        actionBar.color = actionBarColor;
+        actionBarFill.color = actionBarColor;
     }
 
 }

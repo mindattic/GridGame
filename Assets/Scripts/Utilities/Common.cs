@@ -284,8 +284,7 @@ public static class Interval
     public static float FourSeconds = 4.0f;
     public static float FiveSeconds = 5.0f;
 
-    public static float HealthBarDrainDelay = 0.5f;
-    public static float ActionBarDrainDelay = 0.5f;
+ 
 }
 
 public static class Increment
@@ -303,10 +302,37 @@ public static class Increment
 
 public static class Intermission
 {
-    public static class After
+    public static class Before
     {
-        public static float LastEnemyDeath = 1f;
+
+        public static class Enemy
+        {
+            public static float Moves = Interval.OneSecond;
+            public static float Attacks = Interval.HalfSecond;
+        }
+
+        public static class HealthBar
+        {
+            public static float Drain = Interval.HalfSecond;
+        }
+
+        public static class ActionBar
+        {
+            public static float Drain = Interval.HalfSecond;
+        }
+
+        public static class After
+        {
+            public static class LastEnemy
+            {
+                public static float Death = Interval.OneSecond;
+            }
+            
+        }
+
     }
+
+
   
 }
 

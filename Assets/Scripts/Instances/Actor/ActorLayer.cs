@@ -4,7 +4,7 @@ namespace Game.Instances.Actor
 {
     public static class ActorLayer
     {
-
+        // Define names for all layers
         public static class Name
         {
             public const string Opaque = "Opaque";
@@ -14,14 +14,27 @@ namespace Game.Instances.Actor
             public const string Thumbnail = "Thumbnail";
             public const string Frame = "Frame";
             public const string StatusIcon = "StatusIcon";
-            public const string HealthBarBack = "HealthBarBack";
-            public const string HealthBarDrain = "HealthBarDrain";
-            public const string HealthBar = "HealthBar";
-            public const string HealthBarText = "HealthBarText";
-            public const string ActionBarBack = "ActionBarBack";
-            public const string ActionBarDrain = "ActionBarDrain";
-            public const string ActionBar = "ActionBar";
-            public const string ActionBarText = "ActionBarText";
+
+            // HealthBar Sub-Objects
+            public static class HealthBar
+            {
+                public const string Root = "HealthBar";
+                public const string Back = "HealthBarBack";
+                public const string Drain = "HealthBarDrain";
+                public const string Fill = "HealthBarFill";
+                public const string Text = "HealthBarText";
+            }
+
+            // ActionBar Sub-Objects
+            public static class ActionBar
+            {
+                public const string Root = "ActionBar";
+                public const string Back = "ActionBarBack";
+                public const string Drain = "ActionBarDrain";
+                public const string Fill = "ActionBarFill";
+                public const string Text = "ActionBarText";
+            }
+
             public const string Mask = "Mask";
             public const string RadialBack = "RadialBack";
             public const string RadialFill = "RadialFill";
@@ -41,14 +54,23 @@ namespace Game.Instances.Actor
             public const int Thumbnail = 5;
             public const int Frame = 6;
             public const int StatusIcon = 7;
-            public const int HealthBarBack = 8;
-            public const int HealthBarDrain = 9;
-            public const int HealthBar = 10;
-            public const int HealthBarText = 11;
-            public const int ActionBarBack = 12;
-            public const int ActionBarDrain = 13;
-            public const int ActionBar = 14;
-            public const int ActionBarText = 15;
+
+            public static class HealthBar
+            {
+                public const int Back = 8;  
+                public const int Drain = 9;
+                public const int Fill = 10;
+                public const int Text = 11;
+            }
+
+            public static class ActionBar
+            {
+                public const int Back = 12;
+                public const int Drain = 13;
+                public const int Fill = 14;
+                public const int Text = 15;
+            }
+
             public const int Mask = 16;
             public const int RadialBack = 17;
             public const int RadialFill = 18;
@@ -58,5 +80,6 @@ namespace Game.Instances.Actor
             public const int WeaponIcon = 22;
             public const int SelectionBox = 23;
         }
+
     }
 }
