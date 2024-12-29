@@ -46,29 +46,19 @@ public class CanvasOverlayInstance : ExtendedMonoBehavior
         image.color = new Color(0f, 0f, 0f, Opacity.Opaque);     
     }
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
     public void Show()
     {
-        FadeOutAsync();
-        titleManager.FadeOutAsync();
+        FadeOut();
+        titleManager.FadeOut();
     }
 
 
-    public void FadeInAsync()
+    public void FadeIn()
     {
-        StartCoroutine(FadeIn());
+        StartCoroutine(_FadeIn());
     }
 
-    public IEnumerator FadeIn()
+    private IEnumerator _FadeIn()
     {
         //Before:
         alpha = minAlpha;
@@ -92,12 +82,12 @@ public class CanvasOverlayInstance : ExtendedMonoBehavior
     }
 
 
-    public void FadeOutAsync()
+    public void FadeOut()
     {
-        StartCoroutine(FadeOut());
+        StartCoroutine(_FadeOut());
     }
 
-    public IEnumerator FadeOut()
+    private IEnumerator _FadeOut()
     {
         // Before:
         alpha = maxAlpha;

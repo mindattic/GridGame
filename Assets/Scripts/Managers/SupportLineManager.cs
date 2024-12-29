@@ -27,32 +27,13 @@ public class SupportLineManager : ExtendedMonoBehavior
         instance.Spawn(pair);
     }
 
-
-    public IEnumerator Despawn(ActorPair pair)
-    {
-        var list = supportLines.Where(x => x.name.Contains(pair.actor1.name) || x.name.Contains(pair.actor2.name)).ToList();
-        foreach (var x in list)
-        {
-            while (x.alpha > 0)
-            {
-                yield return x.Despawn();
-            }
-        }
-    }
-
-    public void DespawnAsync(ActorPair pair)
+    public void Despawn(ActorPair pair)
     {
         var list = supportLines.Where(x => x.name.Contains(pair.actor1.name) || x.name.Contains(pair.actor2.name));
         foreach (var x in list)
         {
-            x.DespawnAsync();
+            x.Despawn();
         }
-    }
-
-    public void DespawnAll()
-    {
-        supportLines.ForEach(x => x.DespawnAsync());
-
     }
 
     public void Clear()

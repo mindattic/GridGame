@@ -1,17 +1,21 @@
+using Assets.Scripts.Behaviors.Actor;
 using Game.Behaviors;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Rendering;
 
-public class ActorActionBar : MonoBehaviour
+public class ActorActionBar : ExtendedMonoBehavior
 {
     //Variables
     private ActorInstance instance;
     private Vector3 initialScale;
- 
+
 
     //Properties
     private ActorRenderers renderers => this.instance.renderers;
     private ActorStats stats => this.instance.stats;
+    private ActorFlags flags => this.instance.flags;
 
     public void Initialize(ActorInstance parentInstance)
     {
@@ -22,8 +26,8 @@ public class ActorActionBar : MonoBehaviour
     private Vector3 GetScale(float value)
     {
         return new Vector3(
-            Mathf.Clamp(initialScale.x * (value / stats.MaxAP), 0, initialScale.x), 
-            initialScale.y, 
+            Mathf.Clamp(initialScale.x * (value / stats.MaxAP), 0, initialScale.x),
+            initialScale.y,
             initialScale.z);
     }
 
@@ -32,7 +36,12 @@ public class ActorActionBar : MonoBehaviour
         renderers.actionBarDrain.transform.localScale = GetScale(stats.PreviousAP);
         renderers.actionBarFill.transform.localScale = GetScale(stats.AP);
         renderers.actionBarText.text = $@"{stats.AP}/{stats.MaxAP}";
-        StartCoroutine(Drain());
+
+
+        instance.WeaponWiggle();
+
+        if (instance.IsPlaying)
+            StartCoroutine(Drain());
     }
 
     IEnumerator Drain()
@@ -49,7 +58,7 @@ public class ActorActionBar : MonoBehaviour
 
         while (stats.AP < stats.PreviousAP)
         {
-            stats.PreviousAP -= Increment.ActionBarDrainAmount;
+            stats.PreviousAP -= Increment.ActionBar.Drain;
             scale = GetScale(stats.PreviousAP);
             renderers.actionBarDrain.transform.localScale = scale;
             yield return Wait.OneTick();
@@ -60,5 +69,62 @@ public class ActorActionBar : MonoBehaviour
         scale = GetScale(stats.PreviousAP);
         renderers.healthBarDrain.transform.localScale = scale;
     }
+
+
+
+    public void Fill()
+    {
+        if (instance.IsPlaying)
+            StartCoroutine(_Fill());
+    }
+
+    private IEnumerator _Fill()
+    {
+        //Check abort conditions
+        if (debugManager.isEnemyStunned || !HasSelectedPlayer || !instance.IsEnemy || !instance.IsPlaying || instance.HasMaxAP || flags.isGainingAP)
+            yield break;
+
+        //Before:
+        flags.isGainingAP = true;
+        float amount = stats.Speed * 0.1f;
+
+        //During:
+        while (HasSelectedPlayer && instance.IsEnemy && instance.IsPlaying && !instance.HasMaxAP)
+        {
+            stats.AP += amount;
+            stats.AP = Mathf.Clamp(stats.AP, 0, stats.MaxAP);
+            stats.PreviousAP = stats.AP;
+            Refresh();
+            yield return Wait.OneTick();
+        }
+
+        //After:
+        stats.PreviousAP = stats.AP;
+        Refresh();
+        flags.isGainingAP = false;
+    }
+
+    public void Reset()
+    {
+        stats.AP = 0;
+        stats.PreviousAP = 0;
+        Refresh();
+    }
+
+
+    public void AddInitiative()
+    {
+        //TODO: Add randomization based on stats.Luck...
+        float amount = stats.Speed * 0.01f;
+        stats.AP = amount;
+        stats.PreviousAP = amount;
+        Refresh();
+    }
+
+
+
+
+
+
 
 }

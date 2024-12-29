@@ -31,18 +31,18 @@ namespace Game.Behaviors
 
         }
 
-        public void DespawnAsync(ActorPair pair)
+        public void Despawn(ActorPair pair)
         {
             var list = attackLines.Where(x => x.name.Contains(pair.actor1.name) || x.name.Contains(pair.actor2.name));
             foreach (var x in list)
             {
-                x.DespawnAsync();
+                x.Despawn();
             }
         }
 
         public void DespawnAll()
         {
-            attackLines.ForEach(x => x.DespawnAsync());
+            attackLines.ForEach(x => x.Despawn());
         }
 
         public void Clear()

@@ -69,14 +69,14 @@ public class TitleManager : ExtendedMonoBehavior
         Print(text, ColorHelper.Solid.White);
     }
 
-    //public IEnumerator FadeIn()
+    //public IEnumerator _FadeIn()
     //{
     //    float alpha = 0f;
     //    label.color = new color(1f, 1f, 1f, alpha);
 
     //    while (alpha < 1)
     //    {
-    //        alpha += Increment.TenPercent;
+    //        alpha += Fill.TenPercent;
     //        alpha = Mathf.Clamp(alpha, 0, 1);
     //        label.color = new color(1, 1, 1f, alpha);
     //        yield return Destroy.OneTick();
@@ -85,37 +85,39 @@ public class TitleManager : ExtendedMonoBehavior
 
 
 
-    public void FadeOutAsync()
+    public void FadeOut()
     {
-        IEnumerator _()
+        
+
+        StartCoroutine(_FadeOut());
+    }
+
+    private IEnumerator _FadeOut()
+    {
+        float alpha = 1f;
+        label.color = new Color(1f, 1f, 1f, alpha);
+
+        yield return Wait.For(Interval.TwoSeconds);
+
+        while (alpha > 0f)
         {
-            float alpha = 1f;
-            label.color = new Color(1f, 1f, 1f, alpha);
-
-            yield return Wait.For(Interval.TwoSeconds);
-
-            while (alpha > 0f)
-            {
-                alpha -= Increment.TenPercent;
-                alpha = Mathf.Clamp(alpha, 0f, 1);
-                label.color = new Color(1, 1, 1, alpha);
-                yield return Wait.OneTick();
-            }
+            alpha -= Increment.TenPercent;
+            alpha = Mathf.Clamp(alpha, 0f, 1);
+            label.color = new Color(1, 1, 1, alpha);
+            yield return Wait.OneTick();
         }
-
-        StartCoroutine(_());
     }
 
 
     //public IEnumerator FadeInOut()
     //{
     //    StopCoroutine(FadeInOut());
-    //    StopCoroutine(FadeIn());
-    //    StopCoroutine(FadeOutAsync());
+    //    StopCoroutine(_FadeIn());
+    //    StopCoroutine(_FadeOut());
 
-    //    yield return FadeIn();
+    //    yield return _FadeIn();
     //    yield return Destroy.For(Interval.OneSecond);
-    //    yield return FadeOutAsync();
+    //    yield return _FadeOut();
     //}
 
 

@@ -10,14 +10,14 @@ namespace Game.Manager
         public void CheckEnemyAP()
         {
             var notReadyEnemies = enemies.Where(x => !x.HasMaxAP).ToList();
-            notReadyEnemies.ForEach(x => x.CheckAP());
+            notReadyEnemies.ForEach(x => x.actionBar.Fill());
         }
 
 
         public void CheckEnemyAngry()
         {
             var notAngryEnemies = enemies.Where(x => !x.flags.isAngry).ToList();
-            notAngryEnemies.ForEach(x => x.CheckAngry());
+            notAngryEnemies.ForEach(x => x.Angry());
         }
 
         //public void SetAttacking(List<ActorInstance> x, bool state)

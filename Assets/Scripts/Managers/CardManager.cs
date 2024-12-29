@@ -51,13 +51,13 @@ namespace Game.Behaviors
 
             title.text = actor.name;
 
-            var hp = actor.HP;
-            var mhp = actor.MaxHP;
-            var str = actor.Strength;
-            var vit = actor.Vitality;
-            var agi = actor.Agility;
-            var spd = actor.Speed;
-            var lck = actor.Luck;
+            var hp = actor.stats.HP;
+            var mhp = actor.stats.MaxHP;
+            var str = actor.stats.Strength;
+            var vit = actor.stats.Vitality;
+            var agi = actor.stats.Agility;
+            var spd = actor.stats.Speed;
+            var lck = actor.stats.Luck;
 
             var stats
                 = $" HP: {hp}/{mhp}    {Environment.NewLine}"
@@ -70,15 +70,15 @@ namespace Game.Behaviors
                 + resourceManager.ActorDetails(actor.character.ToString());
             details.text = stats;
 
-            SlideInAsync();
+            SlideIn();
         }
 
-        private void SlideInAsync()
+        private void SlideIn()
         {
-            StartCoroutine(SlideIn());
+            StartCoroutine(_SlideIn());
         }
 
-        private IEnumerator SlideIn()
+        private IEnumerator _SlideIn()
         {
             float elapsedTime = 0f;
 
@@ -105,7 +105,7 @@ namespace Game.Behaviors
             title.text = "";
             details.text = "";
 
-            // Despawn all selection boxes from actors
+            // _Despawn all selection boxes from actors
             actors.ForEach(x => x.renderers.SetSelectionBoxEnabled(false));
 
             // Reset portrait position

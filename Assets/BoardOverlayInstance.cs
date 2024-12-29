@@ -18,23 +18,12 @@ public class BoardOverlayInstance : ExtendedMonoBehavior
         spriteRenderer.enabled = false;
     }
 
-    public void Show()
+    public void FadeIn()
     {
-        FadeInAsync();
+        StartCoroutine(_FadeIn());
     }
 
-    public void Hide()
-    {
-        FadeOutAsync();
-    }
-
-
-    public void FadeInAsync()
-    {
-        StartCoroutine(FadeIn());
-    }
-
-    public IEnumerator FadeIn()
+    public IEnumerator _FadeIn()
     {
         //Before:
         alpha = minAlpha;
@@ -59,12 +48,12 @@ public class BoardOverlayInstance : ExtendedMonoBehavior
     }
 
 
-    public void FadeOutAsync()
+    public void FadeOut()
     {
-        StartCoroutine(FadeOut());
+        StartCoroutine(_FadeOut());
     }
 
-    public IEnumerator FadeOut()
+    public IEnumerator _FadeOut()
     {
         // Before:
         alpha = maxAlpha;

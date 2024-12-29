@@ -200,7 +200,7 @@ public class TurnManager : ExtendedMonoBehavior
             var allParticipants = combatParticipants.SelectAll();
             allParticipants.ForEach(x => x.sortingOrder = SortingOrder.BoardOverlay);
 
-            boardOverlay.Show();
+            boardOverlay.FadeIn();
 
             // Spawn support lines
             foreach (var pair in combatParticipants.supportingPairs)
@@ -219,7 +219,7 @@ public class TurnManager : ExtendedMonoBehavior
                 ResetRolesAfterAttack(pair.alignment.enemies);             // Defenders
             }
 
-            boardOverlay.Hide();
+            boardOverlay.FadeOut();
             NextTurn();
             ClearCombatState(); // Reset all roles and counts
         }
@@ -290,7 +290,7 @@ public class TurnManager : ExtendedMonoBehavior
     {
         #region Player portraits
 
-        yield return Wait.For(Interval.QuarterSecond);
+        yield return Wait.For(Intermission.Before.Player.Attack);
 
         audioManager.Play("Portrait");
         var first = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
@@ -300,7 +300,7 @@ public class TurnManager : ExtendedMonoBehavior
         portraitManager.SlideIn(pair.actor1, direction1);
         portraitManager.SlideIn(pair.actor2, direction2);
 
-        yield return Wait.For(Interval.TwoSeconds);
+        yield return Wait.For(Intermission.Before.Portrait.SlideIn);
 
         #endregion
 
@@ -329,38 +329,37 @@ public class TurnManager : ExtendedMonoBehavior
             .Select(result => result.Opponent)
             .ToList();
 
+        ActorInstance lastDyingEnemy = null;
+
+        if (dyingEnemies.Count > 1)
+        {
+            lastDyingEnemy = dyingEnemies.Last();
+            dyingEnemies.Remove(lastDyingEnemy);
+        }
+
         // Attack each enemy and handle deaths
         foreach (var attack in attacks)
         {
-            if (attack.IsHit)
-            {
-                yield return pair.actor1.Attack(attack);
-
-                // Trigger DieAsync for all dying enemies except the last
-                if (attack.IsFatal && dyingEnemies.Count > 1 && attack.Opponent != dyingEnemies.Last())
-                {
-                    attack.Opponent.DieAsync();
-                }
-            }
-            else
-            {
-                yield return attack.Opponent.AttackMiss();
-            }
+            yield return pair.actor1.Attack(attack);
+            if (dyingEnemies.Contains(attack.Opponent))
+                attack.Opponent.Die();
         }
 
-        // Despawn attack and support lines
-        foreach (var enemy in pair.alignment.enemies)
-        {
-            attackLineManager.DespawnAsync(pair);
-            supportLineManager.DespawnAsync(pair);
-        }
+        // _Despawn attack and support lines
+        //foreach (var enemy in pair.alignment.enemies)
+        //{
+        //    attackLineManager._Despawn(pair);
+        //    supportLineManager._Despawn(pair);
+        //}
+        attackLineManager.Despawn(pair);
+        supportLineManager.Despawn(pair);
 
         // Trigger synchronous death for the last dying enemy
-        if (dyingEnemies.Count > 0)
-        {
-            yield return dyingEnemies.Last().Die();
-            yield return Wait.For(Interval.HalfSecond);
-        }
+
+        if (lastDyingEnemy != null)
+            yield return lastDyingEnemy._Die();
+
+        yield return Wait.For(Interval.HalfSecond);
 
         #endregion
     }
@@ -399,7 +398,7 @@ public class TurnManager : ExtendedMonoBehavior
         var readyEnemies = enemies.Where(x => x.IsPlaying && x.HasMaxAP).ToList();
         if (readyEnemies.Count > 0)
         {
-            yield return Wait.For(Intermission.Before.Enemy.Moves);
+            yield return Wait.For(Intermission.Before.Enemy.Move);
 
             foreach (var enemy in readyEnemies)
             {
@@ -436,55 +435,46 @@ public class TurnManager : ExtendedMonoBehavior
         var readyEnemies = enemies.Where(x => x.IsPlaying && x.HasMaxAP).ToList();
         if (readyEnemies.Count > 0)
         {
-            yield return Wait.For(Intermission.Before.Enemy.Attacks);
+            yield return Wait.For(Intermission.Before.Enemy.Attack);
 
             foreach (var enemy in readyEnemies)
             {
                 var defendingPlayers = players.Where(x => x.IsPlaying && x.IsAdjacentTo(enemy.location)).ToList();
-                if (defendingPlayers.Count > 0)
+                foreach (var player in defendingPlayers)
                 {
-                    foreach (var player in defendingPlayers)
+                    var direction = enemy.GetAdjacentDirectionTo(player);
+
+                    IEnumerator _()
                     {
-                        var direction = enemy.GetAdjacentDirectionTo(player);
-
-                        IEnumerator _()
+                        var isHit = Formulas.IsHit(enemy, player);
+                        var isCriticalHit = false;
+                        var damage = Formulas.CalculateDamage(enemy, player);
+                        var attack = new AttackResult()
                         {
-                            var isHit = Formulas.IsHit(enemy, player);
-                            if (isHit)
-                            {
-                                var damage = Formulas.CalculateDamage(enemy, player);
-                                var attack = new AttackResult()
-                                {
-                                    Opponent = player,
-                                    IsHit = isHit,
-                                    IsCriticalHit = false,
-                                    Damage = damage
-                                };
-
-                                yield return enemy.Attack(attack);
-                            }
-                            else
-                            {
-                                yield return player.AttackMiss();
-                            }
-                        }
-
-
-                        yield return enemy.Bump(direction, _());
-
-
+                            Opponent = player,
+                            IsHit = isHit,
+                            IsCriticalHit = isCriticalHit,
+                            Damage = damage
+                        };
+                        yield return enemy.Attack(attack);
                     }
+
+                    enemy.actionBar.Reset();
+                    yield return enemy._Bump(direction, _());
+
+
                 }
+
             }
 
-            //TODO: Put player.Die here so that it resolves after attacks...
+            //TODO: Put player._Die here so that it resolves after attacks...
             var dyingPlayers = actors.Where(x => x.IsDying).ToList();
             foreach (var player in dyingPlayers)
             {
-                yield return player.Die();
+                yield return player._Die();
             }
 
-            readyEnemies.ForEach(x => x.ResetActionBar());
+            readyEnemies.ForEach(x => x.actionBar.Reset());
         }
 
 

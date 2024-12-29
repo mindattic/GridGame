@@ -79,7 +79,7 @@ public class SupportLineInstance : ExtendedMonoBehavior
         StartCoroutine(_());
     }
 
-    public IEnumerator Despawn()
+    public IEnumerator _Despawn()
     {
         while (alpha > minAlpha)
         {
@@ -93,9 +93,9 @@ public class SupportLineInstance : ExtendedMonoBehavior
         }
     }
 
-    public void DespawnAsync()
+    public void Despawn()
     {
-        StartCoroutine(Despawn());
+        StartCoroutine(_Despawn());
     }
 
     public void Destroy()

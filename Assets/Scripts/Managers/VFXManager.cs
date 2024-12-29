@@ -10,17 +10,17 @@ public class VFXManager : ExtendedMonoBehavior
     //Variables
     Dictionary<string, VFXInstance> visualEffects = new Dictionary<string, VFXInstance>();
 
-    public void SpawnAsync(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    public void Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<VFXInstance>();
         instance.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
         visualEffects.Add(instance.name, instance);
-        instance.SpawnAsync(vfx, position, triggeredEvent);
+        instance._Spawn(vfx, position, triggeredEvent);
     }
 
 
-    public IEnumerator Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    public IEnumerator _Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
         var visualEffect = prefab.GetComponent<VFXInstance>();
@@ -30,7 +30,7 @@ public class VFXManager : ExtendedMonoBehavior
         if (triggeredEvent == null)
             yield break; 
 
-        yield return visualEffect.Spawn(vfx, position, triggeredEvent);
+        yield return visualEffect._Spawn(vfx, position, triggeredEvent);
     }
 
 

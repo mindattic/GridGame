@@ -296,8 +296,16 @@ public static class Increment
     public static float FiftyPercent = 0.5f;
     public static float HundredPercent = 1.0f;
 
-    public static float HealthBarDrainAmount = 1f;
-    public static float ActionBarDrainAmount = 1f;
+
+    public static class HealthBar
+    {
+        public static float Drain = 1f;
+    }
+
+    public static class ActionBar
+    {
+        public static float Drain = 1f;
+    }
 }
 
 public static class Intermission
@@ -307,8 +315,18 @@ public static class Intermission
 
         public static class Enemy
         {
-            public static float Moves = Interval.OneSecond;
-            public static float Attacks = Interval.HalfSecond;
+            public static float Move = Interval.OneSecond;
+            public static float Attack = Interval.HalfSecond;
+        }
+
+        public static class Player
+        {
+            public static float Attack = Interval.HalfSecond;
+        }
+
+        public static class Portrait
+        {
+            public static float SlideIn = Interval.TwoSeconds;
         }
 
         public static class HealthBar
@@ -318,7 +336,7 @@ public static class Intermission
 
         public static class ActionBar
         {
-            public static float Drain = Interval.HalfSecond;
+            public static float Drain = Interval.OneSecond;
         }
 
         public static class After

@@ -30,7 +30,9 @@ public class ActorHealthBar : MonoBehaviour
         renderers.healthBarDrain.transform.localScale = GetScale(stats.PreviousHP);
         renderers.healthBarFill.transform.localScale = GetScale(stats.HP);
         renderers.healthBarText.text = $@"{stats.HP}/{stats.MaxHP}";
-        StartCoroutine(Drain());
+
+        if (instance.IsPlaying)
+            StartCoroutine(Drain());
     }
 
     private IEnumerator Drain()
@@ -47,7 +49,7 @@ public class ActorHealthBar : MonoBehaviour
 
         while (stats.HP < stats.PreviousHP)
         {
-            stats.PreviousHP -= Increment.HealthBarDrainAmount;
+            stats.PreviousHP -= Increment.HealthBar.Drain;
             scale = GetScale(stats.PreviousHP);
             renderers.healthBarDrain.transform.localScale = scale;
             yield return Wait.OneTick();
@@ -57,9 +59,6 @@ public class ActorHealthBar : MonoBehaviour
         stats.PreviousHP = stats.HP;
         scale = GetScale(stats.PreviousHP);
         renderers.healthBarDrain.transform.localScale = scale;
-
-        //if (IsDying)
-        //DieAsync();
     }
 
 

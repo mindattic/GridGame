@@ -15,9 +15,11 @@ namespace Assets.Scripts.Models
 
         //Properties
         public bool IsFatal => Opponent.stats.HP - Damage < 1;
+        public bool IsMiss => !IsHit;
+
     }
 
 
-  
+
 
 }

@@ -54,7 +54,7 @@ public class VFXInstance : ExtendedMonoBehavior
     //Properties
     private bool hasTriggeredEvent => triggeredEvent != null && triggerEventAt != -1;
 
-    private void Init(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    private void Initialize(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         //Translate, rotate, and relativeScale relative to tile dimensions (determined by device)
         var offset = Geometry.Tile.Relative.Translation(vfx.relativeOffset);
@@ -79,11 +79,16 @@ public class VFXInstance : ExtendedMonoBehavior
         }
     }
 
+    public void Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    {
+        isAsync = true;
+        Initialize(vfx, position, triggeredEvent);
+    }
 
-    public IEnumerator Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    public IEnumerator _Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         isAsync = false;
-        Init(vfx, position, triggeredEvent);
+        Initialize(vfx, position, triggeredEvent);
 
         if (!hasTriggeredEvent)
             yield break;
@@ -105,15 +110,11 @@ public class VFXInstance : ExtendedMonoBehavior
             yield return null;
         }
 
-        //Despawn VFX
+        //_Despawn VFX
         Despawn(name);
     }
 
-    public void SpawnAsync(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
-    {
-        isAsync = true;
-        Init(vfx, position, triggeredEvent);
-    }
+   
 
     public void FixedUpdate()
     {

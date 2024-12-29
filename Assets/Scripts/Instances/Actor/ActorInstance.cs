@@ -110,16 +110,6 @@ public class ActorInstance : ExtendedMonoBehavior
 
     #region Properties
 
-    public float Level { get => stats.Level; set => stats.Level = value; }
-    public float HP { get => stats.HP; set => stats.HP = value; }
-    public float MaxHP { get => stats.MaxHP; set => stats.MaxHP = value; }
-    public float Strength { get => stats.Strength; set => stats.Strength = value; }
-    public float Vitality { get => stats.Vitality; set => stats.Vitality = value; }
-    public float Agility { get => stats.Agility; set => stats.Agility = value; }
-    public float Speed { get => stats.Speed; set => stats.Speed = value; }
-    public float Luck { get => stats.Luck; set => stats.Luck = value; }
-
-
     public TileInstance currentTile => tiles.First(x => x.location.Equals(location));
     public bool IsPlayer => team.Equals(Team.Player);
     public bool IsEnemy => team.Equals(Team.Enemy);
@@ -305,9 +295,9 @@ public class ActorInstance : ExtendedMonoBehavior
         renderers.SetNameTagEnabled(isEnabled: debugManager.showActorNameTag);
 
         healthBar.Refresh();
-        ResetActionBar();
-        FadeInAsync();
-        Spin360Async();
+        actionBar.Reset();
+        FadeIn();
+        Spin360();
     }
 
     ActorInstance FindOverlappingActor(TileInstance closestTile)
@@ -332,73 +322,30 @@ public class ActorInstance : ExtendedMonoBehavior
         UpdateGlow();
     }
 
-    public void CheckAP()
-    {
-        if (IsPlaying)
-            StartCoroutine(GainAP());
-    }
-
-    private IEnumerator GainAP()
-    {
-        //Check abort conditions
-        if (debugManager.isEnemyStunned || !HasSelectedPlayer || !IsEnemy || !IsPlaying || HasMaxAP || flags.isGainingAP)
-            yield break;
-
-        //Before:
-        flags.isGainingAP = true;
-        float amount = stats.Speed * 0.1f;
-
-        //During:
-        while (HasSelectedPlayer && IsEnemy && IsPlaying && !HasMaxAP)
-        {
-            stats.AP += amount;
-            stats.AP = Mathf.Clamp(stats.AP, 0, stats.MaxAP);
-            stats.PreviousAP = stats.AP;
-            CheckWeaponWiggle();
-            actionBar.Refresh();
-            yield return Wait.OneTick();
-        }
-
-        //After:
-        stats.PreviousAP = stats.AP;
-        actionBar.Refresh();
-        flags.isGainingAP = false;
-    }
-
-    public void ResetActionBar()
-    {
-        stats.AP = 0;
-        stats.PreviousAP = 0;
-        StopCoroutine(WeaponWiggle());
-        actionBar.Refresh();
-    }
-
-
-    public void AddInitiative()
-    {
-        //Add initiative
-        float amount = stats.Speed * 0.01f;
-        stats.AP = amount;
-        stats.PreviousAP = amount;
-        CheckWeaponWiggle();
-        actionBar.Refresh();
-    }
 
 
     public IEnumerator Attack(AttackResult attack)
     {
-        if (attack.IsCriticalHit)
+        if (attack.IsHit)
         {
-            var critVFX = resourceManager.VisualEffect("Yellow_Hit");
-            vfxManager.SpawnAsync(
-                critVFX,
-                attack.Opponent.position);
-        }
+            if (attack.IsCriticalHit)
+            {
+                var critVFX = resourceManager.VisualEffect("Yellow_Hit");
+                vfxManager.Spawn(
+                    critVFX,
+                    attack.Opponent.position);
+            }
 
-        return vfxManager.Spawn(
-            vfx.Attack,
-            attack.Opponent.position,
-            attack.Opponent.TakeDamage(attack));
+            return vfxManager._Spawn(
+                vfx.Attack,
+                attack.Opponent.position,
+                attack.Opponent._TakeDamage(attack));
+
+        }
+        else
+        {
+            return attack.Opponent.AttackMiss();
+        }
     }
 
 
@@ -632,7 +579,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
 
 
-    //private void Shake(float intensity)
+    //private void _Shake(float intensity)
     //{
     //    thumbnailPosition = currentTile.position;
 
@@ -643,13 +590,13 @@ public class ActorInstance : ExtendedMonoBehavior
     //    thumbnailPosition += amount;
     //}
 
-    public void ShakeAsync(float intensity, float duration = 0)
+    public void Shake(float intensity, float duration = 0)
     {
         if (IsPlaying)
-            StartCoroutine(Shake(intensity, duration));
+            StartCoroutine(_Shake(intensity, duration));
     }
 
-    public IEnumerator Shake(float intensity, float duration = 0)
+    private IEnumerator _Shake(float intensity, float duration = 0)
     {
         // Ensure initial intensity is valid
         if (intensity <= 0)
@@ -674,7 +621,7 @@ public class ActorInstance : ExtendedMonoBehavior
             // Wait for the next frame
             yield return Wait.OneTick();
 
-            // Increment elapsed time if duration is specified
+            // Fill elapsed time if duration is specified
             if (duration > 0)
                 elapsedTime += Interval.OneTick;
         }
@@ -683,13 +630,13 @@ public class ActorInstance : ExtendedMonoBehavior
         thumbnailPosition = originalPosition;
     }
 
-    public void DodgeAsync()
+    public void Dodge()
     {
         if (IsPlaying)
-            StartCoroutine(Dodge());
+            StartCoroutine(_Dodge());
     }
 
-    public IEnumerator Dodge()
+    public IEnumerator _Dodge()
     {
         // Initial setup
         var rotationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
@@ -753,13 +700,13 @@ public class ActorInstance : ExtendedMonoBehavior
         rotation = Geometry.Rotation(Vector3.zero);
     }
 
-    public void BumpAsync(Direction direction)
+    public void Bump(Direction direction)
     {
         if (IsPlaying)
-            StartCoroutine(Bump(direction));
+            StartCoroutine(_Bump(direction));
     }
 
-    public IEnumerator Bump(Direction direction, IEnumerator triggeredEvent = null)
+    public IEnumerator _Bump(Direction direction, IEnumerator triggeredEvent = null)
     {
         // Animation curves for each phase
         var windupCurve = AnimationCurve.EaseInOut(0, 0, 0.5f, 1); // Windup easing
@@ -791,7 +738,7 @@ public class ActorInstance : ExtendedMonoBehavior
             yield return Wait.OneTick();
         }
 
-        // Phase 2: Bump (quickly move in the direction and rotate slightly)
+        // Phase 2: _Bump (quickly move in the direction and rotate slightly)
         elapsedTime = 0f;
         float targetRotationZ = (direction == Direction.East) ? -15f : 15f; // Opposite rotation for East
         while (elapsedTime < bumpDuration)
@@ -805,7 +752,6 @@ public class ActorInstance : ExtendedMonoBehavior
             yield return Wait.OneTick();
         }
 
-        //Trigger Asynchronously
         if (triggeredEvent != null && IsPlaying)
             StartCoroutine(triggeredEvent);
 
@@ -828,7 +774,13 @@ public class ActorInstance : ExtendedMonoBehavior
         rotation = Quaternion.identity;
     }
 
-    public IEnumerator TakeDamage(AttackResult attack)
+    public void TakeDamage(AttackResult attack)
+    {
+        if (IsPlaying)
+            StartCoroutine(_TakeDamage(attack));
+    }
+
+    public IEnumerator _TakeDamage(AttackResult attack)
     {
         //Check abort conditions
         if (!IsPlaying)
@@ -853,36 +805,33 @@ public class ActorInstance : ExtendedMonoBehavior
         //During:
         while (ticks < duration)
         {
-            GrowAsync();
+            Grow();
             if (attack.IsCriticalHit)
-                Shake(ShakeIntensity.Medium);
+                _Shake(ShakeIntensity.Medium);
 
             ticks += Interval.OneTick;
             yield return Wait.For(Interval.OneTick);
         }
 
         //After:
-        ShrinkAsync();
-        Shake(ShakeIntensity.Stop);
+        Shrink();
+        _Shake(ShakeIntensity.Stop);
     }
 
-    public void TakeDamageAsync(AttackResult attack)
-    {
-        //Check abort conditions
-        if (!IsPlaying)
-            return;
-
-        StartCoroutine(TakeDamage(attack));
-    }
+  
 
     public IEnumerator AttackMiss()
     {
         damageTextManager.Spawn("Miss", position);
-        yield return Dodge();
+        yield return _Dodge();
     }
 
+    public void Die()
+    {
+        StartCoroutine(_Die());
+    }
 
-    public IEnumerator Die()
+    public IEnumerator _Die()
     {
         //Before:
         var alpha = 1f;
@@ -891,10 +840,8 @@ public class ActorInstance : ExtendedMonoBehavior
         audioManager.Play("Death");
         sortingOrder = SortingOrder.Max;
 
-        var hasSpawnedCoins = false;
-
-
         //During:
+        var hasSpawnedCoins = false;
         while (alpha > 0f)
         {
             alpha -= Increment.OnePercent;
@@ -904,19 +851,8 @@ public class ActorInstance : ExtendedMonoBehavior
             if (IsEnemy && !hasSpawnedCoins && alpha < Opacity.Percent10)
             {
                 hasSpawnedCoins = true;
-
-                IEnumerator spawnCoins(int amount)
-                {
-                    var i = 0;
-                    do
-                    {
-                        coinManager.Spawn(position);
-                        i++;
-                    } while (i < amount);
-
-                    yield return true;
-                }
-                StartCoroutine(spawnCoins(10)); //TODO: Spawn coins based on enemy stats...
+                var amount = 10;
+                SpawnCoins(amount);
             }
 
             yield return Interval.FiveTicks;
@@ -929,9 +865,23 @@ public class ActorInstance : ExtendedMonoBehavior
         gameObject.SetActive(false);
     }
 
-    public void DieAsync()
+
+    private void SpawnCoins(int amount)
     {
-        StartCoroutine(Die());
+        if (IsPlaying)
+            StartCoroutine(_SpawnCoins(10)); //TODO: Spawn coins based on enemy stats...
+    }
+
+    IEnumerator _SpawnCoins(int amount)
+    {
+        var i = 0;
+        do
+        {
+            coinManager.Spawn(position);
+            i++;
+        } while (i < amount);
+
+        yield return true;
     }
 
     public void SetReady()
@@ -942,11 +892,20 @@ public class ActorInstance : ExtendedMonoBehavior
 
         stats.AP = stats.MaxAP;
         stats.PreviousAP = stats.MaxAP;
-        CheckWeaponWiggle();
+
         actionBar.Refresh();
     }
 
-    public IEnumerator Grow(float maxSize = 0f)
+    public void Grow(float maxSize = 0f)
+    {
+        if (maxSize == 0)
+            maxSize = tileSize * 1.1f;
+
+        if (IsPlaying)
+            StartCoroutine(_Grow(maxSize));
+    }
+
+    private IEnumerator _Grow(float maxSize = 0f)
     {
         //Before:
         if (maxSize == 0)
@@ -969,15 +928,17 @@ public class ActorInstance : ExtendedMonoBehavior
         //After:
         scale = new Vector3(maxSize, maxSize, 0);
     }
-    public void GrowAsync(float maxSize = 0f)
-    {
-        if (maxSize == 0)
-            maxSize = tileSize * 1.1f;
 
-        StartCoroutine(Grow(maxSize));
+    public void Shrink(float minSize = 0f)
+    {
+        if (minSize == 0)
+            minSize = tileSize;
+
+        if (IsPlaying)
+            StartCoroutine(_Shrink(minSize));
     }
 
-    public IEnumerator Shrink(float minSize = 0f)
+    private IEnumerator _Shrink(float minSize = 0f)
     {
         //Before:
         if (minSize == 0)
@@ -1002,24 +963,20 @@ public class ActorInstance : ExtendedMonoBehavior
 
     }
 
-    public void ShrinkAsync(float minSize = 0f)
+   
+
+
+    public void Spin90(IEnumerator triggeredEvent = null)
     {
-        if (minSize == 0)
-            minSize = tileSize;
-        StartCoroutine(Shrink(minSize));
+        if (IsPlaying)
+            StartCoroutine(_Spin90(triggeredEvent));
     }
 
-
-    public void Spin90Async(IEnumerator triggeredEvent = null)
-    {
-        StartCoroutine(Spin90(triggeredEvent));
-    }
-
-    public IEnumerator Spin90(IEnumerator triggeredEvent = null)
+    private IEnumerator _Spin90(IEnumerator triggeredEvent = null)
     {
         //Before:
         bool isDone = false;
-        bool is90Degrees = false;
+        bool hasTriggered = false;
         var rotY = 0f;
         var spinSpeed = tileSize * 24f;
         rotation = Geometry.Rotation(0, rotY, 0);
@@ -1027,20 +984,20 @@ public class ActorInstance : ExtendedMonoBehavior
         //During:
         while (!isDone)
         {
-            rotY += !is90Degrees ? spinSpeed : -spinSpeed;
+            rotY += !hasTriggered ? spinSpeed : -spinSpeed;
 
-            if (!is90Degrees && rotY >= 90f)
+            if (!hasTriggered && rotY >= 90f)
             {
                 rotY = 90f;
-                is90Degrees = true;
-                yield return triggeredEvent;
+                hasTriggered = true;
+
+                if (triggeredEvent != null && IsPlaying)
+                    StartCoroutine(triggeredEvent);
             }
 
-            isDone = is90Degrees && rotY <= 0f;
+            isDone = hasTriggered && rotY <= 0f;
             if (isDone)
-            {
                 rotY = 0f;
-            }
 
             rotation = Geometry.Rotation(0, rotY, 0);
             yield return Wait.OneTick();
@@ -1052,8 +1009,13 @@ public class ActorInstance : ExtendedMonoBehavior
     }
 
 
+    public void Spin360(IEnumerator triggeredEvent = null)
+    {
+        if (IsPlaying)
+            StartCoroutine(_Spin360(triggeredEvent));
+    }
 
-    public IEnumerator Spin360(IEnumerator triggeredEvent = null)
+    private IEnumerator _Spin360(IEnumerator triggeredEvent = null)
     {
         //Before:
         bool isDone = false;
@@ -1072,7 +1034,9 @@ public class ActorInstance : ExtendedMonoBehavior
             if (!hasTriggered && rotY >= 240f)
             {
                 hasTriggered = true;
-                yield return triggeredEvent;
+
+                if (triggeredEvent != null && IsPlaying)
+                    yield return triggeredEvent;
             }
 
             isDone = rotY >= 360f;
@@ -1083,18 +1047,16 @@ public class ActorInstance : ExtendedMonoBehavior
         rotation = Geometry.Rotation(0, 0, 0);
     }
 
-    public void Spin360Async(IEnumerator triggeredEvent = null)
+
+
+
+    public void FadeIn(float delay = 0f, float increment = 0.05f)
     {
-        StartCoroutine(Spin360(triggeredEvent));
+        if (IsPlaying)
+            StartCoroutine(_FadeIn(delay, increment));
     }
 
-
-    public void FadeInAsync(float delay = 0f, float increment = 0.05f)
-    {
-        StartCoroutine(FadeIn(delay, increment));
-    }
-
-    public IEnumerator FadeIn(float delay = 0f, float increment = 0.05f)
+    private IEnumerator _FadeIn(float delay = 0f, float increment = 0.05f)
     {
         //Before:
         float alpha = 0;
@@ -1115,25 +1077,6 @@ public class ActorInstance : ExtendedMonoBehavior
         renderers.SetAlpha(alpha);
     }
 
-    public static IEnumerator FadeOut(SpriteRenderer spriteRenderer, float increment, float interval, float startAlpha, float endAlpha)
-    {
-        //Before:
-        var alpha = startAlpha;
-        spriteRenderer.color = new Color(1, 1, 1, alpha);
-
-        //During:
-        while (alpha > 0)
-        {
-            alpha -= increment;
-            alpha = Mathf.Clamp(alpha, 0, endAlpha);
-            spriteRenderer.color = new Color(1, 1, 1, alpha);
-            yield return interval;
-        }
-
-        //After:
-        spriteRenderer.color = new Color(1, 1, 1, endAlpha);
-    }
-
     public void Teleport(Vector2Int location)
     {
 
@@ -1141,14 +1084,14 @@ public class ActorInstance : ExtendedMonoBehavior
         transform.position = Geometry.GetPositionByLocation(this.location);
     }
 
-    public void CheckAngry()
+    public void Angry()
     {
         if (IsPlaying)
-            StartCoroutine(AngryEnemy());
+            StartCoroutine(_Angry());
     }
 
 
-    private IEnumerator AngryEnemy()
+    private IEnumerator _Angry()
     {
         //Check abort conditions
         if (!HasMaxAP || flags.isAngry)
@@ -1192,30 +1135,33 @@ public class ActorInstance : ExtendedMonoBehavior
         //renderers.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, 0, 0);
         //if (turnDelay > 0)
         //{
-        //    CheckTurnDelayWiggle();
+        //    TurnDelayWiggle();
         //}
 
 
         IEnumerator _()
         {
             renderers.SetThumbnailSprite(sprites.attack);
-
-            //renderers.SetThumbnailMaterial(resourceManager.Material("Invert-color", idle.texture));
-            //ParallaxFadeInAsync();
             yield return null;
         }
-        Spin90Async(_());
+
+        if (IsPlaying)
+            Spin90(_());
 
     }
 
 
 
-    public void CheckWeaponWiggle()
+    public void WeaponWiggle()
     {
-        StartCoroutine(WeaponWiggle());
+        if (stats.AP < stats.MaxAP)
+            return;
+
+        if (IsPlaying)
+            Spin90(_WeaponWiggle());
     }
 
-    IEnumerator WeaponWiggle()
+    private IEnumerator _WeaponWiggle()
     {
         if (stats.AP < stats.MaxAP)
             yield break;
@@ -1244,12 +1190,13 @@ public class ActorInstance : ExtendedMonoBehavior
 
 
 
-    public void CheckTurnDelayWiggle(bool isLooping = false)
+    public void TurnDelayWiggle(bool isLooping = false)
     {
-        StartCoroutine(TurnDelayWiggle(isLooping));
+        if (IsPlaying)
+            StartCoroutine(_TurnDelayWiggle(isLooping));
     }
 
-    public IEnumerator TurnDelayWiggle(bool isLooping = false)
+    private IEnumerator _TurnDelayWiggle(bool isLooping = false)
     {
         float timeElapsed = 0f;
         float amplitude = 10f;
@@ -1283,8 +1230,6 @@ public class ActorInstance : ExtendedMonoBehavior
         renderers.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, 0);
 
     }
-
-
 
     public void SetAttacking()
     {
@@ -1339,7 +1284,7 @@ public class ActorInstance : ExtendedMonoBehavior
 
 
 
-    //public IEnumerator Bump(Direction direction)
+    //public IEnumerator _Bump(Direction direction)
     //{
 
     //    //Before:
@@ -1418,11 +1363,11 @@ public class ActorInstance : ExtendedMonoBehavior
     //{
     //    if (!IsPlaying)
     //        return;
-    //    FadeOutAsync(renderers.parallax, Increment.FivePercent, Interval.OneTick, startAlpha: 0.5f, endAlpha: 0f);
+    //    _FadeOut(renderers.parallax, Fill.FivePercent, Interval.OneTick, startAlpha: 0.5f, endAlpha: 0f);
     //}
 
 
-    //public IEnumerator FadeIn(
+    //public IEnumerator _FadeIn(
     //     SpriteRenderer spriteRenderer,
     //     float increment,
     //     float interval,
@@ -1446,14 +1391,14 @@ public class ActorInstance : ExtendedMonoBehavior
     //    spriteRenderer.color = new Color(1, 1, 1, endAlpha);
     //}
 
-    //public void FadeInAsync(
+    //public void _FadeIn(
     //   SpriteRenderer spriteRenderer,
     //   float increment,
     //   float interval,
     //   float startAlpha = 0f,
     //   float endAlpha = 1f)
     //{
-    //    StartCoroutine(FadeIn(spriteRenderer, increment, interval, startAlpha, endAlpha));
+    //    StartCoroutine(_FadeIn(spriteRenderer, increment, interval, startAlpha, endAlpha));
     //}
 
 
@@ -1496,7 +1441,7 @@ public class ActorInstance : ExtendedMonoBehavior
     //if (!isTurnDelayWiggling)
     //{
     //    isTurnDelayWiggling = Random.Int(1, 20) == 1 ? true : false;
-    //    StartCoroutine(TurnDelayWiggle());
+    //    StartCoroutine(_TurnDelayWiggle());
     //}
 
 
@@ -1561,7 +1506,7 @@ public class ActorInstance : ExtendedMonoBehavior
     //    //During:
     //    while (alpha < maxAlpha)
     //    {
-    //        alpha += Increment.OnePercent;
+    //        alpha += Fill.OnePercent;
     //        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
     //        renderers.radialBack.color = new color(0, 0, 0, alpha);
     //        yield return global::Destroy.OneTick();
@@ -1581,7 +1526,7 @@ public class ActorInstance : ExtendedMonoBehavior
     //    //During:
     //    while (alpha > 0)
     //    {
-    //        alpha -= Increment.OnePercent;
+    //        alpha -= Fill.OnePercent;
     //        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
     //        renderers.radialBack.color = new color(0, 0, 0, alpha);
     //        yield return Destroy.OneTick();
@@ -1600,7 +1545,7 @@ public class ActorInstance : ExtendedMonoBehavior
     //        //renderers.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", idle.texture));
     //        yield return null;
     //    }
-    //    Spin90Async(_());
+    //    Spin90(_());
 
     //    //turnDelay = Formulas.CalculateTurnDelay(stats);
     //    //UpdateTurnDelayText();
@@ -1672,55 +1617,6 @@ public class ActorInstance : ExtendedMonoBehavior
 
     //}
 
-    //public IEnumerator AddAp(float amount)
-    //{
-    //    //Before:
-    //    var targetAP = Mathf.Clamp(ap + amount, 0, maxAp);
-    //    var increment = 1f;
-
-    //    //During:
-    //    while (ap < targetAP)
-    //    {
-    //        ap += increment;
-    //        ap = Mathf.Clamp(ap, 0, maxAp);
-
-    //        UpdateActionBar();
-    //        yield return Wait.For(Interval.FiveTicks);
-    //    }
-
-    //    //After:
-    //    ap = targetAP;
-    //    UpdateActionBar();
-    //}
-
-    //public void AddApAsync(float amount)
-    //{
-    //    StartCoroutine(AddAp(amount));
-    //}
-
-    //public IEnumerator AddSp(float amount)
-    //{
-    //    //Before:
-    //    float ticks = 0f;
-    //    float duration = Interval.OneSecond;
-
-    //    //During:
-    //    while (ticks < duration)
-    //    {
-    //        ticks += Interval.OneTick;
-    //        sp += Interval.OneTick * amount * 0.1f;
-    //        yield return Wait.OneTick();
-    //    }
-
-    //    //After:
-    //    Shake(shakeIntensity.Stop);
-    //}
-
-    //public void AddSpAsync(float amount)
-    //{
-    //    StartCoroutine(AddSp(amount));
-    //}
-
     //public void SetStatus(Status icon)
     //{
     //    //Check abort conditions
@@ -1733,7 +1629,7 @@ public class ActorInstance : ExtendedMonoBehavior
     //private IEnumerator SetStatusIcon(Status status)
     //{
     //    //Before:
-    //    float increment = Increment.FivePercent;
+    //    float increment = Fill.FivePercent;
     //    float alpha = renderers.statusIcon.color.a;
     //    renderers.statusIcon.color = new Color(1, 1, 1, alpha);
 

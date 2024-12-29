@@ -99,6 +99,7 @@
     <Compile Include="Assets\Scripts\Managers\VFXManager.cs" />
     <Compile Include="Assets\Scripts\Instances\SupportLineInstance.cs" />
     <Compile Include="Assets\Scripts\Models\ActorPair.cs" />
+    <Compile Include="Assets\Scripts\Models\TriggeredCoroutine.cs" />
     <Compile Include="Assets\Scripts\Managers\CanvasOverlayInstance.cs" />
     <Compile Include="Assets\Scripts\Instances\ExtendedMonoBehavior.cs" />
     <Compile Include="Assets\Scripts\Managers\EnemyManager.cs" />
