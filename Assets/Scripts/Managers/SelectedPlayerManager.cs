@@ -25,14 +25,14 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         //GetProfile Actor from collider
         var actor = collider.gameObject.GetComponent<ActorInstance>();
-        if (actor == null || !actor.IsPlaying)
+        if (actor == null || !actor.IsActive || !actor.IsAlive)
             return;
 
         //TODO: SaveProfile Card display...
-        actors.ForEach(x => x.renderers.SetSelectionBoxEnabled(isEnabled: false));
+        actors.ForEach(x => x.render.SetSelectionBoxEnabled(isEnabled: false));
         focusedActor = actor;
         //focusedActor.sortingOrder = SortingOrder.Max;
-        focusedActor.renderers.SetSelectionBoxEnabled(isEnabled: true);
+        focusedActor.render.SetSelectionBoxEnabled(isEnabled: true);
 
         //Assign mouse relativeOffset (how off center was selectionBox)
         mouseOffset = focusedActor.position - mousePosition3D;
@@ -40,7 +40,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         cardManager.Assign(focusedActor);
 
         if (focusedActor.IsPlayer)
-            StartCoroutine(focusedActor.MoveTowardCursor());
+            StartCoroutine(focusedActor.move.TowardCursor());
     }
 
     public void Unfocus()
@@ -51,7 +51,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
 
         if (!HasSelectedPlayer)
         {
-            focusedActor.position = focusedActor.currentTile.position;
+            focusedActor.position = focusedActor.CurrentTile.position;
             //focusedActor.sortingOrder = SortingOrder.Default;
             //cardManager.DespawnAll();
         }
@@ -85,7 +85,7 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         audioManager.Play("Select");
         timerBar.Play();
         actorManager.CheckEnemyAP();
-        StartCoroutine(selectedPlayer.MoveTowardCursor());
+        StartCoroutine(selectedPlayer.move.TowardCursor());
     }
 
     public void Unselect()

@@ -17,7 +17,7 @@ namespace Game.Manager
         public void CheckEnemyAngry()
         {
             var notAngryEnemies = enemies.Where(x => !x.flags.isAngry).ToList();
-            notAngryEnemies.ForEach(x => x.Angry());
+            notAngryEnemies.ForEach(x => x.ExecuteAngry());
         }
 
         //public void SetAttacking(List<ActorInstance> x, bool state)

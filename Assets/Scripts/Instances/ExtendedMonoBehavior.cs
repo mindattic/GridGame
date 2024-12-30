@@ -138,8 +138,8 @@ public class ExtendedMonoBehavior : MonoBehaviour
 
     protected ActorInstance focusedActor
     {
-        get { return GameManager.instance.focusedPlayer; }
-        set { GameManager.instance.focusedPlayer = value; }
+        get { return GameManager.instance.focusedActor; }
+        set { GameManager.instance.focusedActor = value; }
     }
 
     protected ActorInstance previousSelectedPlayer

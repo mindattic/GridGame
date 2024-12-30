@@ -150,7 +150,7 @@ public class PortraitInstance : ExtendedMonoBehavior
 
     //private void _Shake(int factor = 12)
     //{
-    //    this.boardPosition = currentTile.boardPosition;
+    //    this.boardPosition = CurrentTile.boardPosition;
     //    this.boardPosition += new Vector3(Random.Range(tileSize / factor), Random.Range(tileSize / factor), 1);
     //}
 

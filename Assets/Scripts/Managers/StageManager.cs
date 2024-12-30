@@ -61,32 +61,32 @@ public class StageManager : ExtendedMonoBehavior
 
 
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Paladin, "paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "barbarian", RandomStats, Team.Player, Rarity.Uncommon));
                 Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
 
                 break;
 
             case 2:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Paladin, "paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "barbarian", RandomStats, Team.Player, Rarity.Uncommon));
                 Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
 
                 break;
 
             case 3:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Paladin, "paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "barbarian", RandomStats, Team.Player, Rarity.Uncommon));
                 Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
 
                 break;
 
             case 4:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Paladin, "paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "barbarian", RandomStats, Team.Player, Rarity.Uncommon));
                 Add(new StageActor(Character.Slime, "Slime A", RandomStats, Team.Enemy, Rarity.Common));
 
                 //Dynamic enemies
@@ -97,9 +97,9 @@ public class StageManager : ExtendedMonoBehavior
             case 5:
 
                 //Players
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Cleric, "Cleric", RandomStats, Team.Player, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Cleric, "cleric", RandomStats, Team.Player, Rarity.Common));
 
                 //Enemies
                 //Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Opponent, Rarity.Common));
@@ -112,9 +112,9 @@ public class StageManager : ExtendedMonoBehavior
             case 6:
 
                 //Players
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Cleric, "Cleric", RandomStats, Team.Player, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Cleric, "cleric", RandomStats, Team.Player, Rarity.Common));
 
                 //Enemies
                 Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
@@ -150,8 +150,8 @@ public class StageManager : ExtendedMonoBehavior
 
             case 7:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Paladin, "paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "barbarian", RandomStats, Team.Player, Rarity.Uncommon));
                 Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
 
                 break;
@@ -159,32 +159,32 @@ public class StageManager : ExtendedMonoBehavior
 
             case 8:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Paladin, "paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "barbarian", RandomStats, Team.Player, Rarity.Uncommon));
                 Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
 
                 break;
 
             case 9:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Paladin, "paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "barbarian", RandomStats, Team.Player, Rarity.Uncommon));
                 Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
 
                 break;
 
             case 10:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Paladin, "paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "barbarian", RandomStats, Team.Player, Rarity.Uncommon));
                 Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
 
                 break;
 
             default:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Paladin, "paladin", RandomStats, Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "barbarian", RandomStats, Team.Player, Rarity.Uncommon));
                 Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
 
                 break;
@@ -202,7 +202,7 @@ public class StageManager : ExtendedMonoBehavior
         instance.thumbnail = stageActor.thumbnail;
         instance.team = stageActor.team;
         instance.quality = stageActor.quality;
-        instance.renderers.SetQualityColor(instance.IsPlayer ? Color.white : Color.red);
+        instance.render.SetQualityColor(instance.IsPlayer ? Color.white : Color.red);
         instance.sortingOrder = SortingOrder.Min;
 
         //Assign stats

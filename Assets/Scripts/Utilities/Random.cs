@@ -127,9 +127,9 @@ static class Random
 
 
 
-    public static ActorInstance Player => players.Where(x => x.IsPlaying).OrderBy(x => Guid.NewGuid()).First();
+    public static ActorInstance Player => players.Where(x => x.IsActive && x.IsAlive).OrderBy(x => Guid.NewGuid()).First();
 
-    public static ActorInstance Enemy => enemies.Where(x => x.IsPlaying).OrderBy(x => Guid.NewGuid()).First();
+    public static ActorInstance Enemy => enemies.Where(x => x.IsActive && x.IsAlive).OrderBy(x => Guid.NewGuid()).First();
 
     public static TileInstance Tile => tiles.OrderBy(x => Guid.NewGuid()).First();
 

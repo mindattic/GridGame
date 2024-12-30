@@ -33,7 +33,7 @@ public class DatabaseExample : MonoBehaviour
         // set database location (directory)
         db.DBLocation = Application.persistentDataPath;
         db.DBName = "MyDatabase.db";
-        Debug.Log("Database Directory : " + db.DBLocation);
+        Debug.Log("DatabaseSchema Directory : " + db.DBLocation);
 
         if (db.Exists)
         {

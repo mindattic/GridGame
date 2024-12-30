@@ -10,7 +10,7 @@ namespace Game.Manager
 {
   
 
-    public static class Database
+    public static class DatabaseSchema
     {
         public const string Name = "MyDatabase.db";
         
@@ -52,7 +52,7 @@ namespace Game.Manager
         private void Awake()
         {
             instance.DBLocation = Application.persistentDataPath;
-            instance.DBName = Database.Name;
+            instance.DBName = DatabaseSchema.Name;
 
             //Refresh if this is the first load of the application
             if (autoOverwrite || !instance.Exists)
@@ -82,7 +82,7 @@ namespace Game.Manager
 #region Load ActorStats
 
             actorStats.Clear();
-            reader = instance.GetAllData(Database.Table.Actor);
+            reader = instance.GetAllData(DatabaseSchema.Table.Actor);
             while (reader != null && reader.Read())
             {
                 var x = new ActorStats()

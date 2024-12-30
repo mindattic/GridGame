@@ -186,7 +186,7 @@ public class DebugWindow : EditorWindow
         if (debugManager.showActorNameTag != onCheckChanged)
         {
             debugManager.showActorNameTag = onCheckChanged;
-            gameManager.actors.ForEach(x => x.renderers.SetNameTagEnabled(onCheckChanged));
+            gameManager.actors.ForEach(x => x.render.SetNameTagEnabled(onCheckChanged));
         }
 
         //Show Actor Frames checkbox
@@ -194,7 +194,7 @@ public class DebugWindow : EditorWindow
         if (debugManager.showActorFrame != onCheckChanged)
         {
             debugManager.showActorFrame = onCheckChanged;
-            gameManager.actors.ForEach(x => x.renderers.SetFrameEnabled(onCheckChanged));
+            gameManager.actors.ForEach(x => x.render.SetFrameEnabled(onCheckChanged));
         }
 
         //Are Players Invinciple? checkbox
@@ -279,7 +279,7 @@ public class DebugWindow : EditorWindow
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
-        isClicked = GUILayout.Button("Erase Database", GUILayout.Width(Screen.width * 0.5f));
+        isClicked = GUILayout.Button("Erase DatabaseSchema", GUILayout.Width(Screen.width * 0.5f));
         if (isClicked)
             OnEraseDatabaseClick();
 

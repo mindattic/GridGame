@@ -206,6 +206,7 @@ public class BoardInstance : ExtendedMonoBehavior
                 var instance = prefab.GetComponent<TileInstance>();
                 instance.name = $"{col}x{row}";
                 instance.location = new Vector2Int(col, row);
+                tileManager.tileMap.Add(instance.location, instance);
             }
         }
 

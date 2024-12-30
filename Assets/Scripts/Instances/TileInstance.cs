@@ -7,7 +7,7 @@ public class TileInstance : ExtendedMonoBehavior
     //Variables
     [SerializeField] public Vector2Int location;
   
-    public bool IsOccupied => actors.Any(x => x != null && x.IsPlaying && x.location == location);
+    public bool IsOccupied => actors.Any(x => x != null && x.IsActive && x.IsAlive && x.location == location);
 
     #region Components
 

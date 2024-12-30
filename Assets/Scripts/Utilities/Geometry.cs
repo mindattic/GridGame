@@ -101,10 +101,10 @@ public class Geometry
     {
         //Determine if already adjacent to player...
         if (IsAdjacentTo(attacker, other))
-            return attacker.currentTile.position;
+            return attacker.CurrentTile.position;
 
         //Swap boardPosition with target
-        return other.currentTile.position;
+        return other.CurrentTile.position;
 
 
 

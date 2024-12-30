@@ -8,7 +8,7 @@ public class ActorHealthBar : MonoBehaviour
     private Vector3 initialScale;
 
     //Properties
-    private ActorRenderers renderers => this.instance.renderers;
+    private ActorRenderers renderers => this.instance.render;
     private ActorStats stats => this.instance.stats;
 
     public void Initialize(ActorInstance parentInstance)
@@ -31,7 +31,7 @@ public class ActorHealthBar : MonoBehaviour
         renderers.healthBarFill.transform.localScale = GetScale(stats.HP);
         renderers.healthBarText.text = $@"{stats.HP}/{stats.MaxHP}";
 
-        if (instance.IsPlaying)
+        if (instance.IsActive && instance.IsAlive)
             StartCoroutine(Drain());
     }
 

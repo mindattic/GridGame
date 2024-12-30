@@ -69,7 +69,7 @@ public class TitleManager : ExtendedMonoBehavior
         Print(text, ColorHelper.Solid.White);
     }
 
-    //public IEnumerator _FadeIn()
+    //public IEnumerator FadeIn()
     //{
     //    float alpha = 0f;
     //    label.color = new color(1f, 1f, 1f, alpha);
@@ -112,10 +112,10 @@ public class TitleManager : ExtendedMonoBehavior
     //public IEnumerator FadeInOut()
     //{
     //    StopCoroutine(FadeInOut());
-    //    StopCoroutine(_FadeIn());
+    //    StopCoroutine(FadeIn());
     //    StopCoroutine(_FadeOut());
 
-    //    yield return _FadeIn();
+    //    yield return FadeIn();
     //    yield return Destroy.For(Interval.OneSecond);
     //    yield return _FadeOut();
     //}

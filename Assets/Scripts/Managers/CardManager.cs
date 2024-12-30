@@ -106,7 +106,7 @@ namespace Game.Behaviors
             details.text = "";
 
             // _Despawn all selection boxes from actors
-            actors.ForEach(x => x.renderers.SetSelectionBoxEnabled(false));
+            actors.ForEach(x => x.render.SetSelectionBoxEnabled(false));
 
             // Reset portrait position
             portrait.rectTransform.localPosition = offscreenPosition;

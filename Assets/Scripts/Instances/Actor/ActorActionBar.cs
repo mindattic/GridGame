@@ -1,9 +1,6 @@
 using Assets.Scripts.Behaviors.Actor;
-using Game.Behaviors;
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class ActorActionBar : ExtendedMonoBehavior
 {
@@ -11,9 +8,8 @@ public class ActorActionBar : ExtendedMonoBehavior
     private ActorInstance instance;
     private Vector3 initialScale;
 
-
     //Properties
-    private ActorRenderers renderers => this.instance.renderers;
+    private ActorRenderers renderers => this.instance.render;
     private ActorStats stats => this.instance.stats;
     private ActorFlags flags => this.instance.flags;
 
@@ -38,13 +34,13 @@ public class ActorActionBar : ExtendedMonoBehavior
         renderers.actionBarText.text = $@"{stats.AP}/{stats.MaxAP}";
 
 
-        instance.WeaponWiggle();
+        instance.action.ExecuteWeaponWiggle();
 
-        if (instance.IsPlaying)
-            StartCoroutine(Drain());
+        if (instance.IsActive && instance.IsAlive)
+            StartCoroutine(_Drain());
     }
 
-    IEnumerator Drain()
+    private IEnumerator _Drain()
     {
         //Check abort conditions
         if (stats.PreviousAP == stats.AP)
@@ -70,18 +66,16 @@ public class ActorActionBar : ExtendedMonoBehavior
         renderers.healthBarDrain.transform.localScale = scale;
     }
 
-
-
     public void Fill()
     {
-        if (instance.IsPlaying)
+        if (instance.IsActive && instance.IsAlive)
             StartCoroutine(_Fill());
     }
 
     private IEnumerator _Fill()
     {
         //Check abort conditions
-        if (debugManager.isEnemyStunned || !HasSelectedPlayer || !instance.IsEnemy || !instance.IsPlaying || instance.HasMaxAP || flags.isGainingAP)
+        if (debugManager.isEnemyStunned || !HasSelectedPlayer || !instance.IsEnemy || !instance.IsActive || !instance.IsAlive || instance.HasMaxAP || flags.isGainingAP)
             yield break;
 
         //Before:
@@ -89,7 +83,7 @@ public class ActorActionBar : ExtendedMonoBehavior
         float amount = stats.Speed * 0.1f;
 
         //During:
-        while (HasSelectedPlayer && instance.IsEnemy && instance.IsPlaying && !instance.HasMaxAP)
+        while (HasSelectedPlayer && instance.IsEnemy && instance.IsActive && instance.IsAlive && !instance.HasMaxAP)
         {
             stats.AP += amount;
             stats.AP = Mathf.Clamp(stats.AP, 0, stats.MaxAP);

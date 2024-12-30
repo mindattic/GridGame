@@ -77,7 +77,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public float bumpSpeed;
 
     //selectionBox
-    [HideInInspector] public ActorInstance focusedPlayer;
+    [HideInInspector] public ActorInstance focusedActor;
     [HideInInspector] public ActorInstance selectedPlayer;
     [HideInInspector] public ActorInstance previousSelectedPlayer;
 

@@ -54,7 +54,7 @@ public class InputManager : ExtendedMonoBehavior
         if (!HasFocusedActor)
             return;
 
-        var dragDistance = Vector3.Distance(focusedActor.position, focusedActor.currentTile.position);
+        var dragDistance = Vector3.Distance(focusedActor.position, focusedActor.CurrentTile.position);
         if (dragDistance > tileSize / 24)
         {
             selectedPlayerManager.Select();

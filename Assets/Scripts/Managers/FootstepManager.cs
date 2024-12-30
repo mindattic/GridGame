@@ -30,7 +30,7 @@ public class FootstepManager : ExtendedMonoBehavior
 
     public void Play(ActorInstance actor)
     {
-        if (!actor.IsPlaying)
+        if (!actor.IsActive || !actor.IsAlive)
             return;
 
         this.actor = actor;
@@ -46,7 +46,7 @@ public class FootstepManager : ExtendedMonoBehavior
 
     private IEnumerator CheckSpawn()
     {
-        while (actor != null && actor.IsPlaying)
+        while (actor != null && actor.IsActive && actor.IsAlive)
         {
             var distance = Vector3.Distance(actor.position, previousPosition);
             if (distance >= threshold)
