@@ -15,7 +15,7 @@ namespace Assets.Scripts.Instances.Actor
         //Instance Properties
         protected bool IsActive => instance.IsActive;
         protected bool IsAlive => instance.IsAlive;
-        protected TileInstance currentTile => tileManager.tileMap[location]; //tiles.First(x => x.location.Equals(location));
+        protected TileInstance currentTile => board.tileMap.GetTile(location); //tiles.First(x => x.location.Equals(location));
         protected ActorRenderers render => instance.render;
         protected ActorFlags flags => instance.flags;
         protected ActorStats stats => instance.stats;
@@ -25,12 +25,16 @@ namespace Assets.Scripts.Instances.Actor
         protected GameManager gameManager => GameManager.instance;
         protected AudioManager audioManager => gameManager.audioManager;
         protected TileManager tileManager => gameManager.tileManager;
+        protected DebugManager debugManager => gameManager.debugManager;
         protected float snapDistance => gameManager.snapDistance;
         protected float tileSize => gameManager.tileSize;
         protected Vector3 tileScale => gameManager.tileScale;
         protected float moveSpeed => gameManager.moveSpeed;
         protected ActorInstance focusedActor => gameManager.focusedActor;
         protected ActorInstance selectedPlayer => gameManager.selectedPlayer;
+        protected bool HasFocusedActor => focusedActor != null;
+        protected bool HasSelectedPlayer => selectedPlayer != null;
+
         protected List<ActorInstance> actors => gameManager.actors;
         protected BoardInstance board => gameManager.board;
         protected float percent33 => Constants.percent33;

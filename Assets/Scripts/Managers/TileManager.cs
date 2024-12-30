@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class TileManager : ExtendedMonoBehavior
 {
-    public Dictionary<Vector2Int, TileInstance> tileMap = new Dictionary<Vector2Int, TileInstance>();
+
+
+
 
     public void Reset()
     {

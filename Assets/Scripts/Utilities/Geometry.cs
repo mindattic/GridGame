@@ -36,7 +36,7 @@ public class Geometry
 
     public static Vector3 GetPositionByLocation(Vector2Int location)
     {
-        return board.locationToPosition[location];
+        return board.tileMap.GetPosition(location);
     }
 
     //public static Vector2Int GetLocation(int col, int row)
@@ -164,10 +164,10 @@ public class Geometry
 
     public static bool IsInCorner(Vector2Int location)
     {
-        return location == board.A1 
-            || location == board.A6 
-            || location == board.H1 
-            || location == board.H6;
+        return location == board.tileMap.GetLocation(1, 1)  //A1
+            || location == board.tileMap.GetLocation(1, 6)  //A6
+            || location == board.tileMap.GetLocation(8, 1)  //H1
+            || location == board.tileMap.GetLocation(8, 6); //H6
     }
 
 
@@ -188,7 +188,7 @@ public class Geometry
 
     /// <summary>
     /// Methods which calculate values relative to another unit
-    /// (which is calculated based on currentFps device aspect ratio, screen size, etc)
+    /// (which is calculated based on current device aspect ratio, screen size, etc)
     /// </summary>
     public static class Tile
     {

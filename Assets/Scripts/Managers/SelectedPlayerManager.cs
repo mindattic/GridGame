@@ -31,7 +31,6 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         //TODO: SaveProfile Card display...
         actors.ForEach(x => x.render.SetSelectionBoxEnabled(isEnabled: false));
         focusedActor = actor;
-        //focusedActor.sortingOrder = SortingOrder.Max;
         focusedActor.render.SetSelectionBoxEnabled(isEnabled: true);
 
         //Assign mouse relativeOffset (how off center was selectionBox)
@@ -107,8 +106,6 @@ public class SelectedPlayerManager : ExtendedMonoBehavior
         closestTile.spriteRenderer.color = ColorHelper.Translucent.White;
         selectedPlayer.location = closestTile.location;
         selectedPlayer.position = closestTile.position;
-        //selectedPlayer.sortingOrder = SortingOrder.Default;
-        //selectedPlayer.SetStatus(Status.None);
         previousSelectedPlayer = selectedPlayer;
         selectedPlayer = null;
 

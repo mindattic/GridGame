@@ -1,21 +1,11 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Instances.Actor;
+using System.Collections;
 using UnityEngine;
 
-public class ActorHealthBar : MonoBehaviour
+public class ActorHealthBar : ActorModule
 {
-    //Variables
-    private ActorInstance instance;
-    private Vector3 initialScale;
-
     //Properties
-    private ActorRenderers renderers => this.instance.render;
-    private ActorStats stats => this.instance.stats;
-
-    public void Initialize(ActorInstance parentInstance)
-    {
-        this.instance = parentInstance;
-        initialScale = renderers.healthBarBack.transform.localScale;
-    }
+    private Vector3 initialScale => render.healthBarBack.transform.localScale;
 
     private Vector3 GetScale(float value)
     {
@@ -27,12 +17,12 @@ public class ActorHealthBar : MonoBehaviour
 
     public void Refresh()
     {
-        renderers.healthBarDrain.transform.localScale = GetScale(stats.PreviousHP);
-        renderers.healthBarFill.transform.localScale = GetScale(stats.HP);
-        renderers.healthBarText.text = $@"{stats.HP}/{stats.MaxHP}";
+        render.healthBarDrain.transform.localScale = GetScale(stats.PreviousHP);
+        render.healthBarFill.transform.localScale = GetScale(stats.HP);
+        render.healthBarText.text = $@"{stats.HP}/{stats.MaxHP}";
 
         if (instance.IsActive && instance.IsAlive)
-            StartCoroutine(Drain());
+            instance.StartCoroutine(Drain());
     }
 
     private IEnumerator Drain()
@@ -51,14 +41,14 @@ public class ActorHealthBar : MonoBehaviour
         {
             stats.PreviousHP -= Increment.HealthBar.Drain;
             scale = GetScale(stats.PreviousHP);
-            renderers.healthBarDrain.transform.localScale = scale;
+            render.healthBarDrain.transform.localScale = scale;
             yield return Wait.OneTick();
         }
 
         //After:
         stats.PreviousHP = stats.HP;
         scale = GetScale(stats.PreviousHP);
-        renderers.healthBarDrain.transform.localScale = scale;
+        render.healthBarDrain.transform.localScale = scale;
     }
 
 

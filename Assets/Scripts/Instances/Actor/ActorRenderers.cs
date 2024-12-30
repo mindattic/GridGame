@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -32,7 +30,7 @@ public class ActorRenderers
     public GameObject healthBar;
     public SpriteRenderer healthBarBack;
     public SpriteRenderer healthBarDrain;
-    public SpriteRenderer healthBarFill;    
+    public SpriteRenderer healthBarFill;
     public TextMeshPro healthBarText;
     public GameObject actionBar;
     public SpriteRenderer actionBarBack;
@@ -157,7 +155,7 @@ public class ActorRenderers
         healthBarBack.color = new Color(1, 1, 1, Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Percent70));
         healthBarDrain.color = new Color(1, 0, 0, alpha);
         healthBarColor.a = alpha;
-        healthBarFill.color = healthBarColor;   
+        healthBarFill.color = healthBarColor;
         healthBarText.color = new Color(1, 1, 1, alpha);
     }
 

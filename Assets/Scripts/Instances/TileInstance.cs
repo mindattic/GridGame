@@ -1,12 +1,19 @@
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class TileInstance : ExtendedMonoBehavior
 {
 
     //Variables
-    [SerializeField] public Vector2Int location;
-  
+    public Vector2Int location;
+
+    //public Vector3 position
+    //{
+    //    get => gameObject.transform.position;
+    //    set => gameObject.transform.position = value;
+    //}
+
     public bool IsOccupied => actors.Any(x => x != null && x.IsActive && x.IsAlive && x.location == location);
 
     #region Components
@@ -28,6 +35,19 @@ public class TileInstance : ExtendedMonoBehavior
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
     }
+
+    public Quaternion rotation
+    {
+        get => gameObject.transform.rotation;
+        set => gameObject.transform.rotation = value;
+    }
+
+    public Vector3 scale
+    {
+        get => gameObject.transform.localScale;
+        set => gameObject.transform.localScale = value;
+    }
+
 
     public SpriteRenderer spriteRenderer;
 
@@ -65,25 +85,11 @@ public class TileInstance : ExtendedMonoBehavior
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
-    public void Start()
+    public void Initialize(int col, int row)
     {
-        transform.position = Geometry.GetPositionByLocation(location);
+        location = new Vector2Int(col, row);
+        position = Geometry.CalculatePositionByLocation(location);
         transform.localScale = tileScale;
-    }
-
-    public void Update()
-    {
-        //if (!HasSelectedPlayer)
-        //    return;
-
-        //if (focusedActor.boardLocation.Equals(this.boardLocation))
-        //{
-        //    bar.color = Colors.Solid.Gold;
-        //}
-        //else
-        //{
-        //    bar.color = Colors.Translucent.White;
-        //}
     }
 
 }

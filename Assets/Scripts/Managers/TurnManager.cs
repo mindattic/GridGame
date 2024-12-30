@@ -135,6 +135,17 @@ public class TurnManager : ExtendedMonoBehavior
     }
 
 
+    private List<ActorPair> GetOrderedAttackingPairs()
+    {
+        return combatParticipants.attackingPairs
+        .OrderBy(pair => pair.axis == Axis.Horizontal ? 1 : 0)              // Prioritize vertical alignments (0) over horizontal (1)
+        .ThenBy(pair => pair.axis == Axis.Vertical
+            ? Mathf.Min(pair.actor1.location.y, pair.actor2.location.y)     // Top-to-bottom for vertical
+            : Mathf.Min(pair.actor1.location.x, pair.actor2.location.x))    // Left-to-right for horizontal
+        .ToList();
+    }
+
+
     private void AssignSupportingPairs()
     {
         foreach (var pair in combatParticipants.alignedPairs)
@@ -228,14 +239,7 @@ public class TurnManager : ExtendedMonoBehavior
     }
 
 
-    private List<ActorPair> GetOrderedAttackingPairs()
-    {
-        return combatParticipants.attackingPairs
-            .OrderBy(pair => pair.axis == Axis.Vertical
-                ? Mathf.Min(pair.actor1.location.y, pair.actor2.location.y) // Top-to-bottom for vertical
-                : Mathf.Min(pair.actor1.location.x, pair.actor2.location.x)) // Left-to-right for horizontal
-            .ToList();
-    }
+
 
 
 

@@ -626,7 +626,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2104487958924403829}
-  - component: {fileID: 6983341154068505866}
   m_Layer: 8
   m_Name: ActionBar
   m_TagString: Untagged
@@ -653,18 +652,6 @@ Transform:
   - {fileID: 226632295278794064}
   m_Father: {fileID: 3730061202814564275}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6983341154068505866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2058773921331139928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53c82b801ff004d4fa91ddb630040e0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2310446151499825996
 GameObject:
   m_ObjectHideFlags: 0
@@ -1328,11 +1315,12 @@ MonoBehaviour:
   previousLocation: {x: 0, y: 0}
   destination: {x: 0, y: 0, z: 0}
   team: 2
-  healthBar: {fileID: 0}
-  actionBar: {fileID: 0}
   spawnDelay: -1
   attackingPairCount: 0
   supportingPairCount: 0
+  wiggleSpeed: 0
+  wiggleAmplitude: 0
+  glowIntensity: 0
   glowCurve:
     serializedVersion: 2
     m_Curve:
@@ -1718,7 +1706,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7320336492821784510}
-  - component: {fileID: 5810108739697343227}
   m_Layer: 8
   m_Name: HealthBar
   m_TagString: Untagged
@@ -1745,18 +1732,6 @@ Transform:
   - {fileID: 136280427170726215}
   m_Father: {fileID: 3730061202814564275}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5810108739697343227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5198873549504250007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7c6065586b70744abbc1e438872a9e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5347228100740303564
 GameObject:
   m_ObjectHideFlags: 0

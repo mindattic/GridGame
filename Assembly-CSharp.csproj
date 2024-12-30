@@ -80,6 +80,7 @@
     <Compile Include="Assets\Scripts\Models\Destination.cs" />
     <Compile Include="Assets\Scripts\Models\RectInt.cs" />
     <Compile Include="Assets\Scripts\Managers\CoinManager.cs" />
+    <Compile Include="Assets\Scripts\Models\TileMap.cs" />
     <Compile Include="Assets\Scripts\Instances\CoinBarInstance.cs" />
     <Compile Include="Assets\Scripts\Models\SoundEffect.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Assets\Scripts\Utilities\Common.cs" />
     <Compile Include="Assets\Scripts\Instances\BoardInstance.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorInstance.cs" />
+    <Compile Include="Assets\Scripts\Models\Location.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorModule.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
     <Compile Include="Assets\Scripts\Models\ShaderResource.cs" />

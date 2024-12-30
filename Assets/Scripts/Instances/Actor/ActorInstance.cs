@@ -3,12 +3,38 @@ using Assets.Scripts.Instances.Actor;
 using Assets.Scripts.Models;
 using Game.Instances.Actor;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class ActorInstance : ExtendedMonoBehavior
+public class ActorInstance : MonoBehaviour
 {
+
+    //Properties
+    protected GameManager gameManager => GameManager.instance;
+    protected AudioManager audioManager => gameManager.audioManager;
+    protected TileManager tileManager => gameManager.tileManager;
+    protected ResourceManager resourceManager => gameManager.resourceManager;
+    protected TurnManager turnManager => gameManager.turnManager;
+    protected VFXManager vfxManager => gameManager.vfxManager;
+    protected DebugManager debugManager => gameManager.debugManager;
+    protected DamageTextManager damageTextManager => gameManager.damageTextManager;
+    protected PortraitManager portraitManager => gameManager.portraitManager;
+    protected CoinManager coinManager => gameManager.coinManager;
+    protected BoardInstance board => gameManager.board;
+    protected float gameSpeed => gameManager.gameSpeed;
+    protected float snapDistance => gameManager.snapDistance;
+    protected float tileSize => gameManager.tileSize;
+    protected Vector3 tileScale => gameManager.tileScale;
+    protected float moveSpeed => gameManager.moveSpeed;
+    protected ActorInstance focusedActor => gameManager.focusedActor;
+    protected ActorInstance selectedPlayer => gameManager.selectedPlayer;
+    protected bool HasFocusedActor => focusedActor != null;
+    protected bool HasSelectedPlayer => selectedPlayer != null;
+    protected List<ActorInstance> actors => gameManager.actors;
+    protected IQueryable<ActorInstance> players => gameManager.players;
+
     //Variables
     public Character character;
     public Vector2Int location;
@@ -24,7 +50,7 @@ public class ActorInstance : ExtendedMonoBehavior
     public float wiggleAmplitude;
     public float glowIntensity;
 
-    //Children
+    //Modules
     public ActorRenderers render = new ActorRenderers();
     public ActorStats stats = new ActorStats();
     public ActorFlags flags = new ActorFlags();
@@ -33,10 +59,8 @@ public class ActorInstance : ExtendedMonoBehavior
     public ActorWeapon weapon = new ActorWeapon();
     public ActorActions action = new ActorActions();
     public ActorMovement move = new ActorMovement();
-
-    //Components
-    public ActorHealthBar healthBar;
-    public ActorActionBar actionBar;
+    public ActorHealthBar healthBar = new ActorHealthBar();
+    public ActorActionBar actionBar = new ActorActionBar();
 
     //Miscellaneous
     ActorSprite sprites;
@@ -52,19 +76,14 @@ public class ActorInstance : ExtendedMonoBehavior
         render.thumbnail = gameObject.transform.GetChild(ActorLayer.Name.Thumbnail).GetComponent<SpriteRenderer>();
         render.frame = gameObject.transform.GetChild(ActorLayer.Name.Frame).GetComponent<SpriteRenderer>();
         render.statusIcon = gameObject.transform.GetChild(ActorLayer.Name.StatusIcon).GetComponent<SpriteRenderer>();
-
-        //Health Bar
         render.healthBarBack = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Back).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Back} is null");
         render.healthBarDrain = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Drain).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Drain} is null");
         render.healthBarFill = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Fill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Fill} is null");
         render.healthBarText = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Text).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Text} is null");
-
-        //Action Bar
         render.actionBarBack = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Back).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Back} is null");
         render.actionBarDrain = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Drain).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Drain} is null");
         render.actionBarFill = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Fill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Fill} is null");
         render.actionBarText = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Text).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Text} is null");
-
         render.mask = gameObject.transform.GetChild(ActorLayer.Name.Mask).GetComponent<SpriteMask>();
         render.radialBack = gameObject.transform.GetChild(ActorLayer.Name.RadialBack).GetComponent<SpriteRenderer>();
         render.radial = gameObject.transform.GetChild(ActorLayer.Name.RadialFill).GetComponent<SpriteRenderer>();
@@ -74,16 +93,9 @@ public class ActorInstance : ExtendedMonoBehavior
         render.weaponIcon = gameObject.transform.GetChild(ActorLayer.Name.WeaponIcon).GetComponent<SpriteRenderer>();
         render.selectionBox = gameObject.transform.GetChild(ActorLayer.Name.SelectionBox).GetComponent<SpriteRenderer>();
 
-        action = new ActorActions();
         action.Initialize(this);
-
-        move = new ActorMovement();
         move.Initialize(this);
-
-        healthBar = GetComponentInChildren<ActorHealthBar>();
         healthBar.Initialize(this);
-
-        actionBar = GetComponentInChildren<ActorActionBar>();
         actionBar.Initialize(this);
 
 
@@ -108,7 +120,8 @@ public class ActorInstance : ExtendedMonoBehavior
 
     }
 
-    public TileInstance CurrentTile => tileManager.tileMap[location]; //tiles.First(x => x.location.Equals(location));
+    //Helpers
+    public TileInstance CurrentTile => board.tileMap.GetTile(location); //tiles.First(x => x.location.Equals(location));
     public bool IsPlayer => team.Equals(Team.Player);
     public bool IsEnemy => team.Equals(Team.Enemy);
     public bool IsFocusedPlayer => HasFocusedActor && Equals(focusedActor);
@@ -123,7 +136,7 @@ public class ActorInstance : ExtendedMonoBehavior
     public bool IsDying => IsActive && stats.HP < 1;
     public bool IsDead => !IsActive && stats.HP < 1;
     public bool IsSpawnable => !IsActive && IsAlive && spawnDelay <= turnManager.currentTurn;
-    public bool HasMaxAP => IsActive && IsAlive && stats.AP == stats.MaxAP; 
+    public bool HasMaxAP => IsActive && IsAlive && stats.AP == stats.MaxAP;
 
     public Transform parent
     {
@@ -345,7 +358,7 @@ public class ActorInstance : ExtendedMonoBehavior
         }
     }
 
-   
+
     public void ApplyTilt(Vector3 velocity, float tiltFactor, float rotationSpeed, float resetSpeed, Vector3 baseRotation)
     {
         if (velocity.magnitude > 0.01f) //Apply tilt if there is noticeable movement
@@ -386,7 +399,7 @@ public class ActorInstance : ExtendedMonoBehavior
         render.SetGlowScale(scale);
     }
 
-   
+
     public void TakeDamage(AttackResult attack)
     {
         if (IsActive && IsAlive)

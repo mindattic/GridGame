@@ -1,23 +1,12 @@
 using Assets.Scripts.Behaviors.Actor;
+using Assets.Scripts.Instances.Actor;
 using System.Collections;
 using UnityEngine;
 
-public class ActorActionBar : ExtendedMonoBehavior
+public class ActorActionBar : ActorModule
 {
-    //Variables
-    private ActorInstance instance;
-    private Vector3 initialScale;
-
     //Properties
-    private ActorRenderers renderers => this.instance.render;
-    private ActorStats stats => this.instance.stats;
-    private ActorFlags flags => this.instance.flags;
-
-    public void Initialize(ActorInstance parentInstance)
-    {
-        this.instance = parentInstance;
-        initialScale = renderers.actionBarBack.transform.localScale;
-    }
+    private Vector3 initialScale => render.actionBarBack.transform.localScale;
 
     private Vector3 GetScale(float value)
     {
@@ -29,15 +18,15 @@ public class ActorActionBar : ExtendedMonoBehavior
 
     public void Refresh()
     {
-        renderers.actionBarDrain.transform.localScale = GetScale(stats.PreviousAP);
-        renderers.actionBarFill.transform.localScale = GetScale(stats.AP);
-        renderers.actionBarText.text = $@"{stats.AP}/{stats.MaxAP}";
+        render.actionBarDrain.transform.localScale = GetScale(stats.PreviousAP);
+        render.actionBarFill.transform.localScale = GetScale(stats.AP);
+        render.actionBarText.text = $@"{stats.AP}/{stats.MaxAP}";
 
 
         instance.action.ExecuteWeaponWiggle();
 
         if (instance.IsActive && instance.IsAlive)
-            StartCoroutine(_Drain());
+            instance.StartCoroutine(_Drain());
     }
 
     private IEnumerator _Drain()
@@ -56,20 +45,20 @@ public class ActorActionBar : ExtendedMonoBehavior
         {
             stats.PreviousAP -= Increment.ActionBar.Drain;
             scale = GetScale(stats.PreviousAP);
-            renderers.actionBarDrain.transform.localScale = scale;
+            render.actionBarDrain.transform.localScale = scale;
             yield return Wait.OneTick();
         }
 
         //After:
         stats.PreviousAP = stats.AP;
         scale = GetScale(stats.PreviousAP);
-        renderers.healthBarDrain.transform.localScale = scale;
+        render.healthBarDrain.transform.localScale = scale;
     }
 
     public void Fill()
     {
         if (instance.IsActive && instance.IsAlive)
-            StartCoroutine(_Fill());
+            instance.StartCoroutine(_Fill());
     }
 
     private IEnumerator _Fill()
