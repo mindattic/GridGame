@@ -47,23 +47,6 @@ public static class EnumExtensions
     }
 }
 
-public static class IEnumeratorExtensions
-{
-    public static IEnumerator WaitUntil(this ExtendedMonoBehavior monoBehaviour, IEnumerator coroutine)
-    {
-        return new WaitAll(monoBehaviour, coroutine);
-    }
-
-    public static IEnumerator WaitAll(this ExtendedMonoBehavior monoBehaviour, params IEnumerator[] coroutines)
-    {
-        return new WaitAll(monoBehaviour, coroutines);
-    }
-
-    public static IEnumerator WaitAny(this ExtendedMonoBehavior monoBehaviour, params IEnumerator[] coroutines)
-    {
-        return new WaitAny(monoBehaviour, coroutines);
-    }
-}
 
 
 public static class ListExtensions

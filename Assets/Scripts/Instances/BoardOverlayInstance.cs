@@ -1,8 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class BoardOverlayInstance : ExtendedMonoBehavior
+public class BoardOverlayInstance : MonoBehaviour
 {
+
+
     SpriteRenderer spriteRenderer;
 
     float alpha = 0;

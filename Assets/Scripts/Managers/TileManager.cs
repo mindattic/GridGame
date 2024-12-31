@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileManager : ExtendedMonoBehavior
+public class TileManager : MonoBehaviour
 {
-
+    protected List<TileInstance> tiles => GameManager.instance.tiles;
 
 
 

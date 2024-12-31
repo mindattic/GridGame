@@ -3,8 +3,12 @@ using UnityEngine;
 
 namespace Game.Instances
 {
-    public class AttackLineInstance : ExtendedMonoBehavior
+    public class AttackLineInstance : MonoBehaviour
     {
+        protected float tileSize => GameManager.instance.tileSize;
+        protected BoardInstance board => GameManager.instance.board;
+
+
         private const string NameFormat = "AttackLine_{0}+{1}";
 
         //Variables

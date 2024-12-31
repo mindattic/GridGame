@@ -2,7 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class TitleManager : ExtendedMonoBehavior
+public class TitleManager : MonoBehaviour
 {
     //Variables
     private RectTransform rectTransform;

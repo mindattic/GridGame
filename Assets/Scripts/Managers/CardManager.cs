@@ -1,14 +1,21 @@
 using Game.Behaviors.Actor;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Game.Behaviors
 {
-    public class CardManager : ExtendedMonoBehavior
+    public class CardManager : MonoBehaviour
     {
+        protected float cardPortraitSize => GameManager.instance.cardPortraitSize;
+        protected ResourceManager resourceManager => GameManager.instance.resourceManager;
+        protected List<ActorInstance> actors => GameManager.instance.actors;
+
+
+
         RectTransform rectTransform;
         Image backdrop;
         Image portrait;

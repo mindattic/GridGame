@@ -1,9 +1,47 @@
 using Assets.Scripts.Utilities;
+using Game.Behaviors;
+using Game.Manager;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageManager : ExtendedMonoBehavior
+public class StageManager : MonoBehaviour
 {
+    protected DatabaseManager databaseManager => GameManager.instance.databaseManager;
+    protected int totalCoins
+    {
+        get { return GameManager.instance.totalCoins; }
+        set { GameManager.instance.totalCoins = value; }
+    }
+    protected ProfileManager profileManager => GameManager.instance.profileManager;
+    protected ActorInstance focusedActor
+    {
+        get { return GameManager.instance.focusedActor; }
+        set { GameManager.instance.focusedActor = value; }
+    }
+    protected ActorInstance selectedPlayer
+    {
+        get { return GameManager.instance.selectedPlayer; }
+        set { GameManager.instance.selectedPlayer = value; }
+    }
+    protected CoinBarInstance coinBar => GameManager.instance.coinBar;
+    protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
+    protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
+    protected TurnManager turnManager => GameManager.instance.turnManager;
+    protected TimerBarInstance timerBar => GameManager.instance.timerBar;
+    protected ActorManager actorManager => GameManager.instance.actorManager;
+
+    protected CanvasOverlayInstance canvasOverlay => GameManager.instance.canvasOverlay;
+    protected TitleManager titleManager => GameManager.instance.titleManager;
+    protected Vector3 tileScale => GameManager.instance.tileScale;
+
+    protected List<ActorInstance> actors
+    {
+        get => GameManager.instance.actors;
+        set => GameManager.instance.actors = value;
+    }
+    protected BoardInstance board => GameManager.instance.board;
+
+
     [SerializeField] public int currentStage;
     [SerializeField] public GameObject actorPrefab;
 

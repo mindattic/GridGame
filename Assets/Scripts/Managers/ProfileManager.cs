@@ -11,7 +11,7 @@ using Party = Game.Models.ProfilePartySection;
 using Section = Game.Models.ProfileSection;
 using Stage = Game.Models.ProfileStageSection;
 
-public class ProfileManager : ExtendedMonoBehavior
+public class ProfileManager : MonoBehaviour
 {
     public const bool PRETTY_PRINT = true;
 

@@ -2,8 +2,11 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class TooltipInstance : ExtendedMonoBehavior
+public class TooltipInstance : MonoBehaviour
 {
+    protected float tileSize => GameManager.instance.tileSize;
+
+
     //Variables
     SpriteRenderer spriteRenderer;
     TextMeshPro textMesh;

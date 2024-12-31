@@ -3,8 +3,16 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class TimerBarInstance : ExtendedMonoBehavior
+public class TimerBarInstance : MonoBehaviour
 {
+    protected DebugManager debugManager => GameManager.instance.debugManager;
+    protected float tileSize => GameManager.instance.tileSize;
+    protected SelectedPlayerManager selectedPlayerManager => GameManager.instance.selectedPlayerManager;
+    protected float snapDistance => GameManager.instance.snapDistance;
+
+
+
+
     private bool isRunning = false;
     private const float maxDuration = 6f;
     private float timeRemaining = 6f;

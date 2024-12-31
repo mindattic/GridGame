@@ -4,8 +4,13 @@ using UnityEngine;
 
 namespace Game.Manager
 {
-    public class ActorManager : ExtendedMonoBehavior
+    public class ActorManager : MonoBehaviour
     {
+        protected List<ActorInstance> actors => GameManager.instance.actors;
+        protected IQueryable<ActorInstance> players => GameManager.instance.players;
+        protected IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
+
+
 
         public void CheckEnemyAP()
         {

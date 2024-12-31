@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI.Table;
 
-public class TileInstance : ExtendedMonoBehavior
+public class TileInstance : MonoBehaviour
 {
+    protected Vector3 tileScale => GameManager.instance.tileScale;
+    protected List<ActorInstance> actors => GameManager.instance.actors;
 
     //Variables
     public Vector2Int location;

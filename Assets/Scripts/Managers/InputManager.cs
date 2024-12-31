@@ -1,7 +1,29 @@
 using UnityEngine;
 
-public class InputManager : ExtendedMonoBehavior
+public class InputManager : MonoBehaviour
 {
+    protected SelectedPlayerManager selectedPlayerManager => GameManager.instance.selectedPlayerManager;
+    protected ActorInstance focusedActor
+    {
+        get { return GameManager.instance.focusedActor; }
+        set { GameManager.instance.focusedActor = value; }
+    }
+
+    protected ActorInstance previousSelectedPlayer
+    {
+        get { return GameManager.instance.previousSelectedPlayer; }
+        set { GameManager.instance.previousSelectedPlayer = value; }
+    }
+
+    protected ActorInstance selectedPlayer
+    {
+        get { return GameManager.instance.selectedPlayer; }
+        set { GameManager.instance.selectedPlayer = value; }
+    }
+    protected bool HasFocusedActor => focusedActor != null;
+    protected bool HasSelectedPlayer => selectedPlayer != null;
+    protected StageManager stageManager => GameManager.instance.stageManager;
+    protected float tileSize => GameManager.instance.tileSize;
 
     private void Awake()
     {

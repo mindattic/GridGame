@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Behaviors
 {
-    public class LogManager : ExtendedMonoBehavior
+    public class LogManager : MonoBehaviour
     {
         private string log;
         private List<string> messages = new List<string>();

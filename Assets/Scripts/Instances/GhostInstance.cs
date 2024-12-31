@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GhostInstance : ExtendedMonoBehavior
+public class GhostInstance : MonoBehaviour
 {
+    protected float tileSize => GameManager.instance.tileSize;
 
     //Constants
     const int Thumbnail = 0;

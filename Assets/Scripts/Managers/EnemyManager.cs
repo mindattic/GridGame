@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : ExtendedMonoBehavior
+public class EnemyManager : MonoBehaviour
 {
 
 }

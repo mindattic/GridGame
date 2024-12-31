@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.VFX;
 
-public class VFXManager : ExtendedMonoBehavior
+public class VFXManager : MonoBehaviour
 {
     //Variables
     Dictionary<string, VFXInstance> visualEffects = new Dictionary<string, VFXInstance>();
@@ -16,7 +15,7 @@ public class VFXManager : ExtendedMonoBehavior
         var instance = prefab.GetComponent<VFXInstance>();
         instance.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
         visualEffects.Add(instance.name, instance);
-        instance._Spawn(vfx, position, triggeredEvent);
+        instance.Spawn(vfx, position, triggeredEvent);
     }
 
 
@@ -28,7 +27,7 @@ public class VFXManager : ExtendedMonoBehavior
         visualEffects.Add(visualEffect.name, visualEffect);
 
         if (triggeredEvent == null)
-            yield break; 
+            yield break;
 
         yield return visualEffect._Spawn(vfx, position, triggeredEvent);
     }

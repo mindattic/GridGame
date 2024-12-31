@@ -1,18 +1,36 @@
 using Assets.Scripts.Models;
+using Game.Behaviors;
+using Game.Manager;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
-using Phase = TurnPhase;
 
-public class DebugManager : ExtendedMonoBehavior
+public class DebugManager : MonoBehaviour
 {
+    protected List<ActorInstance> actors => GameManager.instance.actors;
+    protected IQueryable<ActorInstance> players => GameManager.instance.players;
+    protected IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
+    protected PortraitManager portraitManager => GameManager.instance.portraitManager;
+    protected DamageTextManager damageTextManager => GameManager.instance.damageTextManager;
+    protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
+    protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
+    protected TurnManager turnManager => GameManager.instance.turnManager;
+
+    protected TooltipManager tooltipManager => GameManager.instance.tooltipManager;
+    protected VFXManager vfxManager => GameManager.instance.vfxManager;
+    protected ResourceManager resourceManager => GameManager.instance.resourceManager;
+    protected StageManager stageManager => GameManager.instance.stageManager;
+    protected CoinManager coinManager => GameManager.instance.coinManager;
+    protected DatabaseManager databaseManager => GameManager.instance.databaseManager;
+    protected TitleManager titleManager => GameManager.instance.titleManager;
+
+
+
+
+
     [SerializeField] private TMP_Dropdown Dropdown;
 
     //Flags
@@ -141,9 +159,9 @@ public class DebugManager : ExtendedMonoBehavior
         {
             foreach (var actor2 in players)
             {
-                if (actor1 == null || actor2 == null 
-                    || actor1.Equals(actor2) 
-                    || !actor1.IsActive || !actor1.IsAlive 
+                if (actor1 == null || actor2 == null
+                    || actor1.Equals(actor2)
+                    || !actor1.IsActive || !actor1.IsAlive
                     || !actor2.IsActive || !actor2.IsAlive)
                     continue;
 

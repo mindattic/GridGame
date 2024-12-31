@@ -35,7 +35,7 @@ namespace Game.Behaviors
         }
     }
 
-    public class CameraManager : ExtendedMonoBehavior
+    public class CameraManager : MonoBehaviour
     {
         public RectFloat viewBounds;
         public Game.Models.RectInt screenBounds;

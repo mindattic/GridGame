@@ -3,8 +3,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class DamageTextInstance : ExtendedMonoBehavior
+public class DamageTextInstance : MonoBehaviour
 {
+    protected float tileSize => GameManager.instance.tileSize;
+
+
+
     public TextMeshPro textMesh;
     public Vector3 speed;
     [SerializeField] AnimationCurve riseCurve;

@@ -1,3 +1,4 @@
+using Game.Behaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,8 +6,9 @@ using UnityEngine;
 
 
 
-public class ResourceManager : ExtendedMonoBehavior
+public class ResourceManager : MonoBehaviour
 {
+    protected LogManager logManager => GameManager.instance.logManager;
 
     //Variables
     [SerializeField] public List<ActorSprite> actorSprites = new List<ActorSprite>();

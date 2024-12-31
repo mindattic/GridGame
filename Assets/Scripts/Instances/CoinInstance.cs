@@ -3,8 +3,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CoinInstance : ExtendedMonoBehavior
+public class CoinInstance : MonoBehaviour
 {
+    protected float tileSize => GameManager.instance.tileSize;
+    protected Vector3 tileScale => GameManager.instance.tileScale;
+    protected CoinBarInstance coinBar => GameManager.instance.coinBar;
+    protected int totalCoins { get => GameManager.instance.totalCoins; set => GameManager.instance.totalCoins = value; }
+    protected AudioManager audioManager => GameManager.instance.audioManager;
+
     public AnimationCurve linearCurve;
     public AnimationCurve slopeCurve;
     public AnimationCurve sineCurve;
@@ -58,7 +64,7 @@ public class CoinInstance : ExtendedMonoBehavior
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        particles = GetComponent<ParticleSystem>();             
+        particles = GetComponent<ParticleSystem>();
     }
 
     private void Start()
@@ -74,7 +80,7 @@ public class CoinInstance : ExtendedMonoBehavior
         startDuration += Random.Float(0, 0.2f);
         moveDuration += Random.Float(0, 0.2f);
         cX = RandomCurve();
-        cY = RandomCurve(); 
+        cY = RandomCurve();
         transform.position = start;
         state = CoinState.Start;
     }
@@ -87,10 +93,10 @@ public class CoinInstance : ExtendedMonoBehavior
         return sineCurve;
     }
 
- 
+
     public void Update()
     {
-       
+
         switch (state)
         {
             case CoinState.Start:

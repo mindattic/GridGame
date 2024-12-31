@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class SupportLineManager : ExtendedMonoBehavior
+public class SupportLineManager : MonoBehaviour
 {
     //Variables
     [SerializeField] public GameObject supportLinePrefab;

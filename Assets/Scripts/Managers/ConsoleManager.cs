@@ -4,8 +4,11 @@ using UnityEngine;
 
 namespace Game.Behaviors
 {
-    public class ConsoleManager : ExtendedMonoBehavior
+    public class ConsoleManager : MonoBehaviour
     {
+
+
+
         public TextMeshProUGUI textMesh;
         public FpsMonitor fpsMonitor = new FpsMonitor();
 

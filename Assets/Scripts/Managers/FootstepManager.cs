@@ -4,8 +4,12 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
-public class FootstepManager : ExtendedMonoBehavior
+public class FootstepManager : MonoBehaviour
 {
+    protected float tileSize => GameManager.instance.tileSize;
+    protected ResourceManager resourceManager => GameManager.instance.resourceManager;
+    protected BoardInstance board => GameManager.instance.board;
+
 
     //Variables
     [SerializeField] public GameObject FootstepPrefab;

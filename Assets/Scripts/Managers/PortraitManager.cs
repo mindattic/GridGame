@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PortraitManager : ExtendedMonoBehavior
+public class PortraitManager : MonoBehaviour
 {
+    protected ResourceManager resourceManager => GameManager.instance.resourceManager;
+    protected BoardInstance board => GameManager.instance.board;
+    protected IQueryable<ActorInstance> players => GameManager.instance.players;
 
     //Variables
     [SerializeField] public GameObject portraitPrefab;

@@ -5,8 +5,12 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.U2D;
 
-public class SupportLineInstance : ExtendedMonoBehavior
+public class SupportLineInstance : MonoBehaviour
 {
+    protected float tileSize => GameManager.instance.tileSize;
+    protected BoardInstance board => GameManager.instance.board;
+
+
     private const string NameFormat = "SupportLine_{0}+{1}";
 
     //Variables

@@ -5,7 +5,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CoinManager : ExtendedMonoBehavior
+public class CoinManager : MonoBehaviour
 {
     [SerializeField] public GameObject CoinPrefab;
 

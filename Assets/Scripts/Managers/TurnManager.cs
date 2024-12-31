@@ -1,5 +1,6 @@
 using Assets.Scripts.Models;
 using Assets.Scripts.Utilities;
+using Game.Behaviors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,8 +8,38 @@ using System.Linq;
 using UnityEngine;
 using Phase = TurnPhase;
 
-public class TurnManager : ExtendedMonoBehavior
+public class TurnManager : MonoBehaviour
 {
+    protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
+    protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
+    protected CombatParticipants combatParticipants
+    {
+        get { return GameManager.instance.combatParticipants; }
+        set { GameManager.instance.combatParticipants = value; }
+    }
+    protected List<ActorInstance> actors
+    {
+        get => GameManager.instance.actors;
+        set => GameManager.instance.actors = value;
+    }
+    protected TimerBarInstance timerBar => GameManager.instance.timerBar;
+    protected IQueryable<ActorInstance> players => GameManager.instance.players;
+    protected IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
+    protected BoardOverlayInstance boardOverlay => GameManager.instance.boardOverlay;
+    protected PortraitManager portraitManager => GameManager.instance.portraitManager;
+    protected AudioManager audioManager => GameManager.instance.audioManager;
+
+
+
+
+
+
+
+
+
+
+
+
     //Variables
     [SerializeField] public int currentTurn = 1;
     [SerializeField] public Team currentTeam = Team.Player;

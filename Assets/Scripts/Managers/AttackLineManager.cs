@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Game.Behaviors
 {
-    public class AttackLineManager : ExtendedMonoBehavior
+    public class AttackLineManager : MonoBehaviour
     {
         //Variables
         [SerializeField] public GameObject AttackLinePrefab;

@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class DamageTextManager : ExtendedMonoBehavior
+public class DamageTextManager : MonoBehaviour
 {
+    protected Canvas canvas3D => GameManager.instance.canvas3D;
+
     [SerializeField] public GameObject DamageTextPrefab;
 
     public void Spawn(string text, Vector3 position)

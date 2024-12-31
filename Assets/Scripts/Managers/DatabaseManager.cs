@@ -1,4 +1,5 @@
 
+using Game.Behaviors;
 using SQLiteDatabase;
 using System;
 using System.Collections.Generic;
@@ -21,8 +22,10 @@ namespace Game.Manager
         }
     }
 
-    public class DatabaseManager : ExtendedMonoBehavior
+    public class DatabaseManager : MonoBehaviour
     {
+        protected LogManager logManager => GameManager.instance.logManager;
+
         public const bool autoOverwrite = true; //Used to reinstall app every load...
         private SQLiteDB instance = SQLiteDB.Instance;
 

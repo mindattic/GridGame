@@ -6,8 +6,13 @@ using System.Linq;
 using UnityEngine;
 using static UnityEditor.FilePathAttribute;
 
-public class BoardInstance : ExtendedMonoBehavior
+public class BoardInstance : MonoBehaviour
 {
+    protected float tileSize => GameManager.instance.tileSize;
+    protected ProfileManager profileManager => GameManager.instance.profileManager;
+    protected StageManager stageManager => GameManager.instance.stageManager;
+    protected BoardInstance board => GameManager.instance.board;
+
     [SerializeField] public GameObject TilePrefab;
 
     [HideInInspector] public int columnCount = 6;

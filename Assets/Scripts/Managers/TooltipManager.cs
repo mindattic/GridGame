@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Manager
 {
-    public class TooltipManager : ExtendedMonoBehavior
+    public class TooltipManager : MonoBehaviour
     {
         //Variables
         [SerializeField] public GameObject tooltipPrefab;

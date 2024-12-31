@@ -2,8 +2,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CanvasOverlayInstance : ExtendedMonoBehavior
+public class CanvasOverlayInstance : MonoBehaviour
 {
+    protected TitleManager titleManager => GameManager.instance.titleManager;
 
     //Variables
     private RectTransform rectTransform;

@@ -1,8 +1,12 @@
 using TMPro;
 using UnityEngine;
 
-public class CoinBarInstance : ExtendedMonoBehavior
+public class CoinBarInstance : MonoBehaviour
 {
+    protected Vector3 tileScale => GameManager.instance.tileScale;
+    protected int totalCoins => GameManager.instance.totalCoins;
+
+
     [HideInInspector] public GameObject icon;
     [HideInInspector] public TextMeshPro textMesh;
     [HideInInspector] public GameObject glow;

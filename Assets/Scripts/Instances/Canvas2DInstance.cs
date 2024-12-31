@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Canvas2DInstance : ExtendedMonoBehavior
+public class Canvas2DInstance : MonoBehaviour
 {
   
 

@@ -5,8 +5,10 @@ using System.Linq.Expressions;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class VFXInstance : ExtendedMonoBehavior
+public class VFXInstance : MonoBehaviour
 {
+    protected VFXManager vfxManager => GameManager.instance.vfxManager;
+
 
     #region Components
 

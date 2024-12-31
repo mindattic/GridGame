@@ -1,5 +1,11 @@
-public class AudioManager : ExtendedMonoBehavior
+using Game.Behaviors;
+using UnityEngine;
+
+public class AudioManager : MonoBehaviour
 {
+    protected ResourceManager resourceManager => GameManager.instance.resourceManager;
+    protected LogManager logManager => GameManager.instance.logManager;
+    protected AudioSource soundSource => GameManager.instance.soundSource;
 
     public void Play(string sfx)
     {

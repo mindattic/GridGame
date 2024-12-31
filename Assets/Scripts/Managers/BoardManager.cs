@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Game.Behaviors
 {
 
-    public class BoardManager : ExtendedMonoBehavior
+    public class BoardManager : MonoBehaviour
     {
        
 

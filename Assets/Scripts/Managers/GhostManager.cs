@@ -4,8 +4,11 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
-public class GhostManager : ExtendedMonoBehavior
+public class GhostManager : MonoBehaviour
 {
+    protected float tileSize => GameManager.instance.tileSize;
+    protected BoardInstance board => GameManager.instance.board;
+
     //Variables
     [SerializeField] public GameObject ghostPrefab;
     ActorInstance actor;

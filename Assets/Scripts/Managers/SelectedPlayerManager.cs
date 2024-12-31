@@ -1,8 +1,53 @@
+using Game.Behaviors;
+using Game.Manager;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class SelectedPlayerManager : ExtendedMonoBehavior
+public class SelectedPlayerManager : MonoBehaviour
 {
+    protected CardManager cardManager => GameManager.instance.cardManager;
+    protected TurnManager turnManager => GameManager.instance.turnManager;
+    protected Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
+    protected Vector3 mouseOffset
+    {
+        get { return GameManager.instance.mouseOffset; }
+        set { GameManager.instance.mouseOffset = value; }
+    }
+
+    protected ActorInstance focusedActor
+    {
+        get { return GameManager.instance.focusedActor; }
+        set { GameManager.instance.focusedActor = value; }
+    }
+
+    protected ActorInstance previousSelectedPlayer
+    {
+        get { return GameManager.instance.previousSelectedPlayer; }
+        set { GameManager.instance.previousSelectedPlayer = value; }
+    }
+
+    protected ActorInstance selectedPlayer
+    {
+        get { return GameManager.instance.selectedPlayer; }
+        set { GameManager.instance.selectedPlayer = value; }
+    }
+    protected List<ActorInstance> actors
+    {
+        get => GameManager.instance.actors;
+        set => GameManager.instance.actors = value;
+    }
+    protected bool HasFocusedActor => focusedActor != null;
+    protected bool HasSelectedPlayer => selectedPlayer != null;
+    protected AudioManager audioManager => GameManager.instance.audioManager;
+    protected TimerBarInstance timerBar => GameManager.instance.timerBar;
+    protected ActorManager actorManager => GameManager.instance.actorManager;
+    protected TileManager tileManager => GameManager.instance.tileManager;
+
+
+
+
+
 
     public void Focus()
     {

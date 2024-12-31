@@ -1,8 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
-public class FootstepInstance : ExtendedMonoBehavior
+public class FootstepInstance : MonoBehaviour
 {
+    protected Vector3 tileScale => GameManager.instance.tileScale;
+    protected ResourceManager resourceManager => GameManager.instance.resourceManager;
+
     float Duration;
 
     private void Awake()
