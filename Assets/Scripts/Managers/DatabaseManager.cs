@@ -57,7 +57,7 @@ namespace Game.Manager
             instance.DBLocation = Application.persistentDataPath;
             instance.DBName = DatabaseSchema.Name;
 
-            //Refresh if this is the first load of the application
+            //Update if this is the first load of the application
             if (autoOverwrite || !instance.Exists)
                 instance.CreateDatabase(instance.DBName, isOverWrite: true);
 

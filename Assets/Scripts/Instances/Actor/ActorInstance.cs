@@ -13,18 +13,6 @@ public class ActorInstance : MonoBehaviour
 
     #region Properties
 
-
-    // Actor related objects
-    protected ActorInstance focusedActor => GameManager.instance.focusedActor;
-    protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
-    protected List<ActorInstance> actors => GameManager.instance.actors;
-    protected IQueryable<ActorInstance> players => GameManager.instance.players;
-
-    // Boolean
-    protected bool hasFocusedActor => focusedActor != null;
-    protected bool hasSelectedPlayer => selectedPlayer != null;
-
-    // Managers
     protected AudioManager audioManager => GameManager.instance.audioManager;
     protected BoardInstance board => GameManager.instance.board;
     protected CoinManager coinManager => GameManager.instance.coinManager;
@@ -35,15 +23,17 @@ public class ActorInstance : MonoBehaviour
     protected TileManager tileManager => GameManager.instance.tileManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
     protected VFXManager vfxManager => GameManager.instance.vfxManager;
-
-    // Float
     protected float gameSpeed => GameManager.instance.gameSpeed;
     protected float moveSpeed => GameManager.instance.moveSpeed;
     protected float snapDistance => GameManager.instance.snapDistance;
     protected float tileSize => GameManager.instance.tileSize;
-
-    // Vector3
     protected Vector3 tileScale => GameManager.instance.tileScale;
+    protected ActorInstance focusedActor => GameManager.instance.focusedActor;
+    protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
+    protected List<ActorInstance> actors => GameManager.instance.actors;
+    protected IQueryable<ActorInstance> players => GameManager.instance.players;
+    protected bool hasFocusedActor => focusedActor != null;
+    protected bool hasSelectedPlayer => selectedPlayer != null;
 
     #endregion
 
@@ -60,8 +50,7 @@ public class ActorInstance : MonoBehaviour
     public int supportingPairCount = 0;
     public float wiggleSpeed;
     public float wiggleAmplitude;
-    public float glowIntensity;
-
+ 
     //Modules
     public ActorRenderers render = new ActorRenderers();
     public ActorStats stats = new ActorStats();
@@ -73,6 +62,7 @@ public class ActorInstance : MonoBehaviour
     public ActorMovement move = new ActorMovement();
     public ActorHealthBar healthBar = new ActorHealthBar();
     public ActorActionBar actionBar = new ActorActionBar();
+    public ActorGlow glow = new ActorGlow();
 
     //Miscellaneous
     ActorSprite sprites;
@@ -81,47 +71,18 @@ public class ActorInstance : MonoBehaviour
 
     private void Awake()
     {
-        render.opaque = gameObject.transform.GetChild(ActorLayer.Name.Opaque).GetComponent<SpriteRenderer>();
-        render.quality = gameObject.transform.GetChild(ActorLayer.Name.Quality).GetComponent<SpriteRenderer>();
-        render.glow = gameObject.transform.GetChild(ActorLayer.Name.Glow).GetComponent<SpriteRenderer>();
-        render.parallax = gameObject.transform.GetChild(ActorLayer.Name.Parallax).GetComponent<SpriteRenderer>();
-        render.thumbnail = gameObject.transform.GetChild(ActorLayer.Name.Thumbnail).GetComponent<SpriteRenderer>();
-        render.frame = gameObject.transform.GetChild(ActorLayer.Name.Frame).GetComponent<SpriteRenderer>();
-        render.statusIcon = gameObject.transform.GetChild(ActorLayer.Name.StatusIcon).GetComponent<SpriteRenderer>();
-        render.healthBarBack = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Back).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Back} is null");
-        render.healthBarDrain = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Drain).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Drain} is null");
-        render.healthBarFill = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Fill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Fill} is null");
-        render.healthBarText = gameObject.transform.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Text).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Text} is null");
-        render.actionBarBack = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Back).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Back} is null");
-        render.actionBarDrain = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Drain).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Drain} is null");
-        render.actionBarFill = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Fill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Fill} is null");
-        render.actionBarText = gameObject.transform.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Text).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Text} is null");
-        render.mask = gameObject.transform.GetChild(ActorLayer.Name.Mask).GetComponent<SpriteMask>();
-        render.radialBack = gameObject.transform.GetChild(ActorLayer.Name.RadialBack).GetComponent<SpriteRenderer>();
-        render.radial = gameObject.transform.GetChild(ActorLayer.Name.RadialFill).GetComponent<SpriteRenderer>();
-        render.radialText = gameObject.transform.GetChild(ActorLayer.Name.RadialText).GetComponent<TextMeshPro>();
-        render.turnDelayText = gameObject.transform.GetChild(ActorLayer.Name.TurnDelayText).GetComponent<TextMeshPro>();
-        render.nameTagText = gameObject.transform.GetChild(ActorLayer.Name.NameTagText).GetComponent<TextMeshPro>();
-        render.weaponIcon = gameObject.transform.GetChild(ActorLayer.Name.WeaponIcon).GetComponent<SpriteRenderer>();
-        render.selectionBox = gameObject.transform.GetChild(ActorLayer.Name.SelectionBox).GetComponent<SpriteRenderer>();
-
+        render.Initialize(this);
         action.Initialize(this);
         move.Initialize(this);
         healthBar.Initialize(this);
         actionBar.Initialize(this);
-
+        glow.Initialize(this);
 
         wiggleSpeed = tileSize * 24f;
         wiggleAmplitude = 15f;  // Amplitude (difference from -45 degrees)
 
-        glowIntensity = 1.3333f;
+       
 
-        //glowCurve = new AnimationCurve(
-        //    new Keyframe(0f, 0f, 0f, 0f),      // First keyframe at time 0, value 0
-        //    new Keyframe(1f, 0.25f, 0f, 0f)    // Second keyframe at time 1, value 0.25
-        //);
-        //glowCurve.preWrapMode = WrapMode.Loop;
-        //glowCurve.postWrapMode = WrapMode.Loop;
 
 
 
@@ -290,7 +251,7 @@ public class ActorInstance : MonoBehaviour
         render.SetNameTagText(name);
         render.SetNameTagEnabled(isEnabled: debugManager.showActorNameTag);
 
-        healthBar.Refresh();
+        healthBar.Update();
         actionBar.Reset();
         action.TriggerFadeIn();
         action.TriggerSpin360();
@@ -302,7 +263,7 @@ public class ActorInstance : MonoBehaviour
         if (!isActive || !isAlive || isFocusedPlayer || isSelectedPlayer)
             return;
 
-        UpdateGlow();
+        glow.Update();
     }
 
 
@@ -397,19 +358,6 @@ public class ActorInstance : MonoBehaviour
         }
     }
 
-    private void UpdateGlow()
-    {
-        //Check abort conditions
-        if (!isActive || !isAlive || !turnManager.isStartPhase || (turnManager.isPlayerTurn && !isPlayer) || (turnManager.isEnemyTurn && !isEnemy))
-            return;
-
-        //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
-        var scale = new Vector3(
-            glowIntensity + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
-            glowIntensity + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
-            1.0f);
-        render.SetGlowScale(scale);
-    }
 
 
     public void TriggerTakeDamage(AttackResult attack)
@@ -434,7 +382,7 @@ public class ActorInstance : MonoBehaviour
             stats.PreviousHP = stats.HP;
             stats.HP -= attack.Damage;
             stats.HP = Mathf.Clamp(stats.HP, 0, stats.MaxHP);
-            healthBar.Refresh();
+            healthBar.Update();
         }
 
         damageTextManager.Spawn(attack.Damage.ToString(), position);
@@ -560,7 +508,7 @@ public class ActorInstance : MonoBehaviour
                 //turnDelay--;
                 //turnDelay = Math.Clamp(turnDelay, 0, 9);
 
-                //actionBar.Refresh();
+                //actionBar.Update();
                 //UpdateTurnDelayText();
             }
 
@@ -631,7 +579,7 @@ public class ActorInstance : MonoBehaviour
         stats.AP = stats.MaxAP;
         stats.PreviousAP = stats.MaxAP;
 
-        actionBar.Refresh();
+        actionBar.Update();
     }
     //public IEnumerator Bump(Direction direction)
     //{

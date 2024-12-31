@@ -33,7 +33,7 @@ public class ActorHealthBar
             initialScale.z);
     }
 
-    public void Refresh()
+    public void Update()
     {
         render.healthBarDrain.transform.localScale = GetScale(stats.PreviousHP);
         render.healthBarFill.transform.localScale = GetScale(stats.HP);

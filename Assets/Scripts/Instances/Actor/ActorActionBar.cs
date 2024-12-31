@@ -39,7 +39,7 @@ public class ActorActionBar
             initialScale.z);
     }
 
-    public void Refresh()
+    public void Update()
     {
         render.actionBarDrain.transform.localScale = GetScale(stats.PreviousAP);
         render.actionBarFill.transform.localScale = GetScale(stats.AP);
@@ -104,13 +104,13 @@ public class ActorActionBar
             stats.AP += amount;
             stats.AP = Mathf.Clamp(stats.AP, 0, stats.MaxAP);
             stats.PreviousAP = stats.AP;
-            Refresh();
+            Update();
             yield return Wait.OneTick();
         }
 
         //After:
         stats.PreviousAP = stats.AP;
-        Refresh();
+        Update();
         flags.isGainingAP = false;
     }
 
@@ -118,7 +118,7 @@ public class ActorActionBar
     {
         stats.AP = 0;
         stats.PreviousAP = 0;
-        Refresh();
+        Update();
     }
 
 
@@ -128,7 +128,7 @@ public class ActorActionBar
         float amount = stats.Speed * 0.01f;
         stats.AP = amount;
         stats.PreviousAP = amount;
-        Refresh();
+        Update();
     }
 
 

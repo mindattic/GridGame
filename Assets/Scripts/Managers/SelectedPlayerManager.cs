@@ -9,39 +9,11 @@ public class SelectedPlayerManager : MonoBehaviour
     protected CardManager cardManager => GameManager.instance.cardManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
     protected Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
-    protected Vector3 mouseOffset
-    {
-        get { return GameManager.instance.mouseOffset; }
-        set { GameManager.instance.mouseOffset = value; }
-    }
-
-
-
-
-
-
-    protected ActorInstance focusedActor
-    {
-        get { return GameManager.instance.focusedActor; }
-        set { GameManager.instance.focusedActor = value; }
-    }
-
-    protected ActorInstance previousSelectedPlayer
-    {
-        get { return GameManager.instance.previousSelectedPlayer; }
-        set { GameManager.instance.previousSelectedPlayer = value; }
-    }
-
-    protected ActorInstance selectedPlayer
-    {
-        get { return GameManager.instance.selectedPlayer; }
-        set { GameManager.instance.selectedPlayer = value; }
-    }
-    protected List<ActorInstance> actors
-    {
-        get => GameManager.instance.actors;
-        set => GameManager.instance.actors = value;
-    }
+    protected Vector3 mouseOffset { get => GameManager.instance.mouseOffset; set => GameManager.instance.mouseOffset = value; }
+    protected ActorInstance focusedActor { get => GameManager.instance.focusedActor; set => GameManager.instance.focusedActor = value; }
+    protected ActorInstance previousSelectedPlayer { get => GameManager.instance.previousSelectedPlayer; set => GameManager.instance.previousSelectedPlayer = value; }
+    protected ActorInstance selectedPlayer { get => GameManager.instance.selectedPlayer; set => GameManager.instance.selectedPlayer = value; }
+    protected List<ActorInstance> actors => GameManager.instance.actors;
     protected bool hasFocusedActor => focusedActor != null;
     protected bool hasSelectedPlayer => selectedPlayer != null;
     protected AudioManager audioManager => GameManager.instance.audioManager;
@@ -56,24 +28,17 @@ public class SelectedPlayerManager : MonoBehaviour
 
     public void Focus()
     {
-        //Verify is player turn...
-        if (!turnManager.isPlayerTurn)
+        //Check abort conditions
+        if (!turnManager.isPlayerTurn || !turnManager.isStartPhase)
             return;
 
-        //Verify currentFps phase is "originActor"...
-        if (!turnManager.isStartPhase)
-            return;
-
-        //Find collider attached to Actor
+        //Find actor using collision overlap
         var collisions = Physics2D.OverlapPointAll(mousePosition3D);
         if (collisions == null)
             return;
-
         var collider = collisions.FirstOrDefault(x => x.CompareTag(Tag.Actor));
         if (collider == null)
             return;
-
-        //GetProfile Actor from collider
         var actor = collider.gameObject.GetComponent<ActorInstance>();
         if (actor == null || !actor.isActive || !actor.isAlive)
             return;
@@ -83,7 +48,7 @@ public class SelectedPlayerManager : MonoBehaviour
         focusedActor = actor;
         focusedActor.render.SetSelectionBoxEnabled(isEnabled: true);
 
-        //Assign mouse relativeOffset (how off center was selectionBox)
+        //Assign mouse relative offset (how off center was selection?)
         mouseOffset = focusedActor.position - mousePosition3D;
 
         cardManager.Assign(focusedActor);
@@ -99,37 +64,21 @@ public class SelectedPlayerManager : MonoBehaviour
             return;
 
         if (!hasSelectedPlayer)
-        {
             focusedActor.position = focusedActor.currentTile.position;
-            //focusedActor.sortingOrder = SortingOrder.Default;
-            //cardManager.DespawnAll();
-        }
 
         focusedActor = null;
     }
 
     public void Select()
     {
-        //Verify is player turn...
-        if (!turnManager.isPlayerTurn)
-            return;
-
-        //Verify currentFps phase is "originActor"...
-        if (!turnManager.isStartPhase)
-            return;
-
-        //Verify focused actor exists...
-        if (focusedActor == null || focusedActor.isEnemy)
-            return;
-
-        //Verify focused actor is player...
-        if (focusedActor.isEnemy)
+        //Check abort conditions
+        if (!turnManager.isPlayerTurn || !turnManager.isStartPhase || focusedActor == null || focusedActor.isEnemy)
             return;
 
         //Select player
         selectedPlayer = focusedActor;
-
         Unfocus();
+
         turnManager.currentPhase = TurnPhase.Move;
         audioManager.Play("Select");
         timerBar.Play();
@@ -139,16 +88,8 @@ public class SelectedPlayerManager : MonoBehaviour
 
     public void Unselect()
     {
-        //Verify is player turn...
-        if (!turnManager.isPlayerTurn)
-            return;
-
-        //Verify currentFps phase is "move"...
-        if (!turnManager.isMovePhase)
-            return;
-
-        //Verify *HAS* selected player...
-        if (!hasSelectedPlayer)
+        //Check abort conditions
+        if (!turnManager.isPlayerTurn || !turnManager.isMovePhase || !hasSelectedPlayer)
             return;
 
         //Assign boardLocation and boardPosition

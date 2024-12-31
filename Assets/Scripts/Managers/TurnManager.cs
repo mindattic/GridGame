@@ -268,10 +268,6 @@ public class TurnManager : MonoBehaviour
     }
 
 
-
-
-
-
     private void ResetRolesAfterAttack(IEnumerable<ActorInstance> actors)
     {
         var playingActors = actors.Where(x => x.isActive && x.isAlive).ToList();
@@ -328,8 +324,8 @@ public class TurnManager : MonoBehaviour
         audioManager.Play("Portrait");
         var first = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
         var second = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
-        var direction1 = pair.actor1 == pair.originActor ? first : second;
-        var direction2 = pair.actor2 == pair.originActor ? first : second;
+        var direction1 = pair.actor1 == pair.startActor ? first : second;
+        var direction2 = pair.actor2 == pair.startActor ? first : second;
         portraitManager.SlideIn(pair.actor1, direction1);
         portraitManager.SlideIn(pair.actor2, direction2);
 

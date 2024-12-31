@@ -20,7 +20,7 @@ public class ActorPair
     /// <summary>
     /// Property that retrieves either the top-most or right-most actor depending upon axial alignment
     /// </summary>
-    public ActorInstance originActor
+    public ActorInstance startActor
     {
         get
         {
@@ -33,7 +33,7 @@ public class ActorPair
     /// <summary>
     /// Property that retrieves either the bottom-most or left-most actor depending upon axial alignment
     /// </summary>
-    public ActorInstance terminalActor
+    public ActorInstance endActor
     {
         get
         {
@@ -57,8 +57,8 @@ public class ActorPair
         }
     }
 
-    public float ceiling => axis == Axis.Vertical ? originActor.location.y : originActor.location.x;
-    public float floor => axis == Axis.Vertical ? terminalActor.location.y : terminalActor.location.x;
+    public float ceiling => axis == Axis.Vertical ? startActor.location.y : startActor.location.x;
+    public float floor => axis == Axis.Vertical ? endActor.location.y : endActor.location.x;
 
 
 

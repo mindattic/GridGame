@@ -15,8 +15,8 @@ public class SupportLineInstance : MonoBehaviour
 
     //Variables
     public float alpha = 0;
-    private Vector3 originActor;
-    private Vector3 terminalActor;
+    private Vector3 startPosition;
+    private Vector3 endPosition;
     private float minAlpha = Opacity.Transparent;
     private float maxAlpha = Opacity.Percent50;
     private Color color = ColorHelper.RGBA(48, 161, 49, 0);
@@ -52,14 +52,14 @@ public class SupportLineInstance : MonoBehaviour
     public void Spawn(ActorPair pair)
     {
         parent = board.transform;
-        name = NameFormat.Replace("{0}", pair.originActor.name).Replace("{1}", pair.terminalActor.name);
+        name = NameFormat.Replace("{0}", pair.startActor.name).Replace("{1}", pair.endActor.name);
 
-        originActor = pair.originActor.position;
-        terminalActor = pair.terminalActor.position;
+        startPosition = pair.startActor.position;
+        endPosition = pair.endActor.position;
 
         //lineRenderer.sortingOrder = SortingOrder.SupportLine;
-        lineRenderer.SetPosition(0, originActor);
-        lineRenderer.SetPosition(1, terminalActor);
+        lineRenderer.SetPosition(0, startPosition);
+        lineRenderer.SetPosition(1, endPosition);
 
         IEnumerator _()
         {

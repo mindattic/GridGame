@@ -171,13 +171,13 @@ public class Geometry
     }
 
 
-    public static float GetPercentageBetween(Vector3 start, Vector3 end, Vector3 current)
+    public static float GetPercentageBetween(Vector3 startPosition, Vector3 endPosition, Vector3 currentPosition)
     {
         //Calculate the vectors
-        Vector3 AB = end - start;
-        Vector3 AC = current - start;
+        Vector3 AB = endPosition - startPosition;
+        Vector3 AC = currentPosition - startPosition;
 
-        //Check for division by zero; Handle the case where originActor and terminalActor are the same point
+        //Check for division by zero; Handle the case where startPosition and endPosition are the same point
         if (AB.magnitude == 0)
             return 0;
 
@@ -188,7 +188,7 @@ public class Geometry
 
     /// <summary>
     /// Methods which calculate values relative to another unit
-    /// (which is calculated based on current device aspect ratio, screen size, etc)
+    /// (which is calculated based on currentPosition device aspect ratio, screen size, etc)
     /// </summary>
     public static class Tile
     {
