@@ -257,13 +257,13 @@ public class ActorInstance : MonoBehaviour
         action.TriggerSpin360();
     }
 
+
+    private void Update()
+    {
+       
+    }
     void FixedUpdate()
     {
-        //Check abort conditions
-        if (!isActive || !isAlive || isFocusedPlayer || isSelectedPlayer)
-            return;
-
-        glow.Update();
     }
 
 

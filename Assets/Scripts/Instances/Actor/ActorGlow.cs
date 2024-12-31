@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Assets.Scripts.Instances.Actor
 {
     public class ActorGlow
     {
         protected TurnManager turnManager => GameManager.instance.turnManager;
+        protected Vector3 tileScale => GameManager.instance.tileScale;
         protected ActorRenderers render => instance.render;
         private bool isActive => instance.isActive;
         private bool isAlive => instance.isAlive;
@@ -17,7 +21,6 @@ namespace Assets.Scripts.Instances.Actor
         private bool isEnemy => instance.isEnemy;
         protected float gameSpeed => GameManager.instance.gameSpeed;
         protected AnimationCurve glowCurve => instance.glowCurve;
-
         //glowCurve = new AnimationCurve(
         //    new Keyframe(0f, 0f, 0f, 0f),      // First keyframe at time 0, value 0
         //    new Keyframe(1f, 0.25f, 0f, 0f)    // Second keyframe at time 1, value 0.25
@@ -25,30 +28,100 @@ namespace Assets.Scripts.Instances.Actor
         //glowCurve.preWrapMode = WrapMode.Loop;
         //glowCurve.postWrapMode = WrapMode.Loop;
 
-        public float glowIntensity = 1.3333f;
-
-
         private ActorInstance instance;
+        private Vector3 initialScale;
+        private float maxIntensity;
+        private float speed;
+       
+
         public void Initialize(ActorInstance parentInstance)
         {
             this.instance = parentInstance;
+
+            initialScale = tileScale;
+            maxIntensity = 1.5f;
+            speed = 2f;
         }
 
 
+        private bool IsGlowing => isActive && isAlive && turnManager.isStartPhase && (turnManager.isPlayerTurn && isPlayer) || (turnManager.isEnemyTurn && isEnemy);
 
-        public void Update()
+
+        public void TriggerGlow()
         {
-            //Check abort conditions
-            if (!isActive || !isAlive || !turnManager.isStartPhase || (turnManager.isPlayerTurn && !isPlayer) || (turnManager.isEnemyTurn && !isEnemy))
-                return;
+            if (isActive && isAlive)
+                instance.StartCoroutine(Glow());
+        }
 
-            //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
-            var scale = new Vector3(
-                glowIntensity + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
-                glowIntensity + glowCurve.Evaluate(Time.time % glowCurve.length) * gameSpeed,
+        public IEnumerator Glow()
+        {
+            // Before:
+            Vector3 scale = initialScale;
+            render.SetGlowScale(scale);
+
+            // During (Phase 1) - Warm Up:
+            float warmupDuration = 1.0f; // Duration in seconds
+            float elapsedWarmup = 0f;
+            while (elapsedWarmup < warmupDuration)
+            {
+                elapsedWarmup += Time.deltaTime;
+                float progress = Mathf.Clamp01(elapsedWarmup / warmupDuration);
+                float intensity = Mathf.Lerp(1.0f, maxIntensity, progress);
+                float curveValue = glowCurve.Evaluate(Time.time * speed % glowCurve.length);
+                scale = new Vector3(
+                    intensity + curveValue * gameSpeed,
+                    intensity + curveValue * gameSpeed,
+                    1.0f);
+                render.SetGlowScale(scale);
+
+                yield return Wait.OneTick();
+            }
+
+            // Ensure the scale ends exactly at maxIntensity:
+            scale = new Vector3(
+                maxIntensity,
+                maxIntensity,
                 1.0f);
             render.SetGlowScale(scale);
+
+            // During (Phase 2) - Glowing:
+            while (IsGlowing)
+            {
+                float curveValue = glowCurve.Evaluate(Time.time * speed % glowCurve.length);
+                scale = new Vector3(
+                    maxIntensity + curveValue * gameSpeed,
+                    maxIntensity + curveValue * gameSpeed,
+                    1.0f);
+                render.SetGlowScale(scale);
+
+                yield return Wait.OneTick();
+            }
+
+            // During (Phase 3) - Cooldown:
+            float cooldownDuration = 1.0f; // Duration in seconds
+            float elapsedCooldown = 0f;
+            while (elapsedCooldown < cooldownDuration)
+            {
+                elapsedCooldown += Time.deltaTime;
+                float progress = Mathf.Clamp01(elapsedCooldown / cooldownDuration);
+                float intensity = Mathf.Lerp(maxIntensity, 1.0f, progress);
+                float curveValue = glowCurve.Evaluate(Time.time * speed % glowCurve.length);
+                scale = new Vector3(
+                    intensity + curveValue * gameSpeed,
+                    intensity + curveValue * gameSpeed,
+                    1.0f);
+                render.SetGlowScale(scale);
+
+                yield return Wait.OneTick();
+            }
+
+            // After:
+            scale = initialScale;
+            render.SetGlowScale(scale);
         }
+
+
+
 
     }
 }

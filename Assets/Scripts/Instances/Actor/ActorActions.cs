@@ -93,7 +93,7 @@ namespace Assets.Scripts.Instances.Actor
 
         public IEnumerator Dodge()
         {
-            // Initial setup
+            //Begin:
             var rotationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
             var scaleCurve = AnimationCurve.EaseInOut(0, 1, 1, 0.9f);
             float duration = 0.125f; // Total duration for the forward twist
@@ -107,7 +107,7 @@ namespace Assets.Scripts.Instances.Actor
 
             float elapsedTime = 0f;
 
-            // Twist forward
+            //During (Phase 1) - Twist forward:
             while (elapsedTime < duration)
             {
                 // Normalize time
@@ -128,8 +128,8 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            // Reset transition
-            elapsedTime = 0f; // Reset time
+            //During (Phase 2) - Reset transition:
+            elapsedTime = 0f;
             while (elapsedTime < returnDuration)
             {
                 // Normalize time
@@ -150,7 +150,7 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            // Ensure exact reset
+            //After:
             scale = tileScale;
             rotation = Geometry.Rotation(Vector3.zero);
         }

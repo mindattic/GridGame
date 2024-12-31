@@ -77,7 +77,7 @@ public class TurnManager : MonoBehaviour
         currentTurn = 1;
         currentTeam = Team.Player;
         currentPhase = Phase.Start;
-
+        players.Where(x => x.isActive && x.isAlive).ToList().ForEach(x => x.glow.TriggerGlow());
         //musicSource.Stop();
         //musicSource.PlayOneShot(resourceManager.MusicTrack($"MelancholyLull"));
     }
@@ -98,6 +98,7 @@ public class TurnManager : MonoBehaviour
         {
             currentTurn++;
             timerBar.Reset();
+            players.Where(x => x.isActive && x.isAlive).ToList().ForEach(x => x.glow.TriggerGlow());
         }
         else if (isEnemyTurn)
         {
