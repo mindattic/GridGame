@@ -77,15 +77,15 @@ namespace Game.Behaviors
                 + resourceManager.ActorDetails(actor.character.ToString());
             details.text = stats;
 
-            SlideIn();
+            TriggerSlideIn();
         }
 
-        private void SlideIn()
+        private void TriggerSlideIn()
         {
-            StartCoroutine(_SlideIn());
+            StartCoroutine(SlideIn());
         }
 
-        private IEnumerator _SlideIn()
+        private IEnumerator SlideIn()
         {
             float elapsedTime = 0f;
 
@@ -112,7 +112,7 @@ namespace Game.Behaviors
             title.text = "";
             details.text = "";
 
-            // _Despawn all selection boxes from actors
+            // Despawn all selection boxes from actors
             actors.ForEach(x => x.render.SetSelectionBoxEnabled(false));
 
             // Reset portrait position

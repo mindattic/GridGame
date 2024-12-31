@@ -49,17 +49,17 @@ public class CanvasOverlayInstance : MonoBehaviour
 
     public void Show()
     {
-        FadeOut();
-        titleManager.FadeOut();
+        TriggerFadeOut();
+        titleManager.TriggerFadeOut();
     }
 
 
-    public void FadeIn()
+    public void TriggerFadeIn()
     {
-        StartCoroutine(_FadeIn());
+        StartCoroutine(FadeIn());
     }
 
-    private IEnumerator _FadeIn()
+    private IEnumerator FadeIn()
     {
         //Before:
         alpha = minAlpha;
@@ -83,12 +83,12 @@ public class CanvasOverlayInstance : MonoBehaviour
     }
 
 
-    public void FadeOut()
+    public void TriggerFadeOut()
     {
-        StartCoroutine(_FadeOut());
+        StartCoroutine(FadeOut());
     }
 
-    private IEnumerator _FadeOut()
+    private IEnumerator FadeOut()
     {
         // Before:
         alpha = maxAlpha;

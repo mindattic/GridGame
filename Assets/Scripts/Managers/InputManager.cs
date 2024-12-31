@@ -2,28 +2,29 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+    #region Properties
+
+    // Actor related objects
+    protected ActorInstance focusedActor => GameManager.instance.focusedActor;
+    protected ActorInstance previousSelectedPlayer => GameManager.instance.previousSelectedPlayer;
+    protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
+    protected bool hasFocusedActor => focusedActor != null;
+    protected bool hasSelectedPlayer => selectedPlayer != null;
+
+    // Managers
     protected SelectedPlayerManager selectedPlayerManager => GameManager.instance.selectedPlayerManager;
-    protected ActorInstance focusedActor
-    {
-        get { return GameManager.instance.focusedActor; }
-        set { GameManager.instance.focusedActor = value; }
-    }
-
-    protected ActorInstance previousSelectedPlayer
-    {
-        get { return GameManager.instance.previousSelectedPlayer; }
-        set { GameManager.instance.previousSelectedPlayer = value; }
-    }
-
-    protected ActorInstance selectedPlayer
-    {
-        get { return GameManager.instance.selectedPlayer; }
-        set { GameManager.instance.selectedPlayer = value; }
-    }
-    protected bool HasFocusedActor => focusedActor != null;
-    protected bool HasSelectedPlayer => selectedPlayer != null;
     protected StageManager stageManager => GameManager.instance.stageManager;
+
+    // Float
+    protected float dragThreshold;
     protected float tileSize => GameManager.instance.tileSize;
+
+    // Boolean
+    private bool isDragging;
+
+    #endregion
+
+
 
     private void Awake()
     {
@@ -32,7 +33,7 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
-
+        dragThreshold = tileSize / 24;
     }
 
     //public bool IsDragging => dragStart != null;
@@ -40,7 +41,8 @@ public class InputManager : MonoBehaviour
     //public Vector3? dragStart = null;
     //[SerializeField] public float dragThreshold = 5f;
 
-    bool isDragging = false;
+   
+
 
     void Update()
     {
@@ -48,7 +50,7 @@ public class InputManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             selectedPlayerManager.Focus();
-            isDragging = HasFocusedActor;
+            isDragging = hasFocusedActor;
 
         }
         else if (Input.GetMouseButtonUp(0))
@@ -70,14 +72,12 @@ public class InputManager : MonoBehaviour
 
     private void CheckDragging()
     {
-        if (!isDragging)
+        //Check abort conditions
+        if (!isDragging || !hasFocusedActor)
             return;
 
-        if (!HasFocusedActor)
-            return;
-
-        var dragDistance = Vector3.Distance(focusedActor.position, focusedActor.CurrentTile.position);
-        if (dragDistance > tileSize / 24)
+        var dragDistance = Vector3.Distance(focusedActor.position, focusedActor.currentTile.position);
+        if (dragDistance > dragThreshold)
         {
             selectedPlayerManager.Select();
         }

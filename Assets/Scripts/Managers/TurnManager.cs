@@ -10,25 +10,23 @@ using Phase = TurnPhase;
 
 public class TurnManager : MonoBehaviour
 {
-    protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
-    protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
-    protected CombatParticipants combatParticipants
-    {
-        get { return GameManager.instance.combatParticipants; }
-        set { GameManager.instance.combatParticipants = value; }
-    }
-    protected List<ActorInstance> actors
-    {
-        get => GameManager.instance.actors;
-        set => GameManager.instance.actors = value;
-    }
-    protected TimerBarInstance timerBar => GameManager.instance.timerBar;
-    protected IQueryable<ActorInstance> players => GameManager.instance.players;
-    protected IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
-    protected BoardOverlayInstance boardOverlay => GameManager.instance.boardOverlay;
-    protected PortraitManager portraitManager => GameManager.instance.portraitManager;
-    protected AudioManager audioManager => GameManager.instance.audioManager;
+    #region Properties
 
+    // Managers
+    protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
+    protected AudioManager audioManager => GameManager.instance.audioManager;
+    protected BoardOverlayInstance boardOverlay => GameManager.instance.boardOverlay;
+    protected CombatParticipants combatParticipants { get => GameManager.instance.combatParticipants; set => GameManager.instance.combatParticipants = value; }
+    protected PortraitManager portraitManager => GameManager.instance.portraitManager;
+    protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
+    protected TimerBarInstance timerBar => GameManager.instance.timerBar;
+
+    // Actor related objects
+    protected List<ActorInstance> actors { get => GameManager.instance.actors; set => GameManager.instance.actors = value; }
+    protected IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
+    protected IQueryable<ActorInstance> players => GameManager.instance.players;
+
+    #endregion
 
 
 
@@ -46,13 +44,13 @@ public class TurnManager : MonoBehaviour
     [SerializeField] public Phase currentPhase = Phase.Start;
 
     //Properties
-    public bool IsPlayerTurn => currentTeam.Equals(Team.Player);
-    public bool IsEnemyTurn => currentTeam.Equals(Team.Enemy);
-    public bool IsStartPhase => currentPhase.Equals(Phase.Start);
-    public bool IsMovePhase => currentPhase.Equals(Phase.Move);
-    public bool IsAttackPhase => currentPhase.Equals(Phase.Attack);
+    public bool isPlayerTurn => currentTeam.Equals(Team.Player);
+    public bool isEnemyTurn => currentTeam.Equals(Team.Enemy);
+    public bool isStartPhase => currentPhase.Equals(Phase.Start);
+    public bool isMovePhase => currentPhase.Equals(Phase.Move);
+    public bool isAttackPhase => currentPhase.Equals(Phase.Attack);
 
-    public bool IsFirstTurn => currentTurn == 1;
+    public bool isFirstTurn => currentTurn == 1;
 
 
     void Awake()
@@ -86,7 +84,7 @@ public class TurnManager : MonoBehaviour
 
     public void NextTurn()
     {
-        currentTeam = IsPlayerTurn ? Team.Enemy : Team.Player;
+        currentTeam = isPlayerTurn ? Team.Enemy : Team.Player;
         currentPhase = Phase.Start;
 
         supportLineManager.Clear();
@@ -96,12 +94,12 @@ public class TurnManager : MonoBehaviour
         //Reset actors sorting
         actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
 
-        if (IsPlayerTurn)
+        if (isPlayerTurn)
         {
             currentTurn++;
             timerBar.Reset();
         }
-        else if (IsEnemyTurn)
+        else if (isEnemyTurn)
         {
             timerBar.Hide();
 
@@ -120,7 +118,7 @@ public class TurnManager : MonoBehaviour
             foreach (var actor2 in players)
             {
                 if (actor1 == null || actor2 == null || actor1.Equals(actor2)
-                    || !actor1.IsActive || !actor1.IsAlive || !actor2.IsActive || !actor2.IsAlive
+                    || !actor1.isActive || !actor1.isAlive || !actor2.isActive || !actor2.isAlive
                     || combatParticipants.HasAlignedPair(actor1, actor2))
                     continue;
 
@@ -235,7 +233,7 @@ public class TurnManager : MonoBehaviour
         IEnumerator ExecuteCombat()
         {
             // Sort all actors to default
-            var playingActors = actors.Where(x => x.IsActive && x.IsAlive).ToList();
+            var playingActors = actors.Where(x => x.isActive && x.isAlive).ToList();
             playingActors.ForEach(x => x.sortingOrder = SortingOrder.Default);
 
             // Sort all combat participants to above board overlay
@@ -244,7 +242,7 @@ public class TurnManager : MonoBehaviour
 
             boardOverlay.FadeIn();
 
-            // Spawn support lines
+            // TriggerSpawn support lines
             foreach (var pair in combatParticipants.supportingPairs)
             {
                 supportLineManager.Spawn(pair);
@@ -276,7 +274,7 @@ public class TurnManager : MonoBehaviour
 
     private void ResetRolesAfterAttack(IEnumerable<ActorInstance> actors)
     {
-        var playingActors = actors.Where(x => x.IsActive && x.IsAlive).ToList();
+        var playingActors = actors.Where(x => x.isActive && x.isAlive).ToList();
         foreach (var actor in playingActors)
         {
             if (actor.attackingPairCount > 0)
@@ -377,14 +375,14 @@ public class TurnManager : MonoBehaviour
         {
             yield return pair.actor1.Attack(attack);
             if (dyingEnemies.Contains(attack.Opponent))
-                attack.Opponent.Die();
+                attack.Opponent.TriggerDie();
         }
 
-        // _Despawn attack and support lines
+        // Despawn attack and support lines
         //foreach (var enemy in pair.alignment.enemies)
         //{
-        //    attackLineManager._Despawn(pair);
-        //    supportLineManager._Despawn(pair);
+        //    attackLineManager.Despawn(pair);
+        //    supportLineManager.Despawn(pair);
         //}
         attackLineManager.Despawn(pair);
         supportLineManager.Despawn(pair);
@@ -392,7 +390,7 @@ public class TurnManager : MonoBehaviour
         // Trigger synchronous death for the last dying enemy
 
         if (lastDyingEnemy != null)
-            yield return lastDyingEnemy._Die();
+            yield return lastDyingEnemy.Die();
 
         yield return Wait.For(Intermission.After.Player.Attack);
 
@@ -407,10 +405,10 @@ public class TurnManager : MonoBehaviour
     private void CheckEnemySpawn()
     {
         //Check abort conditions
-        if (!IsEnemyTurn || !IsStartPhase)
+        if (!isEnemyTurn || !isStartPhase)
             return;
 
-        var spawnableEnemies = enemies.Where(x => x.IsSpawnable).ToList();
+        var spawnableEnemies = enemies.Where(x => x.isSpawnable).ToList();
         foreach (var enemy in spawnableEnemies)
         {
             enemy.Spawn(Random.UnoccupiedLocation);
@@ -425,12 +423,12 @@ public class TurnManager : MonoBehaviour
     private IEnumerator EnemyMove()
     {
         //Check abort conditions
-        if (!IsEnemyTurn || !IsStartPhase)
+        if (!isEnemyTurn || !isStartPhase)
             yield break;
 
         currentPhase = Phase.Move;
 
-        var readyEnemies = enemies.Where(x => x.IsActive && x.IsAlive && x.HasMaxAP).ToList();
+        var readyEnemies = enemies.Where(x => x.isActive && x.isAlive && x.hasMaxAP).ToList();
         if (readyEnemies.Count > 0)
         {
             yield return Wait.For(Intermission.Before.Enemy.Move);
@@ -464,22 +462,22 @@ public class TurnManager : MonoBehaviour
     private IEnumerator EnemyAttack()
     {
         //Check abort conditions
-        if (!IsEnemyTurn || !IsAttackPhase)
+        if (!isEnemyTurn || !isAttackPhase)
             yield break;
 
-        var readyEnemies = enemies.Where(x => x.IsActive && x.IsAlive && x.HasMaxAP).ToList();
+        var readyEnemies = enemies.Where(x => x.isActive && x.isAlive && x.hasMaxAP).ToList();
         if (readyEnemies.Count > 0)
         {
             yield return Wait.For(Intermission.Before.Enemy.Attack);
 
             foreach (var enemy in readyEnemies)
             {
-                var defendingPlayers = players.Where(x => x.IsActive && x.IsAlive && x.IsAdjacentTo(enemy.location)).ToList();
+                var defendingPlayers = players.Where(x => x.isActive && x.isAlive && x.IsAdjacentTo(enemy.location)).ToList();
                 foreach (var player in defendingPlayers)
                 {
                     var direction = enemy.GetAdjacentDirectionTo(player);
 
-                    IEnumerator _()
+                    IEnumerator Attack()
                     {
                         var isHit = Formulas.IsHit(enemy, player);
                         var isCriticalHit = false;
@@ -495,18 +493,18 @@ public class TurnManager : MonoBehaviour
                     }
 
                     enemy.actionBar.Reset();
-                    yield return enemy.action._Bump(direction, _());
+                    yield return enemy.action.Bump(direction, Attack());
 
 
                 }
 
             }
 
-            //TODO: Put player._Die here so that it resolves after attacks...
-            var dyingPlayers = actors.Where(x => x.IsDying).ToList();
+            //TODO: Put player.Die here so that it resolves after attacks...
+            var dyingPlayers = actors.Where(x => x.isDying).ToList();
             foreach (var player in dyingPlayers)
             {
-                yield return player._Die();
+                yield return player.Die();
             }
 
             readyEnemies.ForEach(x => x.actionBar.Reset());

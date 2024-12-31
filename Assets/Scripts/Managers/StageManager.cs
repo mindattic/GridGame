@@ -240,7 +240,7 @@ public class StageManager : MonoBehaviour
         instance.thumbnail = stageActor.thumbnail;
         instance.team = stageActor.team;
         instance.quality = stageActor.quality;
-        instance.render.SetQualityColor(instance.IsPlayer ? Color.white : Color.red);
+        instance.render.SetQualityColor(instance.isPlayer ? Color.white : Color.red);
         instance.sortingOrder = SortingOrder.Min;
 
         //Assign stats

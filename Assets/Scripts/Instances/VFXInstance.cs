@@ -81,13 +81,13 @@ public class VFXInstance : MonoBehaviour
         }
     }
 
-    public void Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    public void TriggerSpawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         isAsync = true;
         Initialize(vfx, position, triggeredEvent);
     }
 
-    public IEnumerator _Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    public IEnumerator Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         isAsync = false;
         Initialize(vfx, position, triggeredEvent);
@@ -112,7 +112,7 @@ public class VFXInstance : MonoBehaviour
             yield return null;
         }
 
-        //_Despawn VFX
+        //Despawn VFX
         Despawn(name);
     }
 

@@ -3,8 +3,31 @@ using Assets.Scripts.Instances.Actor;
 using System.Collections;
 using UnityEngine;
 
-public class ActorActionBar : ActorModule
+public class ActorActionBar
 {
+    #region Properties
+
+    // Managers
+    protected DebugManager debugManager => GameManager.instance.debugManager;
+
+    // Actor related objects
+    protected ActorFlags flags => instance.flags;
+    protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
+    protected ActorRenderers render => instance.render;
+    protected ActorStats stats => instance.stats;
+    protected bool hasSelectedPlayer => selectedPlayer != null;
+
+    // Miscellaneous
+    private ActorInstance instance;
+
+    #endregion
+
+
+    public void Initialize(ActorInstance parentInstance)
+    {
+        this.instance = parentInstance;
+    }
+
     //Properties
     private Vector3 initialScale => render.actionBarBack.transform.localScale;
 
@@ -23,13 +46,17 @@ public class ActorActionBar : ActorModule
         render.actionBarText.text = $@"{stats.AP}/{stats.MaxAP}";
 
 
-        instance.action.ExecuteWeaponWiggle();
-
-        if (instance.IsActive && instance.IsAlive)
-            instance.StartCoroutine(_Drain());
+        instance.action.TriggerWeaponWiggle();
+        TriggerDrain();
     }
 
-    private IEnumerator _Drain()
+    private void TriggerDrain()
+    {
+        if (instance.isActive && instance.isAlive)
+            instance.StartCoroutine(Drain());
+    }
+
+    private IEnumerator Drain()
     {
         //Check abort conditions
         if (stats.PreviousAP == stats.AP)
@@ -55,16 +82,16 @@ public class ActorActionBar : ActorModule
         render.healthBarDrain.transform.localScale = scale;
     }
 
-    public void Fill()
+    public void TriggerFill()
     {
-        if (instance.IsActive && instance.IsAlive)
-            instance.StartCoroutine(_Fill());
+        if (instance.isActive && instance.isAlive)
+            instance.StartCoroutine(Fill());
     }
 
-    private IEnumerator _Fill()
+    private IEnumerator Fill()
     {
         //Check abort conditions
-        if (debugManager.isEnemyStunned || !HasSelectedPlayer || !instance.IsEnemy || !instance.IsActive || !instance.IsAlive || instance.HasMaxAP || flags.isGainingAP)
+        if (debugManager.isEnemyStunned || !hasSelectedPlayer || !instance.isEnemy || !instance.isActive || !instance.isAlive || instance.hasMaxAP || flags.isGainingAP)
             yield break;
 
         //Before:
@@ -72,7 +99,7 @@ public class ActorActionBar : ActorModule
         float amount = stats.Speed * 0.1f;
 
         //During:
-        while (HasSelectedPlayer && instance.IsEnemy && instance.IsActive && instance.IsAlive && !instance.HasMaxAP)
+        while (hasSelectedPlayer && instance.isEnemy && instance.isActive && instance.isAlive && !instance.hasMaxAP)
         {
             stats.AP += amount;
             stats.AP = Mathf.Clamp(stats.AP, 0, stats.MaxAP);

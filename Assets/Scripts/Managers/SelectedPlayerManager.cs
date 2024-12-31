@@ -15,6 +15,11 @@ public class SelectedPlayerManager : MonoBehaviour
         set { GameManager.instance.mouseOffset = value; }
     }
 
+
+
+
+
+
     protected ActorInstance focusedActor
     {
         get { return GameManager.instance.focusedActor; }
@@ -37,8 +42,8 @@ public class SelectedPlayerManager : MonoBehaviour
         get => GameManager.instance.actors;
         set => GameManager.instance.actors = value;
     }
-    protected bool HasFocusedActor => focusedActor != null;
-    protected bool HasSelectedPlayer => selectedPlayer != null;
+    protected bool hasFocusedActor => focusedActor != null;
+    protected bool hasSelectedPlayer => selectedPlayer != null;
     protected AudioManager audioManager => GameManager.instance.audioManager;
     protected TimerBarInstance timerBar => GameManager.instance.timerBar;
     protected ActorManager actorManager => GameManager.instance.actorManager;
@@ -52,11 +57,11 @@ public class SelectedPlayerManager : MonoBehaviour
     public void Focus()
     {
         //Verify is player turn...
-        if (!turnManager.IsPlayerTurn)
+        if (!turnManager.isPlayerTurn)
             return;
 
         //Verify currentFps phase is "originActor"...
-        if (!turnManager.IsStartPhase)
+        if (!turnManager.isStartPhase)
             return;
 
         //Find collider attached to Actor
@@ -70,7 +75,7 @@ public class SelectedPlayerManager : MonoBehaviour
 
         //GetProfile Actor from collider
         var actor = collider.gameObject.GetComponent<ActorInstance>();
-        if (actor == null || !actor.IsActive || !actor.IsAlive)
+        if (actor == null || !actor.isActive || !actor.isAlive)
             return;
 
         //TODO: SaveProfile Card display...
@@ -83,19 +88,19 @@ public class SelectedPlayerManager : MonoBehaviour
 
         cardManager.Assign(focusedActor);
 
-        if (focusedActor.IsPlayer)
+        if (focusedActor.isPlayer)
             StartCoroutine(focusedActor.move.TowardCursor());
     }
 
     public void Unfocus()
     {
         //Verify *HAS* focused actor...
-        if (!HasFocusedActor)
+        if (!hasFocusedActor)
             return;
 
-        if (!HasSelectedPlayer)
+        if (!hasSelectedPlayer)
         {
-            focusedActor.position = focusedActor.CurrentTile.position;
+            focusedActor.position = focusedActor.currentTile.position;
             //focusedActor.sortingOrder = SortingOrder.Default;
             //cardManager.DespawnAll();
         }
@@ -106,19 +111,19 @@ public class SelectedPlayerManager : MonoBehaviour
     public void Select()
     {
         //Verify is player turn...
-        if (!turnManager.IsPlayerTurn)
+        if (!turnManager.isPlayerTurn)
             return;
 
         //Verify currentFps phase is "originActor"...
-        if (!turnManager.IsStartPhase)
+        if (!turnManager.isStartPhase)
             return;
 
         //Verify focused actor exists...
-        if (focusedActor == null || focusedActor.IsEnemy)
+        if (focusedActor == null || focusedActor.isEnemy)
             return;
 
         //Verify focused actor is player...
-        if (focusedActor.IsEnemy)
+        if (focusedActor.isEnemy)
             return;
 
         //Select player
@@ -135,15 +140,15 @@ public class SelectedPlayerManager : MonoBehaviour
     public void Unselect()
     {
         //Verify is player turn...
-        if (!turnManager.IsPlayerTurn)
+        if (!turnManager.isPlayerTurn)
             return;
 
         //Verify currentFps phase is "move"...
-        if (!turnManager.IsMovePhase)
+        if (!turnManager.isMovePhase)
             return;
 
         //Verify *HAS* selected player...
-        if (!HasSelectedPlayer)
+        if (!hasSelectedPlayer)
             return;
 
         //Assign boardLocation and boardPosition

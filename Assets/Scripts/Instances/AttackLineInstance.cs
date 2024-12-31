@@ -146,7 +146,12 @@ namespace Game.Instances
             StartCoroutine(_());
         }
 
-        public IEnumerator _Despawn()
+        public void TriggerDespawn()
+        {
+            StartCoroutine(Despawn());
+        }
+
+        public IEnumerator Despawn()
         {
             //Before:
             alpha = maxAlpha;
@@ -173,10 +178,7 @@ namespace Game.Instances
             lineRenderer.endColor = color;
         }
 
-        public void Despawn()
-        {
-            StartCoroutine(_Despawn());
-        }
+        
 
 
     }

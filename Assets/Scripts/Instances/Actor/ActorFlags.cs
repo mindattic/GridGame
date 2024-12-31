@@ -16,6 +16,6 @@ namespace Assets.Scripts.Behaviors.Actor
         public bool isGainingAP;
         public bool isAngry;
 
-        //public bool HasMaxAP;
+        //public bool hasMaxAP;
     }
 }

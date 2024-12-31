@@ -129,11 +129,11 @@ public class PortraitInstance : MonoBehaviour
         while (alpha > minAlpha)
         {
           
-            //_Shake
+            //Shake
             position = startPosition;
-            position += new Vector3(Random.Range(ShakeIntensity.Medium), Random.Range(ShakeIntensity.Medium), 1); //TODO: Use _Shake Coroutine
+            position += new Vector3(Random.Range(ShakeIntensity.Medium), Random.Range(ShakeIntensity.Medium), 1); //TODO: Use Shake Coroutine
 
-            //_Shrink
+            //Shrink
             transform.localScale *= 0.99f;
 
             //Fade
@@ -148,9 +148,9 @@ public class PortraitInstance : MonoBehaviour
 
 
 
-    //private void _Shake(int factor = 12)
+    //private void Shake(int factor = 12)
     //{
-    //    this.boardPosition = CurrentTile.boardPosition;
+    //    this.boardPosition = currentTile.boardPosition;
     //    this.boardPosition += new Vector3(Random.Range(tileSize / factor), Random.Range(tileSize / factor), 1);
     //}
 

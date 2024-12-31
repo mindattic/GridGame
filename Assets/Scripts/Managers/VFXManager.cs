@@ -9,27 +9,27 @@ public class VFXManager : MonoBehaviour
     //Variables
     Dictionary<string, VFXInstance> visualEffects = new Dictionary<string, VFXInstance>();
 
-    public void Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    public void TriggerSpawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<VFXInstance>();
-        instance.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
+        instance.name = $"VFX_{vfx.id}Attack{Guid.NewGuid()}";
         visualEffects.Add(instance.name, instance);
-        instance.Spawn(vfx, position, triggeredEvent);
+        instance.TriggerSpawn(vfx, position, triggeredEvent);
     }
 
 
-    public IEnumerator _Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    public IEnumerator Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
     {
         var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
         var visualEffect = prefab.GetComponent<VFXInstance>();
-        visualEffect.name = $"VFX_{vfx.id}_{Guid.NewGuid()}";
+        visualEffect.name = $"VFX_{vfx.id}Attack{Guid.NewGuid()}";
         visualEffects.Add(visualEffect.name, visualEffect);
 
         if (triggeredEvent == null)
             yield break;
 
-        yield return visualEffect._Spawn(vfx, position, triggeredEvent);
+        yield return visualEffect.Spawn(vfx, position, triggeredEvent);
     }
 
 

@@ -43,7 +43,7 @@ public class GhostManager : MonoBehaviour
 
     private IEnumerator CheckSpawn()
     {
-        while (actor.IsActive && actor.IsAlive)
+        while (actor.isActive && actor.isAlive)
         {
             var distance = Vector3.Distance(actor.position, previousPosition);
             if (distance >= threshold)

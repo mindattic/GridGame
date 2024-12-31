@@ -110,7 +110,7 @@ static class Random
         //    3 => Strategy.AttackWeakest,
         //    4 => Strategy.AttackStrongest,
         //    5 => Strategy.AttackRandom,
-        //    _ => Strategy.MoveAnywhere,
+        //    Attack => Strategy.MoveAnywhere,
         //};
 
         var result = Int(1, 2);
@@ -127,9 +127,9 @@ static class Random
 
 
 
-    public static ActorInstance Player => players.Where(x => x.IsActive && x.IsAlive).OrderBy(x => Guid.NewGuid()).First();
+    public static ActorInstance Player => players.Where(x => x.isActive && x.isAlive).OrderBy(x => Guid.NewGuid()).First();
 
-    public static ActorInstance Enemy => enemies.Where(x => x.IsActive && x.IsAlive).OrderBy(x => Guid.NewGuid()).First();
+    public static ActorInstance Enemy => enemies.Where(x => x.isActive && x.isAlive).OrderBy(x => Guid.NewGuid()).First();
 
     public static TileInstance Tile => tiles.OrderBy(x => Guid.NewGuid()).First();
 

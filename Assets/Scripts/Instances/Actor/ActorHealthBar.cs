@@ -1,9 +1,27 @@
-﻿using Assets.Scripts.Instances.Actor;
+﻿using Assets.Scripts.Behaviors.Actor;
+using Assets.Scripts.Instances.Actor;
 using System.Collections;
 using UnityEngine;
 
-public class ActorHealthBar : ActorModule
+public class ActorHealthBar
 {
+    #region Properties
+
+    //Actor related objects
+    protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
+    protected ActorRenderers render => instance.render;
+    protected ActorStats stats => instance.stats;
+
+    //Miscellaneous
+    private ActorInstance instance;
+
+    #endregion
+
+    public void Initialize(ActorInstance parentInstance)
+    {
+        this.instance = parentInstance;
+    }
+
     //Properties
     private Vector3 initialScale => render.healthBarBack.transform.localScale;
 
@@ -21,7 +39,7 @@ public class ActorHealthBar : ActorModule
         render.healthBarFill.transform.localScale = GetScale(stats.HP);
         render.healthBarText.text = $@"{stats.HP}/{stats.MaxHP}";
 
-        if (instance.IsActive && instance.IsAlive)
+        if (instance.isActive && instance.isAlive)
             instance.StartCoroutine(Drain());
     }
 

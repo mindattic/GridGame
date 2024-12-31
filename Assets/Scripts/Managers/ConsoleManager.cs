@@ -50,7 +50,7 @@ namespace Game.Behaviors
         private void FixedUpdate()
         {
             //string fps = $@"{fpsMonitor.currentFps}";
-            //string turn = turnManager.IsPlayerTurn ? "Player" : "Opponent";
+            //string turn = turnManager.isPlayerTurn ? "Player" : "Opponent";
             //string phase = turnManager.currentPhase.ToString();
 
             //textMesh.text = ""
@@ -61,9 +61,9 @@ namespace Game.Behaviors
             //    + "";
 
 
-            //string character = HasSelectedPlayer ? focusedActor.character : "-";
-            //string boardLocation = HasSelectedPlayer ? $@"({focusedActor.boardLocation.x},{focusedActor.boardLocation.y})" : "-";
-            //string boardPosition = HasSelectedPlayer ? $@"({focusedActor.transform.boardPosition.x},{focusedActor.transform.boardPosition.y})" : "-";
+            //string character = hasSelectedPlayer ? focusedActor.character : "-";
+            //string boardLocation = hasSelectedPlayer ? $@"({focusedActor.boardLocation.x},{focusedActor.boardLocation.y})" : "-";
+            //string boardPosition = hasSelectedPlayer ? $@"({focusedActor.transform.boardPosition.x},{focusedActor.transform.boardPosition.y})" : "-";
             //string mouse2D = mousePosition2D.x >= 0 ? $@"({mousePosition2D.x.ToString("N0").Replace(",", ""):N0},{mousePosition2D.y.ToString("N0").Replace(",", ""):N0})" : "-";
             //string mouse3D = mousePosition3D.x >= -4 ? $@"({mousePosition3D.x.ToString("N0").Replace(",", ""):N0},{mousePosition3D.y.ToString("N0").Replace(",", ""):N0},{mousePosition3D.z.ToString("N0").Replace(", ", ""):N0})" : "-";
             //string attackers = battle.attackers.Any() ? $"[{string.Join(",", battle.attackers.Select(x => x.character))}]" : "-";

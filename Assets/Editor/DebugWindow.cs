@@ -167,7 +167,7 @@ public class DebugWindow : EditorWindow
         GUILayout.BeginHorizontal();
 
         GUILayout.Label($"FPS: {consoleManager.fpsMonitor.currentFps}", GUILayout.Width(Screen.width * 0.25f));
-        GUILayout.Label($"Turn: {(turnManager.IsPlayerTurn ? "Player" : "Opponent")}", GUILayout.Width(Screen.width * 0.25f));
+        GUILayout.Label($"Turn: {(turnManager.isPlayerTurn ? "Player" : "Opponent")}", GUILayout.Width(Screen.width * 0.25f));
         GUILayout.Label($"Phase: {turnManager.currentPhase}", GUILayout.Width(Screen.width * 0.25f));
         GUILayout.Label($"Runtime: {Time.time:F2}", GUILayout.Width(Screen.width * 0.25f));
 
@@ -297,7 +297,7 @@ public class DebugWindow : EditorWindow
     private void RenderSpawnControls()
     {
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Spawn", GUILayout.Width(Screen.width));
+        GUILayout.Label("TriggerSpawn", GUILayout.Width(Screen.width));
         GUILayout.EndHorizontal();
 
         bool isClicked;

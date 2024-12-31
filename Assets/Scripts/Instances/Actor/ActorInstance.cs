@@ -11,29 +11,41 @@ using UnityEngine;
 public class ActorInstance : MonoBehaviour
 {
 
-    //Properties
-    protected GameManager gameManager => GameManager.instance;
-    protected AudioManager audioManager => gameManager.audioManager;
-    protected TileManager tileManager => gameManager.tileManager;
-    protected ResourceManager resourceManager => gameManager.resourceManager;
-    protected TurnManager turnManager => gameManager.turnManager;
-    protected VFXManager vfxManager => gameManager.vfxManager;
-    protected DebugManager debugManager => gameManager.debugManager;
-    protected DamageTextManager damageTextManager => gameManager.damageTextManager;
-    protected PortraitManager portraitManager => gameManager.portraitManager;
-    protected CoinManager coinManager => gameManager.coinManager;
-    protected BoardInstance board => gameManager.board;
-    protected float gameSpeed => gameManager.gameSpeed;
-    protected float snapDistance => gameManager.snapDistance;
-    protected float tileSize => gameManager.tileSize;
-    protected Vector3 tileScale => gameManager.tileScale;
-    protected float moveSpeed => gameManager.moveSpeed;
-    protected ActorInstance focusedActor => gameManager.focusedActor;
-    protected ActorInstance selectedPlayer => gameManager.selectedPlayer;
-    protected bool HasFocusedActor => focusedActor != null;
-    protected bool HasSelectedPlayer => selectedPlayer != null;
-    protected List<ActorInstance> actors => gameManager.actors;
-    protected IQueryable<ActorInstance> players => gameManager.players;
+    #region Properties
+
+
+    // Actor related objects
+    protected ActorInstance focusedActor => GameManager.instance.focusedActor;
+    protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
+    protected List<ActorInstance> actors => GameManager.instance.actors;
+    protected IQueryable<ActorInstance> players => GameManager.instance.players;
+
+    // Boolean
+    protected bool hasFocusedActor => focusedActor != null;
+    protected bool hasSelectedPlayer => selectedPlayer != null;
+
+    // Managers
+    protected AudioManager audioManager => GameManager.instance.audioManager;
+    protected BoardInstance board => GameManager.instance.board;
+    protected CoinManager coinManager => GameManager.instance.coinManager;
+    protected DamageTextManager damageTextManager => GameManager.instance.damageTextManager;
+    protected DebugManager debugManager => GameManager.instance.debugManager;
+    protected PortraitManager portraitManager => GameManager.instance.portraitManager;
+    protected ResourceManager resourceManager => GameManager.instance.resourceManager;
+    protected TileManager tileManager => GameManager.instance.tileManager;
+    protected TurnManager turnManager => GameManager.instance.turnManager;
+    protected VFXManager vfxManager => GameManager.instance.vfxManager;
+
+    // Float
+    protected float gameSpeed => GameManager.instance.gameSpeed;
+    protected float moveSpeed => GameManager.instance.moveSpeed;
+    protected float snapDistance => GameManager.instance.snapDistance;
+    protected float tileSize => GameManager.instance.tileSize;
+
+    // Vector3
+    protected Vector3 tileScale => GameManager.instance.tileScale;
+
+    #endregion
 
     //Variables
     public Character character;
@@ -121,22 +133,22 @@ public class ActorInstance : MonoBehaviour
     }
 
     //Helpers
-    public TileInstance CurrentTile => board.tileMap.GetTile(location); //tiles.First(x => x.location.Equals(location));
-    public bool IsPlayer => team.Equals(Team.Player);
-    public bool IsEnemy => team.Equals(Team.Enemy);
-    public bool IsFocusedPlayer => HasFocusedActor && Equals(focusedActor);
-    public bool IsSelectedPlayer => HasSelectedPlayer && Equals(selectedPlayer);
-    public bool HasReachedDestination => position == destination;
-    public bool OnNorthEdge => location.y == 1;
-    public bool OnEastEdge => location.x == board.columnCount;
-    public bool OnSouthEdge => location.y == board.rowCount;
-    public bool OnWestEdge => location.x == 1;
-    public bool IsActive => isActiveAndEnabled;
-    public bool IsAlive => IsActive && stats.HP > 0;
-    public bool IsDying => IsActive && stats.HP < 1;
-    public bool IsDead => !IsActive && stats.HP < 1;
-    public bool IsSpawnable => !IsActive && IsAlive && spawnDelay <= turnManager.currentTurn;
-    public bool HasMaxAP => IsActive && IsAlive && stats.AP == stats.MaxAP;
+    public TileInstance currentTile => board.tileMap.GetTile(location); //tiles.First(x => x.location.Equals(location));
+    public bool isPlayer => team.Equals(Team.Player);
+    public bool isEnemy => team.Equals(Team.Enemy);
+    public bool isFocusedPlayer => hasFocusedActor && Equals(focusedActor);
+    public bool isSelectedPlayer => hasSelectedPlayer && Equals(selectedPlayer);
+    public bool hasReachedDestination => position == destination;
+    public bool onNorthEdge => location.y == 1;
+    public bool onEastEdge => location.x == board.columnCount;
+    public bool onSouthEdge => location.y == board.rowCount;
+    public bool onWestEdge => location.x == 1;
+    public bool isActive => isActiveAndEnabled;
+    public bool isAlive => isActive && stats.HP > 0;
+    public bool isDying => isActive && stats.HP < 1;
+    public bool isDead => !isActive && stats.HP < 1;
+    public bool isSpawnable => !isActive && isAlive && spawnDelay <= turnManager.currentTurn;
+    public bool hasMaxAP => isActive && isAlive && stats.AP == stats.MaxAP;
 
     public Transform parent
     {
@@ -246,7 +258,7 @@ public class ActorInstance : MonoBehaviour
         weapon.Name = $"{weapon.Type}";
         render.weaponIcon.sprite = resourceManager.WeaponType(weapon.Type).sprite;
 
-        if (IsPlayer)
+        if (isPlayer)
         {
             render.SetQualityColor(quality.Color);
             render.SetGlowColor(quality.Color);
@@ -260,7 +272,7 @@ public class ActorInstance : MonoBehaviour
             render.SetSelectionBoxEnabled(isEnabled: false);
             vfx.Attack = resourceManager.VisualEffect("Blue_Slash_01");
         }
-        else if (IsEnemy)
+        else if (isEnemy)
         {
             render.SetQualityColor(ColorHelper.Solid.Black);
             render.SetGlowColor(ColorHelper.Solid.Red);
@@ -280,14 +292,14 @@ public class ActorInstance : MonoBehaviour
 
         healthBar.Refresh();
         actionBar.Reset();
-        action.ExecuteFadeIn();
-        action.ExecuteSpin360();
+        action.TriggerFadeIn();
+        action.TriggerSpin360();
     }
 
     void FixedUpdate()
     {
         //Check abort conditions
-        if (!IsActive || !IsAlive || IsFocusedPlayer || IsSelectedPlayer)
+        if (!isActive || !isAlive || isFocusedPlayer || isSelectedPlayer)
             return;
 
         UpdateGlow();
@@ -302,15 +314,15 @@ public class ActorInstance : MonoBehaviour
             if (attack.IsCriticalHit)
             {
                 var critVFX = resourceManager.VisualEffect("Yellow_Hit");
-                vfxManager.Spawn(
+                vfxManager.TriggerSpawn(
                     critVFX,
                     attack.Opponent.position);
             }
 
-            return vfxManager._Spawn(
+            return vfxManager.Spawn(
                 vfx.Attack,
                 attack.Opponent.position,
-                attack.Opponent._TakeDamage(attack));
+                attack.Opponent.TakeDamage(attack));
 
         }
         else
@@ -331,17 +343,17 @@ public class ActorInstance : MonoBehaviour
         switch (attackStrategy)
         {
             case AttackStrategy.AttackClosest:
-                targetPlayer = players.Where(x => x.IsActive && x.IsAlive).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
+                targetPlayer = players.Where(x => x.isActive && x.isAlive).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
                 destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
                 break;
 
             case AttackStrategy.AttackWeakest:
-                targetPlayer = players.Where(x => x.IsActive && x.IsAlive).OrderBy(x => x.stats.HP).FirstOrDefault();
+                targetPlayer = players.Where(x => x.isActive && x.isAlive).OrderBy(x => x.stats.HP).FirstOrDefault();
                 destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
                 break;
 
             case AttackStrategy.AttackStrongest:
-                targetPlayer = players.Where(x => x.IsActive && x.IsAlive).OrderByDescending(x => x.stats.HP).FirstOrDefault();
+                targetPlayer = players.Where(x => x.isActive && x.isAlive).OrderByDescending(x => x.stats.HP).FirstOrDefault();
                 destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
                 break;
 
@@ -388,7 +400,7 @@ public class ActorInstance : MonoBehaviour
     private void UpdateGlow()
     {
         //Check abort conditions
-        if (!IsActive || !IsAlive || !turnManager.IsStartPhase || (turnManager.IsPlayerTurn && !IsPlayer) || (turnManager.IsEnemyTurn && !IsEnemy))
+        if (!isActive || !isAlive || !turnManager.isStartPhase || (turnManager.isPlayerTurn && !isPlayer) || (turnManager.isEnemyTurn && !isEnemy))
             return;
 
         //Source: https://forum.unity.com/threads/how-to-make-an-object-move-up-and-down-on-a-loop.380159/
@@ -400,23 +412,23 @@ public class ActorInstance : MonoBehaviour
     }
 
 
-    public void TakeDamage(AttackResult attack)
+    public void TriggerTakeDamage(AttackResult attack)
     {
-        if (IsActive && IsAlive)
-            StartCoroutine(_TakeDamage(attack));
+        if (isActive && isAlive)
+            StartCoroutine(TakeDamage(attack));
     }
 
-    public IEnumerator _TakeDamage(AttackResult attack)
+    public IEnumerator TakeDamage(AttackResult attack)
     {
         //Check abort conditions
-        if (!IsActive || !IsAlive)
+        if (!isActive || !isAlive)
             yield break;
 
         //Before:
         float ticks = 0f;
         float duration = Interval.TenTicks;
 
-        bool isInvincible = (IsEnemy && debugManager.isEnemyInvincible) || (IsPlayer && debugManager.isPlayerInvincible);
+        bool isInvincible = (isEnemy && debugManager.isEnemyInvincible) || (isPlayer && debugManager.isPlayerInvincible);
         if (!isInvincible)
         {
             stats.PreviousHP = stats.HP;
@@ -431,31 +443,31 @@ public class ActorInstance : MonoBehaviour
         //During:
         while (ticks < duration)
         {
-            action.Grow();
+            action.TriggerGrow();
             if (attack.IsCriticalHit)
-                action.Shake(ShakeIntensity.Medium);
+                action.TriggerShake(ShakeIntensity.Medium);
 
             ticks += Interval.OneTick;
             yield return Wait.For(Interval.OneTick);
         }
 
         //After:
-        action.Shrink();
-        action.Shake(ShakeIntensity.Stop);
+        action.TriggerShrink();
+        action.TriggerShake(ShakeIntensity.Stop);
     }
 
     public IEnumerator AttackMiss()
     {
         damageTextManager.Spawn("Miss", position);
-        yield return action._Dodge();
+        yield return action.Dodge();
     }
 
-    public void Die()
+    public void TriggerDie()
     {
-        StartCoroutine(_Die());
+        StartCoroutine(Die());
     }
 
-    public IEnumerator _Die()
+    public IEnumerator Die()
     {
         //Before:
         var alpha = 1f;
@@ -472,11 +484,11 @@ public class ActorInstance : MonoBehaviour
             alpha = Mathf.Clamp(alpha, Opacity.Transparent, Opacity.Opaque);
             render.SetAlpha(alpha);
 
-            if (IsEnemy && !hasSpawnedCoins && alpha < Opacity.Percent10)
+            if (isEnemy && !hasSpawnedCoins && alpha < Opacity.Percent10)
             {
                 hasSpawnedCoins = true;
                 var amount = 10;
-                SpawnCoins(amount);
+                TriggerSpawnCoins(amount);
             }
 
             yield return Interval.FiveTicks;
@@ -489,13 +501,13 @@ public class ActorInstance : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void SpawnCoins(int amount)
+    private void TriggerSpawnCoins(int amount)
     {
-        if (IsActive && IsAlive)
-            StartCoroutine(_SpawnCoins(10)); //TODO: Spawn coins based on enemy stats...
+        if (isActive && isAlive)
+            StartCoroutine(SpawnCoins(10)); //TODO: TriggerSpawn coins based on enemy stats...
     }
 
-    IEnumerator _SpawnCoins(int amount)
+    IEnumerator SpawnCoins(int amount)
     {
         var i = 0;
         do
@@ -518,14 +530,14 @@ public class ActorInstance : MonoBehaviour
 
     public void ExecuteAngry()
     {
-        if (IsActive && IsAlive)
+        if (isActive && isAlive)
             StartCoroutine(Angry());
     }
 
     private IEnumerator Angry()
     {
         //Check abort conditions
-        if (!HasMaxAP || flags.isAngry)
+        if (!hasMaxAP || flags.isAngry)
             yield break;
 
         //Before:
@@ -566,7 +578,7 @@ public class ActorInstance : MonoBehaviour
         //render.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, 0, 0);
         //if (turnDelay > 0)
         //{
-        //    ExecuteTurnDelayWiggle();
+        //    TriggerTurnDelayWiggle();
         //}
 
 
@@ -576,8 +588,8 @@ public class ActorInstance : MonoBehaviour
             yield return null;
         }
 
-        if (IsActive && IsAlive)
-            action.Spin90(_());
+        if (isActive && isAlive)
+            action.TriggerSpin90(_());
 
     }
 
@@ -613,7 +625,7 @@ public class ActorInstance : MonoBehaviour
     public void SetReady()
     {
         //Check abort conditions
-        if (!IsActive || !IsAlive || !IsEnemy)
+        if (!isActive || !isAlive || !isEnemy)
             return;
 
         stats.AP = stats.MaxAP;
@@ -621,7 +633,7 @@ public class ActorInstance : MonoBehaviour
 
         actionBar.Refresh();
     }
-    //public IEnumerator _Bump(Direction direction)
+    //public IEnumerator Bump(Direction direction)
     //{
 
     //    //Before:
@@ -638,7 +650,7 @@ public class ActorInstance : MonoBehaviour
     //            case BumpStage.Start:
     //                {
     //                    sortingOrder = SortingOrder.Max;
-    //                    position = CurrentTile.position;
+    //                    position = currentTile.position;
     //                    targetPosition = Geometry.GetDirectionalPosition(position, direction, range);
     //                    stage = BumpStage.MoveToward;
     //                }
@@ -656,7 +668,7 @@ public class ActorInstance : MonoBehaviour
     //                    if (isSnapDistance)
     //                    {
     //                        position = targetPosition;
-    //                        targetPosition = CurrentTile.position;
+    //                        targetPosition = currentTile.position;
     //                        stage = BumpStage.MoveAway;
     //                    }
     //                }
@@ -674,7 +686,7 @@ public class ActorInstance : MonoBehaviour
     //                    if (isSnapDistance)
     //                    {
     //                        position = targetPosition;
-    //                        targetPosition = CurrentTile.position;
+    //                        targetPosition = currentTile.position;
     //                        stage = BumpStage.End;
     //                    }
     //                }
@@ -698,13 +710,13 @@ public class ActorInstance : MonoBehaviour
 
     //public void ParallaxFadeOutAsync()
     //{
-    //    if (!IsActive && IsAlive)
+    //    if (!isActive && isAlive)
     //        return;
-    //    _FadeOut(render.parallax, Fill.FivePercent, Interval.OneTick, startAlpha: 0.5f, endAlpha: 0f);
+    //    TriggerFadeOut(render.parallax, TriggerFill.FivePercent, Interval.OneTick, startAlpha: 0.5f, endAlpha: 0f);
     //}
 
 
-    //public IEnumerator FadeIn(
+    //public IEnumerator TriggerFadeIn(
     //     SpriteRenderer spriteRenderer,
     //     float increment,
     //     float interval,
@@ -728,14 +740,14 @@ public class ActorInstance : MonoBehaviour
     //    spriteRenderer.color = new Color(1, 1, 1, endAlpha);
     //}
 
-    //public void FadeIn(
+    //public void TriggerFadeIn(
     //   SpriteRenderer spriteRenderer,
     //   float increment,
     //   float interval,
     //   float startAlpha = 0f,
     //   float endAlpha = 1f)
     //{
-    //    StartCoroutine(FadeIn(spriteRenderer, increment, interval, startAlpha, endAlpha));
+    //    StartCoroutine(TriggerFadeIn(spriteRenderer, increment, interval, startAlpha, endAlpha));
     //}
 
 
@@ -745,7 +757,7 @@ public class ActorInstance : MonoBehaviour
     //flags.IsWaiting = true;
 
     // During:
-    //while (HasSelectedPlayer)
+    //while (hasSelectedPlayer)
     //{
     //if (ap < apMax)
     //{
@@ -753,11 +765,11 @@ public class ActorInstance : MonoBehaviour
     //    ap = Math.Clamp(ap, 0, apMax);
     //}
 
-    //Fill ring
+    //TriggerFill ring
     //var fill = 360 - (360 * (ap / apMax));
     //render.radial.material.SetFloat("_Arc2", fill);
 
-    //_Drain ring
+    //Drain ring
     //var fill = (360 * (ap / apMax));
     //render.radial.material.SetFloat("_Arc1", fill);
 
@@ -783,7 +795,7 @@ public class ActorInstance : MonoBehaviour
 
 
     //Check abort status
-    //if (!IsActive && IsAlive || isMoving)
+    //if (!isActive && isAlive || isMoving)
     //    return;
 
     //var closestTile = Geometry.GetClosestTile(boardPosition);
@@ -815,7 +827,7 @@ public class ActorInstance : MonoBehaviour
     //public void AssignSkillWait()
     //{
     //    //Check abort conditions
-    //    if (!IsActive && IsAlive)
+    //    if (!isActive && isAlive)
     //        return;
 
     //    //TODO: Calculate based on stats....
@@ -843,7 +855,7 @@ public class ActorInstance : MonoBehaviour
     //    //During:
     //    while (alpha < maxAlpha)
     //    {
-    //        alpha += Fill.OnePercent;
+    //        alpha += TriggerFill.OnePercent;
     //        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
     //        render.radialBack.color = new color(0, 0, 0, alpha);
     //        yield return global::Destroy.OneTick();
@@ -863,7 +875,7 @@ public class ActorInstance : MonoBehaviour
     //    //During:
     //    while (alpha > 0)
     //    {
-    //        alpha -= Fill.OnePercent;
+    //        alpha -= TriggerFill.OnePercent;
     //        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
     //        render.radialBack.color = new color(0, 0, 0, alpha);
     //        yield return Destroy.OneTick();
@@ -875,14 +887,14 @@ public class ActorInstance : MonoBehaviour
 
     //public void CalculateTurnDelay()
     //{
-    //    IEnumerator _()
+    //    IEnumerator Attack()
     //    {
     //        render.SetThumbnailSprite(sprites.idle);
 
     //        //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", idle.texture));
     //        yield return null;
     //    }
-    //    Spin90(_());
+    //    TriggerSpin90(Attack());
 
     //    //turnDelay = Formulas.CalculateTurnDelay(stats);
     //    //UpdateTurnDelayText();
@@ -904,7 +916,7 @@ public class ActorInstance : MonoBehaviour
     //public void AssignActionWait()
     //{
     //    //Check abort conditions
-    //    if (!IsActive && IsAlive)
+    //    if (!isActive && isAlive)
     //        return;
 
     //    //TODO: Calculate based on stats....
@@ -920,7 +932,7 @@ public class ActorInstance : MonoBehaviour
     //public void CheckActionBar()
     //{
     //Check abort conditions
-    //if (!IsActive && IsAlive || turnManager.IsEnemyTurn || (!turnManager.IsStartPhase && !turnManager.IsMovePhase))
+    //if (!isActive && isAlive || turnManager.isEnemyTurn || (!turnManager.isStartPhase && !turnManager.isMovePhase))
     //    return;
 
 
@@ -957,7 +969,7 @@ public class ActorInstance : MonoBehaviour
     //public void SetStatus(Status icon)
     //{
     //    //Check abort conditions
-    //    if (!IsActive)
+    //    if (!isActive)
     //        return;
 
     //    StartCoroutine(SetStatusIcon(icon));
@@ -966,7 +978,7 @@ public class ActorInstance : MonoBehaviour
     //private IEnumerator SetStatusIcon(Status status)
     //{
     //    //Before:
-    //    float increment = Fill.FivePercent;
+    //    float increment = TriggerFill.FivePercent;
     //    float alpha = render.statusIcon.color.a;
     //    render.statusIcon.color = new Color(1, 1, 1, alpha);
 
@@ -998,7 +1010,7 @@ public class ActorInstance : MonoBehaviour
     //private void CheckBobbing()
     //{
     //    //Check abort conditions
-    //    if (!IsActive && IsAlive || !turnManager.IsStartPhase)
+    //    if (!isActive && isAlive || !turnManager.isStartPhase)
     //        return;
 
 

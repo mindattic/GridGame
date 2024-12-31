@@ -17,7 +17,7 @@ public class TileInstance : MonoBehaviour
     //    set => gameObject.transform.position = value;
     //}
 
-    public bool IsOccupied => actors.Any(x => x != null && x.IsActive && x.IsAlive && x.location == location);
+    public bool IsOccupied => actors.Any(x => x != null && x.isActive && x.isAlive && x.location == location);
 
     #region Components
 

@@ -32,6 +32,10 @@ public class TitleManager : MonoBehaviour
         label.color = new Color(1, 1, 1, 0);
     }
 
+    public void Print(string text)
+    {
+        Print(text, ColorHelper.Solid.White);
+    }
 
     public void Print(string text, Color color)
     {
@@ -64,19 +68,16 @@ public class TitleManager : MonoBehaviour
         StartCoroutine(_());
     }
 
-    public void Print(string text)
-    {
-        Print(text, ColorHelper.Solid.White);
-    }
+   
 
-    //public IEnumerator FadeIn()
+    //public IEnumerator TriggerFadeIn()
     //{
     //    float alpha = 0f;
     //    label.color = new color(1f, 1f, 1f, alpha);
 
     //    while (alpha < 1)
     //    {
-    //        alpha += Fill.TenPercent;
+    //        alpha += TriggerFill.TenPercent;
     //        alpha = Mathf.Clamp(alpha, 0, 1);
     //        label.color = new color(1, 1, 1f, alpha);
     //        yield return Destroy.OneTick();
@@ -85,14 +86,14 @@ public class TitleManager : MonoBehaviour
 
 
 
-    public void FadeOut()
+    public void TriggerFadeOut()
     {
         
 
-        StartCoroutine(_FadeOut());
+        StartCoroutine(FadeOut());
     }
 
-    private IEnumerator _FadeOut()
+    private IEnumerator FadeOut()
     {
         float alpha = 1f;
         label.color = new Color(1f, 1f, 1f, alpha);
@@ -112,12 +113,12 @@ public class TitleManager : MonoBehaviour
     //public IEnumerator FadeInOut()
     //{
     //    StopCoroutine(FadeInOut());
-    //    StopCoroutine(FadeIn());
-    //    StopCoroutine(_FadeOut());
+    //    StopCoroutine(TriggerFadeIn());
+    //    StopCoroutine(TriggerFadeOut());
 
-    //    yield return FadeIn();
+    //    yield return TriggerFadeIn();
     //    yield return Destroy.For(Interval.OneSecond);
-    //    yield return _FadeOut();
+    //    yield return TriggerFadeOut();
     //}
 
 

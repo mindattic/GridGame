@@ -36,13 +36,13 @@ namespace Game.Behaviors
             var list = attackLines.Where(x => x.name.Contains(pair.actor1.name) || x.name.Contains(pair.actor2.name));
             foreach (var x in list)
             {
-                x.Despawn();
+                x.TriggerDespawn();
             }
         }
 
         public void DespawnAll()
         {
-            attackLines.ForEach(x => x.Despawn());
+            attackLines.ForEach(x => x.TriggerDespawn());
         }
 
         public void Clear()
