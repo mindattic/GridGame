@@ -244,7 +244,8 @@ public class DebugManager : MonoBehaviour
         }
 
         var vfx = resourceManager.VisualEffect("Blue_Slash_01");
-        vfxManager.TriggerSpawn(vfx, paladin.position, paladin.TakeDamage(attack));
+        var trigger = new Trigger(paladin.TakeDamage(attack));
+        vfxManager.TriggerSpawn(vfx, paladin.position, trigger);
     }
 
     public void VFXTest_Blue_Slash_02()
@@ -493,7 +494,7 @@ public class DebugManager : MonoBehaviour
         var vfx = resourceManager.VisualEffect("Yellow_Hit");
 
 
-        IEnumerator spawnMany()
+        IEnumerator spawnTenCoins()
         {
             var i = 0;
             do
@@ -504,12 +505,10 @@ public class DebugManager : MonoBehaviour
 
             yield return true;
         }
+        var trigger = new Trigger(spawnTenCoins());
 
-
-        vfxManager.TriggerSpawn(vfx, paladin.position, spawnMany());
-
+        vfxManager.TriggerSpawn(vfx, paladin.position, trigger);
     }
-
 
     public void SpawnSlime()
     {

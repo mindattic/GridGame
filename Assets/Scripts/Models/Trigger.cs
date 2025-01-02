@@ -1,64 +1,61 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-namespace Assets.Scripts.Models
+public class Trigger
 {
-    public class Trigger
+    // Variables
+    public IEnumerator Coroutine = null;
+    public bool IsAsync = true;
+    public bool HasTriggered = false;
+    public float Delay = 0f;
+    private Dictionary<string, object> attributes = new Dictionary<string, object>();
+
+    // Properties
+    public bool IsValid => Coroutine != null && !HasTriggered;
+
+    // Constructors
+    public Trigger() { }
+    public Trigger(IEnumerator coroutine)
     {
+        Coroutine = coroutine;
+    }
+    public Trigger(IEnumerator coroutine, bool isAsync)
+    {
+        Coroutine = coroutine;
+        IsAsync = isAsync;
+    }
 
-        //public Trigger nestedTrigger = null;
+    public IEnumerator Start(MonoBehaviour context)
+    {
+        if (!IsValid)
+            yield break;
 
-        //Variables
-        public IEnumerator Coroutine = null;
-        public bool IsAsync = true;
-        public bool HasTriggered = false;
-        private Dictionary<string, object> attributes = new Dictionary<string, object>();
+        HasTriggered = true;
 
-        //Properties
-        public bool IsValid => Coroutine != null && !HasTriggered;
-
-        //Constructors
-        public Trigger() { }
-        public Trigger(IEnumerator coroutine)
+        if (!IsAsync)
         {
-            Coroutine = coroutine;
+            yield return Coroutine;
         }
-        public Trigger(IEnumerator coroutine, bool isAsync)
+        else
         {
-            Coroutine = coroutine;
-            IsAsync = isAsync;
-        }
-
-        public IEnumerator Start(ActorInstance instance)
-        {
-            HasTriggered = true;
-
-            if (!instance.isActive || !instance.isAlive || !IsValid)
-                yield break;
-
-            if (!IsAsync)
-                yield return Coroutine;
-
-            instance.StartCoroutine(Coroutine);
+            context.StartCoroutine(Coroutine);
             yield break;
         }
+    }
 
-        public bool HasAttribute(string key)
-        {
-            return attributes.ContainsKey(key);
-        }
+    public void AddAttribute(string key, object value)
+    {
+        attributes[key] = value;
+    }
 
-        public void AddAttribute(string key, object value)
-        {
-            attributes[key] = value;
-        }
+    public T GetAttribute<T>(string key, T defaultValue = default)
+    {
+        return attributes.TryGetValue(key, out var value) ? (T)value : defaultValue;
+    }
 
-        public T GetAttribute<T>(string key, T defaultValue = default)
-        {
-            return attributes.TryGetValue(key, out var value) ? (T)value : defaultValue;
-        }
-
-
-
+    public bool HasAttribute(string key)
+    {
+        return attributes.ContainsKey(key);
     }
 }

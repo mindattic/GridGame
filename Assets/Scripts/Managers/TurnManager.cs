@@ -375,6 +375,7 @@ public class TurnManager : MonoBehaviour
                 attack.Opponent.TriggerDie();
         }
 
+
         // Despawn attack and support lines
         //foreach (var enemy in pair.alignment.enemies)
         //{
@@ -463,52 +464,47 @@ public class TurnManager : MonoBehaviour
             yield break;
 
         var readyEnemies = enemies.Where(x => x.isActive && x.isAlive && x.hasMaxAP).ToList();
-        if (readyEnemies.Count > 0)
+        if (readyEnemies.Count < 1)
+            yield break;
+
+        yield return Wait.For(Intermission.Before.Enemy.Attack);
+
+        foreach (var enemy in readyEnemies)
         {
-            yield return Wait.For(Intermission.Before.Enemy.Attack);
+            var defendingPlayers = players.Where(x => x.isActive && x.isAlive && x.IsAdjacentTo(enemy.location)).ToList();
+            if (defendingPlayers.Count < 1)
+                continue;
 
-            foreach (var enemy in readyEnemies)
+            foreach (var player in defendingPlayers)
             {
-                var defendingPlayers = players.Where(x => x.isActive && x.isAlive && x.IsAdjacentTo(enemy.location)).ToList();
-                foreach (var player in defendingPlayers)
+                IEnumerator Attack()
                 {
-                    var direction = enemy.GetAdjacentDirectionTo(player);
-
-                    IEnumerator Attack()
+                    var isHit = Formulas.IsHit(enemy, player);
+                    var isCriticalHit = false;
+                    var damage = Formulas.CalculateDamage(enemy, player);
+                    var attack = new AttackResult()
                     {
-                        var isHit = Formulas.IsHit(enemy, player);
-                        var isCriticalHit = false;
-                        var damage = Formulas.CalculateDamage(enemy, player);
-                        var attack = new AttackResult()
-                        {
-                            Opponent = player,
-                            IsHit = isHit,
-                            IsCriticalHit = isCriticalHit,
-                            Damage = damage
-                        };
-                        yield return enemy.Attack(attack);
-                    }
-
-                    enemy.actionBar.Reset();
-
-                    var trigger = new Trigger(Attack());
-                    trigger.AddAttribute("direction", direction);
-                    yield return enemy.action.Bump(trigger);
+                        Opponent = player,
+                        IsHit = isHit,
+                        IsCriticalHit = isCriticalHit,
+                        Damage = damage
+                    };
+                    yield return enemy.Attack(attack);
                 }
-
+                var trigger = new Trigger(Attack());
+                var direction = enemy.GetAdjacentDirectionTo(player);
+                trigger.AddAttribute("direction", direction);
+                yield return enemy.action.Bump(trigger);
             }
 
-            //TODO: Put player.Die here so that it resolves after attacks...
-            var dyingPlayers = actors.Where(x => x.isDying).ToList();
-            foreach (var player in dyingPlayers)
-            {
-                yield return player.Die();
-            }
-
-            readyEnemies.ForEach(x => x.actionBar.Reset());
+            enemy.actionBar.Reset();
         }
 
-
+        var dyingPlayers = actors.Where(x => x.isDying).ToList();
+        foreach (var player in dyingPlayers)
+        {
+            yield return player.Die();
+        }
 
         NextTurn();
     }

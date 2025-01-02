@@ -275,22 +275,22 @@ public class ActorInstance : MonoBehaviour
             if (attack.IsCriticalHit)
             {
                 var critVFX = resourceManager.VisualEffect("Yellow_Hit");
-                vfxManager.TriggerSpawn(
-                    critVFX,
-                    attack.Opponent.position);
+                vfxManager.TriggerSpawn(critVFX, attack.Opponent.position);
             }
 
-            return vfxManager.Spawn(
+            var trigger = new Trigger(attack.Opponent.TakeDamage(attack), isAsync: false);
+
+            yield return vfxManager.Spawn(
                 vfx.Attack,
                 attack.Opponent.position,
-                attack.Opponent.TakeDamage(attack));
-
+                trigger);
         }
         else
         {
-            return attack.Opponent.AttackMiss();
+            yield return attack.Opponent.AttackMiss();
         }
     }
+
 
 
     public void CalculateAttackStrategy()

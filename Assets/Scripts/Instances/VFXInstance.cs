@@ -1,3 +1,4 @@
+using Assets.Scripts.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,18 +46,16 @@ public class VFXInstance : MonoBehaviour
     }
 
     //Variables
-    bool isAsync = true;
+ 
     float elapsed = 0;
     float duration;
     bool isLoop;
-    float triggerEventAt = -1;
-    IEnumerator triggeredEvent = null;
-    bool hasTriggeredEventStarted;
+    Trigger trigger = default;
 
     //Properties
-    private bool hasTriggeredEvent => triggeredEvent != null && triggerEventAt != -1;
+    //private bool hasTrigger => trigger != null && trigger.IsValid && triggerAt != -1;
 
-    private void Initialize(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    private void Initialize(VisualEffect vfx, Vector3 position, Trigger trigger = default)
     {
         //Translate, rotate, and relativeScale relative to tile dimensions (determined by device)
         var offset = Geometry.Tile.Relative.Translation(vfx.relativeOffset);
@@ -68,8 +67,7 @@ public class VFXInstance : MonoBehaviour
         this.scale = scale;
         this.duration = vfx.duration;
         this.isLoop = vfx.isLoop;
-        this.triggerEventAt = vfx.triggerEventAt;
-        this.triggeredEvent = triggeredEvent;
+        this.trigger = trigger;
 
         //Toggle looping programatically by assigning flag in all child ParticleSystem components
         var particleSystems = new List<ParticleSystem> { GetComponent<ParticleSystem>() };
@@ -81,59 +79,38 @@ public class VFXInstance : MonoBehaviour
         }
     }
 
-    public void TriggerSpawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    public void TriggerSpawn(VisualEffect vfx, Vector3 position, Trigger trigger = default)
     {
-        isAsync = true;
-        Initialize(vfx, position, triggeredEvent);
+        if (trigger == default)
+            trigger = new Trigger();
+
+        Initialize(vfx, position, trigger);
+        StartCoroutine(Spawn(vfx, position, trigger));
     }
 
-    public IEnumerator Spawn(VisualEffect vfx, Vector3 position, IEnumerator triggeredEvent = null)
+    public IEnumerator Spawn(VisualEffect vfx, Vector3 position, Trigger trigger = default)
     {
-        isAsync = false;
-        Initialize(vfx, position, triggeredEvent);
+        if (trigger == default)
+            trigger = new Trigger();
 
-        if (!hasTriggeredEvent)
-            yield break;
+        Initialize(vfx, position, trigger);
 
-        //Destroy until time to trigger event
-        while (elapsed < triggerEventAt)
-        {
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+        // Wait until delay is over
+        if (trigger.Delay > 0)
+            yield return new WaitForSeconds(trigger.Delay);
 
-        //Trigger event and wait for it to finish (if applicable)
-        yield return triggeredEvent;
+        // Execute the trigger (if any)
+        if (trigger.IsValid)
+            yield return trigger.Start(this);
 
-        //Destroy until duration
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+        // Wait until VFX duration completes
+        yield return new WaitForSeconds(duration);
 
-        //Despawn VFX
+        // Despawn the VFX
         Despawn(name);
     }
 
-   
 
-    public void FixedUpdate()
-    {
-        if (!isAsync)
-            return;
-
-        elapsed += Time.deltaTime;
-
-        if (hasTriggeredEvent && !hasTriggeredEventStarted && elapsed >= triggerEventAt)
-        {
-            hasTriggeredEventStarted = true;
-            StartCoroutine(triggeredEvent);
-        }
-
-        if (elapsed > duration)
-            Despawn(name);
-    }
 
     private void Despawn(string name)
     {
