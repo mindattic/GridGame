@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Models;
+using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Instances.Actor
@@ -12,7 +13,7 @@ namespace Assets.Scripts.Instances.Actor
         protected ActorRenderers render => instance.render;
         protected ActorStats stats => instance.stats;
 
- 
+
         // Boolean
         private bool isActive => instance.isActive;
         private bool isAlive => instance.isAlive;
@@ -43,23 +44,35 @@ namespace Assets.Scripts.Instances.Actor
             this.instance = parentInstance;
         }
 
-        public void TriggerShake(float intensity, float duration = 0)
+        public void TriggerShake(float intensity, float duration = 0, Trigger trigger = default)
         {
-            if (isActive && isAlive)
-                instance.StartCoroutine(Shake(intensity, duration));
+            if (!isActive || !isAlive)
+                return;
+
+            if (trigger == default)
+                trigger = new Trigger();
+            trigger.AddAttribute("intensity", intensity);
+            trigger.AddAttribute("duration", duration);
+
+            instance.StartCoroutine(Shake(trigger));
         }
 
-        private IEnumerator Shake(float intensity, float duration = 0)
+        private IEnumerator Shake(Trigger trigger = default)
         {
-            // Ensure initial intensity is valid
-            if (intensity <= 0)
-                yield break;
+            if (trigger == default)
+                trigger = new Trigger();
 
-            // Store the original thumbnail position
+            //Before:
+            float intensity = trigger.GetAttribute("intensity", 0f);
+            float duration = trigger.GetAttribute("duration", 0f);
             var originalPosition = instance.currentTile.position;
             var elapsedTime = 0f;
 
-            while (intensity > 0 && (duration <= 0 || elapsedTime < duration))
+            if (intensity <= 0 || duration <= 0)
+                yield break;
+
+            //During:
+            while (intensity > 0 && elapsedTime < duration)
             {
                 // Calculate a random offset based on intensity
                 var shakeOffset = new Vector3(
@@ -79,20 +92,30 @@ namespace Assets.Scripts.Instances.Actor
                     elapsedTime += Interval.OneTick;
             }
 
-            // Reset to the original position after shaking is stopped
+            //Trigger coroutine (if applicable):
+            if (trigger.IsValid)
+                trigger.Start(instance);
+
+            //After:
             instance.thumbnailPosition = originalPosition;
         }
 
-
-
-        public void TriggerDodge()
+        public void TriggerDodge(Trigger trigger = default)
         {
-            if (isActive && isAlive)
-                instance.StartCoroutine(Dodge());
+            if (!isActive || !isAlive)
+                return;
+
+            if (trigger == default)
+                trigger = new Trigger();
+
+            instance.StartCoroutine(Dodge(trigger));
         }
 
-        public IEnumerator Dodge()
+        public IEnumerator Dodge(Trigger trigger = default)
         {
+            if (trigger == default)
+                trigger = new Trigger();
+
             //Begin:
             var rotationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
             var scaleCurve = AnimationCurve.EaseInOut(0, 1, 1, 0.9f);
@@ -150,30 +173,43 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
+            //Trigger coroutine (if applicable):
+            if (trigger.IsValid)
+                trigger.Start(instance);
+
+
             //After:
             scale = tileScale;
             rotation = Geometry.Rotation(Vector3.zero);
         }
 
-        public void TriggerBump(Direction direction)
+        public void TriggerBump(Direction direction, Trigger trigger = default)
         {
-            if (isActive && isAlive)
-                instance.StartCoroutine(Bump(direction));
+            if (!isActive || !isAlive)
+                return;
+
+            if (trigger == default)
+                trigger = new Trigger();
+
+            if (direction != Direction.None)
+                trigger.AddAttribute("direction", direction);
+
+            instance.StartCoroutine(Bump(trigger));
         }
 
-        public IEnumerator Bump(Direction direction, IEnumerator triggeredEvent = null)
+        public IEnumerator Bump(Trigger trigger = default)
         {
-            // Animation curves for each phase
+            if (trigger == default)
+                trigger = new Trigger();
+
+            //Before
+            var direction = trigger.GetAttribute("direction", Direction.East);
             var windupCurve = AnimationCurve.EaseInOut(0, 0, 0.5f, 1); // Windup easing
             var bumpCurve = AnimationCurve.EaseInOut(0, 0, 0.5f, 1); // Fast movement
             var returnCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);   // Smooth return
-
-            // Durations for each phase
             var windupDuration = 0.15f;
             var bumpDuration = 0.1f;
             var returnDuration = 0.3f;
-
-            // Positions
             var startPosition = instance.currentTile.position;
             var windupPosition = Geometry.GetDirectionalPosition(startPosition, direction.Opposite(), tileSize * percent33);
             var bumpPosition = Geometry.GetDirectionalPosition(startPosition, direction, tileSize * percent33);
@@ -207,8 +243,9 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            if (triggeredEvent != null && isActive && isAlive)
-                instance.StartCoroutine(triggeredEvent);
+            //Trigger coroutine (if applicable):
+            if (trigger.IsValid)
+                trigger.Start(instance);
 
             // Phase 3: Return to Starting Position (rotate back to zero and move back slowly)
             elapsedTime = 0f;
@@ -230,20 +267,25 @@ namespace Assets.Scripts.Instances.Actor
         }
 
 
-        public void TriggerGrow(float maxSize = 0f)
+        public void TriggerGrow(float maxSize = 0f, Trigger trigger = default)
         {
-            if (maxSize == 0)
-                maxSize = tileSize * 1.1f;
+            if (trigger == default)
+                trigger = new Trigger();
+
+            if (maxSize != 0f)
+                trigger.AddAttribute("maxSize", maxSize);
 
             if (isActive && isAlive)
-                instance.StartCoroutine(Grow(maxSize));
+                instance.StartCoroutine(Grow(trigger));
         }
 
-        private IEnumerator Grow(float maxSize = 0f)
+        private IEnumerator Grow(Trigger trigger = default)
         {
+            if (trigger == default)
+                trigger = new Trigger();
+
             //Before:
-            if (maxSize == 0)
-                maxSize = tileSize * 1.1f;
+            float maxSize = trigger.GetAttribute("maxSize", tileSize * 1.1f);
             sortingOrder = SortingOrder.Attacker;
             float minSize = scale.x;
             float increment = tileSize * 0.01f;
@@ -259,24 +301,33 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
+            //Trigger coroutine (if applicable):
+            if (trigger.IsValid)
+                trigger.Start(instance);
+
             //After:
             scale = new Vector3(maxSize, maxSize, 0);
         }
 
-        public void TriggerShrink(float minSize = 0f)
+        public void TriggerShrink(float minSize = 0f, Trigger trigger = default)
         {
-            if (minSize == 0)
-                minSize = tileSize;
+            if (trigger == default)
+                trigger = new Trigger();
+
+            if (minSize != 0f)
+                trigger.AddAttribute("minSize", minSize);
 
             if (isActive && isAlive)
-                instance.StartCoroutine(Shrink(minSize));
+                instance.StartCoroutine(Shrink(trigger));
         }
 
-        private IEnumerator Shrink(float minSize = 0f)
+        private IEnumerator Shrink(Trigger trigger = default)
         {
+            if (trigger == default)
+                trigger = new Trigger();
+
             //Before:
-            if (minSize == 0)
-                minSize = tileSize;
+            float minSize = trigger.GetAttribute("minSize", tileSize);
             float maxSize = scale.x;
             float increment = tileSize * 0.01f;
             float size = maxSize;
@@ -291,23 +342,34 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
+            //Trigger coroutine (if applicable):
+            if (trigger.IsValid)
+                trigger.Start(instance);
+
             //After:
             scale = new Vector3(minSize, minSize, 0);
             sortingOrder = SortingOrder.Default;
 
         }
 
-        public void TriggerSpin90(IEnumerator triggeredEvent = null)
+        public void TriggerSpin90(Trigger trigger = default)
         {
-            if (isActive && isAlive)
-                instance.StartCoroutine(Spin90(triggeredEvent));
+            if (!isActive || !isAlive)
+                return;
+
+            if (trigger == default)
+                trigger = new Trigger();
+
+            instance.StartCoroutine(Spin90(trigger));
         }
 
-        private IEnumerator Spin90(IEnumerator triggeredEvent = null)
+        private IEnumerator Spin90(Trigger trigger = default)
         {
+            if (trigger == default)
+                trigger = new Trigger();
+
             //Before:
             bool isDone = false;
-            bool hasTriggered = false;
             var rotY = 0f;
             var spinSpeed = tileSize * 24f;
             rotation = Geometry.Rotation(0, rotY, 0);
@@ -315,18 +377,18 @@ namespace Assets.Scripts.Instances.Actor
             //During:
             while (!isDone)
             {
-                rotY += !hasTriggered ? spinSpeed : -spinSpeed;
+                rotY += !trigger.HasTriggered ? spinSpeed : -spinSpeed;
 
-                if (!hasTriggered && rotY >= 90f)
+                if (!trigger.HasTriggered && rotY >= 90f)
                 {
                     rotY = 90f;
-                    hasTriggered = true;
 
-                    if (triggeredEvent != null && isActive && isAlive)
-                        instance.StartCoroutine(triggeredEvent);
+                    //Trigger coroutine (if applicable):
+                    if (trigger.IsValid)
+                        trigger.Start(instance);
                 }
 
-                isDone = hasTriggered && rotY <= 0f;
+                isDone = trigger.HasTriggered && rotY <= 0f;
                 if (isDone)
                     rotY = 0f;
 
@@ -339,17 +401,24 @@ namespace Assets.Scripts.Instances.Actor
 
         }
 
-        public void TriggerSpin360(IEnumerator triggeredEvent = null)
+        public void TriggerSpin360(Trigger trigger = default)
         {
-            if (isActive && isAlive)
-                instance.StartCoroutine(Spin360(triggeredEvent));
+            if (!isActive || !isAlive)
+                return;
+
+            if (trigger == default)
+                trigger = new Trigger();
+
+            instance.StartCoroutine(Spin360(trigger));
         }
 
-        private IEnumerator Spin360(IEnumerator triggeredEvent = null)
+        private IEnumerator Spin360(Trigger trigger = default)
         {
+            if (trigger == default)
+                trigger = new Trigger();
+
             //Before:
             bool isDone = false;
-            bool hasTriggered = false;
             var rotY = 0f;
             var speed = tileSize * 24f;
             rotation = Geometry.Rotation(0, rotY, 0);
@@ -361,12 +430,11 @@ namespace Assets.Scripts.Instances.Actor
                 rotation = Geometry.Rotation(0, rotY, 0);
 
                 //Trigger event and startDelay for it to finish (if applicable)
-                if (!hasTriggered && rotY >= 240f)
+                if (!trigger.HasTriggered && rotY >= 240f)
                 {
-                    hasTriggered = true;
-
-                    if (triggeredEvent != null && isActive && isAlive)
-                        yield return triggeredEvent;
+                    //Trigger coroutine (if applicable):
+                    if (trigger.IsValid)
+                        trigger.Start(instance);
                 }
 
                 isDone = rotY >= 360f;
@@ -377,17 +445,31 @@ namespace Assets.Scripts.Instances.Actor
             rotation = Geometry.Rotation(0, 0, 0);
         }
 
-        public void TriggerFadeIn(float delay = 0f, float increment = 0.05f)
+        public void TriggerFadeIn(float delay = 0f, Trigger trigger = default)
         {
-            if (isActive && isAlive)
-                instance.StartCoroutine(FadeIn(delay, increment));
+            if (!isActive || !isAlive)
+                return;
+
+            if (trigger == default)
+                trigger = new Trigger();
+
+            if (delay != 0f)
+                trigger.AddAttribute("delay", delay);
+
+            instance.StartCoroutine(FadeIn(trigger));
         }
 
-        private IEnumerator FadeIn(float delay = 0f, float increment = 0.05f)
+        private IEnumerator FadeIn(Trigger trigger = default)
         {
+            if (trigger == default)
+                trigger = new Trigger();
+
             //Before:
+            float delay = trigger.GetAttribute("delay", 0f);
+            float increment = trigger.GetAttribute("increment", 0.05f);
             float alpha = 0;
             render.SetAlpha(alpha);
+
             yield return Wait.For(delay);
 
             //During:
@@ -399,32 +481,37 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
+            //Trigger coroutine (if applicable):
+            if (trigger.IsValid)
+                trigger.Start(instance);
+
             //After:
             alpha = 1;
             render.SetAlpha(alpha);
         }
 
-
-        public void TriggerWeaponWiggle()
+        public void TriggerWeaponWiggle(Trigger trigger = default)
         {
-            if (stats.AP < stats.MaxAP)
+            if (stats.AP < stats.MaxAP || !isActive || !isAlive)
                 return;
 
-            if (isActive && isAlive)
-                TriggerSpin90(WeaponWiggle());
+            if (trigger == default)
+                trigger = new Trigger();
+
+            instance.StartCoroutine(WeaponWiggle(trigger));
         }
 
-        private IEnumerator WeaponWiggle()
+        private IEnumerator WeaponWiggle(Trigger trigger = default)
         {
-            if (stats.AP < stats.MaxAP)
-                yield break;
+            if (trigger == default)
+                trigger = new Trigger();
 
             //Before:
             float start = -45f;
             float rotZ = start;
             render.weaponIcon.transform.rotation = Quaternion.Euler(0, 0, rotZ);
 
-            // During:
+            //During:
             while (instance.stats.AP == instance.stats.MaxAP)
             {
                 // Calculate rotation angle using sine wave
@@ -436,19 +523,32 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            // After:
+            //Trigger coroutine (if applicable):
+            if (trigger.IsValid)
+                trigger.Start(instance);
+
+            //After:
             rotZ = start;
             render.weaponIcon.transform.rotation = Quaternion.Euler(0, 0, rotZ);
         }
 
-        public void TriggerTurnDelayWiggle(bool isLooping = false)
+        public void TriggerTurnDelayWiggle(Trigger trigger = default)
         {
-            if (isActive && isAlive)
-                instance.StartCoroutine(TurnDelayWiggle(isLooping));
+            if (!isActive || !isAlive)
+                return;
+
+            if (trigger == default)
+                trigger = new Trigger();
+
+            instance.StartCoroutine(TurnDelayWiggle(trigger));
         }
 
-        private IEnumerator TurnDelayWiggle(bool isLooping = false)
+        private IEnumerator TurnDelayWiggle(Trigger trigger = default)
         {
+            if (trigger == default)
+                trigger = new Trigger();
+
+            //Before:
             float timeElapsed = 0f;
             float amplitude = 10f;
             float speed = instance.wiggleSpeed; // Wiggle spinSpeed
@@ -457,6 +557,7 @@ namespace Assets.Scripts.Instances.Actor
 
             render.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, 0);
 
+            //During (Phase 1) - Rock back and forth:
             while (amplitude > cutoff)
             {
                 timeElapsed += Time.deltaTime;
@@ -467,7 +568,7 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            // Smoothly return to zero rotation after finishing
+            //During (Phase 2) - Smoothly return to zero rotation:
             float currentZ = render.turnDelayText.transform.rotation.eulerAngles.z;
             while (Mathf.Abs(Mathf.DeltaAngle(currentZ, 0f)) > cutoff)
             {
@@ -477,7 +578,11 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            // Ensure rotation is exactly zero at the end
+            //Trigger coroutine (if applicable):
+            if (trigger.IsValid)
+                trigger.Start(instance);
+
+            //After
             render.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, 0);
 
         }

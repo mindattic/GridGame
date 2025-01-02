@@ -50,7 +50,7 @@ public class ActorInstance : MonoBehaviour
     public int supportingPairCount = 0;
     public float wiggleSpeed;
     public float wiggleAmplitude;
- 
+
     //Modules
     public ActorRenderers render = new ActorRenderers();
     public ActorStats stats = new ActorStats();
@@ -81,7 +81,7 @@ public class ActorInstance : MonoBehaviour
         wiggleSpeed = tileSize * 24f;
         wiggleAmplitude = 15f;  // Amplitude (difference from -45 degrees)
 
-       
+
 
 
 
@@ -260,7 +260,7 @@ public class ActorInstance : MonoBehaviour
 
     private void Update()
     {
-       
+
     }
     void FixedUpdate()
     {
@@ -407,6 +407,9 @@ public class ActorInstance : MonoBehaviour
     public IEnumerator AttackMiss()
     {
         damageTextManager.Spawn("Miss", position);
+
+
+
         yield return action.Dodge();
     }
 
@@ -529,16 +532,13 @@ public class ActorInstance : MonoBehaviour
         //    TriggerTurnDelayWiggle();
         //}
 
-
-        IEnumerator _()
+        IEnumerator SetThumbnailSprite()
         {
             render.SetThumbnailSprite(sprites.attack);
-            yield return null;
+            yield break;
         }
-
-        if (isActive && isAlive)
-            action.TriggerSpin90(_());
-
+        Trigger trigger = new Trigger(SetThumbnailSprite());
+        action.TriggerSpin90(trigger);
     }
 
     public void SetAttacking()

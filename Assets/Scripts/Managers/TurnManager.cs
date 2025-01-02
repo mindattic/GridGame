@@ -490,9 +490,10 @@ public class TurnManager : MonoBehaviour
                     }
 
                     enemy.actionBar.Reset();
-                    yield return enemy.action.Bump(direction, Attack());
 
-
+                    var trigger = new Trigger(Attack());
+                    trigger.AddAttribute("direction", direction);
+                    yield return enemy.action.Bump(trigger);
                 }
 
             }
