@@ -63,6 +63,7 @@ sysinfo.txt
 
 # ExportedScripts.txt
 Assets/Scripts/ExportedScripts.txt
+Assets/Scripts/ExportedScripts.txt.meta
 
 # Crashlytics generated file
 crashlytics-build.properties

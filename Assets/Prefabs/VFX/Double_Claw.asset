@@ -17,6 +17,6 @@ MonoBehaviour:
   relativeOffset: {x: -0.03, y: -0.1, z: 0}
   angularRotation: {x: 0, y: 0, z: 0}
   relativeScale: {x: 0.12, y: 0.12, z: 0}
-  duration: 2
+  delay: 0.22
+  duration: 0.5
   isLoop: 0
-  triggerEventAt: 0.25
