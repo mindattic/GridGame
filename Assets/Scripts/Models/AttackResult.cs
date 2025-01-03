@@ -12,14 +12,11 @@ namespace Assets.Scripts.Models
         public bool IsHit;
         public bool IsCriticalHit;
         public int Damage;
+        public Trigger trigger = default;
 
         //Properties
         public bool IsFatal => Opponent.stats.HP - Damage < 1;
         public bool IsMiss => !IsHit;
 
     }
-
-
-
-
 }

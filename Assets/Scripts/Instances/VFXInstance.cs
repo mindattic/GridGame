@@ -93,18 +93,22 @@ public class VFXInstance : MonoBehaviour
         if (trigger == default)
             trigger = new Trigger();
 
+        float delay = trigger.GetAttribute("delay", 0f);
+        float duration = trigger.GetAttribute("duration", 0f);
+
         Initialize(vfx, position, trigger);
 
         // Wait until delay is over
-        if (trigger.Delay > 0)
-            yield return new WaitForSeconds(trigger.Delay);
+        if (vfx.delay != 0f)
+            yield return new WaitForSeconds(delay);
 
         // Execute the trigger (if any)
         if (trigger.IsValid)
             yield return trigger.Start(this);
 
         // Wait until VFX duration completes
-        yield return new WaitForSeconds(duration);
+        if (vfx.duration != 0f)
+            yield return new WaitForSeconds(duration);
 
         // Despawn the VFX
         Despawn(name);

@@ -8,7 +8,6 @@ public class Trigger
     public IEnumerator Coroutine = null;
     public bool IsAsync = true;
     public bool HasTriggered = false;
-    public float Delay = 0f;
     private Dictionary<string, object> attributes = new Dictionary<string, object>();
 
     // Properties
@@ -28,20 +27,15 @@ public class Trigger
 
     public IEnumerator Start(MonoBehaviour context)
     {
-        if (!IsValid)
+        if (!IsValid || HasTriggered)
             yield break;
 
         HasTriggered = true;
 
         if (!IsAsync)
-        {
             yield return Coroutine;
-        }
         else
-        {
             context.StartCoroutine(Coroutine);
-            yield break;
-        }
     }
 
     public void AddAttribute(string key, object value)
@@ -58,4 +52,22 @@ public class Trigger
     {
         return attributes.ContainsKey(key);
     }
+
+    public Trigger Clone()
+    {
+        var clone = new Trigger
+        {
+            Coroutine = this.Coroutine,
+            IsAsync = this.IsAsync
+        };
+
+        // Copy attributes dictionary
+        foreach (var kvp in this.attributes)
+        {
+            clone.AddAttribute(kvp.Key, kvp.Value);
+        }
+
+        return clone;
+    }
+
 }

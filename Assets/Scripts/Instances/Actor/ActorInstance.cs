@@ -111,6 +111,10 @@ public class ActorInstance : MonoBehaviour
     public bool isSpawnable => !isActive && isAlive && spawnDelay <= turnManager.currentTurn;
     public bool hasMaxAP => isActive && isAlive && stats.AP == stats.MaxAP;
 
+    public bool isInvincible => (isEnemy && debugManager.isEnemyInvincible) || (isPlayer && debugManager.isPlayerInvincible);
+
+
+
     public Transform parent
     {
         get => gameObject.transform.parent;
@@ -278,12 +282,10 @@ public class ActorInstance : MonoBehaviour
                 vfxManager.TriggerSpawn(critVFX, attack.Opponent.position);
             }
 
-            var trigger = new Trigger(attack.Opponent.TakeDamage(attack), isAsync: false);
-
             yield return vfxManager.Spawn(
                 vfx.Attack,
                 attack.Opponent.position,
-                trigger);
+                new Trigger(attack.Opponent.TakeDamage(attack), isAsync: false));
         }
         else
         {
@@ -359,15 +361,22 @@ public class ActorInstance : MonoBehaviour
     }
 
 
-
     public void TriggerTakeDamage(AttackResult attack)
     {
-        if (isActive && isAlive)
-            StartCoroutine(TakeDamage(attack));
+        if (!isActive || !isAlive)
+            return;
+
+        if (attack.trigger == default)
+            attack.trigger = new Trigger();
+
+        StartCoroutine(TakeDamage(attack));
     }
 
     public IEnumerator TakeDamage(AttackResult attack)
     {
+        if (attack.trigger == default)
+            attack.trigger = new Trigger();
+
         //Check abort conditions
         if (!isActive || !isAlive)
             yield break;
@@ -376,7 +385,6 @@ public class ActorInstance : MonoBehaviour
         float ticks = 0f;
         float duration = Interval.TenTicks;
 
-        bool isInvincible = (isEnemy && debugManager.isEnemyInvincible) || (isPlayer && debugManager.isPlayerInvincible);
         if (!isInvincible)
         {
             stats.PreviousHP = stats.HP;
@@ -398,6 +406,9 @@ public class ActorInstance : MonoBehaviour
             ticks += Interval.OneTick;
             yield return Wait.For(Interval.OneTick);
         }
+
+        //Trigger coroutine (if applicable):
+        yield return attack.trigger.Start(this);
 
         //After:
         action.TriggerShrink();
