@@ -9,7 +9,7 @@ public class CoinManager : MonoBehaviour
 {
     [SerializeField] public GameObject CoinPrefab;
 
-    // Start is called once before the first execution of SaveProfile after the MonoBehaviour is created
+    // StartCoroutine is called once before the first execution of SaveProfile after the MonoBehaviour is created
     void Awake()
     {
   

@@ -118,17 +118,17 @@ public class DebugManager : MonoBehaviour
             supportLineManager.Spawn(pair);
         }
 
-        IEnumerator _()
-        {
-            yield return Wait.For(Interval.ThreeSeconds);
+        //IEnumerator _()
+        //{
+        //    yield return Wait.For(Interval.ThreeSeconds);
 
-            foreach (var supportLine in supportLineManager.supportLines)
-            {
-                supportLine.Despawn();
-            }
-        }
+        //    foreach (var supportLine in supportLineManager.supportLines)
+        //    {
+        //        supportLine.Despawn();
+        //    }
+        //}
 
-        StartCoroutine(_());
+        //StartCoroutine(_());
     }
 
     public void AttackLineTest()
@@ -191,17 +191,17 @@ public class DebugManager : MonoBehaviour
             attackLineManager.Spawn(pair);
         }
 
-        IEnumerator _()
-        {
-            yield return Wait.For(3);
+        //IEnumerator _()
+        //{
+        //    yield return Wait.For(3);
 
-            foreach (var attackLine in attackLineManager.attackLines)
-            {
-                attackLine.TriggerDespawn();
-            }
-        }
+        //    foreach (var attackLine in attackLineManager.attackLines)
+        //    {
+        //        attackLine.TriggerDespawn();
+        //    }
+        //}
 
-        StartCoroutine(_());
+        //StartCoroutine(_());
     }
 
     public void EnemyAttackTest()

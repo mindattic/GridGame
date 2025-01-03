@@ -93,10 +93,13 @@ namespace Assets.Scripts.Instances.Actor
             }
 
             //Trigger coroutine (if applicable):
-            yield return trigger.Start(instance);
+            yield return trigger.StartCoroutine(instance);
 
             //After:
             instance.thumbnailPosition = originalPosition;
+
+
+
         }
 
         public void TriggerDodge(Trigger trigger = default)
@@ -173,7 +176,7 @@ namespace Assets.Scripts.Instances.Actor
             }
 
             //Trigger coroutine (if applicable):
-            yield return trigger.Start(instance);
+            yield return trigger.StartCoroutine(instance);
 
 
             //After:
@@ -242,7 +245,7 @@ namespace Assets.Scripts.Instances.Actor
             }
 
             //Trigger coroutine (if applicable):
-            yield return trigger.Start(instance);
+            yield return trigger.StartCoroutine(instance);
 
             // Phase 3: Return to Starting Position (rotate back to zero and move back slowly)
             elapsedTime = 0f;
@@ -276,14 +279,13 @@ namespace Assets.Scripts.Instances.Actor
                 instance.StartCoroutine(Grow(trigger));
         }
 
-        private IEnumerator Grow(Trigger trigger = default)
+        public IEnumerator Grow(Trigger trigger = default)
         {
             if (trigger == default)
                 trigger = new Trigger();
 
             //Before:
             float maxSize = trigger.GetAttribute("maxSize", tileSize * 1.1f);
-            sortingOrder = SortingOrder.Attacker;
             float minSize = scale.x;
             float increment = tileSize * 0.01f;
             float size = minSize;
@@ -299,7 +301,7 @@ namespace Assets.Scripts.Instances.Actor
             }
 
             //Trigger coroutine (if applicable):
-            yield return trigger.Start(instance);
+            yield return trigger.StartCoroutine(instance);
 
             //After:
             scale = new Vector3(maxSize, maxSize, 0);
@@ -317,7 +319,7 @@ namespace Assets.Scripts.Instances.Actor
                 instance.StartCoroutine(Shrink(trigger));
         }
 
-        private IEnumerator Shrink(Trigger trigger = default)
+        public IEnumerator Shrink(Trigger trigger = default)
         {
             if (trigger == default)
                 trigger = new Trigger();
@@ -339,12 +341,10 @@ namespace Assets.Scripts.Instances.Actor
             }
 
             //Trigger coroutine (if applicable):
-            yield return trigger.Start(instance);
+            yield return trigger.StartCoroutine(instance);
 
             //After:
             scale = new Vector3(minSize, minSize, 0);
-            sortingOrder = SortingOrder.Default;
-
         }
 
         public void TriggerSpin90(Trigger trigger = default)
@@ -379,7 +379,7 @@ namespace Assets.Scripts.Instances.Actor
                     rotY = 90f;
 
                     //Trigger coroutine (if applicable):
-                    yield return trigger.Start(instance);
+                    yield return trigger.StartCoroutine(instance);
                 }
 
                 isDone = trigger.HasTriggered && rotY <= 0f;
@@ -427,7 +427,7 @@ namespace Assets.Scripts.Instances.Actor
                 if (!trigger.HasTriggered && rotY >= 240f)
                 {
                     //Trigger coroutine (if applicable):
-                    yield return trigger.Start(instance);
+                    yield return trigger.StartCoroutine(instance);
                 }
 
                 isDone = rotY >= 360f;
@@ -475,7 +475,7 @@ namespace Assets.Scripts.Instances.Actor
             }
 
             //Trigger coroutine (if applicable):
-            yield return trigger.Start(instance);
+            yield return trigger.StartCoroutine(instance);
 
             //After:
             alpha = 1;
@@ -516,7 +516,7 @@ namespace Assets.Scripts.Instances.Actor
             }
 
             //Trigger coroutine (if applicable):
-            yield return trigger.Start(instance);
+            yield return trigger.StartCoroutine(instance);
 
             //After:
             rotZ = start;
@@ -570,7 +570,7 @@ namespace Assets.Scripts.Instances.Actor
             }
 
             //Trigger coroutine (if applicable):
-            yield return trigger.Start(instance);
+            yield return trigger.StartCoroutine(instance);
 
             //After
             render.turnDelayText.transform.rotation = Quaternion.Euler(0, 0, 0);

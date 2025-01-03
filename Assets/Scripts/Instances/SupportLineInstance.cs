@@ -10,9 +10,6 @@ public class SupportLineInstance : MonoBehaviour
     protected float tileSize => GameManager.instance.tileSize;
     protected BoardInstance board => GameManager.instance.board;
 
-
-    private const string NameFormat = "SupportLine_{0}+{1}";
-
     //Variables
     public float alpha = 0;
     private Vector3 startPosition;
@@ -52,7 +49,7 @@ public class SupportLineInstance : MonoBehaviour
     public void Spawn(ActorPair pair)
     {
         parent = board.transform;
-        name = NameFormat.Replace("{0}", pair.startActor.name).Replace("{1}", pair.endActor.name);
+        name = $"SupportLine_{Guid.NewGuid()}";
 
         startPosition = pair.startActor.position;
         endPosition = pair.endActor.position;
@@ -61,27 +58,28 @@ public class SupportLineInstance : MonoBehaviour
         lineRenderer.SetPosition(0, startPosition);
         lineRenderer.SetPosition(1, endPosition);
 
-        IEnumerator _()
-        {
-            alpha = Opacity.Transparent;
-            color = new Color(color.r, color.g, color.b, alpha);
-            lineRenderer.startColor = color;
-            lineRenderer.endColor = color;
-
-            while (alpha < maxAlpha)
-            {
-                alpha += Increment.OnePercent;
-                alpha = Mathf.Clamp(alpha, minAlpha, maxAlpha);
-                color = new Color(color.r, color.g, color.b, alpha);
-                lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
-                lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
-
-                yield return Wait.OneTick();
-            }
-        };
-
-        StartCoroutine(_());
+        StartCoroutine(FadeIn());
     }
+
+    private IEnumerator FadeIn()
+    {
+        alpha = Opacity.Transparent;
+        color = new Color(color.r, color.g, color.b, alpha);
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
+
+        while (alpha < maxAlpha)
+        {
+            alpha += Increment.OnePercent;
+            alpha = Mathf.Clamp(alpha, minAlpha, maxAlpha);
+            color = new Color(color.r, color.g, color.b, alpha);
+            lineRenderer.startColor = new Color(color.r, color.g, color.b, alpha);
+            lineRenderer.endColor = new Color(color.r, color.g, color.b, alpha);
+
+            yield return Wait.OneTick();
+        }
+    }
+
 
     public IEnumerator _Despawn()
     {

@@ -25,14 +25,14 @@ public class Trigger
         IsAsync = isAsync;
     }
 
-    public IEnumerator Start(MonoBehaviour context)
+    public IEnumerator StartCoroutine(MonoBehaviour context = null)
     {
         if (!IsValid || HasTriggered)
             yield break;
 
         HasTriggered = true;
 
-        if (!IsAsync)
+        if (!IsAsync || context == null)
             yield return Coroutine;
         else
             context.StartCoroutine(Coroutine);

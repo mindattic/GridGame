@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using UnityEngine;
 using Phase = TurnPhase;
 
@@ -344,6 +345,7 @@ public class TurnManager : MonoBehaviour
             var damage = isHit ? Formulas.CalculateDamage(pair.actor1, enemy) : 0;
             return new AttackResult
             {
+                Pair = pair,
                 Opponent = enemy,
                 IsHit = isHit,
                 IsCriticalHit = false,
@@ -366,6 +368,17 @@ public class TurnManager : MonoBehaviour
         //    lastDyingEnemy = dyingEnemies.Last();
         //    dyingEnemies.Remove(lastDyingEnemy);
         //}
+
+
+        IEnumerator GrowShrink(ActorInstance actor)
+        {
+            yield return actor.action.Grow();
+            yield return actor.action.Shrink();
+        }
+        var growShrinkActor1 = GrowShrink(pair.actor1);
+        var growShrinkActor2 = GrowShrink(pair.actor2);
+
+        yield return CoroutineHelper.WaitForAll(this, growShrinkActor1, growShrinkActor2);
 
         // Attack each enemy and handle deaths
         foreach (var attack in attacks)
@@ -392,16 +405,13 @@ public class TurnManager : MonoBehaviour
 
         yield return Wait.For(Intermission.After.Player.Attack);
 
-        float delay = 0;
         foreach (var enemy in dyingEnemies)
         {
             if (enemy != dyingEnemies.Last())
                 enemy.TriggerDie(); 
             else
                 yield return enemy.Die();
-
-            delay += Interval.QuarterSecond;
-            yield return Wait.For(delay);
+            yield return Wait.For(Interval.QuarterSecond);
         }
 
 

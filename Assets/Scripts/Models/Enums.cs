@@ -98,7 +98,7 @@ public enum AttackStrategy
 
 //public enum BumpStage
 //{
-//    Start,
+//    StartCoroutine,
 //    MoveToward,
 //    MoveAway,
 //    End

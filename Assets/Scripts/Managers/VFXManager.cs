@@ -19,9 +19,8 @@ public class VFXManager : MonoBehaviour
         var instance = prefab.GetComponent<VFXInstance>();
         instance.name = $"VFX_{vfx.id}Attack{Guid.NewGuid()}";
         visualEffects.Add(instance.name, instance);
-        instance.TriggerSpawn(vfx, position, trigger);
+        StartCoroutine(instance.Spawn(vfx, position, trigger));
     }
-
 
     public IEnumerator Spawn(VisualEffect vfx, Vector3 position, Trigger trigger = default)
     {

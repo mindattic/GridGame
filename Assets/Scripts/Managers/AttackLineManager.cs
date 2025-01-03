@@ -9,48 +9,60 @@ namespace Game.Behaviors
 {
     public class AttackLineManager : MonoBehaviour
     {
-        //Variables
+        // Variables
         [SerializeField] public GameObject AttackLinePrefab;
-        public List<AttackLineInstance> attackLines = new List<AttackLineInstance>();
+        public Dictionary<(Vector2Int, Vector2Int), AttackLineInstance> attackLines = new Dictionary<(Vector2Int, Vector2Int), AttackLineInstance>();
 
         public bool Exists(ActorPair pair)
         {
-            var name = NameFormat.AttackLine(pair);
-            return attackLines.Any(x => x.name == name);
+            var key = GetKey(pair);
+            return attackLines.ContainsKey(key);
         }
 
         public void Spawn(ActorPair pair)
         {
+            var key = GetKey(pair);
+
             if (Exists(pair))
                 return;
 
             var prefab = Instantiate(AttackLinePrefab, Vector2.zero, Quaternion.identity);
             var instance = prefab.GetComponent<AttackLineInstance>();
-            attackLines.Add(instance);
+            attackLines[key] = instance;
             instance.Spawn(pair);
-
         }
 
         public void Despawn(ActorPair pair)
         {
-            var list = attackLines.Where(x => x.name.Contains(pair.actor1.name) || x.name.Contains(pair.actor2.name));
-            foreach (var x in list)
+            var key = GetKey(pair);
+            if (attackLines.TryGetValue(key, out var instance))
             {
-                x.TriggerDespawn();
+                instance.TriggerDespawn();
+                attackLines.Remove(key);
             }
         }
 
         public void DespawnAll()
         {
-            attackLines.ForEach(x => x.TriggerDespawn());
+            foreach (var instance in attackLines.Values)
+            {
+                instance.TriggerDespawn();
+            }
+            attackLines.Clear();
         }
 
         public void Clear()
         {
-            attackLines.ForEach(x => Destroy(x.gameObject));
+            foreach (var instance in attackLines.Values)
+            {
+                Destroy(instance.gameObject);
+            }
             attackLines.Clear();
         }
 
+        private (Vector2Int, Vector2Int) GetKey(ActorPair pair)
+        {
+            return (pair.startActor.location, pair.endActor.location);
+        }
     }
-
 }

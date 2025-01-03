@@ -282,6 +282,9 @@ public class ActorInstance : MonoBehaviour
                 vfxManager.TriggerSpawn(critVFX, attack.Opponent.position);
             }
 
+          
+          
+
             yield return vfxManager.Spawn(
                 vfx.Attack,
                 attack.Opponent.position,
@@ -292,8 +295,6 @@ public class ActorInstance : MonoBehaviour
             yield return attack.Opponent.AttackMiss();
         }
     }
-
-
 
     public void CalculateAttackStrategy()
     {
@@ -376,7 +377,7 @@ public class ActorInstance : MonoBehaviour
             yield break;
 
         //Trigger coroutine (if applicable):
-        //yield return attack.Triggers.Before.Start(this);
+        //yield return attack.Triggers.Before.StartCoroutine(this);
 
         //Before:
         float ticks = 0f;
@@ -405,7 +406,7 @@ public class ActorInstance : MonoBehaviour
         }
 
         //Trigger coroutine (if applicable):
-        //yield return attack.Triggers.After.Start(this);
+        //yield return attack.Triggers.After.StartCoroutine(this);
 
         //After:
         action.TriggerShrink();
@@ -593,7 +594,7 @@ public class ActorInstance : MonoBehaviour
     //{
 
     //    //Before:
-    //    BumpStage stage = BumpStage.Start;
+    //    BumpStage stage = BumpStage.StartCoroutine;
     //    var targetPosition = position;
     //    var range = tileSize * percent33;
     //    sortingOrder = SortingOrder.Default;
@@ -603,7 +604,7 @@ public class ActorInstance : MonoBehaviour
     //    {
     //        switch (stage)
     //        {
-    //            case BumpStage.Start:
+    //            case BumpStage.StartCoroutine:
     //                {
     //                    sortingOrder = SortingOrder.Max;
     //                    position = currentTile.position;

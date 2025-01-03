@@ -81,7 +81,7 @@ public class LogWindow : EditorWindow
 
     private void OnGUI()
     {
-        // Start the vertical layout for controls
+        // StartCoroutine the vertical layout for controls
         GUILayout.BeginVertical();
 
         // 1. Buttons at the top
