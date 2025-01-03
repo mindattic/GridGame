@@ -10,12 +10,13 @@ namespace Game.Behaviors
 {
     public class CardManager : MonoBehaviour
     {
+        #region Properties
         protected float cardPortraitSize => GameManager.instance.cardPortraitSize;
         protected ResourceManager resourceManager => GameManager.instance.resourceManager;
         protected List<ActorInstance> actors => GameManager.instance.actors;
+        #endregion
 
-
-
+        //Variables
         RectTransform rectTransform;
         Image backdrop;
         Image portrait;
@@ -26,7 +27,7 @@ namespace Game.Behaviors
         AnimationCurve slideInCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         float slideDuration = 0.5f;
 
-
+        //Method which is used for initialization tasks that need to occur before the game starts 
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
@@ -37,6 +38,7 @@ namespace Game.Behaviors
             Reset();
         }
 
+        //Method which is automatically called before the first frame update  
         private void Start()
         {
             portrait.rectTransform.sizeDelta = new Vector2(cardPortraitSize, cardPortraitSize);
@@ -112,10 +114,10 @@ namespace Game.Behaviors
             title.text = "";
             details.text = "";
 
-            // Despawn all selection boxes from actors
+            // TriggerDespawn all selection boxes from actors
             actors.ForEach(x => x.render.SetSelectionBoxEnabled(false));
 
-            // Reset portrait position
+            // TriggerReset portrait position
             portrait.rectTransform.localPosition = offscreenPosition;
         }
     }

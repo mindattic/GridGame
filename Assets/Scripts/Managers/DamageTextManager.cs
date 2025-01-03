@@ -6,8 +6,11 @@ using UnityEngine;
 
 public class DamageTextManager : MonoBehaviour
 {
+    #region Properties
     protected Canvas canvas3D => GameManager.instance.canvas3D;
+    #endregion
 
+    //Variables
     [SerializeField] public GameObject DamageTextPrefab;
 
     public void Spawn(string text, Vector3 position)

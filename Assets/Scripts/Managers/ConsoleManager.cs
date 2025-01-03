@@ -6,40 +6,34 @@ namespace Game.Behaviors
 {
     public class ConsoleManager : MonoBehaviour
     {
-
-
-
-        public TextMeshProUGUI textMesh;
-        public FpsMonitor fpsMonitor = new FpsMonitor();
-
-        #region Components
-
+        #region Properties
         public string text
         {
             get => textMesh.text;
             set => textMesh.text = value;
         }
-
-
         public Color color
         {
             get => textMesh.color;
             set => textMesh.color = value;
         }
-
         #endregion
 
+        //Variables
+        public TextMeshProUGUI textMesh;
+        public FpsMonitor fpsMonitor = new FpsMonitor();
+
+        //Method which is used for initialization tasks that need to occur before the game starts 
         private void Awake()
         {
             textMesh = GetComponent<TextMeshProUGUI>();
             //textMesh.font = new Font("Consolas");
         }
 
+        //Method which is automatically called before the first frame update  
         void Start()
         {
             fpsMonitor.Start();
-
-
         }
 
         void Update()

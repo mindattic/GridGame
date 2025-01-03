@@ -6,11 +6,11 @@ namespace Game.Manager
 {
     public class ActorManager : MonoBehaviour
     {
+        #region Properties
         protected List<ActorInstance> actors => GameManager.instance.actors;
         protected IQueryable<ActorInstance> players => GameManager.instance.players;
         protected IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
-
-
+        #endregion
 
         public void CheckEnemyAP()
         {

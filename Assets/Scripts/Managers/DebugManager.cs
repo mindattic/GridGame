@@ -11,13 +11,9 @@ using UnityEngine;
 public class DebugManager : MonoBehaviour
 {
     #region Properties
-
-    // Actor-related objects
     protected List<ActorInstance> actors => GameManager.instance.actors;
     protected IQueryable<ActorInstance> players => GameManager.instance.players;
     protected IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
-
-    // Managers
     protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
     protected CoinManager coinManager => GameManager.instance.coinManager;
     protected DamageTextManager damageTextManager => GameManager.instance.damageTextManager;
@@ -30,25 +26,16 @@ public class DebugManager : MonoBehaviour
     protected TooltipManager tooltipManager => GameManager.instance.tooltipManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
     protected VFXManager vfxManager => GameManager.instance.vfxManager;
-
     #endregion
 
-
-
-
-
-
+    //Variables
     [SerializeField] private TMP_Dropdown Dropdown;
-
-    //Flags
     public bool showActorNameTag = false;
     public bool showActorFrame = false;
     public bool isPlayerInvincible = false;
     public bool isEnemyInvincible = false;
     public bool isTimerInfinite = false;
     public bool isEnemyStunned = false;
-
-
     ActorInstance paladin => players.First(x => x.name == "Paladin");
     ActorInstance barbarian => players.First(x => x.name == "Barbarian");
     ActorInstance cleric => players.First(x => x.name == "Cleric");
@@ -115,20 +102,22 @@ public class DebugManager : MonoBehaviour
 
         foreach (var pair in alignedPairs)
         {
+            pair.startActor.sortingOrder = SortingOrder.Supporter;
+            pair.endActor.sortingOrder = SortingOrder.Supporter;
             supportLineManager.Spawn(pair);
         }
 
-        //IEnumerator _()
-        //{
-        //    yield return Wait.For(Interval.ThreeSeconds);
+        IEnumerator _()
+        {
+            yield return Wait.For(Interval.ThreeSeconds);
 
-        //    foreach (var supportLine in supportLineManager.supportLines)
-        //    {
-        //        supportLine.Despawn();
-        //    }
-        //}
+            foreach (var supportLine in supportLineManager.supportLines.Values)
+            {
+                supportLine.TriggerDespawn();
+            }
+        }
 
-        //StartCoroutine(_());
+        StartCoroutine(_());
     }
 
     public void AttackLineTest()
@@ -188,20 +177,22 @@ public class DebugManager : MonoBehaviour
 
         foreach (var pair in alignedPairs)
         {
+            pair.startActor.sortingOrder = SortingOrder.Attacker;
+            pair.endActor.sortingOrder = SortingOrder.Attacker;
             attackLineManager.Spawn(pair);
         }
 
-        //IEnumerator _()
-        //{
-        //    yield return Wait.For(3);
+        IEnumerator _()
+        {
+            yield return Wait.For(Interval.ThreeSeconds);
 
-        //    foreach (var attackLine in attackLineManager.attackLines)
-        //    {
-        //        attackLine.TriggerDespawn();
-        //    }
-        //}
+            foreach (var attackLine in attackLineManager.attackLines.Values)
+            {
+                attackLine.TriggerDespawn();
+            }
+        }
 
-        //StartCoroutine(_());
+        StartCoroutine(_());
     }
 
     public void EnemyAttackTest()

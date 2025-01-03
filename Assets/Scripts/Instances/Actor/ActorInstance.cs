@@ -10,9 +10,7 @@ using UnityEngine;
 
 public class ActorInstance : MonoBehaviour
 {
-
     #region Properties
-
     protected AudioManager audioManager => GameManager.instance.audioManager;
     protected BoardInstance board => GameManager.instance.board;
     protected CoinManager coinManager => GameManager.instance.coinManager;
@@ -34,7 +32,6 @@ public class ActorInstance : MonoBehaviour
     protected IQueryable<ActorInstance> players => GameManager.instance.players;
     protected bool hasFocusedActor => focusedActor != null;
     protected bool hasSelectedPlayer => selectedPlayer != null;
-
     #endregion
 
     //Variables
@@ -69,6 +66,7 @@ public class ActorInstance : MonoBehaviour
     [SerializeField] public AnimationCurve glowCurve;
     //public VisualEffect attack;
 
+    //Method which is used for initialization tasks that need to occur before the game starts 
     private void Awake()
     {
         render.Initialize(this);
@@ -80,17 +78,6 @@ public class ActorInstance : MonoBehaviour
 
         wiggleSpeed = tileSize * 24f;
         wiggleAmplitude = 15f;  // Amplitude (difference from -45 degrees)
-
-
-
-
-
-
-    }
-
-    private void Start()
-    {
-
     }
 
     //Helpers
@@ -352,7 +339,7 @@ public class ActorInstance : MonoBehaviour
         }
         else
         {
-            //Reset rotation smoothly when velocity is minimal
+            //TriggerReset rotation smoothly when velocity is minimal
             transform.localRotation = Quaternion.Slerp(
                 transform.localRotation,
                 Quaternion.Euler(baseRotation),
@@ -416,9 +403,6 @@ public class ActorInstance : MonoBehaviour
     public IEnumerator AttackMiss()
     {
         damageTextManager.Spawn("Miss", position);
-
-
-
         yield return action.Dodge();
     }
 
@@ -447,11 +431,11 @@ public class ActorInstance : MonoBehaviour
             if (isEnemy && !hasSpawnedCoins && alpha < Opacity.Percent10)
             {
                 hasSpawnedCoins = true;
-                var amount = 10;
+                int amount = 10;
                 TriggerSpawnCoins(amount);
             }
 
-            yield return Interval.FiveTicks;
+            yield return Wait.For(Interval.FiveTicks);
         }
 
         //After:       
@@ -464,7 +448,7 @@ public class ActorInstance : MonoBehaviour
     private void TriggerSpawnCoins(int amount)
     {
         if (isActive && isAlive)
-            StartCoroutine(SpawnCoins(10)); //TODO: TriggerSpawn coins based on enemy stats...
+            StartCoroutine(SpawnCoins(amount)); //TODO: TriggerSpawn coins based on enemy stats...
     }
 
     IEnumerator SpawnCoins(int amount)
@@ -761,7 +745,7 @@ public class ActorInstance : MonoBehaviour
     //    previousLocation = boardLocation;
 
 
-    //    audioManager.Play($"Move{Random.Int(1, 6)}");
+    //    audioManager.Start($"Move{Random.Int(1, 6)}");
 
     //    var overlappingActor = FindOverlappingActor(closestTile);
 

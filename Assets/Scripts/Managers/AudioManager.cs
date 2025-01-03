@@ -3,9 +3,12 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    #region Properties
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
     protected LogManager logManager => GameManager.instance.logManager;
     protected AudioSource soundSource => GameManager.instance.soundSource;
+    #endregion
+
 
     public void Play(string sfx)
     {

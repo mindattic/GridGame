@@ -5,16 +5,38 @@ using UnityEngine.UIElements;
 
 public class CoinInstance : MonoBehaviour
 {
+    #region Properties
     protected float tileSize => GameManager.instance.tileSize;
     protected Vector3 tileScale => GameManager.instance.tileScale;
     protected CoinBarInstance coinBar => GameManager.instance.coinBar;
     protected int totalCoins { get => GameManager.instance.totalCoins; set => GameManager.instance.totalCoins = value; }
     protected AudioManager audioManager => GameManager.instance.audioManager;
+    public Transform parent
+    {
+        get => gameObject.transform.parent;
+        set => gameObject.transform.SetParent(value, true);
+    }
+    public Vector3 position
+    {
+        get => gameObject.transform.position;
+        set => gameObject.transform.position = value;
+    }
+    public Quaternion rotation
+    {
+        get => gameObject.transform.rotation;
+        set => gameObject.transform.rotation = value;
+    }
+    public Vector3 scale
+    {
+        get => gameObject.transform.localScale;
+        set => gameObject.transform.localScale = value;
+    }
+    #endregion
 
+    //Variables
     public AnimationCurve linearCurve;
     public AnimationCurve slopeCurve;
     public AnimationCurve sineCurve;
-
     private SpriteRenderer spriteRenderer;
     private ParticleSystem particles;
     private float scaleMultiplier = 0.05f;
@@ -31,42 +53,14 @@ public class CoinInstance : MonoBehaviour
     AnimationCurve cX;
     AnimationCurve cY;
 
-
-    #region Components
-
-    public Transform parent
-    {
-        get => gameObject.transform.parent;
-        set => gameObject.transform.SetParent(value, true);
-    }
-
-    public Vector3 position
-    {
-        get => gameObject.transform.position;
-        set => gameObject.transform.position = value;
-    }
-
-
-    public Quaternion rotation
-    {
-        get => gameObject.transform.rotation;
-        set => gameObject.transform.rotation = value;
-    }
-
-    public Vector3 scale
-    {
-        get => gameObject.transform.localScale;
-        set => gameObject.transform.localScale = value;
-    }
-
-    #endregion
-
+    //Method which is used for initialization tasks that need to occur before the game starts 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         particles = GetComponent<ParticleSystem>();
     }
 
+    //Method which is automatically called before the first frame update  
     private void Start()
     {
         transform.localScale = tileScale * scaleMultiplier;

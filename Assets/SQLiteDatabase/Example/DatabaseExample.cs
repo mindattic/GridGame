@@ -5,29 +5,23 @@ using System.Collections.Generic;
 
 public class DatabaseExample : MonoBehaviour
 {
-
+    //Variables
     SQLiteDB db = SQLiteDB.Instance;
-
     List<string> allIDs = new List<string>();
     List<string> allNames = new List<string>();
+    string _id = "";
+    string _name = "";
+    Vector2 scrollPos = Vector2.zero;
+    string btnName_SaveUpdate = "Save";
+    string btnName_CreateDeleteTable = "Create Table";
+    bool isTableCreated = false;
 
     // Events
-    void OnEnable()
-    {
-        SQLiteEventListener.onError += OnError;
-    }
+    void OnEnable() => SQLiteEventListener.onError += OnError;
+    void OnDisable() => SQLiteEventListener.onError -= OnError;
+    void OnError(string err) => Debug.Log(err);
 
-    void OnDisable()
-    {
-        SQLiteEventListener.onError -= OnError;
-    }
-
-    void OnError(string err)
-    {
-        Debug.Log(err);
-    }
-
-    // Use this for initialization
+    //Method which is automatically called before the first frame update  
     void Start()
     {
         // set database location (directory)
@@ -40,15 +34,6 @@ public class DatabaseExample : MonoBehaviour
             ConnectToDB();
         }
     }
-
-
-    // UI
-    string _id = "";
-    string _name = "";
-    Vector2 scrollPos = Vector2.zero;
-    string btnName_SaveUpdate = "Save";
-    string btnName_CreateDeleteTable = "Create Table";
-    bool isTableCreated = false;
 
     void OnGUI()
     {

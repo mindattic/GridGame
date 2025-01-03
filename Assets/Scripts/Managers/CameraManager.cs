@@ -37,48 +37,19 @@ namespace Game.Behaviors
 
     public class CameraManager : MonoBehaviour
     {
+        //Variables
         public RectFloat viewBounds;
         public Game.Models.RectInt screenBounds;
-
         public CameraWorldSpace world;
         public CameraLocalSpace local;
 
 
-
+        //Method which is used for initialization tasks that need to occur before the game starts 
         private void Awake()
         {
             world = new CameraWorldSpace();
             local = new CameraLocalSpace();
         }
-
-
-        void Start()
-        {
-            //var topLeft = Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height));
-            //var topRight = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-            //var bottomRight = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
-            //var bottomLeftt = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
-
-            //var p = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, Camera.main.nearClipPlane));
-            //Gizmos.color = color.yellow;
-            //Gizmos.DrawSphere(p, 0.1F);
-
-
-            //viewBounds = new RectFloat();
-            //viewBounds.Left = worldVector3.x;
-            //viewBounds.Top = worldVector3.y;
-            //viewBounds.Left = worldVector3.w;
-
-
-        }
-
-
-        void Update()
-        {
-
-        }
-
-
 
         public Vector2 ScreenToViewport(Vector2 point, int pixelWidth, int pixelHeight)
         {

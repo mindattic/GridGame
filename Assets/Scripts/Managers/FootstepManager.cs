@@ -6,10 +6,11 @@ using UnityEngine;
 
 public class FootstepManager : MonoBehaviour
 {
+    #region Properties
     protected float tileSize => GameManager.instance.tileSize;
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
     protected BoardInstance board => GameManager.instance.board;
-
+    #endregion
 
     //Variables
     [SerializeField] public GameObject FootstepPrefab;
@@ -18,19 +19,11 @@ public class FootstepManager : MonoBehaviour
     bool isRightFoot = false;
     float threshold;
 
-    void Awake()
-    {
-
-
-
-    }
-
+    //Method which is automatically called before the first frame update  
     void Start()
     {
         threshold = tileSize / 4;
     }
-
-
 
     public void Play(ActorInstance actor)
     {

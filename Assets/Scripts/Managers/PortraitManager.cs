@@ -6,24 +6,16 @@ using UnityEngine;
 
 public class PortraitManager : MonoBehaviour
 {
+    #region Properties
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
     protected BoardInstance board => GameManager.instance.board;
     protected IQueryable<ActorInstance> players => GameManager.instance.players;
+    #endregion
+
 
     //Variables
     [SerializeField] public GameObject portraitPrefab;
     public int sortingOrder = 1;
-
-    private void Start()
-    {
-
-    }
-
-    private void Update()
-    {
-
-    }
-
 
     public void SlideIn(ActorInstance actor, Direction direction)
     {
@@ -41,7 +33,6 @@ public class PortraitManager : MonoBehaviour
 
         StartCoroutine(instance.SlideIn());
     }
-
 
     public void Dissolve()
     {

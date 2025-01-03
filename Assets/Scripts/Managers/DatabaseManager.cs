@@ -9,26 +9,26 @@ using UnityEngine;
 
 namespace Game.Manager
 {
-  
-
-    public static class DatabaseSchema
-    {
-        public const string Name = "MyDatabase.db";
-        
-        public static class Table
-        {
-
-            public static string Actor = "Actor";
-        }
-    }
-
     public class DatabaseManager : MonoBehaviour
     {
-        protected LogManager logManager => GameManager.instance.logManager;
+        public static class DatabaseSchema
+        {
+            public const string Name = "MyDatabase.db";
 
+            public static class Table
+            {
+
+                public static string Actor = "Actor";
+            }
+        }
+
+        #region Properties
+        protected LogManager logManager => GameManager.instance.logManager;
+        #endregion
+
+        //Variables
         public const bool autoOverwrite = true; //Used to reinstall app every load...
         private SQLiteDB instance = SQLiteDB.Instance;
-
         public List<ActorStats> actorStats = new List<ActorStats>();
 
 
@@ -52,6 +52,7 @@ namespace Game.Manager
             instance.Dispose();
         }
 
+        //Method which is used for initialization tasks that need to occur before the game starts 
         private void Awake()
         {
             instance.DBLocation = Application.persistentDataPath;

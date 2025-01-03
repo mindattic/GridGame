@@ -5,49 +5,28 @@ using UnityEngine;
 
 public class GhostInstance : MonoBehaviour
 {
+    #region Properties
     protected float tileSize => GameManager.instance.tileSize;
-
-    //Constants
-    const int Thumbnail = 0;
-    const int Frame = 1;
-
-    #region Components
-
-    public string Name
-    {
-        get => name;
-        set => Name = value;
-    }
-
     public Transform parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
-
     public Vector3 Position
     {
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
     }
-
-
-    public GhostRenderers renderers = new GhostRenderers();
-
-
     public Sprite thumbnail
     {
         get => renderers.thumbnail.sprite;
         set => renderers.thumbnail.sprite = value;
     }
-
     public Sprite frame
     {
         get => renderers.frame.sprite;
         set => renderers.frame.sprite = value;
     }
-
-
     public int sortingOrder
     {
         set
@@ -56,9 +35,14 @@ public class GhostInstance : MonoBehaviour
             renderers.frame.sortingOrder = value + 1;
         }
     }
-
-
     #endregion
+
+    //Constants
+    const int Thumbnail = 0;
+    const int Frame = 1;
+
+    //Variables
+    public GhostRenderers renderers = new GhostRenderers();
 
     public void Spawn(ActorInstance actor)
     {
@@ -74,7 +58,7 @@ public class GhostInstance : MonoBehaviour
     }
 
 
-
+    //Method which is used for initialization tasks that need to occur before the game starts 
     private void Awake()
     {
         renderers.thumbnail = gameObject.transform.GetChild(Thumbnail).GetComponent<SpriteRenderer>();

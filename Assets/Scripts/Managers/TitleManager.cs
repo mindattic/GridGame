@@ -4,27 +4,24 @@ using UnityEngine;
 
 public class TitleManager : MonoBehaviour
 {
-    //Variables
-    private RectTransform rectTransform;
-    public TextMeshProUGUI label;
-
-    #region Components
-
+    #region Properties
     public string text
     {
         get => label.text;
         set => label.text = value;
     }
-
-
     public Color color
     {
         get => label.color;
         set => label.color = value;
     }
-
     #endregion
 
+    //Variables
+    private RectTransform rectTransform;
+    public TextMeshProUGUI label;
+
+    //Method which is used for initialization tasks that need to occur before the game starts 
     void Awake()
     {
         label = GameObject.Find(Constants.Title).GetComponent<TextMeshProUGUI>();

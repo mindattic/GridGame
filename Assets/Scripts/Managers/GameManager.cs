@@ -200,22 +200,11 @@ public class GameManager : Singleton<GameManager>
 
     }
 
+    //Method which is automatically called before the first frame update  
     void Start()
     {
         Application.targetFrameRate = targetFramerate;
         QualitySettings.vSyncCount = vSyncCount;
     }
-
-    void Update()
-    {
-
-    }
-
-    void FixedUpdate()
-    {
-
-    }
-
-
 
 }

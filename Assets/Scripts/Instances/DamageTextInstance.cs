@@ -5,16 +5,8 @@ using UnityEngine.UIElements;
 
 public class DamageTextInstance : MonoBehaviour
 {
+    #region Properties
     protected float tileSize => GameManager.instance.tileSize;
-
-
-
-    public TextMeshPro textMesh;
-    public Vector3 speed;
-    [SerializeField] AnimationCurve riseCurve;
-
-    #region Components
-
     public Transform parent
     {
         get => gameObject.transform.parent;
@@ -26,10 +18,13 @@ public class DamageTextInstance : MonoBehaviour
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
     }
-
     #endregion
 
+    public TextMeshPro textMesh;
+    public Vector3 speed;
+    [SerializeField] AnimationCurve riseCurve;
 
+    //Method which is used for initialization tasks that need to occur before the game starts 
     void Awake()
     {
         textMesh = GetComponent<TextMeshPro>();

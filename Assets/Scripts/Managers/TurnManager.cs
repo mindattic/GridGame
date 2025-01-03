@@ -12,8 +12,6 @@ using Phase = TurnPhase;
 public class TurnManager : MonoBehaviour
 {
     #region Properties
-
-    // Managers
     protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
     protected AudioManager audioManager => GameManager.instance.audioManager;
     protected BoardOverlayInstance boardOverlay => GameManager.instance.boardOverlay;
@@ -21,57 +19,32 @@ public class TurnManager : MonoBehaviour
     protected PortraitManager portraitManager => GameManager.instance.portraitManager;
     protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
     protected TimerBarInstance timerBar => GameManager.instance.timerBar;
-
-    // Actor related objects
     protected List<ActorInstance> actors { get => GameManager.instance.actors; set => GameManager.instance.actors = value; }
     protected IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
     protected IQueryable<ActorInstance> players => GameManager.instance.players;
-
+    public bool isPlayerTurn => currentTeam.Equals(Team.Player);
+    public bool isEnemyTurn => currentTeam.Equals(Team.Enemy);
+    public bool isStartPhase => currentPhase.Equals(Phase.Start);
+    public bool isMovePhase => currentPhase.Equals(Phase.Move);
+    public bool isAttackPhase => currentPhase.Equals(Phase.Attack);
+    public bool isFirstTurn => currentTurn == 1;
     #endregion
-
-
-
-
-
-
-
-
-
-
 
     //Variables
     [SerializeField] public int currentTurn = 1;
     [SerializeField] public Team currentTeam = Team.Player;
     [SerializeField] public Phase currentPhase = Phase.Start;
 
-    //Properties
-    public bool isPlayerTurn => currentTeam.Equals(Team.Player);
-    public bool isEnemyTurn => currentTeam.Equals(Team.Enemy);
-    public bool isStartPhase => currentPhase.Equals(Phase.Start);
-    public bool isMovePhase => currentPhase.Equals(Phase.Move);
-    public bool isAttackPhase => currentPhase.Equals(Phase.Attack);
 
-    public bool isFirstTurn => currentTurn == 1;
-
-
-    void Awake()
-    {
-    }
-
+    //Method which is automatically called before the first frame update  
     void Start()
     {
         Reset();
     }
 
-    void Update()
-    {
+    void Update() { }
 
-    }
-
-    void FixedUpdate()
-    {
-
-    }
+    void FixedUpdate() { }
 
     public void Reset()
     {
@@ -92,13 +65,13 @@ public class TurnManager : MonoBehaviour
         attackLineManager.Clear();
         combatParticipants.Clear();
 
-        //Reset actors sorting
+        //TriggerReset actors sorting
         actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
 
         if (isPlayerTurn)
         {
             currentTurn++;
-            timerBar.Reset();
+            timerBar.TriggerReset();
             players.Where(x => x.isActive && x.isAlive).ToList().ForEach(x => x.glow.TriggerGlow());
         }
         else if (isEnemyTurn)
@@ -242,7 +215,7 @@ public class TurnManager : MonoBehaviour
             var allParticipants = combatParticipants.SelectAll();
             allParticipants.ForEach(x => x.sortingOrder = SortingOrder.BoardOverlay);
 
-            boardOverlay.FadeIn();
+            boardOverlay.TriggerFadeIn();
 
             // TriggerSpawn support lines
             foreach (var pair in combatParticipants.supportingPairs)
@@ -256,14 +229,14 @@ public class TurnManager : MonoBehaviour
                 attackLineManager.Spawn(pair);
                 yield return PlayerAttack(pair);
 
-                // Reset participants after each attack
+                // TriggerReset participants after each attack
                 ResetRolesAfterAttack(new[] { pair.actor1, pair.actor2 }); // Attackers
                 ResetRolesAfterAttack(pair.alignment.enemies);             // Defenders
             }
 
-            boardOverlay.FadeOut();
+            boardOverlay.TriggerFadeOut();
             NextTurn();
-            ClearCombatState(); // Reset all roles and counts
+            ClearCombatState(); // TriggerReset all roles and counts
         }
 
         StartCoroutine(ExecuteCombat());
@@ -280,7 +253,7 @@ public class TurnManager : MonoBehaviour
                 actor.attackingPairCount--;
                 if (actor.attackingPairCount == 0)
                 {
-                    actor.SetDefault(); // Reset attackers
+                    actor.SetDefault(); // TriggerReset attackers
                 }
             }
 
@@ -289,7 +262,7 @@ public class TurnManager : MonoBehaviour
                 actor.supportingPairCount--;
                 if (actor.supportingPairCount == 0)
                 {
-                    actor.SetDefault(); // Reset supporters
+                    actor.SetDefault(); // TriggerReset supporters
                 }
             }
 
@@ -389,11 +362,11 @@ public class TurnManager : MonoBehaviour
         }
 
 
-        // Despawn attack and support lines
+        // TriggerDespawn attack and support lines
         //foreach (var enemy in pair.alignment.enemies)
         //{
-        //    attackLineManager.Despawn(pair);
-        //    supportLineManager.Despawn(pair);
+        //    attackLineManager.TriggerDespawn(pair);
+        //    supportLineManager.TriggerDespawn(pair);
         //}
         attackLineManager.Despawn(pair);
         supportLineManager.Despawn(pair);

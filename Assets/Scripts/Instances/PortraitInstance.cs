@@ -5,51 +5,33 @@ using UnityEngine;
 
 public class PortraitInstance : MonoBehaviour
 {
-    //Variables
-
-    //[SerializeField] public ActorInstance actor;
-    [SerializeField] public Direction direction;
-    [SerializeField] public float startTime;
-    [SerializeField] public Vector2 startPosition;
-    [SerializeField] public AnimationCurve slide;
-
-    float minAlpha = Opacity.Transparent;
-    float maxAlpha = Opacity.Opaque;
-
-    #region Components
+    #region Properties
 
     public Transform parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);
     }
-
     public Vector3 position
     {
         get => gameObject.transform.position;
         set => gameObject.transform.position = value;
     }
-
     public Vector3 scale
     {
         get => gameObject.transform.localScale;
         set => gameObject.transform.localScale = value;
-    }
-
-    public SpriteRenderer spriteRenderer;
-
+    } 
     public Sprite sprite
     {
         get => spriteRenderer.sprite;
         set => spriteRenderer.sprite = value;
     }
-
     public Color color
     {
         get => spriteRenderer.color;
         set => spriteRenderer.color = value;
     }
-
     public int sortingOrder
     {
         set
@@ -57,9 +39,19 @@ public class PortraitInstance : MonoBehaviour
             spriteRenderer.sortingOrder = value;
         }
     }
-
     #endregion
 
+    //Variables
+    //[SerializeField] public ActorInstance actor;
+    [SerializeField] public Direction direction;
+    [SerializeField] public float startTime;
+    [SerializeField] public Vector2 startPosition;
+    [SerializeField] public AnimationCurve slide;
+    public SpriteRenderer spriteRenderer;
+    float minAlpha = Opacity.Transparent;
+    float maxAlpha = Opacity.Opaque;
+
+    //Method which is used for initialization tasks that need to occur before the game starts 
     private void Awake()
     {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();

@@ -9,6 +9,7 @@ public class FpsMonitor
     private float NextPeriod = 0;
     public int currentFps;
 
+    //Method which is automatically called before the first frame update  
     public void Start()
     {
         NextPeriod = Time.realtimeSinceStartup + MeasurePeriod;

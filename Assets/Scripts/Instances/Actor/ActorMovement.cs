@@ -8,12 +8,7 @@ namespace Assets.Scripts.Instances.Actor
 {
     public class ActorMovement
     {
-        //Variables
-        private ActorInstance instance;
-
         #region Properties
-
-        //GameManager properties
         protected float percent33 => Constants.percent33;
         protected Vector3 tileScale => GameManager.instance.tileScale;
         protected ActorInstance focusedActor => GameManager.instance.focusedActor;
@@ -26,9 +21,6 @@ namespace Assets.Scripts.Instances.Actor
         protected float tileSize => GameManager.instance.tileSize;
         protected Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
         protected Vector3 mouseOffset => GameManager.instance.mouseOffset;
-
-        //Instance Properties
-     
         protected ActorFlags flags => instance.flags;
         protected ActorRenderers render => instance.render;
         protected ActorStats stats => instance.stats;
@@ -41,8 +33,9 @@ namespace Assets.Scripts.Instances.Actor
         private Vector3 destination { get => instance.destination; set => instance.destination = value; }
         private Vector3 position { get => instance.position; set => instance.position = value; }  
         private Vector3 scale { get => instance.scale; set => instance.scale = value; }
-      
         #endregion
+
+        private ActorInstance instance;
 
         public void Initialize(ActorInstance parentInstance)
         {
@@ -92,10 +85,10 @@ namespace Assets.Scripts.Instances.Actor
             // After:
             flags.IsMoving = false;
 
-            //TODO: Reset to above overlay if is attacking...
+            //TODO: TriggerReset to above overlay if is attacking...
             //sortingOrder = SortingOrder.Default;
 
-            // Reset rotation at the end
+            // TriggerReset rotation at the end
             instance.transform.localRotation = Quaternion.Euler(baseRotation);
         }
 
@@ -154,9 +147,9 @@ namespace Assets.Scripts.Instances.Actor
             flags.IsMoving = false;
             flags.IsSwapping = false;
             scale = tileScale;
-            rotation = Quaternion.identity; //Reset rotation to default
+            rotation = Quaternion.identity; //TriggerReset rotation to default
 
-            //TODO: Reset to above overlay if is attacking or defending...
+            //TODO: TriggerReset to above overlay if is attacking or defending...
             //sortingOrder = SortingOrder.Default;
 
             //TODO: Add enemy attacking here so that enemy attacks once they reach their intended destination...

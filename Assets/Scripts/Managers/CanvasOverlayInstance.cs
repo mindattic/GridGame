@@ -4,7 +4,24 @@ using UnityEngine.UI;
 
 public class CanvasOverlayInstance : MonoBehaviour
 {
+    #region Properties
     protected TitleManager titleManager => GameManager.instance.titleManager;
+    public string Name
+    {
+        get => name;
+        set => Name = value;
+    }
+    public Transform Parent
+    {
+        get => gameObject.transform.parent;
+        set => gameObject.transform.SetParent(value, true);
+    }
+    public Color Color
+    {
+        get => image.color;
+        set => image.color = value;
+    }
+    #endregion
 
     //Variables
     private RectTransform rectTransform;
@@ -14,28 +31,8 @@ public class CanvasOverlayInstance : MonoBehaviour
     float maxAlpha = Opacity.Opaque;
     Color color = new Color(0f, 0f, 0f, Opacity.Opaque);
 
-    #region Components
 
-    public string Name
-    {
-        get => name;
-        set => Name = value;
-    }
-
-    public Transform Parent
-    {
-        get => gameObject.transform.parent;
-        set => gameObject.transform.SetParent(value, true);
-    }
-
-    public Color Color
-    {
-        get => image.color;
-        set => image.color = value;
-    }
-
-    #endregion
-
+    //Method which is used for initialization tasks that need to occur before the game starts 
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();

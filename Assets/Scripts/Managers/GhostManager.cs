@@ -6,8 +6,10 @@ using UnityEngine;
 
 public class GhostManager : MonoBehaviour
 {
+    #region Properties
     protected float tileSize => GameManager.instance.tileSize;
     protected BoardInstance board => GameManager.instance.board;
+    #endregion
 
     //Variables
     [SerializeField] public GameObject ghostPrefab;
@@ -15,17 +17,10 @@ public class GhostManager : MonoBehaviour
     float threshold;
     Vector3 previousPosition;
 
-    void Awake()
-    {
-       
-
-    }
-
+    //Method which is automatically called before the first frame update  
     void Start() {
         threshold = tileSize / 12;
     }
-
-    void FixedUpdate() { }
 
 
     public void Play(ActorInstance actor)
@@ -52,7 +47,7 @@ public class GhostManager : MonoBehaviour
                 Spawn();
             }
 
-            yield return new WaitForFixedUpdate();
+            yield return Wait.None();
         }
     }
 

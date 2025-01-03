@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class VFXInstance : MonoBehaviour
 {
+    #region Properties
     protected VFXManager vfxManager => GameManager.instance.vfxManager;
 
     public Transform parent
@@ -30,6 +31,7 @@ public class VFXInstance : MonoBehaviour
         get => gameObject.transform.localScale;
         set => gameObject.transform.localScale = value;
     }
+    #endregion
 
     public IEnumerator Spawn(VisualEffect vfx, Vector3 position, Trigger trigger = default)
     {
@@ -66,9 +68,9 @@ public class VFXInstance : MonoBehaviour
 
         //Wait until VFX duration completes
         if (vfx.duration != 0f)
-            yield return new WaitForSeconds(duration);
+            yield return Wait.For(duration);
 
-        //Despawn the VFX
+        //TriggerDespawn the VFX
         Despawn(name);
     }
 

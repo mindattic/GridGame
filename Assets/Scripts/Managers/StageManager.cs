@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
+    #region Properties
     protected DatabaseManager databaseManager => GameManager.instance.databaseManager;
     protected int totalCoins
     {
@@ -41,20 +42,11 @@ public class StageManager : MonoBehaviour
     }
     protected BoardInstance board => GameManager.instance.board;
 
+    #endregion
 
+    //Variables
     [SerializeField] public int currentStage;
     [SerializeField] public GameObject actorPrefab;
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
     private ActorStats RandomStats => Formulas.RandomStats(10);
 
     private ActorStats ActorStats(string name)
@@ -85,7 +77,7 @@ public class StageManager : MonoBehaviour
         supportLineManager.Clear();
         attackLineManager.Clear();
         turnManager.Reset();
-        timerBar.Reset();
+        timerBar.TriggerReset();
         actorManager.Clear();
         actorManager.Clear();
         canvasOverlay.Show();

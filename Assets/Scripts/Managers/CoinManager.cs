@@ -1,25 +1,9 @@
-using Game.Behaviors;
 using System;
-using System.Collections;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CoinManager : MonoBehaviour
 {
     [SerializeField] public GameObject CoinPrefab;
-
-    // StartCoroutine is called once before the first execution of SaveProfile after the MonoBehaviour is created
-    void Awake()
-    {
-  
-    }
-
-    // SaveProfile is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void Spawn(Vector3 position)
     {

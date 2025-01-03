@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Assets.Scripts.Instances.Actor
 {
     public class ActorGlow
     {
+        #region Properties
         protected TurnManager turnManager => GameManager.instance.turnManager;
         protected Vector3 tileScale => GameManager.instance.tileScale;
         protected ActorRenderers render => instance.render;
@@ -27,12 +21,13 @@ namespace Assets.Scripts.Instances.Actor
         //);
         //glowCurve.preWrapMode = WrapMode.Loop;
         //glowCurve.postWrapMode = WrapMode.Loop;
+        #endregion
+
 
         private ActorInstance instance;
         private Vector3 initialScale;
         private float maxIntensity;
         private float speed;
-       
 
         public void Initialize(ActorInstance parentInstance)
         {
@@ -40,7 +35,7 @@ namespace Assets.Scripts.Instances.Actor
 
             initialScale = tileScale;
             maxIntensity = 1.5f;
-            speed = 2f;
+            speed = 1.5f;
         }
 
 

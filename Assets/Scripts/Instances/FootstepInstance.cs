@@ -3,11 +3,15 @@ using UnityEngine;
 
 public class FootstepInstance : MonoBehaviour
 {
+    #region Properties
     protected Vector3 tileScale => GameManager.instance.tileScale;
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
+    #endregion
 
+    //Variables
     float Duration;
 
+    //Method which is used for initialization tasks that need to occur before the game starts 
     private void Awake()
     {
         transform.localScale = tileScale / 2;
@@ -15,11 +19,6 @@ public class FootstepInstance : MonoBehaviour
         Duration = Interval.OneSecond * 10;
 
     }
-    void Start() { }
-    void Update() { }
-    void FixedUpdate() { }
-
-
 
     #region Components
 
@@ -56,7 +55,6 @@ public class FootstepInstance : MonoBehaviour
         set => spriteRenderer.sprite = value;
     }
     #endregion
-
 
 
     public void Spawn(Vector3 position, Quaternion rotation, bool isRightFoot)

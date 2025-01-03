@@ -8,23 +8,24 @@ using static UnityEditor.FilePathAttribute;
 
 public class BoardInstance : MonoBehaviour
 {
+    #region Properties
     protected float tileSize => GameManager.instance.tileSize;
     protected ProfileManager profileManager => GameManager.instance.profileManager;
     protected StageManager stageManager => GameManager.instance.stageManager;
     protected BoardInstance board => GameManager.instance.board;
+    #endregion
 
+    //Variables
     [SerializeField] public GameObject TilePrefab;
-
     [HideInInspector] public int columnCount = 6;
     [HideInInspector] public int rowCount = 8;
-
     [HideInInspector] public Vector2 offset;
-
     [HideInInspector] public RectFloat bounds;
     [HideInInspector] public TileMap tileMap = new TileMap();
     [HideInInspector] public Vector2Int NowhereLocation = new Vector2Int(-1, -1);
     [HideInInspector] public Vector3 NowherePosition = new Vector3(-1000, -1000, -1000);
 
+    //Method which is automatically called before the first frame update  
     private void Start()
     {
         offset = new Vector2(-(tileSize * 3) - tileSize / 2, (tileSize * columnCount));

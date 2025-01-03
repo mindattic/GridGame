@@ -34,7 +34,7 @@ public class SupportLineManager : MonoBehaviour
         var key = GetKey(pair);
         if (supportLines.TryGetValue(key, out var instance))
         {
-            instance.Despawn();
+            instance.TriggerDespawn();
             supportLines.Remove(key);
         }
     }

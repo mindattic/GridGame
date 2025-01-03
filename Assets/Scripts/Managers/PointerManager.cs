@@ -19,6 +19,7 @@ public class PointerManager : MonoBehaviour, IPointerMoveHandler, IPointerDownHa
         && Input.mousePosition.y > 0
         && Input.mousePosition.x <= Screen.height;
 
+    //Method which is used for initialization tasks that need to occur before the game starts 
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();

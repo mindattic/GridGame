@@ -22,12 +22,6 @@ namespace Game.Behaviors
         }
 
         #endregion
-
-        private void Awake()
-        {
-
-        }
-
         public void Info(string message)
         {
             Debug.Log(message);

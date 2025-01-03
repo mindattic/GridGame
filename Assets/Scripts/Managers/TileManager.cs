@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class TileManager : MonoBehaviour
 {
+    #region Properties
     protected List<TileInstance> tiles => GameManager.instance.tiles;
-
-
+    #endregion
 
     public void Reset()
     {

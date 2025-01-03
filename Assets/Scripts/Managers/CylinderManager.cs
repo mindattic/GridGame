@@ -4,21 +4,12 @@ using UnityEngine;
 
 public class CylinderManager : MonoBehaviour
 {
+    //Variables
     [SerializeField] public float Ceiling = 1f;
     [SerializeField] public float Floor = -1f;
     [SerializeField] public float Speed = 0.05f;
-
     private bool isRising = true;
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
 
     void FixedUpdate()
     {

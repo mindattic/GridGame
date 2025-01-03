@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class BoardOverlayInstance : MonoBehaviour
 {
-
-
     SpriteRenderer spriteRenderer;
 
     float alpha = 0;
@@ -13,6 +11,7 @@ public class BoardOverlayInstance : MonoBehaviour
     Color color = ColorHelper.Translucent.DarkBlack;
     float increment = Increment.TwoPercent;
 
+    //Method which is used for initialization tasks that need to occur before the game starts 
     private void Awake()
     {
         spriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
@@ -20,12 +19,12 @@ public class BoardOverlayInstance : MonoBehaviour
         spriteRenderer.enabled = false;
     }
 
-    public void FadeIn()
+    public void TriggerFadeIn()
     {
-        StartCoroutine(_FadeIn());
+        StartCoroutine(FadeIn());
     }
 
-    public IEnumerator _FadeIn()
+    public IEnumerator FadeIn()
     {
         //Before:
         alpha = minAlpha;
@@ -50,12 +49,12 @@ public class BoardOverlayInstance : MonoBehaviour
     }
 
 
-    public void FadeOut()
+    public void TriggerFadeOut()
     {
-        StartCoroutine(_FadeOut());
+        StartCoroutine(FadeOut());
     }
 
-    public IEnumerator _FadeOut()
+    public IEnumerator FadeOut()
     {
         // Before:
         alpha = maxAlpha;

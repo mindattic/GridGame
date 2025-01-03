@@ -9,10 +9,9 @@ using UnityEngine;
 public class ActorThumbnail
 {
 
+    //Variables
     GameObject gameObject;
-
     SpriteRenderer spriteRenderer;
-
     Sprite sprite;
 
 
@@ -22,28 +21,4 @@ public class ActorThumbnail
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         sprite = spriteRenderer.sprite;
     }
-
-    public void Awake()
-    {
-
-    }
-    public void Start()
-    {
-
-
-
-    }
-
-    public void Update()
-    {
-
-    }
-
-    public void FixedUpdate()
-    {
-
-    }
-
-
-
 }

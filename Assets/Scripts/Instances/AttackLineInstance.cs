@@ -6,9 +6,26 @@ namespace Game.Instances
 {
     public class AttackLineInstance : MonoBehaviour
     {
+        #region Properties
         protected float tileSize => GameManager.instance.tileSize;
         protected BoardInstance board => GameManager.instance.board;
- 
+        public Transform parent
+        {
+            get => gameObject.transform.parent;
+            set => gameObject.transform.SetParent(value, true);
+        }
+        public Vector3 position
+        {
+            get => gameObject.transform.position;
+            set => gameObject.transform.position = value;
+        }
+        public int sortingOrder
+        {
+            get => lineRenderer.sortingOrder;
+            set => lineRenderer.sortingOrder = value;
+        }
+        #endregion
+
         //Variables
         public float alpha;
         private Vector3 startPosition;
@@ -19,32 +36,9 @@ namespace Game.Instances
         private Color color;
         private LineRenderer lineRenderer;
 
-        #region Components
-
-        public Transform parent
-        {
-            get => gameObject.transform.parent;
-            set => gameObject.transform.SetParent(value, true);
-        }
-
-        public Vector3 position
-        {
-            get => gameObject.transform.position;
-            set => gameObject.transform.position = value;
-        }
-
-        public int sortingOrder
-        {
-            get => lineRenderer.sortingOrder;
-            set => lineRenderer.sortingOrder = value;
-        }
-
-        #endregion
-
-
+        //Method which is used for initialization tasks that need to occur before the game starts 
         private void Awake()
         {
-
             thickness = tileSize * 0.02f;
             alpha = 0f;
             maxAlpha = 1f;
@@ -54,6 +48,7 @@ namespace Game.Instances
             lineRenderer.sortingOrder = SortingOrder.AttackLine;
         }
 
+        //Method which is automatically called before the first frame update  
         void Start()
         {
             lineRenderer.startWidth = thickness;

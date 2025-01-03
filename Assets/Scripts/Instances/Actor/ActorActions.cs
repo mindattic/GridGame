@@ -7,37 +7,22 @@ namespace Assets.Scripts.Instances.Actor
     public class ActorActions
     {
         #region Properties
-
-        //Actor related objects
         protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
+        protected float gameSpeed => GameManager.instance.gameSpeed;
         protected ActorRenderers render => instance.render;
         protected ActorStats stats => instance.stats;
-
-
-        // Boolean
         private bool isActive => instance.isActive;
         private bool isAlive => instance.isAlive;
-
-        // Float
         protected float percent33 => Constants.percent33;
         protected float tileSize => GameManager.instance.tileSize;
-
-        // Integer
         private int sortingOrder { get => instance.sortingOrder; set => instance.sortingOrder = value; }
-
-        // Quaternion
         private Quaternion rotation { get => instance.rotation; set => instance.rotation = value; }
-
-        // Vector3
         private Vector3 position { get => instance.position; set => instance.position = value; }
         private Vector3 scale { get => instance.scale; set => instance.scale = value; }
         protected Vector3 tileScale => GameManager.instance.tileScale;
-
-        //Miscellaneous
-        private ActorInstance instance;
-
         #endregion
 
+        private ActorInstance instance;
 
         public void Initialize(ActorInstance parentInstance)
         {
@@ -153,7 +138,7 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            //During (Phase 2) - Reset transition:
+            //During (Phase 2) - TriggerReset transition:
             elapsedTime = 0f;
             while (elapsedTime < returnDuration)
             {
@@ -260,7 +245,7 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            // Reset sorting order and position
+            // TriggerReset sorting order and position
             sortingOrder = SortingOrder.Default;
             position = startPosition;
             rotation = Quaternion.identity;

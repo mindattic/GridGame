@@ -8,24 +8,7 @@ namespace Game.Behaviors
 
     public class BoardManager : MonoBehaviour
     {
-       
 
-        void Awake()
-        {
-
-        }
-
-        void Start()
-        {
-          
-        }
-
-     
-
-        void Update()
-        {
-
-        }
 
     }
 }

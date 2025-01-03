@@ -7,21 +7,15 @@ public class ActorActionBar
 {
     #region Properties
 
-    // Managers
     protected DebugManager debugManager => GameManager.instance.debugManager;
-
-    // Actor related objects
     protected ActorFlags flags => instance.flags;
     protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
     protected ActorRenderers render => instance.render;
     protected ActorStats stats => instance.stats;
     protected bool hasSelectedPlayer => selectedPlayer != null;
-
-    // Miscellaneous
-    private ActorInstance instance;
-
     #endregion
 
+    private ActorInstance instance;
 
     public void Initialize(ActorInstance parentInstance)
     {

@@ -8,7 +8,9 @@ using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
+    #region Properties
     protected LogManager logManager => GameManager.instance.logManager;
+    #endregion
 
     //Variables
     [SerializeField] public List<ActorSprite> actorSprites = new List<ActorSprite>();
@@ -21,10 +23,8 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] public List<MusicTrack> musicTracks = new List<MusicTrack>();
     [SerializeField] public List<VisualEffect> visualEffects = new List<VisualEffect>();
     [SerializeField] public List<WeaponTypeResource> weaponTypes = new List<WeaponTypeResource>();
-
     //[SerializeField] public List<PrefabResource> prefabs = new List<PrefabResource>();
     //[SerializeField] public List<ShaderResource> shaders = new List<ShaderResource>();
-
 
     public ActorSprite ActorSprite(string id)
     {

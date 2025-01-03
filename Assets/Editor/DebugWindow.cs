@@ -243,7 +243,7 @@ public class DebugWindow : EditorWindow
 
         GUILayout.Label("VFX", GUILayout.Width(Screen.width * 0.25f));
         selectedVfx = (VFXOptions)EditorGUILayout.EnumPopup(selectedVfx, GUILayout.Width(Screen.width * 0.5f));
-        if (GUILayout.Button("Play", GUILayout.Width(Screen.width * 0.25f)))
+        if (GUILayout.Button("Start", GUILayout.Width(Screen.width * 0.25f)))
             OnPlayVFXClick();
 
         GUILayout.EndHorizontal();
@@ -257,7 +257,7 @@ public class DebugWindow : EditorWindow
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("Reset", GUILayout.Width(Screen.width * 0.3333f)))
+        if (GUILayout.Button("TriggerReset", GUILayout.Width(Screen.width * 0.3333f)))
             OnResetClick();
 
         if (GUILayout.Button("< Previous", GUILayout.Width(Screen.width * 0.3333f)))

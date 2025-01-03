@@ -1,14 +1,18 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.U2D;
 
 public class SupportLineInstance : MonoBehaviour
 {
+    #region Properties
     protected float tileSize => GameManager.instance.tileSize;
     protected BoardInstance board => GameManager.instance.board;
+    public Transform parent
+    {
+        get => gameObject.transform.parent;
+        set => gameObject.transform.SetParent(value, true);
+    }
+    #endregion
 
     //Variables
     public float alpha = 0;
@@ -19,19 +23,7 @@ public class SupportLineInstance : MonoBehaviour
     private Color color = ColorHelper.RGBA(48, 161, 49, 0);
     private LineRenderer lineRenderer;
 
-
-    #region Components
-
-    public Transform parent
-    {
-        get => gameObject.transform.parent;
-        set => gameObject.transform.SetParent(value, true);
-    }
-
-
-    #endregion
-
-
+    //Method which is used for initialization tasks that need to occur before the game starts 
     private void Awake()
     {
         lineRenderer = gameObject.GetComponent<LineRenderer>();
@@ -39,6 +31,7 @@ public class SupportLineInstance : MonoBehaviour
         lineRenderer.sortingOrder = SortingOrder.SupportLine;
     }
 
+    //Method which is automatically called before the first frame update  
     void Start()
     {
         lineRenderer.positionCount = 2;
@@ -80,8 +73,12 @@ public class SupportLineInstance : MonoBehaviour
         }
     }
 
+    public void TriggerDespawn()
+    {
+        StartCoroutine(Despawn());
+    }
 
-    public IEnumerator _Despawn()
+    public IEnumerator Despawn()
     {
         while (alpha > minAlpha)
         {
@@ -95,10 +92,7 @@ public class SupportLineInstance : MonoBehaviour
         }
     }
 
-    public void Despawn()
-    {
-        StartCoroutine(_Despawn());
-    }
+
 
     public void Destroy()
     {
