@@ -359,20 +359,20 @@ public class TurnManager : MonoBehaviour
             .Select(result => result.Opponent)
             .ToList();
 
-        ActorInstance lastDyingEnemy = null;
+        //ActorInstance lastDyingEnemy = null;
 
-        if (dyingEnemies.Count > 1)
-        {
-            lastDyingEnemy = dyingEnemies.Last();
-            dyingEnemies.Remove(lastDyingEnemy);
-        }
+        //if (dyingEnemies.Count > 1)
+        //{
+        //    lastDyingEnemy = dyingEnemies.Last();
+        //    dyingEnemies.Remove(lastDyingEnemy);
+        //}
 
         // Attack each enemy and handle deaths
         foreach (var attack in attacks)
         {
             yield return pair.actor1.Attack(attack);
-            if (dyingEnemies.Contains(attack.Opponent))
-                attack.Opponent.TriggerDie();
+            //if (dyingEnemies.Contains(attack.Opponent))
+            //    attack.Opponent.TriggerDie();
         }
 
 
@@ -387,10 +387,23 @@ public class TurnManager : MonoBehaviour
 
         // Trigger synchronous death for the last dying enemy
 
-        if (lastDyingEnemy != null)
-            yield return lastDyingEnemy.Die();
+        //if (lastDyingEnemy != null)
+        //    yield return lastDyingEnemy.Die();
 
         yield return Wait.For(Intermission.After.Player.Attack);
+
+        float delay = 0;
+        foreach (var enemy in dyingEnemies)
+        {
+            if (enemy != dyingEnemies.Last())
+                enemy.TriggerDie(); 
+            else
+                yield return enemy.Die();
+
+            delay += Interval.QuarterSecond;
+            yield return Wait.For(delay);
+        }
+
 
         #endregion
     }

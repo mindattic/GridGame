@@ -12,11 +12,29 @@ namespace Assets.Scripts.Models
         public bool IsHit;
         public bool IsCriticalHit;
         public int Damage;
-        public Trigger trigger = default;
+        //public AttackResultTriggers Triggers;
 
         //Properties
         public bool IsFatal => Opponent.stats.HP - Damage < 1;
         public bool IsMiss => !IsHit;
 
+        //public AttackResult()
+        //{
+        //    Triggers = new AttackResultTriggers();
+        //}
     }
+
+    //public class AttackResultTriggers
+    //{
+    //    public AttackResultTriggers(Trigger before = default, Trigger after = default)
+    //    {
+    //        Before = before;
+    //        After = after;
+    //    }
+
+    //    public Trigger Before = default;
+    //    public Trigger After = default;
+    //}
+
+
 }

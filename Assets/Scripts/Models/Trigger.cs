@@ -53,6 +53,10 @@ public class Trigger
         return attributes.ContainsKey(key);
     }
 
+    /// <summary>
+    /// Method which is used to create a deep clone of a Trigger object
+    /// </summary>
+    /// <returns></returns>
     public Trigger Clone()
     {
         var clone = new Trigger

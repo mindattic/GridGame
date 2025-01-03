@@ -366,20 +366,17 @@ public class ActorInstance : MonoBehaviour
         if (!isActive || !isAlive)
             return;
 
-        if (attack.trigger == default)
-            attack.trigger = new Trigger();
-
         StartCoroutine(TakeDamage(attack));
     }
 
     public IEnumerator TakeDamage(AttackResult attack)
     {
-        if (attack.trigger == default)
-            attack.trigger = new Trigger();
-
         //Check abort conditions
         if (!isActive || !isAlive)
             yield break;
+
+        //Trigger coroutine (if applicable):
+        //yield return attack.Triggers.Before.Start(this);
 
         //Before:
         float ticks = 0f;
@@ -408,7 +405,7 @@ public class ActorInstance : MonoBehaviour
         }
 
         //Trigger coroutine (if applicable):
-        yield return attack.trigger.Start(this);
+        //yield return attack.Triggers.After.Start(this);
 
         //After:
         action.TriggerShrink();

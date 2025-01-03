@@ -53,7 +53,7 @@ public class VFXInstance : MonoBehaviour
     Trigger trigger = default;
 
     //Properties
-    //private bool hasTrigger => trigger != null && trigger.IsValid && triggerAt != -1;
+    //private bool hasTrigger => postTrigger != null && postTrigger.IsValid && triggerAt != -1;
 
     private void Initialize(VisualEffect vfx, Vector3 position, Trigger trigger = default)
     {
@@ -102,7 +102,7 @@ public class VFXInstance : MonoBehaviour
         if (vfx.delay != 0f)
             yield return new WaitForSeconds(delay);
 
-        // Execute the trigger (if any)
+        // Execute the postTrigger (if any)
         if (trigger.IsValid)
             yield return trigger.Start(this);
 

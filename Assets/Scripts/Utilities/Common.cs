@@ -339,14 +339,6 @@ public static class Intermission
             public static float Drain = Interval.OneSecond;
         }
 
-        public static class After
-        {
-            public static class LastEnemy
-            {
-                public static float Death = Interval.OneSecond;
-            }
-            
-        }
 
     }
 
@@ -354,8 +346,9 @@ public static class Intermission
     {
         public static class Player
         {
-            public static float Attack = Interval.HalfSecond;
+            public static float Attack = Interval.QuarterSecond;
         }
+
     }
   
 }
