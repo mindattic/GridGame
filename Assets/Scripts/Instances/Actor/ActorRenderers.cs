@@ -20,6 +20,7 @@ public class ActorRenderers
     public Color turnDelayColor = ColorHelper.Solid.Red;
     public Color weaponIconColor = ColorHelper.Solid.White;
     public Color selectionColor = ColorHelper.Solid.White;
+    public Color overlayColor = ColorHelper.Transparent.White;
 
     public SpriteRenderer opaque;
     public SpriteRenderer quality;
@@ -46,6 +47,7 @@ public class ActorRenderers
     public TextMeshPro nameTagText;
     public SpriteRenderer weaponIcon;
     public SpriteRenderer selectionBox;
+    public SpriteRenderer overlay;
 
     private ActorInstance instance;
     public void Initialize(ActorInstance parentInstance)
@@ -76,6 +78,8 @@ public class ActorRenderers
         nameTagText = t.GetChild(ActorLayer.Name.NameTagText).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.NameTagText} is null");
         weaponIcon = t.GetChild(ActorLayer.Name.WeaponIcon).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.WeaponIcon} is null");
         selectionBox = t.GetChild(ActorLayer.Name.SelectionBox).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.SelectionBox} is null");
+        overlay = t.GetChild(ActorLayer.Name.Overlay).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Overlay} is null");
+
     }
 
 
@@ -248,6 +252,13 @@ public class ActorRenderers
     {
         selectionBox.enabled = isEnabled;
     }
+
+    public void SetOverlayColor(Color color)
+    {
+        overlayColor = color;
+        this.overlay.color = overlayColor;
+    }
+
 
     public void SetTurnDelayFontSize(int key)
     {

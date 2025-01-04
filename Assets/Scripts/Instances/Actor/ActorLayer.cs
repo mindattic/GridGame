@@ -43,6 +43,7 @@ namespace Game.Instances.Actor
             public const string NameTagText = "NameTagText";
             public const string WeaponIcon = "WeaponIcon";
             public const string SelectionBox = "SelectionBox";
+            public const string Overlay = "Overlay";
         }
 
         public static class Value
@@ -79,6 +80,7 @@ namespace Game.Instances.Actor
             public const int NameTagText = 21;
             public const int WeaponIcon = 22;
             public const int SelectionBox = 23;
+            public const int Overlay = 23;
         }
 
     }

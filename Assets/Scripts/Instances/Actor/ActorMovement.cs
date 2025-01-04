@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 namespace Assets.Scripts.Instances.Actor
 {
@@ -11,6 +12,7 @@ namespace Assets.Scripts.Instances.Actor
         #region Properties
         protected float percent33 => Constants.percent33;
         protected Vector3 tileScale => GameManager.instance.tileScale;
+        protected float gameSpeed => GameManager.instance.gameSpeed;
         protected ActorInstance focusedActor => GameManager.instance.focusedActor;
         protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
         protected List<ActorInstance> actors => GameManager.instance.actors;
@@ -70,7 +72,7 @@ namespace Assets.Scripts.Instances.Actor
                 Vector3 velocity = instance.position - prevPosition;
 
                 //Apply tilt effect
-                instance.ApplyTilt(velocity, tiltFactor, rotationSpeed, resetSpeed, baseRotation);
+                ApplyTilt(velocity, tiltFactor, rotationSpeed, resetSpeed, baseRotation);
 
                 // Update previous position for next frame
                 prevPosition = instance.position;
@@ -130,7 +132,7 @@ namespace Assets.Scripts.Instances.Actor
                     Vector3 velocity = destination - position;
 
                     //Apply tilt effect
-                    instance.ApplyTilt(velocity, 25f, 10f, 5f, Vector3.zero);
+                    ApplyTilt(velocity, 25f, 10f, 5f, Vector3.zero);
                 }
 
                 CheckLocationChanged();
@@ -193,15 +195,43 @@ namespace Assets.Scripts.Instances.Actor
         {
             //Determine if two actors are overlapping the same boardLocation
             var overlappingActor = actors.FirstOrDefault(x => x != null
-                                                && !x.Equals(this)
+                                                && x != instance
                                                 && x.isActive
                                                 && x.isAlive
-                                                && !x.Equals(focusedActor)
-                                                && !x.Equals(selectedPlayer)
+                                                && x != focusedActor
+                                                && x != selectedPlayer
                                                 && x.location.Equals(closestTile.location));
 
             return overlappingActor;
         }
+
+        public void ApplyTilt(Vector3 velocity, float tiltFactor, float rotationSpeed, float resetSpeed, Vector3 baseRotation)
+        {
+            if (velocity.magnitude > 0.01f) //Apply tilt if there is noticeable movement
+            {
+                // Determine if the movement is primarily vertical or horizontal
+                bool isMovingVertical = Mathf.Abs(velocity.y) > Mathf.Abs(velocity.x);
+                float velocityFactor = isMovingVertical ? velocity.y : velocity.x;
+                float tiltZ = velocityFactor * tiltFactor; // Tilt on Z-axis based on velocity
+                instance.transform.localRotation = Quaternion.Slerp(
+                    instance.transform.localRotation,
+                    Quaternion.Euler(0, 0, tiltZ),
+                    Time.deltaTime * rotationSpeed * gameSpeed
+                );
+            }
+            else
+            {
+                //Reset rotation smoothly when velocity is minimal
+                instance.transform.localRotation = Quaternion.Slerp(
+                    instance.transform.localRotation,
+                    Quaternion.Euler(baseRotation),
+                    Time.deltaTime * resetSpeed
+                );
+            }
+        }
+
+
+
 
 
     }

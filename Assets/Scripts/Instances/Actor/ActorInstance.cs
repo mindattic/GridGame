@@ -168,6 +168,8 @@ public class ActorInstance : MonoBehaviour
             render.nameTagText.sortingOrder = value + ActorLayer.Value.NameTagText;
             render.weaponIcon.sortingOrder = value + ActorLayer.Value.WeaponIcon;
             render.selectionBox.sortingOrder = value + ActorLayer.Value.SelectionBox;
+            render.overlay.sortingOrder = value + ActorLayer.Value.Overlay;
+
         }
     }
 
@@ -261,26 +263,11 @@ public class ActorInstance : MonoBehaviour
 
     public IEnumerator Attack(AttackResult attack)
     {
-        if (attack.IsHit)
-        {
-            if (attack.IsCriticalHit)
-            {
-                var critVFX = resourceManager.VisualEffect("Yellow_Hit");
-                vfxManager.TriggerSpawn(critVFX, attack.Opponent.position);
-            }
-
-          
-          
-
-            yield return vfxManager.Spawn(
-                vfx.Attack,
-                attack.Opponent.position,
-                new Trigger(attack.Opponent.TakeDamage(attack), isAsync: false));
-        }
-        else
-        {
-            yield return attack.Opponent.AttackMiss();
-        }
+        yield return vfxManager.Spawn(
+            vfx.Attack,
+            attack.Opponent.position,
+            new Trigger(coroutine: attack.IsHit ? attack.Opponent.TakeDamage(attack) : attack.Opponent.AttackMiss(),
+                        isAsync: false));
     }
 
     public void CalculateAttackStrategy()
@@ -321,34 +308,6 @@ public class ActorInstance : MonoBehaviour
         }
     }
 
-
-    public void ApplyTilt(Vector3 velocity, float tiltFactor, float rotationSpeed, float resetSpeed, Vector3 baseRotation)
-    {
-        if (velocity.magnitude > 0.01f) //Apply tilt if there is noticeable movement
-        {
-            // Determine if the movement is primarily vertical or horizontal
-
-            bool isMovingVertical = Mathf.Abs(velocity.y) > Mathf.Abs(velocity.x);
-            float velocityFactor = isMovingVertical ? velocity.y : velocity.x;
-            float tiltZ = velocityFactor * tiltFactor; // Tilt on Z-axis based on velocity
-            transform.localRotation = Quaternion.Slerp(
-                transform.localRotation,
-                Quaternion.Euler(0, 0, tiltZ),
-                Time.deltaTime * rotationSpeed * gameSpeed
-            );
-        }
-        else
-        {
-            //TriggerReset rotation smoothly when velocity is minimal
-            transform.localRotation = Quaternion.Slerp(
-                transform.localRotation,
-                Quaternion.Euler(baseRotation),
-                Time.deltaTime * resetSpeed
-            );
-        }
-    }
-
-
     public void TriggerTakeDamage(AttackResult attack)
     {
         if (!isActive || !isAlive)
@@ -362,6 +321,9 @@ public class ActorInstance : MonoBehaviour
         //Check abort conditions
         if (!isActive || !isAlive)
             yield break;
+
+        if(attack.IsCriticalHit)
+            vfxManager.TriggerSpawn(resourceManager.VisualEffect("Yellow_Hit"), attack.Opponent.position);
 
         //Trigger coroutine (if applicable):
         //yield return attack.Triggers.Before.StartCoroutine(this);
@@ -435,7 +397,7 @@ public class ActorInstance : MonoBehaviour
                 TriggerSpawnCoins(amount);
             }
 
-            yield return Wait.For(Interval.FiveTicks);
+            yield return Wait.OneTick();
         }
 
         //After:       
