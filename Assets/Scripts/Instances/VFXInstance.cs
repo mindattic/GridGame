@@ -70,7 +70,7 @@ public class VFXInstance : MonoBehaviour
         if (vfx.duration != 0f)
             yield return Wait.For(duration);
 
-        //TriggerDespawn the VFX
+        //Despawn VFX
         Despawn(name);
     }
 

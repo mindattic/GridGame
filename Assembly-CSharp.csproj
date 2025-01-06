@@ -91,8 +91,10 @@
     <Compile Include="Assets\Scripts\Managers\DatabaseManager.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorVFX.cs" />
     <Compile Include="Assets\Scripts\Managers\PointerManager.cs" />
+    <Compile Include="Assets\Scripts\GUI\CanvasOverlay.cs" />
     <Compile Include="Assets\Scripts\Models\WeaponTypeResource.cs" />
     <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
+    <Compile Include="Assets\PauseManager.cs" />
     <Compile Include="Assets\Scripts\Models\PropSprite.cs" />
     <Compile Include="Assets\Scripts\Managers\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Managers\FootstepManager.cs" />
@@ -100,7 +102,6 @@
     <Compile Include="Assets\Scripts\Managers\VFXManager.cs" />
     <Compile Include="Assets\Scripts\Instances\SupportLineInstance.cs" />
     <Compile Include="Assets\Scripts\Models\ActorPair.cs" />
-    <Compile Include="Assets\Scripts\Managers\CanvasOverlayInstance.cs" />
     <Compile Include="Assets\Scripts\Managers\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Managers\DebugManager.cs" />
     <Compile Include="Assets\SQLiteDatabase\Example\DatabaseExample.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Models\ActorStats.cs" />
     <Compile Include="Assets\Scripts\Models\PrefabResource.cs" />
+    <Compile Include="Assets\Scripts\Instances\BoardOverlay.cs" />
     <Compile Include="Assets\Scripts\Instances\TimerBarInstance.cs" />
     <Compile Include="Assets\Scripts\Managers\LogManager.cs" />
     <Compile Include="Assets\Scripts\Instances\AttackLineInstance.cs" />
@@ -133,7 +135,6 @@
     <Compile Include="Assets\Scripts\Instances\Actor\ActorActionBar.cs" />
     <Compile Include="Assets\Scripts\Managers\CardManager.cs" />
     <Compile Include="Assets\Scripts\Managers\ActorManager.cs" />
-    <Compile Include="Assets\Scripts\Instances\BoardOverlayInstance.cs" />
     <Compile Include="Assets\Scripts\Instances\VFXInstance.cs" />
     <Compile Include="Assets\Scripts\Instances\FpsMonitor.cs" />
     <Compile Include="Assets\Scripts\Managers\TurnManager.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Assets\Scripts\Instances\TileInstance.cs" />
     <Compile Include="Assets\Scripts\Models\Enums.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorActions.cs" />
+    <Compile Include="Assets\Scripts\Models\Alpha.cs" />
     <Compile Include="Assets\Scripts\Models\SeamlessSprite.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Models\Alignment.cs" />

@@ -31,8 +31,7 @@ public class StageManager : MonoBehaviour
     protected TimerBarInstance timerBar => GameManager.instance.timerBar;
     protected ActorManager actorManager => GameManager.instance.actorManager;
 
-    protected CanvasOverlayInstance canvasOverlay => GameManager.instance.canvasOverlay;
-    protected TitleManager titleManager => GameManager.instance.titleManager;
+    protected CanvasOverlay canvasOverlay => GameManager.instance.canvasOverlay;
     protected Vector3 tileScale => GameManager.instance.tileScale;
 
     protected List<ActorInstance> actors
@@ -80,8 +79,12 @@ public class StageManager : MonoBehaviour
         timerBar.TriggerReset();
         actorManager.Clear();
         actorManager.Clear();
-        canvasOverlay.Show();
-        titleManager.Print($"Stage {currentStage}");
+
+
+
+        canvasOverlay.Show($"Stage {currentStage}");
+        canvasOverlay.TriggerFadeOut(delay: Interval.ThreeSeconds);
+        //titleManager.TriggerFadeIn($"Stage {currentStage}");
 
         List<StageActor> stageActors = new List<StageActor>();
 

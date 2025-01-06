@@ -28,7 +28,6 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public DamageTextManager damageTextManager;
     [HideInInspector] public GhostManager ghostManager;
     [HideInInspector] public PortraitManager portraitManager;  
-    [HideInInspector] public TitleManager titleManager;
     [HideInInspector] public CardManager cardManager;
     [HideInInspector] public ActorManager actorManager;
     [HideInInspector] public SelectedPlayerManager selectedPlayerManager;
@@ -42,10 +41,10 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public CoinManager coinManager;
 
     //Board
-    [HideInInspector] public BoardOverlayInstance boardOverlay;
+    [HideInInspector] public BoardOverlay boardOverlay;
 
     //Canvas
-    [HideInInspector] public CanvasOverlayInstance canvasOverlay;
+    [HideInInspector] public CanvasOverlay canvasOverlay;
 
     //UI Managers
     [HideInInspector] public DebugManager debugManager;
@@ -123,7 +122,6 @@ public class GameManager : Singleton<GameManager>
         canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>() ?? throw new UnityException("Canvas2D is null");
         canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>() ?? throw new UnityException("Canvas3D is null");
         cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>() ?? throw new UnityException("CardManager is null");
-        titleManager = GameObject.Find(Constants.Title).GetComponent<TitleManager>() ?? throw new UnityException("TitleManager is null");
         resourceManager = GameObject.Find(Constants.Resources).GetComponent<ResourceManager>() ?? throw new UnityException("ResourceManager is null");
         timerBar = GameObject.Find(Constants.TimerBar).GetComponent<TimerBarInstance>() ?? throw new UnityException("TimerBarInstance is null");
         coinBar = GameObject.Find(Constants.CoinBar).GetComponent<CoinBarInstance>() ?? throw new UnityException("CoinBarInstance is null");
@@ -162,10 +160,10 @@ public class GameManager : Singleton<GameManager>
         coinManager = game.GetComponent<CoinManager>() ?? throw new UnityException("CoinManager is null");
 
         //Board components
-        boardOverlay = GameObject.Find(Constants.BoardOverlay).GetComponent<BoardOverlayInstance>() ?? throw new UnityException("BoardOverlayInstance is null");
+        boardOverlay = GameObject.Find(Constants.BoardOverlay).GetComponent<BoardOverlay>() ?? throw new UnityException("BoardOverlay is null");
 
         //Canvas2D componenets
-        canvasOverlay = GameObject.Find(Constants.CanvasOverlay).GetComponent<CanvasOverlayInstance>() ?? throw new UnityException("CanvasOverlayInstance is null");
+        canvasOverlay = GameObject.Find(Constants.CanvasOverlay).GetComponent<CanvasOverlay>() ?? throw new UnityException("CanvasOverlay is null");
 
 
         combatParticipants = new CombatParticipants();

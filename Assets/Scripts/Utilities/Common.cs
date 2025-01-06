@@ -15,7 +15,6 @@ public static class Constants
     public const string Canvas3D = "Canvas3D";
     public const string Art = "Art";
     public const string CanvasOverlay = "CanvasOverlay";
-    public const string Title = "Title";
     public const string Card = "Card";
     public const string TimerBar = "TimerBar";
     public const string CoinBar = "CoinBar";

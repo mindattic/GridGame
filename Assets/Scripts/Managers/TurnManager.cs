@@ -14,7 +14,7 @@ public class TurnManager : MonoBehaviour
     #region Properties
     protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
     protected AudioManager audioManager => GameManager.instance.audioManager;
-    protected BoardOverlayInstance boardOverlay => GameManager.instance.boardOverlay;
+    protected BoardOverlay boardOverlay => GameManager.instance.boardOverlay;
     protected CombatParticipants combatParticipants { get => GameManager.instance.combatParticipants; set => GameManager.instance.combatParticipants = value; }
     protected PortraitManager portraitManager => GameManager.instance.portraitManager;
     protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;

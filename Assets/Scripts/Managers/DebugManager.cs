@@ -22,10 +22,12 @@ public class DebugManager : MonoBehaviour
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
     protected StageManager stageManager => GameManager.instance.stageManager;
     protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
-    protected TitleManager titleManager => GameManager.instance.titleManager;
     protected TooltipManager tooltipManager => GameManager.instance.tooltipManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
     protected VFXManager vfxManager => GameManager.instance.vfxManager;
+    protected CanvasOverlay canvasOverlay => GameManager.instance.canvasOverlay;
+
+
     #endregion
 
     //Variables
@@ -207,7 +209,9 @@ public class DebugManager : MonoBehaviour
 
     public void TitleTest()
     {
-        titleManager.Print(DateTime.UtcNow.Ticks.ToString());
+        var text = DateTime.UtcNow.Ticks.ToString();
+        canvasOverlay.TriggerFadeIn(text);
+        canvasOverlay.TriggerFadeOut(Interval.ThreeSeconds);
     }
 
     public void TooltipTest()
