@@ -3,6 +3,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     #region Properties
+    protected PauseManager pauseManager => GameManager.instance.pauseManager;
     protected ActorInstance focusedActor => GameManager.instance.focusedActor;
     protected ActorInstance previousSelectedPlayer => GameManager.instance.previousSelectedPlayer;
     protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
@@ -46,9 +47,17 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.Log("Pressed R");
+            Debug.Log("R key pressed");
             stageManager.Load();
         }
+
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("P key pressed");
+            pauseManager.Toggle();
+        }
+
 
     }
 

@@ -76,11 +76,9 @@ public class StageManager : MonoBehaviour
         supportLineManager.Clear();
         attackLineManager.Clear();
         turnManager.Reset();
-        timerBar.TriggerReset();
+        timerBar.TriggerResetUI();
         actorManager.Clear();
         actorManager.Clear();
-
-
 
         canvasOverlay.Show($"Stage {currentStage}");
         canvasOverlay.TriggerFadeOut(delay: Interval.ThreeSeconds);

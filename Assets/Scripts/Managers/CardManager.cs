@@ -117,7 +117,7 @@ namespace Game.Behaviors
             // TriggerDespawn all selection boxes from actors
             actors.ForEach(x => x.render.SetSelectionBoxEnabled(false));
 
-            // TriggerReset portrait position
+            // ResetUI portrait position
             portrait.rectTransform.localPosition = offscreenPosition;
         }
     }

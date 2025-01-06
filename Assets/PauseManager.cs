@@ -4,11 +4,11 @@ public class PauseManager : MonoBehaviour
 {
     #region Properties
     protected CanvasOverlay canvasOverlay => GameManager.instance.canvasOverlay;
-
+    public bool IsPaused => Time.timeScale == 0f;
     #endregion
 
 
-    public bool IsPaused { get; private set; } = false;
+
 
     public void Toggle()
     {
@@ -19,18 +19,14 @@ public class PauseManager : MonoBehaviour
     }
 
     public void Pause()
-    {
-        IsPaused = true;
+    {       
+        canvasOverlay.Show("Pause");
         Time.timeScale = 0f;
-
-        canvasOverlay.TriggerFadeIn("Pause");
     }
 
     public void Resume()
     {
-        IsPaused = false;
+        canvasOverlay.Hide();
         Time.timeScale = 1f;
-
-        canvasOverlay.TriggerFadeOut();
     }
 }

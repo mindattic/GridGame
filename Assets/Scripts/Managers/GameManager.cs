@@ -39,6 +39,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public AudioManager audioManager;
     [HideInInspector] public VFXManager vfxManager;
     [HideInInspector] public CoinManager coinManager;
+    [HideInInspector] public PauseManager pauseManager;
 
     //Board
     [HideInInspector] public BoardOverlay boardOverlay;
@@ -164,6 +165,9 @@ public class GameManager : Singleton<GameManager>
 
         //Canvas2D componenets
         canvasOverlay = GameObject.Find(Constants.CanvasOverlay).GetComponent<CanvasOverlay>() ?? throw new UnityException("CanvasOverlay is null");
+
+        //Global
+        pauseManager = GameObject.Find(Constants.Global).GetComponent<PauseManager>() ?? throw new UnityException("PauseManager is null");
 
 
         combatParticipants = new CombatParticipants();

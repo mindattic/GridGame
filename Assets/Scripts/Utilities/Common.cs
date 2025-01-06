@@ -7,6 +7,7 @@ using UnityEngine;
 
 public static class Constants
 {
+    public const string Global = "Global";
     public const string Game = "Game";
     public const string Resources = "Resources";
     public const string Board = "Board";
@@ -18,6 +19,8 @@ public static class Constants
     public const string Card = "Card";
     public const string TimerBar = "TimerBar";
     public const string CoinBar = "CoinBar";
+  
+
 
     //Percent
     public const float percent10 = 0.1f;

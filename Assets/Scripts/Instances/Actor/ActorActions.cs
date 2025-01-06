@@ -138,7 +138,7 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            //During (Phase 2) - TriggerReset transition:
+            //During (Phase 2) - ResetUI transition:
             elapsedTime = 0f;
             while (elapsedTime < returnDuration)
             {
@@ -245,7 +245,7 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            // TriggerReset sorting order and position
+            // ResetUI sorting order and position
             sortingOrder = SortingOrder.Default;
             position = startPosition;
             rotation = Quaternion.identity;

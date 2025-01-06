@@ -212,6 +212,7 @@ public class DebugManager : MonoBehaviour
         var text = DateTime.UtcNow.Ticks.ToString();
         canvasOverlay.TriggerFadeIn(text);
         canvasOverlay.TriggerFadeOut(Interval.ThreeSeconds);
+
     }
 
     public void TooltipTest()

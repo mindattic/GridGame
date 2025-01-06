@@ -62,12 +62,12 @@ public class TimerBarInstance : MonoBehaviour
         }
     }
 
-    public void TriggerReset()
+    public void TriggerResetUI()
     {
-        StartCoroutine(Reset());
+        StartCoroutine(ResetUI());
     }
 
-    IEnumerator Reset()
+    IEnumerator ResetUI()
     {
         //Before:
         bar.transform.localScale = new Vector3(1f, scale.y, scale.z);

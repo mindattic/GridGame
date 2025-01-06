@@ -257,7 +257,7 @@ public class DebugWindow : EditorWindow
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("TriggerReset", GUILayout.Width(Screen.width * 0.3333f)))
+        if (GUILayout.Button("Reset", GUILayout.Width(Screen.width * 0.3333f)))
             OnResetClick();
 
         if (GUILayout.Button("< Previous", GUILayout.Width(Screen.width * 0.3333f)))

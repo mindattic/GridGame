@@ -29,7 +29,7 @@ public class VFXManager : MonoBehaviour
 
         var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
         var visualEffect = prefab.GetComponent<VFXInstance>();
-        visualEffect.name = $"VFX_{vfx.id}Reset{Guid.NewGuid()}";
+        visualEffect.name = $"VFX_{vfx.id}ResetUI{Guid.NewGuid()}";
         visualEffects.Add(visualEffect.name, visualEffect);
 
         yield return visualEffect.Spawn(vfx, position, trigger);

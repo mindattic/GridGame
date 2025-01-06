@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 public class CanvasOverlay : MonoBehaviour
 {
-    #region Properties
-    #endregion
+    //Constants
+    const float duration = 1f;
+    const float rotateMultiplier = 1.5f;
 
-    // Variables
+    //Variables
     private RectTransform rect;
     private Image backgroundImage;
     private TextMeshProUGUI label;
@@ -67,7 +68,7 @@ public class CanvasOverlay : MonoBehaviour
         label.fontSize = 48; // Ensure visibility
     }
 
-    public void Show(string text)
+    public void Show(string text, float duration = 0f)
     {
         backgroundColor.a = backgroundMaxAlpha;
         backgroundImage.color = backgroundColor;
@@ -78,6 +79,18 @@ public class CanvasOverlay : MonoBehaviour
         label.transform.eulerAngles = new Vector3(0, 0, 0);
     }
 
+    public void Hide()
+    {
+        backgroundColor.a = backgroundMinAlpha;
+        backgroundImage.color = backgroundColor;
+
+        labelColor.a = labelMinAlpha;
+        label.color = labelColor;
+        label.text = "";
+        label.transform.eulerAngles = new Vector3(-90, 0, 0);
+    }
+
+
     public void TriggerFadeIn(string text = "")
     {
         StartCoroutine(FadeIn(text));
@@ -85,7 +98,6 @@ public class CanvasOverlay : MonoBehaviour
 
     private IEnumerator FadeIn(string text = "")
     {
-        const float duration = 1.0f; // Total duration for the fade/rotation
         float elapsedTime = 0f;
 
         // Set initial values
@@ -109,8 +121,8 @@ public class CanvasOverlay : MonoBehaviour
             backgroundColor.a = alpha;
             backgroundImage.color = backgroundColor;
 
-            // Update label rotation
-            float angle = Mathf.Lerp(startAngle, endAngle, t);
+            // Update label rotation (rotate faster)
+            float angle = Mathf.Lerp(startAngle, endAngle, t * rotateMultiplier);
             label.transform.eulerAngles = new Vector3(angle, 0, 0);
 
             yield return Wait.OneTick();
@@ -132,7 +144,6 @@ public class CanvasOverlay : MonoBehaviour
         if (delay > 0)
             yield return new WaitForSeconds(delay);
 
-        const float duration = 1.0f; // Total duration for the fade/rotation
         float elapsedTime = 0f;
 
         // Set initial values
@@ -150,8 +161,8 @@ public class CanvasOverlay : MonoBehaviour
             backgroundColor.a = alpha;
             backgroundImage.color = backgroundColor;
 
-            // Update label rotation
-            float angle = Mathf.Lerp(startAngle, endAngle, t);
+            // Update label rotation (rotate faster)
+            float angle = Mathf.Lerp(startAngle, endAngle, t * rotateMultiplier);
             label.transform.eulerAngles = new Vector3(angle, 0, 0);
 
             yield return Wait.OneTick();

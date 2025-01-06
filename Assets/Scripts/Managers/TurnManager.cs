@@ -65,13 +65,13 @@ public class TurnManager : MonoBehaviour
         attackLineManager.Clear();
         combatParticipants.Clear();
 
-        //TriggerReset actors sorting
+        //ResetUI actors sorting
         actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
 
         if (isPlayerTurn)
         {
             currentTurn++;
-            timerBar.TriggerReset();
+            timerBar.TriggerResetUI();
             players.Where(x => x.isActive && x.isAlive).ToList().ForEach(x => x.glow.TriggerGlow());
         }
         else if (isEnemyTurn)
@@ -229,14 +229,14 @@ public class TurnManager : MonoBehaviour
                 attackLineManager.Spawn(pair);
                 yield return PlayerAttack(pair);
 
-                // TriggerReset participants after each attack
+                // ResetUI participants after each attack
                 ResetRolesAfterAttack(new[] { pair.actor1, pair.actor2 }); // Attackers
                 ResetRolesAfterAttack(pair.alignment.enemies);             // Defenders
             }
 
             boardOverlay.TriggerFadeOut();
             NextTurn();
-            ClearCombatState(); // TriggerReset all roles and counts
+            ClearCombatState(); // ResetUI all roles and counts
         }
 
         StartCoroutine(ExecuteCombat());
@@ -253,7 +253,7 @@ public class TurnManager : MonoBehaviour
                 actor.attackingPairCount--;
                 if (actor.attackingPairCount == 0)
                 {
-                    actor.SetDefault(); // TriggerReset attackers
+                    actor.SetDefault(); // ResetUI attackers
                 }
             }
 
@@ -262,7 +262,7 @@ public class TurnManager : MonoBehaviour
                 actor.supportingPairCount--;
                 if (actor.supportingPairCount == 0)
                 {
-                    actor.SetDefault(); // TriggerReset supporters
+                    actor.SetDefault(); // ResetUI supporters
                 }
             }
 
