@@ -9,16 +9,15 @@ public class PauseManager : MonoBehaviour
     public bool IsPaused => Time.timeScale == 0f;
     #endregion
 
-    public Image pauseButtonImage;
+    private Image buttonImage;
 
 
 
     void Awake()
     {
         GameObject pauseButton = GameObject.Find("PauseButton");
-        pauseButtonImage = pauseButton.GetComponent<Image>();
-        pauseButtonImage = GetComponent<Image>();
-        pauseButtonImage.sprite = resourceManager.Sprite("Pause").sprite;
+        buttonImage = pauseButton.GetComponent<Image>();
+        buttonImage.sprite = resourceManager.Sprite("Pause").sprite;
     }
 
 
@@ -32,14 +31,14 @@ public class PauseManager : MonoBehaviour
 
     public void Pause()
     {
-        pauseButtonImage.sprite = resourceManager.Sprite("Paused").sprite;
+        buttonImage.sprite = resourceManager.Sprite("Paused").sprite;
         canvasOverlay.Show("Pause");
         Time.timeScale = 0f;
     }
 
     public void Resume()
     {
-        pauseButtonImage.sprite = resourceManager.Sprite("Pause").sprite;
+        buttonImage.sprite = resourceManager.Sprite("Pause").sprite;
         canvasOverlay.Hide();
         Time.timeScale = 1f;
     }

@@ -128,9 +128,7 @@ public class GameManager : Singleton<GameManager>
         coinBar = GameObject.Find(Constants.CoinBar).GetComponent<CoinBarInstance>() ?? throw new UnityException("CoinBarInstance is null");
 
         var game = GameObject.Find(Constants.Game);
-        soundSource = game.GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");
-        musicSource = game.GetComponents<AudioSource>()[Constants.MusicSourceIndex] ?? throw new UnityException("MusicSource is null");
-
+       
         //Game components
         databaseManager = game.GetComponent<DatabaseManager>() ?? throw new UnityException("DatabaseManager is null");
         cameraManager = game.GetComponent<CameraManager>() ?? throw new UnityException("CameraManager is null");
@@ -144,8 +142,7 @@ public class GameManager : Singleton<GameManager>
         attackLineManager = game.GetComponent<AttackLineManager>() ?? throw new UnityException("AttackLineManager is null");
         damageTextManager = game.GetComponent<DamageTextManager>() ?? throw new UnityException("DamageTextManager is null");
         ghostManager = game.GetComponent<GhostManager>() ?? throw new UnityException("GhostManager is null");
-        portraitManager = game.GetComponent<PortraitManager>() ?? throw new UnityException("PortraitManager is null");
-        
+        portraitManager = game.GetComponent<PortraitManager>() ?? throw new UnityException("PortraitManager is null");   
         actorManager = game.GetComponent<ActorManager>() ?? throw new UnityException("ActorManager is null");
         selectedPlayerManager = game.GetComponent<SelectedPlayerManager>() ?? throw new UnityException("SelectedPlayerManager is null");
         playerManager = game.GetComponent<PlayerManager>() ?? throw new UnityException("PlayerManager is null");
@@ -159,16 +156,17 @@ public class GameManager : Singleton<GameManager>
         logManager = game.GetComponent<LogManager>() ?? throw new UnityException("LogManager is null");
         vfxManager = game.GetComponent<VFXManager>() ?? throw new UnityException("VFXManager is null");
         coinManager = game.GetComponent<CoinManager>() ?? throw new UnityException("CoinManager is null");
+        pauseManager = game.GetComponent<PauseManager>() ?? throw new UnityException("PauseManager is null");
 
         //Board components
         boardOverlay = GameObject.Find(Constants.BoardOverlay).GetComponent<BoardOverlay>() ?? throw new UnityException("BoardOverlay is null");
 
-        //Canvas2D componenets
+        //Canvas componenets
         canvasOverlay = GameObject.Find(Constants.CanvasOverlay).GetComponent<CanvasOverlay>() ?? throw new UnityException("CanvasOverlay is null");
 
-        //Global
-        pauseManager = GameObject.Find(Constants.Global).GetComponent<PauseManager>() ?? throw new UnityException("PauseManager is null");
-
+        //Audio
+        soundSource = game.GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");
+        musicSource = game.GetComponents<AudioSource>()[Constants.MusicSourceIndex] ?? throw new UnityException("MusicSource is null");
 
         combatParticipants = new CombatParticipants();
 
