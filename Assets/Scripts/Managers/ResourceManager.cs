@@ -1,3 +1,4 @@
+using Assets.Scripts.Models;
 using Game.Behaviors;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] public List<MusicTrack> musicTracks = new List<MusicTrack>();
     [SerializeField] public List<VisualEffect> visualEffects = new List<VisualEffect>();
     [SerializeField] public List<WeaponTypeResource> weaponTypes = new List<WeaponTypeResource>();
+    [SerializeField] public List<SpriteResource> sprites = new List<SpriteResource>();
+
     //[SerializeField] public List<PrefabResource> prefabs = new List<PrefabResource>();
     //[SerializeField] public List<ShaderResource> shaders = new List<ShaderResource>();
 
@@ -190,6 +193,20 @@ public class ResourceManager : MonoBehaviour
         return null;
     }
 
+
+    public SpriteResource Sprite(string id)
+    {
+        try
+        {
+            return sprites.First(x => x.id.Equals(id));
+        }
+        catch (Exception ex)
+        {
+            logManager.Error($"Failed to retrieve sprite `{id}` from resource manager. | Error: {ex.Message}");
+        }
+
+        return null;
+    }
 
     //public PrefabResource Prefab(string id)
     //{

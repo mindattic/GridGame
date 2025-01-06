@@ -37,7 +37,7 @@ public class CanvasOverlay : MonoBehaviour
         rect.offsetMin = Vector2.zero;
         rect.offsetMax = Vector2.zero;
 
-        // Ensure the Background Image also fills the entire screen
+        // Ensure the Background Sprite also fills the entire screen
         RectTransform backgroundImageRect = transform.Find("Background").GetComponent<RectTransform>();
         backgroundImageRect.anchorMin = Vector2.zero;
         backgroundImageRect.anchorMax = Vector2.one;

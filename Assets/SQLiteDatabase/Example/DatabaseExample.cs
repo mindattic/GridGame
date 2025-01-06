@@ -98,7 +98,7 @@ public class DatabaseExample : MonoBehaviour
             // name
             rect.x += 130;
             GUI.Label(rect, allNames[i]);
-            // update button
+            // update buttonImage
             rect.x += 130;
             if (GUI.Button(rect, "Edit"))
             {
@@ -106,7 +106,7 @@ public class DatabaseExample : MonoBehaviour
                 _name = allNames[i];
                 btnName_SaveUpdate = "Update";
             }
-            // remove button
+            // remove buttonImage
             rect.x += 130;
             if (GUI.Button(rect, "Delete"))
             {
