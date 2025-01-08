@@ -13,10 +13,10 @@ public class InputManager : MonoBehaviour
     protected StageManager stageManager => GameManager.instance.stageManager;
     protected float dragThreshold;
     protected float tileSize => GameManager.instance.tileSize;
-    private bool isDragging;
     #endregion
 
     //Variables
+    private bool isDragging;
     //public bool IsDragging => dragStart != null;
     //public Vector3? dragStart = null;
     //[SerializeField] public float dragThreshold = 5f;
@@ -29,6 +29,9 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
+        //Check abort conditions
+        if (pauseManager.IsPaused)
+            return;
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -44,21 +47,6 @@ public class InputManager : MonoBehaviour
         }
 
         CheckDragging();
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log("R key pressed");
-            stageManager.Load();
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Debug.Log("P key pressed");
-            pauseManager.Toggle();
-        }
-
-
     }
 
     private void CheckDragging()

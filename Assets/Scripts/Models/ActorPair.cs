@@ -53,7 +53,7 @@ public class ActorPair
         {
             actor1.sortingOrder = value;
             actor2.sortingOrder = value;
-            alignment.enemies.ForEach(x => x.sortingOrder = value);
+            alignment.opponents.ForEach(x => x.sortingOrder = value);
         }
     }
 

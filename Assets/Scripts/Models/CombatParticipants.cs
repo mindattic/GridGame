@@ -30,18 +30,18 @@ public class CombatParticipants
     {
         if (pair != null)
         {
-            // If a specific pair is provided, include actor1, actor2, and alignment enemies
+            // If a specific pair is provided, include actor1, actor2, and alignment opponents
             return new[] { pair.actor1, pair.actor2 }
-                .Concat(pair.alignment.enemies)
+                .Concat(pair.alignment.opponents)
                 .Distinct()
                 .ToList();
         }
 
-        // If no pair is specified, gather actors and alignment enemies from all collections
+        // If no pair is specified, gather actors and alignment opponents from all collections
         return alignedPairs
-            .SelectMany(x => new[] { x.actor1, x.actor2 }.Concat(x.alignment.enemies)) // Include alignment enemies
-            .Concat(attackingPairs.SelectMany(x => new[] { x.actor1, x.actor2 }.Concat(x.alignment.enemies)))
-            .Concat(supportingPairs.SelectMany(x => new[] { x.actor1, x.actor2 }.Concat(x.alignment.enemies)))
+            .SelectMany(x => new[] { x.actor1, x.actor2 }.Concat(x.alignment.opponents)) // Include alignment opponents
+            .Concat(attackingPairs.SelectMany(x => new[] { x.actor1, x.actor2 }.Concat(x.alignment.opponents)))
+            .Concat(supportingPairs.SelectMany(x => new[] { x.actor1, x.actor2 }.Concat(x.alignment.opponents)))
             .Distinct()
             .ToList();
     }

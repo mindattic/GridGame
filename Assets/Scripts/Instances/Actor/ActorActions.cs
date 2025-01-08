@@ -177,19 +177,15 @@ namespace Assets.Scripts.Instances.Actor
             if (trigger == default)
                 trigger = new Trigger();
 
-            if (direction != Direction.None)
-                trigger.AddAttribute("direction", direction);
-
-            instance.StartCoroutine(Bump(trigger));
+            instance.StartCoroutine(Bump(direction, trigger));
         }
 
-        public IEnumerator Bump(Trigger trigger = default)
+        public IEnumerator Bump(Direction direction, Trigger trigger = default)
         {
             if (trigger == default)
                 trigger = new Trigger();
 
             //Before
-            var direction = trigger.GetAttribute("direction", Direction.East);
             var windupCurve = AnimationCurve.EaseInOut(0, 0, 0.5f, 1); // Windup easing
             var bumpCurve = AnimationCurve.EaseInOut(0, 0, 0.5f, 1); // Fast movement
             var returnCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);   // Smooth return

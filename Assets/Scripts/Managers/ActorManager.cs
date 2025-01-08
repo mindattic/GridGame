@@ -41,7 +41,11 @@ namespace Game.Manager
         //}
 
 
-
+        public void DisabledAt(Vector2Int location)
+        {
+            var actor = actors.Where(x => x.location == location).FirstOrDefault();
+            actor?.gameObject.SetActive(false);
+        }
 
         public void Clear()
         {

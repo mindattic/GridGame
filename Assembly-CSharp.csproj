@@ -95,6 +95,7 @@
     <Compile Include="Assets\Scripts\Models\WeaponTypeResource.cs" />
     <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
     <Compile Include="Assets\PauseManager.cs" />
+    <Compile Include="Assets\CombatManager.cs" />
     <Compile Include="Assets\Scripts\Models\PropSprite.cs" />
     <Compile Include="Assets\Scripts\Managers\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Managers\FootstepManager.cs" />

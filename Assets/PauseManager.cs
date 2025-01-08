@@ -10,14 +10,18 @@ public class PauseManager : MonoBehaviour
     #endregion
 
     private Image buttonImage;
-
+    private Sprite pause;
+    private Sprite paused;
 
 
     void Awake()
     {
+        pause = resourceManager.Sprite("Pause").sprite;
+        paused = resourceManager.Sprite("Paused").sprite;
+
         GameObject pauseButton = GameObject.Find("PauseButton");
         buttonImage = pauseButton.GetComponent<Image>();
-        buttonImage.sprite = resourceManager.Sprite("Pause").sprite;
+        buttonImage.sprite = pause;
     }
 
 
@@ -31,14 +35,14 @@ public class PauseManager : MonoBehaviour
 
     public void Pause()
     {
-        buttonImage.sprite = resourceManager.Sprite("Paused").sprite;
-        canvasOverlay.Show("Pause");
+        buttonImage.sprite = paused;
+        canvasOverlay.Show("Paused");
         Time.timeScale = 0f;
     }
 
     public void Resume()
     {
-        buttonImage.sprite = resourceManager.Sprite("Pause").sprite;
+        buttonImage.sprite = pause;
         canvasOverlay.Hide();
         Time.timeScale = 1f;
     }

@@ -14,6 +14,10 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public int vSyncCount = 0;
     [HideInInspector] public float gameSpeed = 1.0f;
 
+    //Audio
+    [HideInInspector] public AudioSource soundSource;
+    [HideInInspector] public AudioSource musicSource;
+
     //Managers
     [HideInInspector] public DatabaseManager databaseManager;
     [HideInInspector] public ResourceManager resourceManager;
@@ -40,6 +44,11 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public VFXManager vfxManager;
     [HideInInspector] public CoinManager coinManager;
     [HideInInspector] public PauseManager pauseManager;
+    [HideInInspector] public DebugManager debugManager;
+    [HideInInspector] public ConsoleManager consoleManager;
+    [HideInInspector] public LogManager logManager;
+    [HideInInspector] public CombatManager combatManager;
+
 
     //Board
     [HideInInspector] public BoardOverlay boardOverlay;
@@ -47,21 +56,11 @@ public class GameManager : Singleton<GameManager>
     //Canvas
     [HideInInspector] public CanvasOverlay canvasOverlay;
 
-    //UI Managers
-    [HideInInspector] public DebugManager debugManager;
-    [HideInInspector] public ConsoleManager consoleManager;
-    [HideInInspector] public LogManager logManager;
-
-    //Audio
-    [HideInInspector] public AudioSource soundSource;
-    [HideInInspector] public AudioSource musicSource;
-
-    //relativeScale
+  
     [HideInInspector] public Vector2 viewport;
     [HideInInspector] public float tileSize;
     [HideInInspector] public Vector3 tileScale;
     [HideInInspector] public float cardPortraitSize;
-
     [HideInInspector] public Canvas canvas2D;
     [HideInInspector] public Canvas canvas3D;
 
@@ -69,14 +68,13 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public Vector3 mousePosition2D;
     [HideInInspector] public Vector3 mousePosition3D;
     [HideInInspector] public Vector3 mouseOffset;
-
     [HideInInspector] public float cursorSpeed;
     [HideInInspector] public float swapSpeed;
     [HideInInspector] public float moveSpeed;
     [HideInInspector] public float snapDistance;
     [HideInInspector] public float bumpSpeed;
 
-    //selectionBox
+    //Actor selection
     [HideInInspector] public ActorInstance focusedActor;
     [HideInInspector] public ActorInstance selectedPlayer;
     [HideInInspector] public ActorInstance previousSelectedPlayer;
@@ -89,11 +87,11 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public List<SupportLineInstance> lines;
     [HideInInspector] public CoinBarInstance coinBar;
 
-    [HideInInspector] public CombatParticipants combatParticipants;
-
-
     [HideInInspector] public IQueryable<ActorInstance> players => actors.Where(x => x.team.Equals(Team.Player)).AsQueryable();
     [HideInInspector] public IQueryable<ActorInstance> enemies => actors.Where(x => x.team.Equals(Team.Enemy)).AsQueryable();
+
+
+
 
     [HideInInspector] public int totalCoins;
 
@@ -128,8 +126,12 @@ public class GameManager : Singleton<GameManager>
         coinBar = GameObject.Find(Constants.CoinBar).GetComponent<CoinBarInstance>() ?? throw new UnityException("CoinBarInstance is null");
 
         var game = GameObject.Find(Constants.Game);
-       
-        //Game components
+
+        //Audio
+        soundSource = game.GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");
+        musicSource = game.GetComponents<AudioSource>()[Constants.MusicSourceIndex] ?? throw new UnityException("MusicSource is null");
+
+        //Managers
         databaseManager = game.GetComponent<DatabaseManager>() ?? throw new UnityException("DatabaseManager is null");
         cameraManager = game.GetComponent<CameraManager>() ?? throw new UnityException("CameraManager is null");
         profileManager = game.GetComponent<ProfileManager>() ?? throw new UnityException("ProfileManager is null");
@@ -157,6 +159,7 @@ public class GameManager : Singleton<GameManager>
         vfxManager = game.GetComponent<VFXManager>() ?? throw new UnityException("VFXManager is null");
         coinManager = game.GetComponent<CoinManager>() ?? throw new UnityException("CoinManager is null");
         pauseManager = game.GetComponent<PauseManager>() ?? throw new UnityException("PauseManager is null");
+        combatManager = game.GetComponent<CombatManager>() ?? throw new UnityException("CombatManager is null");
 
         //Board components
         boardOverlay = GameObject.Find(Constants.BoardOverlay).GetComponent<BoardOverlay>() ?? throw new UnityException("BoardOverlay is null");
@@ -164,12 +167,7 @@ public class GameManager : Singleton<GameManager>
         //Canvas componenets
         canvasOverlay = GameObject.Find(Constants.CanvasOverlay).GetComponent<CanvasOverlay>() ?? throw new UnityException("CanvasOverlay is null");
 
-        //Audio
-        soundSource = game.GetComponents<AudioSource>()[Constants.SoundSourceIndex] ?? throw new UnityException("SoundSource is null");
-        musicSource = game.GetComponents<AudioSource>()[Constants.MusicSourceIndex] ?? throw new UnityException("MusicSource is null");
-
-        combatParticipants = new CombatParticipants();
-
+    
         totalCoins = 0;
 
         #region Platform Dependent Compilation

@@ -165,13 +165,13 @@ public static class AlignmentHelper
 
         if (axis == Axis.Vertical)
         {
-            alignment.enemies = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isEnemy && x.IsSameColumn(actor1.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
+            alignment.opponents = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isEnemy && x.IsSameColumn(actor1.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
             alignment.players = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isPlayer && x.IsSameColumn(actor1.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
             alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && actor1.IsSameColumn(x.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
         }
         else if (axis == Axis.Horizontal)
         {
-            alignment.enemies = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isEnemy && x.IsSameRow(actor1.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
+            alignment.opponents = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isEnemy && x.IsSameRow(actor1.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
             alignment.players = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isPlayer && x.IsSameRow(actor1.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
             alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && actor1.IsSameRow(x.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
         }

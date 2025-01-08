@@ -120,7 +120,7 @@ public class StageManager : MonoBehaviour
                 Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
                 Add(new StageActor(Character.Slime, "Slime A", RandomStats, Team.Enemy, Rarity.Common));
 
-                //Dynamic enemies
+                //Dynamic opponents
                 Add(new StageActor(Character.Slime, "Slime B", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 1));
 
                 break;
@@ -131,6 +131,7 @@ public class StageManager : MonoBehaviour
                 Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
                 Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
                 Add(new StageActor(Character.Cleric, "Cleric", RandomStats, Team.Player, Rarity.Common));
+                Add(new StageActor(Character.Ninja, "Ninja", RandomStats, Team.Player, Rarity.Common));
 
                 //Enemies
                 //Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Opponent, Rarity.Common));
@@ -166,7 +167,7 @@ public class StageManager : MonoBehaviour
 
                 Add(new StageActor(Character.Yeti, "Yeti A", ActorStats("Yeti"), Team.Enemy, Rarity.Common));
 
-                //Dynamic enemies
+                //Dynamic opponents
                 Add(new StageActor(Character.Slime, "Slime H", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 3));
                 Add(new StageActor(Character.Slime, "Slime I", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 4));
                 Add(new StageActor(Character.Slime, "Slime J", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 5));

@@ -14,6 +14,7 @@ public class DebugManager : MonoBehaviour
     protected List<ActorInstance> actors => GameManager.instance.actors;
     protected IQueryable<ActorInstance> players => GameManager.instance.players;
     protected IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
+    protected ActorManager actorManager => GameManager.instance.actorManager;
     protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
     protected CoinManager coinManager => GameManager.instance.coinManager;
     protected DamageTextManager damageTextManager => GameManager.instance.damageTextManager;
@@ -41,6 +42,7 @@ public class DebugManager : MonoBehaviour
     ActorInstance paladin => players.First(x => x.name == "Paladin");
     ActorInstance barbarian => players.First(x => x.name == "Barbarian");
     ActorInstance cleric => players.First(x => x.name == "Cleric");
+    ActorInstance ninja => players.First(x => x.name == "Ninja");
 
     public void PortraitTest()
     {
@@ -447,42 +449,45 @@ public class DebugManager : MonoBehaviour
     }
 
 
-
     public void AlignTest()
     {
+        // Spawn exactly nine slimes
+        for (int i = 0; i < 9; i++)
+            SpawnSlime();
 
-        SpawnSlime();
-        SpawnSlime();
-        SpawnSlime();
-        SpawnSlime();
-        SpawnSlime();
-        SpawnSlime();
+        // Assign specific enemies for teleportation
+        var enemy1 = enemies.ElementAtOrDefault(0);
+        var enemy2 = enemies.ElementAtOrDefault(1);
+        var enemy3 = enemies.ElementAtOrDefault(2);
+        var enemy4 = enemies.ElementAtOrDefault(3);
+        var enemy5 = enemies.ElementAtOrDefault(4);
+        var enemy6 = enemies.ElementAtOrDefault(5);
+        var enemy7 = enemies.ElementAtOrDefault(6);
+        var enemy8 = enemies.ElementAtOrDefault(7);
+        var enemy9 = enemies.ElementAtOrDefault(8);
 
-        var enemy1 = enemies.Skip(0).Take(1).FirstOrDefault();
-        var enemy2 = enemies.Skip(1).Take(1).FirstOrDefault();
-        var enemy3 = enemies.Skip(2).Take(1).FirstOrDefault();
-        var enemy4 = enemies.Skip(3).Take(1).FirstOrDefault();
-        var enemy5 = enemies.Skip(4).Take(1).FirstOrDefault();
-        var enemy6 = enemies.Skip(5).Take(1).FirstOrDefault();
+        // Define the group to remain aligned
+        var group = new[] { paladin, barbarian, cleric, ninja, enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7, enemy8, enemy9 };
 
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 1))?.Teleport(new Vector2Int(1, 1));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 2))?.Teleport(new Vector2Int(1, 2));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 3))?.Teleport(new Vector2Int(1, 3));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 4))?.Teleport(new Vector2Int(1, 4));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 5))?.Teleport(new Vector2Int(1, 5));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 6))?.Teleport(new Vector2Int(1, 6));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 7))?.Teleport(new Vector2Int(1, 7));
-        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 8))?.Teleport(new Vector2Int(1, 8));
+        // Teleport actors in the group to specific positions
+        paladin?.Teleport(new Vector2Int(1, 1));
+        enemy1?.Teleport(new Vector2Int(1, 2));
+        enemy2?.Teleport(new Vector2Int(1, 3));
+        barbarian?.Teleport(new Vector2Int(1, 4));
+        enemy3?.Teleport(new Vector2Int(2, 4));
+        enemy4?.Teleport(new Vector2Int(3, 4));
+        enemy5?.Teleport(new Vector2Int(4, 4));
+        enemy6?.Teleport(new Vector2Int(5, 4));
+        cleric?.Teleport(new Vector2Int(6, 4));
+        enemy7?.Teleport(new Vector2Int(6, 5));
+        enemy8?.Teleport(new Vector2Int(6, 6));
+        enemy9?.Teleport(new Vector2Int(6, 7));
+        ninja?.Teleport(new Vector2Int(6, 8));
 
-        paladin.Teleport(new Vector2Int(3, 1));
-        enemy1?.Teleport(new Vector2Int(3, 2));
-        enemy2?.Teleport(new Vector2Int(3, 3));
-        barbarian.Teleport(new Vector2Int(3, 4));
-        enemy3?.Teleport(new Vector2Int(3, 5));
-        enemy4?.Teleport(new Vector2Int(3, 6));
-        enemy5?.Teleport(new Vector2Int(3, 7));
-        cleric.Teleport(new Vector2Int(3, 8));
+        // Move all other actors to unoccupied locations
+        actors.Except(group).ToList().ForEach(x => x.Teleport(Random.UnoccupiedLocation));
     }
+
 
 
     public void CoinTest()

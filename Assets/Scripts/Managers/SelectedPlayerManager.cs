@@ -7,6 +7,7 @@ using UnityEngine;
 public class SelectedPlayerManager : MonoBehaviour
 {
     #region Properties
+    protected CombatManager combatManager => GameManager.instance.combatManager;
     protected CardManager cardManager => GameManager.instance.cardManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
     protected Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
@@ -105,7 +106,7 @@ public class SelectedPlayerManager : MonoBehaviour
         timerBar.Pause();
         turnManager.currentPhase = TurnPhase.Attack;
 
-        turnManager.CheckPlayerAttack();
+        combatManager.TriggerCombat();
     }
 
 

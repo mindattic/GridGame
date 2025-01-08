@@ -175,6 +175,7 @@ public class ActorInstance : MonoBehaviour
 
     public bool IsSameColumn(Vector2Int other) => location.x == other.x;
     public bool IsSameRow(Vector2Int other) => location.y == other.y;
+    public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(location, other).Equals(1);
     public bool IsNorthOf(Vector2Int other) => IsSameColumn(other) && location.y == other.y - 1;
     public bool IsEastOf(Vector2Int other) => IsSameRow(other) && location.x == other.x + 1;
     public bool IsSouthOf(Vector2Int other) => IsSameColumn(other) && location.y == other.y + 1;
@@ -183,18 +184,32 @@ public class ActorInstance : MonoBehaviour
     public bool IsNorthEastOf(Vector2Int other) => location.x == other.x + 1 && location.y == other.y - 1;
     public bool IsSouthWestOf(Vector2Int other) => location.x == other.x - 1 && location.y == other.y + 1;
     public bool IsSouthEastOf(Vector2Int other) => location.x == other.x + 1 && location.y == other.y + 1;
-    public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(location, other).Equals(1);
 
-    public Direction GetAdjacentDirectionTo(ActorInstance other)
+
+    public Direction GetDirectionTo(ActorInstance other, bool mustBeAdjacent = false)
     {
-        if (!IsAdjacentTo(other.location)) return Direction.None;
-        if (IsNorthOf(other.location)) return Direction.South;
-        if (IsEastOf(other.location)) return Direction.West;
-        if (IsSouthOf(other.location)) return Direction.North;
-        if (IsWestOf(other.location)) return Direction.East;
+        if (mustBeAdjacent && !IsAdjacentTo(other.location))
+            return Direction.None;
 
+        var deltaX = location.x - other.location.x;
+        var deltaY = location.y - other.location.y;
+
+        // Handle simple cardinal directions
+        if (deltaX == 0 && deltaY > 0) return Direction.North;
+        if (deltaX == 0 && deltaY < 0) return Direction.South;
+        if (deltaX > 0 && deltaY == 0) return Direction.West;
+        if (deltaX < 0 && deltaY == 0) return Direction.East;
+
+        // Handle diagonals
+        if (deltaX > 0 && deltaY > 0) return Direction.NorthWest;
+        if (deltaX < 0 && deltaY > 0) return Direction.NorthEast;
+        if (deltaX > 0 && deltaY < 0) return Direction.SouthWest;
+        if (deltaX < 0 && deltaY < 0) return Direction.SouthEast;
+
+        // Default case for no movement or invalid input
         return Direction.None;
     }
+
 
     public void Spawn(Vector2Int startLocation)
     {

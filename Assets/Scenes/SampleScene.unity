@@ -7720,6 +7720,7 @@ GameObject:
   - component: {fileID: 1751276306}
   - component: {fileID: 1751276307}
   - component: {fileID: 1751276310}
+  - component: {fileID: 1751276311}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -7759,6 +7760,8 @@ MonoBehaviour:
   targetFramerate: 60
   vSyncCount: 0
   gameSpeed: 1
+  soundSource: {fileID: 0}
+  musicSource: {fileID: 0}
   databaseManager: {fileID: 0}
   resourceManager: {fileID: 0}
   inputManager: {fileID: 0}
@@ -7784,13 +7787,12 @@ MonoBehaviour:
   vfxManager: {fileID: 0}
   coinManager: {fileID: 0}
   pauseManager: {fileID: 0}
-  boardOverlay: {fileID: 0}
-  canvasOverlay: {fileID: 0}
   debugManager: {fileID: 0}
   consoleManager: {fileID: 0}
   logManager: {fileID: 0}
-  soundSource: {fileID: 0}
-  musicSource: {fileID: 0}
+  combatManager: {fileID: 0}
+  boardOverlay: {fileID: 0}
+  canvasOverlay: {fileID: 0}
   viewport: {x: 0, y: 0}
   tileSize: 0
   tileScale: {x: 0, y: 0, z: 0}
@@ -8345,6 +8347,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4be495a554bb0084b808faf588373ef9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1751276311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751276275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc9a166243343b49ab9f2b72a404c2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1754065672
