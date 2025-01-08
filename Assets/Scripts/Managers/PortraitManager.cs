@@ -1,5 +1,6 @@
 using Game.Behaviors.Actor;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class PortraitManager : MonoBehaviour
 {
     #region Properties
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
+    protected AudioManager audioManager => GameManager.instance.audioManager;
     protected BoardInstance board => GameManager.instance.board;
     protected IQueryable<ActorInstance> players => GameManager.instance.players;
     #endregion
@@ -15,7 +17,7 @@ public class PortraitManager : MonoBehaviour
 
     //Variables
     [SerializeField] public GameObject portraitPrefab;
-    public int sortingOrder = 1;
+    public int sortingOrder;
 
     public void SlideIn(ActorInstance actor, Direction direction)
     {
@@ -23,7 +25,7 @@ public class PortraitManager : MonoBehaviour
         var instance = prefab.GetComponent<PortraitInstance>();
         instance.name = $"Portrait_{Guid.NewGuid()}";
         instance.parent = board.transform;
-        instance.sortingOrder = sortingOrder++;
+        instance.sortingOrder = sortingOrder--;
         instance.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
         instance.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         instance.spriteRenderer.color = new Color(1, 1, 1, Opacity.Percent90);
@@ -34,7 +36,7 @@ public class PortraitManager : MonoBehaviour
         StartCoroutine(instance.SlideIn());
     }
 
-    public void Dissolve()
+    public void TriggerDissolve()
     {
         var actor = players.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
         Dissolve(actor);
@@ -57,5 +59,37 @@ public class PortraitManager : MonoBehaviour
 
         StartCoroutine(instance.Dissolve());
     }
+
+
+
+    public IEnumerator Play(ActorPair pair)
+    {
+        sortingOrder = SortingOrder.Max;
+
+        yield return Wait.For(Intermission.Before.Player.Attack);
+
+        audioManager.Play("Portrait");
+
+        var (direction1, direction2) = GetDirection(pair);
+        SlideIn(pair.actor1, direction1);
+        SlideIn(pair.actor2, direction2);
+
+        yield return Wait.For(Intermission.Before.Portrait.SlideIn);
+
+        sortingOrder = SortingOrder.Max;
+    }
+
+
+    private (Direction, Direction) GetDirection(ActorPair pair)
+    {
+        var first = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
+        var second = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
+       
+        return (pair.actor1 == pair.startActor ? first : second,
+                pair.actor2 == pair.startActor ? first : second);
+    }
+
+
+
 
 }

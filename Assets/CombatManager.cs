@@ -44,10 +44,10 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        StartCoroutine(CombatSequence());
+        StartCoroutine(Combat());
     }
 
-    private IEnumerator CombatSequence()
+    private IEnumerator Combat()
     {
         SetupCombatState();
 
@@ -93,7 +93,7 @@ public class CombatManager : MonoBehaviour
 
     private IEnumerator ResolveAttack(ActorPair pair)
     {
-        yield return HandlePortraits(pair);
+        yield return portraitManager.Play(pair);
 
         var attacks = CalculateAttackResults(pair);
         yield return PerformAttacks(pair, attacks);
@@ -177,26 +177,7 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private IEnumerator HandlePortraits(ActorPair pair)
-    {
-        yield return Wait.For(Intermission.Before.Player.Attack);
 
-        audioManager.Play("Portrait");
-
-        var (dir1, dir2) = GetPortraitDirections(pair);
-        portraitManager.SlideIn(pair.actor1, dir1);
-        portraitManager.SlideIn(pair.actor2, dir2);
-
-        yield return Wait.For(Intermission.Before.Portrait.SlideIn);
-    }
-
-    private (Direction, Direction) GetPortraitDirections(ActorPair pair)
-    {
-        var first = pair.axis == Axis.Vertical ? Direction.South : Direction.East;
-        var second = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
-        return (pair.actor1 == pair.startActor ? first : second,
-                pair.actor2 == pair.startActor ? first : second);
-    }
 
     private List<AttackResult> CalculateAttackResults(ActorPair pair)
     {
