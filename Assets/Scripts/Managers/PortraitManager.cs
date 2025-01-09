@@ -17,6 +17,7 @@ public class PortraitManager : MonoBehaviour
 
     //Variables
     [SerializeField] public GameObject portraitPrefab;
+    public ActorInstance actor;
     public int sortingOrder;
 
     public void SlideIn(ActorInstance actor, Direction direction)
@@ -29,7 +30,7 @@ public class PortraitManager : MonoBehaviour
         instance.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
         instance.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         instance.spriteRenderer.color = new Color(1, 1, 1, Opacity.Percent90);
-        //instance.actor = actor;
+        instance.actor = actor;
         instance.direction = direction;
         instance.startTime = Time.time;
 
@@ -52,14 +53,12 @@ public class PortraitManager : MonoBehaviour
         instance.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
         instance.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         instance.spriteRenderer.color = new Color(1, 1, 1, Opacity.Percent90);
-        //instance.actor = actor;
         instance.position = actor.position;
         instance.startPosition = actor.position;
         instance.transform.localScale = new Vector3(0.25f, 0.25f, 1);
 
         StartCoroutine(instance.Dissolve());
     }
-
 
 
     public IEnumerator Play(ActorPair pair)

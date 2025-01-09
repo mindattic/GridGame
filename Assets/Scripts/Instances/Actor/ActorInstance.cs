@@ -393,6 +393,14 @@ public class ActorInstance : MonoBehaviour
         //Before:
         var alpha = 1f;
         render.SetAlpha(alpha);
+
+
+        while (stats.PreviousHP > 0)
+        {
+            yield return null; // Wait until the next frame
+        }
+        yield return Wait.For(Intermission.After.HealthBar.Empty);
+
         portraitManager.Dissolve(this);
         audioManager.Play("Death");
         sortingOrder = SortingOrder.Max;
@@ -449,67 +457,6 @@ public class ActorInstance : MonoBehaviour
         transform.position = Geometry.GetPositionByLocation(this.location);
     }
 
-    public void ExecuteAngry()
-    {
-        if (isActive && isAlive)
-            StartCoroutine(Angry());
-    }
-
-    private IEnumerator Angry()
-    {
-        //Check abort conditions
-        if (!hasMaxAP || flags.isAngry)
-            yield break;
-
-        //Before:
-        flags.isAngry = true;
-        bool isDone = false;
-        bool hasFlipped = false;
-        var rotY = 0f;
-        var speed = tileSize * 24f;
-        render.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
-
-        //During:
-        while (!isDone)
-        {
-            rotY += !hasFlipped ? speed : -speed;
-
-            if (!hasFlipped && rotY >= 90f)
-            {
-                rotY = 90f;
-                hasFlipped = true;
-                //turnDelay--;
-                //turnDelay = Math.Clamp(turnDelay, 0, 9);
-
-                //actionBar.Update();
-                //UpdateTurnDelayText();
-            }
-
-            isDone = hasFlipped && rotY <= 0f;
-            if (isDone)
-            {
-                rotY = 0f;
-            }
-
-            //render.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
-            yield return Wait.OneTick();
-        }
-
-        //After:
-        //render.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, 0, 0);
-        //if (turnDelay > 0)
-        //{
-        //    TriggerTurnDelayWiggle();
-        //}
-
-        IEnumerator SetThumbnailSprite()
-        {
-            render.SetThumbnailSprite(sprites.attack);
-            yield break;
-        }
-        Trigger trigger = new Trigger(SetThumbnailSprite());
-        action.TriggerSpin90(trigger);
-    }
 
     public void SetAttacking()
     {
@@ -551,6 +498,69 @@ public class ActorInstance : MonoBehaviour
 
         actionBar.Update();
     }
+
+    //public void ExecuteAngry()
+    //{
+    //    if (isActive && isAlive)
+    //        StartCoroutine(Angry());
+    //}
+
+    //private IEnumerator Angry()
+    //{
+    //    //Check abort conditions
+    //    if (!hasMaxAP || flags.isAngry)
+    //        yield break;
+
+    //    //Before:
+    //    flags.isAngry = true;
+    //    bool isDone = false;
+    //    bool hasFlipped = false;
+    //    var rotY = 0f;
+    //    var speed = tileSize * 24f;
+    //    render.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
+
+    //    //During:
+    //    while (!isDone)
+    //    {
+    //        rotY += !hasFlipped ? speed : -speed;
+
+    //        if (!hasFlipped && rotY >= 90f)
+    //        {
+    //            rotY = 90f;
+    //            hasFlipped = true;
+    //            //turnDelay--;
+    //            //turnDelay = Math.Clamp(turnDelay, 0, 9);
+
+    //            //actionBar.Update();
+    //            //UpdateTurnDelayText();
+    //        }
+
+    //        isDone = hasFlipped && rotY <= 0f;
+    //        if (isDone)
+    //        {
+    //            rotY = 0f;
+    //        }
+
+    //        //render.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
+    //        yield return Wait.OneTick();
+    //    }
+
+    //    //After:
+    //    //render.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, 0, 0);
+    //    //if (turnDelay > 0)
+    //    //{
+    //    //    TriggerTurnDelayWiggle();
+    //    //}
+
+    //    IEnumerator SetThumbnailSprite()
+    //    {
+    //        render.SetThumbnailSprite(sprites.attack);
+    //        yield break;
+    //    }
+    //    Trigger trigger = new Trigger(SetThumbnailSprite());
+    //    action.TriggerSpin90(trigger);
+    //}
+
     //public IEnumerator Bump(Direction direction)
     //{
 

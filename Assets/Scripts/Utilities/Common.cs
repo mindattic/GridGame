@@ -367,6 +367,11 @@ public static class Intermission
             public static float Attack = Interval.QuarterSecond;
         }
 
+        public static class HealthBar
+        {
+            public static float Empty = Interval.HalfSecond;
+        }
+
     }
   
 }

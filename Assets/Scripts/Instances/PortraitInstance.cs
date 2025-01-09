@@ -50,6 +50,7 @@ public class PortraitInstance : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     float minAlpha = Opacity.Transparent;
     float maxAlpha = Opacity.Opaque;
+    public ActorInstance actor;
 
     //Method which is used for initialization tasks that need to occur before the game starts 
     private void Awake()
@@ -115,9 +116,12 @@ public class PortraitInstance : MonoBehaviour
 
     public IEnumerator Dissolve()
     {
+
+        //Begin:
         var alpha = maxAlpha;
         spriteRenderer.color = new Color(1, 1, 1, alpha);
 
+        //During:
         while (alpha > minAlpha)
         {
           
@@ -135,6 +139,7 @@ public class PortraitInstance : MonoBehaviour
             yield return Wait.OneTick();
         }
 
+        //After:
         Destroy(this.gameObject);
     }
 

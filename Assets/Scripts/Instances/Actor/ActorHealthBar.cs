@@ -35,8 +35,7 @@ public class ActorHealthBar
         render.healthBarFill.transform.localScale = GetScale(stats.HP);
         render.healthBarText.text = $@"{stats.HP}/{stats.MaxHP}";
 
-        if (instance.isActive && instance.isAlive)
-            instance.StartCoroutine(Drain());
+        instance.StartCoroutine(Drain());
     }
 
     private IEnumerator Drain()
