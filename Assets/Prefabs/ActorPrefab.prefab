@@ -2071,7 +2071,7 @@ SpriteMask:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2358512391572383950, guid: 607112718602f1e4d9f596328f9ee6ad, type: 3}
+  m_Sprite: {fileID: 8548442916371283198, guid: 6e007a39361c46e4f955323b8a72ff3a, type: 3}
   m_MaskAlphaCutoff: 0.25
   m_FrontSortingLayerID: 1438895807
   m_BackSortingLayerID: 0
@@ -2208,7 +2208,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6031204709295448994}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -2245,8 +2245,8 @@ SpriteRenderer:
   m_SortingLayerID: 1438895807
   m_SortingLayer: 2
   m_SortingOrder: 3
-  m_Sprite: {fileID: 8158900877930711166, guid: 38578ad46c6b97b43ba7b5c81f43d227, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 4434229e432971649a4de990e0da596d, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.2509804}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

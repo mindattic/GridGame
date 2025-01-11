@@ -115,7 +115,11 @@ namespace Assets.Scripts.Instances.Actor
 
                     // Snap horizontal boardPosition (if applicable)
                     if (Mathf.Abs(delta.x) <= snapDistance)
+                    {
                         position = new Vector3(destination.x, position.y, position.z);
+                        rotation = Geometry.Rotation(0, 0, 0);
+                    }
+                        
                 }
                 else if (Mathf.Abs(delta.y) > snapDistance)
                 {
@@ -123,7 +127,10 @@ namespace Assets.Scripts.Instances.Actor
 
                     // Snap vertical boardPosition (if applicable)
                     if (Mathf.Abs(delta.y) <= snapDistance)
+                    {
                         position = new Vector3(position.x, destination.y, position.z);
+                        rotation = Geometry.Rotation(0, 0, 0);
+                    }                      
                 }
 
                 if (flags.IsSwapping)
