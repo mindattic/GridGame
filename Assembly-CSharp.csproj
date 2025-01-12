@@ -122,6 +122,7 @@
     <Compile Include="Assets\Scripts\Models\Location.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorGlow.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
+    <Compile Include="Assets\Scripts\Models\Size.cs" />
     <Compile Include="Assets\Scripts\Models\ShaderResource.cs" />
     <Compile Include="Assets\Scripts\Instances\TooltipInstance.cs" />
     <Compile Include="Assets\Scripts\Models\Trigger.cs" />

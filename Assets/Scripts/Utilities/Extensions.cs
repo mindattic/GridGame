@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 public static class StringExtensions
@@ -45,8 +47,16 @@ public static class EnumExtensions
         int index = Array.IndexOf<T>(values, src) + 1;
         return (values.Length == index) ? values[0] : values[index];
     }
-}
 
+    public static string GetDescription(this Enum value)
+    {
+        FieldInfo field = value.GetType().GetField(value.ToString());
+        DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>();
+        return attribute == null ? value.ToString() : attribute.Description;
+    }
+
+
+}
 
 
 public static class ListExtensions
@@ -56,6 +66,16 @@ public static class ListExtensions
         return list.OrderBy(x => Guid.NewGuid()).ToList();
     }
 }
+
+public static class Vector2IntExtensions
+{
+    public static void Shift(this ref Vector2Int vector, int x, int y)
+    {
+        vector.x += x;
+        vector.y += y;
+    }
+}
+
 
 public static class Vector3Extensions
 {

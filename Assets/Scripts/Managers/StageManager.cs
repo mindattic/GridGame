@@ -231,7 +231,7 @@ public class StageManager : MonoBehaviour
         instance.parent = board.transform;
         instance.character = stageActor.character;
         instance.name = stageActor.name;
-        instance.thumbnail = stageActor.thumbnail;
+        //instance.thumbnail = stageActor.thumbnail;
         instance.team = stageActor.team;
         instance.quality = stageActor.quality;
         instance.render.SetQualityColor(instance.isPlayer ? Color.white : Color.red);

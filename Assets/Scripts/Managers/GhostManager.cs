@@ -55,7 +55,7 @@ public class GhostManager : MonoBehaviour
     {
         var prefab = Instantiate(ghostPrefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<GhostInstance>();
-        instance.thumbnail = actor.thumbnail;
+        //instance.thumbnail = actor.thumbnail;
         instance.name = $"Ghost_{Guid.NewGuid()}";
         instance.parent = board.transform;
         instance.Spawn(actor);

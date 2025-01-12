@@ -29,7 +29,7 @@ public class StageActor
         this.character = character;
         this.name = name;
         this.stats = stats;
-        this.thumbnail = GameManager.instance.resourceManager.ActorSprite(this.character.ToString()).idle;
+        //this.thumbnail = GameManager.instance.resourceManager.ActorSprite(this.character.ToString()).idle;
         this.team = team;
         this.quality = quality;
         this.location = location.HasValue ? location.Value : Random.UnoccupiedLocation;
