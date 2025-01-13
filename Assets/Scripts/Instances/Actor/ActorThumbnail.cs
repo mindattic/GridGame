@@ -5,7 +5,7 @@ public class ActorThumbnail
 {
     #region Properties
 
-    protected ResourceManager resourceManager = GameManager.instance.resourceManager;
+    protected ResourceManager resourceManager => GameManager.instance.resourceManager;
     protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
     protected ActorRenderers render => instance.render;
     protected ActorStats stats => instance.stats;
