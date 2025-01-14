@@ -93,10 +93,16 @@ public class CombatManager : MonoBehaviour
 
     private IEnumerator ResolveAttack(ActorPair pair)
     {
+        pair.actor1.render.SetParallaxSpeed(1, 1);
+        pair.actor2.render.SetParallaxSpeed(1, 1);
+
         yield return portraitManager.Play(pair);
 
         var attacks = CalculateAttackResults(pair);
         yield return PerformAttacks(pair, attacks);
+
+        pair.actor1.render.SetParallaxSpeed(0.05f, 0.05f);
+        pair.actor2.render.SetParallaxSpeed(0.05f, 0.05f);
 
         CleanupLines(pair);
         yield return CleanupDefeatedEnemies(attacks);

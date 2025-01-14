@@ -92,132 +92,132 @@ public class StageManager : MonoBehaviour
 
 
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "Paladin", Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Slime, "Slime A", Team.Enemy, Rarity.Common));
 
                 break;
 
             case 2:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "Paladin", Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Slime, "Slime A", Team.Enemy, Rarity.Common));
 
                 break;
 
             case 3:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "Paladin", Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Slime, "Slime A", Team.Enemy, Rarity.Common));
 
                 break;
 
             case 4:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Slime, "Slime A", RandomStats, Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "Paladin", Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Slime, "Slime A", Team.Enemy, Rarity.Common));
 
                 //Dynamic opponents
-                Add(new StageActor(Character.Slime, "Slime B", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 1));
+                Add(new StageActor(Character.Slime, "Slime B", Team.Enemy, Rarity.Common, spawnTurn: 1));
 
                 break;
 
             case 5:
 
                 //Players
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Cleric, "Cleric", RandomStats, Team.Player, Rarity.Common));
-                Add(new StageActor(Character.Ninja, "Ninja", RandomStats, Team.Player, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "Paladin", Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Cleric, "Cleric", Team.Player, Rarity.Common));
+                Add(new StageActor(Character.Ninja, "Ninja", Team.Player, Rarity.Common));
 
                 //Enemies
                 //Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Opponent, Rarity.Common));
                 //Add(new StageActor(Character.Slime, "Slime B", ActorStats("Slime"), Team.Opponent, Rarity.Common));
                 //Add(new StageActor(Character.Slime, "Slime C", ActorStats("Slime"), Team.Opponent, Rarity.Common));
-                Add(new StageActor(Character.Yeti, "Yeti A", ActorStats("Scorpion"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Yeti, "Yeti A", Team.Enemy, Rarity.Common));
 
                 break;
 
             case 6:
 
                 //Players
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Cleric, "Cleric", RandomStats, Team.Player, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "Paladin", Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Cleric, "Cleric", Team.Player, Rarity.Common));
 
                 //Enemies
-                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Slime, "Slime B", ActorStats("Slime"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Slime, "Slime C", ActorStats("Slime"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Slime, "Slime D", ActorStats("Slime"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Slime, "Slime E", ActorStats("Slime"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Slime, "Slime F", ActorStats("Slime"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Slime, "Slime G", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Slime, "Slime A", Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Slime, "Slime B", Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Slime, "Slime C", Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Slime, "Slime D", Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Slime, "Slime E", Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Slime, "Slime F", Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Slime, "Slime G", Team.Enemy, Rarity.Common));
 
-                Add(new StageActor(Character.Scorpion, "Scorpion A", ActorStats("Scorpion"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Scorpion, "Scorpion B", ActorStats("Scorpion"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Scorpion, "Scorpion C", ActorStats("Scorpion"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Scorpion, "Scorpion D", ActorStats("Scorpion"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Scorpion, "Scorpion A", Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Scorpion, "Scorpion B", Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Scorpion, "Scorpion C", Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Scorpion, "Scorpion D", Team.Enemy, Rarity.Common));
 
-                Add(new StageActor(Character.Bat, "Bat A", ActorStats("Bat"), Team.Enemy, Rarity.Common));
-                Add(new StageActor(Character.Bat, "Bat B", ActorStats("Bat"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Bat, "Bat A", Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Bat, "Bat B", Team.Enemy, Rarity.Common));
 
-                Add(new StageActor(Character.Yeti, "Yeti A", ActorStats("Yeti"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Yeti, "Yeti A", Team.Enemy, Rarity.Common));
 
                 //Dynamic opponents
-                Add(new StageActor(Character.Slime, "Slime H", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 3));
-                Add(new StageActor(Character.Slime, "Slime I", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 4));
-                Add(new StageActor(Character.Slime, "Slime J", ActorStats("Slime"), Team.Enemy, Rarity.Common, spawnTurn: 5));
-                Add(new StageActor(Character.Scorpion, "Scorpion E", ActorStats("Scorpion"), Team.Enemy, Rarity.Common, spawnTurn: 6));
-                Add(new StageActor(Character.Scorpion, "Scorpion F", ActorStats("Scorpion"), Team.Enemy, Rarity.Common, spawnTurn: 6));
-                Add(new StageActor(Character.Bat, "Bat C", ActorStats("Bat"), Team.Enemy, Rarity.Common, spawnTurn: 7));
-                Add(new StageActor(Character.Bat, "Bat D", ActorStats("Bat"), Team.Enemy, Rarity.Common, spawnTurn: 8));
-                Add(new StageActor(Character.Bat, "Bat E", ActorStats("Bat"), Team.Enemy, Rarity.Common, spawnTurn: 9));
-                Add(new StageActor(Character.Yeti, "Yeti B", ActorStats("Yeti"), Team.Enemy, Rarity.Common, spawnTurn: 10));
+                Add(new StageActor(Character.Slime, "Slime H", Team.Enemy, Rarity.Common, spawnTurn: 3));
+                Add(new StageActor(Character.Slime, "Slime I", Team.Enemy, Rarity.Common, spawnTurn: 4));
+                Add(new StageActor(Character.Slime, "Slime J", Team.Enemy, Rarity.Common, spawnTurn: 5));
+                Add(new StageActor(Character.Scorpion, "Scorpion E", Team.Enemy, Rarity.Common, spawnTurn: 6));
+                Add(new StageActor(Character.Scorpion, "Scorpion F", Team.Enemy, Rarity.Common, spawnTurn: 6));
+                Add(new StageActor(Character.Bat, "Bat C", Team.Enemy, Rarity.Common, spawnTurn: 7));
+                Add(new StageActor(Character.Bat, "Bat D", Team.Enemy, Rarity.Common, spawnTurn: 8));
+                Add(new StageActor(Character.Bat, "Bat E", Team.Enemy, Rarity.Common, spawnTurn: 9));
+                Add(new StageActor(Character.Yeti, "Yeti B", Team.Enemy, Rarity.Common, spawnTurn: 10));
 
                 break;
 
             case 7:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "Paladin", Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Slime, "Slime A", Team.Enemy, Rarity.Common));
 
                 break;
 
 
             case 8:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "Paladin", Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Slime, "Slime A", Team.Enemy, Rarity.Common));
 
                 break;
 
             case 9:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "Paladin", Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Slime, "Slime A", Team.Enemy, Rarity.Common));
 
                 break;
 
             case 10:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "Paladin", Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Slime, "Slime A", Team.Enemy, Rarity.Common));
 
                 break;
 
             default:
 
-                Add(new StageActor(Character.Paladin, "Paladin", RandomStats, Team.Player, Rarity.Rare));
-                Add(new StageActor(Character.Barbarian, "Barbarian", RandomStats, Team.Player, Rarity.Uncommon));
-                Add(new StageActor(Character.Slime, "Slime A", ActorStats("Slime"), Team.Enemy, Rarity.Common));
+                Add(new StageActor(Character.Paladin, "Paladin", Team.Player, Rarity.Rare));
+                Add(new StageActor(Character.Barbarian, "Barbarian", Team.Player, Rarity.Uncommon));
+                Add(new StageActor(Character.Slime, "Slime A", Team.Enemy, Rarity.Common));
 
                 break;
         }

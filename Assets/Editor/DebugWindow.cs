@@ -279,7 +279,7 @@ public class DebugWindow : EditorWindow
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
-        isClicked = GUILayout.Button("Erase DatabaseSchema", GUILayout.Width(Screen.width * 0.5f));
+        isClicked = GUILayout.Button("Erase Schema", GUILayout.Width(Screen.width * 0.5f));
         if (isClicked)
             OnEraseDatabaseClick();
 

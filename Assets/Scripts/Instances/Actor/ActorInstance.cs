@@ -273,12 +273,25 @@ public class ActorInstance : MonoBehaviour
 
     private void Update()
     {
+        CheckRotation();
 
     }
     void FixedUpdate()
     {
     }
 
+
+    private void CheckRotation()
+    {
+        if (transform.localEulerAngles.y == 0f)
+            return;
+
+        bool isFlipped = transform.localEulerAngles.y > 90f && transform.localEulerAngles.y < 270f;
+
+        // Toggle visibility
+        render.front.gameObject.SetActive(!isFlipped);
+        render.back.gameObject.SetActive(isFlipped);
+    }
 
 
     public IEnumerator Attack(AttackResult attack)

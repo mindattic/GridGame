@@ -1,9 +1,14 @@
 
+using Assets.Scripts.Entities;
+using Assets.Scripts.Models;
 using Game.Behaviors;
 using SQLiteDatabase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager;
+using UnityEditor.Playables;
 using UnityEngine;
 
 
@@ -11,7 +16,7 @@ namespace Game.Manager
 {
     public class DatabaseManager : MonoBehaviour
     {
-        public static class DatabaseSchema
+        public static class Schema
         {
             public const string Name = "MyDatabase.db";
 
@@ -22,6 +27,31 @@ namespace Game.Manager
             }
         }
 
+        public static class Queries
+        {
+            public static string ActorEntity 
+                = "SELECT                                             "
+                + "  a.Id,                                            "
+                + "  a.Name,                                          "
+                + "  a.Variant,                                       "
+                + "  a.Description,                                   "
+                + "  a.Level,                                         "
+                + "  a.MaxHp,                                         "
+                + "  a.Strength,                                      "
+                + "  a.Vitality,                                      "
+                + "  a.Agility,                                       "
+                + "  a.Speed,                                         "
+                + "  a.Luck,                                          "
+                + "  t.Width as 'ThumbnailWidth',                     "
+                + "  t.Width as 'ThumbnailHeight',                    "
+                + "	 t.X as 'ThumbnailX',                             "
+                + "  t.Y as 'ThumbnailY'                              "
+                + "FROM Actor a                                       "
+                + "INNER JOIN ActorThumbnail at ON(a.Id = at.ActorId) "
+                + "INNER JOIN Thumbnail t ON(t.Id = at.ThumbnailId)   ";
+        }
+
+
         #region Properties
         protected LogManager logManager => GameManager.instance.logManager;
         #endregion
@@ -29,7 +59,7 @@ namespace Game.Manager
         //Variables
         public const bool autoOverwrite = true; //Used to reinstall app every load...
         private SQLiteDB instance = SQLiteDB.Instance;
-        public List<ActorStats> actorStats = new List<ActorStats>();
+        public List<ActorEntity> actorEntities = new List<ActorEntity>();
 
 
         void OnEnable()
@@ -56,7 +86,7 @@ namespace Game.Manager
         private void Awake()
         {
             instance.DBLocation = Application.persistentDataPath;
-            instance.DBName = DatabaseSchema.Name;
+            instance.DBName = Schema.Name;
 
             //Update if this is the first load of the application
             if (autoOverwrite || !instance.Exists)
@@ -82,19 +112,12 @@ namespace Game.Manager
         {
             DBReader reader;
 
-
-        
-
-
-
-            //TODO: Should only load enemy types that are in current level...
-#region Load ActorStats
-
-            actorStats.Clear();
-            reader = instance.GetAllData(DatabaseSchema.Table.Actor);
+            actorEntities.Clear();
+            //reader = instance.GetAllData(Schema.Table.Actor);
+            reader = instance.Select(Queries.ActorEntity);
             while (reader != null && reader.Read())
             {
-                var x = new ActorStats()
+                var x = new ActorEntity()
                 {
                     Id = reader.GetIntValue("Id"),
                     Name = reader.GetStringValue("Name"),
@@ -107,12 +130,15 @@ namespace Game.Manager
                     Vitality = reader.GetFloatValue("Vitality"),
                     Agility = reader.GetFloatValue("Agility"),
                     Speed = reader.GetFloatValue("Speed"),
-                    Luck = reader.GetFloatValue("Luck")
-                };
-                actorStats.Add(x);
-                logManager.Info(JsonUtility.ToJson(x));
+                    Luck = reader.GetFloatValue("Luck"),
 
-#endregion
+                    ThumbnailWidth = reader.GetIntValue("ThumbnailWidth"),
+                    ThumbnailHeight = reader.GetIntValue("ThumbnailHeight"),
+                    ThumbnailX = reader.GetIntValue("ThumbnailX"),
+                    ThumbnailY = reader.GetIntValue("ThumbnailY"),
+                };
+                actorEntities.Add(x);
+                logManager.Info(JsonUtility.ToJson(x));
 
 
             }
@@ -121,10 +147,47 @@ namespace Game.Manager
 
         public ActorStats GetActorStats(string name)
         {
-            var stats = actorStats.Where(x => x.Name == name).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+            //Retrieve random varient of actor with name
+            var entity = actorEntities.Where(x => x.Name == name).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+
+            var stats = new ActorStats()
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Variant = entity.Variant,
+                Description = entity.Description,
+                Level = entity.Level,
+                PreviousHP = entity.PreviousHP,
+                HP = entity.HP,
+                MaxHP = entity.MaxHP,
+                PreviousAP = entity.PreviousAP,
+                AP = entity.AP,
+                MaxAP = entity.MaxAP,
+                Strength = entity.Strength,
+                Vitality = entity.Vitality,
+                Agility = entity.Agility,
+                Speed = entity.Speed,
+                Luck = entity.Luck
+            };
+
             return stats;
         }
 
+
+        public ThumbnailSize GetThumbnailSize(string name)
+        {
+            var entity = actorEntities.Where(x => x.Name == name).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+
+            var thumbnailSize = new ThumbnailSize()
+            {
+                Width = entity.ThumbnailWidth,
+                Height = entity.ThumbnailHeight,
+                X = entity.ThumbnailX,
+                Y = entity.ThumbnailY
+            };
+
+            return thumbnailSize;
+        }
 
     }
 }

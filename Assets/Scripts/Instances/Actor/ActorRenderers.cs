@@ -22,6 +22,9 @@ public class ActorRenderers
     public Color selectionColor = ColorHelper.Solid.White;
     public Color overlayColor = ColorHelper.Transparent.White;
 
+    public Transform front;
+    public Transform back;
+
     public SpriteRenderer opaque;
     public SpriteRenderer quality;
     public SpriteRenderer glow;
@@ -49,36 +52,41 @@ public class ActorRenderers
     public SpriteRenderer selectionBox;
     public SpriteRenderer overlay;
 
+
+    
     private ActorInstance instance;
     public void Initialize(ActorInstance parentInstance)
     {
         this.instance = parentInstance;
 
-        var t = this.instance.gameObject.transform;
-        opaque = t.GetChild(ActorLayer.Name.Opaque).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Opaque} is null");
-        quality = t.GetChild(ActorLayer.Name.Quality).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Quality} is null");
-        glow = t.GetChild(ActorLayer.Name.Glow).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Glow} is null");
-        parallax = t.GetChild(ActorLayer.Name.Parallax).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Parallax} is null");
-        thumbnail = t.GetChild(ActorLayer.Name.Thumbnail).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Thumbnail} is null");
-        frame = t.GetChild(ActorLayer.Name.Frame).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Frame} is null");
-        statusIcon = t.GetChild(ActorLayer.Name.StatusIcon).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.StatusIcon} is null");
-        healthBarBack = t.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Back).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Back} is null");
-        healthBarDrain = t.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Drain).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Drain} is null");
-        healthBarFill = t.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Fill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Fill} is null");
-        healthBarText = t.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Text).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Text} is null");
-        actionBarBack = t.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Back).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Back} is null");
-        actionBarDrain = t.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Drain).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Drain} is null");
-        actionBarFill = t.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Fill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Fill} is null");
-        actionBarText = t.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Text).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Text} is null");
-        mask = t.GetChild(ActorLayer.Name.Mask).GetComponent<SpriteMask>() ?? throw new UnityException($"{ActorLayer.Name.Mask} is null");
-        radialBack = t.GetChild(ActorLayer.Name.RadialBack).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.RadialBack} is null");
-        radial = t.GetChild(ActorLayer.Name.RadialFill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.RadialFill} is null");
-        radialText = t.GetChild(ActorLayer.Name.RadialText).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.RadialText} is null");
-        turnDelayText = t.GetChild(ActorLayer.Name.TurnDelayText).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.TurnDelayText} is null");
-        nameTagText = t.GetChild(ActorLayer.Name.NameTagText).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.NameTagText} is null");
-        weaponIcon = t.GetChild(ActorLayer.Name.WeaponIcon).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.WeaponIcon} is null");
-        selectionBox = t.GetChild(ActorLayer.Name.SelectionBox).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.SelectionBox} is null");
-        overlay = t.GetChild(ActorLayer.Name.Overlay).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Overlay} is null");
+        front = instance.transform.GetChild("Front");
+        opaque = front.GetChild(ActorLayer.Name.Opaque).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Opaque} is null");
+        quality = front.GetChild(ActorLayer.Name.Quality).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Quality} is null");
+        glow = front.GetChild(ActorLayer.Name.Glow).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Glow} is null");
+        parallax = front.GetChild(ActorLayer.Name.Parallax).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Parallax} is null");
+        thumbnail = front.GetChild(ActorLayer.Name.Thumbnail).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Thumbnail} is null");
+        frame = front.GetChild(ActorLayer.Name.Frame).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Frame} is null");
+        statusIcon = front.GetChild(ActorLayer.Name.StatusIcon).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.StatusIcon} is null");
+        healthBarBack = front.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Back).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Back} is null");
+        healthBarDrain = front.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Drain).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Drain} is null");
+        healthBarFill = front.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Fill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Fill} is null");
+        healthBarText = front.GetChild(ActorLayer.Name.HealthBar.Root).GetChild(ActorLayer.Name.HealthBar.Text).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.HealthBar.Text} is null");
+        actionBarBack = front.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Back).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Back} is null");
+        actionBarDrain = front.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Drain).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Drain} is null");
+        actionBarFill = front.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Fill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Fill} is null");
+        actionBarText = front.GetChild(ActorLayer.Name.ActionBar.Root).GetChild(ActorLayer.Name.ActionBar.Text).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.ActionBar.Text} is null");
+        mask = front.GetChild(ActorLayer.Name.Mask).GetComponent<SpriteMask>() ?? throw new UnityException($"{ActorLayer.Name.Mask} is null");
+        radialBack = front.GetChild(ActorLayer.Name.RadialBack).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.RadialBack} is null");
+        radial = front.GetChild(ActorLayer.Name.RadialFill).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.RadialFill} is null");
+        radialText = front.GetChild(ActorLayer.Name.RadialText).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.RadialText} is null");
+        turnDelayText = front.GetChild(ActorLayer.Name.TurnDelayText).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.TurnDelayText} is null");
+        nameTagText = front.GetChild(ActorLayer.Name.NameTagText).GetComponent<TextMeshPro>() ?? throw new UnityException($"{ActorLayer.Name.NameTagText} is null");
+        weaponIcon = front.GetChild(ActorLayer.Name.WeaponIcon).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.WeaponIcon} is null");
+        selectionBox = front.GetChild(ActorLayer.Name.SelectionBox).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.SelectionBox} is null");
+        overlay = front.GetChild(ActorLayer.Name.Overlay).GetComponent<SpriteRenderer>() ?? throw new UnityException($"{ActorLayer.Name.Overlay} is null");
+
+        back = instance.transform.GetChild("Back");
+
 
     }
 
@@ -88,7 +96,7 @@ public class ActorRenderers
         SetOpaqueAlpha(alpha);
         SetQualityAlpha(alpha);
         SetGlowAlpha(alpha);
-        //SetParallaxAlpha(alpha);
+        SetParallaxAlpha(alpha);
         SetThumbnailAlpha(alpha);
         SetFrameAlpha(alpha);
         //statusIcon.color = new color(1, 1, 1, alpha);
