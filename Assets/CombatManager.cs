@@ -220,7 +220,7 @@ public class CombatManager : MonoBehaviour
 
     private IEnumerator CleanupDefeatedEnemies(List<AttackResult> attacks)
     {
-        var dyingEnemies = attacks.Where(a => a.IsFatal).Select(a => a.Opponent).ToList();
+        var dyingEnemies = attacks.Where(x => x.Opponent.isDying).Select(x => x.Opponent).ToList();
         foreach (var enemy in dyingEnemies)
         {
             if (enemy == dyingEnemies.Last())

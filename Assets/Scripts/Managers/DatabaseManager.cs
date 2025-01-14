@@ -82,6 +82,11 @@ namespace Game.Manager
         {
             DBReader reader;
 
+
+        
+
+
+
             //TODO: Should only load enemy types that are in current level...
 #region Load ActorStats
 

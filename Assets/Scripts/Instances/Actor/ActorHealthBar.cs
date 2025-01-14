@@ -12,6 +12,7 @@ public class ActorHealthBar
     #endregion
 
     private ActorInstance instance;
+    public bool isDraining;
 
     public void Initialize(ActorInstance parentInstance)
     {
@@ -46,6 +47,7 @@ public class ActorHealthBar
 
         //Before:
         Vector3 scale;
+        isDraining = true;
 
         //During:
         yield return Wait.For(Intermission.Before.HealthBar.Drain);
@@ -53,6 +55,7 @@ public class ActorHealthBar
         while (stats.HP < stats.PreviousHP)
         {
             stats.PreviousHP -= Increment.HealthBar.Drain;
+            stats.PreviousHP = Mathf.Clamp(stats.PreviousHP, stats.HP, stats.MaxHP);
             scale = GetScale(stats.PreviousHP);
             render.healthBarDrain.transform.localScale = scale;
             yield return Wait.OneTick();
@@ -62,6 +65,7 @@ public class ActorHealthBar
         stats.PreviousHP = stats.HP;
         scale = GetScale(stats.PreviousHP);
         render.healthBarDrain.transform.localScale = scale;
+        isDraining = false;
     }
 
 

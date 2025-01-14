@@ -22,6 +22,11 @@
         Speed = other.Speed;
         Luck = other.Luck;
         // If you have resistances, you'll need to copy those too.
+
+        
+
+
+
     }
 
 

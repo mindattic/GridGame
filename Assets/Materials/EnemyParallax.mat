@@ -82,7 +82,7 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
-    - _Alpha: 1
+    - _Alpha: 0.5
     - _BumpScale: 1
     - _ColorMask: 15
     - _Cutoff: 0.5
@@ -108,8 +108,8 @@ Material:
     - _TileAmount: 1
     - _UVSec: 0
     - _UseUIAlphaClip: 0
-    - _XScroll: 1
-    - _YScroll: 1
+    - _XScroll: 0.01
+    - _YScroll: 0.01
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

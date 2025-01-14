@@ -16,7 +16,6 @@ namespace Assets.Scripts.Models
         //public AttackResultTriggers Triggers;
 
         //Properties
-        public bool IsFatal => Opponent.stats.HP - Damage < 1;
         public bool IsMiss => !IsHit;
 
         //public AttackResult()

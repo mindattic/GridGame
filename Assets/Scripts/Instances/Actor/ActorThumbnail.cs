@@ -21,7 +21,7 @@ public class ActorThumbnail
         this.instance = parentInstance;
     }
 
-    public void CreateThumbnail()
+    public void Generate()
     {
         // Get the full texture from the resource manager
         texture = resourceManager.ActorPortrait(instance.character.ToString()).texture;

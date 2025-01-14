@@ -5,7 +5,6 @@ using Game.Instances.Actor;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 
 public class ActorInstance : MonoBehaviour
@@ -64,7 +63,7 @@ public class ActorInstance : MonoBehaviour
 
 
     //Miscellaneous
-    ActorSprite sprites;
+    //ActorSprite sprites;
     [SerializeField] public AnimationCurve glowCurve;
     //public VisualEffect attack;
 
@@ -221,8 +220,8 @@ public class ActorInstance : MonoBehaviour
         location = startLocation;
         position = Geometry.GetPositionByLocation(location);
         destination = position;
-        sprites = resourceManager.ActorSprite(this.character.ToString());
-        thumbnail.CreateThumbnail();
+        //sprites = resourceManager.ActorSprite(this.character.ToString());
+        thumbnail.Generate();
 
 
 
@@ -235,11 +234,11 @@ public class ActorInstance : MonoBehaviour
 
         if (isPlayer)
         {
-            render.SetQualityColor(quality.Color);
-            render.SetGlowColor(quality.Color);
+            render.SetQualityColor(ColorHelper.Solid.White);
+            render.SetGlowColor(ColorHelper.Solid.White);
             render.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
             render.SetParallaxMaterial(resourceManager.Material("PlayerParallax", thumbnail.texture));
-            render.SetParallaxAlpha(0);
+            render.SetParallaxAlpha(Opacity.Percent50);
             //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
             render.SetFrameColor(quality.Color);
             render.SetHealthBarColor(ColorHelper.HealthBar.Green);
@@ -249,11 +248,11 @@ public class ActorInstance : MonoBehaviour
         }
         else if (isEnemy)
         {
-            render.SetQualityColor(ColorHelper.Solid.Black);
+            render.SetQualityColor(ColorHelper.Solid.Red);
             render.SetGlowColor(ColorHelper.Solid.Red);
             render.SetParallaxSprite(resourceManager.Seamless("RedFire"));
             render.SetParallaxMaterial(resourceManager.Material("EnemyParallax", thumbnail.texture));
-            render.SetParallaxAlpha(0);
+            render.SetParallaxAlpha(Opacity.Percent50);
             //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
             render.SetFrameColor(ColorHelper.Solid.Red);
             render.SetHealthBarColor(ColorHelper.HealthBar.Green);
@@ -343,7 +342,7 @@ public class ActorInstance : MonoBehaviour
         if (!isActive || !isAlive)
             yield break;
 
-        if(attack.IsCriticalHit)
+        if (attack.IsCriticalHit)
             vfxManager.TriggerSpawn(resourceManager.VisualEffect("Yellow_Hit"), attack.Opponent.position);
 
         //Trigger coroutine (if applicable):
@@ -396,12 +395,15 @@ public class ActorInstance : MonoBehaviour
 
     public IEnumerator Die()
     {
+        //Check abort conditions
+        if (!isDying)
+            yield break;
+
         //Before:
         var alpha = 1f;
         render.SetAlpha(alpha);
 
-
-        while (stats.PreviousHP > 0)
+        while (healthBar.isDraining)
         {
             yield return null; // Wait until the next frame
         }
