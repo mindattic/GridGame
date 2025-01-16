@@ -39,7 +39,6 @@ public class ActorInstance : MonoBehaviour
     public Vector2Int previousLocation;
     public Vector3 destination;
     public Team team = Team.Independant;
-    public Quality quality = Rarity.Common;
     public int spawnDelay = -1;
     //public int turnDelay = 0;
     public int attackingPairCount = 0;
@@ -240,7 +239,7 @@ public class ActorInstance : MonoBehaviour
             render.SetParallaxMaterial(resourceManager.Material("PlayerParallax", thumbnail.texture));
             render.SetParallaxAlpha(Opacity.Percent50);
             //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
-            render.SetFrameColor(quality.Color);
+            //render.SetFrameColor(quality.Color);
             render.SetHealthBarColor(ColorHelper.HealthBar.Green);
             render.SetActionBarColor(ColorHelper.ActionBar.Blue);
             render.SetSelectionBoxEnabled(isEnabled: false);

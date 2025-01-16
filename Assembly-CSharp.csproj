@@ -67,7 +67,6 @@
     <Compile Include="Assets\Scripts\Instances\Actor\ActorAttributes.cs" />
     <Compile Include="Assets\Scripts\Managers\SupportLineManager.cs" />
     <Compile Include="Assets\Scripts\Instances\FootstepInstance.cs" />
-    <Compile Include="Assets\Scripts\Models\Quality.cs" />
     <Compile Include="Assets\Scripts\Models\MaterialResource.cs" />
     <Compile Include="Assets\Scripts\Models\ShakeIntensity.cs" />
     <Compile Include="Assets\Scripts\Managers\SelectedPlayerManager.cs" />
@@ -93,6 +92,7 @@
     <Compile Include="Assets\Scripts\Managers\PointerManager.cs" />
     <Compile Include="Assets\Scripts\GUI\CanvasOverlay.cs" />
     <Compile Include="Assets\Scripts\Models\WeaponTypeResource.cs" />
+    <Compile Include="Assets\Scripts\Models\Rarity.cs" />
     <Compile Include="Assets\Scripts\Managers\CylinderManager.cs" />
     <Compile Include="Assets\PauseManager.cs" />
     <Compile Include="Assets\CombatManager.cs" />

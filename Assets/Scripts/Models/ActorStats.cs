@@ -5,10 +5,6 @@
     // Copy Constructor
     public ActorStats(ActorStats other)
     {
-        Id = other.Id;
-        Name = other.Name;
-        Variant = other.Variant;
-        Description = other.Description;
         Level = other.Level;
         PreviousHP = other.HP;
         HP = other.HP;
@@ -30,7 +26,6 @@
     }
 
 
-    public int Id;
     public string Name;
     public string Variant;
     public string Description;

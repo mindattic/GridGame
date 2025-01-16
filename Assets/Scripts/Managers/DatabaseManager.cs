@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEditor.PackageManager;
 using UnityEditor.Playables;
 using UnityEngine;
@@ -29,26 +30,21 @@ namespace Game.Manager
 
         public static class Queries
         {
-            public static string ActorEntity 
-                = "SELECT                                             "
-                + "  a.Id,                                            "
-                + "  a.Name,                                          "
-                + "  a.Variant,                                       "
-                + "  a.Description,                                   "
-                + "  a.Level,                                         "
-                + "  a.MaxHp,                                         "
-                + "  a.Strength,                                      "
-                + "  a.Vitality,                                      "
-                + "  a.Agility,                                       "
-                + "  a.Speed,                                         "
-                + "  a.Luck,                                          "
-                + "  t.Width as 'ThumbnailWidth',                     "
-                + "  t.Width as 'ThumbnailHeight',                    "
-                + "	 t.X as 'ThumbnailX',                             "
-                + "  t.Y as 'ThumbnailY'                              "
-                + "FROM Actor a                                       "
-                + "INNER JOIN ActorThumbnail at ON(a.Id = at.ActorId) "
-                + "INNER JOIN Thumbnail t ON(t.Id = at.ThumbnailId)   ";
+            public static class Select
+            {
+                public static class Actor
+                {
+                    public static string Entities = "SELECT a.Name, a.Description, s.Level, s.MaxHp, s.Strength, s.Vitality, s.Agility, s.Speed, s.Luck, t.Width AS ThumbnailWidth, t.Width AS ThumbnailHeight, t.X AS ThumbnailX, t.Y AS ThumbnailY FROM Actor a INNER JOIN ActorStats ON (a.id = ActorStats.ActorId) INNER JOIN Stats s ON (ActorStats.StatsId = s.Id) INNER JOIN ActorThumbnail ON (a.Id = ActorThumbnail.ActorId) INNER JOIN Thumbnail t ON (t.Id = ActorThumbnail.ThumbnailId);";
+                
+                
+                
+                }
+            }
+        }
+
+        public static class Entities
+        {
+            public static List<ActorEntity> Actors = new List<ActorEntity>();
         }
 
 
@@ -59,8 +55,7 @@ namespace Game.Manager
         //Variables
         public const bool autoOverwrite = true; //Used to reinstall app every load...
         private SQLiteDB instance = SQLiteDB.Instance;
-        public List<ActorEntity> actorEntities = new List<ActorEntity>();
-
+  
 
         void OnEnable()
         {
@@ -112,18 +107,20 @@ namespace Game.Manager
         {
             DBReader reader;
 
-            actorEntities.Clear();
+            Entities.Actors.Clear();
+
             //reader = instance.GetAllData(Schema.Table.Actor);
-            reader = instance.Select(Queries.ActorEntity);
+            reader = instance.ExecuteReader(Queries.Select.Actor.Entities);
             while (reader != null && reader.Read())
             {
                 var x = new ActorEntity()
                 {
-                    Id = reader.GetIntValue("Id"),
                     Name = reader.GetStringValue("Name"),
-                    Variant = reader.GetStringValue("Variant"),
                     Description = reader.GetStringValue("Description"),
-                    Level = reader.GetFloatValue("Level"),
+                };
+
+                x.stats = new ActorStats()
+                {
                     HP = reader.GetFloatValue("MaxHp"),
                     MaxHP = reader.GetFloatValue("MaxHp"),
                     Strength = reader.GetFloatValue("Strength"),
@@ -131,62 +128,37 @@ namespace Game.Manager
                     Agility = reader.GetFloatValue("Agility"),
                     Speed = reader.GetFloatValue("Speed"),
                     Luck = reader.GetFloatValue("Luck"),
-
-                    ThumbnailWidth = reader.GetIntValue("ThumbnailWidth"),
-                    ThumbnailHeight = reader.GetIntValue("ThumbnailHeight"),
-                    ThumbnailX = reader.GetIntValue("ThumbnailX"),
-                    ThumbnailY = reader.GetIntValue("ThumbnailY"),
                 };
-                actorEntities.Add(x);
+
+                x.thumbnail = new ThumbnailSize()
+                {
+                    Width = reader.GetIntValue("ThumbnailWidth"),
+                    Height = reader.GetIntValue("ThumbnailHeight"),
+                    X = reader.GetIntValue("ThumbnailX"),
+                    Y = reader.GetIntValue("ThumbnailY"),
+                };
+
+                //x.Rarity = new Rarity()
+                //{
+                //    Name = reader.GetStringValue("RarityName"),
+                //    Color = ColorHelper.Solid.White,
+                //};
+
+
+                Entities.Actors.Add(x);
                 logManager.Info(JsonUtility.ToJson(x));
-
-
-            }
+            };
         }
-
 
         public ActorStats GetActorStats(string name)
         {
-            //Retrieve random varient of actor with name
-            var entity = actorEntities.Where(x => x.Name == name).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
-
-            var stats = new ActorStats()
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                Variant = entity.Variant,
-                Description = entity.Description,
-                Level = entity.Level,
-                PreviousHP = entity.PreviousHP,
-                HP = entity.HP,
-                MaxHP = entity.MaxHP,
-                PreviousAP = entity.PreviousAP,
-                AP = entity.AP,
-                MaxAP = entity.MaxAP,
-                Strength = entity.Strength,
-                Vitality = entity.Vitality,
-                Agility = entity.Agility,
-                Speed = entity.Speed,
-                Luck = entity.Luck
-            };
-
-            return stats;
+            return Entities.Actors.Where(x => x.Name == name).FirstOrDefault().stats;
         }
 
 
         public ThumbnailSize GetThumbnailSize(string name)
         {
-            var entity = actorEntities.Where(x => x.Name == name).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
-
-            var thumbnailSize = new ThumbnailSize()
-            {
-                Width = entity.ThumbnailWidth,
-                Height = entity.ThumbnailHeight,
-                X = entity.ThumbnailX,
-                Y = entity.ThumbnailY
-            };
-
-            return thumbnailSize;
+            return Entities.Actors.Where(x => x.Name == name).FirstOrDefault().thumbnail;
         }
 
     }
