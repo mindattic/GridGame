@@ -246,4 +246,9 @@ public class StageManager : MonoBehaviour
 
 
 
+    public void AddEnemy(Character character)
+    {
+        Add(new StageActor(character, Team.Enemy, Random.UnoccupiedLocation));
+    }
+
 }

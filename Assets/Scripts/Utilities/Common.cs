@@ -153,32 +153,6 @@ public static class AlignmentHelper
         return a > b && a < c;
     }
 
-    public static Alignment Assign(ActorInstance actor1, ActorInstance actor2, Axis axis)
-    {
-
-        ActorInstance highestActor = axis == Axis.Vertical ? actor1.location.y > actor2.location.y ? actor1 : actor2 : actor1.location.x > actor2.location.x ? actor1 : actor2;
-        ActorInstance lowestActor = (axis == Axis.Vertical) ? actor1.location.y < actor2.location.y ? actor1 : actor2 : actor1.location.x < actor2.location.x ? actor1 : actor2;
-        float ceiling = axis == Axis.Vertical ? highestActor.location.y : highestActor.location.x;
-        float floor = axis == Axis.Vertical ? lowestActor.location.y : lowestActor.location.x;
-
-        var alignment = new Alignment();
-
-        if (axis == Axis.Vertical)
-        {
-            alignment.opponents = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isEnemy && x.IsSameColumn(actor1.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
-            alignment.players = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isPlayer && x.IsSameColumn(actor1.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
-            alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && actor1.IsSameColumn(x.location) && IsBetween(x.location.y, floor, ceiling)).OrderBy(x => x.location.y).ToList();
-        }
-        else if (axis == Axis.Horizontal)
-        {
-            alignment.opponents = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isEnemy && x.IsSameRow(actor1.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
-            alignment.players = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isPlayer && x.IsSameRow(actor1.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
-            alignment.gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && actor1.IsSameRow(x.location) && IsBetween(x.location.x, floor, ceiling)).OrderBy(x => x.location.x).ToList();
-        }
-
-        return alignment;
-    }
-
 }
 
 public static class ColorHelper

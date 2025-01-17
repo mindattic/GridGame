@@ -4,6 +4,7 @@ using Game.Behaviors;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour
@@ -19,26 +20,21 @@ public class CombatManager : MonoBehaviour
     protected List<ActorInstance> actors { get => GameManager.instance.actors; set => GameManager.instance.actors = value; }
     protected IQueryable<ActorInstance> enemies => GameManager.instance.enemies;
     protected IQueryable<ActorInstance> players => GameManager.instance.players;
-    protected ActorInstance previousSelectedPlayer  => GameManager.instance.previousSelectedPlayer;
+    protected ActorInstance previousSelectedPlayer => GameManager.instance.previousSelectedPlayer;
     #endregion
 
     private CombatParticipants participants = new CombatParticipants();
 
     public void Clear() => participants.Clear();
 
-    #region Combat Flow
+
 
     public void TriggerCombat()
     {
         participants.Clear();
 
-        if (!HandleAlignedActors(players))
-        {
-            turnManager.NextTurn();
-            return;
-        }
-
-        if (!AssignParticipants())
+        //TODO: Feed enemies or allies based on turn...
+        if (!AssignParticipants(players))
         {
             turnManager.NextTurn();
             return;
@@ -55,114 +51,57 @@ public class CombatManager : MonoBehaviour
         {
             attackLineManager.Spawn(pair);
             yield return ResolveAttack(pair);
-            ResetRolesAfterCombat(pair);
+            ResetRoles(participants.Get(pair));
         }
 
         CleanupCombatState();
         turnManager.NextTurn();
     }
 
-    #endregion
 
-    #region Combat Logic
-
-    private bool HandleAlignedActors(IQueryable<ActorInstance> actors)
+    private bool AssignParticipants(IQueryable<ActorInstance> teamMembers)
     {
-        foreach (var actor1 in actors)
+        AssignAlignedPairs(teamMembers);
+        if (!participants.alignedPairs.Any())
+            return false;
+
+        AssignAttackingPairs();
+        if (!participants.attackingPairs.Any())
+            return false;
+
+        AssignSupportingPairs();
+
+        return true;
+    }
+
+    private void AssignAlignedPairs(IQueryable<ActorInstance> teamMembers)
+    {
+        foreach (var actor1 in teamMembers)
         {
-            foreach (var actor2 in actors)
+            foreach (var actor2 in teamMembers)
             {
-                if (IsValidAlignment(actor1, actor2) && !participants.HasAlignedPair(actor1, actor2))
+                if (AreActorsAligned(actor1, actor2) && !participants.HasAlignedPair(actor1, actor2))
                 {
-                    var pair = CreateAlignmentPair(actor1, actor2);
+                    var pair = CreateAlignedPair(actor1, actor2);
                     participants.alignedPairs.Add(pair);
                 }
             }
         }
-        return participants.alignedPairs.Any();
     }
-
-    private bool AssignParticipants()
-    {
-        AssignAttackingPairs();
-        if (!participants.attackingPairs.Any()) return false;
-
-        AssignSupportingPairs();
-        return true;
-    }
-
-    private IEnumerator ResolveAttack(ActorPair pair)
-    {
-        pair.actor1.render.SetParallaxSpeed(1, 1);
-        pair.actor2.render.SetParallaxSpeed(1, 1);
-
-        yield return portraitManager.Play(pair);
-
-        var attacks = CalculateAttackResults(pair);
-        yield return PerformAttacks(pair, attacks);
-
-        pair.actor1.render.SetParallaxSpeed(0.05f, 0.05f);
-        pair.actor2.render.SetParallaxSpeed(0.05f, 0.05f);
-
-        CleanupLines(pair);
-        yield return CleanupDefeatedEnemies(attacks);
-    }
-
-    private void SetupCombatState()
-    {
-        SortActorsToDefault();
-        SortParticipantsAboveBoardOverlay();
-        boardOverlay.TriggerFadeIn();
-        SpawnSupportLines();
-    }
-
-    private void CleanupCombatState()
-    {
-        boardOverlay.TriggerFadeOut();
-        ClearCombatParticipants();
-    }
-
-    #endregion
-
-    #region Helper Methods
-
-    private bool IsValidAlignment(ActorInstance actor1, ActorInstance actor2)
-    {
-        return actor1 != null && actor2 != null && actor1 != actor2 &&
-               actor1.isActive && actor1.isAlive &&
-               actor2.isActive && actor2.isAlive &&
-               (actor1.IsSameColumn(actor2.location) || actor1.IsSameRow(actor2.location));
-    }
-
-    private ActorPair CreateAlignmentPair(ActorInstance actor1, ActorInstance actor2)
-    {
-        // Ensure actor1 is always positioned "before" actor2 based on left-to-right, top-to-bottom sorting
-        if (actor1.location.y > actor2.location.y ||
-            (actor1.location.y == actor2.location.y && actor1.location.x > actor2.location.x))
-        {
-            (actor1, actor2) = (actor2, actor1);
-        }
-
-        // Determine the axis for the alignment
-        var axis = actor1.IsSameColumn(actor2.location) ? Axis.Vertical : Axis.Horizontal;
-
-        return new ActorPair(actor1, actor2, axis);
-    }
-
 
     private void AssignAttackingPairs()
     {
         foreach (var pair in participants.alignedPairs)
         {
-            if (pair.alignment.hasOpponentsBetween &&
-                !pair.alignment.hasAlliesBetween &&
-                !pair.alignment.hasGapsBetween &&
+            if (pair.hasOpponentsBetween &&
+                !pair.hasAlliesBetween &&
+                !pair.hasGapsBetween &&
                 !participants.HasAttackingPair(pair))
             {
                 participants.attackingPairs.Add(pair);
                 pair.actor1.SetAttacking();
                 pair.actor2.SetAttacking();
-                pair.alignment.opponents.ForEach(opponent => opponent.SetDefending());
+                pair.opponents.ForEach(opponent => opponent.SetDefending());
             }
         }
     }
@@ -171,8 +110,8 @@ public class CombatManager : MonoBehaviour
     {
         foreach (var pair in participants.alignedPairs)
         {
-            if (!pair.alignment.hasOpponentsBetween &&
-                !pair.alignment.hasAlliesBetween &&
+            if (!pair.hasOpponentsBetween &&
+                !pair.hasAlliesBetween &&
                 (pair.actor1.flags.IsAttacking || pair.actor2.flags.IsAttacking) &&
                 !participants.HasSupportingPair(pair))
             {
@@ -183,11 +122,71 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    private IEnumerator ResolveAttack(ActorPair pair)
+    {
+        var direction = Geometry.CalculateDirection(pair.actor1.position, pair.opponents[0].position);
+        pair.opponents.ForEach(x => x.parallax.Assign(direction));
+
+        yield return portraitManager.Play(pair);
+
+        var attacks = CalculateAttackResults(pair);
+        yield return PerformAttacks(pair, attacks);
+
+
+        pair.opponents.ForEach(x => x.parallax.Assign(Direction.None));
+
+       
+        CleanupLines(pair);
+        yield return CleanupDefeatedEnemies(attacks);
+    }
+
+    private void SetupCombatState()
+    {
+        SortBeforeCombat();
+        boardOverlay.TriggerFadeIn();
+        SpawnSupportLines();
+    }
+
+    private void CleanupCombatState()
+    {
+        boardOverlay.TriggerFadeOut();
+        ClearCombatParticipants();
+    }
+
+
+    private bool AreActorsAligned(ActorInstance actor1, ActorInstance actor2)
+    {
+        return actor1 != null && actor2 != null && actor1 != actor2 &&
+               actor1.isActive && actor1.isAlive &&
+               actor2.isActive && actor2.isAlive &&
+               (actor1.IsSameColumn(actor2.location) || actor1.IsSameRow(actor2.location));
+    }
+
+    private ActorPair CreateAlignedPair(ActorInstance actor1, ActorInstance actor2)
+    {
+        //DEBUG: This screws up the sortingOrder so that actors participating in additional attacks might get sorted behind board overlay too early...
+        // Ensure actor1 is always positioned "before" actor2 based on left-to-right, top-to-bottom sorting
+        //if (actor1.location.y > actor2.location.y ||
+        //    (actor1.location.y == actor2.location.y && actor1.location.x > actor2.location.x))
+        //{
+        //    (actor1, actor2) = (actor2, actor1);
+        //}
+
+        // Determine the axis for the alignment
+        var axis = actor1.IsSameColumn(actor2.location) ? Axis.Vertical : Axis.Horizontal;
+
+        return new ActorPair(actor1, actor2, axis);
+    }
+
+
+
+
+
 
 
     private List<AttackResult> CalculateAttackResults(ActorPair pair)
     {
-        return pair.alignment.opponents.Select(opponent =>
+        return pair.opponents.Select(opponent =>
         {
             var isHit = Formulas.IsHit(pair.actor1, opponent);
             var damage = isHit ? Formulas.CalculateDamage(pair.actor1, opponent) : 0;
@@ -244,15 +243,9 @@ public class CombatManager : MonoBehaviour
         supportLineManager.Despawn(pair);
     }
 
-    private void ResetRolesAfterCombat(ActorPair pair)
+    private void ResetRoles(params IEnumerable<ActorInstance>[] groups)
     {
-        ResetRoles(new[] { pair.actor1, pair.actor2 });
-        ResetRoles(pair.alignment.opponents);
-    }
-
-    private void ResetRoles(params IEnumerable<ActorInstance>[] actorGroups)
-    {
-        foreach (var group in actorGroups)
+        foreach (var group in groups)
         {
             foreach (var actor in group.Where(x => x.isActive && x.isAlive))
             {
@@ -268,16 +261,14 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private void SortActorsToDefault()
+    private void SortBeforeCombat()
     {
         foreach (var actor in actors.Where(x => x.isActive && x.isAlive))
             actor.sortingOrder = SortingOrder.Default;
-    }
 
-    private void SortParticipantsAboveBoardOverlay()
-    {
-        foreach (var actor in participants.SelectAll())
+        foreach (var actor in participants.Get())
             actor.sortingOrder = SortingOrder.BoardOverlay;
+
     }
 
     private void SpawnSupportLines()
@@ -288,7 +279,7 @@ public class CombatManager : MonoBehaviour
 
     private void ClearCombatParticipants()
     {
-        foreach (var actor in participants.SelectAll())
+        foreach (var actor in participants.Get())
         {
             actor.attackingPairCount = 0;
             actor.supportingPairCount = 0;
@@ -296,5 +287,5 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    #endregion
+
 }

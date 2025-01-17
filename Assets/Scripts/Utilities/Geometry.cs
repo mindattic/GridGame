@@ -97,6 +97,23 @@ public class Geometry
         return Direction.None;
     }
 
+
+    public static Direction CalculateDirection(Vector2 a, Vector2 b)
+    {
+        Vector2 difference = b - a;
+
+        if (Mathf.Abs(difference.x) > Mathf.Abs(difference.y))
+        {
+            // Horizontal movement
+            return difference.x > 0 ? Direction.East : Direction.West;
+        }
+        else
+        {
+            // Vertical movement
+            return difference.y > 0 ? Direction.North : Direction.South;
+        }
+    }
+
     public static Vector3 GetClosestAttackPosition(ActorInstance attacker, ActorInstance other)
     {
         //Determine if already adjacent to player...

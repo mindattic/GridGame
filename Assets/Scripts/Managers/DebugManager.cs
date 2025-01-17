@@ -513,25 +513,21 @@ public class DebugManager : MonoBehaviour
 
     public void SpawnSlime()
     {
-        var location = Random.UnoccupiedLocation;
-        stageManager.Add(new StageActor(Character.Slime, Team.Enemy, location));
+        stageManager.AddEnemy(Character.Slime);
     }
 
     public void SpawnBat()
     {
-        var location = Random.UnoccupiedLocation;
-        stageManager.Add(new StageActor(Character.Bat, Team.Enemy, location));
+        stageManager.AddEnemy(Character.Bat);
     }
 
     public void SpawnScorpion()
     {
-        var location = Random.UnoccupiedLocation;
-        stageManager.Add(new StageActor(Character.Scorpion, Team.Enemy, location));
+        stageManager.AddEnemy(Character.Scorpion);
     }
 
     public void SpawnYeti()
     {
-        var location = Random.UnoccupiedLocation;
-        stageManager.Add(new StageActor(Character.Yeti, Team.Enemy, location));
+        stageManager.AddEnemy(Character.Yeti);
     }
 }

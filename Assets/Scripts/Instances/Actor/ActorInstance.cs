@@ -5,6 +5,7 @@ using Game.Instances.Actor;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ActorInstance : MonoBehaviour
@@ -58,6 +59,7 @@ public class ActorInstance : MonoBehaviour
     public ActorHealthBar healthBar = new ActorHealthBar();
     public ActorActionBar actionBar = new ActorActionBar();
     public ActorGlow glow = new ActorGlow();
+    public ActorParallax parallax = new ActorParallax();
     public ActorThumbnail thumbnail = new ActorThumbnail();
 
 
@@ -75,6 +77,7 @@ public class ActorInstance : MonoBehaviour
         healthBar.Initialize(this);
         actionBar.Initialize(this);
         glow.Initialize(this);
+        parallax.Initialize(this);
         thumbnail.Initialize(this);
 
         wiggleSpeed = tileSize * 24f;
@@ -168,9 +171,12 @@ public class ActorInstance : MonoBehaviour
             render.turnDelayText.sortingOrder = value + ActorLayer.Value.TurnDelayText;
             render.nameTagText.sortingOrder = value + ActorLayer.Value.NameTagText;
             render.weaponIcon.sortingOrder = value + ActorLayer.Value.WeaponIcon;
-            render.selectionBox.sortingOrder = value + ActorLayer.Value.SelectionBox;
+            render.armorNorth.sortingOrder = value + ActorLayer.Value.Armor.ArmorNorth;
+            render.armorEast.sortingOrder = value + ActorLayer.Value.Armor.ArmorEast;
+            render.armorSouth.sortingOrder = value + ActorLayer.Value.Armor.ArmorSouth;
+            render.armorWest.sortingOrder = value + ActorLayer.Value.Armor.ArmorWest;
             render.overlay.sortingOrder = value + ActorLayer.Value.Overlay;
-
+            render.selectionBox.sortingOrder = value + ActorLayer.Value.SelectionBox;
         }
     }
 
@@ -222,8 +228,6 @@ public class ActorInstance : MonoBehaviour
         //sprites = resourceManager.ActorSprite(this.character.ToString());
         thumbnail.Generate();
 
-
-
         //TODO: Equip actor at stagemaanger load based on save file: party.json
         weapon.Type = Random.WeaponType();
         weapon.Attack = Random.Float(10, 15);
@@ -238,6 +242,8 @@ public class ActorInstance : MonoBehaviour
             render.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
             render.SetParallaxMaterial(resourceManager.Material("PlayerParallax", thumbnail.texture));
             render.SetParallaxAlpha(Opacity.Percent50);
+            //render.SetParallaxSpeed(1, 1);
+
             //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
             //render.SetFrameColor(quality.Color);
             render.SetHealthBarColor(ColorHelper.HealthBar.Green);
@@ -252,6 +258,7 @@ public class ActorInstance : MonoBehaviour
             render.SetParallaxSprite(resourceManager.Seamless("RedFire"));
             render.SetParallaxMaterial(resourceManager.Material("EnemyParallax", thumbnail.texture));
             render.SetParallaxAlpha(Opacity.Percent50);
+            //render.SetParallaxSpeed(1, 1);
             //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
             render.SetFrameColor(ColorHelper.Solid.Red);
             render.SetHealthBarColor(ColorHelper.HealthBar.Green);

@@ -86,9 +86,9 @@ public class LogWindow : EditorWindow
 
         // 1. Buttons at the top
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Clear Log"))
+        if (GUILayout.Button("Reset Log"))
         {
-            logText = ""; // Clear the log content
+            logText = ""; // Reset the log content
         }
 
         if (GUILayout.Button("Export Log"))
@@ -115,7 +115,7 @@ public class LogWindow : EditorWindow
 
         // 4. Dropdown for selecting log level filter (if needed)
         GUILayout.Label("Log Level Filter (Dropdown)");
-        string[] logLevels = new string[] { "All", "Log", "Warning", "Error", "Exception" };
+        string[] logLevels = new string[] { "Get", "Log", "Warning", "Error", "Exception" };
         int logLevelFilter = EditorGUILayout.Popup("Filter Logs", 0, logLevels);
 
         GUILayout.Space(10); // Add space between dropdown and scrollable log area

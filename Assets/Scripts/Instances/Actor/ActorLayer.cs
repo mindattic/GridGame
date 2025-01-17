@@ -7,6 +7,11 @@ namespace Game.Instances.Actor
         // Define names for all layers
         public static class Name
         {
+            public const string Front = "Front";
+            public const string Back = "Back";
+
+
+
             public const string Opaque = "Opaque";
             public const string Quality = "Quality";
             public const string Glow = "Glow";
@@ -43,6 +48,17 @@ namespace Game.Instances.Actor
             public const string NameTagText = "NameTagText";
             public const string WeaponIcon = "WeaponIcon";
             public const string SelectionBox = "SelectionBox";
+
+            // Armor Sub-Objects
+            public static class Armor
+            {
+                public const string Root = "Armor";
+                public const string ArmorNorth = "ArmorNorth";
+                public const string ArmorEast = "ArmorEast";
+                public const string ArmorSouth = "ArmorSouth";
+                public const string ArmorWest = "ArmorWest";
+            }
+
             public const string Overlay = "Overlay";
         }
 
@@ -79,8 +95,19 @@ namespace Game.Instances.Actor
             public const int TurnDelayText = 20;
             public const int NameTagText = 21;
             public const int WeaponIcon = 22;
-            public const int SelectionBox = 23;
-            public const int Overlay = 23;
+           
+
+            public static class Armor
+            {
+                public const int ArmorNorth = 23;
+                public const int ArmorEast = 24;
+                public const int ArmorSouth = 25;
+                public const int ArmorWest = 26;
+            }
+
+
+            public const int Overlay = 27;
+            public const int SelectionBox = 28;
         }
 
     }

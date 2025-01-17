@@ -64,7 +64,7 @@ public class TurnManager : MonoBehaviour
         attackLineManager.Clear();
         combatManager.Clear();
 
-        //ResetUI actors sorting
+        //Reset actor sorting
         actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
 
         if (isPlayerTurn)
@@ -118,6 +118,8 @@ public class TurnManager : MonoBehaviour
 
             foreach (var enemy in readyEnemies)
             {
+                //enemy.render.SetParallaxSpeed(0.25f, 0.25f);
+     
                 enemy.CalculateAttackStrategy();
                 yield return enemy.move.TowardDestination();
             }
@@ -183,6 +185,7 @@ public class TurnManager : MonoBehaviour
             }
 
             enemy.actionBar.Reset();
+            //enemy.render.SetParallaxSpeed(0.05f, 0.05f);
         }
 
         var dyingPlayers = actors.Where(x => x.isDying).ToList();

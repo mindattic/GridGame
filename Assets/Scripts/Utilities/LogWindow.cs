@@ -8,7 +8,7 @@ namespace Assets.Scripts.Utilities
         private Vector2 scrollPosition;
         private string logText = "";
         private int logLevelFilter = 0; // Index of selected textMesh level
-        private string[] logLevels = new string[] { "All", "Log", "Warning", "Error", "Exception" };
+        private string[] logLevels = new string[] { "Get", "Log", "Warning", "Error", "Exception" };
 
         [MenuItem("Window/Custom Log Window")]
         public static void ShowWindow()
@@ -39,7 +39,7 @@ namespace Assets.Scripts.Utilities
 
         private bool ShouldShowLog(LogType type)
         {
-            if (logLevelFilter == 0) return true; // "All"
+            if (logLevelFilter == 0) return true; // "Get"
 
             // Filter textMesh by selected textMesh level
             return logLevelFilter == (int)type;
