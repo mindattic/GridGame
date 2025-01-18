@@ -13,7 +13,6 @@ namespace Assets.Scripts.Instances.Actor
         private bool isAlive => instance.isAlive;
         private bool isPlayer => instance.isPlayer;
         private bool isEnemy => instance.isEnemy;
-        protected float gameSpeed => GameManager.instance.gameSpeed;
         protected AnimationCurve glowCurve => instance.glowCurve;
         //glowCurve = new AnimationCurve(
         //    new Keyframe(0f, 0f, 0f, 0f),      // First keyframe at time 0, value 0
@@ -64,8 +63,8 @@ namespace Assets.Scripts.Instances.Actor
                 float intensity = Mathf.Lerp(1.0f, maxIntensity, progress);
                 float curveValue = glowCurve.Evaluate(Time.time * speed % glowCurve.length);
                 scale = new Vector3(
-                    intensity + curveValue * gameSpeed,
-                    intensity + curveValue * gameSpeed,
+                    intensity + curveValue,
+                    intensity + curveValue,
                     1.0f);
                 render.SetGlowScale(scale);
 
@@ -84,8 +83,8 @@ namespace Assets.Scripts.Instances.Actor
             {
                 float curveValue = glowCurve.Evaluate(Time.time * speed % glowCurve.length);
                 scale = new Vector3(
-                    maxIntensity + curveValue * gameSpeed,
-                    maxIntensity + curveValue * gameSpeed,
+                    maxIntensity + curveValue,
+                    maxIntensity + curveValue,
                     1.0f);
                 render.SetGlowScale(scale);
 
@@ -102,8 +101,8 @@ namespace Assets.Scripts.Instances.Actor
                 float intensity = Mathf.Lerp(maxIntensity, 1.0f, progress);
                 float curveValue = glowCurve.Evaluate(Time.time * speed % glowCurve.length);
                 scale = new Vector3(
-                    intensity + curveValue * gameSpeed,
-                    intensity + curveValue * gameSpeed,
+                    intensity + curveValue,
+                    intensity + curveValue,
                     1.0f);
                 render.SetGlowScale(scale);
 

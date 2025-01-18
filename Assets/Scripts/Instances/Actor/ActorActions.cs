@@ -8,7 +8,6 @@ namespace Assets.Scripts.Instances.Actor
     {
         #region Properties
         protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
-        protected float gameSpeed => GameManager.instance.gameSpeed;
         protected ActorRenderers render => instance.render;
         protected ActorStats stats => instance.stats;
         private bool isActive => instance.isActive;

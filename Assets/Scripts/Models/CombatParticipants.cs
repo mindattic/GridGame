@@ -4,17 +4,16 @@ using System.Linq;
 
 public class CombatParticipants
 {
-    public List<ActorPair> alignedPairs = new List<ActorPair>();
-    public List<ActorPair> attackingPairs = new List<ActorPair>();
-    public List<ActorPair> supportingPairs = new List<ActorPair>();
+    public List<CombatPair> alignedPairs = new List<CombatPair>();
+    public List<CombatPair> attackingPairs = new List<CombatPair>();
+    public List<CombatPair> supportingPairs = new List<CombatPair>();
 
     public CombatParticipants() { }
 
     //Select all participants
     public List<ActorInstance> Get()
     {
-        return alignedPairs
-                .Concat(attackingPairs)
+        return attackingPairs
                 .Concat(supportingPairs)
                 .SelectMany(x => new[] { x.actor1, x.actor2 }.Concat(x.opponents).Concat(x.allies))
                 .Distinct()
@@ -22,7 +21,7 @@ public class CombatParticipants
     }
 
     //Select all participants in actor x
-    public List<ActorInstance> Get(ActorPair pair)
+    public List<ActorInstance> Get(CombatPair pair)
     {
 
         return new[] { pair.actor1, pair.actor2 }
@@ -48,12 +47,12 @@ public class CombatParticipants
     }
 
 
-    public bool HasAttackingPair(ActorPair pair)
+    public bool HasAttackingPair(CombatPair pair)
     {
         return attackingPairs.Count > 0 && attackingPairs.Any(x => x.HasPair(pair.actor1, pair.actor2));
     }
 
-    public bool HasSupportingPair(ActorPair pair)
+    public bool HasSupportingPair(CombatPair pair)
     {
         return supportingPairs.Count > 0 && supportingPairs.Any(x => x.HasPair(pair.actor1, pair.actor2));
     }

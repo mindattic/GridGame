@@ -67,7 +67,7 @@ public class TooltipInstance : MonoBehaviour
             spriteRenderer.color = color;
 
             //During:
-            yield return Wait.Duration(Interval.FourSeconds);
+            yield return Wait.For(Interval.FourSeconds);
             while (textMesh.color.a > 0)
             {
                 alpha -= Increment.OnePercent;

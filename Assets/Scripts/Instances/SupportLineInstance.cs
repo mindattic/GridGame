@@ -39,7 +39,7 @@ public class SupportLineInstance : MonoBehaviour
         lineRenderer.endWidth = tileSize / 2;
     }
 
-    public void Spawn(ActorPair pair)
+    public void Spawn(CombatPair pair)
     {
         parent = board.transform;
         name = $"SupportLine_{Guid.NewGuid()}";

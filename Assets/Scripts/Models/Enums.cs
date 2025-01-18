@@ -193,3 +193,13 @@ public enum VFXOptions
     VFXTest_BlueYellow_Sword_3X,
     VFXTest_Red_Sword
 }
+
+public enum GameSpeedOption
+{
+    Paused = 0,
+    Slower = 1,
+    Slow = 2,
+    Normal = 3,
+    Fast = 4,
+    Faster = 5
+}

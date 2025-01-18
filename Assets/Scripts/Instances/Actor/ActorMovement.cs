@@ -12,7 +12,7 @@ namespace Assets.Scripts.Instances.Actor
         #region Properties
         protected float percent33 => Constants.percent33;
         protected Vector3 tileScale => GameManager.instance.tileScale;
-        protected float gameSpeed => GameManager.instance.gameSpeed;
+
         protected ActorInstance focusedActor => GameManager.instance.focusedActor;
         protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
         protected List<ActorInstance> actors => GameManager.instance.actors;
@@ -81,7 +81,7 @@ namespace Assets.Scripts.Instances.Actor
 
                 instance.destination = instance.position;
 
-                yield return Wait.None();
+                yield return Wait.ForNextFrame();
             }
 
             // After:
@@ -223,7 +223,7 @@ namespace Assets.Scripts.Instances.Actor
                 instance.transform.localRotation = Quaternion.Slerp(
                     instance.transform.localRotation,
                     Quaternion.Euler(0, 0, tiltZ),
-                    Time.deltaTime * rotationSpeed * gameSpeed
+                    Time.deltaTime * rotationSpeed
                 );
             }
             else

@@ -19,7 +19,7 @@ namespace Game.Manager
     {
         public static class Schema
         {
-            public const string Name = "MyDatabase.db";
+            public const string DBName = "MyDatabase.db";
 
             public static class Table
             {
@@ -81,7 +81,7 @@ namespace Game.Manager
         private void Awake()
         {
             instance.DBLocation = Application.persistentDataPath;
-            instance.DBName = Schema.Name;
+            instance.DBName = Schema.DBName;
 
             //Update if this is the first load of the application
             if (autoOverwrite || !instance.Exists)

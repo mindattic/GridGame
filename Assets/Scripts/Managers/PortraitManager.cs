@@ -61,7 +61,7 @@ public class PortraitManager : MonoBehaviour
     }
 
 
-    public IEnumerator Play(ActorPair pair)
+    public IEnumerator Play(CombatPair pair)
     {
         sortingOrder = SortingOrder.Max;
 
@@ -79,7 +79,7 @@ public class PortraitManager : MonoBehaviour
     }
 
 
-    private (Direction, Direction) GetDirection(ActorPair pair)
+    private (Direction, Direction) GetDirection(CombatPair pair)
     {
         var first = pair.axis == Axis.Vertical ? Direction.North : Direction.West;
         var second = pair.axis == Axis.Vertical ? Direction.South : Direction.East;

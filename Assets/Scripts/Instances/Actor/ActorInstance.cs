@@ -21,7 +21,6 @@ public class ActorInstance : MonoBehaviour
     protected TileManager tileManager => GameManager.instance.tileManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
     protected VFXManager vfxManager => GameManager.instance.vfxManager;
-    protected float gameSpeed => GameManager.instance.gameSpeed;
     protected float moveSpeed => GameManager.instance.moveSpeed;
     protected float snapDistance => GameManager.instance.snapDistance;
     protected float tileSize => GameManager.instance.tileSize;
@@ -423,9 +422,8 @@ public class ActorInstance : MonoBehaviour
         render.SetAlpha(alpha);
 
         while (healthBar.isDraining)
-        {
-            yield return null; // Wait until the next frame
-        }
+            yield return Wait.ForNextFrame();
+
         yield return Wait.For(Intermission.After.HealthBar.Empty);
 
         portraitManager.Dissolve(this);
@@ -813,7 +811,7 @@ public class ActorInstance : MonoBehaviour
     //        alpha += TriggerFill.OnePercent;
     //        alpha = Mathf.Clamp(alpha, 0, maxAlpha);
     //        render.radialBack.color = new color(0, 0, 0, alpha);
-    //        yield return global::Destroy.OneTick();
+    //        yield return Wait.OneTick();
     //    }
 
     //    //After:
@@ -847,7 +845,7 @@ public class ActorInstance : MonoBehaviour
     //        render.SetThumbnailSprite(sprites.idle);
 
     //        //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", idle.texture));
-    //        yield return null;
+    //        yield return Wait.Continue(); // Wait until the next frame
     //    }
     //    TriggerSpin90(Attack());
 

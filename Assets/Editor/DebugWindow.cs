@@ -1,4 +1,5 @@
 ﻿using Game.Behaviors;
+using Game.Manager;
 using System;
 using System.IO;
 using System.Linq;
@@ -23,6 +24,7 @@ public class DebugWindow : EditorWindow
     private LogManager logManager;
     private ProfileManager profileManager;
 
+    private GameSpeedOption selectedGameSpeed = GameSpeedOption.Normal;
     private DebugOptions selectedOption = DebugOptions.None;
     private VFXOptions selectedVfx = VFXOptions.None;
 
@@ -150,6 +152,7 @@ public class DebugWindow : EditorWindow
 
         RenderStats();
         RenderCheckboxes();
+        RenderGameSpeedDropdown();
         RenderDebugOptionsDropdown();
         RenderVFXDropdown();
         RenderLevelControls();
@@ -224,6 +227,20 @@ public class DebugWindow : EditorWindow
         GUILayout.Space(10);
     }
 
+
+    private void RenderGameSpeedDropdown()
+    {
+        GUILayout.BeginHorizontal();
+
+        GUILayout.Label("Game Speed", GUILayout.Width(Screen.width * 0.25f));
+        selectedGameSpeed = (GameSpeedOption)EditorGUILayout.EnumPopup(selectedGameSpeed, GUILayout.Width(Screen.width * 0.5f));
+        if (GUILayout.Button("Apply", GUILayout.Width(Screen.width * 0.25f)))
+            OnGameSpeedChange();
+
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
+    }
+
     private void RenderDebugOptionsDropdown()
     {
         GUILayout.BeginHorizontal();
@@ -231,7 +248,7 @@ public class DebugWindow : EditorWindow
         GUILayout.Label("Debug Options", GUILayout.Width(Screen.width * 0.25f));
         selectedOption = (DebugOptions)EditorGUILayout.EnumPopup(selectedOption, GUILayout.Width(Screen.width * 0.5f));
         if (GUILayout.Button("Execute", GUILayout.Width(Screen.width * 0.25f)))
-            OnRunClick();
+            OnDebugOptionRunClick();
 
         GUILayout.EndHorizontal();
         GUILayout.Space(10);
@@ -257,13 +274,13 @@ public class DebugWindow : EditorWindow
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("Reset", GUILayout.Width(Screen.width * 0.3333f)))
+        if (GUILayout.Button("Reset", GUILayout.Width(Screen.width * Constants.percent33)))
             OnResetClick();
 
-        if (GUILayout.Button("< Previous", GUILayout.Width(Screen.width * 0.3333f)))
+        if (GUILayout.Button("< Previous", GUILayout.Width(Screen.width * Constants.percent33)))
             OnPreviousLevelClick();
 
-        if (GUILayout.Button("Next >", GUILayout.Width(Screen.width * 0.3333f)))
+        if (GUILayout.Button("Next >", GUILayout.Width(Screen.width * Constants.percent33)))
             OnNextLevelClick();
 
         GUILayout.EndHorizontal();
@@ -279,11 +296,11 @@ public class DebugWindow : EditorWindow
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
-        isClicked = GUILayout.Button("Erase Schema", GUILayout.Width(Screen.width * 0.5f));
+        isClicked = GUILayout.Button("Erase Schema", GUILayout.Width(Screen.width * Constants.percent50));
         if (isClicked)
             OnEraseDatabaseClick();
 
-        isClicked = GUILayout.Button("Erase Profiles", GUILayout.Width(Screen.width * 0.5f));
+        isClicked = GUILayout.Button("Erase Profiles", GUILayout.Width(Screen.width * Constants.percent50));
 
         if (isClicked)
             OnEraseProfilesClick();
@@ -304,21 +321,21 @@ public class DebugWindow : EditorWindow
 
         GUILayout.BeginHorizontal();
 
-        isClicked = GUILayout.Button("Slime", GUILayout.Width(Screen.width * 0.25f));
+        isClicked = GUILayout.Button("Slime", GUILayout.Width(Screen.width * Constants.percent25));
         if (isClicked)
             debugManager.SpawnSlime();
 
 
-        isClicked = GUILayout.Button("Bat", GUILayout.Width(Screen.width * 0.25f));
+        isClicked = GUILayout.Button("Bat", GUILayout.Width(Screen.width * Constants.percent25));
         if (isClicked)
             debugManager.SpawnBat();
 
-        isClicked = GUILayout.Button("Scorpion", GUILayout.Width(Screen.width * 0.25f));
+        isClicked = GUILayout.Button("Scorpion", GUILayout.Width(Screen.width * Constants.percent25));
         if (isClicked)
             debugManager.SpawnScorpion();
 
 
-        isClicked = GUILayout.Button("Yeti", GUILayout.Width(Screen.width * 0.25f));
+        isClicked = GUILayout.Button("Yeti", GUILayout.Width(Screen.width * Constants.percent25));
         if (isClicked)
             debugManager.SpawnYeti();
 
@@ -395,6 +412,54 @@ public class DebugWindow : EditorWindow
         GUILayout.Space(10);
     }
 
+    private void OnGameSpeedChange()
+    {
+        switch (selectedGameSpeed)
+        {
+            case GameSpeedOption.Paused:
+                gameManager.gameSpeed = 0f;
+                break;
+            case GameSpeedOption.Slower:
+                gameManager.gameSpeed = 0.25f;
+                break;
+            case GameSpeedOption.Slow:
+                gameManager.gameSpeed = 0.5f;
+                break;
+            case GameSpeedOption.Normal:
+                gameManager.gameSpeed = 1f;
+                break;
+            case GameSpeedOption.Fast:
+                gameManager.gameSpeed = 2f;
+                break;
+            case GameSpeedOption.Faster:
+                gameManager.gameSpeed = 4f;
+                break;
+        }
+
+        Time.timeScale = gameManager.gameSpeed;
+    }
+
+    private void OnDebugOptionRunClick()
+    {
+        switch (selectedOption)
+        {
+            case DebugOptions.DodgeTest: debugManager.DodgeTest(); break;
+            case DebugOptions.SpinTest: debugManager.SpinTest(); break;
+            case DebugOptions.ShakeTest: debugManager.ShakeTest(); break;
+            case DebugOptions.AlignTest: debugManager.AlignTest(); break;
+            case DebugOptions.CoinTest: debugManager.CoinTest(); break;
+            case DebugOptions.PortraitTest: debugManager.PortraitTest(); break;
+            case DebugOptions.DamageTextTest: debugManager.DamageTextTest(); break;
+            case DebugOptions.BumpTest: debugManager.BumpTest(); break;
+            case DebugOptions.SupportLineTest: debugManager.SupportLineTest(); break;
+            case DebugOptions.AttackLineTest: debugManager.AttackLineTest(); break;
+
+            case DebugOptions.EnemyAttackTest: debugManager.EnemyAttackTest(); break;
+            case DebugOptions.TitleTest: debugManager.TitleTest(); break;
+            case DebugOptions.TooltipTest: debugManager.TooltipTest(); break;
+            default: Debug.LogWarning("OnDebugOptionRunClick failed."); break;
+        }
+    }
 
     private void OnPlayVFXClick()
     {
@@ -434,27 +499,7 @@ public class DebugWindow : EditorWindow
         }
     }
 
-    private void OnRunClick()
-    {
-        switch (selectedOption)
-        {
-            case DebugOptions.DodgeTest: debugManager.DodgeTest(); break;
-            case DebugOptions.SpinTest: debugManager.SpinTest(); break;
-            case DebugOptions.ShakeTest: debugManager.ShakeTest(); break;
-            case DebugOptions.AlignTest: debugManager.AlignTest(); break;
-            case DebugOptions.CoinTest: debugManager.CoinTest(); break;
-            case DebugOptions.PortraitTest: debugManager.PortraitTest(); break;
-            case DebugOptions.DamageTextTest: debugManager.DamageTextTest(); break;
-            case DebugOptions.BumpTest: debugManager.BumpTest(); break;
-            case DebugOptions.SupportLineTest: debugManager.SupportLineTest(); break;
-            case DebugOptions.AttackLineTest: debugManager.AttackLineTest(); break;
 
-            case DebugOptions.EnemyAttackTest: debugManager.EnemyAttackTest(); break;
-            case DebugOptions.TitleTest: debugManager.TitleTest(); break;
-            case DebugOptions.TooltipTest: debugManager.TooltipTest(); break;
-            default: Debug.LogWarning("OnRunClick failed."); break;
-        }
-    }
 
     //Blank click events for the buttons
     private void OnResetClick()
@@ -474,16 +519,16 @@ public class DebugWindow : EditorWindow
 
     private void OnEraseDatabaseClick()
     {
-        string filePath = Path.Combine(Application.persistentDataPath, "MyDatabase.db");
+        string fullPath = Path.Combine(Application.persistentDataPath, DatabaseManager.Schema.DBName);
 
-        if (!File.Exists(filePath))
+        if (!File.Exists(fullPath))
         {
-            logManager.Error("MyDatabase.db does not exist at the specified path.");
+            logManager.Error($"{DatabaseManager.Schema.DBName} does not exist at the specified path.");
             return;
         }
 
-        File.Delete(filePath);
-        logManager.Info("MyDatabase.db has been deleted.");
+        File.Delete(fullPath);
+        logManager.Info($"{DatabaseManager.Schema.DBName} has been deleted.");
     }
 
     private void OnEraseProfilesClick()

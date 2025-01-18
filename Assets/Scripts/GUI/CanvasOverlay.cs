@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CanvasOverlay : MonoBehaviour
 {
     //Constants
-    const float duration = 1f;
+    const float duration = 0.25f;
     const float rotateMultiplier = 1.5f;
 
     //Variables
@@ -142,7 +142,7 @@ public class CanvasOverlay : MonoBehaviour
     private IEnumerator FadeOut(float delay = 0)
     {
         if (delay > 0)
-            yield return new WaitForSeconds(delay);
+            yield return Wait.For(delay);
 
         float elapsedTime = 0f;
 

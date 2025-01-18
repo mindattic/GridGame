@@ -55,7 +55,7 @@ namespace Game.Instances
             lineRenderer.endWidth = thickness;
         }
 
-        public void Spawn(ActorPair pair)
+        public void Spawn(CombatPair pair)
         {
             parent = board.transform;
             name = $"AttackLine_{Guid.NewGuid()}";

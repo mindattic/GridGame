@@ -51,7 +51,7 @@ public class FootstepManager : MonoBehaviour
                 Spawn();
             }
 
-            yield return new WaitForFixedUpdate();
+            yield return Wait.ForNextFrame();
         }
     }
 

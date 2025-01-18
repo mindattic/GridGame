@@ -8,7 +8,7 @@ namespace Assets.Scripts.Models
 {
     public class AttackResult
     {
-        public ActorPair Pair;
+        public CombatPair Pair;
         public ActorInstance Opponent;
         public bool IsHit;
         public bool IsCriticalHit;

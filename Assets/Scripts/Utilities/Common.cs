@@ -19,7 +19,7 @@ public static class Constants
     public const string Card = "Card";
     public const string TimerBar = "TimerBar";
     public const string CoinBar = "CoinBar";
-  
+
 
 
     //Percent
@@ -276,7 +276,7 @@ public static class Interval
     public static float FourSeconds = 4.0f;
     public static float FiveSeconds = 5.0f;
 
- 
+
 }
 
 public static class Increment
@@ -347,33 +347,17 @@ public static class Intermission
         }
 
     }
-  
+
 }
 
 
 public static class Wait
 {
-    public static WaitForSeconds OneTick() => new WaitForSeconds(Interval.OneTick * GameManager.instance.gameSpeed);
-    public static WaitForSeconds Ticks(int amount) => new WaitForSeconds(Interval.OneTick * amount * GameManager.instance.gameSpeed);
-
-    public static WaitForSeconds For(float seconds) => new WaitForSeconds(seconds * GameManager.instance.gameSpeed);
-    public static WaitForSeconds None() => new WaitForSeconds(0);
-
-
-
-    public static IEnumerator Duration(float amount)
-    {
-        float ticks = 0f;
-        while (ticks < amount)
-        {
-            ticks += Interval.OneTick;
-            yield return OneTick();
-        }
-    }
+    public static WaitForSeconds OneTick() => new WaitForSeconds(Interval.OneTick);
+    public static WaitForSeconds Ticks(int amount) => new WaitForSeconds(Interval.OneTick * amount);
+    public static WaitForSeconds For(float seconds) => new WaitForSeconds(seconds);
+    public static IEnumerator ForNextFrame() { yield return null; }
 }
-
-
-
 
 public static class SortingOrder
 {
@@ -390,17 +374,6 @@ public static class SortingOrder
 }
 
 
-
-public static class NameFormat
-{
-    public static string AttackLine(ActorPair pair)
-        => "AttackLine_{0}+{1}".Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
-
-    public static string SupportLine(ActorPair pair)
-        => "SupportLine_{0}+{1}".Replace("{0}", pair.actor1.name).Replace("{1}", pair.actor2.name);
-
-}
-
 public static class FileHelper
 {
     public static class Folders
@@ -409,7 +382,8 @@ public static class FileHelper
 
         static Folders()
         {
-            if (string.IsNullOrWhiteSpace(Application.persistentDataPath)) {
+            if (string.IsNullOrWhiteSpace(Application.persistentDataPath))
+            {
                 Debug.LogError("Application.persistentDataPath is null or whitespace.");
                 return;
             }
