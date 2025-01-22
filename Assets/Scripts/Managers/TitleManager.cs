@@ -47,11 +47,11 @@
 //        if (color == default)
 //            color = ColorHelper.Solid.White;
 
-//        StartCoroutine(FadeIn(text, color));
+//        StartCoroutine(@@FadeIn(text, color));
 //    }
 
 
-//    public IEnumerator FadeIn(string text, Color color = default)
+//    public IEnumerator @@FadeIn(string text, Color color = default)
 //    {
 //        if (color == default)
 //            color = ColorHelper.Solid.White;

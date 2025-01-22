@@ -47,7 +47,7 @@ public class GhostManager : MonoBehaviour
                 Spawn();
             }
 
-            yield return Wait.ForNextFrame();
+            yield return Wait.UntilNextFrame();
         }
     }
 

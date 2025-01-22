@@ -51,7 +51,7 @@ public class FootstepManager : MonoBehaviour
                 Spawn();
             }
 
-            yield return Wait.ForNextFrame();
+            yield return Wait.UntilNextFrame();
         }
     }
 
@@ -61,7 +61,7 @@ public class FootstepManager : MonoBehaviour
         var instance = prefab.GetComponent<FootstepInstance>();
         instance.sprite = resourceManager.Prop("Footstep");
         instance.name = $"Footstep_{Guid.NewGuid()}";
-        instance.Parent = board.transform;
+        instance.parent = board.transform;
         instance.Spawn(actor.position, RotationHelper.ByDirection(actor.position, previousPosition), isRightFoot);
         previousPosition = actor.position;
         isRightFoot = !isRightFoot;

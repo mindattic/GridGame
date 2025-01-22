@@ -28,7 +28,7 @@ public class FootstepInstance : MonoBehaviour
         set => Name = value;
     }
 
-    public Transform Parent
+    public Transform parent
     {
         get => gameObject.transform.parent;
         set => gameObject.transform.SetParent(value, true);

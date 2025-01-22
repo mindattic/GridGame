@@ -25,6 +25,7 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] public List<VisualEffect> visualEffects = new List<VisualEffect>();
     [SerializeField] public List<WeaponTypeResource> weaponTypes = new List<WeaponTypeResource>();
     [SerializeField] public List<SpriteResource> sprites = new List<SpriteResource>();
+    [SerializeField] public List<DottedLineSegmentResource> dottedLines = new List<DottedLineSegmentResource>();
 
     //[SerializeField] public List<PrefabResource> prefabs = new List<PrefabResource>();
     //[SerializeField] public List<ShaderResource> shaders = new List<ShaderResource>();
@@ -203,6 +204,20 @@ public class ResourceManager : MonoBehaviour
         catch (Exception ex)
         {
             logManager.Error($"Failed to retrieve sprite `{id}` from resource manager. | Error: {ex.Message}");
+        }
+
+        return null;
+    }
+
+    public DottedLineSegmentResource DottedLine(string id)
+    {
+        try
+        {
+            return dottedLines.First(x => x.id.Equals(id));
+        }
+        catch (Exception ex)
+        {
+            logManager.Error($"Failed to retrieve dotted line `{id}` from resource manager. | Error: {ex.Message}");
         }
 
         return null;

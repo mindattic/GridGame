@@ -530,4 +530,14 @@ public class DebugManager : MonoBehaviour
     {
         stageManager.AddEnemy(Character.Yeti);
     }
+
+
+    public void SpawnRandomEnemy()
+    {
+        var r = Random.Int(1, 9);
+        if (r <= 6) SpawnSlime();
+        else if (r == 7) SpawnBat();
+        else if (r == 8) SpawnScorpion();
+        else if (r == 9) SpawnYeti();
+    }
 }

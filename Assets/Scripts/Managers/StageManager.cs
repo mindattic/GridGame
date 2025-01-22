@@ -26,6 +26,10 @@ public class StageManager : MonoBehaviour
     }
     protected CoinBarInstance coinBar => GameManager.instance.coinBar;
     protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
+    protected DottedLineManager dottedLineManager => GameManager.instance.dottedLineManager;
+
+
+
     protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
     protected TimerBarInstance timerBar => GameManager.instance.timerBar;
@@ -62,8 +66,8 @@ public class StageManager : MonoBehaviour
 
     public void Load()
     {
-        totalCoins = profileManager.currentProfile.Global.TotalCoins;
-        currentStage = profileManager.currentProfile.Stage.CurrentStage;
+        //totalCoins = profileManager.currentProfile.Global.TotalCoins;
+        //currentStage = profileManager.currentProfile.Stage.CurrentStage;
 
         focusedActor = null;
         selectedPlayer = null;
@@ -71,9 +75,10 @@ public class StageManager : MonoBehaviour
         supportLineManager.Clear();
         attackLineManager.Clear();
         turnManager.Reset();
-        timerBar.TriggerResetUI();
+        timerBar.TriggerInitialize();
         actorManager.Clear();
-        actorManager.Clear();
+        canvasOverlay.Reset();
+        dottedLineManager.Clear();
 
         canvasOverlay.Show($"Stage {currentStage}");
         canvasOverlay.TriggerFadeOut(delay: Interval.ThreeSeconds);
@@ -85,9 +90,24 @@ public class StageManager : MonoBehaviour
         {
             case 1:
 
-                Add(new StageActor(Character.Paladin, Team.Player));
-                Add(new StageActor(Character.Barbarian, Team.Player));
-                Add(new StageActor(Character.Slime, Team.Enemy));
+                Add(new StageActor(Character.Paladin, Team.Player, new Vector2Int(2, 7)));
+                Add(new StageActor(Character.Slime, Team.Enemy, new Vector2Int(5, 6)));
+                Add(new StageActor(Character.Barbarian, Team.Player, new Vector2Int(4, 5)));
+
+                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(2, 3));
+                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(2, 4));
+                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(2, 5));
+                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(2, 6));
+                dottedLineManager.Spawn(DottedLineSegment.TurnBottomRight, new Vector2Int(2, 2));
+                dottedLineManager.Spawn(DottedLineSegment.Horizontal, new Vector2Int(3, 2));
+                dottedLineManager.Spawn(DottedLineSegment.Horizontal, new Vector2Int(4, 2));
+                dottedLineManager.Spawn(DottedLineSegment.TurnBottomLeft, new Vector2Int(5, 2));
+                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(5, 3));
+                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(5, 4));
+                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(5, 5));
+                dottedLineManager.Spawn(DottedLineSegment.TurnTopRight, new Vector2Int(5, 6));
+                dottedLineManager.Spawn(DottedLineSegment.TurnTopLeft, new Vector2Int(6, 6));
+                dottedLineManager.Spawn(DottedLineSegment.ArrowUp, new Vector2Int(6, 5));
 
                 break;
 

@@ -422,7 +422,7 @@ public class ActorInstance : MonoBehaviour
         render.SetAlpha(alpha);
 
         while (healthBar.isDraining)
-            yield return Wait.ForNextFrame();
+            yield return Wait.UntilNextFrame();
 
         yield return Wait.For(Intermission.After.HealthBar.Empty);
 

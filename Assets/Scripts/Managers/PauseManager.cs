@@ -43,7 +43,7 @@ public class PauseManager : MonoBehaviour
     public void Resume()
     {
         buttonImage.sprite = pause;
-        canvasOverlay.Hide();
+        canvasOverlay.Reset();
         Time.timeScale = 1f;
     }
 }

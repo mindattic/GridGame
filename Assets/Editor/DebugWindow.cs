@@ -274,14 +274,14 @@ public class DebugWindow : EditorWindow
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("Reset", GUILayout.Width(Screen.width * Constants.percent33)))
+        if (GUILayout.Button("TriggerInitialize", GUILayout.Width(Screen.width * Constants.percent33)))
             OnResetClick();
 
         if (GUILayout.Button("< Previous", GUILayout.Width(Screen.width * Constants.percent33)))
-            OnPreviousLevelClick();
+            OnPreviousStageClick();
 
         if (GUILayout.Button("Next >", GUILayout.Width(Screen.width * Constants.percent33)))
-            OnNextLevelClick();
+            OnNextStageClick();
 
         GUILayout.EndHorizontal();
         GUILayout.Space(10);
@@ -507,12 +507,12 @@ public class DebugWindow : EditorWindow
         stageManager.Load();
     }
 
-    private void OnPreviousLevelClick()
+    private void OnPreviousStageClick()
     {
         stageManager.PreviousStage();
     }
 
-    private void OnNextLevelClick()
+    private void OnNextStageClick()
     {
         stageManager.NextStage();
     }

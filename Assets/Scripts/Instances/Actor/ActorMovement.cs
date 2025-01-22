@@ -81,16 +81,16 @@ namespace Assets.Scripts.Instances.Actor
 
                 instance.destination = instance.position;
 
-                yield return Wait.ForNextFrame();
+                yield return Wait.UntilNextFrame();
             }
 
             // After:
             flags.IsMoving = false;
 
-            //TODO: ResetUI to above overlay if is attacking...
+            //TODO: Initialize to above overlay if is attacking...
             //sortingOrder = SortingOrder.Default;
 
-            // ResetUI rotation at the end
+            // Initialize rotation at the end
             instance.transform.localRotation = Quaternion.Euler(baseRotation);
         }
 
@@ -156,9 +156,9 @@ namespace Assets.Scripts.Instances.Actor
             flags.IsMoving = false;
             flags.IsSwapping = false;
             scale = tileScale;
-            rotation = Quaternion.identity; //ResetUI rotation to default
+            rotation = Quaternion.identity; //Initialize rotation to default
 
-            //TODO: ResetUI to above overlay if is attacking or defending...
+            //TODO: Initialize to above overlay if is attacking or defending...
             //sortingOrder = SortingOrder.Default;
 
             //TODO: Add enemy attacking here so that enemy attacks once they reach their intended destination...
@@ -228,7 +228,7 @@ namespace Assets.Scripts.Instances.Actor
             }
             else
             {
-                //ResetUI rotation smoothly when velocity is minimal
+                //Initialize rotation smoothly when velocity is minimal
                 instance.transform.localRotation = Quaternion.Slerp(
                     instance.transform.localRotation,
                     Quaternion.Euler(baseRotation),

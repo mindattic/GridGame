@@ -45,14 +45,14 @@ public class CanvasOverlay : MonoBehaviour
         backgroundImageRect.offsetMin = Vector2.zero;
         backgroundImageRect.offsetMax = Vector2.zero;
 
-        // Setup Background
+        // Initialize Background
         backgroundMinAlpha = Opacity.Transparent;
         backgroundMaxAlpha = Opacity.Percent70;
         backgroundImage = transform.Find("Background").GetComponent<Image>();
         backgroundColor = new Color(0f, 0f, 0f, backgroundMinAlpha);
         backgroundImage.color = backgroundColor;
 
-        // Setup Text
+        // Initialize Text
         label = transform.Find("Label").GetComponent<TextMeshProUGUI>();
         RectTransform labelRect = label.GetComponent<RectTransform>();
         labelRect.anchorMin = new Vector2(0.5f, 0.75f); // Place label 75% up the screen
@@ -79,8 +79,11 @@ public class CanvasOverlay : MonoBehaviour
         label.transform.eulerAngles = new Vector3(0, 0, 0);
     }
 
-    public void Hide()
+    public void Reset()
     {
+        StopCoroutine(FadeIn());
+        StopCoroutine(FadeOut());
+
         backgroundColor.a = backgroundMinAlpha;
         backgroundImage.color = backgroundColor;
 

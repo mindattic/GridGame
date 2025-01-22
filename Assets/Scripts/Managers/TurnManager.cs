@@ -64,13 +64,13 @@ public class TurnManager : MonoBehaviour
         attackLineManager.Clear();
         combatManager.Clear();
 
-        //Reset actor sorting
+        //TriggerInitialize actor sorting
         actors.ForEach(x => x.sortingOrder = SortingOrder.Default);
 
         if (isPlayerTurn)
         {
             currentTurn++;
-            timerBar.TriggerResetUI();
+            timerBar.TriggerInitialize();
             players.Where(x => x.isActive && x.isAlive).ToList().ForEach(x => x.glow.TriggerGlow());
         }
         else if (isEnemyTurn)

@@ -203,3 +203,18 @@ public enum GameSpeedOption
     Fast = 4,
     Faster = 5
 }
+
+
+public enum DottedLineSegment
+{
+    Vertical,
+    Horizontal,
+    TurnTopLeft,
+    TurnTopRight,
+    TurnBottomLeft,
+    TurnBottomRight,
+    ArrowUp,
+    ArrowDown,
+    ArrowLeft,
+    ArrowRight
+}

@@ -137,7 +137,7 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            //During (Phase 2) - ResetUI transition:
+            //During (Phase 2) - Initialize transition:
             elapsedTime = 0f;
             while (elapsedTime < returnDuration)
             {
@@ -227,7 +227,7 @@ namespace Assets.Scripts.Instances.Actor
             //Trigger coroutine (if applicable):
             yield return trigger.StartCoroutine(instance);
 
-            // Phase 3: Return to Starting Position (rotate back to zero and move back slowly)
+            // Phase 3: Return to Starting position (rotate back to zero and move back slowly)
             elapsedTime = 0f;
             while (elapsedTime < returnDuration)
             {
@@ -240,7 +240,7 @@ namespace Assets.Scripts.Instances.Actor
                 yield return Wait.OneTick();
             }
 
-            // ResetUI sorting order and position
+            // Initialize sorting order and position
             sortingOrder = SortingOrder.Default;
             position = startPosition;
             rotation = Quaternion.identity;

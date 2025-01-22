@@ -121,7 +121,7 @@ public class DatabaseExample : MonoBehaviour
         rect.width = 100;
         rect.height = 20;
         GUI.enabled = isTableCreated;
-        if (GUI.Button(rect, "Reset Table"))
+        if (GUI.Button(rect, "TriggerInitialize Table"))
         {
             db.ClearTable("Users");
 

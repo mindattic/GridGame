@@ -75,6 +75,7 @@ public static class Tag
     public static string Wall = "Wall";
     public static string Tooltip = "Tooltip";
     public static string VFX = "VFX";
+    public static string DottedLine = "DottedLine";
 }
 
 public static class ScreenHelper
@@ -356,7 +357,7 @@ public static class Wait
     public static WaitForSeconds OneTick() => new WaitForSeconds(Interval.OneTick);
     public static WaitForSeconds Ticks(int amount) => new WaitForSeconds(Interval.OneTick * amount);
     public static WaitForSeconds For(float seconds) => new WaitForSeconds(seconds);
-    public static IEnumerator ForNextFrame() { yield return null; }
+    public static IEnumerator UntilNextFrame() { yield return null; }
 }
 
 public static class SortingOrder
