@@ -1,10 +1,7 @@
 using Assets.Scripts.Models;
 using Game.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
 
 public class BoardInstance : MonoBehaviour
 {
@@ -28,7 +25,15 @@ public class BoardInstance : MonoBehaviour
     //Method which is automatically called before the first frame update  
     private void Start()
     {
-        offset = new Vector2(-(tileSize * 3) - tileSize / 2, (tileSize * columnCount));
+
+        //var x = -tileSize * (columnCount / 2f) + tileSize / 2f;
+        //var y = tileSize * (rowCount / 2f) - tileSize / 2f;
+        //offset = new Vector2(x, y);
+        //transform.position = offset;
+
+        var x = -(tileSize * 3) - tileSize / 2;
+
+        offset = new Vector2(x, (tileSize * 4));
         transform.position = offset;
 
         //Order of Operations:

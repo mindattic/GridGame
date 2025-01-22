@@ -22,6 +22,7 @@ TagManager:
   - Tooltip
   - VFX
   - Powerup
+  - DottedLine
   layers:
   - Default
   - TransparentFX

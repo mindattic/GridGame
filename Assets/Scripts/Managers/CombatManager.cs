@@ -4,7 +4,6 @@ using Game.Behaviors;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour
@@ -135,7 +134,7 @@ public class CombatManager : MonoBehaviour
 
         pair.opponents.ForEach(x => x.parallax.Assign(Direction.None));
 
-       
+
         CleanupLines(pair);
         yield return CleanupDefeatedEnemies(attacks);
     }

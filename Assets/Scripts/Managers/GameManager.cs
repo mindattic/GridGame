@@ -10,7 +10,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public string deviceType;
 
     //Settings
-    [HideInInspector] public int targetFramerate = 60;
+    [HideInInspector] public int targetFramerate = 120;
     [HideInInspector] public int vSyncCount = 0;
     [HideInInspector] public float gameSpeed = 1.0f;
 

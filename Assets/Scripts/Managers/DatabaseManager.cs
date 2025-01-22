@@ -3,13 +3,8 @@ using Assets.Scripts.Entities;
 using Assets.Scripts.Models;
 using Game.Behaviors;
 using SQLiteDatabase;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using UnityEditor.PackageManager;
-using UnityEditor.Playables;
 using UnityEngine;
 
 
@@ -35,9 +30,9 @@ namespace Game.Manager
                 public static class Actor
                 {
                     public static string Entities = "SELECT a.Name, a.Description, s.Level, s.MaxHp, s.Strength, s.Vitality, s.Agility, s.Speed, s.Luck, t.Width AS ThumbnailWidth, t.Width AS ThumbnailHeight, t.X AS ThumbnailX, t.Y AS ThumbnailY FROM Actor a INNER JOIN ActorStats ON (a.id = ActorStats.ActorId) INNER JOIN Stats s ON (ActorStats.StatsId = s.Id) INNER JOIN ActorThumbnail ON (a.Id = ActorThumbnail.ActorId) INNER JOIN Thumbnail t ON (t.Id = ActorThumbnail.ThumbnailId);";
-                
-                
-                
+
+
+
                 }
             }
         }
@@ -55,7 +50,7 @@ namespace Game.Manager
         //Variables
         public const bool autoOverwrite = true; //Used to reinstall app every load...
         private SQLiteDB instance = SQLiteDB.Instance;
-  
+
 
         void OnEnable()
         {

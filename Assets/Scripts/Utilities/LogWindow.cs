@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.Utilities
 {
+
+#if UNITY_STANDALONE_WIN
+
     public class LogWindow : EditorWindow
     {
         private Vector2 scrollPosition;
@@ -80,5 +83,6 @@ namespace Assets.Scripts.Utilities
         }
     }
 
+#endif
 
 }
