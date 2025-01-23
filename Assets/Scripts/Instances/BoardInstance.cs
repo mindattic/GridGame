@@ -32,8 +32,8 @@ public class BoardInstance : MonoBehaviour
         //transform.position = offset;
 
         var x = -(tileSize * 3) - tileSize / 2;
-
-        offset = new Vector2(x, (tileSize * 4));
+        var y = (tileSize * 4) + tileSize * 2;
+        offset = new Vector2(x, y);
         transform.position = offset;
 
         //Order of Operations:

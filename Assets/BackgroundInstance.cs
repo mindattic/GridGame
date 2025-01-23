@@ -1,24 +1,28 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BackgroundInstance : MonoBehaviour
 {
-
-    [SerializeField] public float floatAmplitude = 2f; // How high and low it floats
-    [SerializeField] public float floatSpeed = 0.2f; // How fast it floats
+    private bool isMoving;
     private Vector3 initialPosition;
+    private SpriteRenderer spriteRenderer;
+    private Vector2 padding;
+    private Vector3 scale;
+    private Vector2 amplitude;
+    private Vector2 speed;
+    private float time;
+    private Vector3 targetPosition;
 
+    private void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Initialize();
-        StartCoroutine(Hover());
-    }
-
-    private void Initialize()
-    {
-
         initialPosition = transform.position; // Store the starting position
 
         // Get screen dimensions in world units
@@ -26,37 +30,72 @@ public class BackgroundInstance : MonoBehaviour
         float screenWidth = screenHeight * Camera.main.aspect;
 
         // Get the sprite's size in world units
-        var spriteRenderer = GetComponent<SpriteRenderer>();
         Bounds spriteBounds = spriteRenderer.sprite.bounds;
         Vector2 spriteSize = spriteBounds.size;
 
         // Calculate scale factors
-        float scaleX = screenWidth / spriteSize.x + (screenWidth * 0.01f);
-        float scaleY = screenHeight / spriteSize.y + (screenHeight * 0.01f);
+        padding = new Vector2(screenWidth * 0.01f, screenHeight * 0.01f);
+        scale = new Vector3(screenWidth / spriteSize.x + padding.x, screenHeight / spriteSize.y + padding.y, 1);
+        transform.localScale = scale;
 
-        // Apply the larger scale factor to ensure the sprite covers the entire screen
-        transform.localScale = new Vector3(scaleX, scaleY, 1);
+        amplitude = new Vector2(padding.x, padding.y);
+        speed = new Vector2(0.2f, 0.2f);
+
+        //StartCoroutine(MoveToRandomPositions());
+
     }
 
-    IEnumerator Hover()
+    //private IEnumerator MoveToRandomPositions()
+    //{
+    //    while (true)
+    //    {
+    //        // Pick a random position within the screen bounds
+    //        float screenHeight = Camera.main.orthographicSize * 2f;
+    //        float screenWidth = screenHeight * Camera.main.aspect;
+
+    //        float randomX = Random.Float(-screenWidth / 2f, screenWidth / 2f);
+    //        float randomY = Random.Float(-screenHeight / 2f, screenHeight / 2f);
+    //        targetPosition = new Vector3(randomX, randomY, transform.position.z);
+
+    //        // Move toward the target position
+    //        isMoving = true;
+    //        while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+    //        {
+    //            transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * 2f);
+    //            yield return null;
+    //        }
+
+    //        // Wait for a second at the target
+    //        isMoving = false;
+    //        yield return new WaitForSeconds(1f);
+    //    }
+    //}
+
+    private void FixedUpdate()
     {
-        float time = 0f;
+        time += Time.deltaTime;
 
-        while (true) // Infinite loop for continuous floating
+        // Calculate the new position using a sine wave
+        var x = initialPosition.x + Mathf.Sin(time * speed.x) * amplitude.x;
+        var y = initialPosition.y + Mathf.Sin(time * speed.y) * amplitude.y;
+        transform.position = new Vector3(x, y, initialPosition.z);
+
+        // Check for completion of a full sine wave cycle
+        if (Mathf.Abs(Mathf.Sin(time * speed.x)) < 0.01f && Mathf.Abs(Mathf.Sin(time * speed.y)) < 0.01f)
         {
-            // Calculate the new Y position using a sine wave
-            float x = initialPosition.x + Mathf.Sin(time * floatSpeed) * floatAmplitude;
-            float y = initialPosition.y + Mathf.Sin(time * floatSpeed) * floatAmplitude;
-           
-            // Update the transform's position
-            transform.position = new Vector3(x, y, initialPosition.z);
+            // Slightly modify amplitude and speed after a full cycle
+            amplitude.x += Random.Float(-0.1f, 0.1f); // Adjust amplitude on X-axis
+            amplitude.y += Random.Float(-0.1f, 0.1f); // Adjust amplitude on Y-axis
 
-            // Increment time
-            time += Time.deltaTime;
+            speed.x += Random.Float(-0.01f, 0.01f); // Adjust speed on X-axis
+            speed.y += Random.Float(-0.01f, 0.01f); // Adjust speed on Y-axis
 
-            // Wait for the next frame
-            yield return null;
+            // Ensure values stay within reasonable bounds
+            amplitude = Vector2.Max(Vector2.zero, amplitude); // Prevent negative amplitude
+            speed = Vector2.Max(new Vector2(0.1f, 0.1f), speed); // Prevent speed from becoming too slow
         }
     }
+
+
 
 }
