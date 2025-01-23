@@ -79,21 +79,6 @@ public class BackgroundInstance : MonoBehaviour
         var x = initialPosition.x + Mathf.Sin(time * speed.x) * amplitude.x;
         var y = initialPosition.y + Mathf.Sin(time * speed.y) * amplitude.y;
         transform.position = new Vector3(x, y, initialPosition.z);
-
-        // Check for completion of a full sine wave cycle
-        if (Mathf.Abs(Mathf.Sin(time * speed.x)) < 0.01f && Mathf.Abs(Mathf.Sin(time * speed.y)) < 0.01f)
-        {
-            // Slightly modify amplitude and speed after a full cycle
-            amplitude.x += Random.Float(-0.1f, 0.1f); // Adjust amplitude on X-axis
-            amplitude.y += Random.Float(-0.1f, 0.1f); // Adjust amplitude on Y-axis
-
-            speed.x += Random.Float(-0.01f, 0.01f); // Adjust speed on X-axis
-            speed.y += Random.Float(-0.01f, 0.01f); // Adjust speed on Y-axis
-
-            // Ensure values stay within reasonable bounds
-            amplitude = Vector2.Max(Vector2.zero, amplitude); // Prevent negative amplitude
-            speed = Vector2.Max(new Vector2(0.1f, 0.1f), speed); // Prevent speed from becoming too slow
-        }
     }
 
 
