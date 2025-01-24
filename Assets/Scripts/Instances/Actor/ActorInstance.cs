@@ -239,6 +239,8 @@ public class ActorInstance : MonoBehaviour
             render.SetQualityColor(ColorHelper.Solid.White);
             render.SetGlowColor(ColorHelper.Solid.White);
             render.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
+
+
             render.SetParallaxMaterial(resourceManager.Material("PlayerParallax", thumbnail.texture));
             render.SetParallaxAlpha(Opacity.Percent50);
             //render.SetParallaxSpeed(1, 1);

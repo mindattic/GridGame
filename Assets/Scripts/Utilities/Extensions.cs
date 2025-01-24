@@ -77,6 +77,12 @@ public static class ListExtensions
         list.Clear();
         list.AddRange(items);
     }
+
+    public static void SetRange<T>(this List<T> list, params T[] items)
+    {
+        list.Clear();
+        list.AddRange(items);
+    }
 }
 
 public static class Vector2IntExtensions

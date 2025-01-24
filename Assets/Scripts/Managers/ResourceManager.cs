@@ -26,7 +26,8 @@ public static class ResourceFolder
     public static string Backgrounds = "Backgrounds";
     public static string Portraits = "Portraits";
     public static string SoundEffects = "SoundEffects";
-} 
+    public static string Materials = "Materials";
+}
 
 public class ResourceManager : MonoBehaviour
 {
@@ -38,19 +39,28 @@ public class ResourceManager : MonoBehaviour
     public Dictionary<string, ResourceItem<Sprite>> backgrounds = new Dictionary<string, ResourceItem<Sprite>>();
     public Dictionary<string, ResourceItem<Texture2D>> portraits = new Dictionary<string, ResourceItem<Texture2D>>();
     public Dictionary<string, ResourceItem<AudioClip>> soundEffects = new Dictionary<string, ResourceItem<AudioClip>>();
+    public Dictionary<string, ResourceItem<Material>> materials = new Dictionary<string, ResourceItem<Material>>();
+
+
 
     public void Awake()
     {
         List<string> keys = new List<string>();
 
-        keys.SetRange(new List<string>() { "CandleLitPath" });
+        keys.SetRange("CandleLitPath");
         backgrounds = LoadResources<Sprite>(ResourceFolder.Backgrounds, keys);
 
-        keys.SetRange(new List<string>() { "Barbarian", "Bat", "Cleric", "Ninja", "Paladin", "PandaGirl", "Scorpion", "Sentinel", "Slime", "Yeti" });
+        keys.SetRange("Barbarian", "Bat", "Cleric", "Ninja", "Paladin", "PandaGirl",
+                      "Scorpion", "Sentinel", "Slime", "Yeti");
         portraits = LoadResources<Texture2D>(ResourceFolder.Portraits, keys);
 
-        keys.SetRange(new List<string>() { "Death", "Move1", "Move2", "Move3", "Move4", "Move5", "Move6", "NextTurn", "PlayerGlow", "Portrait", "Rumble", "Select", "Slash1", "Slash2", "Slash3", "Slash4", "Slash5", "Slash6", "Slash7", "Slide" });
+        keys.SetRange("Death", "Move1", "Move2", "Move3", "Move4", "Move5", "Move6", "NextTurn",
+                      "PlayerGlow", "Portrait", "Rumble", "Select", "Slash1", "Slash2", "Slash3",
+                      "Slash4", "Slash5", "Slash6", "Slash7", "Slide");
         soundEffects = LoadResources<AudioClip>(ResourceFolder.SoundEffects, keys);
+
+        keys.SetRange("EnemyParallax", "PlayerParallax");
+        materials = LoadResources<Material>(ResourceFolder.Materials, keys);
 
 
     }
@@ -84,10 +94,39 @@ public class ResourceManager : MonoBehaviour
             return item;
 
         //TODO: Attempt to dynamically load resource if missing...
-      
+
         logManager.Error($"Failed to retrieve sound effect `{key}` from resource manager.");
         return null;
     }
+
+    public ResourceItem<Material> Material(string key)
+    {
+        if (materials.TryGetValue(key, out var item))
+            return item;
+
+        //TODO: Attempt to dynamically load resource if missing...
+
+        logManager.Error($"Failed to retrieve sound effect `{key}` from resource manager.");
+        return null;
+    }
+
+    public Material Material(string key, Texture2D texture = null)
+    {
+        Material m = null;
+
+        if (materials.TryGetValue(key, out var item))
+        {
+            m = item.Value;
+            if (texture != null)
+                m.mainTexture = texture;
+        }
+
+        if (m == null)
+            logManager.Error($"Failed to retrieve material `{key}` from resource manager.");
+
+        return m;
+    }
+
 
 
     /// <summary>
@@ -157,16 +196,6 @@ public class ResourceManager : MonoBehaviour
         return entries;
     }
 
-    public void LoadBackgrounds(List<string> keys)
-    {
-        //List<string> keys = new List<string>()
-        //{
-        //    "CandleLitPath"
-        //};
-        backgrounds = LoadResources<Sprite>("Backgrounds", keys);
-    }
-
-
     /// <summary>
     /// Load parameters from a JSON file matching the resource name.
     /// </summary>
@@ -180,7 +209,7 @@ public class ResourceManager : MonoBehaviour
             return JsonUtility.FromJson<ParameterList>(json).Parameters;
         }
 
-        Debug.LogWarning($"Parameters file not found for resource {resourceName} at {jsonPath}");
+        //Debug.LogWarning($"Parameters file not found for resource {resourceName} at {jsonPath}");
         return new List<ResourceParameter>();
     }
 
@@ -223,10 +252,9 @@ public class ResourceManager : MonoBehaviour
 
 
     //Variables
-    [SerializeField] public List<ActorSprite> actorSprites = new List<ActorSprite>();
-    [SerializeField] public List<MaterialResource> materials = new List<MaterialResource>();
+    //[SerializeField] public List<MaterialResource> materials = new List<MaterialResource>();
     [SerializeField] public List<ActorDetails> actorDetails = new List<ActorDetails>();
-    [SerializeField] public List<StatusSprite> statusSprites = new List<StatusSprite>();
+    //[SerializeField] public List<StatusSprite> statusSprites = new List<StatusSprite>();
     [SerializeField] public List<PropSprite> propSprites = new List<PropSprite>();
     [SerializeField] public List<SeamlessSprite> seamLessSprites = new List<SeamlessSprite>();
     //[SerializeField] public List<SoundEffect> soundEffects = new List<SoundEffect>();
@@ -240,36 +268,36 @@ public class ResourceManager : MonoBehaviour
     //[SerializeField] public List<ShaderResource> shaders = new List<ShaderResource>();
 
 
-    //public ActorSprite ActorSprite(string id)
+    //public ActorSprite ActorSprite(string key)
     //{
     //    try
     //    {
-    //        return actorSprites.First(x => x.id.Equals(id));
+    //        return actorSprites.First(x => x.key.Equals(key));
     //    }
     //    catch (Exception ex)
     //    {
-    //        logManager.Error($"Failed to retrieve actor sprite `{id}` from resource manager. | Error: {ex.Message}");
+    //        logManager.Error($"Failed to retrieve actor sprite `{key}` from resource manager. | Error: {ex.Message}");
     //    }
 
     //    return null;
     //}
 
-    public Material Material(string id, Texture2D texture = null)
-    {
-        try
-        {
-            var material = materials.First(x => x.id.Equals(id)).material;
-            if (texture != null)
-                material.mainTexture = texture;
-            return material;
-        }
-        catch (Exception ex)
-        {
-            logManager.Error($"Failed to retrieve actor material `{id}` from resource manager. | Error: {ex.Message}");
-        }
+    //public Material Material(string key, Texture2D texture = null)
+    //{
+    //    try
+    //    {
+    //        var material = materials.First(x => x.key.Equals(key)).material;
+    //        if (texture != null)
+    //            material.mainTexture = texture;
+    //        return material;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        logManager.Error($"Failed to retrieve actor material `{key}` from resource manager. | Error: {ex.Message}");
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
 
 
     public string ActorDetails(string id)
@@ -318,19 +346,19 @@ public class ResourceManager : MonoBehaviour
     }
 
 
-    public Sprite StatusThumbnail(string id)
-    {
-        try
-        {
-            return statusSprites.First(x => x.id.Equals(id)).thumbnail;
-        }
-        catch (Exception ex)
-        {
-            logManager.Error($"Failed to retrieve status thumbnail `{id}` from resource manager. | Error: {ex.Message}");
-        }
+    //public Sprite StatusThumbnail(string id)
+    //{
+    //    try
+    //    {
+    //        return statusSprites.First(x => x.id.Equals(id)).thumbnail;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        logManager.Error($"Failed to retrieve status thumbnail `{id}` from resource manager. | Error: {ex.Message}");
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
 
 
     //public AudioClip SoundEffect(string key)
