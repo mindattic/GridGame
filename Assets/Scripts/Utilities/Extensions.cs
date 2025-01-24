@@ -65,6 +65,18 @@ public static class ListExtensions
     {
         return list.OrderBy(x => Guid.NewGuid()).ToList();
     }
+
+    public static void Set<T>(this List<T> list, T item)
+    {
+        list.Clear();
+        list.Add(item);
+    }
+
+    public static void SetRange<T>(this List<T> list, IEnumerable<T> items)
+    {
+        list.Clear();
+        list.AddRange(items);
+    }
 }
 
 public static class Vector2IntExtensions
@@ -228,4 +240,10 @@ public static class DirectionExtensions
 
 
 
-
+public static class Texture2DExtensions
+{
+    public static Sprite ToSprite(this Texture2D texture)
+    {
+        return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+    }
+}

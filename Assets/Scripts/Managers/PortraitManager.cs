@@ -27,7 +27,7 @@ public class PortraitManager : MonoBehaviour
         instance.name = $"Portrait_{Guid.NewGuid()}";
         instance.parent = board.transform;
         instance.sortingOrder = sortingOrder--;
-        instance.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
+        instance.sprite = resourceManager.Portrait(actor.character.ToString()).Value.ToSprite();
         instance.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         instance.spriteRenderer.color = new Color(1, 1, 1, Opacity.Percent90);
         instance.actor = actor;
@@ -50,7 +50,7 @@ public class PortraitManager : MonoBehaviour
         instance.name = $"Portrait_{Guid.NewGuid()}";
         instance.parent = board.transform;
         instance.sortingOrder = SortingOrder.Max;
-        instance.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
+        instance.sprite = resourceManager.Portrait(actor.character.ToString()).Value.ToSprite();
         instance.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         instance.spriteRenderer.color = new Color(1, 1, 1, Opacity.Percent90);
         instance.position = actor.position;

@@ -25,7 +25,7 @@ public class ActorThumbnail
     public void Generate()
     {
         // Get the full texture from the resource manager
-        texture = resourceManager.ActorPortrait(instance.character.ToString()).texture;
+        texture = resourceManager.Portrait(instance.character.ToString()).Value;
 
         //Retrieve thumnail dimensions from entity
         ThumbnailSize size = databaseManager.GetThumbnailSize(instance.character.ToString());

@@ -55,7 +55,7 @@ namespace Game.Behaviors
         public void Assign(ActorInstance actor)
         {
             backdrop.enabled = true;
-            portrait.sprite = resourceManager.ActorSprite(actor.character.ToString()).portrait;
+            portrait.sprite = resourceManager.Portrait(actor.character.ToString()).Value.ToSprite();
             portrait.enabled = true;
 
             title.text = actor.name;

@@ -29,7 +29,7 @@ namespace Game.Manager
             {
                 public static class Actor
                 {
-                    public static string Entities = "SELECT a.Name, a.Description, s.Level, s.MaxHp, s.Strength, s.Vitality, s.Agility, s.Speed, s.Luck, t.Width AS ThumbnailWidth, t.Width AS ThumbnailHeight, t.X AS ThumbnailX, t.Y AS ThumbnailY FROM Actor a INNER JOIN ActorStats ON (a.id = ActorStats.ActorId) INNER JOIN Stats s ON (ActorStats.StatsId = s.Id) INNER JOIN ActorThumbnail ON (a.Id = ActorThumbnail.ActorId) INNER JOIN Thumbnail t ON (t.Id = ActorThumbnail.ThumbnailId);";
+                    public static string Entities = " SELECT a.Name, a.Description, s.Level, s.MaxHp, s.Strength, s.Vitality, s.Agility, s.Speed, s.Luck, t.Width AS ThumbnailWidth, t.Width AS ThumbnailHeight, t.X AS ThumbnailX, t.Y AS ThumbnailY FROM Actor a INNER JOIN ActorStats a_s ON (a.ActorId = a_s.ActorId) INNER JOIN Stats s ON (a_s.StatsId = s.StatsId) INNER JOIN ActorThumbnail a_t ON (a.ActorId = a_t.ActorId) INNER JOIN Thumbnail t ON (t.ThumbnailId = a_t.ThumbnailId)";
 
 
 

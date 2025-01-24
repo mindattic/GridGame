@@ -32,7 +32,7 @@ public class BackgroundInstance : MonoBehaviour
         float screenWidth = screenHeight * Camera.main.aspect;
 
         // Get the sprite's size in world units
-        spriteRenderer.sprite = resourceManager.Load<Sprite>("Background/candle-lit-path");
+        spriteRenderer.sprite = resourceManager.Load<Sprite>("Backgrounds/CandleLitPath");
         Bounds spriteBounds = spriteRenderer.sprite.bounds;
         Vector2 spriteSize = spriteBounds.size;
 

@@ -125,6 +125,7 @@
     <Compile Include="Assets\Scripts\Managers\PauseManager.cs" />
     <Compile Include="Assets\Scripts\Instances\DottedLineInstance.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorGlow.cs" />
+    <Compile Include="Assets\Scripts\GUI\DebugDropdown.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
     <Compile Include="Assets\Scripts\Models\Size.cs" />
     <Compile Include="Assets\BackgroundInstance.cs" />
@@ -216,6 +217,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\Shader\StencilMasked.shader" />
     <None Include="Assets\Shader\uvnoise.shader" />
+    <None Include="Assets\Resources\SoundEffects\FileList.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Shader\henshuuv.shader" />
     <None Include="Assets\Shader\Mobile-Particle-Alpha.shader" />

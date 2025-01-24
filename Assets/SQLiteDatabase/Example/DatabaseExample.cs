@@ -193,7 +193,7 @@ public class DatabaseExample : MonoBehaviour
             // Create table :: schema
             /*// you can create table when you want
 			DBSchema schema = new DBSchema ("Users");
-			schema.AddField ("Id", SQLiteDB.DB_DataType.DB_INT, 0, false, true, true);
+			schema.AddField ("Key", SQLiteDB.DB_DataType.DB_INT, 0, false, true, true);
 			schema.AddField ("Name", SQLiteDB.DB_DataType.DB_VARCHAR, 100, false, false, false);
 			return db.CreateTable (schema);*/
 
@@ -220,7 +220,7 @@ public class DatabaseExample : MonoBehaviour
         SQLiteDB.DB_DataPair data = new SQLiteDB.DB_DataPair();
         // Insert first row
         // first field
-        data.fieldName = "Id";
+        data.fieldName = "Key";
         data.value = id;
         dataPairList.Add(data);
 
@@ -257,7 +257,7 @@ public class DatabaseExample : MonoBehaviour
 
         // row to be updated
         SQLiteDB.DB_ConditionPair condition = new SQLiteDB.DB_ConditionPair();
-        condition.fieldName = "Id";
+        condition.fieldName = "Key";
         condition.value = id;
         condition.condition = SQLiteDB.DB_Condition.EQUAL_TO;
 
@@ -276,8 +276,8 @@ public class DatabaseExample : MonoBehaviour
     void DeleteRow(string id)
     {
         SQLiteDB.DB_ConditionPair condition = new SQLiteDB.DB_ConditionPair();
-        // delete from Users where Id = id
-        condition.fieldName = "Id";
+        // delete from Users where Key = id
+        condition.fieldName = "Key";
         condition.value = id;
         condition.condition = SQLiteDB.DB_Condition.EQUAL_TO;
 
@@ -299,7 +299,7 @@ public class DatabaseExample : MonoBehaviour
 
         while (reader != null && reader.Read())
         {
-            allIDs.Add(reader.GetStringValue("Id"));
+            allIDs.Add(reader.GetStringValue("Key"));
             allNames.Add(reader.GetStringValue("Name"));
             isTableCreated = true;
         }

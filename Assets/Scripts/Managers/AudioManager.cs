@@ -12,7 +12,7 @@ public class AudioManager : MonoBehaviour
 
     public void Play(string sfx)
     {
-        var soundEffect = resourceManager.SoundEffect(sfx);
+        var soundEffect = resourceManager.SoundEffect(sfx).Value;
         if (soundEffect == null)
         {
             logManager.Error($@"Sound Effect ""{sfx}"" was not found.");
