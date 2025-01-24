@@ -30,6 +30,16 @@ public class ResourceManager : MonoBehaviour
     //[SerializeField] public List<PrefabResource> prefabs = new List<PrefabResource>();
     //[SerializeField] public List<ShaderResource> shaders = new List<ShaderResource>();
 
+
+    public T Load<T>(string resourcePath) where T : UnityEngine.Object
+    {
+        T resource = Resources.Load<T>(resourcePath);
+        if (resource == null)
+            logManager.Error($"Failed to load external resource from `{resourcePath}`");
+
+        return resource;
+    }
+
     public ActorSprite ActorSprite(string id)
     {
         try
