@@ -232,7 +232,7 @@ public class ActorInstance : MonoBehaviour
         weapon.Attack = Random.Float(10, 15);
         weapon.Defense = Random.Float(0, 5);
         weapon.Name = $"{weapon.Type}";
-        render.weaponIcon.sprite = resourceManager.WeaponType(weapon.Type).sprite;
+        render.weaponIcon.sprite = resourceManager.WeaponType(weapon.Type.ToString()).Value;
 
         if (isPlayer)
         {
