@@ -65,7 +65,7 @@ namespace Assets.Scripts.Instances.Actor
                     0 // Keep the z-axis stable
                 );
 
-                // Apply the offset to the thumbnail position
+                // Apply the offset to the thumbnailSettings position
                 instance.thumbnailPosition = originalPosition + shakeOffset;
 
                 // Wait for the next frame

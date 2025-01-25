@@ -135,10 +135,10 @@ public class ActorInstance : MonoBehaviour
         set => gameObject.transform.localScale = value;
     }
 
-    //public Sprite thumbnail
+    //public Sprite thumbnailSettings
     //{
-    //    get => render.thumbnail.sprite;
-    //    set => render.thumbnail.sprite = value;
+    //    get => render.thumbnailSettings.sprite;
+    //    set => render.thumbnailSettings.sprite = value;
     //}
 
     public int sortingOrder
@@ -245,7 +245,7 @@ public class ActorInstance : MonoBehaviour
             render.SetParallaxAlpha(Opacity.Percent50);
             //render.SetParallaxSpeed(1, 1);
 
-            //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
+            //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnailSettings.texture));
             //render.SetFrameColor(quality.Color);
             render.SetHealthBarColor(ColorHelper.HealthBar.Green);
             render.SetActionBarColor(ColorHelper.ActionBar.Blue);
@@ -260,7 +260,7 @@ public class ActorInstance : MonoBehaviour
             render.SetParallaxMaterial(resourceManager.Material("EnemyParallax", thumbnail.texture).Value);
             render.SetParallaxAlpha(Opacity.Percent50);
             //render.SetParallaxSpeed(1, 1);
-            //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
+            //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnailSettings.texture));
             render.SetFrameColor(ColorHelper.Solid.Red);
             render.SetHealthBarColor(ColorHelper.HealthBar.Green);
             render.SetActionBarColor(ColorHelper.ActionBar.Blue);
@@ -460,7 +460,7 @@ public class ActorInstance : MonoBehaviour
     private void TriggerSpawnCoins(int amount)
     {
         if (isActive && isAlive)
-            StartCoroutine(SpawnCoins(amount)); //TODO: TriggerSpawn coins based on enemy stats...
+            StartCoroutine(SpawnCoins(amount)); //TODO: TriggerSpawn coins based on enemy Stats...
     }
 
     IEnumerator SpawnCoins(int amount)
@@ -716,7 +716,7 @@ public class ActorInstance : MonoBehaviour
     //{
     //if (ap < apMax)
     //{
-    //    ap += stats.Speed;
+    //    ap += Stats.Speed;
     //    ap = Math.Clamp(ap, 0, apMax);
     //}
 
@@ -785,9 +785,9 @@ public class ActorInstance : MonoBehaviour
     //    if (!isActive && isAlive)
     //        return;
 
-    //    //TODO: Calculate based on stats....
-    //    float min = (Interval.OneSecond * 20) - stats.Agility * Formulas.LuckModifier(stats);
-    //    float max = (Interval.OneSecond * 40) - stats.Agility * Formulas.LuckModifier(stats);
+    //    //TODO: Calculate based on Stats....
+    //    float min = (Interval.OneSecond * 20) - Stats.Agility * Formulas.LuckModifier(Stats);
+    //    float max = (Interval.OneSecond * 40) - Stats.Agility * Formulas.LuckModifier(Stats);
 
     //    sp = 0;
     //    apMax = Random.Float(min, max);
@@ -851,7 +851,7 @@ public class ActorInstance : MonoBehaviour
     //    }
     //    TriggerSpin90(Attack());
 
-    //    //turnDelay = Formulas.CalculateTurnDelay(stats);
+    //    //turnDelay = Formulas.CalculateTurnDelay(Stats);
     //    //UpdateTurnDelayText();
 
     //    UpdateActionBar();
@@ -874,7 +874,7 @@ public class ActorInstance : MonoBehaviour
     //    if (!isActive && isAlive)
     //        return;
 
-    //    //TODO: Calculate based on stats....
+    //    //TODO: Calculate based on Stats....
     //    float min = (Interval.OneSecond * 10) - amplitude * LuckModifier;
     //    float max = (Interval.OneSecond * 20) - amplitude * LuckModifier;
 
@@ -947,7 +947,7 @@ public class ActorInstance : MonoBehaviour
     //    }
 
     //    //Before:
-    //    render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(status.ToString())).thumbnail;
+    //    render.statusIcon.sprite = resourceManager.statusSprites.First(x => x.id.Equals(status.ToString())).thumbnailSettings;
     //    alpha = 0;
     //    render.statusIcon.color = new Color(1, 1, 1, alpha);
 

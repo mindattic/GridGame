@@ -7,7 +7,7 @@ using UnityEngine;
 public class StageManager : MonoBehaviour
 {
     #region Properties
-    protected DatabaseManager databaseManager => GameManager.instance.databaseManager;
+    protected DataManager dataManager => GameManager.instance.dataManager;
     protected int totalCoins
     {
         get { return GameManager.instance.totalCoins; }
@@ -241,13 +241,13 @@ public class StageManager : MonoBehaviour
         instance.parent = board.transform;
         instance.character = stageActor.character;
         instance.name = stageActor.character.ToString();
-        //instance.thumbnail = stageActor.thumbnail;
+        //instance.thumbnailSettings = stageActor.thumbnailSettings;
         instance.team = stageActor.team;
         //instance.quality = stageActor.quality;
         //instance.render.SetQualityColor(instance.isPlayer ? Color.white : Color.red);
         //instance.sortingOrder = SortingOrder.Min;
 
-        //Assign stats
+        //Assign Stats
         instance.stats = new ActorStats(stageActor.stats);
         instance.transform.localScale = tileScale;
 

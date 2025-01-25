@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Models\ActorDetails.cs" />
     <Compile Include="Assets\Scripts\Instances\DamageTextInstance.cs" />
     <Compile Include="Assets\Scripts\Utilities\Formulas.cs" />
+    <Compile Include="Assets\DataManager.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorWeapon.cs" />
     <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
@@ -95,12 +96,10 @@
     <Compile Include="Assets\Scripts\Managers\FootstepManager.cs" />
     <Compile Include="Assets\Scripts\Models\GhostRenderers.cs" />
     <Compile Include="Assets\Scripts\Managers\VFXManager.cs" />
-    <Compile Include="Assets\Scripts\Models\ThumbnailSize.cs" />
     <Compile Include="Assets\Scripts\Instances\SupportLineInstance.cs" />
     <Compile Include="Assets\Scripts\Managers\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Managers\DebugManager.cs" />
     <Compile Include="Assets\SQLiteDatabase\Example\DatabaseExample.cs" />
-    <Compile Include="Assets\Scripts\Entities\Data.cs" />
     <Compile Include="Assets\Scripts\Models\VisualEffect.cs" />
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
@@ -121,6 +120,7 @@
     <Compile Include="Assets\Scripts\Models\Size.cs" />
     <Compile Include="Assets\BackgroundInstance.cs" />
     <Compile Include="Assets\Scripts\Instances\TooltipInstance.cs" />
+    <Compile Include="Assets\Scripts\Models\ThumbnailSettings.cs" />
     <Compile Include="Assets\Scripts\Models\Trigger.cs" />
     <Compile Include="Assets\Scripts\Utilities\Geometry.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorLayer.cs" />
@@ -172,7 +172,6 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
     <None Include="Assets\VFX\GameVFX Collection(URP)\FX_Dragonfire\Shader\ParticleAdd_UV.shader" />
     <None Include="Assets\Shader\Add_DisUV.shader" />
-    <None Include="Assets\Resources\Sprites\FileList.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Shader\SraeWaveAlphaBlended02.shader" />
     <None Include="Assets\VFX\GameVFX Collection(URP)\FX_Dragonfire\Shader\MaskUV.shader" />

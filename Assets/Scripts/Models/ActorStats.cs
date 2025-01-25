@@ -1,4 +1,5 @@
-﻿public class ActorStats
+﻿[System.Serializable]
+public class ActorStats
 {
     public ActorStats() { }
 

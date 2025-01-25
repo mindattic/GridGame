@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class StageActor
 {
-    protected DatabaseManager databaseManager => GameManager.instance.databaseManager;
+    protected DataManager dataManager => GameManager.instance.dataManager;
     protected List<ActorInstance> actors => GameManager.instance.actors;
 
 
@@ -26,13 +26,11 @@ public class StageActor
 
     public StageActor(Character character, Team team, Vector2Int? location = null, int spawnTurn = -1)
     {
-
-
         this.character = character;
         this.name = $"{character.ToString()}{GenerateNameSuffix(character)}";
         //this.name = character.ToString();
-        this.stats = databaseManager.GetActorStats(character.ToString());
-        //this.thumbnail = GameManager.instance.resourceManager.ActorSprite(this.character.ToString()).idle;
+        this.stats = dataManager.GetActorStats(character.ToString());
+        //this.thumbnailSettings = GameManager.instance.resourceManager.ActorSprite(this.character.ToString()).idle;
         this.team = team;
         this.location = location ?? Random.UnoccupiedLocation;
         this.spawnTurn = spawnTurn;
@@ -52,11 +50,11 @@ public class StageActor
 
 
 
-    //public StageActor(Character character, string name, ActorStats stats, Team team, Rarity quality, int spawnDelay)
+    //public StageActor(Character character, string name, ActorStats Stats, Team team, Rarity quality, int spawnDelay)
     //{
     //    this.character = character;
     //    this.name = name;
-    //    this.stats = stats;
+    //    this.Stats = Stats;
     //    this.idle = GameManager.db.resourceManager.ActorThumbnail(this.character.ToString());
     //    this.team = team;
     //    this.quality = quality;

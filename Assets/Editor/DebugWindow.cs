@@ -156,7 +156,7 @@ public class DebugWindow : EditorWindow
         RenderDebugOptionsDropdown();
         RenderVFXDropdown();
         RenderLevelControls();
-        RenderDataControls();
+        //RenderDataControls();
         RenderSpawnControls();
         RenderActorStats();    
         RenderLog();
@@ -287,27 +287,27 @@ public class DebugWindow : EditorWindow
         GUILayout.Space(10);
     }
 
-    private void RenderDataControls()
-    {
-        bool isClicked;
+    //private void RenderDataControls()
+    //{
+    //    bool isClicked;
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Data", GUILayout.Width(Screen.width));
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
+    //    GUILayout.BeginHorizontal();
+    //    GUILayout.Label("Data", GUILayout.Width(Screen.width));
+    //    GUILayout.EndHorizontal();
+    //    GUILayout.BeginHorizontal();
 
-        isClicked = GUILayout.Button("Erase Schema", GUILayout.Width(Screen.width * Constants.percent50));
-        if (isClicked)
-            OnEraseDatabaseClick();
+    //    isClicked = GUILayout.Button("Erase Schema", GUILayout.Width(Screen.width * Constants.percent50));
+    //    if (isClicked)
+    //        OnEraseDatabaseClick();
 
-        isClicked = GUILayout.Button("Erase Profiles", GUILayout.Width(Screen.width * Constants.percent50));
+    //    isClicked = GUILayout.Button("Erase Profiles", GUILayout.Width(Screen.width * Constants.percent50));
 
-        if (isClicked)
-            OnEraseProfilesClick();
+    //    if (isClicked)
+    //        OnEraseProfilesClick();
 
-        GUILayout.EndHorizontal();
-        GUILayout.Space(10);
-    }
+    //    GUILayout.EndHorizontal();
+    //    GUILayout.Space(10);
+    //}
 
 
 
@@ -517,23 +517,23 @@ public class DebugWindow : EditorWindow
         stageManager.NextStage();
     }
 
-    private void OnEraseDatabaseClick()
-    {
-        string fullPath = Path.Combine(Application.persistentDataPath, DatabaseManager.Schema.DBName);
+    //private void OnEraseDatabaseClick()
+    //{
+    //    string fullPath = Path.Combine(Application.persistentDataPath, DatabaseManager.Schema.DBName);
 
-        if (!File.Exists(fullPath))
-        {
-            logManager.Error($"{DatabaseManager.Schema.DBName} does not exist at the specified path.");
-            return;
-        }
+    //    if (!File.Exists(fullPath))
+    //    {
+    //        logManager.Error($"{DatabaseManager.Schema.DBName} does not exist at the specified path.");
+    //        return;
+    //    }
 
-        File.Delete(fullPath);
-        logManager.Info($"{DatabaseManager.Schema.DBName} has been deleted.");
-    }
+    //    File.Delete(fullPath);
+    //    logManager.Info($"{DatabaseManager.Schema.DBName} has been deleted.");
+    //}
 
-    private void OnEraseProfilesClick()
-    {
-        logManager.Info("Not yet implemented.");
-    }
+    //private void OnEraseProfilesClick()
+    //{
+    //    logManager.Info("Not yet implemented.");
+    //}
 
 }

@@ -1,0 +1,204 @@
+﻿{
+  "Items": [
+    {
+      "Name": "Barbarian",
+      "Variant": "",
+      "Description": "A warrior driven by rage.",
+      "Stats": {
+        "Level": 1,
+        "PreviousHP": 40,
+        "HP": 40,
+        "MaxHP": 40,
+        "PreviousAP": 0,
+        "AP": 0,
+        "MaxAP": 100,
+        "Strength": 9,
+        "Vitality": 6,
+        "Agility": 4,
+        "Speed": 5,
+        "Luck": 5
+      },
+      "ThumbnailSettings": {
+        "X": -60,
+        "Y": -80,
+        "Width": 256,
+        "Height": 256
+      }
+    },
+    {
+      "Name": "Bat",
+      "Variant": "",
+      "Description": "A flying menace.",
+      "Stats": {
+        "Level": 1,
+        "PreviousHP": 5,
+        "HP": 5,
+        "MaxHP": 5,
+        "PreviousAP": 0,
+        "AP": 0,
+        "MaxAP": 100,
+        "Strength": 2,
+        "Vitality": 4,
+        "Agility": 8,
+        "Speed": 6,
+        "Luck": 6
+      },
+      "ThumbnailSettings": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1024,
+        "Height": 1024
+      }
+    },
+    {
+      "Name": "Cleric",
+      "Variant": "",
+      "Description": "A strict adherent to the church.",
+      "Stats": {
+        "Level": 1,
+        "PreviousHP": 30,
+        "HP": 30,
+        "MaxHP": 30,
+        "PreviousAP": 0,
+        "AP": 0,
+        "MaxAP": 100,
+        "Strength": 2,
+        "Vitality": 5,
+        "Agility": 3,
+        "Speed": 3,
+        "Luck": 9
+      },
+      "ThumbnailSettings": {
+        "X": 0,
+        "Y": -50,
+        "Width": 326,
+        "Height": 316
+      }
+    },
+    {
+      "Name": "Ninja",
+      "Variant": "",
+      "Description": "A stealthy assassin.",
+      "Stats": {
+        "Level": 1,
+        "PreviousHP": 35,
+        "HP": 35,
+        "MaxHP": 35,
+        "PreviousAP": 0,
+        "AP": 0,
+        "MaxAP": 100,
+        "Strength": 4,
+        "Vitality": 4,
+        "Agility": 10,
+        "Speed": 10,
+        "Luck": 5
+      },
+      "ThumbnailSettings": {
+        "X": 0,
+        "Y": 0,
+        "Width": 196,
+        "Height": 196
+      }
+    },
+    {
+      "Name": "Paladin",
+      "Variant": "",
+      "Description": "A holy knight.",
+      "Stats": {
+        "Level": 1,
+        "PreviousHP": 50,
+        "HP": 50,
+        "MaxHP": 50,
+        "PreviousAP": 0,
+        "AP": 0,
+        "MaxAP": 100,
+        "Strength": 6,
+        "Vitality": 8,
+        "Agility": 3,
+        "Speed": 3,
+        "Luck": 6
+      },
+      "ThumbnailSettings": {
+        "X": 20,
+        "Y": -30,
+        "Width": 196,
+        "Height": 196
+      }
+    },
+    {
+      "Name": "Scorpion",
+      "Variant": "",
+      "Description": "A poisonous insectile predator.",
+      "Stats": {
+        "Level": 2,
+        "PreviousHP": 100,
+        "HP": 100,
+        "MaxHP": 100,
+        "PreviousAP": 0,
+        "AP": 0,
+        "MaxAP": 100,
+        "Strength": 4,
+        "Vitality": 2,
+        "Agility": 6,
+        "Speed": 4,
+        "Luck": 2
+      },
+      "ThumbnailSettings": {
+        "X": -125,
+        "Y": -300,
+        "Width": 256,
+        "Height": 256
+      }
+    },
+    {
+      "Name": "Slime",
+      "Variant": "",
+      "Description": "A weak and squishy creature.",
+      "Stats": {
+        "Level": 1,
+        "PreviousHP": 8,
+        "HP": 8,
+        "MaxHP": 8,
+        "PreviousAP": 0,
+        "AP": 0,
+        "MaxAP": 100,
+        "Strength": 1,
+        "Vitality": 1,
+        "Agility": 1,
+        "Speed": 5,
+        "Luck": 1
+      },
+      "ThumbnailSettings": {
+        "X": -150,
+        "Y": -300,
+        "Width": 512,
+        "Height": 512
+      }
+    },
+    {
+      "Name": "Yeti",
+      "Variant": "",
+      "Description": "An abominable snowman.",
+      "Stats": {
+        "Level": 5,
+        "PreviousHP": 50,
+        "HP": 50,
+        "MaxHP": 50,
+        "PreviousAP": 0,
+        "AP": 0,
+        "MaxAP": 100,
+        "Strength": 4,
+        "Vitality": 10,
+        "Agility": 5,
+        "Speed": 1,
+        "Luck": 5
+      },
+      "ThumbnailSettings": {
+        "X": -150,
+        "Y": -100,
+        "Width": 256,
+        "Height": 256
+      }
+    }
+  ]
+}

@@ -61,13 +61,13 @@ namespace Game.Behaviors
             title.text = actor.name;
 
             var hp = $"{actor.stats.HP,2}/{actor.stats.MaxHP,-3}"; // HP/MaxHP with dynamic padding
-            var str = $"{actor.stats.Strength,4}";                // Right-align stats to 4 characters
+            var str = $"{actor.stats.Strength,4}";                // Right-align Stats to 4 characters
             var vit = $"{actor.stats.Vitality,4}";
             var agi = $"{actor.stats.Agility,4}";
             var spd = $"{actor.stats.Speed,4}";
             var lck = $"{actor.stats.Luck,4}";
 
-            // Create the stats table
+            // Create the Stats table
             var stats
                 = $"HP       STR  VIT  AGI  SPD  LCK{Environment.NewLine}"
                 + $"{hp}   {str}{vit}{agi}{spd}{lck}{Environment.NewLine}";
