@@ -61,7 +61,8 @@ public class FootstepInstance : MonoBehaviour
     {
         this.Position = position;
         this.Rotation = rotation;
-        spriteRenderer.sprite = resourceManager.Prop($"Footstep{(isRightFoot ? "right" : "left")}");
+        spriteRenderer.flipX = !isRightFoot;
+
         StartCoroutine(FadeOut());
     }
 

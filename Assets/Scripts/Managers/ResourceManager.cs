@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 public class ResourceParameter
 {
     public string Key;   // The parameter name (e.g., "Role", "Description")
-    public string Value; // The parameter item (e.g., "Tank", "A brave warrior")
+    public string Value; // The parameter entry (e.g., "Tank", "A brave warrior")
 }
 
 [System.Serializable]
@@ -27,6 +27,8 @@ public static class ResourceFolder
     public static string Portraits = "Portraits";
     public static string SoundEffects = "SoundEffects";
     public static string Materials = "Materials";
+    public static string Seamless = "Seamless";
+    public static string Sprites = "Sprites";
 }
 
 public class ResourceManager : MonoBehaviour
@@ -40,7 +42,8 @@ public class ResourceManager : MonoBehaviour
     public Dictionary<string, ResourceItem<Texture2D>> portraits = new Dictionary<string, ResourceItem<Texture2D>>();
     public Dictionary<string, ResourceItem<AudioClip>> soundEffects = new Dictionary<string, ResourceItem<AudioClip>>();
     public Dictionary<string, ResourceItem<Material>> materials = new Dictionary<string, ResourceItem<Material>>();
-
+    public Dictionary<string, ResourceItem<Sprite>> seamless = new Dictionary<string, ResourceItem<Sprite>>();
+    public Dictionary<string, ResourceItem<Sprite>> sprites = new Dictionary<string, ResourceItem<Sprite>>();
 
 
     public void Awake()
@@ -62,72 +65,80 @@ public class ResourceManager : MonoBehaviour
         keys.SetRange("EnemyParallax", "PlayerParallax");
         materials = LoadResources<Material>(ResourceFolder.Materials, keys);
 
+        keys.SetRange("BlackFire1", "BlackFire2", "Fire1", "RedFire1", "Swords1", "Swords2",
+                      "WhiteFire1", "WhiteFire2");
+        seamless = LoadResources<Sprite>(ResourceFolder.Seamless, keys);
+
+        keys.SetRange("DottedLine", "DottedLineArrow", "DottedLineTurn", "Footstep", "Pause", 
+                      "Paused");
+        sprites = LoadResources<Sprite>(ResourceFolder.Sprites, keys);
+
 
     }
 
 
     public ResourceItem<Sprite> Background(string key)
     {
-        if (backgrounds.TryGetValue(key, out var value))
-            return value;
+        if (backgrounds.TryGetValue(key, out var entry))
+            return entry;
+        else
+            logManager.Error($"Failed to retrieve background `{key}` from resource manager.");
 
-        //TODO: Attempt to dynamically load resource if missing...
-
-        logManager.Error($"Failed to retrieve background `{key}` from resource manager.");
         return null;
     }
 
     public ResourceItem<Texture2D> Portrait(string key)
     {
-        if (portraits.TryGetValue(key, out var item))
-            return item;
+        if (portraits.TryGetValue(key, out var entry))
+            return entry;
+        else
+            logManager.Error($"Failed to retrieve portrait texture2D `{key}` from resource manager.");
 
-        //TODO: Attempt to dynamically load resource if missing...
-
-        logManager.Error($"Failed to retrieve portrait texture2D `{key}` from resource manager.");
         return null;
     }
 
     public ResourceItem<AudioClip> SoundEffect(string key)
     {
-        if (soundEffects.TryGetValue(key, out var item))
-            return item;
+        if (soundEffects.TryGetValue(key, out var entry))
+            return entry;
+        else
+            logManager.Error($"Failed to retrieve sound effect `{key}` from resource manager.");
 
-        //TODO: Attempt to dynamically load resource if missing...
-
-        logManager.Error($"Failed to retrieve sound effect `{key}` from resource manager.");
         return null;
     }
 
-    public ResourceItem<Material> Material(string key)
+    public ResourceItem<Material> Material(string key, Texture2D texture = null)
     {
-        if (materials.TryGetValue(key, out var item))
-            return item;
-
-        //TODO: Attempt to dynamically load resource if missing...
-
-        logManager.Error($"Failed to retrieve sound effect `{key}` from resource manager.");
-        return null;
-    }
-
-    public Material Material(string key, Texture2D texture = null)
-    {
-        Material m = null;
-
-        if (materials.TryGetValue(key, out var item))
+        if (materials.TryGetValue(key, out var entry))
         {
-            m = item.Value;
-            if (texture != null)
-                m.mainTexture = texture;
+            entry.Value.mainTexture = texture;
+            return entry;
         }
-
-        if (m == null)
+        else
             logManager.Error($"Failed to retrieve material `{key}` from resource manager.");
 
-        return m;
+        return null;
     }
 
+    public ResourceItem<Sprite> Seamless(string key)
+    {
+        if (seamless.TryGetValue(key, out var entry))
+            return entry;
+        else
+            logManager.Error($"Failed to retrieve seamless sprite `{key}` from resource manager.");
 
+        return null;
+    }
+
+    public ResourceItem<Sprite> Sprite(string key)
+    {
+        if (sprites.TryGetValue(key, out var entry))
+            return entry;
+        else
+            logManager.Error($"Failed to retrieve sprite `{key}` from resource manager.");
+
+        return null;
+    }
 
     /// <summary>
     /// Load all resources from a folder and their matching JSON parameters.
@@ -173,24 +184,31 @@ public class ResourceManager : MonoBehaviour
     {
         Dictionary<string, ResourceItem<T>> entries = new Dictionary<string, ResourceItem<T>>();
 
-        foreach (var key in keys)
+        try
         {
-            // Load the sprite
-            T value = Resources.Load<T>($"{resourcePath}/{key}");
-            if (value == null)
+            foreach (var key in keys)
             {
-                logManager.Warning($"Resource {key} not found in folder {resourcePath}");
-                continue;
+                // Load the sprite
+                T value = Resources.Load<T>($"{resourcePath}/{key}");
+                if (value == null)
+                {
+                    logManager.Warning($"Resource `{key}` was not found in folder {resourcePath}");
+                    continue;
+                }
+
+                // Load the matching JSON file for parameters
+                List<ResourceParameter> parameters = LoadParameters(resourcePath, key);
+
+                entries.Add(key, new ResourceItem<T>
+                {
+                    Value = value,
+                    Parameters = parameters
+                });
             }
-
-            // Load the matching JSON file for parameters
-            List<ResourceParameter> parameters = LoadParameters(resourcePath, key);
-
-            entries.Add(key, new ResourceItem<T>
-            {
-                Value = value,
-                Parameters = parameters
-            });
+        }
+        catch (Exception ex)
+        {
+            logManager.Error(ex.Message);
         }
 
         return entries;
@@ -255,14 +273,14 @@ public class ResourceManager : MonoBehaviour
     //[SerializeField] public List<MaterialResource> materials = new List<MaterialResource>();
     [SerializeField] public List<ActorDetails> actorDetails = new List<ActorDetails>();
     //[SerializeField] public List<StatusSprite> statusSprites = new List<StatusSprite>();
-    [SerializeField] public List<PropSprite> propSprites = new List<PropSprite>();
-    [SerializeField] public List<SeamlessSprite> seamLessSprites = new List<SeamlessSprite>();
+    //[SerializeField] public List<PropSprite> propSprites = new List<PropSprite>();
+    //[SerializeField] public List<SeamlessSprite> seamLessSprites = new List<SeamlessSprite>();
     //[SerializeField] public List<SoundEffect> soundEffects = new List<SoundEffect>();
     [SerializeField] public List<MusicTrack> musicTracks = new List<MusicTrack>();
     [SerializeField] public List<VisualEffect> visualEffects = new List<VisualEffect>();
     [SerializeField] public List<WeaponTypeResource> weaponTypes = new List<WeaponTypeResource>();
-    [SerializeField] public List<SpriteResource> sprites = new List<SpriteResource>();
-    [SerializeField] public List<DottedLineSegmentResource> dottedLines = new List<DottedLineSegmentResource>();
+    //[SerializeField] public List<SpriteResource> sprites = new List<SpriteResource>();
+    //[SerializeField] public List<DottedLineSegmentResource> dottedLines = new List<DottedLineSegmentResource>();
 
     //[SerializeField] public List<PrefabResource> prefabs = new List<PrefabResource>();
     //[SerializeField] public List<ShaderResource> shaders = new List<ShaderResource>();
@@ -316,34 +334,34 @@ public class ResourceManager : MonoBehaviour
         return null;
     }
 
-    public Sprite Prop(string id)
-    {
-        try
-        {
-            return propSprites.First(x => x.id.Equals(id)).sprite;
-        }
-        catch (Exception ex)
-        {
-            logManager.Error($"Failed to retrieve prop sprite `{id}` from resource manager. | Error: {ex.Message}");
-        }
+    //public Sprite Prop(string id)
+    //{
+    //    try
+    //    {
+    //        return propSprites.First(x => x.id.Equals(id)).sprite;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        logManager.Error($"Failed to retrieve prop sprite `{id}` from resource manager. | Error: {ex.Message}");
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
 
 
-    public Sprite Seamless(string id)
-    {
-        try
-        {
-            return seamLessSprites.First(x => x.id.Equals(id)).sprite;
-        }
-        catch (Exception ex)
-        {
-            logManager.Error($"Failed to retrieve seamless sprite `{id}` from resource manager. | Error: {ex.Message}");
-        }
+    //public Sprite Seamless(string id)
+    //{
+    //    try
+    //    {
+    //        return seamLessSprites.First(x => x.id.Equals(id)).sprite;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        logManager.Error($"Failed to retrieve seamless sprite `{id}` from resource manager. | Error: {ex.Message}");
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
 
 
     //public Sprite StatusThumbnail(string id)
@@ -420,33 +438,33 @@ public class ResourceManager : MonoBehaviour
     }
 
 
-    public SpriteResource Sprite(string id)
-    {
-        try
-        {
-            return sprites.First(x => x.id.Equals(id));
-        }
-        catch (Exception ex)
-        {
-            logManager.Error($"Failed to retrieve sprite `{id}` from resource manager. | Error: {ex.Message}");
-        }
+    //public SpriteResource Sprite(string id)
+    //{
+    //    try
+    //    {
+    //        return sprites.First(x => x.id.Equals(id));
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        logManager.Error($"Failed to retrieve sprite `{id}` from resource manager. | Error: {ex.Message}");
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
 
-    public DottedLineSegmentResource DottedLine(string id)
-    {
-        try
-        {
-            return dottedLines.First(x => x.id.Equals(id));
-        }
-        catch (Exception ex)
-        {
-            logManager.Error($"Failed to retrieve dotted line `{id}` from resource manager. | Error: {ex.Message}");
-        }
+    //public DottedLineSegmentResource DottedLine(string id)
+    //{
+    //    try
+    //    {
+    //        return dottedLines.First(x => x.id.Equals(id));
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        logManager.Error($"Failed to retrieve dotted line `{id}` from resource manager. | Error: {ex.Message}");
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
 
     //public PrefabResource Prefab(string key)
     //{

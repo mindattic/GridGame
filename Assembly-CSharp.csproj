@@ -186,6 +186,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
     <None Include="Assets\VFX\GameVFX Collection(URP)\FX_Dragonfire\Shader\ParticleAdd_UV.shader" />
     <None Include="Assets\Shader\Add_DisUV.shader" />
+    <None Include="Assets\Resources\Sprites\FileList.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Shader\SraeWaveAlphaBlended02.shader" />
     <None Include="Assets\VFX\GameVFX Collection(URP)\FX_Dragonfire\Shader\MaskUV.shader" />

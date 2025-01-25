@@ -1733,7 +1733,7 @@ SpriteRenderer:
   m_Size: {x: 20.48, y: 20.48}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &890377525
@@ -1972,22 +1972,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ab69e486f76f346a6a18a43218c8d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actorSprites:
-  - {fileID: 11400000, guid: d28a961f7abb9684f8d4b72f61f1cfae, type: 2}
-  - {fileID: 11400000, guid: 1d0dcbbafad66bb43a61bf5f97afb115, type: 2}
-  - {fileID: 11400000, guid: 0168d34f4a24da54db20358053e15234, type: 2}
-  - {fileID: 11400000, guid: 97fb61cfcf8213d4f84848a1436dc15d, type: 2}
-  - {fileID: 11400000, guid: 42bdeacd8aff0644fbad00ca3b826f04, type: 2}
-  - {fileID: 11400000, guid: e8759d61593029541966704a135471fa, type: 2}
-  - {fileID: 11400000, guid: e6432c69dfc629f498ad887e2d1f4050, type: 2}
-  - {fileID: 11400000, guid: 168f65728fc44ac42862ed21e1763289, type: 2}
-  - {fileID: 11400000, guid: bcd672913a41bb04099c880d857477db, type: 2}
-  - {fileID: 11400000, guid: d797516de2996b449af62ceb5b8e8303, type: 2}
-  materials:
-  - {fileID: 11400000, guid: a29cf4d84d6d254409511a800c7721fc, type: 2}
-  - {fileID: 11400000, guid: 6e600acae8a7f2b469ec4c43538fc51a, type: 2}
-  - {fileID: 11400000, guid: 1ceab92f21618ca4887501408e84bac0, type: 2}
-  - {fileID: 11400000, guid: 8e423b70a55ec2f44b7457ed81d4f662, type: 2}
   actorDetails:
   - {fileID: 11400000, guid: c1997edaa59603c4c968c2a0dc1ec1f3, type: 2}
   - {fileID: 11400000, guid: 641c664aae2139c499b44c88e24c90fd, type: 2}
@@ -1995,42 +1979,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 113c56f8ee85f604e96ce46cd6264e79, type: 2}
   - {fileID: 11400000, guid: b5d76e1302460524cb1c025ada8ce831, type: 2}
   - {fileID: 11400000, guid: 0c114d7c946af4e48a16f2cc0652768d, type: 2}
-  statusSprites:
-  - {fileID: 11400000, guid: 6cc028cdbb5c5bb4bbb59fa96cbba237, type: 2}
-  - {fileID: 11400000, guid: eb61db422a2858f44a1f219dd70d392e, type: 2}
-  - {fileID: 11400000, guid: 71fa838fbfdb10c4ab6ff3d3dc23aef9, type: 2}
-  - {fileID: 11400000, guid: 19553e1841a8b66409b9689e07f8617c, type: 2}
-  - {fileID: 11400000, guid: a4cb35da490acdc469f4ab36210da287, type: 2}
-  - {fileID: 11400000, guid: 84bbbe397c00b7b4b8c62759b6bea9ee, type: 2}
-  propSprites:
-  - {fileID: 11400000, guid: cd51026f4e87dee4aab54acdec4e0f8d, type: 2}
-  - {fileID: 11400000, guid: 8949318a856a2bf458ffc92f0ac77c5a, type: 2}
-  - {fileID: 11400000, guid: 61d3740c71aa4e84b8d70bbafb15f226, type: 2}
-  seamLessSprites:
-  - {fileID: 11400000, guid: 0c18f57ac3d9c034a9040f6abfe3f1c6, type: 2}
-  - {fileID: 11400000, guid: 0907e3e8de9fbaf408052127339b28ac, type: 2}
-  - {fileID: 11400000, guid: f2ae3359be60fcf4fbd798e1cc14ff1b, type: 2}
-  soundEffects:
-  - {fileID: 11400000, guid: 4114cdd851f647842bf7211b176cb70f, type: 2}
-  - {fileID: 11400000, guid: 12fe8d6cc678c944090b1db3caa67371, type: 2}
-  - {fileID: 11400000, guid: d8ad62287d8a8c24aa0c19a9f7a5b69e, type: 2}
-  - {fileID: 11400000, guid: edf1b0e64faad474caa9b977be9dfb1c, type: 2}
-  - {fileID: 11400000, guid: 12fe8d6cc678c944090b1db3caa67371, type: 2}
-  - {fileID: 11400000, guid: 301fbc002d382174ab1cd2d71ed5f856, type: 2}
-  - {fileID: 11400000, guid: c672d679056c7f8468ede4ffcee19228, type: 2}
-  - {fileID: 11400000, guid: 68fcfb3ea707fea44bc4576ec8f38ffc, type: 2}
-  - {fileID: 11400000, guid: eaa0a45fbc46edd4e8545ad470074ba0, type: 2}
-  - {fileID: 11400000, guid: c56a3ec95b8d4c149baf7eb0b2550db1, type: 2}
-  - {fileID: 11400000, guid: 5169c815967d2d24da138820d95c7eb6, type: 2}
-  - {fileID: 11400000, guid: 31cf76a5edc8d0e4b96f36f83d7c5adb, type: 2}
-  - {fileID: 11400000, guid: b5954baa52a4fe948871c30571d22b07, type: 2}
-  - {fileID: 11400000, guid: eef54f3221d6daf4fa130dadf8dbb098, type: 2}
-  - {fileID: 11400000, guid: 08617b34d5e1dcf4ea5d7461da64ee6b, type: 2}
-  - {fileID: 11400000, guid: 2697fc23a9a032740a662669b2df91de, type: 2}
-  - {fileID: 11400000, guid: 6201ad4808eb50c4abccdf0dd6b7fb4e, type: 2}
-  - {fileID: 11400000, guid: 42c6daa9bcf6c7a498f46b5971859221, type: 2}
-  - {fileID: 11400000, guid: 6d74a03d08c1237459a70acc260a417a, type: 2}
-  - {fileID: 11400000, guid: 38e3b958db9388c47a824bef5e7b900b, type: 2}
   musicTracks:
   - {fileID: 11400000, guid: 8d74182f04b1c0447aa31106ce247f1c, type: 2}
   visualEffects:
@@ -2071,13 +2019,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6d8cadf8519e84340a4aabc687766faa, type: 2}
   - {fileID: 11400000, guid: da8ef85cbbc01c3408b41ceeaa1e9f85, type: 2}
   - {fileID: 11400000, guid: 49be8d719449d78498f7336dbe50c9be, type: 2}
-  sprites:
-  - {fileID: 11400000, guid: d8f31f57716a48544b5c1259c5f5f619, type: 2}
-  - {fileID: 11400000, guid: d2181ee6e2a07f24b8dc164ec1ef2711, type: 2}
-  dottedLines:
-  - {fileID: 11400000, guid: ec5e5a64b7a75e747ac9f4e56f360a51, type: 2}
-  - {fileID: 11400000, guid: e3013a8e0ed1ea74d833bd5427f11659, type: 2}
-  - {fileID: 11400000, guid: a425860958a32104c96510e93be1cf66, type: 2}
 --- !u!4 &988052023
 Transform:
   m_ObjectHideFlags: 0
@@ -2342,7 +2283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e6c77f319ffae942ab5c993208422ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dropdown: {fileID: 1086431235}
+  dropdown: {fileID: 0}
 --- !u!1 &1327466008
 GameObject:
   m_ObjectHideFlags: 0
@@ -10164,7 +10105,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 44c9665b4bea7494ebff429c31891ddf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 10e6e0081fd95d2438fe47f4f308429c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

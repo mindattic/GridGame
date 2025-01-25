@@ -238,10 +238,10 @@ public class ActorInstance : MonoBehaviour
         {
             render.SetQualityColor(ColorHelper.Solid.White);
             render.SetGlowColor(ColorHelper.Solid.White);
-            render.SetParallaxSprite(resourceManager.Seamless("WhiteFire"));
+            render.SetParallaxSprite(resourceManager.Seamless("WhiteFire2").Value);
 
 
-            render.SetParallaxMaterial(resourceManager.Material("PlayerParallax", thumbnail.texture));
+            render.SetParallaxMaterial(resourceManager.Material("PlayerParallax", thumbnail.texture).Value);
             render.SetParallaxAlpha(Opacity.Percent50);
             //render.SetParallaxSpeed(1, 1);
 
@@ -256,8 +256,8 @@ public class ActorInstance : MonoBehaviour
         {
             render.SetQualityColor(ColorHelper.Solid.Red);
             render.SetGlowColor(ColorHelper.Solid.Red);
-            render.SetParallaxSprite(resourceManager.Seamless("RedFire"));
-            render.SetParallaxMaterial(resourceManager.Material("EnemyParallax", thumbnail.texture));
+            render.SetParallaxSprite(resourceManager.Seamless("RedFire1").Value);
+            render.SetParallaxMaterial(resourceManager.Material("EnemyParallax", thumbnail.texture).Value);
             render.SetParallaxAlpha(Opacity.Percent50);
             //render.SetParallaxSpeed(1, 1);
             //render.SetThumbnailMaterial(resourceManager.Material("Sprites-Default", thumbnail.texture));
@@ -544,7 +544,7 @@ public class ActorInstance : MonoBehaviour
     //    bool hasFlipped = false;
     //    var rotY = 0f;
     //    var speed = tileSize * 24f;
-    //    render.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
+    //    render.turnDelayText.gameObject.transform.rotation = Geometry.rotation(0, rotY, 0);
 
     //    //During:
     //    while (!isDone)
@@ -568,12 +568,12 @@ public class ActorInstance : MonoBehaviour
     //            rotY = 0f;
     //        }
 
-    //        //render.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, rotY, 0);
+    //        //render.turnDelayText.gameObject.transform.rotation = Geometry.rotation(0, rotY, 0);
     //        yield return Wait.OneTick();
     //    }
 
     //    //After:
-    //    //render.turnDelayText.gameObject.transform.rotation = Geometry.Rotation(0, 0, 0);
+    //    //render.turnDelayText.gameObject.transform.rotation = Geometry.rotation(0, 0, 0);
     //    //if (turnDelay > 0)
     //    //{
     //    //    TriggerTurnDelayWiggle();

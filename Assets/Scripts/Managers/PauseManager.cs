@@ -16,14 +16,16 @@ public class PauseManager : MonoBehaviour
 
     void Awake()
     {
-        pause = resourceManager.Sprite("Pause").sprite;
-        paused = resourceManager.Sprite("Paused").sprite;
-
         GameObject pauseButton = GameObject.Find("PauseButton");
-        buttonImage = pauseButton.GetComponent<Image>();
-        buttonImage.sprite = pause;
+        buttonImage = pauseButton.GetComponent<Image>();  
     }
 
+    private void Start()
+    {
+        pause = resourceManager.Sprite("Pause").Value;
+        paused = resourceManager.Sprite("Paused").Value;
+        buttonImage.sprite = pause;
+    }
 
     public void Toggle()
     {
