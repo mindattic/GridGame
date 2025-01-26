@@ -33,7 +33,7 @@ public class ActorThumbnail
         Vector2Int offset = new Vector2Int();
         offset.x = (texture.width - size.Width) / 2;
         offset.y = texture.height - size.Height;
-        offset.Shift(size.X, size.Y);
+        offset.Shift(size.OffsetX, size.OffsetY);
 
         // Clamp values to ensure the Rect doesn't go out of bounds
         offset.x = Mathf.Clamp(offset.x, 0, texture.width - size.Width);

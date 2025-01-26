@@ -19,8 +19,8 @@
         "Luck": 5
       },
       "ThumbnailSettings": {
-        "X": -60,
-        "Y": -80,
+        "OffsetX": -60,
+        "OffsetY": -80,
         "Width": 256,
         "Height": 256
       }
@@ -44,8 +44,8 @@
         "Luck": 6
       },
       "ThumbnailSettings": {
-        "X": 0,
-        "Y": 0,
+        "OffsetX": 0,
+        "OffsetY": 0,
         "Width": 1024,
         "Height": 1024
       }
@@ -69,8 +69,8 @@
         "Luck": 9
       },
       "ThumbnailSettings": {
-        "X": 0,
-        "Y": -50,
+        "OffsetX": 0,
+        "OffsetY": -50,
         "Width": 326,
         "Height": 316
       }
@@ -94,8 +94,8 @@
         "Luck": 5
       },
       "ThumbnailSettings": {
-        "X": 0,
-        "Y": 0,
+        "OffsetX": 0,
+        "OffsetY": 0,
         "Width": 196,
         "Height": 196
       }
@@ -119,8 +119,8 @@
         "Luck": 6
       },
       "ThumbnailSettings": {
-        "X": 20,
-        "Y": -30,
+        "OffsetX": 20,
+        "OffsetY": -30,
         "Width": 196,
         "Height": 196
       }
@@ -144,8 +144,8 @@
         "Luck": 2
       },
       "ThumbnailSettings": {
-        "X": -125,
-        "Y": -300,
+        "OffsetX": -125,
+        "OffsetY": -300,
         "Width": 256,
         "Height": 256
       }
@@ -169,8 +169,8 @@
         "Luck": 1
       },
       "ThumbnailSettings": {
-        "X": -150,
-        "Y": -300,
+        "OffsetX": -150,
+        "OffsetY": -300,
         "Width": 512,
         "Height": 512
       }
@@ -194,8 +194,8 @@
         "Luck": 5
       },
       "ThumbnailSettings": {
-        "X": -150,
-        "Y": -100,
+        "OffsetX": -150,
+        "OffsetY": -100,
         "Width": 256,
         "Height": 256
       }

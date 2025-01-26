@@ -11,11 +11,7 @@ public class DottedLineInstance : MonoBehaviour
 
     #endregion
 
-
     SpriteRenderer spriteRenderer;
-    Sprite line;
-    Sprite turn;
-    Sprite arrow;
 
     private void Awake()
     {
@@ -24,9 +20,7 @@ public class DottedLineInstance : MonoBehaviour
 
     private void Start()
     {
-        line = resourceManager.Sprite("DottedLine").Value;
-        turn = resourceManager.Sprite("DottedLineTurn").Value;
-        arrow = resourceManager.Sprite("DottedLineArrow").Value;
+
     }
 
 
@@ -48,7 +42,7 @@ public class DottedLineInstance : MonoBehaviour
         set => gameObject.transform.rotation = value;
     }
 
-   
+
 
     public Sprite sprite
     {
@@ -62,6 +56,11 @@ public class DottedLineInstance : MonoBehaviour
         this.position = Geometry.GetPositionByLocation(location);
         this.transform.localScale = tileScale;
 
+        //TODO: Put these in the "DottedLineManager" so they aren't reloaded each instance...
+        var line = resourceManager.Sprite("DottedLine").Value;
+        var turn = resourceManager.Sprite("DottedLineTurn").Value;
+        var arrow = resourceManager.Sprite("DottedLineArrow").Value;
+
         switch (segment)
         {
             case DottedLineSegment.Vertical:
@@ -71,17 +70,17 @@ public class DottedLineInstance : MonoBehaviour
 
             case DottedLineSegment.Horizontal:
                 sprite = line;
-                rotation = Quaternion.Euler(0, 0, 90); 
+                rotation = Quaternion.Euler(0, 0, 90);
                 break;
 
             case DottedLineSegment.TurnTopLeft:
-                sprite = line;
-                rotation = Quaternion.Euler(0, 0, -180); 
+                sprite = turn;
+                rotation = Quaternion.Euler(0, 0, -180);
                 break;
 
             case DottedLineSegment.TurnTopRight:
                 sprite = turn;
-                rotation = Quaternion.Euler(0, 0, 90); 
+                rotation = Quaternion.Euler(0, 0, 90);
                 break;
 
             case DottedLineSegment.TurnBottomLeft:
@@ -101,7 +100,7 @@ public class DottedLineInstance : MonoBehaviour
 
             case DottedLineSegment.ArrowDown:
                 sprite = arrow;
-                rotation = Quaternion.Euler(0, 0, 180); 
+                rotation = Quaternion.Euler(0, 0, 180);
                 break;
 
             case DottedLineSegment.ArrowLeft:

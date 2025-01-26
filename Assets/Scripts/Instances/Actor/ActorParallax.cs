@@ -8,22 +8,19 @@ namespace Assets.Scripts.Instances.Actor
     {
         protected float tileSize => GameManager.instance.tileSize;
 
-
-
         private ActorInstance instance;
-
-        public void Initialize(ActorInstance parentInstance)
-        {
-            this.instance = parentInstance;
-
-            maxSpeed = tileSize * 3f;
-        }
-
         public float maxSpeed = 0f;
         public float targetX = 0f;
         public float targetY = 0f;
         public Direction attackerDirection = Direction.None;
         public float transitionDuration = 2f;
+
+        public void Initialize(ActorInstance parentInstance)
+        {
+            this.instance = parentInstance;
+
+            maxSpeed = tileSize * 10f;
+        }
 
         public void Assign(Direction attackerDirection)
         {       
@@ -49,14 +46,15 @@ namespace Assets.Scripts.Instances.Actor
                     targetY = 0f;
                     break;
                 case Direction.None:
-                    targetX = 0f;
-                    targetY = 0f;
+                    targetX = 1f;
+                    targetY = 1f;
                     break;
             }
 
             instance.render.parallax.material.SetFloat("_XScroll", targetX);
             instance.render.parallax.material.SetFloat("_YScroll", targetY);
         }
+
 
 
     }

@@ -105,8 +105,10 @@ public class StageManager : MonoBehaviour
                 dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(5, 3));
                 dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(5, 4));
                 dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(5, 5));
-                dottedLineManager.Spawn(DottedLineSegment.TurnTopRight, new Vector2Int(5, 6));
-                dottedLineManager.Spawn(DottedLineSegment.TurnTopLeft, new Vector2Int(6, 6));
+                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(5, 6));
+                dottedLineManager.Spawn(DottedLineSegment.TurnTopRight, new Vector2Int(5, 7));
+                dottedLineManager.Spawn(DottedLineSegment.TurnTopLeft, new Vector2Int(6, 7));
+                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(6, 6));
                 dottedLineManager.Spawn(DottedLineSegment.ArrowUp, new Vector2Int(6, 5));
 
                 break;
