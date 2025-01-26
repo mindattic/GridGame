@@ -99,7 +99,6 @@
     <Compile Include="Assets\Scripts\Instances\SupportLineInstance.cs" />
     <Compile Include="Assets\Scripts\Managers\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Managers\DebugManager.cs" />
-    <Compile Include="Assets\SQLiteDatabase\Example\DatabaseExample.cs" />
     <Compile Include="Assets\Scripts\Models\VisualEffect.cs" />
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
@@ -170,11 +169,11 @@
     <None Include="Assets\Shader\TileMask.shader" />
     <None Include="Assets\Shader\dissolve_c.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
-    <None Include="Assets\VFX\GameVFX Collection(URP)\FX_Dragonfire\Shader\ParticleAdd_UV.shader" />
+    <None Include="Assets\Shader\ParticleAdd_UV 1.shader" />
     <None Include="Assets\Shader\Add_DisUV.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Shader\SraeWaveAlphaBlended02.shader" />
-    <None Include="Assets\VFX\GameVFX Collection(URP)\FX_Dragonfire\Shader\MaskUV.shader" />
+    <None Include="Assets\Shader\MaskUV.shader" />
     <None Include="Assets\Shader\Particle AddSmooth.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\Shader\ModelDouble 1.shader" />
@@ -191,7 +190,7 @@
     <None Include="Assets\Shader\Innerglow.shader" />
     <None Include="Assets\Shader\RadialFill.shader" />
     <None Include="Assets\Shader\kongjianniuqu.shader" />
-    <None Include="Assets\Trails\Readme.txt" />
+    <None Include="Assets\Resources\Trails\Readme.txt" />
     <None Include="Assets\Shader\SpriteOutline.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />

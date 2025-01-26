@@ -453,7 +453,6 @@ public class DebugWindow : EditorWindow
             case DebugOptions.BumpTest: debugManager.BumpTest(); break;
             case DebugOptions.SupportLineTest: debugManager.SupportLineTest(); break;
             case DebugOptions.AttackLineTest: debugManager.AttackLineTest(); break;
-
             case DebugOptions.EnemyAttackTest: debugManager.EnemyAttackTest(); break;
             case DebugOptions.TitleTest: debugManager.TitleTest(); break;
             case DebugOptions.TooltipTest: debugManager.TooltipTest(); break;
