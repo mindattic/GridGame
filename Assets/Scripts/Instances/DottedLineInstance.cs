@@ -12,6 +12,10 @@ public class DottedLineInstance : MonoBehaviour
     #endregion
 
     SpriteRenderer spriteRenderer;
+    Sprite line;
+    Sprite turn;
+    Sprite arrow;
+
 
     private void Awake()
     {
@@ -20,7 +24,9 @@ public class DottedLineInstance : MonoBehaviour
 
     private void Start()
     {
-
+        line = resourceManager.Sprite("DottedLine").Value;
+        turn = resourceManager.Sprite("DottedLineTurn").Value;
+        arrow = resourceManager.Sprite("DottedLineArrow").Value;
     }
 
 

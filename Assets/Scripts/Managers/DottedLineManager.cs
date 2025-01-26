@@ -27,11 +27,7 @@ public class DottedLineManager : MonoBehaviour
         var instance = prefab.GetComponent<DottedLineInstance>();
         instance.name = $"DottedLine_{Guid.NewGuid()}";
         instance.parent = board.transform;
-
-        var position = Geometry.GetPositionByLocation(location);
-
         instance.Spawn(segment, location);
-
     }
 
 

@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-[CreateAssetMenu()]
-public class ActorDetails : ScriptableObject
+public class ActorDetails
 {
-    public string id;
-    public string details;
+    public string Description;
+    public string Card;  
+    public List<string> Lore = new List<string>();
 }

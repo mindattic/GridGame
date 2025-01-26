@@ -23,6 +23,11 @@
         "OffsetY": -80,
         "Width": 256,
         "Height": 256
+      },
+      "Details": {
+        "Description": "A warrior driven by rage. ",
+        "Card": "Gains <color=#FF0000>[Rage]</color> when attacking or being attacked. Will eventually go <color=#FF0000>[Berserk]</color> and attack multiple nearby enemies.",
+        "Lore": [ "Likes jerky", "Hates Reptiles" ]
       }
     },
     {
@@ -48,6 +53,11 @@
         "OffsetY": 0,
         "Width": 1024,
         "Height": 1024
+      },
+      "Details": {
+        "Description": "A warrior driven by rage.",
+        "Card": "Intermittently goes <color=#FF0000>[Berserk]</color> attacking multiple nearby enemies.",
+        "Lore": [ "Likes jerky", "Hates Reptiles" ]
       }
     },
     {
@@ -73,6 +83,11 @@
         "OffsetY": -50,
         "Width": 326,
         "Height": 316
+      },
+      "Details": {
+        "Description": "An adherent to the Lightbearer Orthodoxy.",
+        "Card": "Casts <color=#00FF00>[Cure]</color> when supporting an attacker.",
+        "Lore": [ "Likes jerky", "Hates Reptiles" ]
       }
     },
     {
@@ -98,6 +113,11 @@
         "OffsetY": 0,
         "Width": 196,
         "Height": 196
+      },
+      "Details": {
+        "Description": "A stealthy assassin raised in the shadows; trained to dispatch Lightbearers.",
+        "Card": "Intermittently enters <color=#0000FF>[Stealth]</color> to avoid enemy attacks",
+        "Lore": [ "Likes jerky", "Hates Reptiles" ]
       }
     },
     {
@@ -123,6 +143,11 @@
         "OffsetY": -30,
         "Width": 196,
         "Height": 196
+      },
+      "Details": {
+        "Description": "A holy knight oath bound to defend the Lightbearer Orthodoxy.",
+        "Card": "Intermittently uses <color=#FF0000>[Taunt]</color> to force enemies to focus their attacks.",
+        "Lore": [ "Likes jerky", "Hates Reptiles" ]
       }
     },
     {
@@ -148,6 +173,11 @@
         "OffsetY": -300,
         "Width": 256,
         "Height": 256
+      },
+      "Details": {
+        "Description": "A poisonous insectile predator.",
+        "Card": "Attacks have chance of inflicting <color=#00FF00>[Poison]</color>",
+        "Lore": [ "Likes jerky", "Hates Reptiles" ]
       }
     },
     {
@@ -173,12 +203,17 @@
         "OffsetY": -300,
         "Width": 512,
         "Height": 512
+      },
+      "Details": {
+        "Description": "A weak and squishy creature.",
+        "Card": "The most common denisen of the dark; neither good nor evil a monster still has to eat.",
+        "Lore": [ "Likes jerky", "Hates Reptiles" ]
       }
     },
     {
       "Name": "Yeti",
       "Variant": "",
-      "Description": "An abominable snowman.",
+      "Description": "An large humanoid under dewller",
       "Stats": {
         "Level": 5,
         "PreviousHP": 50,
@@ -198,6 +233,11 @@
         "OffsetY": -100,
         "Width": 256,
         "Height": 256
+      },
+      "Details": {
+        "Description": "An large humanoid under dewller",
+        "Card": "Intermittently goes <color=#FF0000>[Berserk]</color> attacking multiple nearby enemies.",
+        "Lore": [ "Likes jerky", "Hates Reptiles" ]
       }
     }
   ]

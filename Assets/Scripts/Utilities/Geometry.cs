@@ -224,9 +224,9 @@ public class Geometry
             public static Vector3 Scale(float x, float y, float z)
             {
                 return new Vector3(
-                    tileSize * (x / tileSize),
-                    tileSize * (y / tileSize),
-                    tileSize * (z / tileSize));
+                    tileSize * (x),
+                    tileSize * (y),
+                    tileSize * (z));
             }
             public static Vector3 Scale(Vector3 v) => Scale(v.x, v.y, v.z);
 

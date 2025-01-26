@@ -29,7 +29,7 @@ public class StageActor
         this.character = character;
         this.name = $"{character.ToString()}{GenerateNameSuffix(character)}";
         //this.name = character.ToString();
-        this.stats = dataManager.GetActorStats(character.ToString());
+        this.stats = dataManager.GetStats(character.ToString());
         //this.thumbnailSettings = GameManager.instance.resourceManager.ActorSprite(this.character.ToString()).idle;
         this.team = team;
         this.location = location ?? Random.UnoccupiedLocation;

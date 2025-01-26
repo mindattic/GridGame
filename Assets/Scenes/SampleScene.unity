@@ -9129,7 +9129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3033aa7c0c25f4141be2ebb68f5c2b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStage: 5
+  currentStage: 1
   actorPrefab: {fileID: 3730061202814564284, guid: 4f922b47447b0d245acc44d2545257a3, type: 3}
 --- !u!82 &1751276292
 AudioSource:

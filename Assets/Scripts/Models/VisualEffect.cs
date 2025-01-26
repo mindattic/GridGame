@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu()]
-public class VisualEffect : ScriptableObject
+public class VisualEffect
 {
-    [SerializeField] public string id;
-    [SerializeField] public GameObject prefab;
-    [SerializeField] public Vector3 relativeOffset;
-    [SerializeField] public Vector3 angularRotation;
-    [SerializeField] public Vector3 relativeScale = new Vector3(0.1f, 0.1f, 0.1f);
-    [SerializeField] public float delay = 0f;
-    [SerializeField] public float duration = 2f;
-    [SerializeField] public bool isLoop;
+    public string Name;
+    public GameObject Prefab;
+    public Vector3 RelativeOffset;
+    public Vector3 AngularRotation;
+    public Vector3 RelativeScale;
+    public float Delay = 0f;
+    public float Duration = 2f;
+    public bool IsLoop;
 }

@@ -250,7 +250,7 @@ public class ActorInstance : MonoBehaviour
             render.SetHealthBarColor(ColorHelper.HealthBar.Green);
             render.SetActionBarColor(ColorHelper.ActionBar.Blue);
             render.SetSelectionBoxEnabled(isEnabled: false);
-            vfx.Attack = resourceManager.VisualEffect("Blue_Slash_01");
+            vfx.Attack = resourceManager.VisualEffect("BlueSlash1");
         }
         else if (isEnemy)
         {
@@ -265,7 +265,7 @@ public class ActorInstance : MonoBehaviour
             render.SetHealthBarColor(ColorHelper.HealthBar.Green);
             render.SetActionBarColor(ColorHelper.ActionBar.Blue);
             render.SetSelectionBoxEnabled(isEnabled: false);
-            vfx.Attack = resourceManager.VisualEffect("Double_Claw");
+            vfx.Attack = resourceManager.VisualEffect("DoubleClaw");
         }
 
         render.SetNameTagText(name);
@@ -363,7 +363,7 @@ public class ActorInstance : MonoBehaviour
             yield break;
 
         if (attack.IsCriticalHit)
-            vfxManager.TriggerSpawn(resourceManager.VisualEffect("Yellow_Hit"), attack.Opponent.position);
+            vfxManager.TriggerSpawn(resourceManager.VisualEffect("YellowHit"), attack.Opponent.position);
 
         //Trigger coroutine (if applicable):
         //yield return attack.Triggers.Before.StartCoroutine(this);

@@ -1,4 +1,5 @@
 using Game.Behaviors;
+using NUnit.Framework.Constraints;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,6 +30,8 @@ public static class ResourceFolder
     public static string Seamless = "Seamless";
     public static string Sprites = "Sprites";
     public static string WeaponTypes = "Sprites/WeaponTypes";
+    public static string VisualEffects = "VisualEffects";
+
 }
 
 // Helper class for deserializing parameter lists
@@ -41,21 +44,29 @@ public class ParameterList
 public class ResourceManager : MonoBehaviour
 {
     #region Properties
+    protected DataManager dataManager => GameManager.instance.dataManager;
     protected LogManager logManager => GameManager.instance.logManager;
     #endregion
 
 
-    public Dictionary<string, ResourceItem<Sprite>> backgrounds = new Dictionary<string, ResourceItem<Sprite>>();
-    public Dictionary<string, ResourceItem<Texture2D>> portraits = new Dictionary<string, ResourceItem<Texture2D>>();
-    public Dictionary<string, ResourceItem<AudioClip>> soundEffects = new Dictionary<string, ResourceItem<AudioClip>>();
-    public Dictionary<string, ResourceItem<AudioClip>> musicTracks = new Dictionary<string, ResourceItem<AudioClip>>();
-    public Dictionary<string, ResourceItem<Material>> materials = new Dictionary<string, ResourceItem<Material>>();
-    public Dictionary<string, ResourceItem<Sprite>> seamless = new Dictionary<string, ResourceItem<Sprite>>();
-    public Dictionary<string, ResourceItem<Sprite>> sprites = new Dictionary<string, ResourceItem<Sprite>>();
-    public Dictionary<string, ResourceItem<Sprite>> weaponTypes = new Dictionary<string, ResourceItem<Sprite>>();
-
+    [SerializeField] public Dictionary<string, ResourceItem<Sprite>> backgrounds = new Dictionary<string, ResourceItem<Sprite>>();
+    [SerializeField] public Dictionary<string, ResourceItem<Texture2D>> portraits = new Dictionary<string, ResourceItem<Texture2D>>();
+    [SerializeField] public Dictionary<string, ResourceItem<AudioClip>> soundEffects = new Dictionary<string, ResourceItem<AudioClip>>();
+    [SerializeField] public Dictionary<string, ResourceItem<AudioClip>> musicTracks = new Dictionary<string, ResourceItem<AudioClip>>();
+    [SerializeField] public Dictionary<string, ResourceItem<Material>> materials = new Dictionary<string, ResourceItem<Material>>();
+    [SerializeField] public Dictionary<string, ResourceItem<Sprite>> seamless = new Dictionary<string, ResourceItem<Sprite>>();
+    [SerializeField] public Dictionary<string, ResourceItem<Sprite>> sprites = new Dictionary<string, ResourceItem<Sprite>>();
+    [SerializeField] public Dictionary<string, ResourceItem<Sprite>> weaponTypes = new Dictionary<string, ResourceItem<Sprite>>();
+    [SerializeField] public Dictionary<string, VisualEffect> visualEffects = new Dictionary<string, VisualEffect>();
 
     public void Awake()
+    {
+
+
+
+    }
+
+    public void Initialize()
     {
         List<string> keys = new List<string>();
 
@@ -71,7 +82,7 @@ public class ResourceManager : MonoBehaviour
 
         //Sound Effects
         keys.SetRange(
-            "Death", "Move1", "Move2", "Move3", "Move4", "Move5", "Move6", "NextTurn", "PlayerGlow", "Portrait", "Rumble", 
+            "Death", "Move1", "Move2", "Move3", "Move4", "Move5", "Move6", "NextTurn", "PlayerGlow", "Portrait", "Rumble",
             "Select", "Slash1", "Slash2", "Slash3", "Slash4", "Slash5", "Slash6", "Slash7", "Slide");
         soundEffects = LoadResources<AudioClip>(ResourceFolder.SoundEffects, keys);
 
@@ -97,10 +108,18 @@ public class ResourceManager : MonoBehaviour
 
         //Weapon Types
         keys.SetRange(
-            "Bow", "Claw", "Crossbow", "Dagger", "Grenade", "Hammer", "Katana", "Mace", "Pistol", "Polearm", "Potion", 
+            "Bow", "Claw", "Crossbow", "Dagger", "Grenade", "Hammer", "Katana", "Mace", "Pistol", "Polearm", "Potion",
             "Scythe", "Shield", "Shuriken", "Spear", "Staff", "Sword", "Wand");
         weaponTypes = LoadResources<Sprite>(ResourceFolder.WeaponTypes, keys);
 
+        //Visual Effects Types
+        keys.SetRange(
+            "AcidSplash", "AirSlash", "BloodClaw", "BlueSlash1", "BlueSlash2", "BlueSlash3", "BlueSword", "BlueSword4X",
+            "BlueYellowSword", "BlueYellowSword3X", "BuffLife", "DoubleClaw", "FireRain", "GodRays", "GoldBuff",
+            "GreenBuff", "HexShield", "LevelUp", "LightningExplosion", "LightningStrike",
+            "MoonFeather", "OrangeSlash", "PinkSpark", "PuffyExplosion", "RayBlast", "RedSlash2X", "RedSword",
+            "RotaryKnife", "ToxicCloud", "YellowHit");
+        visualEffects = LoadVisualEffects(keys);
     }
 
     public ResourceItem<Sprite> Background(string key)
@@ -182,11 +201,19 @@ public class ResourceManager : MonoBehaviour
         return null;
     }
 
+    public VisualEffect VisualEffect(string key)
+    {
+        if (visualEffects.TryGetValue(key, out var entry))
+            return entry;
+
+        logManager.Error($"Failed to retrieve visual effect `{key}` from resource manager.");
+        return null;
+    }
 
     /// <summary>
     /// Load all resources from a folder and their matching JSON parameters.
     /// </summary>
-    //public List<ResourceItem<Sprite>> LoadAllFromFolder(string resourcePath)
+    //public List<ResourceItem<Sprite>> LoadFolder(string resourcePath)
     //{
     //    Sprite[] sprites = Resources.LoadAll<Sprite>(resourcePath);
     //    List<ResourceItem<Sprite>> entries = new List<ResourceItem<Sprite>>();
@@ -235,7 +262,7 @@ public class ResourceManager : MonoBehaviour
                 T value = Resources.Load<T>($"{resourcePath}/{key}");
                 if (value == null)
                 {
-                    logManager.Warning($"Resource `{key}` not found at resource path `{resourcePath}`");
+                    logManager.Error($"Resource `{key}` not found at resource path `{resourcePath}`");
                     continue;
                 }
 
@@ -257,6 +284,10 @@ public class ResourceManager : MonoBehaviour
         return entries;
     }
 
+
+
+
+
     /// <summary>
     /// Load parameters from a JSON file matching the resource name.
     /// </summary>
@@ -264,48 +295,82 @@ public class ResourceManager : MonoBehaviour
     {
         string jsonPath = Path.Combine(Application.dataPath, "Resources", folderPath, $"{resourceName}.json");
 
-        if (File.Exists(jsonPath))
-        {
-            string json = File.ReadAllText(jsonPath);
-            return JsonUtility.FromJson<ParameterList>(json).Parameters;
-        }
+        if (!File.Exists(jsonPath))
+            return null;
 
-        //Debug.LogWarning($"Parameters file not found for resource {resourceName} at {jsonPath}");
-        return new List<ResourceParameter>();
+        string json = File.ReadAllText(jsonPath);
+        return JsonUtility.FromJson<ParameterList>(json).Parameters;
     }
 
-    [SerializeField] public List<ActorDetails> actorDetails = new List<ActorDetails>();
-    [SerializeField] public List<VisualEffect> visualEffects = new List<VisualEffect>();
 
 
-    public string ActorDetails(string id)
+    public Dictionary<string, VisualEffect> LoadVisualEffects(List<string> keys)
     {
+        Dictionary<string, VisualEffect> entries = new Dictionary<string, VisualEffect>();
+
         try
         {
-            var details = actorDetails.FirstOrDefault(x => x.id.Equals(id))?.details ?? null;
-            if (details != null)
-                return details;
+            foreach (var key in keys)
+            {
+                //DEBUG: Should the JSON parsing be here in the Resource Manager? Or depend on OOO?...
+                var entity = dataManager.GetVisualEffect(key);
+                if (entity == null)
+                {
+                    logManager.Error($"Visual Effect Entity `{key}` is null");
+                    continue;
+                }
+
+                var resourcePath = ResourceFolder.VisualEffects.ToString();
+                var prefab = Resources.Load<GameObject>($"{resourcePath}/{key}");
+                if (prefab == null)
+                {
+                    logManager.Error($"Visual Effect Prefab `{key}` not found at resource path `{resourcePath}`");
+                    continue;
+                }
+
+                var visualEffect = new VisualEffect()
+                {
+                    Name = key,
+                    Prefab = prefab,
+                    RelativeOffset = entity.RelativeOffset.ToVector3(),
+                    AngularRotation = entity.AngularRotation.ToVector3(),
+                    RelativeScale = entity.RelativeScale.ToVector3(),
+                    Delay = entity.Delay,
+                    Duration = entity.Duration,
+                    IsLoop = entity.IsLoop,
+                };
+
+                entries.Add(key, visualEffect);
+            }
         }
         catch (Exception ex)
         {
-            logManager.Error($"Failed to retrieve actor details `{id}` from resource manager. | Error: {ex.Message}");
+            logManager.Error(ex.Message);
         }
 
-        return null;
+        return entries;
     }
 
-    public VisualEffect VisualEffect(string id)
-    {
-        try
-        {
-            return visualEffects.First(x => x.id.Equals(id));
-        }
-        catch (Exception ex)
-        {
-            logManager.Error($"Failed to retrieve visual effect `{id}` from resource manager. | Error: {ex.Message}");
-        }
 
-        return null;
-    }
+
+
+
+
+    //[SerializeField] public List<VisualEffect> visualEffects = new List<VisualEffect>();
+
+
+    //public VisualEffect VisualEffect(string id)
+    //{
+    //    try
+    //    {
+    //        return visualEffects.First(x => x.id.Equals(id));
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        logManager.Error($"Failed to retrieve visual effect `{id}` from resource manager. | Error: {ex.Message}");
+    //    }
+
+    //    return null;
+    //}
 
 }

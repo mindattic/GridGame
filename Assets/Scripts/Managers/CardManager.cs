@@ -12,6 +12,7 @@ namespace Game.Behaviors
     {
         #region Properties
         protected float cardPortraitSize => GameManager.instance.cardPortraitSize;
+        protected DataManager dataManager => GameManager.instance.dataManager;
         protected ResourceManager resourceManager => GameManager.instance.resourceManager;
         protected List<ActorInstance> actors => GameManager.instance.actors;
         #endregion
@@ -72,7 +73,7 @@ namespace Game.Behaviors
                 = $"HP       STR  VIT  AGI  SPD  LCK{Environment.NewLine}"
                 + $"{hp}   {str}{vit}{agi}{spd}{lck}{Environment.NewLine}";
 
-            details.text = stats + resourceManager.ActorDetails(actor.character.ToString());
+            details.text = stats + dataManager.GetDetails(actor.character.ToString()).Card;
 
             TriggerSlideIn();
         }

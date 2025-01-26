@@ -145,7 +145,7 @@
 //            };
 //        }
 
-//        public ActorStats GetActorStats(string name)
+//        public ActorStats GetStats(string name)
 //        {
 //            return Entities.Actors.Where(x => x.Name == name).FirstOrDefault().Stats;
 //        }

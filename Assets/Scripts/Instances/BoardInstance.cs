@@ -21,6 +21,7 @@ public class BoardInstance : MonoBehaviour
     [HideInInspector] public TileMap tileMap = new TileMap();
     [HideInInspector] public Vector2Int NowhereLocation = new Vector2Int(-1, -1);
     [HideInInspector] public Vector3 NowherePosition = new Vector3(-1000, -1000, -1000);
+    [HideInInspector] public Vector2 center;
 
     //Method which is automatically called before the first frame update  
     private void Start()
@@ -44,6 +45,9 @@ public class BoardInstance : MonoBehaviour
         stageManager.Load();
     }
 
+
+
+
     private void CalculateBounds()
     {
         bounds = new RectFloat();
@@ -51,6 +55,9 @@ public class BoardInstance : MonoBehaviour
         bounds.Right = offset.x + (tileSize * columnCount) + tileSize / 2;
         bounds.Bottom = offset.y - (tileSize * rowCount) - tileSize / 2;
         bounds.Left = offset.x + tileSize / 2;
+        center = new Vector2(
+            (bounds.Left + bounds.Right) / 2, 
+            (bounds.Top + bounds.Bottom) / 2);
     }
 
     private void GenerateTiles()
@@ -74,4 +81,35 @@ public class BoardInstance : MonoBehaviour
         GameObject.FindGameObjectsWithTag(Tag.Tile).ToList()
             .ForEach(x => GameManager.instance.tiles.Add(x.GetComponent<TileInstance>()));
     }
+
+
+
+    public Vector2 ScreenCoordinates(ScreenPoint point)
+    {
+        // Define the world position based on the selected ScreenPoint
+        Vector3 worldPosition = point switch
+        {
+            ScreenPoint.TopLeft => new Vector3(bounds.Left, bounds.Top, transform.position.z),
+            ScreenPoint.TopCenter => new Vector3(center.x, bounds.Top, transform.position.z),
+            ScreenPoint.TopRight => new Vector3(bounds.Right, bounds.Top, transform.position.z),
+            ScreenPoint.MiddleLeft => new Vector3(bounds.Left, center.y, transform.position.z),
+            ScreenPoint.MiddleCenter => new Vector3(center.x, center.y, transform.position.z),
+            ScreenPoint.MiddleRight => new Vector3(bounds.Right, center.y, transform.position.z),
+            _ => Vector3.zero, // Default case (shouldn't happen if all enum values are handled)
+        };
+
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
+        return new Vector2(screenPosition.x, screenPosition.y);
+    }
+
+}
+
+public enum ScreenPoint
+{
+    TopLeft,
+    TopCenter,
+    TopRight,
+    MiddleLeft, 
+    MiddleCenter,
+    MiddleRight
 }

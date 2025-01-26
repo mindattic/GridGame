@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class VFXManager : MonoBehaviour
 {
+    protected BoardInstance board => GameManager.instance.board;
+
     //Variables
     Dictionary<string, VFXInstance> visualEffects = new Dictionary<string, VFXInstance>();
 
@@ -15,9 +17,9 @@ public class VFXManager : MonoBehaviour
         if (trigger == default)
             trigger = new Trigger();
 
-        var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
+        var prefab = Instantiate(vfx.Prefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<VFXInstance>();
-        instance.name = $"VFX_{vfx.id}Attack{Guid.NewGuid()}";
+        instance.name = $"VFX_{vfx.Name}Attack{Guid.NewGuid()}";
         visualEffects.Add(instance.name, instance);
         StartCoroutine(instance.Spawn(vfx, position, trigger));
     }
@@ -27,12 +29,13 @@ public class VFXManager : MonoBehaviour
         if (trigger == default)
             trigger = new Trigger();
 
-        var prefab = Instantiate(vfx.prefab, Vector2.zero, Quaternion.identity);
-        var visualEffect = prefab.GetComponent<VFXInstance>();
-        visualEffect.name = $"VFX_{vfx.id}Initialize{Guid.NewGuid()}";
-        visualEffects.Add(visualEffect.name, visualEffect);
+        var prefab = Instantiate(vfx.Prefab, Vector2.zero, Quaternion.identity);
+        var instance = prefab.GetComponent<VFXInstance>();
+        instance.name = $"VFX_{vfx.Name}Initialize{Guid.NewGuid()}";
+        instance.parent = board.transform;
+        visualEffects.Add(instance.name, instance);
 
-        yield return visualEffect.Spawn(vfx, position, trigger);
+        yield return instance.Spawn(vfx, position, trigger);
     }
 
 

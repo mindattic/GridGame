@@ -26,7 +26,7 @@ public class DebugWindow : EditorWindow
 
     private GameSpeedOption selectedGameSpeed = GameSpeedOption.Normal;
     private DebugOptions selectedOption = DebugOptions.None;
-    private VFXOptions selectedVfx = VFXOptions.None;
+    private VFX selectedVfx = VFX.None;
 
     static DebugWindow()
     {
@@ -259,7 +259,7 @@ public class DebugWindow : EditorWindow
         GUILayout.BeginHorizontal();
 
         GUILayout.Label("VFX", GUILayout.Width(Screen.width * 0.25f));
-        selectedVfx = (VFXOptions)EditorGUILayout.EnumPopup(selectedVfx, GUILayout.Width(Screen.width * 0.5f));
+        selectedVfx = (VFX)EditorGUILayout.EnumPopup(selectedVfx, GUILayout.Width(Screen.width * 0.5f));
         if (GUILayout.Button("Start", GUILayout.Width(Screen.width * 0.25f)))
             OnPlayVFXClick();
 
@@ -465,36 +465,36 @@ public class DebugWindow : EditorWindow
     {
         switch (selectedVfx)
         {
-            case VFXOptions.VFXTest_Blue_Slash_01: debugManager.VFXTest_Blue_Slash_01(); break;
-            case VFXOptions.VFXTest_Blue_Slash_02: debugManager.VFXTest_Blue_Slash_02(); break;
-            case VFXOptions.VFXTest_Blue_Slash_03: debugManager.VFXTest_Blue_Slash_03(); break;
-            case VFXOptions.VFXTest_Blue_Sword: debugManager.VFXTest_Blue_Sword(); break;
-            case VFXOptions.VFXTest_Blue_Sword_4X: debugManager.VFXTest_Blue_Sword_4X(); break;
-            case VFXOptions.VFXTest_Blood_Claw: debugManager.VFXTest_Blood_Claw(); break;
-            case VFXOptions.VFXTest_Level_Up: debugManager.VFXTest_Level_Up(); break;
-            case VFXOptions.VFXTest_Yellow_Hit: debugManager.VFXTest_Yellow_Hit(); break;
-            case VFXOptions.VFXTest_Double_Claw: debugManager.VFXTest_Double_Claw(); break;
-            case VFXOptions.VFXTest_Lightning_Explosion: debugManager.VFXTest_Lightning_Explosion(); break;
-            case VFXOptions.VFXTest_Buff_Life: debugManager.VFXTest_Buff_Life(); break;
-            case VFXOptions.VFXTest_Rotary_Knife: debugManager.VFXTest_Rotary_Knife(); break;
-            case VFXOptions.VFXTest_Air_Slash: debugManager.VFXTest_Air_Slash(); break;
-            case VFXOptions.VFXTest_Fire_Rain: debugManager.VFXTest_Fire_Rain(); break;
-            case VFXOptions.VFXTest_Ray_Blast: debugManager.VFXTest_Ray_Blast(); break;
-            case VFXOptions.VFXTest_Lightning_Strike: debugManager.VFXTest_Lightning_Strike(); break;
-            case VFXOptions.VFXTest_Puffy_Explosion: debugManager.VFXTest_Puffy_Explosion(); break;
-            case VFXOptions.VFXTest_Red_Slash_2X: debugManager.VFXTest_Red_Slash_2X(); break;
-            case VFXOptions.VFXTest_God_Rays: debugManager.VFXTest_God_Rays(); break;
-            case VFXOptions.VFXTest_Acid_Splash: debugManager.VFXTest_Acid_Splash(); break;
-            case VFXOptions.VFXTest_Green_Buff: debugManager.VFXTest_Green_Buff(); break;
-            case VFXOptions.VFXTest_Gold_Buff: debugManager.VFXTest_Gold_Buff(); break;
-            case VFXOptions.VFXTest_Hex_Shield: debugManager.VFXTest_Hex_Shield(); break;
-            case VFXOptions.VFXTest_Toxic_Cloud: debugManager.VFXTest_Toxic_Cloud(); break;
-            case VFXOptions.VFXTest_Orange_Slash: debugManager.VFXTest_Orange_Slash(); break;
-            case VFXOptions.VFXTest_Moon_Feather: debugManager.VFXTest_Moon_Feather(); break;
-            case VFXOptions.VFXTest_Pink_Spark: debugManager.VFXTest_Pink_Spark(); break;
-            case VFXOptions.VFXTest_BlueYellow_Sword: debugManager.VFXTest_BlueYellow_Sword(); break;
-            case VFXOptions.VFXTest_BlueYellow_Sword_3X: debugManager.VFXTest_BlueYellow_Sword_3X(); break;
-            case VFXOptions.VFXTest_Red_Sword: debugManager.VFXTest_Red_Sword(); break;
+            case VFX.BlueSlash1: debugManager.VFXTest_BlueSlash1(); break;
+            case VFX.BlueSlash2: debugManager.VFXTest_BlueSlash2(); break;
+            case VFX.BlueSlash3: debugManager.VFXTest_BlueSlash3(); break;
+            case VFX.BlueSword: debugManager.VFXTest_BlueSword(); break;
+            case VFX.BlueSword4X: debugManager.VFXTest_BlueSword4X(); break;
+            case VFX.BloodClaw: debugManager.VFXTest_BloodClaw(); break;
+            case VFX.LevelUp: debugManager.VFXTest_LevelUp(); break;
+            case VFX.YellowHit: debugManager.VFXTest_YellowHit(); break;
+            case VFX.DoubleClaw: debugManager.VFXTest_DoubleClaw(); break;
+            case VFX.LightningExplosion: debugManager.VFXTest_LightningExplosion(); break;
+            case VFX.BuffLife: debugManager.VFXTest_BuffLife(); break;
+            case VFX.RotaryKnife: debugManager.VFXTest_RotaryKnife(); break;
+            case VFX.AirSlash: debugManager.VFXTest_AirSlash(); break;
+            case VFX.FireRain: debugManager.VFXTest_FireRain(); break;
+            case VFX.VFXTest_Ray_Blast: debugManager.VFXTest_RayBlast(); break;
+            case VFX.LightningStrike: debugManager.VFXTest_LightningStrike(); break;
+            case VFX.PuffyExplosion: debugManager.VFXTest_PuffyExplosion(); break;
+            case VFX.RedSlash2X: debugManager.VFXTest_RedSlash2X(); break;
+            case VFX.GodRays: debugManager.VFXTest_GodRays(); break;
+            case VFX.AcidSplash: debugManager.VFXTest_AcidSplash(); break;
+            case VFX.GreenBuff: debugManager.VFXTest_GreenBuff(); break;
+            case VFX.GoldBuff: debugManager.VFXTest_GoldBuff(); break;
+            case VFX.HexShield: debugManager.VFXTest_HexShield(); break;
+            case VFX.ToxicCloud: debugManager.VFXTest_ToxicCloud(); break;
+            case VFX.OrangeSlash: debugManager.VFXTest_OrangeSlash(); break;
+            case VFX.MoonFeather: debugManager.VFXTest_MoonFeather(); break;
+            case VFX.PinkSpark: debugManager.VFXTest_PinkSpark(); break;
+            case VFX.BlueYellowSword: debugManager.VFXTest_BlueYellowSword(); break;
+            case VFX.BlueYellowSword3X: debugManager.VFXTest_BlueYellowSword3X(); break;
+            case VFX.RedSword: debugManager.VFXTest_RedSword(); break;
             default: Debug.LogWarning("OnPlayVFXClick failed."); break;
         }
     }

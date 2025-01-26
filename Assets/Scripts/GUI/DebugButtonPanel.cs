@@ -6,6 +6,8 @@ namespace Assets.Scripts.GUI
 {
     public class DebugButtonPanel : MonoBehaviour
     {
+        protected BoardInstance board => GameManager.instance.board;
+
         // Serialize fields to assign buttons in the Inspector
         [SerializeField] private RectTransform PanelRect;
         [SerializeField] private Button ResetButton;
@@ -19,22 +21,20 @@ namespace Assets.Scripts.GUI
 
         private void Start()
         {
-            // Ensure the panel RectTransform is properly assigned
-            if (PanelRect == null)
-            {
-                Debug.LogError("PanelRect is not assigned in the Inspector!");
-                return;
-            }
+            //// Get the screen position for the BottomCenter of the grid
+            Vector2 bottomCenterScreenPosition = board.ScreenCoordinates(ScreenPoint.MiddleCenter);
 
-            PanelRect.transform.position = new Vector3(100, 32, 0);
-            PanelRect.anchoredPosition = new Vector2(100, 32);
 
-            // Set the panel's pivot to the bottom-left corner
-            PanelRect.pivot = new Vector2(0, 0);
+            var position = Camera.main.ScreenToWorldPoint(bottomCenterScreenPosition);
+            //// Convert the screen coordinates to anchored position
+            PanelRect.transform.position = position;
 
-            // Anchor the panel to the bottom-left corner of the screen
-            PanelRect.anchorMin = new Vector2(0, 0);
-            PanelRect.anchorMax = new Vector2(0, 0);
+            //// Set the panel's pivot to the bottom-center
+            //PanelRect.pivot = new Vector2(0, 0);
+
+            //// Anchor the panel to the bottom-center of the screen
+            //PanelRect.anchorMin = new Vector2(0.5f, 0);
+            //PanelRect.anchorMax = new Vector2(0.5f, 0);
 
             // Assign button click listeners
             ResetButton.onClick.AddListener(OnLoadButtonClicked);
@@ -42,6 +42,7 @@ namespace Assets.Scripts.GUI
             NextStageButton.onClick.AddListener(OnNextStageButtonClicked);
             SpawnRandomEnemyButton.onClick.AddListener(OnSpawnRandomEnemyButtonClicked);
         }
+
 
         private void OnLoadButtonClicked()
         {

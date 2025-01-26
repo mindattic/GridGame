@@ -9,15 +9,38 @@ using UnityEngine;
 
 public static class StringExtensions
 {
-    public static string SanitizeFileName(this string src)
+    public static string SanitizeFileName(this string v)
     {
         //Trim and replace spaces
-        src = src.Trim().Replace(" ", "-");
+        v = v.Trim().Replace(" ", "-");
 
         //Remove illegal characters for Windows, iOS, and Android
-        System.IO.Path.GetInvalidFileNameChars().ToList().ForEach(c => src = src.Replace(c.ToString(), ""));
+        System.IO.Path.GetInvalidFileNameChars().ToList().ForEach(c => v = v.Replace(c.ToString(), ""));
 
-        return src;
+        return v;
+    }
+
+    public static Vector3 ToVector3(this string v)
+    {
+        if (string.IsNullOrWhiteSpace(v))
+            return Vector3.zero;
+
+        // Remove parentheses and split by commas
+        v = v.Trim('(', ')');
+        string[] split = v.Split(',');
+
+        if (split.Length != 3)
+            return Vector3.zero;
+
+        // Parse each component to float
+        if (float.TryParse(split[0].Trim(), out float x) &&
+            float.TryParse(split[1].Trim(), out float y) &&
+            float.TryParse(split[2].Trim(), out float z))
+        {
+            return new Vector3(x, y, z);
+        }
+
+        return Vector3.zero;
     }
 }
 
@@ -87,10 +110,10 @@ public static class ListExtensions
 
 public static class Vector2IntExtensions
 {
-    public static void Shift(this ref Vector2Int vector, int x, int y)
+    public static void Shift(this ref Vector2Int v, int x, int y)
     {
-        vector.x += x;
-        vector.y += y;
+        v.x += x;
+        v.y += y;
     }
 }
 
@@ -151,6 +174,33 @@ public static class Vector3Extensions
     {
         return new Vector3(v.x + Random.Float(-amount, amount), v.y + Random.Float(-amount, amount), v.z);
     }
+
+    public static Vector3 FromString(string v)
+    {
+        // Remove parentheses and split by commas
+        v = v.Trim('(', ')');
+        string[] split = v.Split(',');
+
+        if (split.Length != 3)
+            return Vector3.zero;
+
+        // Parse each component to float and return the Vector3
+        float x = float.Parse(split[0].Trim());
+        float y = float.Parse(split[1].Trim());
+        float z = float.Parse(split[2].Trim());
+        return new Vector3(x, y, z);
+    }
+
+    public static Vector3 MultiplyBy(this Vector3 v, Vector3 other)
+    {
+        return new Vector3(v.x * other.x, v.y * other.y, v.z * other.z);
+    }
+
+    public static Vector3 MultiplyBy(this Vector3 v, float x, float y, float z)
+    {
+        var other = new Vector3(x, y, z);
+        return v.MultiplyBy(other);
+    }
 }
 
 public static class ColorExtensions
@@ -158,7 +208,7 @@ public static class ColorExtensions
 
     public static Color SetA(this Color c, float a)
     {
-        return new Color(c.r, c.g, c.b, c.a);
+        return new Color(c.r, c.g, c.b, a);
     }
 
     public static Color AddA(this Color c, float a)
@@ -206,9 +256,9 @@ static class StopwatchExtensions
     /// <summary>
     /// Gets estimated time on compleation. 
     /// </summary>
-    /// <param src="sw"></param>
-    /// <param src="counter"></param>
-    /// <param src="counterGoal"></param>
+    /// <param v="sw"></param>
+    /// <param v="counter"></param>
+    /// <param v="counterGoal"></param>
     /// <returns></returns>
     public static TimeSpan GetEta(this Stopwatch sw, int counter, int counterGoal)
     {

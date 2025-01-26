@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class VFXInstance : MonoBehaviour
 {
-    #region Properties
+
     protected VFXManager vfxManager => GameManager.instance.vfxManager;
+    protected Vector3 tileScale => GameManager.instance.tileScale;
 
     public Transform parent
     {
@@ -31,47 +32,64 @@ public class VFXInstance : MonoBehaviour
         get => gameObject.transform.localScale;
         set => gameObject.transform.localScale = value;
     }
-    #endregion
+
+
+
 
     public IEnumerator Spawn(VisualEffect vfx, Vector3 position, Trigger trigger = default)
     {
         if (trigger == default)
             trigger = new Trigger();
 
-        float delay = trigger.GetAttribute("delay", 0f);
-        float duration = trigger.GetAttribute("duration", 0f);
-
         //Translate, rotate, and relativeScale relative to tile dimensions (determined by device)
-        var offset = Geometry.Tile.Relative.Translation(vfx.relativeOffset);
-        var scale = Geometry.Tile.Relative.Scale(vfx.relativeScale);
-        var rotation = Geometry.Rotation(vfx.angularRotation);
+        //var offset = Geometry.Tile.Relative.Translation(vfx.RelativeOffset);
+        //var scale = Geometry.Tile.Relative.Scale(vfx.RelativeScale);
+        //var rotation = Geometry.Rotation(vfx.AngularRotation);
 
-        this.position = position + offset;
-        this.rotation = rotation;
-        this.scale = scale;
+        //this.position = position + vfx.RelativeOffset;
+        this.position = position;
+        this.scale = tileScale.MultiplyBy(vfx.RelativeScale);
 
-        //Toggle looping programatically by assigning flag in all child ParticleSystem components
-        var ps = new List<ParticleSystem> { GetComponent<ParticleSystem>() };
-        ps.AddRange(GetComponentsInChildren<ParticleSystem>().ToList());
-        foreach (var x in ps)
-        {
-            var main = x.main;
-            main.loop = vfx.isLoop;
-        }
+        SetLooping(vfx.IsLoop);
 
         //Wait until delay is over
-        if (vfx.delay != 0f)
-            yield return new WaitForSeconds(delay);
+        if (vfx.Delay != 0f)
+            yield return new WaitForSeconds(vfx.Delay);
 
         //Trigger coroutine (if applicable)
         yield return trigger.StartCoroutine(this);
 
         //Wait until VFX duration completes
-        if (vfx.duration != 0f)
-            yield return Wait.For(duration);
+        if (vfx.Duration != 0f)
+            yield return Wait.For(vfx.Duration);
 
         //Despawn VFX
         Despawn(name);
+    }
+
+    private void SetLooping(bool isLoop)
+    {
+        var particleSystems = new List<ParticleSystem>();
+        GetRecursively(ref particleSystems, transform);
+
+        // Set the looping flag for each ParticleSystem
+        foreach (var system in particleSystems)
+        {
+            var main = system.main;
+            main.loop = isLoop;
+        }
+    }
+
+    private void GetRecursively(ref List<ParticleSystem> particleSystems, Transform transform)
+    {
+        //Add particle system from root transform
+        particleSystems.Add(transform.GetComponent<ParticleSystem>());
+
+        //Recursively retrieve child particle systems from children transforms
+        foreach (Transform child in transform)
+        {
+            GetRecursively(ref particleSystems, child);
+        }
     }
 
     private void Despawn(string name)
