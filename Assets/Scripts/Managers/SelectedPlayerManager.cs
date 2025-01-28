@@ -8,7 +8,7 @@ public class SelectedPlayerManager : MonoBehaviour
 {
     #region Properties
     protected CombatManager combatManager => GameManager.instance.combatManager;
-    protected CardManager cardManager => GameManager.instance.cardManager;
+    protected Card cardManager => GameManager.instance.cardManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
     protected Vector3 mousePosition3D => GameManager.instance.mousePosition3D;
     protected Vector3 mouseOffset { get => GameManager.instance.mouseOffset; set => GameManager.instance.mouseOffset = value; }

@@ -21,20 +21,13 @@ namespace Assets.Scripts.GUI
 
         private void Start()
         {
-            //// Get the screen position for the BottomCenter of the grid
-            Vector2 bottomCenterScreenPosition = board.ScreenCoordinates(ScreenPoint.MiddleCenter);
+            //// Set anchors and pivot to center
+            //PanelRect.anchorMin = new Vector2(0.5f, 0.5f);
+            //PanelRect.anchorMax = new Vector2(0.5f, 0.5f);
+            //PanelRect.pivot = new Vector2(0.5f, 0.5f);
 
-
-            var position = Camera.main.ScreenToWorldPoint(bottomCenterScreenPosition);
-            //// Convert the screen coordinates to anchored position
-            PanelRect.transform.position = position;
-
-            //// Set the panel's pivot to the bottom-center
-            //PanelRect.pivot = new Vector2(0, 0);
-
-            //// Anchor the panel to the bottom-center of the screen
-            //PanelRect.anchorMin = new Vector2(0.5f, 0);
-            //PanelRect.anchorMax = new Vector2(0.5f, 0);
+            //// Set the anchored position to (0, 0) for centering
+            //PanelRect.anchoredPosition = Vector2.zero;
 
             // Assign button click listeners
             ResetButton.onClick.AddListener(OnLoadButtonClicked);

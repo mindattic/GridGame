@@ -83,33 +83,43 @@ public class BoardInstance : MonoBehaviour
     }
 
 
-
-    public Vector2 ScreenCoordinates(ScreenPoint point)
+    public Vector2 ScreenPosition(BoardPoint point)
     {
-        // Define the world position based on the selected ScreenPoint
+        // Ensure the world position is correctly calculated based on the board bounds
         Vector3 worldPosition = point switch
         {
-            ScreenPoint.TopLeft => new Vector3(bounds.Left, bounds.Top, transform.position.z),
-            ScreenPoint.TopCenter => new Vector3(center.x, bounds.Top, transform.position.z),
-            ScreenPoint.TopRight => new Vector3(bounds.Right, bounds.Top, transform.position.z),
-            ScreenPoint.MiddleLeft => new Vector3(bounds.Left, center.y, transform.position.z),
-            ScreenPoint.MiddleCenter => new Vector3(center.x, center.y, transform.position.z),
-            ScreenPoint.MiddleRight => new Vector3(bounds.Right, center.y, transform.position.z),
-            _ => Vector3.zero, // Default case (shouldn't happen if all enum values are handled)
+            BoardPoint.TopLeft => new Vector3(bounds.Left, bounds.Top, 0),
+            BoardPoint.TopCenter => new Vector3(center.x, bounds.Top, 0),
+            BoardPoint.TopRight => new Vector3(bounds.Right, bounds.Top, 0),
+            BoardPoint.MiddleLeft => new Vector3(bounds.Left, center.y, 0),
+            BoardPoint.MiddleCenter => new Vector3(center.x, center.y, 0),
+            BoardPoint.MiddleRight => new Vector3(bounds.Right, center.y, 0),
+            BoardPoint.BottomLeft => new Vector3(bounds.Left, bounds.Bottom, 0),
+            BoardPoint.BottomCenter => new Vector3(center.x, bounds.Bottom, 0),
+            BoardPoint.BottomRight => new Vector3(bounds.Right, bounds.Bottom, 0),
+            _ => Vector3.zero // Fallback case
         };
 
+        // Convert the world position to screen space
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
+
+        // Return only the X and Y screen coordinates
         return new Vector2(screenPosition.x, screenPosition.y);
     }
 
+
+
 }
 
-public enum ScreenPoint
+public enum BoardPoint
 {
     TopLeft,
     TopCenter,
     TopRight,
     MiddleLeft, 
     MiddleCenter,
-    MiddleRight
+    MiddleRight,
+    BottomLeft,
+    BottomCenter,
+    BottomRight
 }

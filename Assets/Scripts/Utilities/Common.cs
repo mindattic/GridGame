@@ -212,6 +212,7 @@ public static class ColorHelper
         public static Color LightRed = RGBA(255, 128, 128, 128);
         public static Color Red = RGBA(255, 0, 0, 128);
         public static Color Green = RGBA(0, 255, 0, 128);
+        public static Color Yellow = RGBA(255, 255, 0, 128);
     }
 
     public static class Transparent

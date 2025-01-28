@@ -3,18 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 namespace Assets.Scripts.Instances.Actor
 {
     public class ActorMovement
     {
-        #region Properties
         protected float percent33 => Constants.percent33;
         protected Vector3 tileScale => GameManager.instance.tileScale;
 
         protected ActorInstance focusedActor => GameManager.instance.focusedActor;
-        protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
+
         protected List<ActorInstance> actors => GameManager.instance.actors;
         protected AudioManager audioManager => GameManager.instance.audioManager;
         protected BoardInstance board => GameManager.instance.board;
@@ -33,15 +33,24 @@ namespace Assets.Scripts.Instances.Actor
         protected Vector2Int previousLocation { get => instance.previousLocation; set => instance.previousLocation = value; }
         private Vector2Int location { get => instance.location; set => instance.location = value; }
         private Vector3 destination { get => instance.destination; set => instance.destination = value; }
-        private Vector3 position { get => instance.position; set => instance.position = value; }  
+        private Vector3 position { get => instance.position; set => instance.position = value; }
         private Vector3 scale { get => instance.scale; set => instance.scale = value; }
-        #endregion
+
+        protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
+        protected bool hasSelectedPlayer => GameManager.instance.hasSelectedPlayer;
+        protected bool isSelectedPlayer => hasSelectedPlayer && selectedPlayer == instance;
+        protected UnityEvent<Vector2Int> onSelectedPlayerLocationChanged => GameManager.instance.onSelectedPlayerLocationChanged;
+
+
+
 
         private ActorInstance instance;
+
 
         public void Initialize(ActorInstance parentInstance)
         {
             this.instance = parentInstance;
+
         }
 
         public IEnumerator TowardCursor()
@@ -119,7 +128,7 @@ namespace Assets.Scripts.Instances.Actor
                         position = new Vector3(destination.x, position.y, position.z);
                         rotation = Geometry.Rotation(0, 0, 0);
                     }
-                        
+
                 }
                 else if (Mathf.Abs(delta.y) > snapDistance)
                 {
@@ -130,7 +139,7 @@ namespace Assets.Scripts.Instances.Actor
                     {
                         position = new Vector3(position.x, destination.y, position.z);
                         rotation = Geometry.Rotation(0, 0, 0);
-                    }                      
+                    }
                 }
 
                 if (flags.IsSwapping)
@@ -175,11 +184,13 @@ namespace Assets.Scripts.Instances.Actor
 
             previousLocation = location;
 
-
             CheckActorOverlapping(closestTile);
 
             //Assign actor's location to closest tile location
             location = closestTile.location;
+
+            if (isSelectedPlayer)
+                onSelectedPlayerLocationChanged?.Invoke(location);
         }
 
         private void CheckActorOverlapping(TileInstance closestTile)

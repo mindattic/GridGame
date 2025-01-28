@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Managers\DamageTextManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\DataManager.cs" />
+    <Compile Include="Assets\Scripts\Instances\BackgroundInstance.cs" />
     <Compile Include="Assets\Scripts\Managers\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\LogWindow.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorAttributes.cs" />
@@ -73,7 +75,6 @@
     <Compile Include="Assets\Scripts\Models\ActorDetails.cs" />
     <Compile Include="Assets\Scripts\Instances\DamageTextInstance.cs" />
     <Compile Include="Assets\Scripts\Utilities\Formulas.cs" />
-    <Compile Include="Assets\DataManager.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorWeapon.cs" />
     <Compile Include="Assets\Scripts\Managers\AttackLineManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\Random.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Assets\Scripts\Managers\DebugManager.cs" />
     <Compile Include="Assets\Scripts\Models\VisualEffect.cs" />
     <Compile Include="Assets\Scripts\Managers\GhostManager.cs" />
+    <Compile Include="Assets\Scripts\GUI\Card.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Models\ActorStats.cs" />
     <Compile Include="Assets\Scripts\Instances\BoardOverlay.cs" />
@@ -116,7 +118,6 @@
     <Compile Include="Assets\Scripts\Instances\Actor\ActorGlow.cs" />
     <Compile Include="Assets\Scripts\Managers\TitleManager.cs" />
     <Compile Include="Assets\Scripts\Models\Size.cs" />
-    <Compile Include="Assets\BackgroundInstance.cs" />
     <Compile Include="Assets\Scripts\Instances\TooltipInstance.cs" />
     <Compile Include="Assets\Scripts\Models\ThumbnailSettings.cs" />
     <Compile Include="Assets\Scripts\Models\Trigger.cs" />
@@ -127,7 +128,6 @@
     <Compile Include="Assets\Scripts\Instances\Actor\ActorHealthBar.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorRenderers.cs" />
     <Compile Include="Assets\Scripts\Instances\Actor\ActorActionBar.cs" />
-    <Compile Include="Assets\Scripts\Managers\CardManager.cs" />
     <Compile Include="Assets\Scripts\Managers\ActorManager.cs" />
     <Compile Include="Assets\Scripts\Instances\VFXInstance.cs" />
     <Compile Include="Assets\Scripts\GUI\DebugButtonPanel.cs" />
@@ -142,7 +142,7 @@
     <Compile Include="Assets\Scripts\Managers\InputManager.cs" />
     <Compile Include="Assets\Scripts\Managers\DottedLineManager.cs" />
     <Compile Include="Assets\Scripts\Instances\PortraitInstance.cs" />
-    <Compile Include="Assets\WorldMapInstance.cs" />
+    <Compile Include="Assets\Scripts\Instances\WorldMapInstance.cs" />
     <Compile Include="Assets\Scripts\Managers\TooltipManager.cs" />
     <Compile Include="Assets\Scripts\Managers\BoardManager.cs" />
     <Compile Include="Assets\Scripts\Models\StageActor.cs" />
@@ -180,10 +180,10 @@
     <None Include="Assets\Shader\Dazed.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Shader\InvertColor.shader" />
-    <None Include="Assets\VFX\GameVFX Collection(URP)\FX_Dissolution＆Explosion\Shader\Dissolve_Rimlight.shader" />
+    <None Include="Assets\Shader\Dissolve_Rimlight.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
-    <None Include="Assets\VFX\GameVFX Collection(URP)\FX_Starfall\Shader\MaskUV.shader" />
-    <None Include="Assets\VFX\GameVFX Collection(URP)\FX_UI_Waterball\Shader\water_ramp.shader" />
+    <None Include="Assets\Shader\MaskUV 1.shader" />
+    <None Include="Assets\Shader\water_ramp.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
     <None Include="Assets\Shader\Blend_CenterGlow.shader" />
     <None Include="Assets\Shader\ParticleBlend.shader" />
@@ -212,7 +212,8 @@
     <None Include="Assets\Shader\Alpha Blended.shader" />
     <None Include="Assets\Shader\FireDartsOriginalFinal.shader" />
     <None Include="Assets\Shader\Add_CenterGlow.shader" />
-    <None Include="Assets\VFX\GameVFX Collection(URP)\FX_UI_Waterball\Shader\water_add.shader" />
+    <None Include="Assets\Shader\water_add.shader" />
+    <None Include="Assets\Scripts\ExportedScripts.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\Shader\pmxg.shader" />
     <None Include="Assets\Shader\Particle Add.shader" />
@@ -224,11 +225,10 @@
     <None Include="Assets\Shader\GradientTransparency.shader" />
     <None Include="Assets\Shader\Add_CenterGlow 1.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
-    <None Include="Assets\VFX\GameVFX Collection(URP)\Shaders\Alpha Blended.shader" />
+    <None Include="Assets\Shader\Alpha Blended 1.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Shader\ModelDouble.shader" />
     <None Include="Assets\Shader\StencilMask.shader" />
-    <None Include="Assets\VFX\GameVFX Collection(URP)\Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\Shader\MobileParticleAddMultiColor.shader" />
   </ItemGroup>

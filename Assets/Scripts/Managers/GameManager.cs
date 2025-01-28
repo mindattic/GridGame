@@ -4,6 +4,7 @@ using Game.Models;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -32,8 +33,8 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public AttackLineManager attackLineManager;
     [HideInInspector] public DamageTextManager damageTextManager;
     [HideInInspector] public GhostManager ghostManager;
-    [HideInInspector] public PortraitManager portraitManager;  
-    [HideInInspector] public CardManager cardManager;
+    [HideInInspector] public PortraitManager portraitManager;
+    [HideInInspector] public Card cardManager;
     [HideInInspector] public ActorManager actorManager;
     [HideInInspector] public SelectedPlayerManager selectedPlayerManager;
     [HideInInspector] public PlayerManager playerManager;
@@ -57,7 +58,7 @@ public class GameManager : Singleton<GameManager>
     //Canvas
     [HideInInspector] public CanvasOverlay canvasOverlay;
 
-  
+
     [HideInInspector] public Vector2 viewport;
     [HideInInspector] public float tileSize;
     [HideInInspector] public Vector3 tileScale;
@@ -79,6 +80,10 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public ActorInstance focusedActor;
     [HideInInspector] public ActorInstance selectedPlayer;
     [HideInInspector] public ActorInstance previousSelectedPlayer;
+
+    public bool hasSelectedPlayer => selectedPlayer != null;
+    public UnityEvent<Vector2Int> onSelectedPlayerLocationChanged;
+
 
     //Instances
     [HideInInspector] public TimerBarInstance timerBar;
@@ -106,7 +111,7 @@ public class GameManager : Singleton<GameManager>
         //var tenPercentOfOneSixth = oneSixth * 0.1f;
         //var fivePercentOfOneSixth = oneSixth * 0.05f;
 
-        tileSize = oneSixth; 
+        tileSize = oneSixth;
         tileScale = new Vector3(tileSize, tileSize, 1f);
 
         cardPortraitSize = ScreenHelper.ScreenInPixels.Width / 2;
@@ -121,7 +126,7 @@ public class GameManager : Singleton<GameManager>
         board = GameObject.Find(Constants.Board).GetComponent<BoardInstance>() ?? throw new UnityException("BoardInstance is null");
         canvas2D = GameObject.Find(Constants.Canvas2D).GetComponent<Canvas>() ?? throw new UnityException("Canvas2D is null");
         canvas3D = GameObject.Find(Constants.Canvas3D).GetComponent<Canvas>() ?? throw new UnityException("Canvas3D is null");
-        cardManager = GameObject.Find(Constants.Card).GetComponent<CardManager>() ?? throw new UnityException("CardManager is null");
+        cardManager = GameObject.Find(Constants.Card).GetComponent<Card>() ?? throw new UnityException("CardManager is null");
         timerBar = GameObject.Find(Constants.TimerBar).GetComponent<TimerBarInstance>() ?? throw new UnityException("TimerBarInstance is null");
         coinBar = GameObject.Find(Constants.CoinBar).GetComponent<CoinBarInstance>() ?? throw new UnityException("CoinBarInstance is null");
 
@@ -145,7 +150,7 @@ public class GameManager : Singleton<GameManager>
         attackLineManager = game.GetComponent<AttackLineManager>() ?? throw new UnityException("AttackLineManager is null");
         damageTextManager = game.GetComponent<DamageTextManager>() ?? throw new UnityException("DamageTextManager is null");
         ghostManager = game.GetComponent<GhostManager>() ?? throw new UnityException("GhostManager is null");
-        portraitManager = game.GetComponent<PortraitManager>() ?? throw new UnityException("PortraitManager is null");   
+        portraitManager = game.GetComponent<PortraitManager>() ?? throw new UnityException("PortraitManager is null");
         actorManager = game.GetComponent<ActorManager>() ?? throw new UnityException("ActorManager is null");
         selectedPlayerManager = game.GetComponent<SelectedPlayerManager>() ?? throw new UnityException("SelectedPlayerManager is null");
         playerManager = game.GetComponent<PlayerManager>() ?? throw new UnityException("PlayerManager is null");
@@ -179,7 +184,8 @@ public class GameManager : Singleton<GameManager>
 
 
 
-    
+        onSelectedPlayerLocationChanged = new UnityEvent<Vector2Int>();
+
         totalCoins = 0;
 
         #region Platform Dependent Compilation
