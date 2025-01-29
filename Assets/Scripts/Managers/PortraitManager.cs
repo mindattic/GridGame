@@ -24,7 +24,7 @@ public class PortraitManager : MonoBehaviour
     {
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<PortraitInstance>();
-        instance.name = $"Portrait_{Guid.NewGuid()}";
+        instance.name = $"Portrait_{Guid.NewGuid().ToString("N")}";
         instance.parent = board.transform;
         instance.sortingOrder = sortingOrder--;
         instance.sprite = resourceManager.Portrait(actor.character.ToString()).Value.ToSprite();
@@ -39,7 +39,7 @@ public class PortraitManager : MonoBehaviour
 
     public void TriggerDissolve()
     {
-        var actor = players.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+        var actor = players.OrderBy(x => Guid.NewGuid().ToString("N")).FirstOrDefault();
         Dissolve(actor);
     }
 
@@ -47,7 +47,7 @@ public class PortraitManager : MonoBehaviour
     {
         var prefab = Instantiate(portraitPrefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<PortraitInstance>();
-        instance.name = $"Portrait_{Guid.NewGuid()}";
+        instance.name = $"Portrait_{Guid.NewGuid().ToString("N")}";
         instance.parent = board.transform;
         instance.sortingOrder = SortingOrder.Max;
         instance.sprite = resourceManager.Portrait(actor.character.ToString()).Value.ToSprite();

@@ -15,7 +15,7 @@ namespace Game.Manager
         {
             var prefab = Instantiate(tooltipPrefab, Vector2.zero, Quaternion.identity);
             var instance = prefab.GetComponent<TooltipInstance>();
-            instance.name = $"Tooltip_{Guid.NewGuid()}";
+            instance.name = $"Tooltip_{Guid.NewGuid().ToString("N")}";
             instance.Spawn(text, position);
         }
 

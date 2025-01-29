@@ -6,10 +6,12 @@ namespace Assets.Scripts.Utilities
 {
     public static class Formulas
     {
-        const float baseHitRate = 66.6666f;
-
         private static LogManager log => GameManager.instance.logManager;
 
+        const float baseHitRate = 66.6666f;
+        const float armorWeightPenalty = 0.1666f;
+
+        
         public static float StatGrowth(int level)
         {
             return Mathf.Round(100f * (level / 100.0f) * Random.Float(0.4f, 0.8f));
@@ -53,10 +55,9 @@ namespace Assets.Scripts.Utilities
             var multiplier = 1.0f;
             var spd = stats.Speed * multiplier;
             var lck = LuckModifier(stats);
-            var armor = 10;
-            var armorModifier = armor * 0.1666f;
+            var armor = 10 * armorWeightPenalty;
 
-            return Mathf.Round(spd + lck - armorModifier);
+            return Mathf.Round(spd + lck - armor);
         }
 
         public static bool IsHit(ActorInstance attacker, ActorInstance defender)

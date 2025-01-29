@@ -58,7 +58,7 @@ namespace Game.Instances
         public void Spawn(CombatPair pair)
         {
             parent = board.transform;
-            name = $"AttackLine_{Guid.NewGuid()}";
+            name = $"AttackLine_{Guid.NewGuid().ToString("N")}";
 
             startPosition = pair.startActor.position;
             endPosition = pair.endActor.position;

@@ -86,7 +86,7 @@ public class ProfileManager : MonoBehaviour
     private bool CreateProfile()
     {
         //Generate a new GUID
-        var guid = Guid.NewGuid().ToString().ToLower();
+        var guid = Guid.NewGuid().ToString("N").ToString().ToLower();
 
         //TODO: Verify guid is unique in folders (extremely unlikely)
 

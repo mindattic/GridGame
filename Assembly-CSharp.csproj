@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{ABC6BD27-6426-9C0A-9167-74920197AA09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -162,6 +163,8 @@
     <Compile Include="Assets\Scripts\Managers\WallManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Resources\Data\Actors.json" />
+    <Content Include="Assets\Resources\Data\VisualEffects.json" />
     <None Include="Assets\Shader\Add_CenterGlow 2.shader" />
     <None Include="Assets\Shader\henshuuv_b.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -213,7 +216,6 @@
     <None Include="Assets\Shader\FireDartsOriginalFinal.shader" />
     <None Include="Assets\Shader\Add_CenterGlow.shader" />
     <None Include="Assets\Shader\water_add.shader" />
-    <None Include="Assets\Scripts\ExportedScripts.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\Shader\pmxg.shader" />
     <None Include="Assets\Shader\Particle Add.shader" />

@@ -16,9 +16,6 @@ public class DottedLineInstance : MonoBehaviour
     #endregion
 
     SpriteRenderer spriteRenderer;
-    Sprite line;
-    Sprite turn;
-    Sprite arrow;
     public Vector2Int location;
     public DottedLineSegment segment;
     //public bool isOccupied => hasSelectedPlayer && selectedPlayer.location == location;
@@ -28,7 +25,7 @@ public class DottedLineInstance : MonoBehaviour
     public Vector2Int bottom => location + new Vector2Int(0, 1);
     public Vector2Int left => location + new Vector2Int(-1, 0);
 
-    public List<Vector2Int> connections = new List<Vector2Int>();
+    public List<Vector2Int> connectedLocations = new List<Vector2Int>();
 
     private void Awake()
     {
@@ -39,9 +36,7 @@ public class DottedLineInstance : MonoBehaviour
 
     private void Start()
     {
-        line = resourceManager.Sprite("DottedLine").Value;
-        turn = resourceManager.Sprite("DottedLineTurn").Value;
-        arrow = resourceManager.Sprite("DottedLineArrow").Value;
+
     }
 
 
@@ -93,69 +88,69 @@ public class DottedLineInstance : MonoBehaviour
         var turn = resourceManager.Sprite("DottedLineTurn").Value;
         var arrow = resourceManager.Sprite("DottedLineArrow").Value;
 
-        connections.Clear(); // Ensure connections are reset
-        connections.Add(location); // Add self-location to connections
+        connectedLocations.Clear(); // Ensure connectedLocations are reset
+        connectedLocations.Add(location); // Add self-location to connectedLocations
 
         switch (this.segment)
         {
             case DottedLineSegment.Vertical:
                 sprite = line;
                 rotation = Quaternion.identity;
-                connections.AddRange(new[] { top, bottom });
+                connectedLocations.AddRange(new[] { top, bottom });
                 break;
 
             case DottedLineSegment.Horizontal:
                 sprite = line;
                 rotation = Quaternion.Euler(0, 0, 90);
-                connections.AddRange(new[] { left, right });
+                connectedLocations.AddRange(new[] { left, right });
                 break;
 
             case DottedLineSegment.TurnTopLeft:
                 sprite = turn;
                 rotation = Quaternion.Euler(0, 0, -180);
-                connections.AddRange(new[] { top, left });
+                connectedLocations.AddRange(new[] { top, left });
                 break;
 
             case DottedLineSegment.TurnTopRight:
                 sprite = turn;
                 rotation = Quaternion.Euler(0, 0, 90);
-                connections.AddRange(new[] { top, right });
+                connectedLocations.AddRange(new[] { top, right });
                 break;
 
             case DottedLineSegment.TurnBottomLeft:
                 sprite = turn;
                 rotation = Quaternion.Euler(0, 0, -90);
-                connections.AddRange(new[] { bottom, left });
+                connectedLocations.AddRange(new[] { bottom, left });
                 break;
 
             case DottedLineSegment.TurnBottomRight:
                 sprite = turn;
                 rotation = Quaternion.identity;
-                connections.AddRange(new[] { bottom, right });
+                connectedLocations.AddRange(new[] { bottom, right });
                 break;
 
             case DottedLineSegment.ArrowUp:
                 sprite = arrow;
                 rotation = Quaternion.identity;
-                connections.Add(bottom);
+                connectedLocations.Add(bottom);
                 break;
 
             case DottedLineSegment.ArrowDown:
                 sprite = arrow;
                 rotation = Quaternion.Euler(0, 0, 180);
-                connections.Add(top);
+                connectedLocations.Add(top);
                 break;
 
             case DottedLineSegment.ArrowLeft:
                 sprite = arrow;
                 rotation = Quaternion.Euler(0, 0, 90);
-                connections.Add(right);
+                connectedLocations.Add(right);
                 break;
 
             case DottedLineSegment.ArrowRight:
                 sprite = arrow;
                 rotation = Quaternion.Euler(0, 0, -90);
-                connections.Add(left);
+                connectedLocations.Add(left);
                 break;
 
             default:
@@ -163,73 +158,6 @@ public class DottedLineInstance : MonoBehaviour
                 break;
         }
     }
-
-    //public List<Vector2Int> GetConnections()
-    //{
-    //    var connections = new List<Vector2Int> { location };
-
-    //    Vector2Int up = location + new Vector2Int(0, 1);
-    //    Vector2Int down = location + new Vector2Int(0, -1);
-    //    Vector2Int left = location + new Vector2Int(-1, 0);
-    //    Vector2Int right = location + new Vector2Int(1, 0);
-
-    //    switch (segment)
-    //    {
-    //        case DottedLineSegment.Vertical:
-    //            connections.Add(up);
-    //            connections.Add(down);
-    //            break;
-
-    //        case DottedLineSegment.Horizontal:
-    //            connections.Add(left);
-    //            connections.Add(right);
-    //            break;
-
-    //        case DottedLineSegment.TurnTopLeft:
-    //            connections.Add(up);
-    //            connections.Add(left);
-    //            break;
-
-    //        case DottedLineSegment.TurnTopRight:
-    //            connections.Add(up);
-    //            connections.Add(right);
-    //            break;
-
-    //        case DottedLineSegment.TurnBottomLeft:
-    //            connections.Add(down);
-    //            connections.Add(left);
-    //            break;
-
-    //        case DottedLineSegment.TurnBottomRight:
-    //            connections.Add(down);
-    //            connections.Add(right);
-    //            break;
-
-    //        case DottedLineSegment.ArrowUp:
-    //            connections.Add(up);
-    //            break;
-
-    //        case DottedLineSegment.ArrowDown:
-    //            connections.Add(down);
-    //            break;
-
-    //        case DottedLineSegment.ArrowLeft:
-    //            connections.Add(left);
-    //            break;
-
-    //        case DottedLineSegment.ArrowRight:
-    //            connections.Add(right);
-    //            break;
-
-    //        default:
-    //            logManager.Warning($"Unhandled segment type: {segment}");
-    //            break;
-    //    }
-
-    //    return connections;
-    //}
-
-
 
     public void Despawn()
     {

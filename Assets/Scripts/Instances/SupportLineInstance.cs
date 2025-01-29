@@ -42,7 +42,7 @@ public class SupportLineInstance : MonoBehaviour
     public void Spawn(CombatPair pair)
     {
         parent = board.transform;
-        name = $"SupportLine_{Guid.NewGuid()}";
+        name = $"SupportLine_{Guid.NewGuid().ToString("N")}";
 
         startPosition = pair.startActor.position;
         endPosition = pair.endActor.position;

@@ -41,9 +41,9 @@ public class DottedLineManager : MonoBehaviour
             return;
 
         // Highlight all connected lines
-        foreach (var c in occupiedSegment.connections)
+        foreach (var location in occupiedSegment.connectedLocations)
         {
-            var connectedSegment = dottedLines.FirstOrDefault(x => x.location == c);
+            var connectedSegment = dottedLines.FirstOrDefault(x => x.location == location);
             if (connectedSegment == null)
                 continue;
 
@@ -57,7 +57,7 @@ public class DottedLineManager : MonoBehaviour
     {
         GameObject prefab = Instantiate(DottedLinePrefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<DottedLineInstance>();
-        instance.name = $"DottedLine_{Guid.NewGuid()}";
+        instance.name = $"DottedLine_{Guid.NewGuid().ToString("N")}";
         instance.parent = board.transform;
         instance.Spawn(segment, location);
         dottedLines.Add(instance);

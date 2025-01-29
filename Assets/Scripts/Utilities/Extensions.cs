@@ -86,7 +86,7 @@ public static class ListExtensions
 {
     public static List<T> Shuffle<T>(this List<T> list)
     {
-        return list.OrderBy(x => Guid.NewGuid()).ToList();
+        return list.OrderBy(x => Guid.NewGuid().ToString("N")).ToList();
     }
 
     public static void Set<T>(this List<T> list, T item)

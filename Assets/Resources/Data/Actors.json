@@ -44,8 +44,8 @@
         "MaxAP": 100,
         "Strength": 2,
         "Vitality": 4,
-        "Agility": 8,
-        "Speed": 6,
+        "Agility": 1,
+        "Speed": 1,
         "Luck": 6
       },
       "ThumbnailSettings": {
@@ -164,7 +164,7 @@
         "MaxAP": 100,
         "Strength": 4,
         "Vitality": 2,
-        "Agility": 6,
+        "Agility": 1,
         "Speed": 4,
         "Luck": 2
       },
@@ -195,7 +195,7 @@
         "Strength": 1,
         "Vitality": 1,
         "Agility": 1,
-        "Speed": 5,
+        "Speed": 1,
         "Luck": 1
       },
       "ThumbnailSettings": {
@@ -224,7 +224,7 @@
         "MaxAP": 100,
         "Strength": 4,
         "Vitality": 10,
-        "Agility": 5,
+        "Agility": 1,
         "Speed": 1,
         "Luck": 5
       },
