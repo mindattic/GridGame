@@ -2440,7 +2440,7 @@ SpriteRenderer:
   m_Size: {x: 2.59, y: 2.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1463557012
@@ -8835,7 +8835,6 @@ GameObject:
   - component: {fileID: 1751276276}
   - component: {fileID: 1751276293}
   - component: {fileID: 1751276292}
-  - component: {fileID: 1751276309}
   - component: {fileID: 1751276313}
   - component: {fileID: 1751276308}
   - component: {fileID: 1751276301}
@@ -8955,6 +8954,9 @@ MonoBehaviour:
   focusedActor: {fileID: 0}
   selectedPlayer: {fileID: 0}
   previousSelectedPlayer: {fileID: 0}
+  onSelectedPlayerLocationChanged:
+    m_PersistentCalls:
+      m_Calls: []
   timerBar: {fileID: 0}
   actors: []
   board: {fileID: 0}
@@ -9092,8 +9094,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3033aa7c0c25f4141be2ebb68f5c2b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStage: 1
   actorPrefab: {fileID: 3730061202814564284, guid: 4f922b47447b0d245acc44d2545257a3, type: 3}
+  currentStage:
+    Name: 
+    Description: 
+    CompletionCondition: 
+    CompletionValue: 0
+    Actors: []
+    DottedLines: []
 --- !u!82 &1751276292
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9471,18 +9479,6 @@ MonoBehaviour:
   currentProfile:
     Guid: 
     Folder: 
---- !u!114 &1751276309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1751276275}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26471179de44c2840a2a8d7b23aa1d0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1751276310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9520,6 +9516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DottedLinePrefab: {fileID: 1386232852907994317, guid: dcd92126d8247e749a49508f9e424e1c, type: 3}
+  dottedLines: []
 --- !u!114 &1751276313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9532,6 +9529,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac4cf3ce71caa6b46aed25bf5e9181b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Actors: []
+  VisualEffects: []
+  Stages: []
 --- !u!1 &1754065672
 GameObject:
   m_ObjectHideFlags: 0
@@ -9997,7 +9997,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -480.42, y: -484.33}
   m_SizeDelta: {x: 256, y: 64}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1964631041

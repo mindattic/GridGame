@@ -107,7 +107,7 @@ namespace Game.Behaviors
                 = $"HP       STR  VIT  AGI  SPD  LCK{Environment.NewLine}"
                 + $"{hp}   {str}{vit}{agi}{spd}{lck}{Environment.NewLine}";
 
-            detailsText.text = stats + dataManager.GetDetails(actor.character.ToString()).Card;
+            detailsText.text = stats + dataManager.GetDetails(actor.character).Card;
 
             TriggerSlideIn();
         }

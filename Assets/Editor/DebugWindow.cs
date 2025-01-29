@@ -503,17 +503,17 @@ public class DebugWindow : EditorWindow
     //Blank click events for the buttons
     private void OnResetClick()
     {
-        stageManager.Load();
+        stageManager.LoadStage("Stage1");
     }
 
     private void OnPreviousStageClick()
     {
-        stageManager.PreviousStage();
+        //stageManager.PreviousStage();
     }
 
     private void OnNextStageClick()
     {
-        stageManager.NextStage();
+        //stageManager.NextStage();
     }
 
     //private void OnEraseDatabaseClick()

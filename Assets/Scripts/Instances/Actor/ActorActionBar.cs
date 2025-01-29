@@ -118,7 +118,7 @@ public class ActorActionBar
 
     public void AddInitiative()
     {
-        //TODO: Add randomization based on Stats.Luck...
+        //TODO: SpawnActor randomization based on Stats.Luck...
         float amount = stats.Speed * 0.01f;
         stats.AP = amount;
         stats.PreviousAP = amount;

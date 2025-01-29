@@ -71,7 +71,7 @@ static class Random
         //}
 
 
-        //TODO: Add in weighted value so some attacks are more common that others...
+        //TODO: SpawnActor in weighted value so some attacks are more common that others...
 
         //int result = Int(0, ratios.Sum());
 

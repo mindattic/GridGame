@@ -95,7 +95,7 @@
 //        //Come up with a way to retrieve records piecemeal so
 //        //that entire database tables don't have to be
 //        //downloaded for a small subset of data, e.g:
-//        //Stage 05: ["Slime", "Scorpion", "Bat", "Yeti"]
+//        //StageEntity 05: ["Slime", "Scorpion", "Bat", "Yeti"]
 
 
 //        void Load()
@@ -140,8 +140,8 @@
 //                //};
 
 
-//                Entities.Actors.Add(x);
-//                logManager.Info(JsonUtility.ToJson(x));
+//                Entities.StageActors.SpawnActor(x);
+//                logManager.Info(JsonConvert.Serialize(x));
 //            };
 //        }
 

@@ -9,8 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{ABC6BD27-6426-9C0A-9167-74920197AA09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -163,8 +162,6 @@
     <Compile Include="Assets\Scripts\Managers\WallManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Resources\Data\Actors.json" />
-    <Content Include="Assets\Resources\Data\VisualEffects.json" />
     <None Include="Assets\Shader\Add_CenterGlow 2.shader" />
     <None Include="Assets\Shader\henshuuv_b.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -709,6 +706,10 @@
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>Library\PackageCache\com.unity.nuget.mono-cecil@d6f9955a5d5f\Mono.Cecil.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@74deb55db2a0\Runtime\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">

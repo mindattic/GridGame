@@ -176,16 +176,17 @@ public class GameManager : Singleton<GameManager>
         //Canvas componenets
         canvasOverlay = GameObject.Find(Constants.CanvasOverlay).GetComponent<CanvasOverlay>() ?? throw new UnityException("CanvasOverlay is null");
 
+        onSelectedPlayerLocationChanged = new UnityEvent<Vector2Int>();
 
 
         //Initialize in specific order:
         dataManager.Initialize();       //01
         resourceManager.Initialize();   //02
+        stageManager.Initialize();      //03
 
 
 
-        onSelectedPlayerLocationChanged = new UnityEvent<Vector2Int>();
-
+       
         totalCoins = 0;
 
         #region Platform Dependent Compilation

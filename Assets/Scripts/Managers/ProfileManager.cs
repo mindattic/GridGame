@@ -1,9 +1,11 @@
 using Game.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Global = Game.Models.ProfileGlobalSection;
@@ -126,7 +128,7 @@ public class ProfileManager : MonoBehaviour
             return false;
         }
 
-        string json = JsonUtility.ToJson(section, PRETTY_PRINT);
+        string json = JsonConvert.SerializeObject(section);
         if (string.IsNullOrWhiteSpace(json) || json == "{}")
         {
             Debug.LogError($"Failed to serialize {json}.");
@@ -177,7 +179,7 @@ public class ProfileManager : MonoBehaviour
         }
 
         string json = File.ReadAllText(filePath);
-        T section = JsonUtility.FromJson<T>(json);
+        T section = JsonConvert.DeserializeObject<T>(json);
         if (section == null)
         {
             Debug.LogError($"Failed to deserialize {fileName}.");

@@ -1,19 +1,22 @@
 using Assets.Scripts.Models;
 using Game.Behaviors;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[System.Serializable]
-public class DataCollection<T>
+[Serializable]
+public class JsonData<T>
 {
     public List<T> Items;
 }
 
-[System.Serializable]
+
+[Serializable]
 public class ActorEntity
 {
-    public string Name;
+    public string Character;
     public string Description;
     //public Rarity Rarity; 
 
@@ -22,7 +25,8 @@ public class ActorEntity
     public ActorDetails Details;
 }
 
-[System.Serializable]
+
+[Serializable]
 public class VisualEffectEntity
 {
     public string Name;
@@ -34,41 +38,64 @@ public class VisualEffectEntity
     public bool IsLoop;
 }
 
+
+[Serializable]
+public enum StageCompletionCondition
+{
+    DefeatAllEnemies,
+    CollectCoins,
+    SurviveTurns
+}
+
+[Serializable]
+public class StageEntity
+{
+    public string Name;
+    public string Description;
+    public string CompletionCondition;
+    public int CompletionValue;
+    public List<StageActor> Actors;
+    public List<StageDottedLine> DottedLines;
+}
+
+[Serializable]
+public class StageActor
+{
+    public string Character;
+    public string Team;
+    public string Location;
+}
+
+[Serializable]
+public class StageDottedLine
+{
+    public string Segment;
+    public string Location;
+}
+
+
 public class DataManager : MonoBehaviour
 {
     protected LogManager logManager => GameManager.instance.logManager;
-
-
-    public static class Entities
-    {
-        public static List<ActorEntity> Actors = new List<ActorEntity>();
-        public static List<VisualEffectEntity> VisualEffects = new List<VisualEffectEntity>();
-
-    }
 
     public static class Resource
     {
         public static string Actors = "Actors";
         public static string VisualEffects = "VisualEffects";
-
+        public static string Stages = "Stages";
     }
 
-    public void Awake()
-    {
-    }
+    public List<ActorEntity> Actors = new List<ActorEntity>();
+    public List<VisualEffectEntity> VisualEffects = new List<VisualEffectEntity>();
+    public List<StageEntity> Stages = new List<StageEntity>();
 
-
-
-    public void Initialize()
-    {
-        Entities.Actors = ParseJson<ActorEntity>(Resource.Actors);
-        Entities.VisualEffects = ParseJson<VisualEffectEntity>(Resource.VisualEffects);
-    }
-
+  
 
     public List<T> ParseJson<T>(string resource)
     {
         string filePath = $"Data/{resource}";
+
+        Debug.Log(filePath);
         TextAsset jsonFile = Resources.Load<TextAsset>(filePath);
 
         if (jsonFile == null)
@@ -77,44 +104,56 @@ public class DataManager : MonoBehaviour
             return null;
         }
 
-        var collection = JsonUtility.FromJson<DataCollection<T>>(jsonFile.text);
+        var collection = JsonConvert.DeserializeObject<JsonData<T>>(jsonFile.text);
         return collection.Items;
     }
 
-
-    public ActorStats GetStats(string name)
+    public void Initialize()
     {
-        var data = Entities.Actors.Where(x => x.Name == name).FirstOrDefault().Stats;
+        Actors = ParseJson<ActorEntity>(Resource.Actors);
+        VisualEffects = ParseJson<VisualEffectEntity>(Resource.VisualEffects);
+        Stages = ParseJson<StageEntity>(Resource.Stages);
+    }
+
+    public ActorStats GetStats(Character character)
+    {
+        var data = Actors.Where(x => x.Character == character.ToString()).FirstOrDefault().Stats;
         if (data == null)
-            logManager.Error($"Unable to retrieve actor stats for `{name}`");
+            logManager.Error($"Unable to retrieve actor stats for `{character}`");
         return data;
     }
 
 
-    public ThumbnailSettings GetThumbnailSetting(string name)
+    public ThumbnailSettings GetThumbnailSetting(Character character)
     {
-        var data = Entities.Actors.Where(x => x.Name == name).FirstOrDefault().ThumbnailSettings;
+        var data = Actors.Where(x => x.Character == character.ToString()).FirstOrDefault().ThumbnailSettings;
         if (data == null)
             logManager.Error($"Unable to retrieve thumnail settings for `{name}`");
         return data;
     }
 
-    public ActorDetails GetDetails(string name)
+    public ActorDetails GetDetails(Character character)
     {
-        var data = Entities.Actors.Where(x => x.Name == name).FirstOrDefault().Details;
+        var data = Actors.Where(x => x.Character == character.ToString()).FirstOrDefault().Details;
         if (data == null)
-            logManager.Error($"Unable to retrieve actor details for `{name}`");
+            logManager.Error($"Unable to retrieve actor details for `{character}`");
         return data;
     }
 
     public VisualEffectEntity GetVisualEffect(string name)
     {
-        var data = Entities.VisualEffects.Where(x => x.Name == name).FirstOrDefault();
+        var data = VisualEffects.Where(x => x.Name == name).FirstOrDefault();
         if (data == null)
             logManager.Error($"Unable to retrieve visual effect for `{name}`");
         return data;
     }
 
-
+    public StageEntity GetStage(string name)
+    {
+        var data = Stages.Where(x => x.Name == name).FirstOrDefault();
+        if (data == null)
+            logManager.Error($"Unable to retrieve stage for `{name}`");
+        return data;
+    }
 
 }

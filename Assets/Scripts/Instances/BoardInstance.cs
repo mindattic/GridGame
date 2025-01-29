@@ -42,9 +42,8 @@ public class BoardInstance : MonoBehaviour
         GenerateTiles();
         profileManager.LoadProfiles();
         profileManager.Select(0); //TODO: Have user select profile, for now just use index 0   
-        stageManager.Load();
+        stageManager.LoadStage("Stage1");
     }
-
 
 
 
@@ -72,7 +71,7 @@ public class BoardInstance : MonoBehaviour
                 instance.name = $"Tile_{col}x{row}";
                 instance.Initialize(col, row);
                 tileMap.Add(instance);
-                //tiles.Add(instance);
+                //tiles.SpawnActor(instance);
             }
         }
 

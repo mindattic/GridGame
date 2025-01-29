@@ -97,7 +97,7 @@ public class LogWindow : EditorWindow
         }
         GUILayout.EndHorizontal();
 
-        GUILayout.Space(10); // Add some space between buttons and next controls
+        GUILayout.Space(10); // SpawnActor some space between buttons and next controls
 
         // 2. Radio Buttons for showing or hiding timestamps
         selectedRadioOption = GUILayout.SelectionGrid(selectedRadioOption, radioOptions, 2);
@@ -111,14 +111,14 @@ public class LogWindow : EditorWindow
         showError = EditorGUILayout.Toggle("Show Errors", showError);
         showException = EditorGUILayout.Toggle("Show Exceptions", showException);
 
-        GUILayout.Space(10); // Add space between checkboxes and dropdown
+        GUILayout.Space(10); // SpawnActor space between checkboxes and dropdown
 
         // 4. Dropdown for selecting log level filter (if needed)
         GUILayout.Label("Log Level Filter (Dropdown)");
         string[] logLevels = new string[] { "Get", "Log", "Warning", "Error", "Exception" };
         int logLevelFilter = EditorGUILayout.Popup("Filter Logs", 0, logLevels);
 
-        GUILayout.Space(10); // Add space between dropdown and scrollable log area
+        GUILayout.Space(10); // SpawnActor space between dropdown and scrollable log area
 
         // 5. Display the logs (scrollable)
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUILayout.Height(position.height - 200)); // Ensure scrollable area takes up the remaining space

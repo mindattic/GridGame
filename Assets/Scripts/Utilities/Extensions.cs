@@ -42,6 +42,28 @@ public static class StringExtensions
 
         return Vector3.zero;
     }
+
+    public static Vector2Int ToVector2Int(this string v)
+    {
+        if (string.IsNullOrWhiteSpace(v))
+            return Vector2Int.zero;
+
+        // Remove parentheses and split by commas
+        v = v.Trim('(', ')');
+        string[] split = v.Split(',');
+
+        if (split.Length != 2)
+            return Vector2Int.zero;
+
+        // Parse each component to float
+        if (int.TryParse(split[0].Trim(), out int x) &&
+            int.TryParse(split[1].Trim(), out int y))
+        {
+            return new Vector2Int(x, y);
+        }
+
+        return Vector2Int.zero;
+    }
 }
 
 public static class TransformExtensions
@@ -78,7 +100,10 @@ public static class EnumExtensions
         return attribute == null ? value.ToString() : attribute.Description;
     }
 
-
+    public static T ToEnum<T>(this string value, T defaultValue = default) where T : struct, Enum
+    {
+        return Enum.TryParse(value, true, out T result) ? result : defaultValue;
+    }
 }
 
 
@@ -115,6 +140,7 @@ public static class Vector2IntExtensions
         v.x += x;
         v.y += y;
     }
+
 }
 
 

@@ -1,276 +1,144 @@
-using Assets.Scripts.Utilities;
 using Game.Behaviors;
 using Game.Manager;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+
 
 public class StageManager : MonoBehaviour
 {
     #region Properties
     protected DataManager dataManager => GameManager.instance.dataManager;
-    protected int totalCoins
+    public int totalCoins
     {
-        get { return GameManager.instance.totalCoins; }
-        set { GameManager.instance.totalCoins = value; }
+        get => GameManager.instance.totalCoins;
+        set => GameManager.instance.totalCoins = value;
     }
-    protected ProfileManager profileManager => GameManager.instance.profileManager;
-    protected ActorInstance focusedActor
-    {
-        get { return GameManager.instance.focusedActor; }
-        set { GameManager.instance.focusedActor = value; }
-    }
-    protected ActorInstance selectedPlayer
-    {
-        get { return GameManager.instance.selectedPlayer; }
-        set { GameManager.instance.selectedPlayer = value; }
-    }
-    protected CoinBarInstance coinBar => GameManager.instance.coinBar;
-    protected SupportLineManager supportLineManager => GameManager.instance.supportLineManager;
-    protected DottedLineManager dottedLineManager => GameManager.instance.dottedLineManager;
-
-
-
-    protected AttackLineManager attackLineManager => GameManager.instance.attackLineManager;
     protected TurnManager turnManager => GameManager.instance.turnManager;
-    protected TimerBarInstance timerBar => GameManager.instance.timerBar;
     protected ActorManager actorManager => GameManager.instance.actorManager;
-
+    protected DottedLineManager dottedLineManager => GameManager.instance.dottedLineManager;
+    protected CoinBarInstance coinBar => GameManager.instance.coinBar;
     protected CanvasOverlay canvasOverlay => GameManager.instance.canvasOverlay;
-    protected Vector3 tileScale => GameManager.instance.tileScale;
-
+    protected BoardInstance board => GameManager.instance.board;
     protected List<ActorInstance> actors
     {
         get => GameManager.instance.actors;
         set => GameManager.instance.actors = value;
     }
-    protected BoardInstance board => GameManager.instance.board;
-
     #endregion
 
-    //Variables
-    [SerializeField] public int currentStage;
-    [SerializeField] public GameObject actorPrefab;
-    private ActorStats RandomStats => Formulas.RandomStats(10);
+
+    [SerializeField] GameObject actorPrefab;
+
+
+    public StageEntity currentStage;
+
+    public int enemyCount => actors.FindAll(x => x.isEnemy).Count;
+
+
+    public void Initialize()
+    {
+        LoadStage("Stage1");
+    }
+
+
+    public void ReloadStage()
+    {
+        LoadStage(currentStage.Name);
+    }
 
     public void PreviousStage()
     {
-        if (currentStage > 1) currentStage--;
-        Load();
+        var currentIndex = dataManager.Stages.FindIndex(x => x.Name == currentStage.Name);
+        if (currentIndex > 0)
+            currentStage = dataManager.Stages[currentIndex - 1];
+
+        ReloadStage();
     }
 
     public void NextStage()
     {
-        currentStage++;
-        Load();
+        var currentIndex = dataManager.Stages.FindIndex(x => x.Name == currentStage.Name);
+        if (currentIndex >= 0 && currentIndex < dataManager.Stages.Count - 1)
+            currentStage = dataManager.Stages[currentIndex + 1];
+
+        ReloadStage();
     }
 
-    public void Load()
+
+    public void LoadStage(string name)
     {
-        //totalCoins = profileManager.currentProfile.Global.TotalCoins;
-        //currentStage = profileManager.currentProfile.Stage.CurrentStage;
-
-        focusedActor = null;
-        selectedPlayer = null;
+        currentStage = dataManager.GetStage(name);
+  
+        // Reset game elements
+        actors.Clear();
         coinBar.Refresh();
-        supportLineManager.Clear();
-        attackLineManager.Clear();
-        turnManager.Reset();
-        timerBar.TriggerInitialize();
         actorManager.Clear();
-        canvasOverlay.Reset();
         dottedLineManager.Clear();
+        turnManager.Reset();
+        canvasOverlay.Show($"{currentStage.Name}");
+        canvasOverlay.TriggerFadeOut(Interval.OneSecond);
 
-        canvasOverlay.Show($"Stage {currentStage}");
-        canvasOverlay.TriggerFadeOut(delay: Interval.ThreeSeconds);
-        //titleManager.TriggerFadeIn($"Stage {currentStage}");
-
-        List<StageActor> stageActors = new List<StageActor>();
-
-        switch (currentStage)
+        //Spawn actors
+        foreach (var stageActor in currentStage.Actors)
         {
-            case 1:
-
-                Add(new StageActor(Character.Paladin, Team.Player, new Vector2Int(2, 7)));
-                Add(new StageActor(Character.Slime, Team.Enemy, new Vector2Int(5, 6)));
-                Add(new StageActor(Character.Barbarian, Team.Player, new Vector2Int(4, 5)));
-
-                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(2, 3));
-                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(2, 4));
-                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(2, 5));
-                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(2, 6));
-                dottedLineManager.Spawn(DottedLineSegment.TurnBottomRight, new Vector2Int(2, 2));
-                dottedLineManager.Spawn(DottedLineSegment.Horizontal, new Vector2Int(3, 2));
-                dottedLineManager.Spawn(DottedLineSegment.Horizontal, new Vector2Int(4, 2));
-                dottedLineManager.Spawn(DottedLineSegment.TurnBottomLeft, new Vector2Int(5, 2));
-                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(5, 3));
-                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(5, 4));
-                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(5, 5));
-                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(5, 6));
-                dottedLineManager.Spawn(DottedLineSegment.TurnTopRight, new Vector2Int(5, 7));
-                dottedLineManager.Spawn(DottedLineSegment.TurnTopLeft, new Vector2Int(6, 7));
-                dottedLineManager.Spawn(DottedLineSegment.Vertical, new Vector2Int(6, 6));
-                dottedLineManager.Spawn(DottedLineSegment.ArrowUp, new Vector2Int(6, 5));
-
-                break;
-
-            case 2:
-
-                Add(new StageActor(Character.Paladin, Team.Player));
-                Add(new StageActor(Character.Barbarian, Team.Player));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-
-                break;
-
-            case 3:
-
-                Add(new StageActor(Character.Paladin, Team.Player));
-                Add(new StageActor(Character.Barbarian, Team.Player));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-
-                break;
-
-            case 4:
-
-                Add(new StageActor(Character.Paladin, Team.Player));
-                Add(new StageActor(Character.Barbarian, Team.Player));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-
-                //Dynamic opponents
-                Add(new StageActor(Character.Slime, Team.Enemy, spawnTurn: 1));
-
-                break;
-
-            case 5:
-
-                //Players
-                Add(new StageActor(Character.Paladin, Team.Player));
-                Add(new StageActor(Character.Barbarian, Team.Player));
-                Add(new StageActor(Character.Cleric, Team.Player));
-                Add(new StageActor(Character.Ninja, Team.Player));
-
-                //Enemies
-                Add(new StageActor(Character.Yeti, Team.Enemy));
-
-                break;
-
-            case 6:
-
-                //Players
-                Add(new StageActor(Character.Paladin, Team.Player));
-                Add(new StageActor(Character.Barbarian, Team.Player));
-                Add(new StageActor(Character.Cleric, Team.Player));
-
-                //Enemies
-                Add(new StageActor(Character.Slime, Team.Enemy));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-
-                Add(new StageActor(Character.Scorpion, Team.Enemy));
-                Add(new StageActor(Character.Scorpion, Team.Enemy));
-                Add(new StageActor(Character.Scorpion, Team.Enemy));
-                Add(new StageActor(Character.Scorpion, Team.Enemy));
-
-                Add(new StageActor(Character.Bat, Team.Enemy));
-                Add(new StageActor(Character.Bat, Team.Enemy));
-
-                Add(new StageActor(Character.Yeti, Team.Enemy));
-
-                //Dynamic opponents
-                Add(new StageActor(Character.Slime, Team.Enemy, spawnTurn: 3));
-                Add(new StageActor(Character.Slime, Team.Enemy, spawnTurn: 4));
-                Add(new StageActor(Character.Slime, Team.Enemy, spawnTurn: 5));
-                Add(new StageActor(Character.Scorpion, Team.Enemy, spawnTurn: 6));
-                Add(new StageActor(Character.Scorpion, Team.Enemy, spawnTurn: 6));
-                Add(new StageActor(Character.Bat, Team.Enemy, spawnTurn: 7));
-                Add(new StageActor(Character.Bat, Team.Enemy, spawnTurn: 8));
-                Add(new StageActor(Character.Bat, Team.Enemy, spawnTurn: 9));
-                Add(new StageActor(Character.Yeti, Team.Enemy, spawnTurn: 10));
-
-                break;
-
-            case 7:
-
-                Add(new StageActor(Character.Paladin, Team.Player));
-                Add(new StageActor(Character.Barbarian, Team.Player));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-
-                break;
-
-
-            case 8:
-
-                Add(new StageActor(Character.Paladin, Team.Player));
-                Add(new StageActor(Character.Barbarian, Team.Player));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-
-                break;
-
-            case 9:
-
-                Add(new StageActor(Character.Paladin, Team.Player));
-                Add(new StageActor(Character.Barbarian, Team.Player));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-
-                break;
-
-            case 10:
-
-                Add(new StageActor(Character.Paladin, Team.Player));
-                Add(new StageActor(Character.Barbarian, Team.Player));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-
-                break;
-
-            default:
-
-                Add(new StageActor(Character.Paladin, Team.Player));
-                Add(new StageActor(Character.Barbarian, Team.Player));
-                Add(new StageActor(Character.Slime, Team.Enemy));
-
-                break;
+            var character = Enum.Parse<Character>(stageActor.Character);
+            var team = Enum.Parse<Team>(stageActor.Team);
+            var location = !string.IsNullOrWhiteSpace(stageActor.Location) 
+                ? stageActor.Location.ToVector2Int() 
+                : Random.UnoccupiedLocation;
+            SpawnActor(character, team, location);
         }
 
+        //Spawn dotted lines
+        foreach (var stageDottedLine in currentStage.DottedLines)
+        {
+            var segment = Enum.Parse<DottedLineSegment>(stageDottedLine.Segment);
+            var location = stageDottedLine.Location.ToVector2Int();
+            dottedLineManager.Spawn(segment, location);
+        }
+
+
     }
 
-    public void Add(StageActor stageActor)
+    //private void Update()
+    //{
+    //    if (currentStage != null && currentStage.IsStageComplete(this))
+    //    {
+    //        Debug.Log($"StageEntity '{currentStage.Name}' Complete!");
+    //    }
+    //}
+
+    public void SpawnActor(Character character, Team team, Vector2Int location)
     {
         var prefab = Instantiate(actorPrefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<ActorInstance>();
-        instance.parent = board.transform;
-        instance.character = stageActor.character;
-        instance.name = stageActor.character.ToString();
-        //instance.thumbnailSettings = stageActor.thumbnailSettings;
-        instance.team = stageActor.team;
-        //instance.quality = stageActor.quality;
-        //instance.render.SetQualityColor(instance.isPlayer ? Color.white : Color.red);
-        //instance.sortingOrder = SortingOrder.Min;
+        instance.transform.parent = board.transform;
+        instance.character = character;
+        instance.name = character.ToString();
+        instance.team = team;
+        instance.stats = dataManager.GetStats(character);
+        instance.transform.localScale = GameManager.instance.tileScale;
 
-        //Assign Stats
-        instance.stats = new ActorStats(stageActor.stats);
-        instance.transform.localScale = tileScale;
-
-        if (stageActor.IsSpawning)
+        if (instance.spawnDelay < 1)
         {
-            instance.Spawn(stageActor.location);
+            instance.Spawn(location);
         }
         else
         {
-            instance.spawnDelay = stageActor.spawnTurn;
+            instance.spawnDelay = 5; //TODO: incorporate into json or find a better way...
             instance.gameObject.SetActive(false);
         }
 
         actors.Add(instance);
     }
 
-
-
     public void AddEnemy(Character character)
     {
-        Add(new StageActor(character, Team.Enemy, Random.UnoccupiedLocation));
+        var location = Random.UnoccupiedLocation;
+        SpawnActor(character, Team.Enemy, location);
     }
-
 }

@@ -89,7 +89,7 @@ public class DottedLineInstance : MonoBehaviour
         var arrow = resourceManager.Sprite("DottedLineArrow").Value;
 
         connectedLocations.Clear(); // Ensure connectedLocations are reset
-        connectedLocations.Add(location); // Add self-location to connectedLocations
+        connectedLocations.Add(location); // SpawnActor self-location to connectedLocations
 
         switch (this.segment)
         {

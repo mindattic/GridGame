@@ -11,7 +11,7 @@ public class DottedLineManager : MonoBehaviour
     protected BoardInstance board => GameManager.instance.board;
     protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
     protected bool hasSelectedPlayer => GameManager.instance.hasSelectedPlayer;
-    protected UnityEvent<Vector2Int> onSelectedPlayerLocationChanged => GameManager.instance.onSelectedPlayerLocationChanged;
+    //protected UnityEvent<Vector2Int> onSelectedPlayerLocationChanged => GameManager.instance.onSelectedPlayerLocationChanged;
 
 
     //Variables
@@ -22,14 +22,16 @@ public class DottedLineManager : MonoBehaviour
     //Method which is automatically called before the first frame update  
     void Start()
     {
-        onSelectedPlayerLocationChanged?.AddListener(OnSelectedPlayerLocationChanged);
+        //onSelectedPlayerLocationChanged?.AddListener(OnSelectedPlayerLocationChanged);
     }
 
 
     private void ResetColors()
     {
-        // Reset all dotted lines to white
-        dottedLines.ForEach(x => x.ResetColor());
+        foreach(var dottedLine in dottedLines)
+        {
+            dottedLine.ResetColor();
+        }
     }
 
     private void OnSelectedPlayerLocationChanged(Vector2Int newLocation)
@@ -76,7 +78,7 @@ public class DottedLineManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (onSelectedPlayerLocationChanged != null)
-            onSelectedPlayerLocationChanged.RemoveListener(OnSelectedPlayerLocationChanged);
+        //if (onSelectedPlayerLocationChanged != null)
+        //    onSelectedPlayerLocationChanged.RemoveListener(OnSelectedPlayerLocationChanged);
     }
 }

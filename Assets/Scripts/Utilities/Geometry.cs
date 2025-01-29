@@ -21,8 +21,8 @@ public class Geometry
     {
 
         //Assign lookup dictionaries
-        //tiles.ForEach(x => boardPositions.Add(x.boardLocation, x.boardPosition));
-        //tiles.ForEach(x => boardLocations.Add(x.boardPosition, x.boardLocation));
+        //tiles.ForEach(x => boardPositions.SpawnActor(x.boardLocation, x.boardPosition));
+        //tiles.ForEach(x => boardLocations.SpawnActor(x.boardPosition, x.boardLocation));
     }
 
 

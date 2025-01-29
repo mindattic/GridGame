@@ -1,8 +1,7 @@
 ﻿{
   "Items": [
     {
-      "Name": "Barbarian",
-      "Variant": "",
+      "Character": "Barbarian",
       "Description": "A warrior driven by rage.",
       "Stats": {
         "Level": 1,
@@ -31,8 +30,7 @@
       }
     },
     {
-      "Name": "Bat",
-      "Variant": "",
+      "Character": "Bat",
       "Description": "A flying menace.",
       "Stats": {
         "Level": 1,
@@ -61,8 +59,7 @@
       }
     },
     {
-      "Name": "Cleric",
-      "Variant": "",
+      "Character": "Cleric",
       "Description": "A strict adherent to the church.",
       "Stats": {
         "Level": 1,
@@ -91,8 +88,7 @@
       }
     },
     {
-      "Name": "Ninja",
-      "Variant": "",
+      "Character": "Ninja",
       "Description": "A stealthy assassin.",
       "Stats": {
         "Level": 1,
@@ -121,8 +117,7 @@
       }
     },
     {
-      "Name": "Paladin",
-      "Variant": "",
+      "Character": "Paladin",
       "Description": "A holy knight.",
       "Stats": {
         "Level": 1,
@@ -151,8 +146,7 @@
       }
     },
     {
-      "Name": "Scorpion",
-      "Variant": "",
+      "Character": "Scorpion",
       "Description": "A poisonous insectile predator.",
       "Stats": {
         "Level": 2,
@@ -181,8 +175,7 @@
       }
     },
     {
-      "Name": "Slime",
-      "Variant": "",
+      "Character": "Slime",
       "Description": "A weak and squishy creature.",
       "Stats": {
         "Level": 1,
@@ -211,8 +204,7 @@
       }
     },
     {
-      "Name": "Yeti",
-      "Variant": "",
+      "Character": "Yeti",
       "Description": "An large humanoid under dewller",
       "Stats": {
         "Level": 5,

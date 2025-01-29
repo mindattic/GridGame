@@ -27,20 +27,20 @@ public class ActorThumbnail
         // Get the full texture from the resource manager
         texture = resourceManager.Portrait(instance.character.ToString()).Value;
 
-        //Retrieve thumnail dimensions from entity
-        ThumbnailSettings size = dataManager.GetThumbnailSetting(instance.character.ToString());
+        //Retrieve thumnail settings from entity
+        ThumbnailSettings settings = dataManager.GetThumbnailSetting(instance.character);
 
         Vector2Int offset = new Vector2Int();
-        offset.x = (texture.width - size.Width) / 2;
-        offset.y = texture.height - size.Height;
-        offset.Shift(size.OffsetX, size.OffsetY);
+        offset.x = (texture.width - settings.Width) / 2;
+        offset.y = texture.height - settings.Height;
+        offset.Shift(settings.OffsetX, settings.OffsetY);
 
         // Clamp values to ensure the Rect doesn't go out of bounds
-        offset.x = Mathf.Clamp(offset.x, 0, texture.width - size.Width);
-        offset.y = Mathf.Clamp(offset.y, 0, texture.height - size.Height);
+        offset.x = Mathf.Clamp(offset.x, 0, texture.width - settings.Width);
+        offset.y = Mathf.Clamp(offset.y, 0, texture.height - settings.Height);
 
         // Define the portion to cut out
-        Rect rect = new Rect(offset.x, offset.y, size.Width, size.Height);
+        Rect rect = new Rect(offset.x, offset.y, settings.Width, settings.Height);
 
         // Create a sprite from the selected portion of the texture
         var pivot = new Vector2(0.5f, 0.5f);

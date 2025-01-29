@@ -1,5 +1,5 @@
 using Game.Behaviors;
-using NUnit.Framework.Constraints;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -223,7 +223,7 @@ public class ResourceManager : MonoBehaviour
     //        // Load matching JSON file for parameters
     //        List<ResourceParameter> parameters = LoadParameters(resourcePath, sprite.name);
 
-    //        entries.Add(new ResourceItem<Sprite>
+    //        entries.SpawnActor(new ResourceItem<Sprite>
     //        {
     //            Key = sprite.name,
     //            Value = sprite,
@@ -299,7 +299,7 @@ public class ResourceManager : MonoBehaviour
             return null;
 
         string json = File.ReadAllText(jsonPath);
-        return JsonUtility.FromJson<ParameterList>(json).Parameters;
+        return JsonConvert.DeserializeObject<ParameterList>(json).Parameters;
     }
 
 

@@ -170,7 +170,7 @@ namespace Assets.Scripts.Instances.Actor
             //TODO: Initialize to above overlay if is attacking or defending...
             //sortingOrder = SortingOrder.Default;
 
-            //TODO: Add enemy attacking here so that enemy attacks once they reach their intended destination...
+            //TODO: SpawnActor enemy attacking here so that enemy attacks once they reach their intended destination...
 
 
         }
@@ -189,8 +189,8 @@ namespace Assets.Scripts.Instances.Actor
             //Assign actor's location to closest tile location
             location = closestTile.location;
 
-            if (isSelectedPlayer)
-                onSelectedPlayerLocationChanged?.Invoke(location);
+            //if (isSelectedPlayer)
+            //    onSelectedPlayerLocationChanged.Invoke(location);
         }
 
         private void CheckActorOverlapping(TileInstance closestTile)

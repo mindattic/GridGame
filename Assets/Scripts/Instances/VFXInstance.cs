@@ -82,7 +82,7 @@ public class VFXInstance : MonoBehaviour
 
     private void GetRecursively(ref List<ParticleSystem> particleSystems, Transform transform)
     {
-        //Add particle system from root transform
+        //SpawnActor particle system from root transform
         particleSystems.Add(transform.GetComponent<ParticleSystem>());
 
         //Recursively retrieve child particle systems from children transforms
