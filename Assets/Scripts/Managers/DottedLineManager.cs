@@ -26,20 +26,28 @@ public class DottedLineManager : MonoBehaviour
     }
 
 
+    private void ResetColors()
+    {
+        // Reset all dotted lines to white
+        dottedLines.ForEach(x => x.ResetColor());
+    }
+
     private void OnSelectedPlayerLocationChanged(Vector2Int newLocation)
     {
-        var occupiedLine = dottedLines.FirstOrDefault(line => line.location == newLocation);
-        if (occupiedLine == null)
+        ResetColors();
+
+        var occupiedSegment = dottedLines.FirstOrDefault(x => x.location == newLocation);
+        if (occupiedSegment == null)
             return;
 
-        // Reset all dotted lines to white
-        dottedLines.ForEach(line => line.ResetColor());
-
         // Highlight all connected lines
-        foreach (var connection in occupiedLine.connections)
+        foreach (var c in occupiedSegment.connections)
         {
-            var connectedLine = dottedLines.FirstOrDefault(line => line.location == connection);
-            connectedLine?.SetColor();
+            var connectedSegment = dottedLines.FirstOrDefault(x => x.location == c);
+            if (connectedSegment == null)
+                continue;
+
+            connectedSegment.SetColor();
         }
     }
 
@@ -68,7 +76,7 @@ public class DottedLineManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        onSelectedPlayerLocationChanged?.RemoveListener(OnSelectedPlayerLocationChanged);
+        if (onSelectedPlayerLocationChanged != null)
+            onSelectedPlayerLocationChanged.RemoveListener(OnSelectedPlayerLocationChanged);
     }
 }
-

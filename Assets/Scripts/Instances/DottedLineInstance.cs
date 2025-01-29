@@ -71,27 +71,6 @@ public class DottedLineInstance : MonoBehaviour
         set => spriteRenderer.sprite = value;
     }
 
-    //public void Update()
-    //{
-    //    //Check abort conditions
-    //    if (!hasSelectedPlayer)
-    //        return;
-
-    //    if (selectedPlayer.location != location)
-    //        return;
-
-    //    spriteRenderer.color = ColorHelper.Translucent.Yellow;
-
-    //    //if (selectedPlayer.location.Equals(location))
-    //    //{
-    //    //    spriteRenderer.color = ColorHelper.Translucent.Yellow;
-    //    //}
-    //    //else
-    //    //{
-    //    //    spriteRenderer.color = ColorHelper.Translucent.White;
-    //    //}
-    //}
-
     public void SetColor()
     {
         spriteRenderer.color = ColorHelper.Translucent.Yellow;
