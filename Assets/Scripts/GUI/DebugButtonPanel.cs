@@ -10,7 +10,7 @@ namespace Assets.Scripts.GUI
 
         // Serialize fields to assign buttons in the Inspector
         [SerializeField] private RectTransform PanelRect;
-        [SerializeField] private Button ResetButton;
+        [SerializeField] private Button ReloadButton;
         [SerializeField] private Button PreviousStageButton;
         [SerializeField] private Button NextStageButton;
         [SerializeField] private Button SpawnRandomEnemyButton;
@@ -30,7 +30,7 @@ namespace Assets.Scripts.GUI
             //PanelRect.anchoredPosition = Vector2.zero;
 
             // Assign button click listeners
-            ResetButton.onClick.AddListener(OnLoadButtonClicked);
+            ReloadButton.onClick.AddListener(OnLoadButtonClicked);
             PreviousStageButton.onClick.AddListener(OnPreviousStageButtonClicked);
             NextStageButton.onClick.AddListener(OnNextStageButtonClicked);
             SpawnRandomEnemyButton.onClick.AddListener(OnSpawnRandomEnemyButtonClicked);
@@ -44,12 +44,12 @@ namespace Assets.Scripts.GUI
 
         private void OnPreviousStageButtonClicked()
         {
-            //stageManager.PreviousStage();
+            //stageManager.Previous();
         }
 
         private void OnNextStageButtonClicked()
         {
-            //stageManager.NextStage();
+            //stageManager.Next();
         }
 
         private void OnSpawnRandomEnemyButtonClicked()

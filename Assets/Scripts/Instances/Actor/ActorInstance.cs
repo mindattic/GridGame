@@ -38,7 +38,7 @@ public class ActorInstance : MonoBehaviour
     public Vector2Int location;
     public Vector2Int previousLocation;
     public Vector3 destination;
-    public Team team = Team.Independant;
+    public Team team = Team.Neutral;
     public int spawnDelay = -1;
     //public int turnDelay = 0;
     public int attackingPairCount = 0;

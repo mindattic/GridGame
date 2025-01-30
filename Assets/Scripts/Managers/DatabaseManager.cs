@@ -39,7 +39,7 @@
 
 //        public static class Entities
 //        {
-//            public static List<ActorEntity> Actors = new List<ActorEntity>();
+//            public static List<ActorData> Actors = new List<ActorData>();
 //        }
 
 
@@ -95,7 +95,7 @@
 //        //Come up with a way to retrieve records piecemeal so
 //        //that entire database tables don't have to be
 //        //downloaded for a small subset of data, e.g:
-//        //StageEntity 05: ["Slime", "Scorpion", "Bat", "Yeti"]
+//        //StageData 05: ["Slime", "Scorpion", "Bat", "Yeti"]
 
 
 //        void Load()
@@ -108,7 +108,7 @@
 //            reader = instance.ExecuteReader(Queries.Select.Actor.Entities);
 //            while (reader != null && reader.Read())
 //            {
-//                var x = new ActorEntity()
+//                var x = new ActorData()
 //                {
 //                    Name = reader.GetStringValue("Name"),
 //                    Description = reader.GetStringValue("Description"),

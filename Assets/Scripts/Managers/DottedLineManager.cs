@@ -11,7 +11,7 @@ public class DottedLineManager : MonoBehaviour
     protected BoardInstance board => GameManager.instance.board;
     protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
     protected bool hasSelectedPlayer => GameManager.instance.hasSelectedPlayer;
-    //protected UnityEvent<Vector2Int> onSelectedPlayerLocationChanged => GameManager.instance.onSelectedPlayerLocationChanged;
+    protected UnityEvent<Vector2Int> onSelectedPlayerLocationChanged => GameManager.instance.onSelectedPlayerLocationChanged;
 
 
     //Variables
@@ -22,7 +22,7 @@ public class DottedLineManager : MonoBehaviour
     //Method which is automatically called before the first frame update  
     void Start()
     {
-        //onSelectedPlayerLocationChanged?.AddListener(OnSelectedPlayerLocationChanged);
+        onSelectedPlayerLocationChanged?.AddListener(OnSelectedPlayerLocationChanged);
     }
 
 
@@ -36,21 +36,21 @@ public class DottedLineManager : MonoBehaviour
 
     private void OnSelectedPlayerLocationChanged(Vector2Int newLocation)
     {
-        ResetColors();
+        //ResetColors();
 
-        var occupiedSegment = dottedLines.FirstOrDefault(x => x.location == newLocation);
-        if (occupiedSegment == null)
-            return;
+        //var occupiedSegment = dottedLines.FirstOrDefault(x => x.location == newLocation);
+        //if (occupiedSegment == null)
+        //    return;
 
-        // Highlight all connected lines
-        foreach (var location in occupiedSegment.connectedLocations)
-        {
-            var connectedSegment = dottedLines.FirstOrDefault(x => x.location == location);
-            if (connectedSegment == null)
-                continue;
+        //// Highlight all connected lines
+        //foreach (var location in occupiedSegment.connectedLocations)
+        //{
+        //    var connectedSegment = dottedLines.FirstOrDefault(x => x.location == location);
+        //    if (connectedSegment == null)
+        //        continue;
 
-            connectedSegment.SetColor();
-        }
+        //    connectedSegment.SetColor();
+        //}
     }
 
 
@@ -76,9 +76,9 @@ public class DottedLineManager : MonoBehaviour
         GameObject.FindGameObjectsWithTag(Tag.DottedLine).ToList().ForEach(x => Destroy(x));
     }
 
-    private void OnDestroy()
-    {
-        //if (onSelectedPlayerLocationChanged != null)
-        //    onSelectedPlayerLocationChanged.RemoveListener(OnSelectedPlayerLocationChanged);
-    }
+    //private void OnDestroy()
+    //{
+    //    if (onSelectedPlayerLocationChanged != null)
+    //        onSelectedPlayerLocationChanged.RemoveListener(OnSelectedPlayerLocationChanged);
+    //}
 }

@@ -313,8 +313,8 @@ public class ResourceManager : MonoBehaviour
             foreach (var key in keys)
             {
                 //DEBUG: Should the JSON parsing be here in the Resource Manager? Or depend on OOO?...
-                var entity = dataManager.GetVisualEffect(key);
-                if (entity == null)
+                var data = dataManager.GetVisualEffect(key);
+                if (data == null)
                 {
                     logManager.Error($"Visual Effect Entity `{key}` is null");
                     continue;
@@ -332,12 +332,12 @@ public class ResourceManager : MonoBehaviour
                 {
                     Name = key,
                     Prefab = prefab,
-                    RelativeOffset = entity.RelativeOffset.ToVector3(),
-                    AngularRotation = entity.AngularRotation.ToVector3(),
-                    RelativeScale = entity.RelativeScale.ToVector3(),
-                    Delay = entity.Delay,
-                    Duration = entity.Duration,
-                    IsLoop = entity.IsLoop,
+                    RelativeOffset = Convert.ToVector3(data.RelativeOffset),
+                    AngularRotation = Convert.ToVector3(data.AngularRotation),
+                    RelativeScale = Convert.ToVector3(data.RelativeScale),
+                    Delay = data.Delay,
+                    Duration = data.Duration,
+                    IsLoop = data.IsLoop,
                 };
 
                 entries.Add(key, visualEffect);

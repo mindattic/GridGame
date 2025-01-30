@@ -190,7 +190,7 @@ namespace Assets.Scripts.Instances.Actor
             location = closestTile.location;
 
             //if (isSelectedPlayer)
-            //    onSelectedPlayerLocationChanged.Invoke(location);
+            //    onSelectedPlayerLocationChanged?.Invoke(location);
         }
 
         private void CheckActorOverlapping(TileInstance closestTile)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -7,63 +6,85 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-public static class StringExtensions
+public static class Convert
 {
-    public static string SanitizeFileName(this string v)
+    public static Vector3 ToVector3(string value)
     {
-        //Trim and replace spaces
-        v = v.Trim().Replace(" ", "-");
-
-        //Remove illegal characters for Windows, iOS, and Android
-        System.IO.Path.GetInvalidFileNameChars().ToList().ForEach(c => v = v.Replace(c.ToString(), ""));
-
-        return v;
-    }
-
-    public static Vector3 ToVector3(this string v)
-    {
-        if (string.IsNullOrWhiteSpace(v))
-            return Vector3.zero;
+        if (string.IsNullOrWhiteSpace(value))
+            return Vector3.zero; // Null fallback
 
         // Remove parentheses and split by commas
-        v = v.Trim('(', ')');
-        string[] split = v.Split(',');
-
-        if (split.Length != 3)
-            return Vector3.zero;
+        value = value.Trim('(', ')');
+        string[] split = value.Split(',');
 
         // Parse each component to float
-        if (float.TryParse(split[0].Trim(), out float x) &&
+        if (split.Length >= 3
+            && float.TryParse(split[0].Trim(), out float x) &&
             float.TryParse(split[1].Trim(), out float y) &&
             float.TryParse(split[2].Trim(), out float z))
         {
             return new Vector3(x, y, z);
         }
 
-        return Vector3.zero;
+        return Vector3.zero; // Default fallback
     }
 
-    public static Vector2Int ToVector2Int(this string v)
+    public static Vector2Int ToVector2Int(string value)
     {
-        if (string.IsNullOrWhiteSpace(v))
-            return Vector2Int.zero;
+        if (string.IsNullOrWhiteSpace(value))
+            return Random.UnoccupiedLocation; // Null fallback
 
         // Remove parentheses and split by commas
-        v = v.Trim('(', ')');
-        string[] split = v.Split(',');
+        value = value.Trim('(', ')');
+        string[] split = value.Split(',');
 
-        if (split.Length != 2)
-            return Vector2Int.zero;
-
-        // Parse each component to float
-        if (int.TryParse(split[0].Trim(), out int x) &&
-            int.TryParse(split[1].Trim(), out int y))
+        // Parse each component to int
+        if (split.Length >= 2
+            && int.TryParse(split[0].Trim(), out int x)
+            && int.TryParse(split[1].Trim(), out int y))
         {
             return new Vector2Int(x, y);
         }
 
-        return Vector2Int.zero;
+        return Random.UnoccupiedLocation; // Default fallback
     }
+
+    public static Character ToCharacter(string value)
+    {
+        return Enum.TryParse<Character>(value, true, out var character)
+            ? character
+            : Character.Unknown;  // Default fallback
+    }
+
+    public static Team ToTeam(string value)
+    {
+        return Enum.TryParse<Team>(value, true, out var team)
+            ? team
+            : Team.Neutral; // Default fallback
+    }
+
+    public static DottedLineSegment ToDottedLineSegment(string value)
+    {
+        return Enum.TryParse<DottedLineSegment>(value, true, out var segment)
+            ? segment
+            : DottedLineSegment.None; // Default fallback
+    }
+}
+
+
+public static class StringExtensions
+{
+    public static string SanitizeFileName(this string value)
+    {
+        //Trim and replace spaces
+        value = value.Trim().Replace(" ", "-");
+
+        //Remove illegal characters for Windows, iOS, and Android
+        System.IO.Path.GetInvalidFileNameChars().ToList().ForEach(c => value = value.Replace(c.ToString(), ""));
+
+        return value;
+    }
+
 }
 
 public static class TransformExtensions
@@ -282,9 +303,9 @@ static class StopwatchExtensions
     /// <summary>
     /// Gets estimated time on compleation. 
     /// </summary>
-    /// <param v="sw"></param>
-    /// <param v="counter"></param>
-    /// <param v="counterGoal"></param>
+    /// <param value="sw"></param>
+    /// <param value="counter"></param>
+    /// <param value="counterGoal"></param>
     /// <returns></returns>
     public static TimeSpan GetEta(this Stopwatch sw, int counter, int counterGoal)
     {

@@ -34,7 +34,7 @@ public class StageManager : MonoBehaviour
     [SerializeField] GameObject actorPrefab;
 
 
-    public StageEntity currentStage;
+    public StageData currentStage;
 
     public int enemyCount => actors.FindAll(x => x.isEnemy).Count;
 
@@ -45,27 +45,27 @@ public class StageManager : MonoBehaviour
     }
 
 
-    public void ReloadStage()
+    public void Reload()
     {
         LoadStage(currentStage.Name);
     }
 
-    public void PreviousStage()
+    public void Previous()
     {
         var currentIndex = dataManager.Stages.FindIndex(x => x.Name == currentStage.Name);
         if (currentIndex > 0)
             currentStage = dataManager.Stages[currentIndex - 1];
 
-        ReloadStage();
+        Reload();
     }
 
-    public void NextStage()
+    public void Next()
     {
         var currentIndex = dataManager.Stages.FindIndex(x => x.Name == currentStage.Name);
         if (currentIndex >= 0 && currentIndex < dataManager.Stages.Count - 1)
             currentStage = dataManager.Stages[currentIndex + 1];
 
-        ReloadStage();
+        Reload();
     }
 
 
@@ -85,19 +85,17 @@ public class StageManager : MonoBehaviour
         //Spawn actors
         foreach (var stageActor in currentStage.Actors)
         {
-            var character = Enum.Parse<Character>(stageActor.Character);
-            var team = Enum.Parse<Team>(stageActor.Team);
-            var location = !string.IsNullOrWhiteSpace(stageActor.Location) 
-                ? stageActor.Location.ToVector2Int() 
-                : Random.UnoccupiedLocation;
+            var character = Convert.ToCharacter(stageActor.Character);
+            var team = Convert.ToTeam(stageActor.Team);
+            var location = Convert.ToVector2Int(stageActor.Location);
             SpawnActor(character, team, location);
         }
 
         //Spawn dotted lines
         foreach (var stageDottedLine in currentStage.DottedLines)
         {
-            var segment = Enum.Parse<DottedLineSegment>(stageDottedLine.Segment);
-            var location = stageDottedLine.Location.ToVector2Int();
+            var segment = Convert.ToDottedLineSegment(stageDottedLine.Segment);
+            var location = Convert.ToVector2Int(stageDottedLine.Location);
             dottedLineManager.Spawn(segment, location);
         }
 
@@ -108,7 +106,7 @@ public class StageManager : MonoBehaviour
     //{
     //    if (currentStage != null && currentStage.IsStageComplete(this))
     //    {
-    //        Debug.Log($"StageEntity '{currentStage.Name}' Complete!");
+    //        Debug.Log($"StageData '{currentStage.Name}' Complete!");
     //    }
     //}
 
@@ -138,7 +136,6 @@ public class StageManager : MonoBehaviour
 
     public void AddEnemy(Character character)
     {
-        var location = Random.UnoccupiedLocation;
-        SpawnActor(character, Team.Enemy, location);
+        SpawnActor(character, Team.Enemy, Random.UnoccupiedLocation);
     }
 }

@@ -301,7 +301,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 78515833}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1751276291}
+        m_TargetAssemblyTypeName: StageManager, Assembly-CSharp
+        m_MethodName: Previous
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &78515833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -558,7 +570,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 99346088}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1751276305}
+        m_TargetAssemblyTypeName: DebugManager, Assembly-CSharp
+        m_MethodName: SpawnRandomEnemy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &99346088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2185,7 +2209,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1196892281}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1751276291}
+        m_TargetAssemblyTypeName: StageManager, Assembly-CSharp
+        m_MethodName: Next
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1196892281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10013,7 +10049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PanelRect: {fileID: 1964631040}
-  ResetButton: {fileID: 2064858386}
+  ReloadButton: {fileID: 2064858386}
   PreviousStageButton: {fileID: 78515832}
   NextStageButton: {fileID: 1196892280}
   SpawnRandomEnemyButton: {fileID: 99346087}
@@ -10030,7 +10066,7 @@ GameObject:
   - component: {fileID: 2064858387}
   - component: {fileID: 2064858386}
   m_Layer: 5
-  m_Name: ResetButton
+  m_Name: ReloadButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10099,7 +10135,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2064858387}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1751276291}
+        m_TargetAssemblyTypeName: StageManager, Assembly-CSharp
+        m_MethodName: Reload
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2064858387
 MonoBehaviour:
   m_ObjectHideFlags: 0

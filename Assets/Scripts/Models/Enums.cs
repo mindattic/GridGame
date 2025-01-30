@@ -5,7 +5,7 @@ public enum Team
 {
     Player,
     Enemy,
-    Independant
+    Neutral
 }
 
 
@@ -59,6 +59,7 @@ public enum Status
 
 public enum Character
 {
+    Unknown,
     Paladin,
     Barbarian,
     Ninja,
@@ -207,6 +208,7 @@ public enum GameSpeedOption
 
 public enum DottedLineSegment
 {
+    None,
     Vertical,
     Horizontal,
     TurnTopLeft,

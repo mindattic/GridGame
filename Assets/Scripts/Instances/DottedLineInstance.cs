@@ -6,14 +6,16 @@ using UnityEngine;
 
 public class DottedLineInstance : MonoBehaviour
 {
-    #region Properties
+
     protected Vector3 tileScale => GameManager.instance.tileScale;
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
     protected DottedLineManager dottedLineManager => GameManager.instance.dottedLineManager;
     protected LogManager logManager => GameManager.instance.logManager;
     protected ActorInstance selectedPlayer => GameManager.instance.selectedPlayer;
     protected bool hasSelectedPlayer => selectedPlayer != null;
-    #endregion
+   
+
+
 
     SpriteRenderer spriteRenderer;
     public Vector2Int location;

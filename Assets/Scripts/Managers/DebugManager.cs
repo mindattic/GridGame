@@ -534,10 +534,10 @@ public class DebugManager : MonoBehaviour
 
     public void SpawnRandomEnemy()
     {
-        var r = Random.Int(1, 9);
-        if (r <= 6) SpawnSlime();
-        else if (r == 7) SpawnBat();
-        else if (r == 8) SpawnScorpion();
-        else if (r == 9) SpawnYeti();
+        var r = Random.Int(1, 10);
+        if (r <= 7) SpawnSlime();
+        else if (r == 8) SpawnBat();
+        else if (r == 9) SpawnScorpion();
+        else if (r == 10) SpawnYeti();
     }
 }

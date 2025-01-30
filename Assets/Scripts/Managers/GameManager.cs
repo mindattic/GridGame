@@ -104,6 +104,8 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
+        onSelectedPlayerLocationChanged = new UnityEvent<Vector2Int>();
+
 
         //DEBUG: Need to add buffer so tile doesn't align to left-most and right-most edge,
         //however this causes actors to not align properly after moving for some reason
@@ -176,9 +178,7 @@ public class GameManager : Singleton<GameManager>
         //Canvas componenets
         canvasOverlay = GameObject.Find(Constants.CanvasOverlay).GetComponent<CanvasOverlay>() ?? throw new UnityException("CanvasOverlay is null");
 
-        onSelectedPlayerLocationChanged = new UnityEvent<Vector2Int>();
-
-
+        
         //Initialize in specific order:
         dataManager.Initialize();       //01
         resourceManager.Initialize();   //02

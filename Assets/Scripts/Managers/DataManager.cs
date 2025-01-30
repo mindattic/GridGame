@@ -1,6 +1,7 @@
 using Assets.Scripts.Models;
 using Game.Behaviors;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,9 @@ public class JsonData<T>
 
 
 [Serializable]
-public class ActorEntity
+public class ActorData
 {
+
     public string Character;
     public string Description;
     //public Rarity Rarity; 
@@ -27,7 +29,7 @@ public class ActorEntity
 
 
 [Serializable]
-public class VisualEffectEntity
+public class VisualEffectData
 {
     public string Name;
     public string RelativeOffset;
@@ -48,7 +50,7 @@ public enum StageCompletionCondition
 }
 
 [Serializable]
-public class StageEntity
+public class StageData
 {
     public string Name;
     public string Description;
@@ -65,6 +67,47 @@ public class StageActor
     public string Team;
     public string Location;
 }
+
+//public class StageActorConverter : JsonConverter
+//{
+//    public override bool CanConvert(Type objectType)
+//    {
+//        return objectType == typeof(StageActor);
+//    }
+
+//    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+//    {
+//        JObject obj = JObject.Load(reader);
+
+//        Character character = Enum.TryParse<Character>(obj["Character"]?.ToString(), out character) ? character : Character.Unknown;
+//        Team team = Enum.TryParse<Team>(obj["Team"]?.ToString(), out team) ? team : Team.Neutral;
+//        Vector2Int location
+//            = !string.IsNullOrWhiteSpace(obj["Location"]?.ToString())
+//            ? obj["Location"].ToString().ToVector2Int()
+//            : Random.UnoccupiedLocation;
+
+//        return new StageActor
+//        {
+//            Character = character, 
+//            Team = team,         
+//            Location = location
+//        };
+//    }
+
+//    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+//    {
+//        var stageActor = (StageActor)value;
+
+//        JObject obj = new JObject
+//        {
+//            ["Character"] = stageActor.Character.ToString(),
+//            ["Team"] = stageActor.Team.ToString(),
+//            ["Location"] = stageActor.Location.HasValue ? $"({stageActor.Location.Value.x}, {stageActor.Location.Value.y})" : null
+//        };
+
+//        obj.WriteTo(writer);
+//    }
+//}
 
 [Serializable]
 public class StageDottedLine
@@ -85,9 +128,9 @@ public class DataManager : MonoBehaviour
         public static string Stages = "Stages";
     }
 
-    public List<ActorEntity> Actors = new List<ActorEntity>();
-    public List<VisualEffectEntity> VisualEffects = new List<VisualEffectEntity>();
-    public List<StageEntity> Stages = new List<StageEntity>();
+    public List<ActorData> Actors = new List<ActorData>();
+    public List<VisualEffectData> VisualEffects = new List<VisualEffectData>();
+    public List<StageData> Stages = new List<StageData>();
 
   
 
@@ -105,14 +148,19 @@ public class DataManager : MonoBehaviour
         }
 
         var collection = JsonConvert.DeserializeObject<JsonData<T>>(jsonFile.text);
+
+        //Convert Location values from string (1, 0.5) to Vector2Int...
+        //Convert Character values from string to Character Enum here...
+
+
         return collection.Items;
     }
 
     public void Initialize()
     {
-        Actors = ParseJson<ActorEntity>(Resource.Actors);
-        VisualEffects = ParseJson<VisualEffectEntity>(Resource.VisualEffects);
-        Stages = ParseJson<StageEntity>(Resource.Stages);
+        Actors = ParseJson<ActorData>(Resource.Actors);
+        VisualEffects = ParseJson<VisualEffectData>(Resource.VisualEffects);
+        Stages = ParseJson<StageData>(Resource.Stages);
     }
 
     public ActorStats GetStats(Character character)
@@ -140,7 +188,7 @@ public class DataManager : MonoBehaviour
         return data;
     }
 
-    public VisualEffectEntity GetVisualEffect(string name)
+    public VisualEffectData GetVisualEffect(string name)
     {
         var data = VisualEffects.Where(x => x.Name == name).FirstOrDefault();
         if (data == null)
@@ -148,7 +196,7 @@ public class DataManager : MonoBehaviour
         return data;
     }
 
-    public StageEntity GetStage(string name)
+    public StageData GetStage(string name)
     {
         var data = Stages.Where(x => x.Name == name).FirstOrDefault();
         if (data == null)
