@@ -39,6 +39,10 @@ public class Geometry
         return board.tileMap.GetPosition(location);
     }
 
+    public static Vector2Int GetLocationByPosition(Vector3 position)
+    {
+        return board.tileMap.GetLocation(position);
+    }
     //public static Vector2Int GetLocation(int col, int row)
     //{
     //    col = Math.Clamp(col, 1, board.columnCount);

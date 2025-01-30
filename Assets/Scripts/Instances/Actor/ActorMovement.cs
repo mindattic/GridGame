@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Behaviors.Actor;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,12 +42,10 @@ namespace Assets.Scripts.Instances.Actor
         protected bool isSelectedPlayer => hasSelectedPlayer && selectedPlayer == instance;
         protected UnityEvent<Vector2Int> onSelectedPlayerLocationChanged => GameManager.instance.onSelectedPlayerLocationChanged;
 
-
-
-
+  
         private ActorInstance instance;
 
-
+        
         public void Initialize(ActorInstance parentInstance)
         {
             this.instance = parentInstance;
@@ -195,6 +194,7 @@ namespace Assets.Scripts.Instances.Actor
 
         private void CheckActorOverlapping(TileInstance closestTile)
         {
+            //Determine if two actors are overlapping the same boardLocation
             var overlappingActor = FindOverlappingActor(closestTile);
             if (overlappingActor == null)
                 return;
@@ -204,10 +204,14 @@ namespace Assets.Scripts.Instances.Actor
             overlappingActor.flags.IsMoving = true;
             overlappingActor.flags.IsSwapping = true;
 
-            if (isActive && isAlive)
-                instance.StartCoroutine(overlappingActor.move.TowardDestination());
-        }
+            Debug.Log($"[CheckActorOverlapping] Invoking event on {overlappingActor.name} from {instance.name}");
 
+            // Raise the event so the overlapping actor can respond immediately
+            overlappingActor.OnOverlappingActorDetected?.Invoke(instance);
+
+            //if (isActive && isAlive)
+            //    instance.StartCoroutine(overlappingActor.move.TowardDestination());
+        }
 
         private ActorInstance FindOverlappingActor(TileInstance closestTile)
         {
@@ -222,6 +226,21 @@ namespace Assets.Scripts.Instances.Actor
 
             return overlappingActor;
         }
+
+
+        public void HandleOverlappingActor(ActorInstance other)
+        {
+            Debug.Log($"[HandleOverlappingActor] {instance.name} handling overlap with {other.name}");
+
+            location = other.location;
+            destination = Geometry.GetPositionByLocation(location);
+            flags.IsMoving = true;
+            flags.IsSwapping = true;
+
+            if (isActive && isAlive)
+                instance.StartCoroutine(this.TowardDestination());
+        }
+
 
         public void ApplyTilt(Vector3 velocity, float tiltFactor, float rotationSpeed, float resetSpeed, Vector3 baseRotation)
         {

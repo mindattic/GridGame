@@ -2,6 +2,7 @@ using Assets.Scripts.Behaviors.Actor;
 using Assets.Scripts.Instances.Actor;
 using Assets.Scripts.Models;
 using Game.Instances.Actor;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,11 +34,20 @@ public class ActorInstance : MonoBehaviour
     protected bool hasSelectedPlayer => selectedPlayer != null;
     #endregion
 
+    public Action<ActorInstance> OnOverlappingActorDetected;
+
     //Variables
     public Character character;
     public Vector2Int location;
     public Vector2Int previousLocation;
     public Vector3 destination;
+
+
+    public Vector2Int? redirectedLocation = null;  // Nullable location on the grid
+    public Vector3? redirectedDestination = null;  // Nullable world position
+
+
+
     public Team team = Team.Neutral;
     public int spawnDelay = -1;
     //public int turnDelay = 0;
@@ -81,6 +91,15 @@ public class ActorInstance : MonoBehaviour
 
         wiggleSpeed = tileSize * 24f;
         wiggleAmplitude = 15f;  // Amplitude (difference from -45 degrees)
+
+        redirectedDestination = board.NowherePosition;
+
+        //Event bindings
+        OnOverlappingActorDetected += (other) =>
+        {
+            //Debug.Log($"[OnOverlappingActorDetected] {name} received event from {other.name}");
+            move.HandleOverlappingActor(other);
+        };
     }
 
     //Helpers
@@ -989,4 +1008,9 @@ public class ActorInstance : MonoBehaviour
     //    render.idle.transform.angularRotation = rot;
     //}
 
+
+    private void OnDestroy()
+    {
+        OnOverlappingActorDetected -= move.HandleOverlappingActor;
+    }
 }
