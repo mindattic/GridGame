@@ -38,13 +38,24 @@ public class ActorInstance : MonoBehaviour
 
     //Variables
     public Character character;
-    public Vector2Int location;
+
+
+
+
+   
     public Vector2Int previousLocation;
+    public Vector3 previousDestination;
+
+    public Vector2Int location;
     public Vector3 destination;
 
+    public Vector2Int? nextLocation;
+    public Vector3? nextDestination;
 
-    public Vector2Int? redirectedLocation = null;  // Nullable location on the grid
-    public Vector3? redirectedDestination = null;  // Nullable world position
+
+
+    public Vector2Int? redirectedLocation; 
+    public Vector3? redirectedDestination;  
 
 
 
@@ -240,9 +251,15 @@ public class ActorInstance : MonoBehaviour
     {
         gameObject.SetActive(true);
 
+        previousLocation = startLocation;
         location = startLocation;
+
+        previousDestination = Geometry.GetPositionByLocation(location);
         position = Geometry.GetPositionByLocation(location);
+    
         destination = position;
+
+
         //sprites = resourceManager.ActorSprite(this.character.ToString());
         thumbnail.Generate();
 
@@ -788,12 +805,12 @@ public class ActorInstance : MonoBehaviour
     //        overlappingActor.boardLocation = boardLocation;
     //        overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.boardLocation);
     //        overlappingActor.isMoving = true;
-    //        StartCoroutine(overlappingActor.TowardDestination());
+    //        StartCoroutine(overlappingActor.MoveTowardDestination());
     //    }
 
     //    //Assign currentFps actor's boardLocation to closest tile boardLocation
     //    boardLocation = closestTile.boardLocation;
-    //    StartCoroutine(TowardDestination());
+    //    StartCoroutine(MoveTowardDestination());
     //}
     //}
 
@@ -882,7 +899,7 @@ public class ActorInstance : MonoBehaviour
     //    boardLocation = newLocation;
     //    destination = Geometry.GetPositionByLocation(boardLocation);
     //    isMoving = true;
-    //    StartCoroutine(TowardDestination());
+    //    StartCoroutine(MoveTowardDestination());
     //}
 
 

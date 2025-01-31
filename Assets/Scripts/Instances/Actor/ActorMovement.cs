@@ -52,7 +52,7 @@ namespace Assets.Scripts.Instances.Actor
 
         }
 
-        public IEnumerator TowardCursor()
+        public IEnumerator MoveTowardCursor()
         {
             // Before:
             flags.IsMoving = true;
@@ -102,7 +102,7 @@ namespace Assets.Scripts.Instances.Actor
             instance.transform.localRotation = Quaternion.Euler(baseRotation);
         }
 
-        public IEnumerator TowardDestination()
+        public IEnumerator MoveTowardDestination()
         {
             // Before:
             Vector3 initialPosition = instance.position;
@@ -210,7 +210,7 @@ namespace Assets.Scripts.Instances.Actor
             overlappingActor.OnOverlappingActorDetected?.Invoke(instance);
 
             //if (isActive && isAlive)
-            //    instance.StartCoroutine(overlappingActor.move.TowardDestination());
+            //    instance.StartCoroutine(overlappingActor.move.MoveTowardDestination());
         }
 
         private ActorInstance FindOverlappingActor(TileInstance closestTile)
@@ -238,7 +238,7 @@ namespace Assets.Scripts.Instances.Actor
             flags.IsSwapping = true;
 
             if (isActive && isAlive)
-                instance.StartCoroutine(this.TowardDestination());
+                instance.StartCoroutine(this.MoveTowardDestination());
         }
 
 

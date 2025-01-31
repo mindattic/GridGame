@@ -52,7 +52,7 @@ public class SelectedPlayerManager : MonoBehaviour
         cardManager.Assign(focusedActor);
 
         if (focusedActor.isPlayer)
-            StartCoroutine(focusedActor.move.TowardCursor());
+            StartCoroutine(focusedActor.move.MoveTowardCursor());
     }
 
     public void Unfocus()
@@ -81,7 +81,7 @@ public class SelectedPlayerManager : MonoBehaviour
         audioManager.Play("Select");
         timerBar.Play();
         actorManager.CheckEnemyAP();
-        StartCoroutine(selectedPlayer.move.TowardCursor());
+        StartCoroutine(selectedPlayer.move.MoveTowardCursor());
     }
 
     public void Unselect()

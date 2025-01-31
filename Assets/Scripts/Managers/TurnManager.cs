@@ -121,7 +121,7 @@ public class TurnManager : MonoBehaviour
                 //enemy.render.SetParallaxSpeed(0.25f, 0.25f);
      
                 enemy.CalculateAttackStrategy();
-                yield return enemy.move.TowardDestination();
+                yield return enemy.move.MoveTowardDestination();
             }
 
             currentPhase = Phase.Attack;
