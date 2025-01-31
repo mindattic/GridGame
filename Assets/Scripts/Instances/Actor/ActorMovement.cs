@@ -177,25 +177,26 @@ namespace Assets.Scripts.Instances.Actor
         private void CheckLocationChanged()
         {
             //Check if currentFps actor is closer to another tile (i.e.: it has moved)
-            var closestTile = Geometry.GetClosestTile(position);
-            if (location == closestTile.location)
+            var closestLocation = Geometry.GetClosestTile(position).location;
+
+            if (location == closestLocation)
                 return;
 
             previousLocation = location;
 
-            CheckActorOverlapping(closestTile);
+            CheckActorOverlapping(closestLocation);
 
             //Assign actor's location to closest tile location
-            location = closestTile.location;
+            location = closestLocation;
 
             //if (isSelectedPlayer)
             //    onSelectedPlayerLocationChanged?.Invoke(location);
         }
 
-        private void CheckActorOverlapping(TileInstance closestTile)
+        private void CheckActorOverlapping(Vector2Int closestLocation)
         {
             //Determine if two actors are overlapping the same boardLocation
-            var overlappingActor = FindOverlappingActor(closestTile);
+            var overlappingActor = FindOverlappingActor(closestLocation);
             if (overlappingActor == null)
                 return;
 
@@ -213,16 +214,16 @@ namespace Assets.Scripts.Instances.Actor
             //    instance.StartCoroutine(overlappingActor.move.MoveTowardDestination());
         }
 
-        private ActorInstance FindOverlappingActor(TileInstance closestTile)
+        private ActorInstance FindOverlappingActor(Vector2Int closestLocation)
         {
             //Determine if two actors are overlapping the same boardLocation
             var overlappingActor = actors.FirstOrDefault(x => x != null
                                                 && x != instance
-                                                && x.isActive
-                                                && x.isAlive
                                                 && x != focusedActor
                                                 && x != selectedPlayer
-                                                && x.location.Equals(closestTile.location));
+                                                && x.isActive
+                                                && x.isAlive
+                                                && x.location == closestLocation);
 
             return overlappingActor;
         }
