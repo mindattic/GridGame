@@ -14,7 +14,7 @@ public class SupportLineInstance : MonoBehaviour
     }
     #endregion
 
-    //Variables
+    //Fields
     public float alpha = 0;
     private Vector3 startPosition;
     private Vector3 endPosition;

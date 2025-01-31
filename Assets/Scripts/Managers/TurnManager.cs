@@ -29,7 +29,7 @@ public class TurnManager : MonoBehaviour
     public bool isFirstTurn => currentTurn == 1;
     #endregion
 
-    //Variables
+    //Fields
     [SerializeField] public int currentTurn = 1;
     [SerializeField] public Team currentTeam = Team.Player;
     [SerializeField] public Phase currentPhase = Phase.Start;
@@ -158,7 +158,7 @@ public class TurnManager : MonoBehaviour
 
         foreach (var enemy in readyEnemies)
         {
-            var defendingPlayers = players.Where(x => x.isActive && x.isAlive && x.IsAdjacentTo(enemy.location)).ToList();
+            var defendingPlayers = players.Where(x => x.isActive && x.isAlive && x.IsAdjacentTo(enemy.currentLocation)).ToList();
             if (defendingPlayers.Count < 1)
                 continue;
 

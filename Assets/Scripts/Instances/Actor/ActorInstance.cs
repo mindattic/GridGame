@@ -36,16 +36,18 @@ public class ActorInstance : MonoBehaviour
 
     public Action<ActorInstance> OnOverlappingActorDetected;
 
-    //Variables
+    //Fields
     public Character character;
 
     public Vector2Int previousLocation;
-    public Vector2Int location;
+    public Vector2Int currentLocation;
     public Vector2Int? nextLocation;
+    //public Vector3? nextPosition;
+
+
     public Vector2Int? redirectedLocation;
 
-    public Vector3? destination;
-
+    
   
     public Team team = Team.Neutral;
     public int spawnDelay = -1;
@@ -93,7 +95,7 @@ public class ActorInstance : MonoBehaviour
 
         nextLocation = null;
         redirectedLocation = null;
-        destination = null;
+        //nextPosition = null;
 
         //Event bindings
         OnOverlappingActorDetected += (other) =>
@@ -104,16 +106,15 @@ public class ActorInstance : MonoBehaviour
     }
 
     //Helpers
-    public TileInstance currentTile => board.tileMap.GetTile(location); //tiles.First(x => x.location.Equals(location));
+    public TileInstance currentTile => board.tileMap.GetTile(currentLocation); //tiles.First(x => x.currentLocation.Equals(currentLocation));
     public bool isPlayer => team.Equals(Team.Player);
     public bool isEnemy => team.Equals(Team.Enemy);
     public bool isFocusedPlayer => hasFocusedActor && Equals(focusedActor);
     public bool isSelectedPlayer => hasSelectedPlayer && Equals(selectedPlayer);
-    public bool hasReachedDestination => position == destination;
-    public bool onNorthEdge => location.y == 1;
-    public bool onEastEdge => location.x == board.columnCount;
-    public bool onSouthEdge => location.y == board.rowCount;
-    public bool onWestEdge => location.x == 1;
+    public bool onNorthEdge => currentLocation.y == 1;
+    public bool onEastEdge => currentLocation.x == board.columnCount;
+    public bool onSouthEdge => currentLocation.y == board.rowCount;
+    public bool onWestEdge => currentLocation.x == 1;
     public bool isActive => isActiveAndEnabled;
     public bool isAlive => isActive && stats.HP > 0;
     public bool isDying => isActive && stats.HP < 1;
@@ -199,26 +200,26 @@ public class ActorInstance : MonoBehaviour
         }
     }
 
-    public bool IsSameColumn(Vector2Int other) => location.x == other.x;
-    public bool IsSameRow(Vector2Int other) => location.y == other.y;
-    public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(location, other).Equals(1);
-    public bool IsNorthOf(Vector2Int other) => IsSameColumn(other) && location.y == other.y - 1;
-    public bool IsEastOf(Vector2Int other) => IsSameRow(other) && location.x == other.x + 1;
-    public bool IsSouthOf(Vector2Int other) => IsSameColumn(other) && location.y == other.y + 1;
-    public bool IsWestOf(Vector2Int other) => IsSameRow(other) && location.x == other.x - 1;
-    public bool IsNorthWestOf(Vector2Int other) => location.x == other.x - 1 && location.y == other.y - 1;
-    public bool IsNorthEastOf(Vector2Int other) => location.x == other.x + 1 && location.y == other.y - 1;
-    public bool IsSouthWestOf(Vector2Int other) => location.x == other.x - 1 && location.y == other.y + 1;
-    public bool IsSouthEastOf(Vector2Int other) => location.x == other.x + 1 && location.y == other.y + 1;
+    public bool IsSameColumn(Vector2Int other) => currentLocation.x == other.x;
+    public bool IsSameRow(Vector2Int other) => currentLocation.y == other.y;
+    public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(currentLocation, other).Equals(1);
+    public bool IsNorthOf(Vector2Int other) => IsSameColumn(other) && currentLocation.y == other.y - 1;
+    public bool IsEastOf(Vector2Int other) => IsSameRow(other) && currentLocation.x == other.x + 1;
+    public bool IsSouthOf(Vector2Int other) => IsSameColumn(other) && currentLocation.y == other.y + 1;
+    public bool IsWestOf(Vector2Int other) => IsSameRow(other) && currentLocation.x == other.x - 1;
+    public bool IsNorthWestOf(Vector2Int other) => currentLocation.x == other.x - 1 && currentLocation.y == other.y - 1;
+    public bool IsNorthEastOf(Vector2Int other) => currentLocation.x == other.x + 1 && currentLocation.y == other.y - 1;
+    public bool IsSouthWestOf(Vector2Int other) => currentLocation.x == other.x - 1 && currentLocation.y == other.y + 1;
+    public bool IsSouthEastOf(Vector2Int other) => currentLocation.x == other.x + 1 && currentLocation.y == other.y + 1;
 
 
     public Direction GetDirectionTo(ActorInstance other, bool mustBeAdjacent = false)
     {
-        if (mustBeAdjacent && !IsAdjacentTo(other.location))
+        if (mustBeAdjacent && !IsAdjacentTo(other.currentLocation))
             return Direction.None;
 
-        var deltaX = location.x - other.location.x;
-        var deltaY = location.y - other.location.y;
+        var deltaX = currentLocation.x - other.currentLocation.x;
+        var deltaY = currentLocation.y - other.currentLocation.y;
 
         // Handle simple cardinal directions
         if (deltaX == 0 && deltaY > 0) return Direction.North;
@@ -242,9 +243,9 @@ public class ActorInstance : MonoBehaviour
         gameObject.SetActive(true);
 
         previousLocation = startLocation;
-        location = startLocation;
+        currentLocation = startLocation;
 
-        position = Geometry.GetPositionByLocation(location);
+        position = Geometry.GetPositionByLocation(currentLocation);
     
         //sprites = resourceManager.ActorSprite(this.character.ToString());
         thumbnail.Generate();
@@ -338,36 +339,37 @@ public class ActorInstance : MonoBehaviour
         int[] ratios = { 50, 20, 15, 10, 5 };
         var attackStrategy = Random.Strategy(ratios);
 
-        ActorInstance targetPlayer = null;
+ 
+        Vector2Int targetLocation = board.NowhereLocation; 
 
         switch (attackStrategy)
         {
             case AttackStrategy.AttackClosest:
-                targetPlayer = players.Where(x => x.isActive && x.isAlive).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
-                destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
+                var targetPlayer = players.Where(x => x.isActive && x.isAlive).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
+                targetLocation = targetPlayer.currentLocation;
                 break;
 
             case AttackStrategy.AttackWeakest:
                 targetPlayer = players.Where(x => x.isActive && x.isAlive).OrderBy(x => x.stats.HP).FirstOrDefault();
-                destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
+                targetLocation = targetPlayer.currentLocation;
                 break;
 
             case AttackStrategy.AttackStrongest:
                 targetPlayer = players.Where(x => x.isActive && x.isAlive).OrderByDescending(x => x.stats.HP).FirstOrDefault();
-                destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
+                targetLocation = targetPlayer.currentLocation;
                 break;
 
             case AttackStrategy.AttackRandom:
-                targetPlayer = Random.Player;
-                destination = Geometry.GetClosestAttackPosition(this, targetPlayer);
+                targetLocation = Random.Player.currentLocation;
                 break;
 
             case AttackStrategy.MoveAnywhere:
-                var location = Random.Location;
-                targetPlayer = null;
-                destination = Geometry.GetPositionByLocation(location);
+                targetLocation = Random.Location;
                 break;
         }
+
+        nextLocation = Geometry.GetClosestAttackLocation(this.currentLocation, targetLocation);
+        //nextPosition = Geometry.GetPositionByLocation(nextLocation.Value);
     }
 
     public void TriggerTakeDamage(AttackResult attack)
@@ -473,9 +475,9 @@ public class ActorInstance : MonoBehaviour
         }
 
         //After:       
-        location = board.NowhereLocation;
+        currentLocation = board.NowhereLocation;
         position = board.NowherePosition;
-        destination = null;
+        //nextPosition = null;
         
         gameObject.SetActive(false);
     }
@@ -503,8 +505,8 @@ public class ActorInstance : MonoBehaviour
     public void Teleport(Vector2Int location)
     {
 
-        this.location = location;
-        transform.position = Geometry.GetPositionByLocation(this.location);
+        this.currentLocation = location;
+        transform.position = Geometry.GetPositionByLocation(this.currentLocation);
     }
 
 
@@ -790,7 +792,7 @@ public class ActorInstance : MonoBehaviour
     //    if (overlappingActor != null)
     //    {
     //        overlappingActor.boardLocation = boardLocation;
-    //        overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.boardLocation);
+    //        overlappingActor.nextPosition = Geometry.GetPositionByLocation(overlappingActor.boardLocation);
     //        overlappingActor.isMoving = true;
     //        StartCoroutine(overlappingActor.MoveTowardDestination());
     //    }
@@ -884,7 +886,7 @@ public class ActorInstance : MonoBehaviour
     //private void Swap(Vector2Int newLocation)
     //{
     //    boardLocation = newLocation;
-    //    destination = Geometry.GetPositionByLocation(boardLocation);
+    //    nextPosition = Geometry.GetPositionByLocation(boardLocation);
     //    isMoving = true;
     //    StartCoroutine(MoveTowardDestination());
     //}

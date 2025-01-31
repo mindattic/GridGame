@@ -17,7 +17,7 @@ namespace Game.Behaviors
         protected List<ActorInstance> actors => GameManager.instance.actors;
         #endregion
 
-        //Variables
+        //Fields
         RectTransform rectTransform;
 
 

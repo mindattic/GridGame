@@ -33,7 +33,7 @@ public class CoinInstance : MonoBehaviour
     }
     #endregion
 
-    //Variables
+    //Fields
     public AnimationCurve linearCurve;
     public AnimationCurve slopeCurve;
     public AnimationCurve sineCurve;

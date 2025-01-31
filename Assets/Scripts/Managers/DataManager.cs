@@ -8,20 +8,27 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class JsonData<T>
+public class JsonWrapper<T>
 {
     public List<T> Items;
 }
 
-
 [Serializable]
 public class ActorData
 {
+    public ActorData() { }
+
+    public ActorData(ActorData other)
+    {
+        Character = other.Character;
+        Description = other.Description;
+        Stats = other.Stats != null ? new ActorStats(other.Stats) : new ActorStats();
+        ThumbnailSettings = other.ThumbnailSettings != null ? new ThumbnailSettings(other.ThumbnailSettings) : new ThumbnailSettings();
+        Details = other.Details != null ? new ActorDetails(other.Details) : new ActorDetails();
+    }
 
     public string Character;
     public string Description;
-    //public Rarity Rarity; 
-
     public ActorStats Stats;
     public ThumbnailSettings ThumbnailSettings;
     public ActorDetails Details;
@@ -31,6 +38,19 @@ public class ActorData
 [Serializable]
 public class VisualEffectData
 {
+    public VisualEffectData() { }
+
+    public VisualEffectData(VisualEffectData other)
+    {
+        Name = other.Name;
+        RelativeOffset = other.RelativeOffset;
+        AngularRotation = other.AngularRotation;
+        RelativeScale = other.RelativeScale;
+        Delay = other.Delay;
+        Duration = other.Duration;
+        IsLoop = other.IsLoop;
+    }
+
     public string Name;
     public string RelativeOffset;
     public string AngularRotation;
@@ -39,6 +59,7 @@ public class VisualEffectData
     public float Duration;
     public bool IsLoop;
 }
+
 
 
 [Serializable]
@@ -52,6 +73,18 @@ public enum StageCompletionCondition
 [Serializable]
 public class StageData
 {
+    public StageData() { }
+
+    public StageData(StageData other)
+    {
+        Name = other.Name;
+        Description = other.Description;
+        CompletionCondition = other.CompletionCondition;
+        CompletionValue = other.CompletionValue;
+        Actors = other.Actors != null ? new List<StageActor>(other.Actors) : new List<StageActor>();
+        DottedLines = other.DottedLines != null ? new List<StageDottedLine>(other.DottedLines) : new List<StageDottedLine>();
+    }
+
     public string Name;
     public string Description;
     public string CompletionCondition;
@@ -60,58 +93,35 @@ public class StageData
     public List<StageDottedLine> DottedLines;
 }
 
+
 [Serializable]
 public class StageActor
 {
+    public StageActor() { }
+
+    public StageActor(StageActor other)
+    {
+        Character = other.Character;
+        Team = other.Team;
+        Location = other.Location;
+    }
+
     public string Character;
     public string Team;
     public string Location;
 }
 
-//public class StageActorConverter : JsonConverter
-//{
-//    public override bool CanConvert(Type objectType)
-//    {
-//        return objectType == typeof(StageActor);
-//    }
-
-//    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-//    {
-//        JObject obj = JObject.Load(reader);
-
-//        Character character = Enum.TryParse<Character>(obj["Character"]?.ToString(), out character) ? character : Character.Unknown;
-//        Team team = Enum.TryParse<Team>(obj["Team"]?.ToString(), out team) ? team : Team.Neutral;
-//        Vector2Int location
-//            = !string.IsNullOrWhiteSpace(obj["Location"]?.ToString())
-//            ? obj["Location"].ToString().ToVector2Int()
-//            : Random.UnoccupiedLocation;
-
-//        return new StageActor
-//        {
-//            Character = character, 
-//            Team = team,         
-//            Location = location
-//        };
-//    }
-
-//    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-//    {
-//        var stageActor = (StageActor)value;
-
-//        JObject obj = new JObject
-//        {
-//            ["Character"] = stageActor.Character.ToString(),
-//            ["Team"] = stageActor.Team.ToString(),
-//            ["Location"] = stageActor.Location.HasValue ? $"({stageActor.Location.Value.x}, {stageActor.Location.Value.y})" : null
-//        };
-
-//        obj.WriteTo(writer);
-//    }
-//}
-
 [Serializable]
 public class StageDottedLine
 {
+    public StageDottedLine() { }
+
+    public StageDottedLine(StageDottedLine other)
+    {
+        Segment = other.Segment;
+        Location = other.Location;
+    }
+
     public string Segment;
     public string Location;
 }
@@ -132,8 +142,6 @@ public class DataManager : MonoBehaviour
     public List<VisualEffectData> VisualEffects = new List<VisualEffectData>();
     public List<StageData> Stages = new List<StageData>();
 
-  
-
     public List<T> ParseJson<T>(string resource)
     {
         string filePath = $"Data/{resource}";
@@ -147,12 +155,7 @@ public class DataManager : MonoBehaviour
             return null;
         }
 
-        var collection = JsonConvert.DeserializeObject<JsonData<T>>(jsonFile.text);
-
-        //Convert Location values from string (1, 0.5) to Vector2Int...
-        //Convert Character values from string to Character Enum here...
-
-
+        var collection = JsonConvert.DeserializeObject<JsonWrapper<T>>(jsonFile.text);
         return collection.Items;
     }
 
@@ -168,7 +171,10 @@ public class DataManager : MonoBehaviour
         var data = Actors.Where(x => x.Character == character.ToString()).FirstOrDefault().Stats;
         if (data == null)
             logManager.Error($"Unable to retrieve actor stats for `{character}`");
-        return data;
+
+
+        return new ActorStats(data); // Return a new copy instead of a shared reference
+        //return data;
     }
 
 
@@ -177,7 +183,9 @@ public class DataManager : MonoBehaviour
         var data = Actors.Where(x => x.Character == character.ToString()).FirstOrDefault().ThumbnailSettings;
         if (data == null)
             logManager.Error($"Unable to retrieve thumnail settings for `{name}`");
-        return data;
+
+        return new ThumbnailSettings(data); // Return a new copy instead of a shared reference
+        //return data;
     }
 
     public ActorDetails GetDetails(Character character)
@@ -185,7 +193,8 @@ public class DataManager : MonoBehaviour
         var data = Actors.Where(x => x.Character == character.ToString()).FirstOrDefault().Details;
         if (data == null)
             logManager.Error($"Unable to retrieve actor details for `{character}`");
-        return data;
+
+        return new ActorDetails(data);
     }
 
     public VisualEffectData GetVisualEffect(string name)
@@ -193,7 +202,8 @@ public class DataManager : MonoBehaviour
         var data = VisualEffects.Where(x => x.Name == name).FirstOrDefault();
         if (data == null)
             logManager.Error($"Unable to retrieve visual effect for `{name}`");
-        return data;
+
+        return new VisualEffectData(data);
     }
 
     public StageData GetStage(string name)
@@ -201,7 +211,8 @@ public class DataManager : MonoBehaviour
         var data = Stages.Where(x => x.Name == name).FirstOrDefault();
         if (data == null)
             logManager.Error($"Unable to retrieve stage for `{name}`");
-        return data;
+
+        return new StageData(data);
     }
 
 }

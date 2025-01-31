@@ -8,7 +8,7 @@ public class CoinBarInstance : MonoBehaviour
     protected int totalCoins => GameManager.instance.totalCoins;
     #endregion
 
-    //Variables
+    //Fields
     [HideInInspector] public GameObject icon;
     [HideInInspector] public TextMeshPro textMesh;
     [HideInInspector] public GameObject glow;

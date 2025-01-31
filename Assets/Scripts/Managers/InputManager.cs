@@ -15,7 +15,7 @@ public class InputManager : MonoBehaviour
     protected float tileSize => GameManager.instance.tileSize;
     #endregion
 
-    //Variables
+    //Fields
     private bool isDragging;
     //public bool IsDragging => dragStart != null;
     //public Vector3? dragStart = null;

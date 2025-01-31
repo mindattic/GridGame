@@ -11,7 +11,7 @@ public class GhostManager : MonoBehaviour
     protected BoardInstance board => GameManager.instance.board;
     #endregion
 
-    //Variables
+    //Fields
     [SerializeField] public GameObject ghostPrefab;
     ActorInstance actor;
     float threshold;

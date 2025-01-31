@@ -47,7 +47,7 @@
 //        protected LogManager logManager => GameManager.instance.logManager;
 //        #endregion
 
-//        //Variables
+//        //Fields
 //        public const bool autoOverwrite = true; //Used to reinstall app every load...
 //        private SQLiteDB instance = SQLiteDB.Instance;
 

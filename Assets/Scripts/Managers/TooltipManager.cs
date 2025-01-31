@@ -7,7 +7,7 @@ namespace Game.Manager
 {
     public class TooltipManager : MonoBehaviour
     {
-        //Variables
+        //Fields
         [SerializeField] public GameObject tooltipPrefab;
 
 

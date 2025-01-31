@@ -8,7 +8,7 @@ public class FootstepInstance : MonoBehaviour
     protected ResourceManager resourceManager => GameManager.instance.resourceManager;
     #endregion
 
-    //Variables
+    //Fields
     float Duration;
 
     //Method which is used for initialization tasks that need to occur before the game starts 

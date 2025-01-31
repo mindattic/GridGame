@@ -78,17 +78,31 @@ public class Geometry
 
 
 
-    public static bool IsSameColumn(ActorInstance a, ActorInstance b) => a.location.x == b.location.x;
-    public static bool IsSameRow(ActorInstance a, ActorInstance b) => a.location.y == b.location.y;
-    public static bool IsNorthOf(ActorInstance a, ActorInstance b) => IsSameColumn(a, b) && a.location.y == b.location.y - 1;
-    public static bool IsEastOf(ActorInstance a, ActorInstance b) => IsSameRow(a, b) && a.location.x == b.location.x + 1;
-    public static bool IsSouthOf(ActorInstance a, ActorInstance b) => IsSameColumn(a, b) && a.location.y == b.location.y + 1;
-    public static bool IsWestOf(ActorInstance a, ActorInstance b) => IsSameRow(a, b) && a.location.x == b.location.x - 1;
-    public static bool IsNorthWestOf(ActorInstance a, ActorInstance b) => a.location.x == b.location.x - 1 && a.location.y == b.location.y - 1;
-    public static bool IsNorthEastOf(ActorInstance a, ActorInstance b) => a.location.x == b.location.x + 1 && a.location.y == b.location.y - 1;
-    public static bool IsSouthWestOf(ActorInstance a, ActorInstance b) => a.location.x == b.location.x - 1 && a.location.y == b.location.y + 1;
-    public static bool IsSouthEastOf(ActorInstance a, ActorInstance b) => a.location.x == b.location.x + 1 && a.location.y == b.location.y + 1;
-    public static bool IsAdjacentTo(ActorInstance a, ActorInstance b) => (IsSameColumn(a, b) || IsSameRow(a, b)) && Vector2Int.Distance(a.location, a.location).Equals(1);
+    public static bool IsSameColumn(ActorInstance a, ActorInstance b) => a.currentLocation.x == b.currentLocation.x;
+    public static bool IsSameRow(ActorInstance a, ActorInstance b) => a.currentLocation.y == b.currentLocation.y;
+    public static bool IsNorthOf(ActorInstance a, ActorInstance b) => IsSameColumn(a, b) && a.currentLocation.y == b.currentLocation.y - 1;
+    public static bool IsEastOf(ActorInstance a, ActorInstance b) => IsSameRow(a, b) && a.currentLocation.x == b.currentLocation.x + 1;
+    public static bool IsSouthOf(ActorInstance a, ActorInstance b) => IsSameColumn(a, b) && a.currentLocation.y == b.currentLocation.y + 1;
+    public static bool IsWestOf(ActorInstance a, ActorInstance b) => IsSameRow(a, b) && a.currentLocation.x == b.currentLocation.x - 1;
+    public static bool IsNorthWestOf(ActorInstance a, ActorInstance b) => a.currentLocation.x == b.currentLocation.x - 1 && a.currentLocation.y == b.currentLocation.y - 1;
+    public static bool IsNorthEastOf(ActorInstance a, ActorInstance b) => a.currentLocation.x == b.currentLocation.x + 1 && a.currentLocation.y == b.currentLocation.y - 1;
+    public static bool IsSouthWestOf(ActorInstance a, ActorInstance b) => a.currentLocation.x == b.currentLocation.x - 1 && a.currentLocation.y == b.currentLocation.y + 1;
+    public static bool IsSouthEastOf(ActorInstance a, ActorInstance b) => a.currentLocation.x == b.currentLocation.x + 1 && a.currentLocation.y == b.currentLocation.y + 1;
+    public static bool IsAdjacentTo(ActorInstance a, ActorInstance b) => (IsSameColumn(a, b) || IsSameRow(a, b)) && Vector2Int.Distance(a.currentLocation, a.currentLocation).Equals(1);
+
+
+    public static bool IsSameColumn(Vector2Int a, Vector2Int b) => a.x == b.x;
+    public static bool IsSameRow(Vector2Int a, Vector2Int b) => a.y == b.y;
+    public static bool IsNorthOf(Vector2Int a, Vector2Int b) => IsSameColumn(a, b) && a.y == b.y - 1;
+    public static bool IsEastOf(Vector2Int a, Vector2Int b) => IsSameRow(a, b) && a.x == b.x + 1;
+    public static bool IsSouthOf(Vector2Int a, Vector2Int b) => IsSameColumn(a, b) && a.y == b.y + 1;
+    public static bool IsWestOf(Vector2Int a, Vector2Int b) => IsSameRow(a, b) && a.x == b.x - 1;
+    public static bool IsNorthWestOf(Vector2Int a, Vector2Int b) => a.x == b.x - 1 && a.y == b.y - 1;
+    public static bool IsNorthEastOf(Vector2Int a, Vector2Int b) => a.x == b.x + 1 && a.y == b.y - 1;
+    public static bool IsSouthWestOf(Vector2Int a, Vector2Int b) => a.x == b.x - 1 && a.y == b.y + 1;
+    public static bool IsSouthEastOf(Vector2Int a, Vector2Int b) => a.x == b.x + 1 && a.y == b.y + 1;
+    public static bool IsAdjacentTo(Vector2Int a, Vector2Int b) => (IsSameColumn(a, b) || IsSameRow(a, b)) && Vector2Int.Distance(a, b).Equals(1);
+
 
     public static Direction AdjacentDirectionTo(ActorInstance a, ActorInstance b)
     {
@@ -118,14 +132,14 @@ public class Geometry
         }
     }
 
-    public static Vector3 GetClosestAttackPosition(ActorInstance attacker, ActorInstance other)
+    public static Vector2Int GetClosestAttackLocation(Vector2Int attackerLocation, Vector2Int defenderLocation)
     {
         //Determine if already adjacent to player...
-        if (IsAdjacentTo(attacker, other))
-            return attacker.currentTile.position;
+        if (IsAdjacentTo(attackerLocation, defenderLocation))
+            return attackerLocation;
 
         //Swap boardPosition with target
-        return other.currentTile.position;
+        return defenderLocation;
 
 
 

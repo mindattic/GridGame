@@ -4,7 +4,7 @@ namespace Game.Models
 {
     public class RectInt
     {
-        //Variables
+        //Fields
         public int Top;
         public int Right;
         public int Bottom;

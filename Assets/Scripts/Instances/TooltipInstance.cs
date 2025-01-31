@@ -8,7 +8,7 @@ public class TooltipInstance : MonoBehaviour
     protected float tileSize => GameManager.instance.tileSize;
     #endregion
 
-    //Variables
+    //Fields
     SpriteRenderer spriteRenderer;
     TextMeshPro textMesh;
     Vector2 offset;

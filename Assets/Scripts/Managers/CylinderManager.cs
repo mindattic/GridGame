@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CylinderManager : MonoBehaviour
 {
-    //Variables
+    //Fields
     [SerializeField] public float Ceiling = 1f;
     [SerializeField] public float Floor = -1f;
     [SerializeField] public float Speed = 0.05f;

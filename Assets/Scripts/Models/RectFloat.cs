@@ -13,7 +13,7 @@ namespace Game.Models
             Left = left;
         }
 
-        //Variables
+        //Fields
         public float Top;
         public float Right;
         public float Bottom;

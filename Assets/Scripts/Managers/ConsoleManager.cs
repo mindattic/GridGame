@@ -19,7 +19,7 @@ namespace Game.Behaviors
         }
         #endregion
 
-        //Variables
+        //Fields
         public TextMeshProUGUI textMesh;
         public FpsMonitor fpsMonitor = new FpsMonitor();
 

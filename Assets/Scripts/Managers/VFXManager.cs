@@ -9,7 +9,7 @@ public class VFXManager : MonoBehaviour
 {
     protected BoardInstance board => GameManager.instance.board;
 
-    //Variables
+    //Fields
     Dictionary<string, VFXInstance> visualEffects = new Dictionary<string, VFXInstance>();
 
     public void TriggerSpawn(VisualEffect vfx, Vector3 position, Trigger trigger = default)

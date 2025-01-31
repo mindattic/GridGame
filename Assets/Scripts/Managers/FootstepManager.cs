@@ -12,7 +12,7 @@ public class FootstepManager : MonoBehaviour
     protected BoardInstance board => GameManager.instance.board;
     #endregion
 
-    //Variables
+    //Fields
     [SerializeField] public GameObject FootstepPrefab;
     ActorInstance actor;
     Vector3 previousPosition;

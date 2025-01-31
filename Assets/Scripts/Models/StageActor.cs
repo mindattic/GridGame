@@ -17,20 +17,20 @@ using UnityEngine;
 //    public Sprite thumbnail;
 //    public Team team;
 //    public Rarity quality;
-//    public Vector2Int location;
+//    public Vector2Int currentLocation;
 //    public int spawnTurn = -1;
 
 //    public bool IsSpawning => spawnTurn < 1;
 
 //    public StageActor() { }
 
-//    public StageActor(Character character, Team team, Vector2Int? location = null, int spawnTurn = -1)
+//    public StageActor(Character character, Team team, Vector2Int? currentLocation = null, int spawnTurn = -1)
 //    {
 //        this.character = character;
 //        //this.name = $"{character}{GenerateNameSuffix(character)}";
 //        //this.stats = dataManager.GetStats(character.ToString());
 //        this.team = team;
-//        this.location = location ?? Random.UnoccupiedLocation;
+//        this.currentLocation = currentLocation ?? Random.UnoccupiedLocation;
 //        this.spawnTurn = spawnTurn;
 //    }
 

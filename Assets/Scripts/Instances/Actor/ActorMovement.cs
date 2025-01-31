@@ -33,10 +33,10 @@ namespace Assets.Scripts.Instances.Actor
         private int sortingOrder { get => instance.sortingOrder; set => instance.sortingOrder = value; }
         private Quaternion rotation { get => instance.rotation; set => instance.rotation = value; }
         protected Vector2Int previousLocation { get => instance.previousLocation; set => instance.previousLocation = value; }
-        private Vector2Int location { get => instance.location; set => instance.location = value; }
+        private Vector2Int currentLocation { get => instance.currentLocation; set => instance.currentLocation = value; }
         private Vector2Int? nextLocation { get => instance.nextLocation; set => instance.nextLocation = value; }
         private Vector2Int? redirectedLocation { get => instance.redirectedLocation; set => instance.redirectedLocation = value; }
-        private Vector3? destination { get => instance.destination; set => instance.destination = value; }
+        //private Vector3? nextPosition { get => instance.nextPosition; set => instance.nextPosition = value; }
 
 
 
@@ -93,7 +93,7 @@ namespace Assets.Scripts.Instances.Actor
 
                 CheckLocationChanged();
 
-                instance.destination = instance.position;
+                //instance.nextPosition = instance.position;
 
                 yield return Wait.UntilNextFrame();
             }
@@ -110,42 +110,42 @@ namespace Assets.Scripts.Instances.Actor
 
         public IEnumerator MoveTowardDestination()
         {
-            //Check abort conditions
-            if (!destination.HasValue)
-                yield break;
+            // Check abort conditions
+            //if (!nextLocation.HasValue)
+            //    yield break;
 
-            // Before:
+            // Assign nextPosition based on nextLocation
+            var nextPosition = Geometry.GetPositionByLocation(nextLocation.Value);
+
+            // Before movement begins
             Vector3 initialPosition = instance.position;
             Vector3 initialScale = tileScale;
             scale = tileScale;
-            audioManager.Play($"Slide");
+            audioManager.Play("Slide");
             instance.sortingOrder = SortingOrder.Moving;
 
-            // During:
-            while (!instance.hasReachedDestination)
+            // Moving toward nextLocation
+            while (position != nextPosition)
             {
                 sortingOrder = SortingOrder.Moving;
 
-                var delta = instance.destination.Value - instance.position;
+                var delta = nextPosition - instance.position;
                 if (Mathf.Abs(delta.x) > snapDistance)
                 {
-                    var xLockedVector = new Vector3(destination.Value.x, position.y, position.z);
+                    var xLockedVector = new Vector3(nextPosition.x, position.y, position.z);
                     position = Vector2.MoveTowards(position, xLockedVector, moveSpeed);
 
-                    // Snap horizontal boardPosition (if applicable)
                     if (Mathf.Abs(delta.x) <= snapDistance)
                     {
                         position = xLockedVector;
                         rotation = Geometry.Rotation(0, 0, 0);
                     }
-
                 }
                 else if (Mathf.Abs(delta.y) > snapDistance)
                 {
-                    var yLockedVector = new Vector3(position.x, destination.Value.y, position.z);
+                    var yLockedVector = new Vector3(position.x, nextPosition.y, position.z);
                     position = Vector2.MoveTowards(position, yLockedVector, moveSpeed);
 
-                    // Snap vertical boardPosition (if applicable)
                     if (Mathf.Abs(delta.y) <= snapDistance)
                     {
                         position = yLockedVector;
@@ -155,36 +155,30 @@ namespace Assets.Scripts.Instances.Actor
 
                 if (flags.IsSwapping)
                 {
-                    //Calculate velocity
-                    Vector3 velocity = destination.Value - position;
-
-                    //Apply tilt effect
+                    // Calculate velocity
+                    Vector3 velocity = nextPosition - position;
                     ApplyTilt(velocity, 25f, 10f, 5f, Vector3.zero);
                 }
 
                 CheckLocationChanged();
 
-                //Determine whether to snap to destination
-                bool isSnapDistance = Vector2.Distance(position, destination.Value) <= snapDistance;
+                // Determine whether to snap to nextPosition
+                bool isSnapDistance = Vector2.Distance(position, nextPosition) <= snapDistance;
                 if (isSnapDistance)
-                    position = destination.Value;
+                    position = nextPosition;
 
                 yield return Wait.OneTick();
             }
 
-            //After:
+            // After reaching the nextPosition
+            previousLocation = currentLocation; // Track previous currentLocation
+            currentLocation = nextLocation.Value; // Assign new currentLocation
+            nextLocation = null; // Reset nextLocation
+
             flags.IsMoving = false;
             flags.IsSwapping = false;
             scale = tileScale;
-            rotation = Quaternion.identity; //Initialize rotation to default
-            destination = null;
-
-            //TODO: Initialize to above overlay if is attacking or defending...
-            //sortingOrder = SortingOrder.Default;
-
-            //TODO: SpawnActor enemy attacking here so that enemy attacks once they reach their intended destination...
-
-
+            rotation = Quaternion.identity;
         }
 
         private void CheckLocationChanged()
@@ -192,19 +186,20 @@ namespace Assets.Scripts.Instances.Actor
             //Check if currentFps actor is closer to another tile (i.e.: it has moved)
             var closestLocation = Geometry.GetClosestTile(position).location;
 
-            if (location == closestLocation)
+            if (currentLocation == closestLocation)
                 return;
 
-            previousLocation = location;
+            previousLocation = currentLocation;
 
             CheckActorOverlapping(closestLocation);
 
-            //Assign actor's location to closest tile location
-            location = closestLocation;
+            //Assign actor's currentLocation to closest tile currentLocation
+            currentLocation = closestLocation;
 
             //if (isSelectedPlayer)
-            //    onSelectedPlayerLocationChanged?.Invoke(location);
+            //    onSelectedPlayerLocationChanged?.Invoke(currentLocation);
         }
+
 
         private void CheckActorOverlapping(Vector2Int closestLocation)
         {
@@ -213,8 +208,8 @@ namespace Assets.Scripts.Instances.Actor
             if (overlappingActor == null)
                 return;
 
-            overlappingActor.location = location;
-            overlappingActor.destination = Geometry.GetPositionByLocation(overlappingActor.location);
+            overlappingActor.currentLocation = currentLocation;
+            //overlappingActor.nextPosition = Geometry.GetPositionByLocation(overlappingActor.currentLocation);
             overlappingActor.flags.IsMoving = true;
             overlappingActor.flags.IsSwapping = true;
 
@@ -236,7 +231,7 @@ namespace Assets.Scripts.Instances.Actor
                                                 && x != selectedPlayer
                                                 && x.isActive
                                                 && x.isAlive
-                                                && x.location == closestLocation);
+                                                && x.currentLocation == closestLocation);
 
             return overlappingActor;
         }
@@ -246,8 +241,8 @@ namespace Assets.Scripts.Instances.Actor
         {
             Debug.Log($"[HandleOverlappingActor] {instance.name} handling overlap with {other.name}");
 
-            location = other.location;
-            destination = Geometry.GetPositionByLocation(location);
+            nextLocation = other.currentLocation;
+            //nextPosition = Geometry.GetPositionByLocation(nextLocation.Value);
             flags.IsMoving = true;
             flags.IsSwapping = true;
 

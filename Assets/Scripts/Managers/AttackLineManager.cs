@@ -62,7 +62,7 @@ namespace Game.Behaviors
 
         private (Vector2Int, Vector2Int) GetKey(CombatPair pair)
         {
-            return (pair.startActor.location, pair.endActor.location);
+            return (pair.startActor.currentLocation, pair.endActor.currentLocation);
         }
     }
 }

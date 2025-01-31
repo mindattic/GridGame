@@ -41,7 +41,7 @@ public class PortraitInstance : MonoBehaviour
     }
     #endregion
 
-    //Variables
+    //Fields
     //[SerializeField] public ActorInstance actor;
     [SerializeField] public Direction direction;
     [SerializeField] public float startTime;

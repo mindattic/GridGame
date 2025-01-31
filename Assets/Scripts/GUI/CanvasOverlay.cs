@@ -9,7 +9,7 @@ public class CanvasOverlay : MonoBehaviour
     const float duration = 0.25f;
     const float rotateMultiplier = 1.5f;
 
-    //Variables
+    //Fields
     private RectTransform rect;
     private Image backgroundImage;
     private TextMeshProUGUI label;

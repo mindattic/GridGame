@@ -18,7 +18,7 @@
 //    }
 //    #endregion
 
-//    //Variables
+//    //Fields
 //    public TextMeshProUGUI label;
 //    float minAlpha = Opacity.Transparent;
 //    public float maxAlpha = Opacity.Percent70;

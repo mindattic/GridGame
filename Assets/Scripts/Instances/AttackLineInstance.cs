@@ -26,7 +26,7 @@ namespace Game.Instances
         }
         #endregion
 
-        //Variables
+        //Fields
         public float alpha;
         private Vector3 startPosition;
         private Vector3 endPosition;

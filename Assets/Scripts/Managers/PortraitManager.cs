@@ -15,7 +15,7 @@ public class PortraitManager : MonoBehaviour
     #endregion
 
 
-    //Variables
+    //Fields
     [SerializeField] public GameObject portraitPrefab;
     public ActorInstance actor;
     public int sortingOrder;

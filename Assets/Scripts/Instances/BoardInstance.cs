@@ -12,7 +12,7 @@ public class BoardInstance : MonoBehaviour
     protected BoardInstance board => GameManager.instance.board;
     #endregion
 
-    //Variables
+    //Fields
     [SerializeField] public GameObject TilePrefab;
     [HideInInspector] public int columnCount = 6;
     [HideInInspector] public int rowCount = 8;

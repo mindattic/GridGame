@@ -14,7 +14,7 @@ public class DottedLineManager : MonoBehaviour
     protected UnityEvent<Vector2Int> onSelectedPlayerLocationChanged => GameManager.instance.onSelectedPlayerLocationChanged;
 
 
-    //Variables
+    //Fields
     [SerializeField] public GameObject DottedLinePrefab;
 
     public List<DottedLineInstance> dottedLines = new List<DottedLineInstance>();
@@ -38,14 +38,14 @@ public class DottedLineManager : MonoBehaviour
     {
         //ResetColors();
 
-        //var occupiedSegment = dottedLines.FirstOrDefault(x => x.location == newLocation);
+        //var occupiedSegment = dottedLines.FirstOrDefault(x => x.currentLocation == newLocation);
         //if (occupiedSegment == null)
         //    return;
 
         //// Highlight all connected lines
-        //foreach (var location in occupiedSegment.connectedLocations)
+        //foreach (var currentLocation in occupiedSegment.connectedLocations)
         //{
-        //    var connectedSegment = dottedLines.FirstOrDefault(x => x.location == location);
+        //    var connectedSegment = dottedLines.FirstOrDefault(x => x.currentLocation == currentLocation);
         //    if (connectedSegment == null)
         //        continue;
 

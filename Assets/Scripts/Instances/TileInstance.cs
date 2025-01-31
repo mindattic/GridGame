@@ -8,7 +8,7 @@ public class TileInstance : MonoBehaviour
     #region Properties
     protected Vector3 tileScale => GameManager.instance.tileScale;
     protected List<ActorInstance> actors => GameManager.instance.actors;
-    public bool IsOccupied => actors.Any(x => x != null && x.isActive && x.isAlive && x.location == location);
+    public bool IsOccupied => actors.Any(x => x != null && x.isActive && x.isAlive && x.currentLocation == location);
     public string Name
     {
         get => name;
@@ -57,7 +57,7 @@ public class TileInstance : MonoBehaviour
     public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(this.location, other) == 1;
     #endregion
 
-    //Variables
+    //Fields
     public Vector2Int location;
     public SpriteRenderer spriteRenderer;
 

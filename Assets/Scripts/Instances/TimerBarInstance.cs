@@ -12,7 +12,7 @@ public class TimerBarInstance : MonoBehaviour
     protected float snapDistance => GameManager.instance.snapDistance;
     #endregion
 
-    //Variables
+    //Fields
     private bool isRunning = false;
     private const float maxDuration = 6f;
     private float timeRemaining = 6f;
@@ -80,7 +80,7 @@ public class TimerBarInstance : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, initialPosition, slideSpeed);
 
-            //Determine whether to snap to destination
+            //Determine whether to snap
             bool isSnapDistance = Vector2.Distance(transform.position, initialPosition) <= snapDistance;
             if (isSnapDistance)
                 transform.position = initialPosition;
@@ -117,7 +117,7 @@ public class TimerBarInstance : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, offscreenPosition, slideSpeed);
 
-            //Determine whether to snap to destination
+            //Determine whether to snap
             bool isSnapDistance = Vector2.Distance(transform.position, offscreenPosition) <= snapDistance;
             if (isSnapDistance)
                 transform.position = offscreenPosition;

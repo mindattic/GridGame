@@ -37,7 +37,7 @@ namespace Game.Behaviors
 
     public class CameraManager : MonoBehaviour
     {
-        //Variables
+        //Fields
         public RectFloat viewBounds;
         public Game.Models.RectInt screenBounds;
         public CameraWorldSpace world;

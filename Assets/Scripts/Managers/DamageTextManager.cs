@@ -10,7 +10,7 @@ public class DamageTextManager : MonoBehaviour
     protected Canvas canvas3D => GameManager.instance.canvas3D;
     #endregion
 
-    //Variables
+    //Fields
     [SerializeField] public GameObject DamageTextPrefab;
 
     public void Spawn(string text, Vector3 position)

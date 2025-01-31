@@ -41,7 +41,7 @@ public class GhostInstance : MonoBehaviour
     const int Thumbnail = 0;
     const int Frame = 1;
 
-    //Variables
+    //Fields
     public GhostRenderers renderers = new GhostRenderers();
 
     public void Spawn(ActorInstance actor)

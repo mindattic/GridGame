@@ -43,7 +43,7 @@ namespace Game.Manager
 
         public void DisabledAt(Vector2Int location)
         {
-            var actor = actors.Where(x => x.location == location).FirstOrDefault();
+            var actor = actors.Where(x => x.currentLocation == location).FirstOrDefault();
             actor?.gameObject.SetActive(false);
         }
 
