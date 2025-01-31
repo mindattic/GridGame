@@ -128,11 +128,27 @@ public static class EnumExtensions
 }
 
 
+public static class IEnumerableExtensions
+{
+    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> list)
+    {
+        return list.OrderBy(x => Guid.NewGuid());
+    }
+}
+
+public static class IQueryableExtensions
+{
+    public static IQueryable<T> Shuffle<T>(this IQueryable<T> list)
+    {
+        return list.OrderBy(x => Guid.NewGuid());
+    }
+}
+
 public static class ListExtensions
 {
     public static List<T> Shuffle<T>(this List<T> list)
     {
-        return list.OrderBy(x => Guid.NewGuid().ToString("N")).ToList();
+        return list.OrderBy(x => Guid.NewGuid()).ToList();
     }
 
     public static void Set<T>(this List<T> list, T item)

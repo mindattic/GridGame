@@ -59,7 +59,7 @@ public class DottedLineManager : MonoBehaviour
     {
         GameObject prefab = Instantiate(DottedLinePrefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<DottedLineInstance>();
-        instance.name = $"DottedLine_{Guid.NewGuid().ToString("N")}";
+        instance.name = $"DottedLine_{Guid.NewGuid():N}";
         instance.parent = board.transform;
         instance.Spawn(segment, location);
         dottedLines.Add(instance);

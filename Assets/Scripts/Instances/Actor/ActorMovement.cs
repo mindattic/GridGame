@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using static UnityEngine.RuleTile.TilingRuleOutput;
@@ -33,7 +34,12 @@ namespace Assets.Scripts.Instances.Actor
         private Quaternion rotation { get => instance.rotation; set => instance.rotation = value; }
         protected Vector2Int previousLocation { get => instance.previousLocation; set => instance.previousLocation = value; }
         private Vector2Int location { get => instance.location; set => instance.location = value; }
-        private Vector3 destination { get => instance.destination; set => instance.destination = value; }
+        private Vector2Int? nextLocation { get => instance.nextLocation; set => instance.nextLocation = value; }
+        private Vector2Int? redirectedLocation { get => instance.redirectedLocation; set => instance.redirectedLocation = value; }
+        private Vector3? destination { get => instance.destination; set => instance.destination = value; }
+
+
+
         private Vector3 position { get => instance.position; set => instance.position = value; }
         private Vector3 scale { get => instance.scale; set => instance.scale = value; }
 
@@ -104,6 +110,10 @@ namespace Assets.Scripts.Instances.Actor
 
         public IEnumerator MoveTowardDestination()
         {
+            //Check abort conditions
+            if (!destination.HasValue)
+                yield break;
+
             // Before:
             Vector3 initialPosition = instance.position;
             Vector3 initialScale = tileScale;
@@ -116,27 +126,29 @@ namespace Assets.Scripts.Instances.Actor
             {
                 sortingOrder = SortingOrder.Moving;
 
-                var delta = instance.destination - instance.position;
+                var delta = instance.destination.Value - instance.position;
                 if (Mathf.Abs(delta.x) > snapDistance)
                 {
-                    position = Vector2.MoveTowards(position, new Vector3(destination.x, position.y, position.z), moveSpeed);
+                    var xLockedVector = new Vector3(destination.Value.x, position.y, position.z);
+                    position = Vector2.MoveTowards(position, xLockedVector, moveSpeed);
 
                     // Snap horizontal boardPosition (if applicable)
                     if (Mathf.Abs(delta.x) <= snapDistance)
                     {
-                        position = new Vector3(destination.x, position.y, position.z);
+                        position = xLockedVector;
                         rotation = Geometry.Rotation(0, 0, 0);
                     }
 
                 }
                 else if (Mathf.Abs(delta.y) > snapDistance)
                 {
-                    position = Vector2.MoveTowards(position, new Vector3(position.x, destination.y, position.z), moveSpeed);
+                    var yLockedVector = new Vector3(position.x, destination.Value.y, position.z);
+                    position = Vector2.MoveTowards(position, yLockedVector, moveSpeed);
 
                     // Snap vertical boardPosition (if applicable)
                     if (Mathf.Abs(delta.y) <= snapDistance)
                     {
-                        position = new Vector3(position.x, destination.y, position.z);
+                        position = yLockedVector;
                         rotation = Geometry.Rotation(0, 0, 0);
                     }
                 }
@@ -144,7 +156,7 @@ namespace Assets.Scripts.Instances.Actor
                 if (flags.IsSwapping)
                 {
                     //Calculate velocity
-                    Vector3 velocity = destination - position;
+                    Vector3 velocity = destination.Value - position;
 
                     //Apply tilt effect
                     ApplyTilt(velocity, 25f, 10f, 5f, Vector3.zero);
@@ -153,9 +165,9 @@ namespace Assets.Scripts.Instances.Actor
                 CheckLocationChanged();
 
                 //Determine whether to snap to destination
-                bool isSnapDistance = Vector2.Distance(position, destination) <= snapDistance;
+                bool isSnapDistance = Vector2.Distance(position, destination.Value) <= snapDistance;
                 if (isSnapDistance)
-                    position = destination;
+                    position = destination.Value;
 
                 yield return Wait.OneTick();
             }
@@ -165,6 +177,7 @@ namespace Assets.Scripts.Instances.Actor
             flags.IsSwapping = false;
             scale = tileScale;
             rotation = Quaternion.identity; //Initialize rotation to default
+            destination = null;
 
             //TODO: Initialize to above overlay if is attacking or defending...
             //sortingOrder = SortingOrder.Default;

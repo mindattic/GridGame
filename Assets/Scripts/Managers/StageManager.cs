@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -116,7 +117,9 @@ public class StageManager : MonoBehaviour
         var instance = prefab.GetComponent<ActorInstance>();
         instance.transform.parent = board.transform;
         instance.character = character;
-        instance.name = character.ToString();
+        instance.name = $"{character}_{Guid.NewGuid():N}";
+
+
         instance.team = team;
         instance.stats = dataManager.GetStats(character);
         instance.transform.localScale = GameManager.instance.tileScale;

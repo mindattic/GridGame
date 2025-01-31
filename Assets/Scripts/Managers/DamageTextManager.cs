@@ -17,7 +17,7 @@ public class DamageTextManager : MonoBehaviour
     {
         var prefab = Instantiate(DamageTextPrefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<DamageTextInstance>();
-        instance.name = $"DamageText_{Guid.NewGuid().ToString("N")}";
+        instance.name = $"DamageText_{Guid.NewGuid():N}";
         instance.parent = canvas3D.transform;
         instance.Spawn(text, position);
     }

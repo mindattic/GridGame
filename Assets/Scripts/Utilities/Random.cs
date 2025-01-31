@@ -127,13 +127,13 @@ static class Random
 
 
 
-    public static ActorInstance Player => players.Where(x => x.isActive && x.isAlive).OrderBy(x => Guid.NewGuid().ToString("N")).First();
+    public static ActorInstance Player => players.Where(x => x.isActive && x.isAlive).Shuffle().First();
 
-    public static ActorInstance Enemy => enemies.Where(x => x.isActive && x.isAlive).OrderBy(x => Guid.NewGuid().ToString("N")).First();
+    public static ActorInstance Enemy => enemies.Where(x => x.isActive && x.isAlive).Shuffle().First();
 
-    public static TileInstance Tile => tiles.OrderBy(x => Guid.NewGuid().ToString("N")).First();
+    public static TileInstance Tile => tiles.Shuffle().First();
 
-    public static TileInstance UnoccupiedTile => tiles.Where(x => !x.IsOccupied).OrderBy(x => Guid.NewGuid().ToString("N")).First();
+    public static TileInstance UnoccupiedTile => tiles.Where(x => !x.IsOccupied).Shuffle().First();
 
     public static Vector2Int Location => new Vector2Int(Int(1, columnCount), Int(1, rowCount));
 

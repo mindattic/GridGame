@@ -353,7 +353,7 @@ public class DebugWindow : EditorWindow
         foreach (var x in gameManager.players.OrderBy(x => x.name))
         {
             GUILayout.BeginHorizontal();
-            string stats = $"{x.name}: HP: {x.stats.HP}/{x.stats.MaxHP}, AP: {x.stats.AP}/{x.stats.MaxAP}, IsAngry? {x.flags.isAngry}";
+            string stats = $"{x.name}, IsAlive? {x.isAlive}, IsActive? {x.isActive}";
             GUILayout.Label(stats, GUILayout.Width(Screen.width));
             GUILayout.EndHorizontal();
         }
@@ -363,7 +363,7 @@ public class DebugWindow : EditorWindow
         foreach (var x in gameManager.enemies.OrderBy(x => x.name))
         {
             GUILayout.BeginHorizontal();
-            string stats = $"{x.name}: HP: {x.stats.HP}/{x.stats.MaxHP}, AP: {x.stats.AP}/{x.stats.MaxAP}, IsAngry? {x.flags.isAngry}";
+            string stats = $"{x.name}, IsAlive? {x.isAlive}, IsActive? {x.isActive}";
             GUILayout.Label(stats, GUILayout.Width(Screen.width));
             GUILayout.EndHorizontal();
         }

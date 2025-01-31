@@ -9,7 +9,7 @@ public class CoinManager : MonoBehaviour
     {
         var prefab = Instantiate(CoinPrefab, Vector2.zero, Quaternion.identity);
         var instance = prefab.GetComponent<CoinInstance>();
-        instance.name = $"Coin_{Guid.NewGuid().ToString("N")}";
+        instance.name = $"Coin_{Guid.NewGuid():N}";
         instance.Spawn(position);
     }
 

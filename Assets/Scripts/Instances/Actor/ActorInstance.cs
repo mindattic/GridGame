@@ -39,26 +39,14 @@ public class ActorInstance : MonoBehaviour
     //Variables
     public Character character;
 
-
-
-
-   
     public Vector2Int previousLocation;
-    public Vector3 previousDestination;
-
     public Vector2Int location;
-    public Vector3 destination;
-
     public Vector2Int? nextLocation;
-    public Vector3? nextDestination;
+    public Vector2Int? redirectedLocation;
 
+    public Vector3? destination;
 
-
-    public Vector2Int? redirectedLocation; 
-    public Vector3? redirectedDestination;  
-
-
-
+  
     public Team team = Team.Neutral;
     public int spawnDelay = -1;
     //public int turnDelay = 0;
@@ -103,7 +91,9 @@ public class ActorInstance : MonoBehaviour
         wiggleSpeed = tileSize * 24f;
         wiggleAmplitude = 15f;  // Amplitude (difference from -45 degrees)
 
-        redirectedDestination = board.NowherePosition;
+        nextLocation = null;
+        redirectedLocation = null;
+        destination = null;
 
         //Event bindings
         OnOverlappingActorDetected += (other) =>
@@ -254,12 +244,8 @@ public class ActorInstance : MonoBehaviour
         previousLocation = startLocation;
         location = startLocation;
 
-        previousDestination = Geometry.GetPositionByLocation(location);
         position = Geometry.GetPositionByLocation(location);
     
-        destination = position;
-
-
         //sprites = resourceManager.ActorSprite(this.character.ToString());
         thumbnail.Generate();
 
@@ -488,8 +474,9 @@ public class ActorInstance : MonoBehaviour
 
         //After:       
         location = board.NowhereLocation;
-        destination = board.NowherePosition;
-        position = destination;
+        position = board.NowherePosition;
+        destination = null;
+        
         gameObject.SetActive(false);
     }
 
