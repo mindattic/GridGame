@@ -90,12 +90,12 @@ public class DebugManager : MonoBehaviour
                 if (actor1 == null || actor2 == null || actor1.Equals(actor2) || !actor1.isActive || !actor1.isAlive || !actor2.isActive || !actor2.isAlive)
                     continue;
 
-                if (actor1.IsSameColumn(actor2.currentLocation))
+                if (actor1.IsSameColumn(actor2.location))
                 {
                     var pair = new CombatPair(actor1, actor2, Axis.Vertical);
                     alignedPairs.Add(pair);
                 }
-                else if (actor1.IsSameRow(actor2.currentLocation))
+                else if (actor1.IsSameRow(actor2.location))
                 {
                     var pair = new CombatPair(actor1, actor2, Axis.Horizontal);
                     alignedPairs.Add(pair);
@@ -133,14 +133,14 @@ public class DebugManager : MonoBehaviour
         var enemy5 = enemies.Skip(4).Take(1).FirstOrDefault();
         var enemy6 = enemies.Skip(5).Take(1).FirstOrDefault();
 
-        actors.FirstOrDefault(x => x.currentLocation == new Vector2Int(3, 1))?.Teleport(new Vector2Int(1, 1));
-        actors.FirstOrDefault(x => x.currentLocation == new Vector2Int(3, 2))?.Teleport(new Vector2Int(1, 2));
-        actors.FirstOrDefault(x => x.currentLocation == new Vector2Int(3, 3))?.Teleport(new Vector2Int(1, 3));
-        actors.FirstOrDefault(x => x.currentLocation == new Vector2Int(3, 4))?.Teleport(new Vector2Int(1, 4));
-        actors.FirstOrDefault(x => x.currentLocation == new Vector2Int(3, 5))?.Teleport(new Vector2Int(1, 5));
-        actors.FirstOrDefault(x => x.currentLocation == new Vector2Int(3, 6))?.Teleport(new Vector2Int(1, 6));
-        actors.FirstOrDefault(x => x.currentLocation == new Vector2Int(3, 7))?.Teleport(new Vector2Int(1, 7));
-        actors.FirstOrDefault(x => x.currentLocation == new Vector2Int(3, 8))?.Teleport(new Vector2Int(1, 8));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 1))?.Teleport(new Vector2Int(1, 1));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 2))?.Teleport(new Vector2Int(1, 2));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 3))?.Teleport(new Vector2Int(1, 3));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 4))?.Teleport(new Vector2Int(1, 4));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 5))?.Teleport(new Vector2Int(1, 5));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 6))?.Teleport(new Vector2Int(1, 6));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 7))?.Teleport(new Vector2Int(1, 7));
+        actors.FirstOrDefault(x => x.location == new Vector2Int(3, 8))?.Teleport(new Vector2Int(1, 8));
 
         paladin.Teleport(new Vector2Int(3, 1));
         enemy1?.Teleport(new Vector2Int(3, 2));
@@ -165,12 +165,12 @@ public class DebugManager : MonoBehaviour
                     || !actor2.isActive || !actor2.isAlive)
                     continue;
 
-                if (actor1.IsSameColumn(actor2.currentLocation))
+                if (actor1.IsSameColumn(actor2.location))
                 {
                     var pair = new CombatPair(actor1, actor2, Axis.Vertical);
                     alignedPairs.Add(pair);
                 }
-                else if (actor1.IsSameRow(actor2.currentLocation))
+                else if (actor1.IsSameRow(actor2.location))
                 {
                     var pair = new CombatPair(actor1, actor2, Axis.Horizontal);
                     alignedPairs.Add(pair);

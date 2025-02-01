@@ -34,18 +34,18 @@ public class ActorInstance : MonoBehaviour
     protected bool hasSelectedPlayer => selectedPlayer != null;
     #endregion
 
-    public Action<ActorInstance> OnOverlappingActorDetected;
+    public Action<ActorInstance> OnOverlapDetected;
 
     //Fields
     public Character character;
 
     public Vector2Int previousLocation;
-    public Vector2Int currentLocation;
-    public Vector2Int? nextLocation;
+    public Vector2Int location;
+    //public Vector2Int? nextLocation;
     //public Vector3? nextPosition;
 
 
-    public Vector2Int? redirectedLocation;
+    //public Vector2Int? redirectedLocation;
 
     
   
@@ -93,28 +93,28 @@ public class ActorInstance : MonoBehaviour
         wiggleSpeed = tileSize * 24f;
         wiggleAmplitude = 15f;  // Amplitude (difference from -45 degrees)
 
-        nextLocation = null;
-        redirectedLocation = null;
+        //nextLocation = null;
+        //redirectedLocation = null;
         //nextPosition = null;
 
         //Event bindings
-        OnOverlappingActorDetected += (other) =>
+        OnOverlapDetected += (other) =>
         {
-            //Debug.Log($"[OnOverlappingActorDetected] {name} received event from {other.name}");
-            move.HandleOverlappingActor(other);
+            //Debug.Log($"[OnOverlapDetected] {name} received event from {other.name}");
+            move.HandleOnOverlapDetected(other);
         };
     }
 
     //Helpers
-    public TileInstance currentTile => board.tileMap.GetTile(currentLocation); //tiles.First(x => x.currentLocation.Equals(currentLocation));
+    public TileInstance currentTile => board.tileMap.GetTile(location); //tiles.First(x => x.location.Equals(location));
     public bool isPlayer => team.Equals(Team.Player);
     public bool isEnemy => team.Equals(Team.Enemy);
     public bool isFocusedPlayer => hasFocusedActor && Equals(focusedActor);
     public bool isSelectedPlayer => hasSelectedPlayer && Equals(selectedPlayer);
-    public bool onNorthEdge => currentLocation.y == 1;
-    public bool onEastEdge => currentLocation.x == board.columnCount;
-    public bool onSouthEdge => currentLocation.y == board.rowCount;
-    public bool onWestEdge => currentLocation.x == 1;
+    public bool onNorthEdge => location.y == 1;
+    public bool onEastEdge => location.x == board.columnCount;
+    public bool onSouthEdge => location.y == board.rowCount;
+    public bool onWestEdge => location.x == 1;
     public bool isActive => isActiveAndEnabled;
     public bool isAlive => isActive && stats.HP > 0;
     public bool isDying => isActive && stats.HP < 1;
@@ -200,26 +200,26 @@ public class ActorInstance : MonoBehaviour
         }
     }
 
-    public bool IsSameColumn(Vector2Int other) => currentLocation.x == other.x;
-    public bool IsSameRow(Vector2Int other) => currentLocation.y == other.y;
-    public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(currentLocation, other).Equals(1);
-    public bool IsNorthOf(Vector2Int other) => IsSameColumn(other) && currentLocation.y == other.y - 1;
-    public bool IsEastOf(Vector2Int other) => IsSameRow(other) && currentLocation.x == other.x + 1;
-    public bool IsSouthOf(Vector2Int other) => IsSameColumn(other) && currentLocation.y == other.y + 1;
-    public bool IsWestOf(Vector2Int other) => IsSameRow(other) && currentLocation.x == other.x - 1;
-    public bool IsNorthWestOf(Vector2Int other) => currentLocation.x == other.x - 1 && currentLocation.y == other.y - 1;
-    public bool IsNorthEastOf(Vector2Int other) => currentLocation.x == other.x + 1 && currentLocation.y == other.y - 1;
-    public bool IsSouthWestOf(Vector2Int other) => currentLocation.x == other.x - 1 && currentLocation.y == other.y + 1;
-    public bool IsSouthEastOf(Vector2Int other) => currentLocation.x == other.x + 1 && currentLocation.y == other.y + 1;
+    public bool IsSameColumn(Vector2Int other) => location.x == other.x;
+    public bool IsSameRow(Vector2Int other) => location.y == other.y;
+    public bool IsAdjacentTo(Vector2Int other) => (IsSameColumn(other) || IsSameRow(other)) && Vector2Int.Distance(location, other).Equals(1);
+    public bool IsNorthOf(Vector2Int other) => IsSameColumn(other) && location.y == other.y - 1;
+    public bool IsEastOf(Vector2Int other) => IsSameRow(other) && location.x == other.x + 1;
+    public bool IsSouthOf(Vector2Int other) => IsSameColumn(other) && location.y == other.y + 1;
+    public bool IsWestOf(Vector2Int other) => IsSameRow(other) && location.x == other.x - 1;
+    public bool IsNorthWestOf(Vector2Int other) => location.x == other.x - 1 && location.y == other.y - 1;
+    public bool IsNorthEastOf(Vector2Int other) => location.x == other.x + 1 && location.y == other.y - 1;
+    public bool IsSouthWestOf(Vector2Int other) => location.x == other.x - 1 && location.y == other.y + 1;
+    public bool IsSouthEastOf(Vector2Int other) => location.x == other.x + 1 && location.y == other.y + 1;
 
 
     public Direction GetDirectionTo(ActorInstance other, bool mustBeAdjacent = false)
     {
-        if (mustBeAdjacent && !IsAdjacentTo(other.currentLocation))
+        if (mustBeAdjacent && !IsAdjacentTo(other.location))
             return Direction.None;
 
-        var deltaX = currentLocation.x - other.currentLocation.x;
-        var deltaY = currentLocation.y - other.currentLocation.y;
+        var deltaX = location.x - other.location.x;
+        var deltaY = location.y - other.location.y;
 
         // Handle simple cardinal directions
         if (deltaX == 0 && deltaY > 0) return Direction.North;
@@ -243,9 +243,9 @@ public class ActorInstance : MonoBehaviour
         gameObject.SetActive(true);
 
         previousLocation = startLocation;
-        currentLocation = startLocation;
+        location = startLocation;
 
-        position = Geometry.GetPositionByLocation(currentLocation);
+        position = Geometry.GetPositionByLocation(location);
     
         //sprites = resourceManager.ActorSprite(this.character.ToString());
         thumbnail.Generate();
@@ -346,21 +346,21 @@ public class ActorInstance : MonoBehaviour
         {
             case AttackStrategy.AttackClosest:
                 var targetPlayer = players.Where(x => x.isActive && x.isAlive).OrderBy(x => Vector3.Distance(x.position, position)).FirstOrDefault();
-                targetLocation = targetPlayer.currentLocation;
+                targetLocation = targetPlayer.location;
                 break;
 
             case AttackStrategy.AttackWeakest:
                 targetPlayer = players.Where(x => x.isActive && x.isAlive).OrderBy(x => x.stats.HP).FirstOrDefault();
-                targetLocation = targetPlayer.currentLocation;
+                targetLocation = targetPlayer.location;
                 break;
 
             case AttackStrategy.AttackStrongest:
                 targetPlayer = players.Where(x => x.isActive && x.isAlive).OrderByDescending(x => x.stats.HP).FirstOrDefault();
-                targetLocation = targetPlayer.currentLocation;
+                targetLocation = targetPlayer.location;
                 break;
 
             case AttackStrategy.AttackRandom:
-                targetLocation = Random.Player.currentLocation;
+                targetLocation = Random.Player.location;
                 break;
 
             case AttackStrategy.MoveAnywhere:
@@ -368,7 +368,7 @@ public class ActorInstance : MonoBehaviour
                 break;
         }
 
-        nextLocation = Geometry.GetClosestAttackLocation(this.currentLocation, targetLocation);
+        location = Geometry.GetClosestAttackLocation(location, targetLocation);
         //nextPosition = Geometry.GetPositionByLocation(nextLocation.Value);
     }
 
@@ -475,7 +475,7 @@ public class ActorInstance : MonoBehaviour
         }
 
         //After:       
-        currentLocation = board.NowhereLocation;
+        location = board.NowhereLocation;
         position = board.NowherePosition;
         //nextPosition = null;
         
@@ -505,8 +505,8 @@ public class ActorInstance : MonoBehaviour
     public void Teleport(Vector2Int location)
     {
 
-        this.currentLocation = location;
-        transform.position = Geometry.GetPositionByLocation(this.currentLocation);
+        this.location = location;
+        transform.position = Geometry.GetPositionByLocation(this.location);
     }
 
 
@@ -786,7 +786,7 @@ public class ActorInstance : MonoBehaviour
 
     //    audioManager.Start($"Move{Random.Int(1, 6)}");
 
-    //    var overlappingActor = FindOverlappingActor(closestTile);
+    //    var overlappingActor = GetOverlappingActor(closestTile);
 
     //    //Assign overlapping actors boardLocation to currentFps actor's boardLocation
     //    if (overlappingActor != null)
@@ -1017,6 +1017,6 @@ public class ActorInstance : MonoBehaviour
 
     private void OnDestroy()
     {
-        OnOverlappingActorDetected -= move.HandleOverlappingActor;
+        OnOverlapDetected -= move.HandleOnOverlapDetected;
     }
 }

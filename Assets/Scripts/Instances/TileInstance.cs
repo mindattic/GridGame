@@ -8,7 +8,7 @@ public class TileInstance : MonoBehaviour
     #region Properties
     protected Vector3 tileScale => GameManager.instance.tileScale;
     protected List<ActorInstance> actors => GameManager.instance.actors;
-    public bool IsOccupied => actors.Any(x => x != null && x.isActive && x.isAlive && x.currentLocation == location);
+    public bool IsOccupied => actors.Any(x => x != null && x.isActive && x.isAlive && x.location == location);
     public string Name
     {
         get => name;

@@ -20,7 +20,7 @@ public class DottedLineInstance : MonoBehaviour
     SpriteRenderer spriteRenderer;
     public Vector2Int location;
     public DottedLineSegment segment;
-    //public bool isOccupied => hasSelectedPlayer && selectedPlayer.currentLocation == currentLocation;
+    //public bool isOccupied => hasSelectedPlayer && selectedPlayer.location == location;
 
     public Vector2Int top => location + new Vector2Int(0, -1);
     public Vector2Int right => location + new Vector2Int(1, 0);
@@ -91,7 +91,7 @@ public class DottedLineInstance : MonoBehaviour
         var arrow = resourceManager.Sprite("DottedLineArrow").Value;
 
         connectedLocations.Clear(); // Ensure connectedLocations are reset
-        connectedLocations.Add(location); // SpawnActor self-currentLocation to connectedLocations
+        connectedLocations.Add(location); // SpawnActor self-location to connectedLocations
 
         switch (this.segment)
         {

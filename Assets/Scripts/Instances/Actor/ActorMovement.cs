@@ -33,12 +33,10 @@ namespace Assets.Scripts.Instances.Actor
         private int sortingOrder { get => instance.sortingOrder; set => instance.sortingOrder = value; }
         private Quaternion rotation { get => instance.rotation; set => instance.rotation = value; }
         protected Vector2Int previousLocation { get => instance.previousLocation; set => instance.previousLocation = value; }
-        private Vector2Int currentLocation { get => instance.currentLocation; set => instance.currentLocation = value; }
-        private Vector2Int? nextLocation { get => instance.nextLocation; set => instance.nextLocation = value; }
-        private Vector2Int? redirectedLocation { get => instance.redirectedLocation; set => instance.redirectedLocation = value; }
+        private Vector2Int location { get => instance.location; set => instance.location = value; }
+        //private Vector2Int? nextLocation { get => instance.nextLocation; set => instance.nextLocation = value; }
+        //private Vector2Int? redirectedLocation { get => instance.redirectedLocation; set => instance.redirectedLocation = value; }
         //private Vector3? nextPosition { get => instance.nextPosition; set => instance.nextPosition = value; }
-
-
 
         private Vector3 position { get => instance.position; set => instance.position = value; }
         private Vector3 scale { get => instance.scale; set => instance.scale = value; }
@@ -48,217 +46,203 @@ namespace Assets.Scripts.Instances.Actor
         protected bool isSelectedPlayer => hasSelectedPlayer && selectedPlayer == instance;
         protected UnityEvent<Vector2Int> onSelectedPlayerLocationChanged => GameManager.instance.onSelectedPlayerLocationChanged;
 
-  
         private ActorInstance instance;
 
-        
         public void Initialize(ActorInstance parentInstance)
         {
             this.instance = parentInstance;
-
         }
 
+        /// <summary>
+        /// Moves the actor toward the cursor while the actor is focused or selected.
+        /// If a swap is initiated (via overlap), the movement exits immediately.
+        /// </summary>
         public IEnumerator MoveTowardCursor()
         {
-            // Before:
-            flags.IsMoving = true;
+            // Before: set a high sorting order.
             instance.sortingOrder = SortingOrder.Max;
-
             Vector3 prevPosition = instance.position; // Store the initial position
-            float tiltFactor = 25f; // How much tilt to apply based on movement
+            float tiltFactor = 25f;   // How much tilt to apply based on movement
             float rotationSpeed = 10f; // Speed at which the tilt adjusts
-            float resetSpeed = 5f; // Speed at which the rotation resets
-            var baseRotation = Vector3.zero;
+            float resetSpeed = 5f;     // Speed at which the rotation resets
 
-            // During:
-            while (instance.isFocusedPlayer || instance.isSelectedPlayer)
+            // During: while the actor is focused or selected and not swapping.
+            while ((instance.isFocusedPlayer || instance.isSelectedPlayer) && !flags.IsSwapping)
             {
+                flags.IsMoving = true;
                 instance.sortingOrder = SortingOrder.Max;
 
-                var cursorPosition = mousePosition3D + mouseOffset;
+                // Calculate cursor position and clamp within board bounds.
+                Vector3 cursorPosition = mousePosition3D + mouseOffset;
                 cursorPosition.x = Mathf.Clamp(cursorPosition.x, board.bounds.Left, board.bounds.Right);
                 cursorPosition.y = Mathf.Clamp(cursorPosition.y, board.bounds.Bottom, board.bounds.Top);
 
-                //Snap selected player to cursor
+                // Snap the actor to the cursor.
                 instance.position = cursorPosition;
 
-                //Calculate velocity
+                // Calculate velocity and apply tilt effect.
                 Vector3 velocity = instance.position - prevPosition;
+                ApplyTilt(velocity, tiltFactor, rotationSpeed, resetSpeed, Vector3.zero);
 
-                //Apply tilt effect
-                ApplyTilt(velocity, tiltFactor, rotationSpeed, resetSpeed, baseRotation);
-
-                // Update previous position for next frame
+                // Update the previous position.
                 prevPosition = instance.position;
 
+                // Update the actor's grid location.
                 CheckLocationChanged();
-
-                //instance.nextPosition = instance.position;
 
                 yield return Wait.UntilNextFrame();
             }
 
-            // After:
+            // After: clean up.
             flags.IsMoving = false;
-
-            //TODO: Initialize to above overlay if is attacking...
-            //sortingOrder = SortingOrder.Default;
-
-            // Initialize rotation at the end
-            instance.transform.localRotation = Quaternion.Euler(baseRotation);
+            instance.transform.localRotation = Quaternion.Euler(Vector3.zero);
         }
 
+        /// <summary>
+        /// Moves the actor toward its grid destination using right-angle (non-diagonal) movement.
+        /// </summary>
         public IEnumerator MoveTowardDestination()
         {
-            // Check abort conditions
-            //if (!nextLocation.HasValue)
-            //    yield break;
-
-            // Assign nextPosition based on nextLocation
-            var nextPosition = Geometry.GetPositionByLocation(nextLocation.Value);
-
-            // Before movement begins
-            Vector3 initialPosition = instance.position;
-            Vector3 initialScale = tileScale;
-            scale = tileScale;
+            // Before: movement begins
             audioManager.Play("Slide");
             instance.sortingOrder = SortingOrder.Moving;
+            float moveSpeed = 7f;
+            float snapThreshold = 0.1f;
 
-            // Moving toward nextLocation
-            while (position != nextPosition)
+            // Determine the destination based on the actor's grid location.
+            Vector3 destination = Geometry.GetPositionByLocation(location);
+
+            // --- Horizontal Movement ---
+            if (Mathf.Abs(position.x - destination.x) > snapThreshold)
             {
-                sortingOrder = SortingOrder.Moving;
-
-                var delta = nextPosition - instance.position;
-                if (Mathf.Abs(delta.x) > snapDistance)
+                // Target position for horizontal movement.
+                Vector3 horizontalTarget = new Vector3(destination.x, position.y, position.z);
+                while (Mathf.Abs(position.x - destination.x) > snapThreshold)
                 {
-                    var xLockedVector = new Vector3(nextPosition.x, position.y, position.z);
-                    position = Vector2.MoveTowards(position, xLockedVector, moveSpeed);
+                    flags.IsMoving = true;
+                    sortingOrder = SortingOrder.Moving;
+                    position = Vector3.MoveTowards(position, horizontalTarget, moveSpeed * Time.deltaTime);
 
-                    if (Mathf.Abs(delta.x) <= snapDistance)
+                    if (flags.IsSwapping)
                     {
-                        position = xLockedVector;
-                        rotation = Geometry.Rotation(0, 0, 0);
+                        // Apply tilt effect along the horizontal axis.
+                        Vector3 velocity = horizontalTarget - position;
+                        ApplyTilt(velocity, 25f, 10f, 5f, Vector3.zero);
                     }
-                }
-                else if (Mathf.Abs(delta.y) > snapDistance)
-                {
-                    var yLockedVector = new Vector3(position.x, nextPosition.y, position.z);
-                    position = Vector2.MoveTowards(position, yLockedVector, moveSpeed);
 
-                    if (Mathf.Abs(delta.y) <= snapDistance)
-                    {
-                        position = yLockedVector;
-                        rotation = Geometry.Rotation(0, 0, 0);
-                    }
+                    CheckLocationChanged();
+                    yield return Wait.UntilNextFrame();
                 }
 
-                if (flags.IsSwapping)
-                {
-                    // Calculate velocity
-                    Vector3 velocity = nextPosition - position;
-                    ApplyTilt(velocity, 25f, 10f, 5f, Vector3.zero);
-                }
-
-                CheckLocationChanged();
-
-                // Determine whether to snap to nextPosition
-                bool isSnapDistance = Vector2.Distance(position, nextPosition) <= snapDistance;
-                if (isSnapDistance)
-                    position = nextPosition;
-
-                yield return Wait.OneTick();
+                // Snap X coordinate into place.
+                Vector3 tempPos = position;
+                tempPos.x = destination.x;
+                position = tempPos;
             }
 
-            // After reaching the nextPosition
-            previousLocation = currentLocation; // Track previous currentLocation
-            currentLocation = nextLocation.Value; // Assign new currentLocation
-            nextLocation = null; // Reset nextLocation
+            // --- Vertical Movement ---
+            if (Mathf.Abs(position.y - destination.y) > snapThreshold)
+            {
+                // Target position for vertical movement.
+                Vector3 verticalTarget = new Vector3(position.x, destination.y, position.z);
+                while (Mathf.Abs(position.y - destination.y) > snapThreshold)
+                {
+                    flags.IsMoving = true;
+                    sortingOrder = SortingOrder.Moving;
+                    position = Vector3.MoveTowards(position, verticalTarget, moveSpeed * Time.deltaTime);
 
+                    if (flags.IsSwapping)
+                    {
+                        // Apply tilt effect along the vertical axis.
+                        Vector3 velocity = verticalTarget - position;
+                        ApplyTilt(velocity, 25f, 10f, 5f, Vector3.zero);
+                    }
+
+                    CheckLocationChanged();
+                    yield return Wait.UntilNextFrame();
+                }
+
+                // Snap Y coordinate into place.
+                Vector3 tempPos = position;
+                tempPos.y = destination.y;
+                position = tempPos;
+            }
+
+            // After: finished moving.
             flags.IsMoving = false;
             flags.IsSwapping = false;
             scale = tileScale;
-            rotation = Quaternion.identity;
+            rotation = Geometry.Rotation(0, 0, 0);
         }
 
+        /// <summary>
+        /// Checks if the actor's current position has moved to a new grid tile.
+        /// If so, it either updates the logical location or, if the target tile is already occupied,
+        /// triggers an overlap event so that a swap can occur.
+        /// </summary>
         private void CheckLocationChanged()
         {
-            //Check if currentFps actor is closer to another tile (i.e.: it has moved)
-            var closestLocation = Geometry.GetClosestTile(position).location;
-
-            if (currentLocation == closestLocation)
+            // Do not update the grid location if a swap is in progress.
+            if (flags.IsSwapping)
                 return;
 
-            previousLocation = currentLocation;
+            var closestTile = Geometry.GetClosestTile(position);
+            Vector2Int closestLocation = closestTile.location;
 
-            CheckActorOverlapping(closestLocation);
+            if (location != closestLocation)
+            {
+                // Check if any other active and alive actor (except this one) already occupies the tile.
+                ActorInstance overlappingActor = actors.FirstOrDefault(x =>
+                    x != null &&
+                    x != instance &&
+                    x.isActive &&
+                    x.isAlive &&
+                    x.location == closestLocation);
 
-            //Assign actor's currentLocation to closest tile currentLocation
-            currentLocation = closestLocation;
+                if (overlappingActor != null)
+                {
+                    // If the overlapping actor is not already swapping, trigger its overlap event.
+                    if (!overlappingActor.flags.IsSwapping)
+                    {
+                        overlappingActor.OnOverlapDetected.Invoke(instance);
+                    }
+                    // Do not update location until the swap resolves.
+                    return;
+                }
 
-            //if (isSelectedPlayer)
-            //    onSelectedPlayerLocationChanged?.Invoke(currentLocation);
+                // Otherwise, update the grid location.
+                previousLocation = location;
+                location = closestLocation;
+            }
         }
 
-
-        private void CheckActorOverlapping(Vector2Int closestLocation)
+        /// <summary>
+        /// Called when an overlap with another actor is detected.
+        /// Initiates a swap movement if not already in progress.
+        /// </summary>
+        public void HandleOnOverlapDetected(ActorInstance other)
         {
-            //Determine if two actors are overlapping the same boardLocation
-            var overlappingActor = FindOverlappingActor(closestLocation);
-            if (overlappingActor == null)
+            // If already swapping, ignore additional overlap events.
+            if (flags.IsSwapping)
                 return;
 
-            overlappingActor.currentLocation = currentLocation;
-            //overlappingActor.nextPosition = Geometry.GetPositionByLocation(overlappingActor.currentLocation);
-            overlappingActor.flags.IsMoving = true;
-            overlappingActor.flags.IsSwapping = true;
-
-            Debug.Log($"[CheckActorOverlapping] Invoking event on {overlappingActor.name} from {instance.name}");
-
-            // Raise the event so the overlapping actor can respond immediately
-            overlappingActor.OnOverlappingActorDetected?.Invoke(instance);
-
-            //if (isActive && isAlive)
-            //    instance.StartCoroutine(overlappingActor.move.MoveTowardDestination());
-        }
-
-        private ActorInstance FindOverlappingActor(Vector2Int closestLocation)
-        {
-            //Determine if two actors are overlapping the same boardLocation
-            var overlappingActor = actors.FirstOrDefault(x => x != null
-                                                && x != instance
-                                                && x != focusedActor
-                                                && x != selectedPlayer
-                                                && x.isActive
-                                                && x.isAlive
-                                                && x.currentLocation == closestLocation);
-
-            return overlappingActor;
-        }
-
-
-        public void HandleOverlappingActor(ActorInstance other)
-        {
-            Debug.Log($"[HandleOverlappingActor] {instance.name} handling overlap with {other.name}");
-
-            nextLocation = other.currentLocation;
-            //nextPosition = Geometry.GetPositionByLocation(nextLocation.Value);
-            flags.IsMoving = true;
+            // Snap to the overlapping actor's location and start swapping.
+            location = other.location;
             flags.IsSwapping = true;
-
-            if (isActive && isAlive)
-                instance.StartCoroutine(this.MoveTowardDestination());
+            instance.StartCoroutine(MoveTowardDestination());
         }
 
-
+        /// <summary>
+        /// Applies a tilt effect to the actor based on its movement velocity.
+        /// </summary>
         public void ApplyTilt(Vector3 velocity, float tiltFactor, float rotationSpeed, float resetSpeed, Vector3 baseRotation)
         {
-            if (velocity.magnitude > 0.01f) //Apply tilt if there is noticeable movement
+            if (velocity.magnitude > 0.01f) // Only apply tilt if there's noticeable movement.
             {
-                // Determine if the movement is primarily vertical or horizontal
+                // Determine whether the movement is primarily vertical or horizontal.
                 bool isMovingVertical = Mathf.Abs(velocity.y) > Mathf.Abs(velocity.x);
                 float velocityFactor = isMovingVertical ? velocity.y : velocity.x;
-                float tiltZ = velocityFactor * tiltFactor; // Tilt on Z-axis based on velocity
+                float tiltZ = velocityFactor * tiltFactor;
                 instance.transform.localRotation = Quaternion.Slerp(
                     instance.transform.localRotation,
                     Quaternion.Euler(0, 0, tiltZ),
@@ -267,7 +251,7 @@ namespace Assets.Scripts.Instances.Actor
             }
             else
             {
-                //Initialize rotation smoothly when velocity is minimal
+                // Smoothly reset the rotation when the movement slows/stops.
                 instance.transform.localRotation = Quaternion.Slerp(
                     instance.transform.localRotation,
                     Quaternion.Euler(baseRotation),
@@ -275,10 +259,5 @@ namespace Assets.Scripts.Instances.Actor
                 );
             }
         }
-
-
-
-
-
     }
 }

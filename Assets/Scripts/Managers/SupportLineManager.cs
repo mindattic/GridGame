@@ -50,6 +50,6 @@ public class SupportLineManager : MonoBehaviour
 
     private (Vector2Int, Vector2Int) GetKey(CombatPair pair)
     {
-        return (pair.actor1.currentLocation, pair.actor2.currentLocation);
+        return (pair.actor1.location, pair.actor2.location);
     }
 }

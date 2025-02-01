@@ -158,21 +158,21 @@ public class CombatManager : MonoBehaviour
         return actor1 != null && actor2 != null && actor1 != actor2 &&
                actor1.isActive && actor1.isAlive &&
                actor2.isActive && actor2.isAlive &&
-               (actor1.IsSameColumn(actor2.currentLocation) || actor1.IsSameRow(actor2.currentLocation));
+               (actor1.IsSameColumn(actor2.location) || actor1.IsSameRow(actor2.location));
     }
 
     private CombatPair CreateAlignedPair(ActorInstance actor1, ActorInstance actor2)
     {
         //DEBUG: This screws up the sortingOrder so that actors participating in additional attacks might get sorted behind board overlay too early...
         // Ensure actor1 is always positioned "before" actor2 based on left-to-right, top-to-bottom sorting
-        //if (actor1.currentLocation.y > actor2.currentLocation.y ||
-        //    (actor1.currentLocation.y == actor2.currentLocation.y && actor1.currentLocation.x > actor2.currentLocation.x))
+        //if (actor1.location.y > actor2.location.y ||
+        //    (actor1.location.y == actor2.location.y && actor1.location.x > actor2.location.x))
         //{
         //    (actor1, actor2) = (actor2, actor1);
         //}
 
         // Determine the axis for the alignment
-        var axis = actor1.IsSameColumn(actor2.currentLocation) ? Axis.Vertical : Axis.Horizontal;
+        var axis = actor1.IsSameColumn(actor2.location) ? Axis.Vertical : Axis.Horizontal;
 
         return new CombatPair(actor1, actor2, axis);
     }

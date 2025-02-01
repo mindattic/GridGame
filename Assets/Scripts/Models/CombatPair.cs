@@ -24,8 +24,8 @@ public class CombatPair
         get
         {
             return (axis == Axis.Vertical)
-                ? actor1.currentLocation.y > actor2.currentLocation.y ? actor1 : actor2
-                : actor1.currentLocation.x > actor2.currentLocation.x ? actor1 : actor2;
+                ? actor1.location.y > actor2.location.y ? actor1 : actor2
+                : actor1.location.x > actor2.location.x ? actor1 : actor2;
         }
     }
 
@@ -37,8 +37,8 @@ public class CombatPair
         get
         {
             return (axis == Axis.Vertical)
-                ? actor1.currentLocation.y < actor2.currentLocation.y ? actor1 : actor2
-                : actor1.currentLocation.x < actor2.currentLocation.x ? actor1 : actor2;
+                ? actor1.location.y < actor2.location.y ? actor1 : actor2
+                : actor1.location.x < actor2.location.x ? actor1 : actor2;
         }
     }
 
@@ -57,8 +57,8 @@ public class CombatPair
         }
     }
 
-    public float start => axis == Axis.Vertical ? startActor.currentLocation.y : startActor.currentLocation.x;
-    public float end => axis == Axis.Vertical ? endActor.currentLocation.y : endActor.currentLocation.x;
+    public float start => axis == Axis.Vertical ? startActor.location.y : startActor.location.x;
+    public float end => axis == Axis.Vertical ? endActor.location.y : endActor.location.x;
 
     public CombatPair(ActorInstance actor1, ActorInstance actor2, Axis axis)
     {
@@ -68,14 +68,14 @@ public class CombatPair
  
         if (axis == Axis.Vertical)
         {
-            opponents = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isEnemy && x.IsSameColumn(actor1.currentLocation) && AlignmentHelper.IsBetween(x.currentLocation.y, end, start)).OrderBy(x => x.currentLocation.y).ToList();
-            allies = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isPlayer && x.IsSameColumn(actor1.currentLocation) && AlignmentHelper.IsBetween(x.currentLocation.y, end, start)).OrderBy(x => x.currentLocation.y).ToList();
+            opponents = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isEnemy && x.IsSameColumn(actor1.location) && AlignmentHelper.IsBetween(x.location.y, end, start)).OrderBy(x => x.location.y).ToList();
+            allies = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isPlayer && x.IsSameColumn(actor1.location) && AlignmentHelper.IsBetween(x.location.y, end, start)).OrderBy(x => x.location.y).ToList();
             gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && actor1.IsSameColumn(x.location) && AlignmentHelper.IsBetween(x.location.y, end, start)).OrderBy(x => x.location.y).ToList();
         }
         else if (axis == Axis.Horizontal)
         {
-            opponents = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isEnemy && x.IsSameRow(actor1.currentLocation) && AlignmentHelper.IsBetween(x.currentLocation.x, end, start)).OrderBy(x => x.currentLocation.x).ToList();
-            allies = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isPlayer && x.IsSameRow(actor1.currentLocation) && AlignmentHelper.IsBetween(x.currentLocation.x, end, start)).OrderBy(x => x.currentLocation.x).ToList();
+            opponents = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isEnemy && x.IsSameRow(actor1.location) && AlignmentHelper.IsBetween(x.location.x, end, start)).OrderBy(x => x.location.x).ToList();
+            allies = GameManager.instance.actors.Where(x => x.isActive && x.isAlive && x.isPlayer && x.IsSameRow(actor1.location) && AlignmentHelper.IsBetween(x.location.x, end, start)).OrderBy(x => x.location.x).ToList();
             gaps = GameManager.instance.tiles.Where(x => !x.IsOccupied && actor1.IsSameRow(x.location) && AlignmentHelper.IsBetween(x.location.x, end, start)).OrderBy(x => x.location.x).ToList();
         }
 

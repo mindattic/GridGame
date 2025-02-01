@@ -158,7 +158,7 @@ public class TurnManager : MonoBehaviour
 
         foreach (var enemy in readyEnemies)
         {
-            var defendingPlayers = players.Where(x => x.isActive && x.isAlive && x.IsAdjacentTo(enemy.currentLocation)).ToList();
+            var defendingPlayers = players.Where(x => x.isActive && x.isAlive && x.IsAdjacentTo(enemy.location)).ToList();
             if (defendingPlayers.Count < 1)
                 continue;
 

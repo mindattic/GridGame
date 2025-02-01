@@ -166,6 +166,7 @@
     <None Include="Assets\Shader\henshuuv_b.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\Scripts\ExportedScripts.txt" />
     <None Include="Assets\Shader\TileMask.shader" />
     <None Include="Assets\Shader\dissolve_c.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />

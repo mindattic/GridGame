@@ -38,14 +38,14 @@ public class DottedLineManager : MonoBehaviour
     {
         //ResetColors();
 
-        //var occupiedSegment = dottedLines.FirstOrDefault(x => x.currentLocation == newLocation);
+        //var occupiedSegment = dottedLines.FirstOrDefault(x => x.location == newLocation);
         //if (occupiedSegment == null)
         //    return;
 
         //// Highlight all connected lines
-        //foreach (var currentLocation in occupiedSegment.connectedLocations)
+        //foreach (var location in occupiedSegment.connectedLocations)
         //{
-        //    var connectedSegment = dottedLines.FirstOrDefault(x => x.currentLocation == currentLocation);
+        //    var connectedSegment = dottedLines.FirstOrDefault(x => x.location == location);
         //    if (connectedSegment == null)
         //        continue;
 
